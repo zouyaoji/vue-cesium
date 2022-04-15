@@ -3,11 +3,12 @@ import { useCommon, useLocale } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcBtn, VcBtnRef, VcTooltip, VcTooltipRef } from '@vue-cesium/components/ui'
 import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcBtnTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcBtnTooltipProps, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref } from 'vue'
 import VcViewer, { VcViewerProps, VcViewerRef } from '@vue-cesium/components/viewer'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { makeColor } from '@vue-cesium/utils/cesium-helpers'
 
 export const overviewProps = {
   position: {
@@ -39,6 +40,18 @@ export const overviewProps = {
   },
   viewerOpts: {
     type: Object as PropType<VcViewerProps>
+  },
+  centerRectColor: {
+    type: [Object, Array, String] as PropType<VcColor>,
+    default: '#ff000080'
+  },
+  widthFactor: {
+    type: Number,
+    default: 2
+  },
+  heightFactor: {
+    type: Number,
+    default: 2
   }
 }
 export default defineComponent({
@@ -65,6 +78,7 @@ export default defineComponent({
     let minimized = false
     let unwatchFns: Array<WatchStopHandle> = []
     let overviewViewer: Cesium.Viewer
+    let centerRect: Cesium.ViewportQuad
 
     // computed
     const toggleOpts = computed(() => {
@@ -124,17 +138,53 @@ export default defineComponent({
     }
 
     const onClockTick = () => {
-      const { viewer } = $services
-      overviewViewer &&
+      if (overviewViewer) {
+        const { viewer: parentViewer } = $services
+        const parentCameraRectangle = parentViewer.camera.computeViewRectangle()
+        const { defined } = Cesium
+        if (!defined(parentCameraRectangle)) {
+          return
+        }
+        const rectangle = parentCameraRectangle.expand(props.widthFactor, props.heightFactor)
+
         overviewViewer.camera.flyTo({
-          destination: viewer.camera.position,
+          destination: rectangle.clone(),
+          // destination: parentViewer.camera.position,
           orientation: {
-            heading: viewer.camera.heading,
-            pitch: viewer.camera.pitch,
-            roll: viewer.camera.roll
+            heading: parentViewer.camera.heading,
+            pitch: parentViewer.camera.pitch,
+            roll: parentViewer.camera.roll
           },
           duration: 0.0
         })
+        const { Cartesian3, SceneTransforms } = Cesium
+        const wnPosition = Cartesian3.fromRadians(parentCameraRectangle.west, parentCameraRectangle.north)
+        const enPosition = Cartesian3.fromRadians(parentCameraRectangle.east, parentCameraRectangle.north)
+        const wsPosition = Cartesian3.fromRadians(parentCameraRectangle.west, parentCameraRectangle.south)
+        const esPosition = Cartesian3.fromRadians(parentCameraRectangle.east, parentCameraRectangle.south)
+        const scene = overviewViewer.scene
+        const wnWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, wnPosition)
+        const enWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, enPosition)
+        const wsWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, wsPosition)
+        const esWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, esPosition)
+
+        if (!defined(wnWindowPosition) || !defined(enWindowPosition) || !defined(wsWindowPosition) || !defined(esWindowPosition)) {
+          return
+        }
+
+        const width = enWindowPosition.x - wnWindowPosition.x
+        const height = wsWindowPosition.y - wnWindowPosition.y
+        const x = (wnWindowPosition.x + enWindowPosition.x) / 2 - width / 2
+        const y = (wnWindowPosition.y + wsWindowPosition.y) / 2 - height / 2
+
+        if (width <= 0 || height <= 0) {
+          return
+        }
+        const boundingRectangle = new Cesium.BoundingRectangle(x, y, width, height)
+        centerRect.rectangle = boundingRectangle
+        centerRect.material.uniforms.color = makeColor(props.centerRectColor)
+        centerRect.show = true
+      }
     }
 
     const onViewerReady = (readyObj: VcReadyObject) => {
@@ -146,6 +196,22 @@ export default defineComponent({
       control.enableZoom = false
       control.enableTilt = false
       control.enableLook = false
+
+      overviewViewer.scene.highDynamicRange = false
+      overviewViewer.scene.globe.enableLighting = false
+      overviewViewer.scene.globe.showWaterEffect = false
+      overviewViewer.scene.globe.depthTestAgainstTerrain = false
+      overviewViewer.scene.skyAtmosphere.show = false
+      overviewViewer.scene.fog.enabled = false
+      overviewViewer.scene.skyBox.show = false
+      overviewViewer.scene.sun.show = false
+      overviewViewer.scene.moon.show = false
+      overviewViewer.scene.highDynamicRange = false
+      overviewViewer.scene.globe.showGroundAtmosphere = false
+
+      centerRect = new Cesium.ViewportQuad(new Cesium.BoundingRectangle(150, 100, 100, 50))
+      centerRect.show = false
+      overviewViewer.scene.primitives.add(centerRect)
     }
 
     const updateRootStyle = () => {
@@ -153,6 +219,7 @@ export default defineComponent({
       rootStyle.left = css.left
       rootStyle.top = css.top
       rootStyle.transform = css.transform
+      rootStyle['pointer-events'] = 'none'
 
       css.borderRadius = props.borderRadius
       css.border = props.border
@@ -217,7 +284,7 @@ export default defineComponent({
             dense: true,
             icon: toggleOpts.value.icon,
             size: toggleOpts.value.size,
-            style: { color: toggleOpts.value.color, background: toggleOpts.value.background },
+            style: { color: toggleOpts.value.color, background: toggleOpts.value.background, 'pointer-events': 'auto' },
             onClick: onToggle
           },
           () =>
@@ -296,6 +363,21 @@ export type VcOverviewMapProps = {
    * Specify the vc-viewer component options in the overviewmap component.
    */
   viewerOpts?: VcViewerProps
+  /**
+   * Specify the center rectangle color.
+   * Default value: #ff000080
+   */
+  centerRectColor?: VcColor
+  /**
+   * Specify the width factor of center rectangle.
+   * Default value: 2
+   */
+  widthFactor?: number
+  /**
+   * Specify the height factor of center rectangle.
+   * Default value: 2
+   */
+  heightFactor?: number
   /**
    * Triggers before the VcOverviewMap is loaded.
    * @param instance

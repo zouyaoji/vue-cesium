@@ -24,6 +24,7 @@ import { useEvents } from '@vue-cesium/composables'
 import { getMars3dConfig } from './loadUtil'
 import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { VcSkeletonProps } from '../../ui/skeleton'
+import useVcExtend from '@vue-cesium/composables/use-vue-cesium-extend'
 
 export const viewerProps = defaultProps
 
@@ -730,6 +731,9 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     } else {
       viewer = new Viewer($(viewerRef), options)
     }
+
+    // 扩展
+    useVcExtend(viewer)
 
     vcInstance.Cesium = Cesium
     vcInstance.viewer = viewer
