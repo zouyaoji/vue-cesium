@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-03-10 01:12:55
+ * @LastEditTime: 2022-04-12 17:54:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -628,5 +628,5 @@ export type VcMeasurementsProps = {
   /**
    * Triggers when the floating button is expanded or collapsed.
    */
-  onFabUpdated: (value: boolean) => void
+  onFabUpdated?: (value: boolean) => void
 }

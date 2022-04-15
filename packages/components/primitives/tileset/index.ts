@@ -138,7 +138,7 @@ export const tilesetPrimitiveProps = {
   ...clippingPlanes,
   ...classificationType,
   ...ellipsoid,
-  pointCloudShading: Object,
+  pointCloudShading: Object as PropType<Cesium.PointCloudShading>,
   ...imageBasedLightingFactor,
   ...lightColor2,
   ...luminanceAtZenith,
@@ -435,7 +435,7 @@ export type VcPrimitiveTilesetProps = {
   /**
    * Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting.
    */
-  pointCloudShading: any
+  pointCloudShading?: Cesium.PointCloudShading
   /**
    * Scales the diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.
    */

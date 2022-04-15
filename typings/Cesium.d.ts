@@ -26,9 +26,10 @@ declare namespace Cesium {
   const ShaderSource: any
   const S3MTilesLayer: any
   const SuperMapVersion: string
-  // class GeometryAttributes {
-  //   constructor(opts)
-  // }
+
+  interface Rectangle {
+    expand: (widthFactor: number, heightFactor: number, result?: Rectangle) => Rectangle
+  }
   interface CumulusCloud {
     id?: string
   }
