@@ -212,15 +212,22 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           event.cesiumObject[event.callbackName] ||
           event.cesiumObject[`on${capitalize(event.callbackName)}`] ||
           event.cesiumObject[kebabCase(`on${capitalize(event.callbackName)}`)]
-        fn &&
-          fn({
+
+        if (Cesium.defined(fn)) {
+          const payload = {
             type: `on${event.callbackName}`,
             windowPosition: position,
             surfacePosition: intersection,
             pickedFeature: event.pickedFeature,
             button,
             cesiumObject: event.cesiumObject
-          })
+          }
+          if (fn instanceof Cesium.CallbackProperty) {
+            ;(fn as any)._callback(payload)
+          } else {
+            fn(payload)
+          }
+        }
       }
     })
 
