@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 11:49:20
+ * @LastEditTime: 2022-04-26 11:01:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
@@ -30,10 +30,6 @@ export const baiduImageryProviderProps = {
   ...credit,
   ...minimumLevel,
   ...maximumLevel,
-  protocol: {
-    type: String,
-    default: 'https'
-  },
   projectionTransforms: {
     type: [Boolean, Object] as PropType<ProjectionTransforms>,
     default: () => {
@@ -44,15 +40,19 @@ export const baiduImageryProviderProps = {
     }
   },
   scale: {
-    type: Number,
-    default: 1
+    type: String as PropType<'1' | '2'>,
+    default: '2'
   },
   ak: {
     type: String,
     default: 'E4805d16520de693a3fe707cdc962045'
   },
+  subdomains: {
+    type: Array as PropType<string[]>,
+    default: () => ['0', '1', '2', '3']
+  },
   // https://lbsyun.baidu.com/custom/list.htm
-  customid: {
+  mapStyle: {
     type: String as PropType<
       | 'img'
       | 'vec'
@@ -70,7 +70,15 @@ export const baiduImageryProviderProps = {
       | 'grayscale'
       | 'hardedge'
     >,
-    default: 'normal' // img vec traffic normal light dark redalert googlelite grassgreen midnight pink darkgreen bluish grayscale hardedge
+    default: 'vec' // img vec traffic normal light dark redalert googlelite grassgreen midnight pink darkgreen bluish grayscale hardedge
+  },
+  qt: {
+    type: String as PropType<'tile' | 'vtile'>,
+    default: 'vtile'
+  },
+  styles: {
+    type: String as PropType<'sl' | 'pl'>, // sl 背景透明 pl 正常
+    default: 'pl'
   }
 }
 export default defineComponent({
@@ -130,22 +138,18 @@ export type VcImageryProviderBaiduProps = {
    */
   maximumLevel?: number
   /**
-   * Specify protocol of service.
-   * Default value: https
-   */
-  protocol?: string
-  /**
-   * Specify the scale
-   */
-  scale?: number
-  /**
    * Specify the baidumap key
    */
   ak?: string
   /**
-   * Specify the customid
+   * Specify the service polling parameters.
+   * Default value: ['0', '1', '2', '3']
    */
-  customid?:
+  subdomains?: string[]
+  /**
+   * Specify the map style
+   */
+  mapStyle?:
     | 'img'
     | 'vec'
     | 'traffic'
@@ -161,6 +165,21 @@ export type VcImageryProviderBaiduProps = {
     | 'bluish'
     | 'grayscale'
     | 'hardedge'
+  /**
+   * Specify tile request type.
+   * Default value: vtile
+   */
+  qt: 'tile' | 'vtile'
+  /**
+   * Specify tile styles.
+   * Default value: pl
+   */
+  styles: 'sl' | 'pl'
+  /**
+   * Specify the scale.
+   * Default value: 2
+   */
+  scale?: '1' | '2'
   /**
    * Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }
    */
