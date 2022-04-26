@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import type { CSSProperties, VNode } from 'vue'
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
 import type {
   VcCamera,
@@ -282,7 +282,6 @@ export default defineComponent({
   }
 })
 
-// export type VcZoomControlProps = ExtractPropTypes<typeof zoomControlProps>
 export type VcZoomControlEmits = typeof emits
 
 export type VcZoomControlProps = {

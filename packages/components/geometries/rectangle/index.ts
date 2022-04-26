@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-30 11:45:50
+ * @LastEditTime: 2022-04-20 09:36:52
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\rectangle\index.ts
@@ -70,7 +70,7 @@ export type VcGeometryRectangleProps = {
   /**
    * The distance in meters between the rectangle's extruded face and the ellipsoid surface.
    */
-  extrudedHeight: number
+  extrudedHeight?: number
   /**
    * Triggers before the VcGeometryRectangle is loaded
    */

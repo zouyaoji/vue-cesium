@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-02 09:44:20
+ * @LastEditTime: 2022-04-20 09:33:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
@@ -130,7 +130,7 @@ export type VcGeometryInstanceProps = {
   /**
    * Per-instance attributes like a show or color attribute shown in the example below.
    */
-  attributes: any
+  attributes?: any
   /**
    * Triggers before the VcGeometryInstance is loaded.
    */
@@ -146,7 +146,7 @@ export type VcGeometryInstanceProps = {
   /**
    * Triggers when the geometry mounted.
    */
-  'onUpdate:geometry': (payload: VcGeometry) => void
+  'onUpdate:geometry'?: (payload: VcGeometry) => void
 }
 
 export interface VcGeometryInstanceRef extends VcComponentPublicInstance<VcGeometryInstanceProps> {
