@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-23 11:15:41
+ * @LastEditTime: 2022-05-06 13:58:28
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\prettifyCoordinates.ts
@@ -24,10 +24,18 @@ function prettifyCoordinates(longitude, latitude, options) {
   }
   const { defaultValue, defined } = Cesium
   const optionsDefaulted = defaultValue(options, {})
-  const digits = defaultValue(optionsDefaulted.digits, 5)
+  const decimal = defaultValue(optionsDefaulted.decimal, 5)
 
-  result.latitude = Math.abs(latitude).toFixed(digits) + '°' + (latitude < 0.0 ? 'S' : 'N')
-  result.longitude = Math.abs(longitude).toFixed(digits) + '°' + (longitude < 0.0 ? 'W' : 'E')
+  if (optionsDefaulted.rangeType === 0) {
+    result.latitude = Math.abs(latitude).toFixed(decimal) + '°' + (latitude < 0.0 ? 'S' : 'N')
+    result.longitude = Math.abs(longitude).toFixed(decimal) + '°' + (longitude < 0.0 ? 'W' : 'E')
+  } else if (optionsDefaulted.rangeType === 1) {
+    result.latitude = latitude.toFixed(decimal) + '°'
+    result.longitude = longitude.toFixed(decimal) + '°'
+  } else if (optionsDefaulted.rangeType === 2) {
+    result.latitude = latitude.toFixed(decimal) + '°'
+    result.longitude = (longitude < 0 ? 360 + longitude : longitude).toFixed(decimal) + '°'
+  }
 
   if (defined(optionsDefaulted.height)) {
     result.elevation =

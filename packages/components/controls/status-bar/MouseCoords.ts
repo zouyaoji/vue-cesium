@@ -18,12 +18,16 @@ interface MouseCoords {
   geoidModel: EarthGravityModel1996
   useProjection: boolean
   debounceSampleAccurateHeight: any
+  decimal: number
+  rangeType: number
 }
 interface MouseCoordsOption {
   gridFileUrl: string
   proj4Projection: string
   projectionUnits: string
   proj4longlat: string
+  decimal: number
+  rangeType: number
 }
 class MouseCoords {
   constructor(options: MouseCoordsOption) {
@@ -47,6 +51,8 @@ class MouseCoords {
     this.east = ''
     this.useProjection = false
     this.debounceSampleAccurateHeight = debounce(this.sampleAccurateHeight, this.accurateSamplingDebounceTime)
+    this.decimal = options.decimal || 5
+    this.rangeType = options.rangeType || 0
 
     knockout.track(this, ['elevation', 'utmZone', 'latitude', 'longitude', 'north', 'east', 'useProjection'])
   }
@@ -131,7 +137,9 @@ class MouseCoords {
 
     const prettyCoordinate = prettifyCoordinates(longitude, latitude, {
       height: coordinates.height,
-      errorBar: errorBar
+      errorBar: errorBar,
+      decimal: this.decimal,
+      rangeType: this.rangeType
     })
 
     this.latitude = prettyCoordinate.latitude

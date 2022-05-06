@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-03-05 10:33:23
+ * @LastEditTime: 2022-05-06 13:59:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\defaultProps.ts
@@ -38,6 +38,14 @@ export default {
   color: {
     type: String,
     default: '#fff'
+  },
+  decimal: {
+    type: Number,
+    default: 6
+  },
+  rangeType: {
+    type: Number,
+    default: 0
   },
   background: {
     type: String,

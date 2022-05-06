@@ -82,7 +82,9 @@ export default defineComponent({
           gridFileUrl: props.gridFileUrl,
           proj4Projection: props.proj4Projection,
           projectionUnits: props.projectionUnits,
-          proj4longlat: props.proj4longlat
+          proj4longlat: props.proj4longlat,
+          decimal: props.decimal,
+          rangeType: props.rangeType
         })
 
         viewerElement.addEventListener('wheel', onMouseMove, false)
@@ -538,6 +540,16 @@ export interface VcStatusBarProps {
    * Default value: #fff
    */
   color?: string
+  /**
+   * Specify the latitude and longitude display range. 0: 0-180, distinguish between East and West; 1: -180-180; 2: 0-360.
+   * Default value: 1
+   */
+  rangeType?: number
+  /**
+   * Specify the number of decimal places for latitude and longitude.
+   * Default value: 5
+   */
+  decimal?: number
   /**
    * Specify the background of the information bar.
    * Default value: #3f4854
