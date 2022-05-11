@@ -140,8 +140,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     result.providerCoords = providerCoords
     result.pickPosition = pickPosition
 
-    result.allFeaturesAvailablePromise = when
-      .all(featurePromises)
+    result.allFeaturesAvailablePromise = Promise.all(featurePromises)
       .then(function (this, allFeatures) {
         result.isLoading = false
 
@@ -175,7 +174,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
           defaultValue(existingFeatures, [])
         )
       })
-      .otherwise(function () {
+      .catch(function () {
         result.isLoading = false
         result.error = 'An unknown error occurred while picking features.'
       })
