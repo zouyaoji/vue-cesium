@@ -1,5 +1,13 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-04-29 17:32:41
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\use-circle-scan.ts
+ */
 import { VcViewerProvider } from '@vue-cesium/utils/types'
-import shaderSource from '@vue-cesium/shared/materials/shaders/CircleScan'
+import shaderSource from '@vue-cesium/shared/shaders/CircleScan'
 export default function ($services: VcViewerProvider) {
   const webgl = options => {
     const { viewer } = $services

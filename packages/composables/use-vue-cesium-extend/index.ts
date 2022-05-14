@@ -1,26 +1,18 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-15 17:07:25
- * @LastEditTime: 2022-04-15 17:14:22
+ * @LastEditTime: 2022-04-16 20:49:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-vue-cesium-extend\index.ts
  */
 
-import { RectangleExtend } from '@vue-cesium/shared'
+import { RectangleExtend, ShadowMapShaderExtend } from '@vue-cesium/shared'
 
-const vcExtends = [RectangleExtend]
-
-let isExtend = false
+const vcExtends = [RectangleExtend, ShadowMapShaderExtend]
 
 export default function useVcExtend(viewer: Cesium.Viewer) {
-  if (isExtend) {
-    return
-  }
-
   vcExtends.forEach(item => {
     item.extend(viewer)
   })
-
-  isExtend = true
 }

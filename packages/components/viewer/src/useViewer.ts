@@ -24,7 +24,7 @@ import { useEvents } from '@vue-cesium/composables'
 import { getMars3dConfig } from './loadUtil'
 import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { VcSkeletonProps } from '../../ui/skeleton'
-import useVcExtend from '@vue-cesium/composables/use-vue-cesium-extend'
+import useVcExtension from '@vue-cesium/composables/private/use-vc-extension'
 
 export const viewerProps = defaultProps
 
@@ -63,6 +63,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   logger.debug('viewer creating')
 
   const { t } = useLocale()
+
+  const { invokeExtensions, revokeExtensions } = useVcExtension()
 
   // watch
   watch(
@@ -733,7 +735,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
 
     // 扩展
-    useVcExtend(viewer)
+    invokeExtensions(viewer)
 
     vcInstance.Cesium = Cesium
     vcInstance.viewer = viewer
@@ -878,6 +880,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
     viewer._vcPickScreenSpaceEventHandler = undefined!
     viewer._vcViewerScreenSpaceEventHandler = undefined!
+
+    revokeExtensions(viewer)
 
     if (globalThis.XE) {
       earth && earth.destroy()
