@@ -313,6 +313,7 @@ importers:
       '@amap/amap-jsapi-loader': ^1.0.1
       '@vue/shared': ^3.2.26
       '@zouyaoji/heatmap.js': ^2.0.8
+      echarts: ^5.3.2
       lodash: ^4.17.21
       lodash-es: ^4.17.21
       lodash-unified: ^1.0.1
@@ -322,6 +323,7 @@ importers:
       '@amap/amap-jsapi-loader': 1.0.1
       '@vue/shared': 3.2.26
       '@zouyaoji/heatmap.js': 2.0.8
+      echarts: 5.3.2
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.1_da03a4540fbd16bbaafbb96724306afd
@@ -3536,9 +3538,9 @@ packages:
       '@volar/code-gen': 0.31.2
       '@volar/shared': 0.31.2
       '@volar/source-map': 0.31.2
-      '@vue/compiler-core': 3.2.30
-      '@vue/compiler-dom': 3.2.30
-      '@vue/shared': 3.2.30
+      '@vue/compiler-core': 3.2.33
+      '@vue/compiler-dom': 3.2.33
+      '@vue/shared': 3.2.33
       upath: 2.0.1
     dev: true
 
@@ -3583,11 +3585,27 @@ packages:
       source-map: 0.6.1
     dev: true
 
+  /@vue/compiler-core/3.2.33:
+    resolution: { integrity: sha512-AAmr52ji3Zhk7IKIuigX2osWWsb2nQE5xsdFYjdnmtQ4gymmqXbjLvkSE174+fF3A3kstYrTgGkqgOEbsdLDpw== }
+    dependencies:
+      '@babel/parser': 7.16.4
+      '@vue/shared': 3.2.33
+      estree-walker: 2.0.2
+      source-map: 0.6.1
+    dev: true
+
   /@vue/compiler-dom/3.2.30:
     resolution: { integrity: sha512-t7arHz2SXLCXlF2fdGDFVbhENbGMez254Z5edUqb//6WXJU1lC7GvSkUE7i5x8WSjgfqt60i0V8zdmk16rvLdw== }
     dependencies:
       '@vue/compiler-core': 3.2.30
       '@vue/shared': 3.2.30
+    dev: true
+
+  /@vue/compiler-dom/3.2.33:
+    resolution: { integrity: sha512-GhiG1C8X98Xz9QUX/RlA6/kgPBWJkjq0Rq6//5XTAGSYrTMBgcLpP9+CnlUg1TFxnnCVughAG+KZl28XJqw8uQ== }
+    dependencies:
+      '@vue/compiler-core': 3.2.33
+      '@vue/shared': 3.2.33
     dev: true
 
   /@vue/compiler-sfc/3.2.30:
@@ -3678,6 +3696,10 @@ packages:
 
   /@vue/shared/3.2.30:
     resolution: { integrity: sha512-B3HouBtUxcfu2w2d+VhdLcVBXKYYhXiFMAfQ+hoe8NUhKkPRkWDIqhpuehCZxVQ3S2dN1P1WfKGlxGC+pfmxGg== }
+    dev: true
+
+  /@vue/shared/3.2.33:
+    resolution: { integrity: sha512-UBc1Pg1T3yZ97vsA2ueER0F6GbJebLHYlEi4ou1H5YL4KWvMOOWwpYo9/QpWq93wxKG6Wo13IY74Hcn/f7c7Bg== }
     dev: true
 
   /@vue/test-utils/2.0.0-rc.18_vue@3.2.30:
@@ -6874,6 +6896,13 @@ packages:
       tslib: 2.3.0
       zrender: 5.2.1
     dev: true
+
+  /echarts/5.3.2:
+    resolution: { integrity: sha512-LWCt7ohOKdJqyiBJ0OGBmE9szLdfA9sGcsMEi+GGoc6+Xo75C+BkcT/6NNGRHAWtnQl2fNow05AQjznpap28TQ== }
+    dependencies:
+      tslib: 2.3.0
+      zrender: 5.3.1
+    dev: false
 
   /ee-first/1.1.1:
     resolution: { integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0= }
@@ -15889,7 +15918,6 @@ packages:
 
   /tslib/2.3.0:
     resolution: { integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg== }
-    dev: true
 
   /tslib/2.3.1:
     resolution: { integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw== }
@@ -16497,7 +16525,7 @@ packages:
       '@volar/vue-code-gen': 0.31.2
       '@vscode/emmet-helper': 2.8.3
       '@vue/reactivity': 3.2.30
-      '@vue/shared': 3.2.30
+      '@vue/shared': 3.2.33
       upath: 2.0.1
       vscode-css-languageservice: 5.1.9
       vscode-html-languageservice: 4.2.1
@@ -17319,3 +17347,9 @@ packages:
     dependencies:
       tslib: 2.3.0
     dev: true
+
+  /zrender/5.3.1:
+    resolution: { integrity: sha512-7olqIjy0gWfznKr6vgfnGBk7y4UtdMvdwFmK92vVQsQeDPyzkHW1OlrLEKg6GHz1W5ePf0FeN1q2vkl/HFqhXw== }
+    dependencies:
+      tslib: 2.3.0
+    dev: false
