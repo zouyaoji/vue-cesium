@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-04-06 14:33:01
+ * @LastEditTime: 2022-04-25 17:20:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -340,28 +340,28 @@ export default defineComponent({
 
     const onClockTick = (clock: Cesium.Clock) => {
       let listener = getInstanceListener(instance, 'update:currentTime')
-      listener && emit('update:currentTime', clock.currentTime)
+      props.currentTime !== clock.currentTime && listener && emit('update:currentTime', clock.currentTime)
 
       listener = getInstanceListener(instance, 'update:shouldAnimate')
-      listener && emit('update:shouldAnimate', clock.shouldAnimate)
+      props.shouldAnimate !== clock.shouldAnimate && listener && emit('update:shouldAnimate', clock.shouldAnimate)
 
       listener = getInstanceListener(instance, 'update:canAnimate')
-      listener && emit('update:canAnimate', clock.canAnimate)
+      props.canAnimate !== clock.canAnimate && listener && emit('update:canAnimate', clock.canAnimate)
 
       listener = getInstanceListener(instance, 'update:clockRange')
-      listener && emit('update:clockRange', clock.clockRange)
+      props.clockRange !== clock.clockRange && listener && emit('update:clockRange', clock.clockRange)
 
       listener = getInstanceListener(instance, 'update:clockStep')
-      listener && emit('update:clockStep', clock.clockStep)
+      props.clockStep !== clock.clockStep && listener && emit('update:clockStep', clock.clockStep)
 
       listener = getInstanceListener(instance, 'update:multiplier')
-      listener && emit('update:multiplier', clock.multiplier)
+      props.multiplier !== clock.multiplier && listener && emit('update:multiplier', clock.multiplier)
 
       listener = getInstanceListener(instance, 'update:startTime')
-      listener && emit('update:startTime', clock.startTime)
+      props.startTime !== clock.startTime && listener && emit('update:startTime', clock.startTime)
 
       listener = getInstanceListener(instance, 'update:stopTime')
-      listener && emit('update:stopTime', clock.stopTime)
+      props.stopTime !== clock.stopTime && listener && emit('update:stopTime', clock.stopTime)
 
       setTrackView(clock)
 
@@ -514,10 +514,10 @@ export default defineComponent({
       }
     }
 
-    const trackOverlay = (trackViewOpts?: TrackViewOpts, trackOverlay?: DynamicOverlay | string | number) => {
+    const trackOverlay = (trackOverlay?: DynamicOverlay | string | number, trackViewOpts?: TrackViewOpts) => {
       const { viewer } = $services
       trackViewOpts = trackViewOpts || {
-        mode: 'FREE'
+        mode: trackView.value === null ? 'FP' : 'FREE'
       }
 
       if (trackViewOpts.mode === 'FREE') {
@@ -530,13 +530,7 @@ export default defineComponent({
         return
       }
 
-      if (trackOverlay instanceof DynamicOverlay) {
-        trackingOverlay.value = trackOverlay
-      } else if (typeof trackOverlay === 'string' || typeof trackOverlay === 'number') {
-        trackingOverlay.value = find(overlays.value, v => v.id === trackOverlay)
-      } else if (overlays.value.length) {
-        trackingOverlay.value = overlays.value[0]
-      }
+      trackingOverlay.value = getOverlay(trackOverlay)
 
       viewer.trackedEntity = toRaw(trackingOverlay.value._entity)
       if (trackViewOpts.mode === 'TRACKED') {
@@ -553,22 +547,88 @@ export default defineComponent({
       }
     }
 
-    const zoomToOverlay = (offset?: VcHeadingPitchRange, viewOverlays?: Array<DynamicOverlay> | Array<number | string>) => {
+    const getOverlay = (e: number | string | DynamicOverlay) => {
+      if (e instanceof DynamicOverlay) {
+        return e
+      } else if (typeof e === 'string') {
+        return find(overlays.value, v => v.id === e)
+      } else if (typeof e === 'number') {
+        return overlays.value[e]
+      } else {
+        return overlays.value[0]
+      }
+    }
+
+    const flyToOverlay = (
+      overlays?: number | string | DynamicOverlay | Array<DynamicOverlay | number | string>,
+      options?: {
+        duration?: number
+        maximumHeight?: number
+        offset?: VcHeadingPitchRange
+      }
+    ) => {
       const { viewer } = $services
       if (trackingOverlay.value) {
         viewer.trackedEntity = undefined
         trackingOverlay.value = null
       }
-      let target
-      if (Array.isArray(viewOverlays) && viewOverlays.length) {
-        if (viewOverlays[0] instanceof DynamicOverlay) {
-          target = viewOverlays.map(v => toRaw(v._entity))
+      let target: Cesium.Entity | Array<Cesium.Entity> | Cesium.CustomDataSource
+      if (Cesium.defined(overlays)) {
+        if (Array.isArray(overlays)) {
+          if (overlays.length) {
+            const targets: Array<Cesium.Entity> = []
+            overlays.forEach(viewOverlay => {
+              const target = toRaw(getOverlay(viewOverlay)._entity)
+              targets.push(target)
+            })
+            target = targets
+          } else {
+            target = instance.cesiumObject as Cesium.CustomDataSource
+          }
         } else {
-          target = viewOverlays.map(id => toRaw(find(overlays.value, v => v.id === id)._entity))
+          target = toRaw(getOverlay(overlays)._entity)
         }
       } else {
         target = instance.cesiumObject as Cesium.CustomDataSource
       }
+
+      options = options || {
+        duration: 3.0
+      }
+
+      if (Cesium.defined(options.offset)) {
+        options.offset = makeHeadingPitchRang(options.offset)
+      }
+
+      return viewer.flyTo(target, options as any)
+    }
+
+    const zoomToOverlay = (overlays?: number | string | DynamicOverlay | Array<DynamicOverlay | number | string>, offset?: VcHeadingPitchRange) => {
+      const { viewer } = $services
+      if (trackingOverlay.value) {
+        viewer.trackedEntity = undefined
+        trackingOverlay.value = null
+      }
+      let target: Cesium.Entity | Array<Cesium.Entity> | Cesium.CustomDataSource
+      if (Cesium.defined(overlays)) {
+        if (Array.isArray(overlays)) {
+          if (overlays.length) {
+            const targets: Array<Cesium.Entity> = []
+            overlays.forEach(viewOverlay => {
+              const target = toRaw(getOverlay(viewOverlay)._entity)
+              targets.push(target)
+            })
+            target = targets
+          } else {
+            target = instance.cesiumObject as Cesium.CustomDataSource
+          }
+        } else {
+          target = toRaw(getOverlay(overlays)._entity)
+        }
+      } else {
+        target = instance.cesiumObject as Cesium.CustomDataSource
+      }
+
       return viewer.zoomTo(target, Cesium.defined(offset) ? makeHeadingPitchRang(offset) : undefined)
     }
 
@@ -579,7 +639,7 @@ export default defineComponent({
     })
 
     // expose public methods
-    Object.assign(instance.proxy, { getOverlays: () => overlays.value, trackOverlay, zoomToOverlay })
+    Object.assign(instance.proxy, { getOverlays: () => overlays.value, getOverlay, trackOverlay, zoomToOverlay, flyToOverlay })
 
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
@@ -715,19 +775,41 @@ export type VcOverlayDynamicEmits = typeof emits
 
 export interface VcOverlayDynamicRef extends ComponentPublicInstance<VcOverlayDynamicProps> {
   /**
+   * Get overlay by id or index.
+   * @param e id or index.
+   */
+  getOverlay: (e: number | string | DynamicOverlay) => DynamicOverlay
+  /**
    * Get overlays.
    */
   getOverlays: () => Array<DynamicOverlay>
   /**
-   *
-   * @param trackViewOpts
-   * @param trackOverlay
+   * Track dynamic overlay.
+   * @param trackOverlay tracked overlay or tracked overlay's id or index. If not passed, the first overlay is tracked by default.
+   * @param trackViewOpts view parameters.
    */
-  trackOverlay: (trackViewOpts?: TrackViewOpts, trackOverlay?: DynamicOverlay | string | number) => void
+  trackOverlay: (trackOverlay?: DynamicOverlay | string | number, trackViewOpts?: TrackViewOpts) => void
   /**
-   *
-   * @param offset
-   * @param viewOverlays
+   * Zoom to dynamic overlay(s).
+   * @param viewOverlays Dynamic overlays (index, id) or a collection of dynamic overlay (index, id). If you don't pass it or pass in an empty array (empty object), it scales to all overlays.
+   * @param offset The camera offset to zoom to the overlay.
    */
-  zoomToOverlay: (offset?: VcHeadingPitchRange, viewOverlays?: Array<DynamicOverlay> | Array<number | string>) => Promise<boolean>
+  zoomToOverlay: (
+    overlays: number | string | DynamicOverlay | Array<DynamicOverlay | number | string>,
+    offset?: VcHeadingPitchRange
+  ) => Promise<boolean>
+
+  /**
+   * Fly to dynamic overlay(s).
+   * @param viewOverlays Dynamic overlays (index, id) or a collection of dynamic overlay (index, id). If you don't pass it or pass in an empty array (empty object), it scales to all overlays.
+   * @param offset The camera offset to zoom to the overlay.
+   */
+  flyToOverlay: (
+    overlays: number | string | DynamicOverlay | Array<DynamicOverlay | number | string>,
+    options?: {
+      duration?: number
+      maximumHeight?: number
+      offset?: VcHeadingPitchRange
+    }
+  ) => Promise<boolean>
 }
