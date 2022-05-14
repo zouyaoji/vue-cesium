@@ -8,9 +8,7 @@
  * Primitive
  * ParticleSystem
  */
-import type { SetupContext } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import type { PrimitiveEmits } from '@vue-cesium/utils/emits'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { provide, ref } from 'vue'

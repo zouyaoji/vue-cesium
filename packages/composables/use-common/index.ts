@@ -11,6 +11,8 @@ import { useLocale } from '../use-locale'
 import useEvents from '../use-events'
 import { isEqual } from 'lodash-unified'
 
+const callbackCmpNames = ['Graphics', 'VcEntity', 'Datasource', 'VcOverlayDynamic']
+
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   const logger = useLog(vcInstance)
 
@@ -310,10 +312,18 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return transformProps(value, childProps)
     } else {
       const cmpName = vcInstance.proxy?.$options.name
+      let supportCallbackProperty = false
+      if (isFunction(value) && cmpName) {
+        callbackCmpNames.forEach(v => {
+          if (cmpName.indexOf(v) !== -1) {
+            supportCallbackProperty = true
+          }
+        })
+      }
       const propOption = vcInstance.proxy?.$options.props[prop] || childProps?.[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
       return propOption?.watcherOptions && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
-        : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity' || cmpName.indexOf('Datasource') !== -1)
+        : supportCallbackProperty
         ? new Cesium.CallbackProperty(value, false)
         : value
     }

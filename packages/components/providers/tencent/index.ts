@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-31 11:14:52
- * @LastEditTime: 2022-03-31 15:09:19
+ * @LastEditTime: 2022-05-13 14:26:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tencent\index.ts
@@ -86,7 +86,7 @@ export interface VcImageryProviderTencentProps {
    * Specify the map style type of the tencent service.
    * Default value: vector
    */
-  mapStyle: 'img' | 'terrain' | 'vector'
+  mapStyle?: 'img' | 'terrain' | 'vector'
   /**
    * Specify the map style type of the tencent service. Valid when mapStyle is vector. 1: Classic; 2: Label; 3: Label; 4: Mo Yuan; 8: White Light; 9: Gray
    * Default value: 1
