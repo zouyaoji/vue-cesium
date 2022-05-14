@@ -19,12 +19,14 @@
     </div>
   </el-scrollbar>
   <ad-sense
+    adSlot="4608014562"
+    :adStyle="{ display: 'inline-block', width: '220px', height: '220px' }"
     style="position: fixed; right: 10px; bottom: 10px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
   ></ad-sense>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { defineComponent, nextTick, onBeforeUnmount, onMounted, ref, computed } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import AdSense from './ad-sense.vue'
 
@@ -46,6 +48,11 @@ export default defineComponent({
     }
 
     let resizeObserver = null
+
+    // const adSlot = computed(() => {
+    //   const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
+    //   return cnHref ? '7202599371' : '4608014562'
+    // })
 
     //  const adSenseShow = ref(false)
 

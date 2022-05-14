@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-04-26 14:08:50
+ * @LastEditTime: 2022-05-15 00:31:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -10,26 +10,29 @@
   <div class="adsense-content">
     <div class="adsense-title">{{ sponsor }}</div>
     <div style="padding: 0 0">
-      <ins
-        class="adsbygoogle"
-        style="display: inline-block; width: 220px; height: 220px"
-        data-ad-client="ca-pub-3445228872340333"
-        :data-ad-slot="adSlot"
-      ></ins>
+      <ins class="adsbygoogle" :style="adStyle" data-ad-client="ca-pub-3445228872340333" :data-ad-slot="adSlot"></ins>
     </div>
+    <a v-if="showOtherAd" href="https://502502.xyz/aff.php?aff=312" style="padding-left: 20px" target="_blank">便宜稳定的科学上网工具</a>
   </div>
 </template>
 
 <script>
 const href = location.href
 export default {
+  props: {
+    adSlot: String,
+    adStyle: Object
+  },
   computed: {
-    adSlot() {
-      const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
-      return cnHref ? '7202599371' : '4608014562'
-    },
+    // adSlot() {
+    //   const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
+    //   return cnHref ? '7202599371' : '4608014562'
+    // },
     sponsor() {
       return this.$route.path.indexOf('/zh-CN/') !== -1 ? '赞助商' : 'Sponsor'
+    },
+    showOtherAd() {
+      return this.$route.path.indexOf('/zh-CN/') !== -1
     }
   },
   mounted() {
