@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-04-12 15:46:47
+ * @LastEditTime: 2022-05-14 01:57:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -9,15 +9,9 @@
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
-import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
+import { VcPrimitive, VcPrimitiveGroundPolyline, VcViewshed } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
-import {
-  VcGeometryPolyline,
-  VcGeometryGroundPolyline,
-  VcGeometryEllipsoidOutline,
-  VcGeometryEllipsoidOutlineProps
-} from '@vue-cesium/components/geometries'
-import { VcPostProcessStage } from '@vue-cesium/components/post-processes'
+import { VcGeometryPolyline, VcGeometryGroundPolyline } from '@vue-cesium/components/geometries'
 import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import {
@@ -28,12 +22,11 @@ import {
   getPolylineSegmentEndpoint,
   getPolylineSegmentPitch,
   makeCartesian2,
-  makeCartesian3,
   makeCartesian3Array,
   getFirstIntersection
 } from '@vue-cesium/utils/cesium-helpers'
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance, VcDrawingProvider, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
 import type { VNode } from 'vue'
 import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
@@ -42,7 +35,7 @@ import useDrawingAction from './use-drawing-action'
 import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 import { platform } from '@vue-cesium/utils/platform'
 
-export default function (props, ctx, cmpName: string, fs?: string) {
+export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
 
   const commonState = useCommon(props, ctx, instance)
@@ -53,29 +46,6 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   const { t } = useLocale()
   const $services = commonState.$services as VcDrawingProvider
   const { emit } = ctx
-
-  const innerRadii = ref<VcPosition>({ x: 0.01, y: 0.01, z: 0.01 })
-  let lightCamera: Cesium.Camera, shadowMap: Cesium.ShadowMap
-  if (cmpName === 'VcAnalysisViewshed') {
-    lightCamera = new Cesium.Camera($services.viewer.scene)
-    lightCamera.frustum.near = 1
-    lightCamera.frustum.far = 400
-    ;(lightCamera.frustum as any).fov = Cesium.Math.PI / 3
-    ;(lightCamera.frustum as any).aspectRatio = 3
-
-    shadowMap = new Cesium.ShadowMap({
-      context: ($services.viewer.scene as any).context,
-      lightCamera,
-      enabled: true,
-      isPointLight: true,
-      pointLightRadius: 400,
-      cascadesEnabled: false,
-      size: 2048,
-      softShadows: true,
-      normalOffset: false,
-      fromLightSource: false
-    } as any)
-  }
 
   const {
     drawingType,
@@ -230,28 +200,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           })
         }
       } else if (cmpName === 'VcAnalysisViewshed') {
-        // lightCamera
-        const viewPosition = makeCartesian3(startPosition) as Cesium.Cartesian3
-        lightCamera.position = viewPosition
-        lightCamera.frustum.near = 0.001 * distance
-        lightCamera.frustum.far = distance
-        const hr = CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle)
-        const vr = CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle)
-        const aspectRatio = (polyline.distance * Math.tan(hr / 2) * 2) / (distance * Math.tan(vr / 2) * 2)
-        ;(lightCamera.frustum as any).fov = hr > vr ? hr : vr
-        ;(lightCamera.frustum as any).aspectRatio = aspectRatio
-        lightCamera.setView({
-          destination: viewPosition,
-          orientation: {
-            heading: CesiumMath.toRadians(heading || 0),
-            pitch: CesiumMath.toRadians(pitch || 0),
-            roll: 0
-          }
-        })
-
-        // shadowMap
-        shadowMap._pointLightRadius = distance
-        viewer.scene.shadowMap = shadowMap
+        // updateViewshed
+        Object.assign(polyline.viewshedOpts, { startPosition, endPosition })
       } else if (cmpName === 'VcAnalysisSightline') {
         if (props.sightlineType === 'segment') {
           const positionsNew: Array<Cesium.Cartesian3> = []
@@ -684,9 +634,6 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       primitiveOpts: {},
       polygonOpts: {}
     }
-    if (cmpName === 'VcAnalysisViewshed') {
-      clear()
-    }
 
     cmpName === 'VcMeasurementVertical' &&
       Object.assign(polyline, {
@@ -817,6 +764,12 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
         if (props.mode === 1) {
           drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
+        }
+      }
+
+      if (cmpName === 'VcAnalysisViewshed') {
+        polyline.viewshedOpts = {
+          ...props.viewshedOpts
         }
       }
     } else {
@@ -1017,18 +970,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
-    const {
-      ColorGeometryInstanceAttribute,
-      createGuid,
-      Math: CesiumMath,
-      Matrix4,
-      Cartesian3,
-      Transforms,
-      HeadingPitchRoll,
-      PerInstanceColorAppearance,
-      Cartesian4,
-      Cartesian2
-    } = Cesium
+    const { createGuid } = Cesium
 
     const children: Array<VNode> = []
     computedRenderDatas.value.forEach((polyline, index) => {
@@ -1048,8 +990,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
               ...primitiveOpts,
+              show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
               onReady: (readyObject: VcReadyObject) => {
                 primitiveOpts?.onReady?.(readyObject)
                 ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
@@ -1069,134 +1011,10 @@ export default function (props, ctx, cmpName: string, fs?: string) {
               )
           )
         )
+
         // viewshed
         if (cmpName === 'VcAnalysisViewshed') {
-          // ellipsoid
-          const { viewer } = $services
-
-          const modelMatrix = Matrix4.fromTranslationQuaternionRotationScale(
-            polyline.positions[0],
-            Transforms.headingPitchRollQuaternion(
-              polyline.positions[0],
-              HeadingPitchRoll.fromDegrees(polyline.heading! - props.ellipsoidOpts.horizontalViewAngle, polyline.pitch!, 0),
-              viewer.scene.globe.ellipsoid
-            ),
-            new Cartesian3(1, 1, 1)
-          )
-          const color = ColorGeometryInstanceAttribute.fromColor(props.ellipsoidOpts.color)
-          children.push(
-            h(VcPostProcessStage, {
-              fragmentShader: fs,
-              uniforms: {
-                shadowMap_textureCube: function () {
-                  shadowMap.update(viewer.scene.frameState)
-                  return shadowMap._shadowMapTexture
-                },
-                shadowMap_matrix: function () {
-                  shadowMap.update(viewer.scene.frameState)
-                  return shadowMap._shadowMapMatrix
-                },
-                shadowMap_lightPositionEC: function () {
-                  shadowMap.update(viewer.scene.frameState)
-                  return shadowMap._lightPositionEC
-                },
-                shadowMap_normalOffsetScaleDistanceMaxDistanceAndDarkness: function () {
-                  shadowMap.update(viewer.scene.frameState)
-                  const bias = shadowMap._pointBias
-                  return Cartesian4.fromElements(bias.normalOffsetScale, shadowMap._distance, shadowMap.maximumDistance, 0, new Cartesian4())
-                },
-                shadowMap_texelSizeDepthBiasAndNormalShadingSmooth: function () {
-                  shadowMap.update(viewer.scene.frameState)
-                  const bias = shadowMap._pointBias
-                  const scratchTexelStepSize = new Cartesian2()
-                  const texelStepSize = scratchTexelStepSize
-                  texelStepSize.x = 1.0 / shadowMap._textureSize.x
-                  texelStepSize.y = 1.0 / shadowMap._textureSize.y
-                  return Cartesian4.fromElements(texelStepSize.x, texelStepSize.y, bias.depthBias, bias.normalShadingSmooth, new Cartesian4())
-                },
-                camera_projection_matrix: lightCamera.frustum.projectionMatrix,
-                camera_view_matrix: lightCamera.viewMatrix,
-                vc_viewDistance: function () {
-                  return polyline.distance
-                },
-                vc_visibleAreaColor: props.visibleAreaColor || Cesium.Color.LIME,
-                vc_invisibleAreaColor: props.invisibleAreaColor || Cesium.Color.RED
-              }
-            })
-          )
-          const radii: VcPosition = { x: polyline.distance, y: polyline.distance, z: polyline.distance }
-          children.push(
-            h(
-              VcPrimitive,
-              {
-                show: (polyline.show && props.ellipsoidOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-                enableMouseEvent: props.enableMouseEvent,
-                appearance: new PerInstanceColorAppearance({
-                  flat: true
-                }),
-                asynchronous: false
-              },
-              () => [
-                h(
-                  VcGeometryInstance,
-                  {
-                    id: createGuid(),
-                    modelMatrix,
-                    attributes: {
-                      color
-                    }
-                  },
-                  () =>
-                    h(VcGeometryEllipsoidOutline, {
-                      radii: radii,
-                      minimumClock: CesiumMath.toRadians(-props.ellipsoidOpts.horizontalViewAngle / 2),
-                      maximumClock: CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle / 2),
-                      minimumCone: CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle + 7.75),
-                      maximumCone: CesiumMath.toRadians(180 - props.ellipsoidOpts.verticalViewAngle - 7.75),
-                      subdivisions: 256,
-                      stackPartitions: 64,
-                      slicePartitions: 64
-                    } as VcGeometryEllipsoidOutlineProps)
-                )
-              ]
-            )
-          )
-          children.push(
-            h(
-              VcPrimitive,
-              {
-                show: (polyline.show && props.ellipsoidOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-                enableMouseEvent: props.enableMouseEvent,
-                appearance: new PerInstanceColorAppearance({
-                  flat: true
-                }),
-                asynchronous: false
-              },
-              () =>
-                h(
-                  VcGeometryInstance,
-                  {
-                    id: createGuid(),
-                    modelMatrix,
-                    attributes: {
-                      color
-                    }
-                  },
-                  () =>
-                    h(VcGeometryEllipsoidOutline, {
-                      radii: radii,
-                      innerRadii: innerRadii.value,
-                      minimumClock: CesiumMath.toRadians(-props.ellipsoidOpts.horizontalViewAngle / 2),
-                      maximumClock: CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle / 2),
-                      minimumCone: CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle + 7.75),
-                      maximumCone: CesiumMath.toRadians(180 - props.ellipsoidOpts.verticalViewAngle - 7.75),
-                      subdivisions: 128,
-                      stackPartitions: 10,
-                      slicePartitions: 8
-                    } as VcGeometryEllipsoidOutlineProps)
-                )
-            )
-          )
+          children.push(h(VcViewshed, { ...polyline.viewshedOpts }))
         }
       }
 

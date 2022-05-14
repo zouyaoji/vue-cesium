@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-03-15 10:58:46
+ * @LastEditTime: 2022-05-14 20:46:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -191,6 +191,7 @@ export interface VcSegmentDrawing {
   polygonOpts?: VcPolygonProps
 
   points?: Array<VcPointProps>
+  viewshedOpts?: VcViewshedOpts
 }
 
 export interface VcDrawingPrimitive {
@@ -324,14 +325,7 @@ export interface VcRegularMeasurementOpts extends VcPolylineMeasurementOpts {
 }
 
 export interface VcViewshedAnalysisOpts extends VcDrawingOpts {
-  ellipsoidOpts?: VcViewshedEllipsoidOpts
-}
-
-export interface VcViewshedEllipsoidOpts {
-  show?: boolean
-  horizontalViewAngle?: number
-  verticalViewAngle?: number
-  color?: VcColor
+  viewshedOpts?: VcViewshedOpts
 }
 
 export type VcDrawingPreRenderDatas = Array<VcCartesian3Array | VcPosition>
@@ -344,4 +338,16 @@ export type MeasurementDecimals = {
   lat?: number
   height?: number
   slope?: number
+}
+
+export type VcViewshedOpts = {
+  fovH?: number
+  fovV?: number
+  invisibleColor?: VcColor
+  offsetHeight?: number
+  visibleColor?: VcColor
+  show?: boolean
+  showGridLine?: boolean
+  lineColor?: VcColor
+  faceColor?: VcColor
 }

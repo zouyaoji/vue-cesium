@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-03-11 09:49:41
+ * @LastEditTime: 2022-05-14 01:57:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
@@ -98,11 +98,15 @@ const viewshedAnalysisDefault: VcViewshedAnalysisOpts = Object.assign({}, polygo
       icon: 'vc-icons-delete'
     })
   },
-  ellipsoidOpts: {
-    show: true,
-    horizontalViewAngle: 90,
-    verticalViewAngle: 60,
-    color: '#fff'
+  viewshedOpts: {
+    fovH: 90,
+    fovV: 60,
+    offsetHeight: 1.8,
+    visibleColor: '#00ff00',
+    invisibleColor: '#ff0000',
+    showGridLine: true,
+    faceColor: 'rgba(255,255,255,0.1)',
+    lineColor: 'rgba(255,255,255,0.4)'
   }
 })
 

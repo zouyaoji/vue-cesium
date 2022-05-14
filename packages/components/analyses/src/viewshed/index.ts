@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 16:26:03
- * @LastEditTime: 2022-03-15 15:04:36
+ * @LastEditTime: 2022-05-14 01:54:34
  * @LastEditors: zouyaoji
  * @Description: refer to https://blog.csdn.net/fywindmoon/article/details/108415116
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\viewshed\index.ts
@@ -9,7 +9,6 @@
 import { ComputedRef, defineComponent, PropType, Ref } from 'vue'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import fragmentShader from './fragmentShader'
 import { VcGeometryPolylineProps } from '../../../geometries'
 import { VcPrimitiveProps } from '../../../primitives'
 import { drawingEmit } from '@vue-cesium/utils/emits'
@@ -22,7 +21,7 @@ import {
   VcEditorOpts,
   VcPolylineDrawing,
   VcSegmentDrawing,
-  VcViewshedEllipsoidOpts
+  VcViewshedOpts
 } from '@vue-cesium/utils/drawing-types'
 import { VcPointProps } from '../../../primitive-collections'
 import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
@@ -32,12 +31,12 @@ export default defineComponent({
     ...useDrawingActionProps,
     polylineOpts: Object as PropType<VcGeometryPolylineProps>,
     primitiveOpts: Object as PropType<VcPrimitiveProps>,
-    ellipsoidOpts: Object as PropType<VcViewshedEllipsoidOpts>
+    viewshedOpts: Object as PropType<VcViewshedOpts>
   },
   emits: drawingEmit,
   setup(props, ctx) {
     // state
-    return useDrawingSegment(props, ctx, 'VcAnalysisViewshed', fragmentShader)
+    return useDrawingSegment(props, ctx, 'VcAnalysisViewshed')
   }
 })
 
@@ -83,9 +82,9 @@ export type VcAnalysisViewshedProps = {
    */
   primitiveOpts?: VcPrimitiveProps
   /**
-   * Specify the ellipsoid options of viewshed.
+   * Specify the options options of viewshed.
    */
-  ellipsoidOpts?: VcViewshedEllipsoidOpts
+  viewshedOpts?: VcViewshedOpts
   /**
    * Triggers before the VcAnalysisViewshed is loaded.
    */
