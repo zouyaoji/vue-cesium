@@ -64,7 +64,7 @@ class BaiduMapImageryProvider {
     this._tileDiscardPolicy = options.tileDiscardPolicy
     this._tileWidth = 256
     this._tileHeight = 256
-    this._minimumLevel = options.maximumLevel || 0
+    this._minimumLevel = options.minimumLevel || 0
     this._maximumLevel = options.maximumLevel || 18
     this._tilingScheme = new BaiduMapMercatorTilingScheme(options)
     this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)

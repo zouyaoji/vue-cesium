@@ -3,7 +3,7 @@ import defer from '@vue-cesium/utils/defer'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 16:10:02
- * @LastEditTime: 2022-04-06 16:40:37
+ * @LastEditTime: 2022-05-14 17:58:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tencent\TencentImageryProvider.ts
@@ -45,7 +45,7 @@ class TencentImageryProvider {
     this._tileDiscardPolicy = options.tileDiscardPolicy
     this._tileWidth = 256
     this._tileHeight = 256
-    this._minimumLevel = options.maximumLevel || 0
+    this._minimumLevel = options.minimumLevel || 0
     this._maximumLevel = options.maximumLevel || 20
     this._tilingScheme = new Cesium.WebMercatorTilingScheme()
     this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)
