@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2022-03-09 22:52:06
+ * @LastEditTime: 2022-04-28 14:29:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-dynamic.md
@@ -67,7 +67,7 @@
       const startTime = ref(null)
       const stopTime = ref(null)
       const clockRange = ref(0)
-      const radio = ref(0)
+      const radio = ref(1)
       const multiplier = ref(1.0)
       const text = ref('yeah')
       const showStop = ref(false)
@@ -207,6 +207,13 @@
             depthFailMaterial: '#69B273',
             clampToGround: true
           },
+          rectangle: {
+            material: 'red',
+            coordinates: () => {
+              return Cesium.Rectangle.fromDegrees(102, 32, 104, 34)
+            }
+            // coordinates: [102, 32, 104, 34]
+          },
           sampledPositions
         })
         return overlays
@@ -284,20 +291,20 @@
         if (radio.value === 0) {
           dynamicOverlayRef.value.zoomToOverlay()
         } else {
-          dynamicOverlayRef.value.zoomToOverlay([0, -90, 1500])
+          dynamicOverlayRef.value.zoomToOverlay([], [0, -90, 1500])
         }
       }
 
       const viewSide = () => {
         if (radio.value === 0) {
-          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 8000])
+          dynamicOverlayRef.value.zoomToOverlay([], [-50, -20, 8000])
         } else {
-          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 1800])
+          dynamicOverlayRef.value.zoomToOverlay([], [-50, -20, 1800])
         }
       }
 
       const trackOverlay = mode => {
-        dynamicOverlayRef.value.trackOverlay({
+        dynamicOverlayRef.value.trackOverlay(0, {
           mode,
           viewFrom: [0, 0, 1800]
         })
@@ -343,23 +350,24 @@
 
 ### 属性
 
-| 属性名            | 类型                        | 默认值                       | 描述                                                                       |
-| ----------------- | --------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
-| show              | boolean                     | `true`                       | `optional` 指定加载的动态对象数据源对象是否显示。                          |
-| name              | string                      | `'__vc__overlay__dynamic__'` | `optional` 指定加载的动态对象数据源名字。                                  |
-| startTime         | string\|Date\|JulianDate    |                              | `optional` 指定 `viewer.clock` 时钟的开始时间。                            |
-| stopTime          | string\| Date\|JulianDate   |                              | `optional` 指定 `viewer.clock` 时钟的结束时间。                            |
-| currentTime       | string\| Date\|JulianDate   |                              | `optional` 指定 `viewer.clock` 时钟当前时间。                              |
-| clockRange        | number\| Cesium.ClockRange  | `0`                          | `optional` 指定 `viewer.clock` 时钟走到结束时间时采取的决策。              |
-| clockStep         | number\| Cesium.ClockStep   | `1`                          | `optional` 指定 `viewer.clock` 时钟的运行是按帧还是按系统时间。            |
-| shouldAnimate     | boolean                     | `true`                       | `optional` 指定 `viewer.clock#tick` 是否改变 `viewer.clock` 时钟当前时间。 |
-| canAnimate        | boolean                     | `true`                       | `optional` 指定 Clock#tick 是否可以驱动时间。                              |
-| multiplier        | number                      | `1.0`                        | `optional` 指定 `viewer.clock#tick` 改变 `viewer.clock` 当前时间的倍数。   |
-| dynamicOverlays   | Array\<DynamicOverlayOpts\> | `[]`                         | `optional` 指定动态对象采样位置数组。                                      |
-| defaultInterval   | number                      | `3.0`                        | `optional` 指定默认位置信息默认刷新间隔，实时改变动态模型位置可用。        |
-| stopArrivedFlag   | string                      | `'time'`                     | `optional` 指定到达站点的判定标志。                                        |
-| positionPrecision | number                      | `0.0000001`                  | `optional` 指定位置判定精度。                                              |
-| timePrecision     | number                      | `0.01`                       | `optional` 指定时间判定精度。                                              |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ----- |---- | ---------------| ----------------- |
+| show | boolean | `true` | `optional` 指定加载的动态对象数据源对象是否显示。 |
+| name | string | `'__vc__overlay__dynamic__'` | `optional` 指定加载的动态对象数据源名字。 |
+| startTime | string\|Date\|JulianDate | | `optional` 指定 `viewer.clock` 时钟的开始时间。 |
+| stopTime | string\| Date\|JulianDate | | `optional` 指定 `viewer.clock` 时钟的结束时间。 |
+| currentTime | string\| Date\|JulianDate | | `optional` 指定 `viewer.clock` 时钟当前时间。 |
+| clockRange | number\| Cesium.ClockRange | `0` | `optional` 指定 `viewer.clock` 时钟走到结束时间时采取的决策。 |
+| clockStep | number\| Cesium.ClockStep | `1` | `optional` 指定 `viewer.clock` 时钟的运行是按帧还是按系统时间。 |
+| shouldAnimate | boolean | `true` | `optional` 指定 `viewer.clock#tick` 是否改变 `viewer.clock` 时钟当前时间。 |
+| canAnimate | boolean | `true` | `optional` 指定 Clock#tick 是否可以驱动时间。 |
+| multiplier | number | `1.0` | `optional` 指定 `viewer.clock#tick` 改变 `viewer.clock` 当前时间的倍数。 |
+| dynamicOverlays | Array\<DynamicOverlayOpts\> | `[]` | `optional` 指定动态对象采样位置数组。 |
+| defaultInterval | number | `3.0` | `optional` 指定默认位置信息默认刷新间隔，实时改变动态模型位置可用。 |
+| stopArrivedFlag | string | `'time'` | `optional` 指定到达站点的判定标志。 |
+| positionPrecision | number | `0.0000001` | `optional` 指定位置判定精度。 |
+| timePrecision | number | `0.01` | `optional` 指定时间判定精度。 |
 
 ### 事件
 
@@ -389,9 +397,11 @@
 | unload | () => Promise\<boolean\> | 手动卸载组件。 |
 | getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
 | getCesiumObject | () => VcCesiumObject | 获取该组件加载的 Cesium 对象。 |
+| getOverlay | (e: number \| string \| DynamicOverlay)  => DynamicOverlay | 根据 id 或者索引获取动态对象。 e: 对象 id 或者索引。 |
 | getOverlays | () => Array\<DynamicOverlay\> | 获取所有的动态对象。 |
-| zoomToOverlay | (offset?: VcHeadingPitchRange, viewOverlays?: Array\<DynamicOverlay\> \| Array\<number \| string\>) => Promise\<boolean\> | 缩放到动态对象（集合）。 offset: 缩放到对象的相机偏移。 viewOverlays: 动态对象集合或者动态对象的 ID 集合，不传则缩放到所有对象。|
-| trackOverlay | (trackViewOpts?: TrackViewOpts, trackOverlay?: DynamicOverlay \| string \| number) => void | 跟踪动态对象。trackViewOpts: 视角参数。trackOverlay: 跟踪对象或者跟踪对象的 ID。不传则默认跟踪第一个对象。|
+| flyToOverlay | (overlays?: DynamicOverlay \| number \| string \| Array\<DynamicOverlay \| number \| string\>, options?: { duration?: number;      maximumHeight?: number; offset?: VcHeadingPitchRange }) => Promise\<boolean\> | 飞行到动态对象（集合）。 overlays: 动态对象（索引、id）或者动态对象（索引、id）集合。不传或者传入空数组（空对象）则缩放到所有对象。offset: 缩放到对象的相机偏移。|
+| zoomToOverlay | (overlays?: DynamicOverlay \| number \| string \| Array\<DynamicOverlay \| number \| string\>, offset?: VcHeadingPitchRange) => Promise\<boolean\> | 缩放到动态对象（集合）。 overlays: 动态对象（索引、id）或者动态对象（索引、id）集合。不传或者传入空数组（空对象）则缩放到所有对象。offset: 缩放到对象的相机偏移。|
+| trackOverlay | (trackOverlay?: DynamicOverlay \| string \| number, trackViewOpts?: TrackViewOpts) => void | 跟踪动态对象。trackOverlay: 跟踪对象或者跟踪对象的 id 或者 索引。不传则默认跟踪第一个对象。trackViewOpts: 视角参数。|
 
 ### 参考
 

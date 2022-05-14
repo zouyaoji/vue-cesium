@@ -17,7 +17,7 @@
       <vc-imagery-provider-tencent
         :mapStyle="mapStyle"
         :styleId="styleId"
-        :projectionTransforms="projectionTransforms"
+        :projection-transforms="projectionTransforms"
         ref="provider"
       ></vc-imagery-provider-tencent>
     </vc-layer-imagery>

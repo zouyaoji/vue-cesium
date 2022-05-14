@@ -20,7 +20,7 @@
     <!-- 鹰眼图示例 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sort-order="10">
-        <vc-imagery-provider-amap map-style="7" :projectionTransforms="{ from: 'GCJ02', to: 'WGS84' }"></vc-imagery-provider-amap>
+        <vc-imagery-provider-amap map-style="7" :projection-transforms="{ from: 'GCJ02', to: 'WGS84' }"></vc-imagery-provider-amap>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>

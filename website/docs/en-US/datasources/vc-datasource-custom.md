@@ -11,7 +11,7 @@ Basic usage of VcDatasourceCustom component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :show="show">
+    <vc-datasource-custom ref="datasourceRef" name="custom" :entities="entities" @click="onClicked" :show="show">
       <vc-entity
         ref="entity1"
         @click="onClicked"
@@ -43,7 +43,6 @@ Basic usage of VcDatasourceCustom component.
       </vc-entity>
     </vc-datasource-custom>
     <vc-datasource-custom
-      ref="datasourceRef"
       @click="onClicked"
       :key="index"
       :show="show"

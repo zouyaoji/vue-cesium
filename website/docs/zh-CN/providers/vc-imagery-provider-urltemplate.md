@@ -14,7 +14,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sort-order="10">
-      <vc-imagery-provider-urltemplate ref="provider" :projectionTransforms="projectionTransforms" :url="url"></vc-imagery-provider-urltemplate>
+      <vc-imagery-provider-urltemplate ref="provider" :projection-transforms="projectionTransforms" :url="url"></vc-imagery-provider-urltemplate>
     </vc-layer-imagery>
     <!-- 用于测试 projectionTransforms  -->
     <vc-layer-imagery :sortOrder="5">

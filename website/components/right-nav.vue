@@ -2,8 +2,8 @@
   <el-scrollbar
     ref="navScroll"
     class="right-nav"
-    wrap-style="max-height: 300px"
-    style="position: fixed; right: 10px; top: 100px; width: 220px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+    wrap-style="max-height: 450px"
+    style="position: fixed; right: 10px; top: 100px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 450px"
   >
     <div v-for="item in anchors" :key="item" style="margin: 3px 0 3px 10px">
       <el-link
@@ -18,13 +18,20 @@
       </el-link>
     </div>
   </el-scrollbar>
+  <ad-sense
+    style="position: fixed; right: 10px; bottom: 10px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+  ></ad-sense>
 </template>
 
 <script lang="ts">
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
+import AdSense from './ad-sense.vue'
 
 export default defineComponent({
+  components: {
+    AdSense
+  },
   setup() {
     // ordered
     const map = new Map()
@@ -39,6 +46,8 @@ export default defineComponent({
     }
 
     let resizeObserver = null
+
+    //  const adSenseShow = ref(false)
 
     onMounted(async () => {
       // waiting for components render, e.g. table.

@@ -17,7 +17,7 @@ Basic usage of the `vc-imagery-provider-tencent` component.
       <vc-imagery-provider-tencent
         :mapStyle="mapStyle"
         :styleId="styleId"
-        :projectionTransforms="projectionTransforms"
+        :projection-transforms="projectionTransforms"
         ref="provider"
       ></vc-imagery-provider-tencent>
     </vc-layer-imagery>
@@ -147,7 +147,6 @@ Basic usage of the `vc-imagery-provider-tencent` component.
 |subdomains|Array\<string\>|`['1', '2', '3']`|`optional` Specify the service polling parameters.|
 | mapStyle | string | `'vector'` | `optional` Specify the map style type of the tencent service. | img/terrain/vector |
 | styleId | string | `'1'` | `optional` Specify the map style type of the tencent service. | 1/2/3/4/8/9 |
-| protocol | String | | `optional` Specify protocol of service. |https/http|
 | credit | string\|Cesium.Credit | `''` | `optional` 	A credit for the data source, which is displayed on the canvas. |
 | rectangle | VcRectangle | | `optional` The rectangle, in radians, covered by the image.|
 | minimumLevel | number | `0` | `optional` 	The minimum level-of-detail supported by the imagery provider. |

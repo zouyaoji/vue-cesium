@@ -21,7 +21,7 @@ Basic usage of the `vc-imagery-provider-amap` component.
       <vc-imagery-provider-amap
         :map-style="mapStyle"
         :ltype="ltype"
-        :projectionTransforms="projectionTransforms"
+        :projection-transforms="projectionTransforms"
         lang="en"
         ref="provider"
       ></vc-imagery-provider-amap>

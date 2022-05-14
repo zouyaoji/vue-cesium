@@ -245,16 +245,20 @@
 
 ### VcPolygon 属性
 
-| 属性名             | 类型                  | 默认值 | 描述                                                         |
-| ------------------ | --------------------- | ------ | ------------------------------------------------------------ |
-| show               | Boolean               | `true` | `optional` 指定 polygon 是否显示。                           |
-| positions          | Array                 |        | `optional` 指定 polygon 的位置属性。                         |
-| polygonHierarchy   | Object                |        | `optional` 指定 polygon 的位置属性，岛洞多边形请用这个属性。 |
-| id                 | Object                |        | `optional` 指定与 polygon 关联的信息，拾取时返回该属性值。   |
-| classificationType | Number                |        | `optional` 指定 polygon 贴地/贴对象模式。                    |
-| color              | Object\|Array\|String |        | `optional` 指定 polygon 颜色。                               |
-| depthFailColor     | Object\|Array\|String |        | `optional` 指定 polygon 在深度检测无效时的颜色。             |
-| enableMouseEvent   | Boolean               | `true` | `optional` 指定鼠标事件是否生效。                            |
+| 属性名              | 类型                                | 默认值  | 描述                                                         |
+| ------------------- | ----------------------------------- | ------- | ------------------------------------------------------------ |
+| id                  | any                                 |         | `optional` 指定与 polygon 关联的信息，拾取时返回该属性值。   |
+| show                | boolean                             | `true`  | `optional` 指定 polygon 是否显示。                           |
+| positions           | VcCartesian3Array                   |         | `optional` 指定 polygon 的位置属性。                         |
+| polygonHierarchy    | VcPolygonHierarchy                  |         | `optional` 指定 polygon 的位置属性，岛洞多边形请用这个属性。 |
+| clampToGround       | boolean                             | `false` | `optional` 指定 polygon 是否贴地。                           |
+| classificationType  | number \| Cesium.ClassificationType |         | `optional` 指定 polygon 贴地/贴对象模式。                    |
+| appearance          | VcAppearance                        |         | `optional` 指定 polygon 外观参数。                           |
+| depthFailAppearance | VcAppearance                        |         | `optional` 指定 polygon 在深度检测无效时的外观参数。         |
+| ellipsoid           | Cesium.Ellipsoid                    |         | `optional` 指定 polygon 的椭球体参数。                       |
+| allowPicking        | boolean                             | `true`  | `optional` 指定 polygon 是否可被拾取。                       |
+| asynchronous        | boolean                             | `true`  | `optional` 指定 polygon 是否是异步创建。                     |
+| enableMouseEvent    | boolean                             | `true`  | `optional` 指定鼠标事件是否生效。                            |
 
 ### VcPolygon 事件
 

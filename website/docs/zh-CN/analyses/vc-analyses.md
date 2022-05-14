@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-03-09 09:46:34
+ * @LastEditTime: 2022-05-14 10:31:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
@@ -24,7 +24,7 @@
   <vc-viewer>
     <!-- 修改定位 和 位置偏移 -->
     <vc-analyses
-      ref="analyses"
+      ref="analysesRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
       :offset="[10, 30]"
@@ -70,6 +70,7 @@
       analysesReadyDefault({ Cesium, viewer, cesiumObject }) {
         console.log('分析选项参数：', cesiumObject)
         window.viewer = viewer
+        window.vm = this
       },
       clear() {
         this.$refs.drawingsCustomRef.clearAll()
@@ -133,13 +134,13 @@
         }
       },
       unload() {
-        this.$refs.analyses.unload()
+        this.$refs.analysesRef.unload()
       },
       load() {
-        this.$refs.analyses.load()
+        this.$refs.analysesRef.load()
       },
       reload() {
-        this.$refs.analyses.reload()
+        this.$refs.analysesRef.reload()
       }
     }
   }

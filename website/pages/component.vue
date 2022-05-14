@@ -9,7 +9,7 @@
           <router-view class="content" />
         </div>
         <footer-nav />
-        <ad-sense v-if="adSenseShow" />
+        <!-- <ad-sense v-if="adSenseShow" /> -->
       </div>
       <el-backtop v-if="showBackToTop" target=".page-component__scroll .el-scrollbar__wrap" :right="100" :bottom="50" />
     </div>

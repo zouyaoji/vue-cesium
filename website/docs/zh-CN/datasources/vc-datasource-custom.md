@@ -47,12 +47,12 @@
       </vc-entity>
     </vc-datasource-custom>
     <vc-datasource-custom
-      ref="datasourceRef"
       @click="onClicked"
       :key="index"
       :show="show"
       :name="datasource.name"
       v-for="(datasource, index) of datasources"
+      ref="datasourceRefs"
       :entities="datasource.entities"
       @cluster-event="onDatasourceClusterEvent"
       @ready="onDatasourceReady"
@@ -70,13 +70,12 @@
 </el-row>
 
 <script>
-  import { ref, reactive, getCurrentInstance, onMounted, watch, toRaw } from 'vue'
+  import { ref, reactive, getCurrentInstance, onMounted, watch } from 'vue'
   export default {
     setup() {
       // state
-      window.toRaw = toRaw
       const show = ref(true)
-      const datasourceRef = ref(null)
+      const datasourceRefs = ref([])
       const datasources = reactive([])
       const entities = reactive([
         {
@@ -84,6 +83,9 @@
           point: {
             pixelSize: 5,
             color: 'red'
+          },
+          onMouseover: e => {
+            console.log(e)
           }
         },
         {
@@ -145,7 +147,10 @@
         console.log(e)
       }
       const unload = () => {
-        datasourceRef.value.unload()
+        console.log(datasourceRefs)
+        datasourceRefs.value.forEach(datasourceRef => {
+          datasourceRef.unload()
+        })
       }
       const reload = () => {
         datasourceRef.value.reload()
@@ -250,7 +255,7 @@
         onViewerReady,
         onDatasourceReady,
         onDatasourceClusterEvent,
-        datasourceRef,
+        datasourceRefs,
         datasources,
         entities,
         clusterSch,
@@ -267,13 +272,13 @@
 
 ### 属性
 
-| 属性名           | 类型    | 默认值  | 描述                                        |
-| ---------------- | ------- | ------- | ------------------------------------------- |
-| name             | string  |         | `optional` 指定数据源名称。                 |
-| enableMouseEvent | boolean | `true`  | `optional` 指定鼠标事件是否生效。           |
-| show             | boolean | `true`  | `optional` 指定数据源是否显示。             |
-| entities         | Array   | `[]`    | `optional` 指定要添加到该数据源的实体集合。 |
-| destroy          | boolean | `false` | `optional` 指定数据源在移除时是否销毁。     |
+| 属性名           | 类型                   | 默认值  | 描述                                        |
+| ---------------- | ---------------------- | ------- | ------------------------------------------- |
+| name             | string                 |         | `optional` 指定数据源名称。                 |
+| enableMouseEvent | boolean                | `true`  | `optional` 指定鼠标事件是否生效。           |
+| show             | boolean                | `true`  | `optional` 指定数据源是否显示。             |
+| entities         | Array<\VcEntityProps\> | `[]`    | `optional` 指定要添加到该数据源的实体集合。 |
+| destroy          | boolean                | `false` | `optional` 指定数据源在移除时是否销毁。     |
 
 ### 事件
 
@@ -295,6 +300,16 @@
 | mousemove         | (evt: VcPickEvent)                      | 鼠标在该数据源上移动时触发。 |
 | mouseover         | (evt: VcPickEvent)                      | 鼠标移动到该数据源时触发。   |
 | mouseout          | (evt: VcPickEvent)                      | 鼠标移出该数据源时触发。     |
+
+### 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### 插槽
 

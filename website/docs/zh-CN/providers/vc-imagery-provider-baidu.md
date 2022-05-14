@@ -1,6 +1,6 @@
 ## VcImageryProviderBaidu
 
-加载百度地图或者跟百度地图一样的切片方案的瓦片服务，支持用`projectionTransforms`属性`纠偏`。
+加载百度地图或者跟百度地图一样的切片方案的瓦片服务，支持用 `projectionTransforms` 属性`纠偏`。
 
 **注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
@@ -8,7 +8,7 @@
 
 `vc-imagery-provider-baidu` 组件的基础用法。
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由百度地图提供的影像瓦片服务图层。**注意**： 暂未找到 https 服务，示例只处理了几层。
+:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由百度地图提供的影像瓦片服务图层。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -16,8 +16,8 @@
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-imagery-provider-baidu
         ref="provider"
-        :customid="customid"
-        :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
+        :mapStyle="mapStyle"
+        :projection-transforms="{ form: 'BD09', to: 'WGS84' }"
       ></vc-imagery-provider-baidu>
     </vc-layer-imagery>
   </vc-viewer>
@@ -37,7 +37,7 @@
           <span class="demonstration">对比度</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">切换服务</span>
-          <el-select v-model="customid" placeholder="请选择">
+          <el-select v-model="mapStyle" placeholder="请选择">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -62,6 +62,10 @@
           label: '默认样式'
         },
         {
+          value: 'vec',
+          label: '百度电子'
+        },
+        {
           value: 'img',
           label: '百度影像' // 不支持https
         },
@@ -78,7 +82,7 @@
           label: '百度路况'
         }
       ]
-      const customid = ref('normal')
+      const mapStyle = ref('vec')
       // methods
       const unload = () => {
         provider.value.unload()
@@ -98,7 +102,7 @@
         brightness,
         contrast,
         options,
-        customid
+        mapStyle
       }
     }
   }
@@ -112,14 +116,15 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ----- | ---- | ----- | ---- |
-| url | string |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `customid` 属性。 |
+| url | string |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `mapStyle` 属性。 |
 | rectangle | VcRectangle | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
 | credit | string\|Object | `''` | `optional` 服务版权描述信息。 |
 | minimumLevel | number | `0` | `optional` 最小层级。 |
 | maximumLevel | number | `18` | `optional` 最大层级。 |
 | scale | number | `1` | `optional` 指定缩放。 |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
-| customid | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+|subdomains|Array\<string\>|`['0', '1', '2', '3']`| `optional` 指定服务轮询参数。|
+| mapStyle | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` 指定服务协议。 |
 

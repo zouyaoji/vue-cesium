@@ -21,7 +21,9 @@
       <vc-imagery-provider-amap
         :map-style="mapStyle"
         :ltype="ltype"
-        :projectionTransforms="projectionTransforms"
+        :projection-transforms="projectionTransforms"
+        :minimumLevel="0"
+        :maximumLevel="18"
         ref="provider"
       ></vc-imagery-provider-amap>
     </vc-layer-imagery>

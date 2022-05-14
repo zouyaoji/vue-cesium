@@ -1,5 +1,17 @@
 ## Changelog
 
+### 3.0.13
+
+#### New feature
+
+- `vc-overview-map`: Add a rectangle indicating the view extent.
+- Support for multiple viewshed analysis.
+
+#### Bug fixes
+
+- Some component ts declaration errors.
+- VcOverlayDynamic component entity object cannot convert Function to CallbackProperty property.
+
 ### 3.0.12
 
 _2022-04-12_

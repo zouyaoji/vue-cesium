@@ -245,14 +245,19 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ------------------ | --------------------- | ------- | ------------------------------------------------------------------------------ |
-| show | Boolean | `true` | `optional` true if this polygon will be shown; otherwise, false. |
-| positions | Array | | `optional` The positions. |
-| polygonHierarchy | Object | | `optional` The polygonHierarchy. |
-| id | Object | | `optional` The user-defined object to be returned when this polygon is picked. |
-| classificationType | Number | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
-| color | Object\|Array\|String | | `optional` The color. |
-| depthFailColor | Object\|Array\|String | | `optional` The depthFailColor. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| id | any | | `optional` The user-defined object to be returned when this polygon is picked. |
+| show | boolean | `true` | `optional` true if this polygon will be shown; otherwise, false. |
+| positions | VcCartesian3Array | | `optional` The positions. |
+| polygonHierarchy | VcPolygonHierarchy | | `optional` The polygonHierarchy. |
+| clampToGround | boolean | `false` | `optional` Specify whether the polygon is attached to the ground or 3dtiles. |
+| classificationType | number \| Cesium.ClassificationType | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
+| appearance | VcAppearance | | `optional` The appearance. |
+| depthFailColor | Object\|Array\|String | | `optional` Specify the depthFailColor. |
+| depthFailAppearance | VcAppearance | | `optional` Specify the depthFailAppearance. |
+| ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
+| allowPicking | boolean | `true` | `optional` When true, polygon will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| asynchronous | boolean | `true` | `optional` Determines if the poygon primitive will be created asynchronously or block until ready. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### VcPolygon Events
 
@@ -269,6 +274,16 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 | mousemove  | (evt: VcPickEvent)                      | Triggers when the mouse moves on this primitive.                 |
 | mouseover  | (evt: VcPickEvent)                      | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | (evt: VcPickEvent)                      | Triggers when the mouse moves out of this primitive.             |
+
+### VcPolygon Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Reference
 

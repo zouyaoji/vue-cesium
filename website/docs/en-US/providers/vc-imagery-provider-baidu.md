@@ -16,8 +16,8 @@ Basic usage of the `vc-imagery-provider-baidu` component.
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-imagery-provider-baidu
         ref="provider"
-        :customid="customid"
-        :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
+        :map-style="mapStyle"
+        :projection-transforms="{ form: 'BD09', to: 'WGS84' }"
       ></vc-imagery-provider-baidu>
     </vc-layer-imagery>
   </vc-viewer>
@@ -37,7 +37,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
           <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">Swich</span>
-          <el-select v-model="customid" placeholder="Select">
+          <el-select v-model="mapStyle" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -62,6 +62,10 @@ Basic usage of the `vc-imagery-provider-baidu` component.
           label: 'Normal'
         },
         {
+          value: 'vec',
+          label: 'vec'
+        },
+        {
           value: 'img',
           label: 'Image' // not https
         },
@@ -78,7 +82,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
           label: 'Traffic'
         }
       ]
-      const customid = ref('normal')
+      const mapStyle = ref('vec')
       // methods
       const unload = () => {
         provider.value.unload()
@@ -97,7 +101,8 @@ Basic usage of the `vc-imagery-provider-baidu` component.
         alpha,
         brightness,
         contrast,
-        options
+        options,
+        mapStyle
       }
     }
   }
@@ -118,7 +123,8 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 | maximumLevel | number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | scale | number | `1` | `optional` Specify the scale. |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
-| customid | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+|subdomains|Array\<string\>|`['0', '1', '2', '3']`|`optional` Specify the service polling parameters.|
+| mapStyle | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` Specify the mapStyle. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` Specify protocol of service. |
 

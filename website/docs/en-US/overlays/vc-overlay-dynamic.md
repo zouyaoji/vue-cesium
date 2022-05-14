@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2022-03-09 22:41:10
+ * @LastEditTime: 2022-04-25 17:26:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-dynamic.md
@@ -286,20 +286,20 @@ Basic usage of VcOverlayDynamic component.
         if (radio.value === 0) {
           dynamicOverlayRef.value.zoomToOverlay()
         } else {
-          dynamicOverlayRef.value.zoomToOverlay([0, -90, 1500])
+          dynamicOverlayRef.value.zoomToOverlay([], [0, -90, 1500])
         }
       }
 
       const viewSide = () => {
         if (radio.value === 0) {
-          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 8000])
+          dynamicOverlayRef.value.zoomToOverlay([], [-50, -20, 8000])
         } else {
-          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 1800])
+          dynamicOverlayRef.value.zoomToOverlay([], [-50, -20, 1800])
         }
       }
 
       const trackOverlay = mode => {
-        dynamicOverlayRef.value.trackOverlay({
+        dynamicOverlayRef.value.trackOverlay(0, {
           mode,
           viewFrom: [0, 0, 1800]
         })
@@ -389,9 +389,11 @@ Basic usage of VcOverlayDynamic component.
 | unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
 | getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
 | getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
+| getOverlay | (e: number \| string \| DynamicOverlay)  => DynamicOverlay | Get dynamic overlay by id or index. e: id or index. |
 | getOverlays | () => Array\<DynamicOverlay\> | Get dynamic overlays. |
-| zoomToOverlay | (offset?: VcHeadingPitchRange, viewOverlays?: Array\<DynamicOverlay\> \| Array\<number \| string\>) => Promise\<boolean\> | Zoom to dynamic objects (collections). offset: The camera offset to zoom to the object. viewOverlays: Dynamic object collection or dynamic object ID collection, if not passed, zoom to all objects. |
-| trackOverlay | (trackViewOpts?: TrackViewOpts, trackOverlay?: DynamicOverlay \| string \| number) => void | Track a dynamic objects. trackOverlay: Tracking object or tracking object ID. If not passed, the first object is tracked by default. |
+| flyToOverlay | (overlays?: DynamicOverlay \| number \| string \| Array\<DynamicOverlay \| number \| string\>, options?: { duration?: number;      maximumHeight?: number; offset?: VcHeadingPitchRange }) => Promise\<boolean\>  | Fly to dynamic overlay(s). overlays: dynamic overlays (index, id) or a collection of dynamic overlay (index, id). If you don't pass it or pass in an empty array (empty object), it scales to all overlays. offset: The camera offset to zoom to the object. |
+| zoomToOverlay | (overlays?: DynamicOverlay \| number \| string \| Array\<DynamicOverlay \| number \| string\>, offset?: VcHeadingPitchRange) => Promise\<boolean\>  | Zoom to dynamic overlay(s). overlays: dynamic overlays (index, id) or a collection of dynamic overlay (index, id). If you don't pass it or pass in an empty array (empty object), it scales to all overlays. offset: The camera offset to zoom to the object. |
+| trackOverlay | (trackOverlay?: DynamicOverlay \| string \| number, trackViewOpts?: TrackViewOpts) => void | Track dynamic overlay. trackOverlay: tracked overlay or tracked overlay's id or index. If not passed, the first overlay is tracked by default. trackViewOpts: View parameters. |
 
 ### Reference
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-19 00:16:21
- * @LastEditTime: 2022-04-08 13:50:22
+ * @LastEditTime: 2022-04-24 17:46:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-tianditu.md
@@ -107,7 +107,11 @@
 ### 已知问题
 
 - 使用未压缩的构建库 `/CesiumUnminified/Cesium.js` 会抛出异常。
+
   ```html
   cesiumTdt.js:12 Uncaught ReferenceError: Zlib is not defined at cesiumTdt.js:12 at XMLHttpRequest.i.onreadystatechange (cesiumTdt.js:12)
   ```
+
   引入 `/Cesium/Cesium.js` 即可解决。
+
+- Cesium 1.92 + 版本去掉了 when，天地图地形插件没兼容，导致问题。

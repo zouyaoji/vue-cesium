@@ -2,12 +2,16 @@
 
 ### 3.0.13
 
-#### 优化
+#### 新特性
 
 - 鹰眼组件 `vc-overview-map` 增加指示视图范围的矩形。
-- `vc-overview-map`: Add a rectangle indicating the view extent.
+- 可视域分析支持多个。
+
+#### Bug 修复
 
 - 修复部分组件 ts 声明错误的问题。
+- VcOverlayDynamic 组件实体对象无法将 Function 转为 CallbackProperty 属性问题。
+- 修复高德、百度、腾讯地图组件最大层级参数错误问题。
 
 ### 3.0.12
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-02-21 13:58:55
+ * @LastEditTime: 2022-04-26 14:08:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -9,12 +9,10 @@
 <template>
   <div class="adsense-content">
     <div class="adsense-title">{{ sponsor }}</div>
-    <div style="padding: 0 1.5rem">
+    <div style="padding: 0 0">
       <ins
         class="adsbygoogle"
-        style="display: block; text-align: center"
-        data-ad-layout="in-article"
-        data-ad-format="fluid"
+        style="display: inline-block; width: 220px; height: 220px"
         data-ad-client="ca-pub-3445228872340333"
         :data-ad-slot="adSlot"
       ></ins>
@@ -28,7 +26,7 @@ export default {
   computed: {
     adSlot() {
       const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
-      return cnHref ? '7202599371' : '8270352624'
+      return cnHref ? '7202599371' : '4608014562'
     },
     sponsor() {
       return this.$route.path.indexOf('/zh-CN/') !== -1 ? '赞助商' : 'Sponsor'
