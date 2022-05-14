@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2022-03-11 10:52:02
+ * @LastEditTime: 2022-05-14 23:06:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -175,14 +175,20 @@ export type VcPolygonProps = {
    * Default value: true
    */
   show?: boolean
+  /**
+   * Specify the positions.
+   */
   positions?: VcCartesian3Array
-  classificationType?: number
   /**
    * 	A polygon hierarchy that can include holes.
    */
   polygonHierarchy?: VcPolygonHierarchy
   /**
-   * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work.
+   * An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground.
+   */
+  classificationType?: number | Cesium.ClassificationType
+  /**
+   * Specify whether the polygon is attached to the ground or 3dtiles.
    */
   clampToGround?: boolean
   /**
@@ -199,10 +205,12 @@ export type VcPolygonProps = {
   ellipsoid?: Cesium.Ellipsoid
   /**
    * When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved.
+   * Default value: true
    */
   allowPicking?: boolean
   /**
    * Determines if the primitive will be created asynchronously or block until ready.
+   * Default value: true
    */
   asynchronous?: boolean
   /**
