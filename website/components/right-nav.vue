@@ -20,7 +20,7 @@
   </el-scrollbar>
   <ad-sense
     adSlot="4608014562"
-    :adStyle="{ display: 'inline-block', width: '220px', height: '220px' }"
+    :adStyle="{ display: 'inline-block', width: '235px', height: '235px' }"
     style="position: fixed; right: 10px; bottom: 10px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
   ></ad-sense>
 </template>

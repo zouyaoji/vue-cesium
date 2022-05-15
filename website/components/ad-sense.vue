@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-05-15 00:31:00
+ * @LastEditTime: 2022-05-15 09:53:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -10,9 +10,16 @@
   <div class="adsense-content">
     <div class="adsense-title">{{ sponsor }}</div>
     <div style="padding: 0 0">
-      <ins class="adsbygoogle" :style="adStyle" data-ad-client="ca-pub-3445228872340333" :data-ad-slot="adSlot"></ins>
+      <ins
+        class="adsbygoogle"
+        :style="adStyle"
+        data-ad-client="ca-pub-3445228872340333"
+        :data-ad-slot="adSlot"
+        :data-ad-format="dataAdFormat"
+        :data-ad-layout="dataAdLayout"
+      ></ins>
     </div>
-    <a v-if="showOtherAd" href="https://502502.xyz/aff.php?aff=312" style="padding-left: 20px" target="_blank">便宜稳定的科学上网工具</a>
+    <a href="https://502502.xyz/aff.php?aff=312" style="padding-left: 20px" target="_blank">{{ otherAd }}</a>
   </div>
 </template>
 
@@ -21,7 +28,9 @@ const href = location.href
 export default {
   props: {
     adSlot: String,
-    adStyle: Object
+    adStyle: Object,
+    dataAdFormat: String,
+    dataAdLayout: String
   },
   computed: {
     // adSlot() {
@@ -31,8 +40,8 @@ export default {
     sponsor() {
       return this.$route.path.indexOf('/zh-CN/') !== -1 ? '赞助商' : 'Sponsor'
     },
-    showOtherAd() {
-      return this.$route.path.indexOf('/zh-CN/') !== -1
+    otherAd() {
+      return this.$route.path.indexOf('/zh-CN/') !== -1 ? '便宜稳定的科学上网工具' : 'Cheap and stable VPN'
     }
   },
   mounted() {

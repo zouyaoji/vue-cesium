@@ -9,7 +9,13 @@
           <router-view class="content" />
         </div>
         <footer-nav />
-        <ad-sense v-if="adSenseShow" adSlot="8270352624" :adStyle="{ display: 'block', 'text-align': 'center' }" />
+        <ad-sense
+          v-if="adSenseShow"
+          adSlot="8270352624"
+          :adStyle="{ display: 'block', 'text-align': 'center' }"
+          dataAdLayout="in-article"
+          dataAdFormat="fluid"
+        />
       </div>
       <el-backtop v-if="showBackToTop" target=".page-component__scroll .el-scrollbar__wrap" :right="100" :bottom="50" />
     </div>
