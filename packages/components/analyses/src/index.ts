@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-03-11 09:40:29
+ * @LastEditTime: 2022-05-16 00:29:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
@@ -132,10 +132,5 @@ export type VcAnalysesSlots = {
   /**
    * body slot content of the component
    */
-  body: (scope: {
-    /**
-     * Action instances.
-     */
-    drawingActionInstances: Array<VcDrawingActionInstance>
-  }) => VNode[]
+  body: (drawingActionInstances: Array<VcDrawingActionInstance>) => VNode[]
 }

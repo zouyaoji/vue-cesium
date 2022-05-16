@@ -187,12 +187,7 @@ export type VcMeasurementsSlots = {
   /**
    * body slot content of the component
    */
-  body: (scope: {
-    /**
-     * Action instances.
-     */
-    drawingActionInstances: Array<VcDrawingActionInstance>
-  }) => VNode[]
+  body: (drawingActionInstances: Array<VcDrawingActionInstance>) => VNode[]
 }
 
 export interface VcMeasurementsRef extends VcComponentPublicInstance<VcMeasurementsProps> {

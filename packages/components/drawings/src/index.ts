@@ -119,12 +119,7 @@ export type VcDrawingsSlots = {
   /**
    * body slot content of the component
    */
-  body: (scope: {
-    /**
-     * Action instances.
-     */
-    drawingActionInstances: Array<VcDrawingActionInstance>
-  }) => VNode[]
+  body: (drawingActionInstances: Array<VcDrawingActionInstance>) => VNode[]
 }
 export interface VcDrawingsRef extends VcComponentPublicInstance<VcDrawingsProps> {
   /**
