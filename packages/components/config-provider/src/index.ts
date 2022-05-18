@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-03-30 15:36:23
+ * @LastEditTime: 2022-05-18 11:51:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\config-provider\src\index.ts
@@ -20,7 +20,7 @@ export default defineComponent({
     },
     cesiumPath: {
       type: String,
-      default: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+      default: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'
     },
     accessToken: {
       type: String,
@@ -42,7 +42,7 @@ export type VcConfigProviderProps = {
   locale?: Language
   /**
    * CesiumJS path for vue-cesium.
-   * Default value: https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js
+   * Default value: https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js
    */
   cesiumPath?: string
   /**
