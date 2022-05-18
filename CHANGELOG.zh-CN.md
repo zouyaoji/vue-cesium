@@ -2,16 +2,21 @@
 
 ### 3.0.13
 
+_2022-05-19_
+
 #### 新特性
 
-- 鹰眼组件 `vc-overview-map` 增加指示视图范围的矩形。
+- 鹰眼组件 `vc-overview-map` 增加指示视图范围的矩形；增加 v-model 属性控制鹰眼控件是展开还是收拢。
 - 可视域分析支持多个。
+- 绘制组件支持添加文字 label。
 
 #### Bug 修复
 
 - 修复部分组件 ts 声明错误的问题。
 - VcOverlayDynamic 组件实体对象无法将 Function 转为 CallbackProperty 属性问题。
 - 修复高德、百度、腾讯地图组件最大层级参数错误问题。
+- 绘制图标、点时 tooltip 无法隐藏的问题。
+- 默认加载的 cdn 资源改为 unpkg 域名的（jsdelivr 被墙）。
 
 ### 3.0.12
 
