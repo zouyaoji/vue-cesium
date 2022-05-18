@@ -18,7 +18,7 @@ The basic usage of the VcOverviewMap component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- example 1 -->
-    <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
+    <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]" v-model="show">
       <vc-layer-imagery :sort-order="10">
         <vc-imagery-provider-bing
           bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
@@ -73,6 +73,7 @@ The basic usage of the VcOverviewMap component.
   export default {
     data() {
       return {
+        show: false,
         point: {
           pixelSize: 28,
           color: 'red'
@@ -141,6 +142,7 @@ The basic usage of the VcOverviewMap component.
 | centerRectColor | VcColor | `'#ff000080'` | `optional` Specify the center rectangle color. |
 | widthFactor | number | `2` | `optional` Specify the width factor of center rectangle. |
 | heightFactor | number | `2` | `optional` Specify the height factor of center rectangle. |
+| modelValue | boolean | `true` | `optional` Specify whether the control is expanded or collapsed. |
 
 :::
 

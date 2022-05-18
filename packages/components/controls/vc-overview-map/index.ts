@@ -36,7 +36,7 @@ export const overviewProps = {
     type: String
   },
   toggleOpts: {
-    type: Object as PropType<VcBtnTooltipProps & { show: boolean }>
+    type: Object as PropType<VcBtnTooltipProps>
   },
   viewerOpts: {
     type: Object as PropType<VcViewerProps>
@@ -52,12 +52,19 @@ export const overviewProps = {
   heightFactor: {
     type: Number,
     default: 2
+  },
+  modelValue: {
+    type: Boolean,
+    default: true
   }
 }
 export default defineComponent({
   name: 'VcOverviewMap',
   props: overviewProps,
-  emits: commonEmits,
+  emits: {
+    ...commonEmits,
+    'update:modelValue': (value: boolean) => true
+  },
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -70,12 +77,12 @@ export default defineComponent({
     const { t } = useLocale()
     const { $services } = commonState
     const rootRef = ref<HTMLElement>(null)
-    const rootStyle = reactive<CSSProperties>({})
     const toggleBtnRef = ref<VcBtnRef>(null)
+    const rootStyle = reactive<CSSProperties>({})
     const tooltipRef = ref<VcTooltipRef>(null)
     const viewerRef = ref<VcViewerRef>(null)
     const positionState = usePosition(props, $services)
-    let minimized = false
+    const showing = ref(props.modelValue)
     let unwatchFns: Array<WatchStopHandle> = []
     let overviewViewer: Cesium.Viewer
     let centerRect: Cesium.ViewportQuad
@@ -85,7 +92,6 @@ export default defineComponent({
       return Object.assign(
         {},
         {
-          show: true,
           color: '#fff',
           background: '#3f4854',
           icon: 'vc-icons-overview-toggle',
@@ -95,7 +101,7 @@ export default defineComponent({
             anchor: 'bottom middle',
             offset: [0, 20],
             tip: void 0
-          }
+          } as any
         },
         props.toggleOpts
       )
@@ -223,10 +229,18 @@ export default defineComponent({
 
       css.borderRadius = props.borderRadius
       css.border = props.border
-      css.width = props.width
-      css.height = props.height
-      minimized = false
 
+      if (showing.value) {
+        css.width = props.width
+        css.height = props.height
+      } else {
+        const reg = /(\d+)/g
+        const regResult = reg.exec(props.border)
+        const boder = regResult?.length ? parseFloat(regResult[0]) : 0
+        const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
+        css.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
+        css.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
+      }
       Object.assign(rootStyle, css)
     }
 
@@ -235,35 +249,27 @@ export default defineComponent({
     // }
 
     const onToggle = () => {
-      if (!minimized) {
+      if (showing.value) {
         minimize()
       } else {
         restore()
       }
-
-      minimized = !minimized
+      showing.value = !showing.value
+      ctx.emit('update:modelValue', showing.value)
     }
 
     const minimize = () => {
-      if (toggleOpts.value.show) {
-        const reg = /(\d+)/g
-        const regResult = reg.exec(props.border)
-        const boder = regResult?.length ? parseFloat(regResult[0]) : 0
-        const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
-        rootStyle.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
-        rootStyle.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
-      } else {
-        rootStyle.display = 'block'
-      }
+      const reg = /(\d+)/g
+      const regResult = reg.exec(props.border)
+      const boder = regResult?.length ? parseFloat(regResult[0]) : 0
+      const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
+      rootStyle.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
+      rootStyle.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
     }
 
     const restore = () => {
-      if (toggleOpts.value.show) {
-        rootStyle.width = props.width
-        rootStyle.height = props.height
-      } else {
-        rootStyle.display = 'none'
-      }
+      rootStyle.width = props.width
+      rootStyle.height = props.height
     }
 
     // life cycle
@@ -279,7 +285,7 @@ export default defineComponent({
           VcBtn,
           {
             ref: toggleBtnRef,
-            class: 'toggle toggle-' + props.position + (minimized ? ' minimized ' : ''),
+            class: 'toggle toggle-' + props.position + (!showing.value ? ' minimized ' : ''),
             flat: true,
             dense: true,
             icon: toggleOpts.value.icon,
@@ -296,7 +302,7 @@ export default defineComponent({
                     ...toggleOpts.value.tooltip
                     // onBeforeShow: onTooltipBeforeShow
                   },
-                  () => h('strong', {}, toggleOpts.value.tooltip.tip || t(`vc.overview.${minimized ? 'show' : 'hidden'}`))
+                  () => h('strong', {}, toggleOpts.value.tooltip.tip || t(`vc.overview.${!showing.value ? 'show' : 'hidden'}`))
                 )
               : createCommentVNode('v-if')
         )
@@ -358,7 +364,7 @@ export type VcOverviewMapProps = {
   /**
    * Specify the toggle button options of the overviewmap component.
    */
-  toggleOpts?: VcBtnTooltipProps & { show: boolean }
+  toggleOpts?: VcBtnTooltipProps
   /**
    * Specify the vc-viewer component options in the overviewmap component.
    */
@@ -379,6 +385,11 @@ export type VcOverviewMapProps = {
    */
   heightFactor?: number
   /**
+   * Model of the component determining if VcOverviewMap should be expanded or not.
+   * Default value: true
+   */
+  modelValue?: boolean
+  /**
    * Triggers before the VcOverviewMap is loaded.
    * @param instance
    */
@@ -391,6 +402,11 @@ export type VcOverviewMapProps = {
    * Triggers when the VcOverviewMap is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Emitted when showing/hidden state changes; Is also used by v-model.
+   * @param value New state (showing/hidden)
+   */
+  'onUpdate:modelValue'?: (value: boolean) => void
 }
 
 export interface VcOverviewMapSlots {
