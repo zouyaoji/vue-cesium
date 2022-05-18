@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-15 14:59:33
+ * @LastEditTime: 2022-05-18 13:50:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\horizontal\index.ts
@@ -40,6 +40,7 @@ export default defineComponent({
     labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
+    showLabel: Boolean,
     showAngleLabel: Boolean,
     showDashedLine: Boolean,
     showDistanceLabel: Boolean,
@@ -121,6 +122,10 @@ export type VcMeasurementHorizontalProps = {
    * Specify parameters for measurement decimals.
    */
   decimals?: MeasurementDecimals
+  /**
+   * Specify whether to display the label.
+   */
+  showLabel?: boolean
   /**
    * Specify whether to display angle labels.
    */

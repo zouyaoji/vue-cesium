@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-05-14 01:57:38
+ * @LastEditTime: 2022-05-18 22:46:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -287,12 +287,13 @@ export default function (props, ctx, cmpName: string) {
         }
 
         const area = calculateAreaByPostions(positions)
-        labels.push({
-          text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
-          position: polylineSegment.positions[0],
-          id: createGuid(),
-          ...labelOpts
-        })
+        props.showLabel &&
+          labels.push({
+            text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+            position: polylineSegment.positions[0],
+            id: createGuid(),
+            ...labelOpts
+          })
       }
 
       if (props.showComponentLines) {
@@ -338,7 +339,6 @@ export default function (props, ctx, cmpName: string) {
       Object.assign(polyline, {
         labels
       })
-
       polyline.positionsDegreesArray = polyline.positions.map(v => {
         const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
         return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
@@ -363,7 +363,10 @@ export default function (props, ctx, cmpName: string) {
     const { viewer } = $services
     if (props.autoUpdateLabelPosition) {
       cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.addEventListener(updateLabelPosition)
-      ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
+      ;(cmpName === 'VcMeasurementRegular' ||
+        cmpName === 'VcMeasurementRectangle' ||
+        cmpName === 'VcDrawingRegular' ||
+        cmpName === 'VcDrawingRectangle') &&
         viewer.scene.preRender.addEventListener(updateLabelPositionPolygon)
     }
 
@@ -374,7 +377,10 @@ export default function (props, ctx, cmpName: string) {
     const { viewer } = $services
     if (props.autoUpdateLabelPosition) {
       cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.removeEventListener(updateLabelPosition)
-      ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
+      ;(cmpName === 'VcMeasurementRegular' ||
+        cmpName === 'VcMeasurementRectangle' ||
+        cmpName === 'VcDrawingRegular' ||
+        cmpName === 'VcDrawingRectangle') &&
         viewer.scene.preRender.removeEventListener(updateLabelPositionPolygon)
     }
 
@@ -393,7 +399,7 @@ export default function (props, ctx, cmpName: string) {
     let startPoint = p1
     let endPoint = positions[1]
     let draggingPlane = polyline.draggingPlane
-    let surfaceNormal = polyline.surfaceNormal!
+    let surfaceNormal = polyline.surfaceNormal
     let normal = surfaceNormal
 
     if (scene.mode === SceneMode.COLUMBUS_VIEW) {
@@ -518,6 +524,8 @@ export default function (props, ctx, cmpName: string) {
         )
         const labels = labelCollection[index]._labels
         const labelTotalLength = labels[labels.length - 1]
+
+        if (!labelTotalLength) return
         for (let i = 1; i < positions.length; i++) {
           const positionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, positions[i], {} as any)
           if (defined(positionWindow)) {
@@ -861,9 +869,10 @@ export default function (props, ctx, cmpName: string) {
     if (cmpName === 'VcMeasurementVertical') {
       const heightPostion = getHeightPosition(polyline, movement)
 
-      if (!isUndefined(heightPostion) && defined(heightPostion)) {
-        const positions = polyline.positions
+      if (!isUndefined(heightPostion)) {
+        const positions = polyline.positions.slice()
         positions[editingPoint.value ? editingPoint.value._index : 1] = heightPostion
+        polyline.positions = positions
       }
     } else if (cmpName === 'VcMeasurementHeight') {
       makeHeightPositions(polyline, position)
@@ -1020,6 +1029,7 @@ export default function (props, ctx, cmpName: string) {
 
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
         const polygonOpts = Object.assign({}, props?.polygonOpts, polyline?.polygonOpts)
+        polygonOpts.clampToGround = props.clampToGround
         // polygon
         children.push(
           h(VcPolygon, {
@@ -1112,15 +1122,14 @@ export default function (props, ctx, cmpName: string) {
       )
 
       // labels
-      cmpName.includes('VcMeasurement') &&
-        children.push(
-          h(VcCollectionLabel, {
-            enableMouseEvent: props.enableMouseEvent,
-            show: polyline.show,
-            labels: polyline.labels,
-            onReady: onVcCollectionLabelReady
-          })
-        )
+      children.push(
+        h(VcCollectionLabel, {
+          enableMouseEvent: props.enableMouseEvent,
+          show: polyline.show,
+          labels: polyline.labels,
+          onReady: onVcCollectionLabelReady
+        })
+      )
     })
 
     if (props.drawtip?.show && canShowDrawTip.value) {

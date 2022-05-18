@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-03-15 15:00:37
+ * @LastEditTime: 2022-05-18 21:29:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
@@ -41,6 +41,7 @@ export default defineComponent({
     measureUnits: Object as PropType<MeasureUnits>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
+    showLabel: Boolean,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
@@ -103,7 +104,7 @@ export type VcMeasurementRegularProps = {
    */
   polygonOpts?: VcPolygonProps
   /**
-   * Specify parameters for measurement labels.
+   * Specify parameters for measurement label.
    */
   labelOpts?: VcLabelProps
   /**
@@ -122,6 +123,10 @@ export type VcMeasurementRegularProps = {
    * Specify the number of edges of a regular polygon.
    */
   edge?: number
+  /**
+   * Specify whether to display the label.
+   */
+  showLabel?: boolean
   /**
    * Specify whether to display distance labels.
    */

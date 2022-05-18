@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-04-12 17:54:17
+ * @LastEditTime: 2022-05-18 21:35:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -97,6 +97,7 @@ const polylineMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, 
     distance: 2,
     angle: 2
   },
+  showLabel: true,
   showAngleLabel: true,
   showDistanceLabel: true,
   locale: undefined,
@@ -215,6 +216,7 @@ const areaMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, poly
   }),
   showDistanceLabel: true,
   showAngleLabel: true,
+  showLabel: true,
   measureUnits: new MeasureUnits(),
   decimals: {
     area: 2,
@@ -248,7 +250,8 @@ const pointMeasurementDefault: VcMeasurementOpts = Object.assign({}, pointDrawin
     height: 2,
     slope: 3
   },
-  locale: undefined
+  locale: undefined,
+  showLabel: true
 })
 
 const rectangleMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2022-03-10 00:57:42
+ * @LastEditTime: 2022-05-18 22:35:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
@@ -170,7 +170,13 @@ const pointDrawingDefault: VcDrawingOpts = {
     })
   },
   heightReference: 1,
-  disableDepthTest: false
+  disableDepthTest: false,
+  showLabel: false,
+  labelOpts: Object.assign({}, labelOptsDefault, {
+    horizontalOrigin: 1, // left
+    verticalOrigin: 0, // center
+    pixelOffset: [10, 0]
+  })
 }
 
 const segmentDrawingDefault: VcDrawingOpts = {
@@ -220,7 +226,17 @@ const polylineDrawingDefault: VcDrawingOpts = {
     })
   },
   loop: false,
-  disableDepthTest: false
+  disableDepthTest: false,
+  showLabel: false,
+  showAngleLabel: false,
+  showDistanceLabel: false,
+  labelOpts: labelOptsDefault,
+  labelsOpts: Object.assign({}, labelOptsDefault, {
+    scale: 0.8,
+    horizontalOrigin: 1, // left
+    verticalOrigin: -1, // top,
+    pixelOffset: [5, 5]
+  })
 }
 
 const polygonDrawingDefault: VcDrawingOpts = {
@@ -263,7 +279,17 @@ const polygonDrawingDefault: VcDrawingOpts = {
     })
   },
   loop: true,
-  disableDepthTest: false
+  disableDepthTest: true,
+  showDistanceLabel: false,
+  showLabel: false,
+  showAngleLabel: false,
+  labelOpts: labelOptsDefault,
+  labelsOpts: Object.assign({}, labelOptsDefault, {
+    scale: 0.8,
+    horizontalOrigin: 1, // left
+    verticalOrigin: -1, // top,
+    pixelOffset: [5, 5]
+  })
 }
 
 const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingDefault, {
@@ -280,8 +306,19 @@ const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingD
     })
   },
   edge: 4,
-  regular: true,
-  disableDepthTest: false
+  loop: false,
+  disableDepthTest: false,
+  showLabel: false,
+  showAngleLabel: false,
+  showDistanceLabel: false,
+  labelOpts: labelOptsDefault,
+  labelsOpts: Object.assign({}, labelOptsDefault, {
+    scale: 0.8,
+    horizontalOrigin: 1, // left
+    verticalOrigin: -1, // top,
+    pixelOffset: [5, 5],
+    text: '1dsa'
+  })
 })
 
 const circleDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
@@ -289,7 +326,8 @@ const circleDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDe
 })
 
 const regularDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
-  edge: 6
+  edge: 6,
+  loop: true
 })
 
 const clearActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {

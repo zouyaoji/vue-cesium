@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-15 14:57:16
+ * @LastEditTime: 2022-05-18 21:30:01
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polygon\index.ts
@@ -12,7 +12,7 @@ import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 import type { VcGeometryPolylineProps } from '../../../geometries'
-import type { VcPointProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 import {
   VcDrawingDrawEvt,
@@ -33,7 +33,13 @@ export default defineComponent({
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     polygonOpts: Object as PropType<VcPolygonProps>,
     loop: Boolean,
-    clampToGround: Boolean
+    clampToGround: Boolean,
+    showLabel: Boolean,
+    showDistanceLabel: Boolean,
+    showAngleLabel: Boolean,
+    labelOpts: Object as PropType<VcLabelProps>,
+    labelsOpts: Object as PropType<VcLabelProps>,
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -84,10 +90,35 @@ export type VcDrawingPolygonProps = {
    */
   clampToGround?: boolean
   /**
+   * Specify whether to display label.
+   */
+  showLabel: boolean
+  /**
+   * Specify whether to display distance labels.
+   */
+  showDistanceLabel?: boolean
+  /**
+   * Specify whether to display angle labels.
+   */
+  showAngleLabel?: boolean
+  /**
    * Specify whether the depthTest is disabled.
    * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify parameters for drawing label.
+   */
+  labelOpts?: VcLabelProps
+  /**
+   * Specify parameters for drawing labels.
+   */
+  labelsOpts?: VcLabelProps
+  /**
+   * Specify whether to update label position.
+   * Default value: false
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Specify editor options.
    */

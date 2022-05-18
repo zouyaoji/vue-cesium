@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-15 14:57:53
+ * @LastEditTime: 2022-05-18 22:30:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\regular\index.ts
@@ -11,7 +11,7 @@ import { defineComponent } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import type { VcPointProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 import {
@@ -32,7 +32,14 @@ export default defineComponent({
     polygonOpts: Object as PropType<VcPolygonProps>,
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     clampToGround: Boolean,
-    edge: Number
+    edge: Number,
+    showLabel: Boolean,
+    showDistanceLabel: Boolean,
+    showAngleLabel: Boolean,
+    labelOpts: Object as PropType<VcLabelProps>,
+    labelsOpts: Object as PropType<VcLabelProps>,
+    loop: Boolean,
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -87,6 +94,23 @@ export type VcDrawingRegularProps = {
    * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify parameters for drawing label.
+   */
+  labelOpts?: VcLabelProps
+  /**
+   * Specify parameters for drawing labels.
+   */
+  labelsOpts?: VcLabelProps
+  /**
+   * Specify whether to update label position.
+   * Default value: false
+   */
+  autoUpdateLabelPosition?: boolean
+  /**
+   * Specify whether a line segment will be added between the last and first line positions to make this line a loop.
+   */
+  loop?: boolean
   /**
    * Specify editor options.
    */

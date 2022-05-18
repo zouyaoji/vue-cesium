@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-03-06 22:51:14
+ * @LastEditTime: 2022-05-18 22:39:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -56,7 +56,8 @@ const pinDrawingDefault: VcDrawingOpts = Object.assign({}, pointDrawingDefault, 
   labelOpts: Object.assign({}, labelOptsDefault, {
     pixelOffset: [0, -30],
     verticalOrigin: 1
-  })
+  }),
+  showLabel: true
 })
 
 const mainFabDefault = Object.assign({}, actionOptions, {
