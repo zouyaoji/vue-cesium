@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-04-12 15:33:15
+ * @LastEditTime: 2022-05-18 22:45:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -203,20 +203,22 @@ export default function (props, ctx, cmpName: string) {
 
         const polylineLabelOpts = Object.assign({}, props.labelOpts, polyline.labelOpts)
 
-        if (cmpName.includes('Area')) {
-          labels.push({
-            text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
-            position: positions[positions.length - 1],
-            id: createGuid(),
-            ...polylineLabelOpts
-          })
-        } else {
-          labels.push({
-            text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
-            position: positions[positions.length - 1],
-            id: createGuid(),
-            ...polylineLabelOpts
-          })
+        if (props.showLabel) {
+          if (cmpName.includes('Area')) {
+            labels.push({
+              text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+              position: positions[positions.length - 1],
+              id: createGuid(),
+              ...polylineLabelOpts
+            })
+          } else {
+            labels.push({
+              text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+              position: positions[positions.length - 1],
+              id: createGuid(),
+              ...polylineLabelOpts
+            })
+          }
         }
 
         polyline.positionsDegreesArray = polyline.positions.map(v => {
@@ -237,15 +239,16 @@ export default function (props, ctx, cmpName: string) {
     })
     return polylines
   })
+
   // methods
   instance.mount = async () => {
     const { viewer } = $services
-    props.autoUpdateLabelPosition && cmpName.includes('VcMeasurement') && viewer.scene.preRender.addEventListener(updateLabelPosition)
+    props.autoUpdateLabelPosition && viewer.scene.preRender.addEventListener(updateLabelPosition)
     return true
   }
   instance.unmount = async () => {
     const { viewer } = $services
-    props.autoUpdateLabelPosition && cmpName.includes('VcMeasurement') && viewer.scene.preRender.removeEventListener(updateLabelPosition)
+    props.autoUpdateLabelPosition && viewer.scene.preRender.removeEventListener(updateLabelPosition)
     return true
   }
 
@@ -856,15 +859,14 @@ export default function (props, ctx, cmpName: string) {
         })
       )
       // labels
-      cmpName.includes('VcMeasurement') &&
-        children.push(
-          h(VcCollectionLabel, {
-            enableMouseEvent: props.enableMouseEvent,
-            show: polyline.show,
-            labels: polyline.labels,
-            onReady: onVcCollectionLabelReady
-          })
-        )
+      children.push(
+        h(VcCollectionLabel, {
+          enableMouseEvent: props.enableMouseEvent,
+          show: polyline.show,
+          labels: polyline.labels,
+          onReady: onVcCollectionLabelReady
+        })
+      )
       // polygon
       if (positions.length > 2 && (cmpName.includes('Polygon') || cmpName.includes('Area'))) {
         const polygonOpts = Object.assign({}, props.polygonOpts, polyline.polygonOpts)

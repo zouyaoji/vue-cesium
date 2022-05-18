@@ -240,7 +240,6 @@ export default defineComponent({
       const viewer = commonState.$services.viewer
       const viewshed = instance.cesiumObject as Viewshed
       const { Cartesian4, PostProcessStage, Cartesian2 } = Cesium
-      window.viewshed = viewshed
 
       updateViewshed(props.startPosition, props.endPosition)
       attachedViewshedStage = new PostProcessStage({

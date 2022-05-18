@@ -18,7 +18,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- 鹰眼图示例 1 -->
-    <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
+    <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]" v-model="show">
       <vc-layer-imagery :sort-order="10">
         <vc-imagery-provider-amap map-style="7" :projection-transforms="{ from: 'GCJ02', to: 'WGS84' }"></vc-imagery-provider-amap>
       </vc-layer-imagery>
@@ -63,6 +63,7 @@
   export default {
     data() {
       return {
+        show: false,
         point: {
           pixelSize: 28,
           color: 'red'
@@ -127,11 +128,12 @@
 | height | string | `'150px'` | `optional` 指定鹰眼组件高度。 |
 | border | string | `'solid 4px rgb(255, 255, 255)'` | `optional` 指定鹰眼组件边框。 |
 | borderRadius | string | | `optional` 指定鹰眼组件圆角。 |
-| toggleOpts | VcBtnTooltipProps & { show: boolean } | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` 指定鹰眼组件切换按钮参数。 |
+| toggleOpts | VcBtnTooltipProps | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` 指定鹰眼组件切换按钮参数。 |
 | viewerOpts | VcViewerProps |`{ removeCesiumScript: false, showCredit: false, sceneMode: 2 }` | `optional` 指定鹰眼组件中 vc-viewer 组件参数。|
 | centerRectColor | VcColor | `'#ff000080'` | `optional` 指定矩形颜色。 |
 | widthFactor | number | `2` | `optional` 指定矩形宽度因子。 |
 | heightFactor | number | `2` | `optional` 指定矩形高度因子。 |
+| modelValue | boolean | `true` | `optional` 指定鹰眼是展开还是收拢。 |
 
 :::
 

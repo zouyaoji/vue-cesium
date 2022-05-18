@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-04-12 15:49:17
+ * @LastEditTime: 2022-05-18 22:44:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -205,17 +205,6 @@ export default function (props, ctx, cmpName: string) {
       drawStatus.value = DrawStatus.AfterDraw
       point.drawStatus = DrawStatus.AfterDraw
 
-      if (editingPoint.value) {
-        editingPoint.value = undefined
-        drawingFabInstanceVm.editingActionName = undefined
-        canShowDrawTip.value = false
-        type = editorType.value
-      } else {
-        if (props.mode === 1) {
-          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
-        }
-      }
-
       const scene = viewer.scene
 
       if (platform().hasTouch === true) {
@@ -223,6 +212,19 @@ export default function (props, ctx, cmpName: string) {
         if (defined(position)) {
           point.position = position
           point.show = true
+        }
+      }
+
+      if (editingPoint.value) {
+        editingPoint.value = undefined
+        drawingFabInstanceVm.editingActionName = undefined
+        canShowDrawTip.value = false
+        type = editorType.value
+      } else {
+        if (props.mode === 1) {
+          nextTick(() => {
+            drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
+          })
         }
       }
 
@@ -543,29 +545,31 @@ export default function (props, ctx, cmpName: string) {
       })
 
       const labelsOpts = Object.assign({}, props.labelOpts, point.labelOpts)
-      cmpName.includes('VcMeasurement') &&
-        labelsRender.push({
-          position: point.position,
-          id: createGuid(),
-          text: getLabelText(point),
-          ...labelsOpts
-        })
 
-      if (cmpName === 'VcDrawingPin') {
-        const billboardOpts = Object.assign({}, props.billboardOpts, point.billboardOpts)
-        billboardsRender.push({
-          position: point.position,
-          id: createGuid(),
-          _vcPolylineIndx: index, // for editor
-          ...billboardOpts
-        })
+      if (props.showLabel) {
+        if (cmpName === 'VcDrawingPin') {
+          const billboardOpts = Object.assign({}, props.billboardOpts, point.billboardOpts)
+          billboardsRender.push({
+            position: point.position,
+            id: createGuid(),
+            _vcPolylineIndx: index, // for editor
+            ...billboardOpts
+          })
 
-        props.labelOpts.text &&
+          props.labelOpts.text &&
+            labelsRender.push({
+              position: point.position,
+              id: createGuid(),
+              ...labelsOpts
+            })
+        } else {
           labelsRender.push({
             position: point.position,
             id: createGuid(),
+            text: getLabelText(point),
             ...labelsOpts
           })
+        }
       }
     })
     children.push(
@@ -577,14 +581,14 @@ export default function (props, ctx, cmpName: string) {
         onReady: onVcCollectionPointReady
       })
     )
-    ;(cmpName.includes('VcMeasurement') || cmpName === 'VcDrawingPin') &&
-      children.push(
-        h(VcCollectionLabel, {
-          enableMouseEvent: props.enableMouseEvent,
-          labels: labelsRender,
-          onReady: onVcCollectionLabelReady
-        })
-      )
+    // ;(cmpName.includes('VcMeasurement') || cmpName === 'VcDrawingPin') &&
+    children.push(
+      h(VcCollectionLabel, {
+        enableMouseEvent: props.enableMouseEvent,
+        labels: labelsRender,
+        onReady: onVcCollectionLabelReady
+      })
+    )
 
     cmpName === 'VcDrawingPin' &&
       children.push(

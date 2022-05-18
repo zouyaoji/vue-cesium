@@ -2,15 +2,20 @@
 
 ### 3.0.13
 
+_2022-05-19_
+
 #### New feature
 
-- `vc-overview-map`: Add a rectangle indicating the view extent.
+- `vc-overview-map`: Add a rectangle indicating the view extent; Add the v-model property to control whether the control is expanded or collapsed.
 - Support for multiple viewshed analysis.
+- Drawing components support adding text labels.
 
 #### Bug fixes
 
 - Some component ts declaration errors.
 - VcOverlayDynamic component entity object cannot convert Function to CallbackProperty property.
+- The tooltip cannot be hidden when drawing icons and points.
+- The default loaded cdn resources are changed to unpkg domain names.
 
 ### 3.0.12
 

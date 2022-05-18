@@ -66,7 +66,7 @@ describe('VcViewer', () => {
   //       camera: {
   //         position: [108, 32, 10000]
   //       },
-  //       cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+  //       cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
   //       onReady: onViewerReady,
   //       onDestroyed: onDestroyed,
   //       onLeftClick: onLeftClick,

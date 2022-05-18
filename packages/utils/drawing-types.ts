@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-05-14 20:46:48
+ * @LastEditTime: 2022-05-18 21:27:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -224,6 +224,7 @@ export interface VcDrawingOpts {
   drawtip?: VcDrawTipOpts
   pointOpts?: VcPointProps
   labelOpts?: VcLabelProps
+  labelsOpts?: VcLabelProps
   polylineOpts?: VcGeometryPolylineProps
   polygonOpts?: VcPolygonProps
   editorOpts?: VcEditorOpts
@@ -236,6 +237,10 @@ export interface VcDrawingOpts {
   sightlineType?: string
   regular?: boolean
   disableDepthTest?: boolean
+  showDistanceLabel?: boolean
+  showLabel?: boolean
+  showAngleLabel?: boolean
+  autoUpdateLabelPosition?: boolean
 }
 
 export type MeasurementType =

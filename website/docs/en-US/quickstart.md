@@ -21,7 +21,7 @@ app.mount('#app')
 ```
 
 :::tip
-The Cesium version at https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js is used by default
+The Cesium version at https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js is used by default
 :::
 
 ## On-demand Import
@@ -90,7 +90,7 @@ Import via HTML `head` tag.
 ```html
 <!-- index.html -->
 <head>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
 </head>
 ```
 

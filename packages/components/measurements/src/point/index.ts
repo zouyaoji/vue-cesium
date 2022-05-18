@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-15 14:59:38
+ * @LastEditTime: 2022-05-18 21:34:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
@@ -33,7 +33,8 @@ export default defineComponent({
     labelOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
-    heightReference: Number
+    heightReference: Number,
+    showLabel: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

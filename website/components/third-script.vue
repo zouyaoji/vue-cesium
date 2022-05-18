@@ -28,12 +28,14 @@ export default {
     // cnzzElement.setAttribute('async', true)
     // let s = document.getElementsByTagName('script')[0]
     // s.parentNode.insertBefore(cnzzElement, s)
-
-    var hm = document.createElement('script')
-    hm.src = 'https://hm.baidu.com/hm.js?a1aaf3ccee748ca69bf8b776942b9e5b'
-    hm.setAttribute('async', true)
-    let s = document.getElementsByTagName('script')[0]
-    s.parentNode.insertBefore(hm, s)
+    // 百度统计
+    if (process.env.NODE_ENV === 'production') {
+      var hm = document.createElement('script')
+      hm.src = 'https://hm.baidu.com/hm.js?a1aaf3ccee748ca69bf8b776942b9e5b'
+      hm.setAttribute('async', true)
+      let s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(hm, s)
+    }
 
     // this.$router.beforeEach((to, from, next) => {
     //   try {

@@ -40,6 +40,7 @@ export default defineComponent({
     labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
+    showLabel: Boolean,
     showAngleLabel: Boolean,
     showDistanceLabel: Boolean,
     autoUpdateLabelPosition: Boolean
@@ -120,6 +121,10 @@ export type VcMeasurementPolylineProps = {
    * Specify parameters for measurement decimals.
    */
   decimals?: MeasurementDecimals
+  /**
+   * Specify whether to display the label.
+   */
+  showLabel?: boolean
   /**
    * Specify whether to display angle labels.
    */

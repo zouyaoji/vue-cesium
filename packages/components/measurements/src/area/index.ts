@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-15 14:58:44
+ * @LastEditTime: 2022-05-18 13:46:05
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
@@ -41,6 +41,7 @@ export default defineComponent({
     decimals: Object as PropType<MeasurementDecimals>,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
+    showLabel: Boolean,
     loop: Boolean,
     clampToGround: Boolean,
     autoUpdateLabelPosition: Boolean
@@ -117,6 +118,10 @@ export type VcMeasurementAreaProps = {
    * Specify parameters for measurement decimals.
    */
   decimals?: MeasurementDecimals
+  /**
+   * Specify whether to display the label.
+   */
+  showLabel?: boolean
   /**
    * Specify whether to display distance labels.
    */

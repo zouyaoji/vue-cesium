@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-15 15:01:07
+ * @LastEditTime: 2022-05-18 22:41:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\pin\index.ts
@@ -29,7 +29,8 @@ export default defineComponent({
     ...useDrawingActionProps,
     billboardOpts: Object as PropType<VcBillboardProps>,
     labelOpts: Object as PropType<VcLabelProps>,
-    heightReference: Number
+    heightReference: Number,
+    showLabel: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -71,6 +72,10 @@ export type VcDrawingPinProps = {
    * Specify the heightReference.
    */
   heightReference?: number
+  /**
+   * Specify whether to display label.
+   */
+  showLabel: boolean
   /**
    * Specify whether the depthTest is disabled.
    * Default value: false

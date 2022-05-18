@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-15 15:01:02
+ * @LastEditTime: 2022-05-18 22:41:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
  */
-import { defineComponent, Ref } from 'vue'
+import { defineComponent, PropType, Ref } from 'vue'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
 import { drawingEmit } from '@vue-cesium/utils/emits'
@@ -20,13 +20,15 @@ import {
   VcEditorOpts,
   VcPointDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcPointProps } from '../../../primitive-collections'
+import { VcLabelProps, VcPointProps } from '../../../primitive-collections'
 
 export default defineComponent({
   name: 'VcDrawingPoint',
   props: {
     ...useDrawingActionProps,
-    heightReference: Number
+    heightReference: Number,
+    labelOpts: Object as PropType<VcLabelProps>,
+    showLabel: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -60,6 +62,10 @@ export type VcDrawingPointProps = {
    * Specify the heightReference.
    */
   heightReference?: number
+  /**
+   * Specify whether to display label.
+   */
+  showLabel: boolean
   /**
    * Specify whether the depthTest is disabled.
    * Default value: false

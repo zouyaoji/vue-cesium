@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-15 15:00:25
+ * @LastEditTime: 2022-05-18 14:12:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\rectangle\index.ts
@@ -41,6 +41,7 @@ export default defineComponent({
     edge: Number,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
+    showLabel: Boolean,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
@@ -122,6 +123,10 @@ export type VcMeasurementRectangleProps = {
    * Specify the number of edges of a regular polygon.
    */
   edge?: number
+  /**
+   * Specify whether to display this label.
+   */
+  showLabel?: boolean
   /**
    * Specify whether to display distance labels.
    */

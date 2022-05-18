@@ -23,7 +23,7 @@ app.mount('#app')
 ```
 
 :::tip
-将默认使用 https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js
+将默认使用 https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js
 :::
 
 ## 按需导入
@@ -97,7 +97,7 @@ import 'vue-cesium/dist/index.css'
 ```html
 <!-- index.html -->
 <head>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
 </head>
 ```
 

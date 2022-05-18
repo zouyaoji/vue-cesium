@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-07 10:54:09
- * @LastEditTime: 2022-02-17 13:35:27
+ * @LastEditTime: 2022-05-18 11:57:21
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\vc-config-provider.md
@@ -160,5 +160,5 @@ VcConfigProvider 组件基础用法
 | 属性名 | 类型 | 默认值 | 描述 |
 | ----------- | ------------------ | --------------------------------------------------------------------------------- | ----------------------------- |
 | locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` 翻译文本对象。 |
-| cesiumPath | String | `'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS 地址。 |
+| cesiumPath | String | `'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS 地址。 |
 | accessToken | String | `'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'` | `optional` 指定 accessToken。 |
