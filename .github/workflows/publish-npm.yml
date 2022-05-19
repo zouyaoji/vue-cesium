@@ -7,16 +7,26 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
         with:
-          node-version: '16'
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.com/
+          cache: 'pnpm'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: latest
+
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
       - name: Lint
