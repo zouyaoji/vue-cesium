@@ -54,26 +54,28 @@ class EarthGravityModel1996 {
   }
 }
 
-function getHeightData(model) {
-  const { defined, when } = Cesium
+async function getHeightData(model) {
+  const { defined } = Cesium
   if (!defined(model.data)) {
     model.data = loadArrayBuffer(model.gridFileUrl)
   }
+  let data = model.data
+  if (model.data instanceof Promise) {
+    data = await model.data
+  }
 
-  return when(model.data, function (data) {
-    if (!(model.data instanceof Int16Array)) {
-      // Data file is big-endian, all relevant platforms are little endian, so swap the byte order.
-      const byteView = new Uint8Array(data)
-      for (let k = 0; k < byteView.length; k += 2) {
-        const tmp = byteView[k]
-        byteView[k] = byteView[k + 1]
-        byteView[k + 1] = tmp
-      }
-      model.data = new Int16Array(data)
+  if (!(model.data instanceof Int16Array)) {
+    // Data file is big-endian, all relevant platforms are little endian, so swap the byte order.
+    const byteView = new Uint8Array(data)
+    for (let k = 0; k < byteView.length; k += 2) {
+      const tmp = byteView[k]
+      byteView[k] = byteView[k + 1]
+      byteView[k + 1] = tmp
     }
+    model.data = new Int16Array(data)
+  }
 
-    return model.data
-  })
+  return model.data
 }
 
 function getHeightFromData(data, longitude, latitude) {
