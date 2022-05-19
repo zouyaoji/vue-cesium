@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-18 15:43:38
- * @LastEditTime: 2022-03-04 15:41:40
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-05-19 13:06:29
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
 -->
 
 ## VcTerrainProviderCesium
@@ -20,6 +20,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady" :imageryProvider="imageryProvider">
+    <vc-navigation></vc-navigation>
     <vc-terrain-provider-cesium ref="provider"></vc-terrain-provider-cesium>
   </vc-viewer>
   <div class="demo-toolbar">
