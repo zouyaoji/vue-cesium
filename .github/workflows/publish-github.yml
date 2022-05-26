@@ -1,4 +1,4 @@
-name: Publish to NPM registry
+name: Publish to GitHub registry
 
 on:
   release:
