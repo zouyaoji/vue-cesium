@@ -1,6 +1,5 @@
 {
-  "name": "vue-cesium",
-  "private": true,
+  "name": "@normanRsharpe/vue-cesium",
   "packageManager": "pnpm@6.30.1",
   "workspaces": [
     "packages/*",
@@ -35,7 +34,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zouyaoji/vue-cesium.git"
+    "url": "git+https://github.com/normanRsharpe/vue-cesium.git"
+  },
+  "publishConfig": {
+    "@normanRsharpe:registry": "https://npm.pkg.github.com"
   },
   "homepage": "https://zouyaoji.top/vue-cesium",
   "lint-staged": {
