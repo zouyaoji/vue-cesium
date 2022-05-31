@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-26 11:01:32
+ * @LastEditTime: 2022-05-26 22:09:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
@@ -169,12 +169,12 @@ export type VcImageryProviderBaiduProps = {
    * Specify tile request type.
    * Default value: vtile
    */
-  qt: 'tile' | 'vtile'
+  qt?: 'tile' | 'vtile'
   /**
    * Specify tile styles.
    * Default value: pl
    */
-  styles: 'sl' | 'pl'
+  styles?: 'sl' | 'pl'
   /**
    * Specify the scale.
    * Default value: 2

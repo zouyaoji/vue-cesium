@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 15:40:44
- * @LastEditTime: 2022-03-31 11:49:14
+ * @LastEditTime: 2022-05-26 22:10:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\amap\index.ts
@@ -116,7 +116,7 @@ export interface VcImageryProviderAmapProps {
    * Specify the map style type of the amap service. '6': satellite image; '7': road map; '8': road map (with transparent background).
    * Default value: 6
    */
-  mapStyle: '6' | '7' | '8'
+  mapStyle?: '6' | '7' | '8'
   /**
    * Specify size control parameters. '1': 256*256; '2': 512*512
    * Default value: 1
