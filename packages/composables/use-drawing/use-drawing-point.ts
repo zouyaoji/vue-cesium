@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-05-18 22:44:40
+ * @LastEditTime: 2022-05-31 16:11:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -76,6 +76,12 @@ export default function (props, ctx, cmpName: string) {
       }
     )
   )
+
+  const convert2Degrees = (position, point, scene) => {
+    const cart = Cesium.Cartographic.fromCartesian(position, scene.globe.ellipsoid)
+    const positionDegrees = [Cesium.Math.toDegrees(cart.longitude), Cesium.Math.toDegrees(cart.latitude), cart.height] as [number, number, number]
+    point.positionDegrees = positionDegrees
+  }
 
   const startNew = () => {
     const { Cartesian3 } = Cesium
@@ -209,6 +215,7 @@ export default function (props, ctx, cmpName: string) {
 
       if (platform().hasTouch === true) {
         const position = getWorldPosition(scene, movement, {} as any)
+        convert2Degrees(position, point, scene)
         if (defined(position)) {
           point.position = position
           point.show = true
@@ -277,9 +284,7 @@ export default function (props, ctx, cmpName: string) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
       const point: VcPointDrawing = renderDatas.value[index]
       point.position = position
-      const cart = Cesium.Cartographic.fromCartesian(position, scene.globe.ellipsoid)
-      const positionDegrees = [Cesium.Math.toDegrees(cart.longitude), Cesium.Math.toDegrees(cart.latitude), cart.height] as [number, number, number]
-      point.positionDegrees = positionDegrees
+      convert2Degrees(position, point, scene)
       getMeasurementResult(point, movement)
       const type = editingPoint.value ? editorType.value : 'new'
       nextTick(() => {
@@ -291,7 +296,7 @@ export default function (props, ctx, cmpName: string) {
             name: drawingType,
             finished: false,
             position,
-            positionDegrees,
+            positionDegrees: point.positionDegrees,
             windowPoistion: movement,
             type
           },
