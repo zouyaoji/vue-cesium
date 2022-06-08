@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-03-12 16:45:53
+ * @LastEditTime: 2022-06-06 17:54:52
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -162,7 +162,7 @@ export default function (
           pickObj instanceof Cesium3DTileFeature ||
           pickObj.primitive instanceof Cesium3DTileset ||
           pickObj.primitive instanceof Model ||
-          pickObj.primitive instanceof Cesium.S3MTilesLayer
+          (Cesium.S3MTilesLayer && pickObj.primitive instanceof Cesium.S3MTilesLayer)
         ) {
           position = scene.pickPosition(windowPosition, cartesianScratch)
           if (defined(position)) {
