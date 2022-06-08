@@ -721,17 +721,21 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     let viewer: Cesium.Viewer
 
-    if (globalThis.mars3d) {
-      vcInstance.map = new mars3d.Map($(viewerRef).id, options)
-      viewer = vcInstance.map?._viewer
-    } else if (globalThis.DC) {
-      vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
-      viewer = vcInstance.dcViewer?.delegate
-    } else if (globalThis.XE) {
-      vcInstance.earth = new globalThis.XE.Earth($(viewerRef), options)
-      viewer = vcInstance.earth?.czm.viewer
+    if (props.viewerCreator) {
+      viewer = props.viewerCreator(vcInstance, $(viewerRef), options)
     } else {
-      viewer = new Viewer($(viewerRef), options)
+      if (globalThis.mars3d) {
+        vcInstance.map = new mars3d.Map($(viewerRef).id, options)
+        viewer = vcInstance.map?._viewer
+      } else if (globalThis.DC) {
+        vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
+        viewer = vcInstance.dcViewer?.delegate
+      } else if (globalThis.XE) {
+        vcInstance.earth = new globalThis.XE.Earth($(viewerRef), options)
+        viewer = vcInstance.earth?.czm.viewer
+      } else {
+        viewer = new Viewer($(viewerRef), options)
+      }
     }
 
     // 扩展
@@ -1613,6 +1617,10 @@ export interface VcViewerProps {
    */
   touchHoldArg?: string
   /**
+   * Specify the initialization method of the viewer when loading non-standard third-party Cesium libraries.
+   */
+  viewerCreator?: VcViewerCreatorFunction
+  /**
    * Triggers before the VcViewer is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
@@ -1829,3 +1837,5 @@ export interface VcViewerSlots {
 }
 
 export type VcViewerRef = VcComponentPublicInstance<VcViewerProps>
+
+export type VcViewerCreatorFunction = (instance: VcComponentInternalInstance, el: HTMLElement, options: VcViewerProps) => Cesium.Viewer

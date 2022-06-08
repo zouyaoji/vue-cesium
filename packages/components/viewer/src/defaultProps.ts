@@ -202,5 +202,6 @@ export default {
   touchHoldArg: {
     type: String,
     default: '1000'
-  }
+  },
+  viewerCreator: Function
 }
