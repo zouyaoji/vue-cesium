@@ -66,6 +66,15 @@ export default defineComponent({
         }
       )
     )
+
+    unwatchFns.push(
+      watch(
+        () => props.show,
+        val => {
+          rootStyle.display = val ? 'block' : 'none'
+        }
+      )
+    )
     // methods
     instance.createCesiumObject = async () => {
       return $(rootRef)
