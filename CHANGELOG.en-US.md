@@ -1,5 +1,18 @@
 ## Changelog
 
+### 3.0.14
+
+_2022-06-08_
+
+#### New feature
+
+- The `vc-viewer` component adds the `viewerCreator` property, and passes in a method for the initialization method of the viewer when loading a non-standard third-party Cesium library.
+
+#### Bug fixes
+
+- `vd-drawings` cannot obtain latitude and longitude when drawing points on the mobile terminal.
+- The `vc-overlay-html` component's show attribute does not respond in time.
+
 ### 3.0.13
 
 _2022-05-19_

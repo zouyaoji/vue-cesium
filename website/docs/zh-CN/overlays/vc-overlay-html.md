@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-19 00:16:21
- * @LastEditTime: 2022-03-09 21:20:54
+ * @LastEditTime: 2022-06-08 09:13:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-html.md
@@ -22,7 +22,7 @@ HTML 覆盖物组件的基础用法。
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <vc-overlay-html ref="html" :position="[117.186419, 45.66446, 20]">
+    <vc-overlay-html ref="html" :position="[117.186419, 45.66446, 20]" :show="show">
       <div class="vc-box">aa</div>
     </vc-overlay-html>
     <vc-entity :position="[117.186419, 45.66446, 20]">
@@ -46,11 +46,17 @@ HTML 覆盖物组件的基础用法。
     <el-button type="danger" round @click="unload">销毁</el-button>
     <el-button type="danger" round @click="load">加载</el-button>
     <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="toggle">显/隐</el-button>
   </el-row>
 </el-row>
 
 <script>
   export default {
+    data() {
+      return {
+        show: true
+      }
+    },
     methods: {
       unload() {
         this.$refs.html.unload()
@@ -60,6 +66,9 @@ HTML 覆盖物组件的基础用法。
       },
       reload() {
         this.$refs.html.reload()
+      },
+      toggle() {
+        this.show = !this.show
       }
     }
   }
