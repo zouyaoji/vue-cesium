@@ -962,7 +962,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         if (cesiumPath?.lastIndexOf('/') !== cesiumPath?.length - 1) {
           cesiumPath += '/'
         }
-        const libsConfig = getMars3dConfig(cesiumPath!)
+        const libsConfig = props.mars3dConfig || getMars3dConfig(cesiumPath)
         const include = globalConfig.value.cfg?.include || 'mars3d'
         const arrInclude = include.split(',')
         const keys = {}
@@ -1616,6 +1616,7 @@ export interface VcViewerProps {
    * Default value: 1000
    */
   touchHoldArg?: string
+  mars3dConfig?: any
   /**
    * Specify the initialization method of the viewer when loading non-standard third-party Cesium libraries.
    */

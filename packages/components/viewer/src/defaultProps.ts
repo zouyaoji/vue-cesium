@@ -203,5 +203,6 @@ export default {
     type: String,
     default: '1000'
   },
-  viewerCreator: Function
+  viewerCreator: Function,
+  mars3dConfig: Object
 }
