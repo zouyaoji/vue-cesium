@@ -5,29 +5,29 @@ on:
     types: [created]
 
 jobs:
-  test:
-    runs-on: windows-latest
+  # test:
+  #   runs-on: windows-latest
 
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          registry-url: https://registry.npmjs.com/
+  #     - name: Setup node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
+  #         registry-url: https://registry.npmjs.com/
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+  #     - name: Setup pnpm
+  #       uses: pnpm/action-setup@v2
 
-      - name: Install dependencies
-        run: pnpm i --frozen-lockfile
-      - name: Lint
-        run: pnpm lint
-      - name: Test
-        run: pnpm test
+  #     - name: Install dependencies
+  #       run: pnpm i --frozen-lockfile
+  #     - name: Lint
+  #       run: pnpm lint
+  #     - name: Test
+  #       run: pnpm test
 
   publish:
     # needs: test
