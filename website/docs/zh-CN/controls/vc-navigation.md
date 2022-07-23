@@ -83,11 +83,11 @@
           color: 'red',
           // 使用高德api定位
           amap: {
-            key: '42d22e6ed83f077bc28b7864718726de',
+            key: '39c28158066d532d372391c5a0c7d9ba',
             version: '2.0',
             options: {
               timeout: 5000,
-              noGeoLocation: 3,
+              noGeoLocation: 0,
               needAddress: true,
               extensions: 'all'
             },
@@ -175,7 +175,7 @@
     <!-- 高德 API 定位 -->
     <vc-my-location
       color="#9C27B0"
-      :amap="{key: '42d22e6ed83f077bc28b7864718726de',version: '2.0',options: {timeout: 5000,noGeoLocation: 3,needAddress: true,extensions: 'all'},transformToWGS84: true}"
+      :amap="{key: '39c28158066d532d372391c5a0c7d9ba',version: '2.0',options: {timeout: 5000,noGeoLocation: 0,needAddress: true,extensions: 'all'},transformToWGS84: true}"
       position="top-left"
       :offset="[0, 60]"
       label="定位"
