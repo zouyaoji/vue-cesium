@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-05-18 22:30:33
+ * @LastEditTime: 2022-06-24 16:55:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\regular\index.ts
@@ -138,7 +138,7 @@ export type VcDrawingRegularProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-15 14:59:16
+ * @LastEditTime: 2022-06-24 16:56:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\height\index.ts
@@ -128,7 +128,7 @@ export type VcMeasurementHeightProps = {
   /**
    * Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

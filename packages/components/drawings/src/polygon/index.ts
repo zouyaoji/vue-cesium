@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-05-18 21:30:01
+ * @LastEditTime: 2022-06-24 16:55:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polygon\index.ts
@@ -146,7 +146,7 @@ export type VcDrawingPolygonProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

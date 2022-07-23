@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-05-18 21:34:15
+ * @LastEditTime: 2022-06-24 16:58:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
@@ -116,7 +116,7 @@ export type VcMeasurementPointProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-05-14 01:57:55
+ * @LastEditTime: 2022-07-05 11:28:27
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
@@ -23,6 +23,9 @@ import {
   VcDrawingEditorEvt,
   VcDrawingMouseEvt,
   VcDrawingOpts,
+  VcPointDrawing,
+  VcPolylineDrawing,
+  VcSegmentDrawing,
   VcViewshedAnalysisOpts
 } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
@@ -254,7 +257,7 @@ export type VcAnalysesProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */
@@ -266,5 +269,5 @@ export type VcAnalysesProps = {
   /**
    * Triggers when the floating button is expanded or collapsed.
    */
-  onFabUpdated: (value: boolean) => void
+  onFabUpdated?: (value: boolean) => void
 }

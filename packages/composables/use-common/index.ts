@@ -289,7 +289,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           className &&
           className.indexOf('Graphics') === -1 &&
           entityGraphics.indexOf(cesiumProp) !== -1 &&
-          (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0)
+          (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
         ) {
           options[cesiumProp] = transformProps(props[vueProp], childProps)
         } else {

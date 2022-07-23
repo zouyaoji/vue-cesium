@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-05-18 21:27:00
+ * @LastEditTime: 2022-07-07 13:54:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -223,6 +223,7 @@ export interface VcDrawingOpts {
   show?: boolean
   drawtip?: VcDrawTipOpts
   pointOpts?: VcPointProps
+  billboardOpts?: VcBillboardProps
   labelOpts?: VcLabelProps
   labelsOpts?: VcLabelProps
   polylineOpts?: VcGeometryPolylineProps
@@ -260,7 +261,8 @@ export type DrawingType = 'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle'
 
 export type AnalysisType = 'sightline' | 'viewshed'
 
-export interface VcDrawingDrawEvt {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type VcDrawingDrawEvt<T = {}> = {
   index?: number
   name: MeasurementType | DrawingType | AnalysisType
   renderDatas: Ref<Array<VcPointDrawing | VcPolylineDrawing | VcSegmentDrawing>>
@@ -268,7 +270,7 @@ export interface VcDrawingDrawEvt {
   position?: Cesium.Cartesian3
   windowPoistion: Cesium.Cartesian2
   type: 'new' | 'move' | 'remove' | 'insert' | 'removeAll' | 'cancel'
-}
+} & T
 
 export interface VcDrawingActiveEvt {
   type: MeasurementType | DrawingType | AnalysisType

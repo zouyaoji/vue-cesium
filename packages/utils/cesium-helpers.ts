@@ -607,7 +607,7 @@ export function makeAppearance(this: VcComponentInternalInstance, val: VcAppeara
 export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRectangle | Cesium.RectangleGraphics | undefined {
   const { Rectangle, RectangleGraphics, CallbackProperty } = Cesium
   // Entiy 的 rectangle 属性不能调用这个方法
-  if (val instanceof RectangleGraphics || val instanceof Rectangle) {
+  if (val instanceof RectangleGraphics || val instanceof Rectangle || val instanceof CallbackProperty) {
     return val
   }
 

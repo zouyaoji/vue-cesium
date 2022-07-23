@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-05-18 22:39:17
+ * @LastEditTime: 2022-06-24 16:54:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -22,7 +22,16 @@ import {
   regularDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
-import { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
+import {
+  VcDrawingActiveEvt,
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingOpts,
+  VcPointDrawing,
+  VcPolylineDrawing,
+  VcSegmentDrawing
+} from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 import type { PropType } from 'vue'
@@ -292,7 +301,7 @@ export type VcDrawingsProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

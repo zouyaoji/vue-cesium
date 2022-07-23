@@ -1839,4 +1839,4 @@ export interface VcViewerSlots {
 
 export type VcViewerRef = VcComponentPublicInstance<VcViewerProps>
 
-export type VcViewerCreatorFunction = (instance: VcComponentInternalInstance, el: HTMLElement, options: VcViewerProps) => Cesium.Viewer
+export type VcViewerCreatorFunction<T = Cesium.Viewer> = (instance: VcComponentInternalInstance, el: HTMLElement, options: VcViewerProps) => T

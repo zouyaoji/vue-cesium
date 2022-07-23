@@ -162,7 +162,7 @@ interface DynamicOverlayOpts extends Cesium.Entity {
 
 interface SampledPosition {
   position: VcPosition
-  time?: Cesium.JulianDate | string
+  time?: Cesium.JulianDate | string | Date
   interval?: number
   [key: string]: any
 }

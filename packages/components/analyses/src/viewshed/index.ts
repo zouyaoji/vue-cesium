@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 16:26:03
- * @LastEditTime: 2022-05-14 01:54:34
+ * @LastEditTime: 2022-06-24 16:54:28
  * @LastEditors: zouyaoji
  * @Description: refer to https://blog.csdn.net/fywindmoon/article/details/108415116
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\viewshed\index.ts
@@ -100,7 +100,7 @@ export type VcAnalysisViewshedProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-05-18 21:35:41
+ * @LastEditTime: 2022-06-24 16:56:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -35,8 +35,11 @@ import type {
   VcDrawingMouseEvt,
   VcHorizontalMeasurementOpts,
   VcMeasurementOpts,
+  VcPointDrawing,
+  VcPolylineDrawing,
   VcPolylineMeasurementOpts,
-  VcRegularMeasurementOpts
+  VcRegularMeasurementOpts,
+  VcSegmentDrawing
 } from '@vue-cesium/utils/drawing-types'
 
 const distanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -619,7 +622,7 @@ export type VcMeasurementsProps = {
   /**
    * 	Triggers when drawing.
    */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**
    * Triggers when the editor button is clicked.
    */

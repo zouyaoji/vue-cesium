@@ -1,7 +1,7 @@
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { isString } from '@vue-cesium/utils/util'
 
-export default function (vcInstance: VcComponentInternalInstance) {
+export default function (vcInstance?: VcComponentInternalInstance) {
   const makeLog = (prefix = '') => {
     return function (...args) {
       if (prefix) {
