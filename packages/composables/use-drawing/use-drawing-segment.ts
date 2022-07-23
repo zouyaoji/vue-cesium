@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-05-18 22:46:39
+ * @LastEditTime: 2022-07-14 18:04:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
  */
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
-import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
+import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelProps, VcPolygon } from '@vue-cesium/components/primitive-collections'
 import { VcPrimitive, VcPrimitiveGroundPolyline, VcViewshed } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolyline, VcGeometryGroundPolyline } from '@vue-cesium/components/geometries'
@@ -28,7 +28,7 @@ import {
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
 import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
-import type { VNode } from 'vue'
+import { reactive, VNode } from 'vue'
 import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
@@ -111,11 +111,7 @@ export default function (props, ctx, cmpName: string) {
         return
       }
 
-      const labels: Array<{
-        position: Cesium.Cartesian3
-        id: string
-        text: string
-      }> = []
+      const labels = reactive<Array<VcLabelProps>>([])
       const distances: number[] = []
       const angles: number[] = []
 

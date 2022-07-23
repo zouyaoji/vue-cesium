@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-05-31 16:11:56
+ * @LastEditTime: 2022-07-14 22:02:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -561,7 +561,7 @@ export default function (props, ctx, cmpName: string) {
             ...billboardOpts
           })
 
-          props.labelOpts.text &&
+          labelsOpts.text &&
             labelsRender.push({
               position: point.position,
               id: createGuid(),

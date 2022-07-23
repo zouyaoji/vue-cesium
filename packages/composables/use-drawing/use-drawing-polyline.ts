@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-05-18 22:45:08
+ * @LastEditTime: 2022-07-14 18:04:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -17,7 +17,7 @@ import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
 import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import type { VNode } from 'vue'
+import { reactive, VNode } from 'vue'
 import { computed, getCurrentInstance, nextTick, ref, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
@@ -96,7 +96,7 @@ export default function (props, ctx, cmpName: string) {
     const polylines: Array<VcPolylineDrawing> = []
     const { viewer } = $services
     renderDatas.value.forEach((polyline, index) => {
-      const labels: Array<VcLabelProps> = []
+      const labels = reactive<Array<VcLabelProps>>([])
       const distances: number[] = []
       const angles: number[] = []
       let distance = 0
