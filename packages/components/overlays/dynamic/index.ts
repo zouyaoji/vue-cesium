@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-04-25 17:20:37
+ * @LastEditTime: 2022-07-05 17:57:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -98,7 +98,7 @@ const emits = {
   'update:startTime': (startTime: Cesium.JulianDate) => true,
   'update:stopTime': (stopTime: Cesium.JulianDate) => true,
   onStop: (clock: Cesium.Clock) => true,
-  stopArrived: (overlay: DynamicOverlay, position: SampledPosition) => true
+  stopArrived: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange) => true
 }
 export default defineComponent({
   name: 'VcOverlayDynamic',
@@ -119,7 +119,8 @@ export default defineComponent({
     const { emit } = ctx
     const trackingOverlay = ref<DynamicOverlay>(null)
     const trackView = ref<TrackViewOpts>(null)
-
+    let lastOffset
+    let lastPosition
     // watcch
     let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
@@ -318,7 +319,6 @@ export default defineComponent({
               const deleteEntity = datasource.entities.getById(deletes[i].id)
               deletedEntities.push(deleteEntity!)
             }
-
             deletedEntities.forEach(v => {
               datasource.entities.remove(v)
               remove(overlays.value, overlay => overlay.id === v.id)
@@ -397,7 +397,7 @@ export default defineComponent({
             }
 
             if (arrivedFlag) {
-              emit('stopArrived', overlay, sampledPosition)
+              emit('stopArrived', overlay, sampledPosition, lastOffset)
               break
             }
           }
@@ -486,8 +486,12 @@ export default defineComponent({
     const setTrackView = (clock: Cesium.Clock) => {
       if (trackView.value && trackingOverlay.value) {
         const { viewer } = $services
+
         if (Cesium.JulianDate.greaterThan(clock.currentTime, clock.stopTime)) {
-          viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY)
+          // viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY)
+          // if (lastOffset && lastPosition) {
+          //   viewer.camera.lookAt(lastPosition, lastOffset)
+          // }
           trackingOverlay.value = null
           return
         }
@@ -502,14 +506,22 @@ export default defineComponent({
           case 'FP': {
             const nextTickTime = Cesium.JulianDate.addSeconds(clock.currentTime, 1 / 60, new Cesium.JulianDate())
             const nextTickPosition = trackingOverlay.value._sampledPosition.getValue(nextTickTime) || position
-            offset.heading = Cesium.Math.toRadians(getPolylineSegmentHeading(position, nextTickPosition))
-            offset.pitch = (trackView.value?.offset?.pitch || Cesium.Math.toRadians(-45.0)) + getPolylineSegmentPitch(position, nextTickPosition)
-            offset.range = trackView.value?.offset?.range || 500
+
+            if (position.equals(nextTickPosition) && lastOffset) {
+              offset = lastOffset
+            } else {
+              offset.heading = Cesium.Math.toRadians(getPolylineSegmentHeading(position, nextTickPosition))
+              offset.pitch = (trackView.value?.offset?.pitch || Cesium.Math.toRadians(-45.0)) + getPolylineSegmentPitch(position, nextTickPosition)
+              offset.range = trackView.value?.offset?.range || 500
+            }
+
             break
           }
           case 'CUSTOM':
             offset = makeHeadingPitchRang(trackView.value.offset)
         }
+        lastOffset = offset
+        lastPosition = position
         viewer.camera.lookAt(position, offset)
       }
     }
@@ -732,11 +744,11 @@ export interface VcOverlayDynamicProps {
   /**
    * Triggers when Clock#stopTime is reached.
    */
-  onOnStop: (clock: Cesium.Clock) => void
+  onOnStop?: (clock: Cesium.Clock) => void
   /**
    * Triggers when a stop is reached.
    */
-  onStopArrived: (overlay: DynamicOverlay, position: SampledPosition) => void
+  onStopArrived?: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange) => void
   /**
    * Triggers when currentTime changed.
    */
