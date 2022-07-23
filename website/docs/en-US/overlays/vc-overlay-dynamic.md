@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2022-04-25 17:26:46
+ * @LastEditTime: 2022-07-04 15:01:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-dynamic.md
@@ -92,6 +92,7 @@ Basic usage of VcOverlayDynamic component.
         const overlays = []
         for (let i = 0; i < 50; i++) {
           overlays.push({
+            id: i,
             maxCacheSize: 10, //The maximum number of buffer points, the real-time track should not be set too large; the historical track should be set to be greater than the total number of points, otherwise the data will be lost.
             model: {
               uri: 'https://zouyaoji.top/vue-cesium/SampleData/models/Car/Car.gltf',

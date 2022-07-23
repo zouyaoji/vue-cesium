@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2022-04-28 14:29:47
+ * @LastEditTime: 2022-07-14 09:10:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-dynamic.md
@@ -90,6 +90,7 @@
         const overlays = []
         for (let i = 0; i < 50; i++) {
           overlays.push({
+            id: i,
             maxCacheSize: 10, // 最大缓存点位数，实时轨迹不要设置太大；历史轨迹要设置得大于总点位数，不然要丢失数据。
             model: {
               uri: 'https://zouyaoji.top/vue-cesium/SampleData/models/Car/Car.gltf',
@@ -207,13 +208,13 @@
             depthFailMaterial: '#69B273',
             clampToGround: true
           },
-          rectangle: {
-            material: 'red',
-            coordinates: () => {
-              return Cesium.Rectangle.fromDegrees(102, 32, 104, 34)
-            }
-            // coordinates: [102, 32, 104, 34]
-          },
+          // rectangle: {
+          //   material: 'red',
+          //   coordinates: () => {
+          //     return Cesium.Rectangle.fromDegrees(121, 32, 121.5, 32.5)
+          //   }
+          //   // coordinates: [102, 32, 104, 34]
+          // },
           sampledPositions
         })
         return overlays

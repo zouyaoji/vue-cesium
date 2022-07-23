@@ -91,6 +91,7 @@ app.mount('#app')
     methods: {
       onViewerReady({ Cesium, viewer }) {
         viewer.imageryLayers.removeAll()
+        const promise = viewer.scene.open('https://www.supermapol.com/realspace/services/3D-CBD/rest/realspace')
         console.log(viewer)
       },
       onNavigationEvt(e) {

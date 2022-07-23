@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.15
+
+_2022-07-23_
+
+#### Optimization
+
+- `vc-overlay-dynamic` component model object keeps the last azimuth when stopped.
+- Individual component types are defined incorrectly.
+
 ### 3.0.14
 
 _2022-06-08_
