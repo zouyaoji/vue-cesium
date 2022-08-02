@@ -9,6 +9,9 @@
 
 .vc-icon {
   line-height: 1;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
@@ -39,11 +42,15 @@
 .material-icons,
 .material-icons-outlined,
 .material-icons-round,
-.material-icons-sharp {
-  // user-select: none;
+.material-icons-sharp,
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-symbols-sharp {
+  user-select: none;
   cursor: inherit;
   font-size: inherit;
-  display: block;
+  // display: block;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
