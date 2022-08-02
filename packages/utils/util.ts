@@ -73,12 +73,43 @@ export function isEmptyObj(obj: unknown): boolean {
 
 export const kebabCase = hyphenate
 
+function myInstanceof(left, right) {
+  //基本数据类型直接返回false
+  if (typeof left !== 'object' || left === null) return false
+  //getProtypeOf是Object对象自带的一个方法，能够拿到参数的原型对象
+  let proto = Object.getPrototypeOf(left)
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    //查找到尽头，还没找到
+    if (proto === null) return false
+    //找到相同的原型对象
+    if (proto === right?.prototype) return true
+    proto = Object.getPrototypeOf(proto)
+  }
+}
+
+export function getCesiumClassName(obj) {
+  let result = undefined
+  const constructorNames = Object.keys(Cesium)
+  for (let i = 0; i < constructorNames.length; i++) {
+    const className = constructorNames[i]
+
+    if (myInstanceof(obj, Cesium[className])) {
+      result = className
+      break
+    }
+  }
+  return result
+}
+
 export function getObjClassName(obj: AnyObject): string {
+  const cesiumClassName = getCesiumClassName(obj)
+
+  if (cesiumClassName) {
+    return cesiumClassName
+  }
   if (obj && obj.constructor) {
-    const strFun = obj.constructor.toString()
-    let className = strFun.substr(0, strFun.indexOf('('))
-    className = className.replace('function', '')
-    return className.replace(/(^\s*)|(\s*$)/gi, '')
+    return obj.constructor.name
   }
   return typeof obj
 }
