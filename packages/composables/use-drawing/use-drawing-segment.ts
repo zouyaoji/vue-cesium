@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-07-14 18:04:50
+ * @LastEditTime: 2022-08-02 22:20:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -183,7 +183,7 @@ export default function (props, ctx, cmpName: string) {
           for (let i = 0; i < (props.edge || 4) - 1; i++) {
             const position = getPolylineSegmentEndpoint(
               startPosition,
-              (hpr[0] += (Math.PI * 2) / (props.edge || 4)),
+              (hpr.heading += (Math.PI * 2) / (props.edge || 4)),
               distance,
               viewer.scene.globe.ellipsoid
             )

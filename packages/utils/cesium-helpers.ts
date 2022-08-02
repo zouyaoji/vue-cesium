@@ -848,32 +848,38 @@ export function getGeodesicDistance(start: Cesium.Cartesian3, end: Cesium.Cartes
 }
 
 export function getHeadingPitchRoll(start: Cesium.Cartesian3, end: Cesium.Cartesian3, scene: Cesium.Scene, result?: Array<number>) {
-  const { Camera, Cartesian3, Math: CesiumMath } = Cesium
-  const camera = new Camera(scene)
+  const { Cartesian3 } = Cesium
   if (Cartesian3.equals(start, end)) {
     return undefined
   }
 
-  let direction = Cartesian3.subtract(end, start, {} as any)
-  direction = Cartesian3.normalize(direction, direction)
-  let up = Cartesian3.subtract(start, new Cartesian3(), {} as any)
-  up = Cartesian3.normalize(up, up)
-  camera.setView({
-    destination: start,
-    orientation: {
-      direction,
-      up
-    }
-  })
+  //向量AB
+  const vector2 = Cesium.Cartesian3.subtract(end, start, new Cesium.Cartesian3())
+  //归一化
+  const normal = Cesium.Cartesian3.normalize(vector2, new Cesium.Cartesian3())
+  //旋转矩阵 rotationMatrixFromPositionVelocity源码中有，并未出现在cesiumAPI中
+  const rotationMatrix3 = Cesium.Transforms.rotationMatrixFromPositionVelocity(start, normal, scene.globe.ellipsoid)
+  const m = Cesium.Matrix4.fromRotationTranslation(rotationMatrix3, start)
+  const m1 = Cesium.Transforms.eastNorthUpToFixedFrame(
+    Cesium.Matrix4.getTranslation(m, new Cesium.Cartesian3()),
+    Cesium.Ellipsoid.WGS84,
+    new Cesium.Matrix4()
+  )
+  // 矩阵相除
+  const m3 = Cesium.Matrix4.multiply(Cesium.Matrix4.inverse(m1, new Cesium.Matrix4()), m, new Cesium.Matrix4())
+  // 得到旋转矩阵
+  const mat3 = Cesium.Matrix4.getMatrix3(m3, new Cesium.Matrix3())
+  // 计算四元数
+  const q = Cesium.Quaternion.fromRotationMatrix(mat3)
+  // 计算旋转角(弧度)
+  const hpr = Cesium.HeadingPitchRoll.fromQuaternion(q)
+  return hpr
+}
 
-  result = result || [0, 0, 0]
-  let heading = camera.heading
-  heading -= CesiumMath.PI_OVER_TWO
-  if (heading < 0) {
-    heading += CesiumMath.TWO_PI
-  }
-  result.splice(0, result.length, heading, camera.pitch, camera.roll)
-  return result
+export function getOrientation(start: Cesium.Cartesian3, end: Cesium.Cartesian3, scene?: Cesium.Scene) {
+  const hpr = getHeadingPitchRoll(start, end, scene)
+  hpr.pitch = hpr.pitch + Math.PI / 2 + Math.PI
+  return Cesium.Transforms.headingPitchRollQuaternion(start, hpr)
 }
 
 export function getPolylineSegmentEndpoint(start: Cesium.Cartesian3, heading: number, distance: number, ellipsoid: Cesium.Ellipsoid) {
