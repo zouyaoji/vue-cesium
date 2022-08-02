@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-15 09:47:36
- * @LastEditTime: 2022-03-10 00:57:10
+ * @LastEditTime: 2022-07-25 17:36:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-action.ts
  */
 // import { enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcDrawingProvider, VcPickEvent } from '@vue-cesium/utils/types'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useLocale } from '../use-locale'
 import { DrawStatus } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
@@ -37,10 +37,12 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   tips[3] && (drawingType = `${tips[2]}-${tips[3]}`)
 
   const drawTip = ref('')
-  const drawTipOpts = ref<VcDrawTipOpts>({
-    drawingTipStart: props.drawtip.drawingTipStart || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipStart`),
-    drawingTipEnd: props.drawtip.drawingTipEnd || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEnd`),
-    drawingTipEditing: props.drawtip.drawingTipEditing || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEditing`)
+  const drawTipOpts = computed<VcDrawTipOpts>(() => {
+    return {
+      drawingTipStart: props.drawtip.drawingTipStart || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipStart`),
+      drawingTipEnd: props.drawtip.drawingTipEnd || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEnd`),
+      drawingTipEditing: props.drawtip.drawingTipEditing || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEditing`)
+    }
   })
 
   const drawStatus = ref(DrawStatus.BeforeDraw)
