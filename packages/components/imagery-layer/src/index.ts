@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 15:56:44
+ * @LastEditTime: 2022-08-03 09:42:07
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \10_vue-cesium\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -147,9 +147,9 @@ export type VcLayerImageryProps = {
    */
   gamma?: number | LayerPropCallback
   /**
-   * The ImagerySplitDirection split to apply to this layer.
+   * The SplitDirection split to apply to this layer.
    */
-  splitDirection?: number | Cesium.ImagerySplitDirection | AnyFunction<number | Cesium.ImagerySplitDirection>
+  splitDirection?: number | Cesium.SplitDirection | AnyFunction<number | Cesium.SplitDirection>
   /**
    * The texture minification filter to apply to this layer. Possible values are TextureMinificationFilter.LINEAR and TextureMinificationFilter.NEAREST.
    */

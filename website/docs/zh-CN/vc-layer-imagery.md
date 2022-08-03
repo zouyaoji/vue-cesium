@@ -84,9 +84,9 @@
       }
       const onImageryLayerReady = readyObj => {
         const { cesiumObject: imageryLayer, viewer } = readyObj
-        imageryLayer.splitDirection = Cesium.ImagerySplitDirection.LEFT
+        imageryLayer.splitDirection = Cesium.SplitDirection.LEFT
         const slider = sliderRef.value
-        viewer.scene.imagerySplitPosition = slider.offsetLeft / slider.parentElement.offsetWidth
+        viewer.scene.splitPosition = slider.offsetLeft / slider.parentElement.offsetWidth
       }
       const onMove = movement => {
         if (!moveActive) {
@@ -96,7 +96,7 @@
         const relativeOffset = movement.endPosition.x
         const splitPosition = (slider.offsetLeft + relativeOffset) / slider.parentElement.offsetWidth
         slider.style.left = 100.0 * splitPosition + '%'
-        myViewer.scene.imagerySplitPosition = splitPosition
+        myViewer.scene.splitPosition = splitPosition
       }
       const unload = () => {
         layer.value.unload()
@@ -158,7 +158,7 @@
 | hue | number \| LayerPropCallback | `0.0` | `optional` 指定影像图层色调。值为 0.0 表示使用原图。 |
 | saturation | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层饱和度。值为 1.0 表示使用原图；值大于 1.0 表示增加饱和度；值小于 1.0 表示降低饱和度。 |
 | gamma | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层伽马校正。值为 1.0 表示使用原图。 |
-| splitDirection | number \| Cesium.ImagerySplitDirection \| LayerPropCallback| `0` | `optional` 指定影像图层分割方向。 **LEFT: -1, NONE: 0, RIGHT: 1**|-1/0/1|
+| splitDirection | number \| Cesium.SplitDirection \| LayerPropCallback| `0` | `optional` 指定影像图层分割方向。 **LEFT: -1, NONE: 0, RIGHT: 1**|-1/0/1|
 | minificationFilter | number \| Cesium.TextureMinificationFilter | `9729` | `optional` 指定影像图层纹理缩小过滤器。 **NEAREST: 9728, LINEAR: 9729, NEAREST_MIPMAP_NEAREST: 9984, LINEAR_MIPMAP_NEAREST: 9985, NEAREST_MIPMAP_LINEAR: 9986**|9728/9729/9984/9985/9986|
 | magnificationFilter | number \| Cesium.TextureMagnificationFilter | `9729` | `optional` 指定影像图层纹理缩小过滤器。**NEAREST: 9728, LINEAR: 9729** |9728/9729|
 | show | boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false |
