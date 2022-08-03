@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-09 16:19:57
- * @LastEditTime: 2022-02-09 16:49:56
+ * @LastEditTime: 2022-08-03 13:57:05
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-global-config\index.ts
@@ -9,23 +9,23 @@
 import { ConfigProviderContext, configProviderContextKey } from '@vue-cesium/utils/config'
 import { inject, ref, computed, unref, provide, getCurrentInstance } from 'vue'
 import type { Ref, App } from 'vue'
-import { hasOwn, isObject, merge } from '@vue-cesium/utils/util'
 import { MaybeRef } from '@vue-cesium/utils/types'
+import { keysOf } from '@vue-cesium/utils/objects'
 
-const cache = ref<ConfigProviderContext>({})
+const globalConfig = ref<ConfigProviderContext>()
 
 export function useGlobalConfig<K extends keyof ConfigProviderContext>(key: K): Ref<ConfigProviderContext[K]>
 export function useGlobalConfig(): Ref<ConfigProviderContext>
-export function useGlobalConfig(key?: keyof ConfigProviderContext) {
-  const config = inject(configProviderContextKey, cache)
+export function useGlobalConfig(key?: keyof ConfigProviderContext, defaultValue = undefined) {
+  const config = getCurrentInstance() ? inject(configProviderContextKey, globalConfig) : globalConfig
   if (key) {
-    return isObject(config.value) && hasOwn(config.value, key) ? computed(() => config.value[key]) : ref(undefined)
+    return computed(() => config.value?.[key] ?? defaultValue)
   } else {
     return config
   }
 }
 
-export const provideGlobalConfig = (config: MaybeRef<ConfigProviderContext>, app?: App) => {
+export const provideGlobalConfig = (config: MaybeRef<ConfigProviderContext>, app?: App, global = false) => {
   const inSetup = !!getCurrentInstance()
   const oldConfig = inSetup ? useGlobalConfig() : undefined
 
@@ -38,9 +38,20 @@ export const provideGlobalConfig = (config: MaybeRef<ConfigProviderContext>, app
   const context = computed(() => {
     const cfg = unref(config)
     if (!oldConfig) return cfg
-    return merge(oldConfig.value, cfg)
+    return mergeConfig(oldConfig.value, cfg)
   })
   provideFn(configProviderContextKey, context)
-  cache.value = context.value
+  if (global || !globalConfig.value) {
+    globalConfig.value = context.value
+  }
   return context
+}
+
+const mergeConfig = (a: ConfigProviderContext, b: ConfigProviderContext): ConfigProviderContext => {
+  const keys = [...new Set([...keysOf(a), ...keysOf(b)])]
+  const obj: Record<string, any> = {}
+  for (const key of keys) {
+    obj[key] = b[key] ?? a[key]
+  }
+  return obj
 }

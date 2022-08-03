@@ -699,6 +699,9 @@ export type Mars3dConfig = {
   }
 }
 
+export type Arrayable<T> = T | T[]
+export type Awaitable<T> = Promise<T> | T
+
 export {
   AnyObject,
   VcCamera,

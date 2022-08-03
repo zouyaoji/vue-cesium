@@ -14,7 +14,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "types": ["node"]
   },
   "include": ["packages", "typings"],
   "exclude": ["node_modules", "**/dist"]

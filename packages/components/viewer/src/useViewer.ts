@@ -962,8 +962,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       if (mars3dConfig) {
         // 引入 mars3d
         const libsConfig = mars3dConfig.libs || getDefaultMars3dConfig()
-        const include = globalConfig.value.cfg?.include || 'mars3d'
-        const arrInclude = include.split(',')
+        const include = mars3dConfig.include || 'mars3d'
+        const arrInclude = include.trim().split(',')
         const keys = {}
         for (let i = 0, len = arrInclude.length; i < len; i++) {
           const key = arrInclude[i]

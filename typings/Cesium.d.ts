@@ -6678,7 +6678,8 @@ evt.removeEventListener(MyObject.prototype.myListener);
      * Raises the event by calling each registered listener with all supplied arguments.
      * @param arguments - This method takes any number of parameters and passes them through to the listener functions.
      */
-    raiseEvent(...arguments: Parameters<Listener>[]): void
+    // raiseEvent(...arguments: Parameters<Listener>[]): void
+    raiseEvent(...arguments: Parameters<Listener>): void
   }
 
   export namespace Event {

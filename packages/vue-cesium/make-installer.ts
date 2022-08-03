@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-05-18 11:51:38
+ * @LastEditTime: 2022-08-03 14:00:58
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\vue-cesium\make-installer.ts
@@ -32,7 +32,7 @@ const makeInstaller = (components: Plugin[] = []) => {
     })
 
     const options = Object.assign(defaultConfig, opts)
-    provideGlobalConfig(options, app)
+    provideGlobalConfig(options, app, true)
 
     if (process.env.NODE_ENV === 'development') {
       logger.capsule('VueCesium', `v${version}`)
