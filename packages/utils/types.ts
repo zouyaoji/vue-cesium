@@ -681,6 +681,24 @@ export type VcHeatMapData = {
   value: number
 }
 
+export type Mars3dConfig = {
+  include: string
+  libs?: {
+    'font-awesome': string[]
+    haoutil: string[]
+    turf: string[]
+    'mars3d-space': string[]
+    'mars3d-echarts': string[]
+    'mars3d-mapv': string[]
+    'mars3d-heatmap': string[]
+    'mars3d-wind': string[]
+    'mars3d-tdt': string[]
+    'mars3d-widget': string[]
+    mars3d: string[]
+    [propName: string]: any
+  }
+}
+
 export {
   AnyObject,
   VcCamera,

@@ -16,12 +16,13 @@ import type {
   VcDatasource,
   ViewerWidgetResizedEvent,
   VcContextOptions,
-  VcViewerProvider
+  VcViewerProvider,
+  Mars3dConfig
 } from '@vue-cesium/utils/types'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
 import { useEvents } from '@vue-cesium/composables'
-import { getMars3dConfig } from './loadUtil'
+import { getMars3dConfig as getDefaultMars3dConfig } from './loadUtil'
 import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { VcSkeletonProps } from '../../ui/skeleton'
 import useVcExtension from '@vue-cesium/composables/private/use-vc-extension'
@@ -36,7 +37,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     reject = _reject
   })
 
-  const viewerRef = ref<HTMLElement>(null!)
+  const viewerRef = ref<HTMLElement>(null)
   const isReady = ref(false)
   const vcMitt: Emitter<VcMittEvents> = mitt()
   const { emit } = ctx
@@ -955,14 +956,12 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   const getCesiumScript = async function (): Promise<typeof Cesium> {
     logger.debug('getCesiumScript')
     if (!globalThis.Cesium) {
-      let cesiumPath = props.cesiumPath ? props.cesiumPath : globalConfig.value.cesiumPath
-      const dirName = dirname(cesiumPath!)
-      if (!cesiumPath?.includes('.js')) {
-        // 认为是mars3d
-        if (cesiumPath?.lastIndexOf('/') !== cesiumPath?.length - 1) {
-          cesiumPath += '/'
-        }
-        const libsConfig = props.mars3dConfig || getMars3dConfig(cesiumPath)
+      const cesiumPath = props.cesiumPath ? props.cesiumPath : globalConfig.value.cesiumPath
+      const dirName = dirname(cesiumPath)
+      const mars3dConfig = globalConfig.value.mars3dConfig || props.mars3dConfig
+      if (mars3dConfig) {
+        // 引入 mars3d
+        const libsConfig = mars3dConfig.libs || getDefaultMars3dConfig()
         const include = globalConfig.value.cfg?.include || 'mars3d'
         const arrInclude = include.split(',')
         const keys = {}
@@ -987,11 +986,11 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       }
 
       const secondaryLibs = loadLibs
-      if (!cesiumPath?.includes('.js')) {
+      if (mars3dConfig) {
         // mars3d 必须要等 Cesium 先初始化
         const primaryLib = loadLibs.find(v => v.includes('Cesium.js'))
         await loadScript(primaryLib)
-        secondaryLibs.splice(secondaryLibs.indexOf(primaryLib!), 1)
+        secondaryLibs.splice(secondaryLibs.indexOf(primaryLib), 1)
       }
 
       const scriptLoadPromises: Array<Promise<unknown>> = []
@@ -1616,7 +1615,7 @@ export interface VcViewerProps {
    * Default value: 1000
    */
   touchHoldArg?: string
-  mars3dConfig?: any
+  mars3dConfig?: Mars3dConfig
   /**
    * Specify the initialization method of the viewer when loading non-standard third-party Cesium libraries.
    */

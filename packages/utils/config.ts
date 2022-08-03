@@ -1,23 +1,24 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-02-09 23:47:58
+ * @LastEditTime: 2022-08-03 10:51:17
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\utils\config.ts
+ * @FilePath: \10_vue-cesium\packages\utils\config.ts
  */
 import type { Language } from '@vue-cesium/locale'
 import type { InjectionKey, Ref } from 'vue'
-import type { AnyObject } from './types'
+import type { Mars3dConfig } from './types'
 
 const hasSymbol = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol'
 export interface ConfigProviderContext {
   cesiumPath?: string
   accessToken?: string
   locale?: Language
-  cfg?: AnyObject // for mars3d
+  mars3dConfig?: Mars3dConfig // for mars3d
   __scriptPromise?: Promise<unknown>
   __viewerUnloadingPromise?: Promise<boolean>
+  [propName: string]: any
 }
 
 const vcKey = hasSymbol ? Symbol('VueCesium') : 'VueCesium'
