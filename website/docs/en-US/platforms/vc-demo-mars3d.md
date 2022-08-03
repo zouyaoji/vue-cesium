@@ -1,6 +1,6 @@
 ## Mars3D Demo
 
-When vue-cesium uses Mars3D of Mars Technology to develop, you only need to specify the address of the **directory** of the mars3d library through the configuration item `cesiumPath` when VueCesium is introduced.
+When vue-cesium uses [Mars3D](http://mars3d.cn/) of Mars Technology, it is only necessary to configure the address of the mars3d main library and its plug-in library through the configuration item `mars3dConfig` when introducing VueCesium, and the default use of unpkg.com cdn resources, if you need to use it locally or in the local area network, please change the resources of the relevant library to the local or local area network address through `mars3dConfig.libs`.Please [Reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/loadUtil.ts#L17) for non-TS project structure.
 
 ```javascript
 import { createApp } from 'vue'
@@ -10,16 +10,14 @@ import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueCesium, {
-  cesiumPath: 'https://mars3d.cn/lib/',
-  // The resource library to be imported, optional. If not specified, only the necessary resources of mars3d will be loaded
-  cfg: {
-    include: 'turf,mars3d'
+  mars3dConfig: {
+    include: 'mars3d'
   }
-})
+} as ConfigProviderContext)
 app.mount('#app')
 ```
 
-Or specify the address of `cesiumPath` as the **directory** of the mars3d library on the `vc-viewer` component.
+Or configure `mars3dConfig` on the `vc-viewer` component.
 
 If `vc-viewer` is loaded successfully, it will return { Cesium, viewer, map }, through this `map` use [mars3d tutorial](http://mars3d.cn/doc.html) and [mars3d API](http:// mars3d.cn/api/) for related development, such as the following example:
 
@@ -33,7 +31,7 @@ Use VueCesium to load Mars Technology Mars3D
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer
     ref="vcViewer"
-    :cesiumPath="cesiumPath"
+    :mars3d-config="mars3dConfig"
     :animation="animation"
     :timeline="timeline"
     :fullscreenButton="fullscreenButton"
@@ -81,7 +79,9 @@ Use VueCesium to load Mars Technology Mars3D
           offset: [0, 32],
           position: 'bottom-right'
         },
-        cesiumPath: 'https://mars3d.cn/lib/'
+        mars3dConfig: {
+          include: 'mars3d'
+        }
       }
     },
     mounted() {

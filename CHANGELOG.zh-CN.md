@@ -11,6 +11,10 @@ _2022-08-03_
 - 修复部分 css 不正确的问题。
 - 修复二维模式下绘制圆、正多边形结果不正确的问题。
 
+#### 破坏性更新
+
+- 引入 mars3d 的方式改变，通过 `mars3dConfig` 来配置。 详见 [vc-demo-mars3d](https://zouyaoji.top/vue-cesium/#/zh-CN/component/platforms/vc-demo-mars3d)
+
 ### 3.0.15
 
 _2022-07-23_

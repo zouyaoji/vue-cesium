@@ -11,6 +11,10 @@ _2022-08-03_
 - Fixed a bug that some css was wrong.
 - Fixed a bug that drawing circles and regular polygons is incorrect in 2D mode.
 
+#### Breaking changes:
+
+- Changed the access method of mars3d, configured via `mars3dConfig`. For details, see [vc-demo-mars3d](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-mars3d)
+
 ### 3.0.15
 
 _2022-07-23_

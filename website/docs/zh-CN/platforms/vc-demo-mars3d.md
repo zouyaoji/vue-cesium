@@ -1,8 +1,8 @@
 ## Mars3D Demo
 
-vue-cesium 使用火星科技的 [Mars3D](http://mars3d.cn/) 开发时只需要在引入 VueCesium 时通过配置项 `cesiumPath` 指定为 mars3d 库的**目录**地址。
+vue-cesium 使用火星科技的 [Mars3D](http://mars3d.cn/) 开发时只需要在引入 VueCesium 时通过配置项 `mars3dConfig` 配置 mars3d 主库和其插件库地址，默认使用 unpkg.com 的 cdn 资源，如需本地或局域网使用，请通过 mars3dConfig.libs 将相关库的资源改为本地或局域网地址即可。非 TS 项目结构请 [参考](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/loadUtil.ts#L17)。
 
-```javascript
+```typescript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
 import 'vue-cesium/dist/index.css'
@@ -10,16 +10,15 @@ import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueCesium, {
-  cesiumPath: 'https://mars3d.cn/lib/',
   // 要引入的资源库,可选。不指定的话只加载 mars3d 必要资源
-  cfg: {
-    include: 'turf,mars3d'
+  mars3dConfig: {
+    include: 'mars3d'
   }
-})
+} as ConfigProviderContext)
 app.mount('#app')
 ```
 
-或者在 `vc-viewer` 组件上将 `cesiumPath` 地址指定为 mars3d 库的**目录**。
+或者在 `vc-viewer` 组件上配置 `mars3dConfig` 。
 
 `vc-viewer` 加载成功会返回 { Cesium, viewer, map }, 通过该 `map` 使用 [mars3d 教程](http://mars3d.cn/doc.html) 和 [mars3d API](http://mars3d.cn/api/) 进行相关开发即可， 如下面的例子：
 
@@ -33,7 +32,7 @@ app.mount('#app')
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer
     ref="vcViewer"
-    :cesiumPath="cesiumPath"
+    :mars3d-config="mars3dConfig"
     :animation="animation"
     :timeline="timeline"
     :fullscreenButton="fullscreenButton"
@@ -86,7 +85,9 @@ app.mount('#app')
           offset: [0, 32],
           position: 'bottom-right'
         },
-        cesiumPath: 'https://mars3d.cn/lib/'
+        mars3dConfig: {
+          include: 'mars3d'
+        }
       }
     },
     mounted() {
