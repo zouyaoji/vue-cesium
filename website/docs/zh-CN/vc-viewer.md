@@ -2,22 +2,6 @@
 
 构建 `Cesium` 应用程序的基础组件，其实质是通过 `Cesium.Viewer` 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者子组件。
 
-## 注意
-
-`VueCesium` 的其他功能性组件，或由这些功能性组件构成的自定义组件，必须是 `VcViewer` 组件的子组件。
-
-例如下面的代码是错误的：
-
-```html
-<template>
-  <div>
-    <vc-viewer @ready="onViewerReady"></vc-viewer>
-    <vc-entity></vc-entity>
-    <!-- 错误用法！ -->
-  </div>
-</template>
-```
-
 ## 例子
 
 使用 `vc-viewer` 标签和它的一些响应属性来初始化三维场景，并挂载 `vc-navigation` 导航和 `vc-entity` 实体组件，详细 API 请查阅它们的文档。
@@ -283,6 +267,22 @@
 | 插槽名 | 描述 | 子组件 |
 | ----- | -----| ----- |
 | default | vue-cesium 子组件均要放在vc-viewer下。 | vc-navigation/vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend/vc-navigation-sm/vc-compass-sm/vc-zoom-control-sm/vc-layer-imagery/vc-entity/vc-terrain-provider-cesium/vc-terrain-provider-arcgis/vc-terrain-provider-tianditu/vc-datasource-custom/vc-datasource-czml/vc-datasource-geojson/vc-datasource-kml/vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-ground-polyline/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-overlay-html/vc-overlay-heatmap/vc-overlay-wind/vc-overlay-echarts/vc-polygon |
+
+## 注意
+
+`VueCesium` 的其他功能性组件，或由这些功能性组件构成的自定义组件，必须是 `VcViewer` 组件的子组件。
+
+例如下面的代码是错误的：
+
+```html
+<template>
+  <div>
+    <vc-viewer @ready="onViewerReady"></vc-viewer>
+    <vc-entity></vc-entity>
+    <!-- 错误用法！ -->
+  </div>
+</template>
+```
 
 # 参考
 

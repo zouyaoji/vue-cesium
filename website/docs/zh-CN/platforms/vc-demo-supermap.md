@@ -36,10 +36,10 @@ app.mount('#app')
     @leftClick="onLeftClick"
   >
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :otherOpts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
-    <!-- <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
+    <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
-    </vc-entity> -->
+    </vc-entity>
     <!-- 天地图注记 -->
     <vc-layer-imagery :sort-order="20">
       <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
@@ -90,7 +90,6 @@ app.mount('#app')
     },
     methods: {
       onViewerReady({ Cesium, viewer }) {
-        viewer.imageryLayers.removeAll()
         const promise = viewer.scene.open('https://www.supermapol.com/realspace/services/3D-CBD/rest/realspace')
         console.log(viewer)
       },

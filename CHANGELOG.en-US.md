@@ -1,5 +1,16 @@
 ## Changelog
 
+### 3.0.16
+
+_2022-08-03_
+
+#### Bug fixes
+
+- Fixed a bug that the tip of the drawing measurement component cannot be dynamically modified.
+- Fixed a bug that Cesium 1.96 version could not be loaded properly.
+- Fixed a bug that some css was wrong.
+- Fixed a bug that drawing circles and regular polygons is incorrect in 2D mode.
+
 ### 3.0.15
 
 _2022-07-23_
