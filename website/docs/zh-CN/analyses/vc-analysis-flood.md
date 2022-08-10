@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2022-03-09 09:48:46
+ * @LastEditTime: 2022-08-10 21:49:14
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analysis-flood.md
+ * @FilePath: \10_vue-cesium\website\docs\zh-CN\analyses\vc-analysis-flood.md
 -->
 
 ## VcAnalysisFlood
@@ -29,6 +29,7 @@
       :max-height="maxHeight"
       :speed="speed"
       :polygon-hierarchy="polygonHierarchy"
+      @stop="onStoped"
     >
     </vc-analysis-flood>
     <vc-layer-imagery>
@@ -41,7 +42,7 @@
     <el-button type="danger" round @click="load">加载</el-button>
     <el-button type="danger" round @click="reload">重载</el-button>
     <el-button type="danger" round @click="start">开始</el-button>
-    <el-button type="danger" round @click="pause">{{pausing ? '继续' : '暂停'}}</el-button>
+    <el-button :disabled="!starting" type="danger" round @click="pause">{{pausing ? '继续' : '暂停'}}</el-button>
     <el-button type="danger" round @click="stop">结束</el-button>
   </el-row>
 </el-row>
@@ -59,7 +60,8 @@
           [106.2, 33.5],
           [102.1, 33.5]
         ],
-        pausing: false
+        pausing: false,
+        starting: false
       }
     },
     methods: {
@@ -67,6 +69,7 @@
         console.log(cesiumInstance)
       },
       onViewerReady({ Cesium, viewer }) {
+        window.vm = this
         viewer.scene.globe.depthTestAgainstTerrain = true
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
@@ -89,6 +92,7 @@
       start() {
         this.$refs.flood.start()
         this.pausing = false
+        this.starting = true
       },
       pause() {
         this.$refs.flood.pause()
@@ -97,6 +101,12 @@
       stop() {
         this.$refs.flood.stop()
         this.pausing = false
+        this.starting = false
+      },
+      onStoped(e) {
+        this.pausing = false
+        this.starting = false
+        console.log(e)
       }
     }
   }
@@ -134,6 +144,7 @@
 | unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
 | getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
 | getCesiumObject    | () => VcCesiumObject                    | 获取通过该组件加载的 Cesium 对象。          |
-| start              | () => void                              | 开始淹没分析。                              |
+| start              | (height?: number) => void               | 开始淹没分析。                              |
 | pause              | () => void                              | 暂停/继续淹没分析。                         |
 | stop               | () => void                              | 结束淹没分析。                              |
+| getCurrentHeight   | () => number                            | 获取当前拉伸高度。                          |

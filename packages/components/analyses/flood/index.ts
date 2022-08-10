@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-03-09 22:55:14
+ * @LastEditTime: 2022-08-10 21:36:23
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
+ * @FilePath: \10_vue-cesium\packages\components\analyses\flood\index.ts
  */
 import { defineComponent, getCurrentInstance, PropType, ref, h, createCommentVNode, WatchStopHandle, onUnmounted, watch } from 'vue'
 import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
@@ -126,8 +126,8 @@ export default defineComponent({
       }
     }
 
-    const start = () => {
-      extrudedHeight.value = props.minHeight
+    const start = (height?: number) => {
+      extrudedHeight.value = Cesium.defined(height) ? height : props.minHeight
       flooding.value = true
     }
 
@@ -153,7 +153,8 @@ export default defineComponent({
     Object.assign(instance.proxy, {
       start,
       pause,
-      stop
+      stop,
+      getCurrentHeight: () => extrudedHeight.value
     })
 
     return () => {
@@ -239,7 +240,7 @@ export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysis
   /**
    * Start flood analysis
    */
-  start: () => void
+  start: (height?: number) => void
   /**
    * Pause flood analysis
    */
@@ -248,4 +249,8 @@ export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysis
    * Stop flood analysis
    */
   stop: (removeLatest?: boolean) => void
+  /**
+   * Get the extrudedHeight value.
+   */
+  getCurrentHeight: () => number
 }

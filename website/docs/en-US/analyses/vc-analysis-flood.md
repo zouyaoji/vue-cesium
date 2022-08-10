@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2022-03-09 09:49:38
+ * @LastEditTime: 2022-08-10 21:50:54
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analysis-flood.md
+ * @FilePath: \10_vue-cesium\website\docs\en-US\analyses\vc-analysis-flood.md
 -->
 
 ## VcAnalysisFlood
@@ -29,6 +29,7 @@ Basic usage of VcAnalysisFlood component.
       :max-height="maxHeight"
       :speed="speed"
       :polygon-hierarchy="polygonHierarchy"
+      @stop="onStoped"
     >
     </vc-analysis-flood>
     <vc-layer-imagery>
@@ -41,7 +42,7 @@ Basic usage of VcAnalysisFlood component.
     <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
     <el-button type="danger" round @click="start">Start</el-button>
-    <el-button type="danger" round @click="pause">{{pausing ? 'Play' : 'Pause'}}</el-button>
+    <el-button :disabled="!starting" type="danger" round @click="pause">{{pausing ? 'Play' : 'Pause'}}</el-button>
     <el-button type="danger" round @click="stop">Stop</el-button>
   </el-row>
 </el-row>
@@ -59,7 +60,8 @@ Basic usage of VcAnalysisFlood component.
           [106.2, 33.5],
           [102.1, 33.5]
         ],
-        pausing: false
+        pausing: false,
+        starting: false
       }
     },
     methods: {
@@ -89,6 +91,7 @@ Basic usage of VcAnalysisFlood component.
       start() {
         this.$refs.flood.start()
         this.pausing = false
+        this.starting = true
       },
       pause() {
         this.$refs.flood.pause()
@@ -97,6 +100,12 @@ Basic usage of VcAnalysisFlood component.
       stop() {
         this.$refs.flood.stop()
         this.pausing = false
+        this.starting = false
+      },
+      onStoped(e) {
+        this.pausing = false
+        this.starting = false
+        console.log(e)
       }
     }
   }
@@ -135,6 +144,7 @@ Basic usage of VcAnalysisFlood component.
 | unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
 | getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
 | getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
-| start              | () => void                              | Start flood analysis.                           |
+| start              | (height?: number) => void               | Start flood analysis.                           |
 | pause              | () => void                              | Pause/resume flood analysis.                    |
 | stop               | () => void                              | Stop flood analysis.                            |
+| getCurrentHeight   | () => number                            | Get the extrudedHeight value.                   |
