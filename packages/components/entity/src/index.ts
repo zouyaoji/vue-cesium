@@ -23,6 +23,7 @@ import {
   VcGraphicsCorridorProps,
   VcGraphicsCylinderProps,
   VcGraphicsEllipseProps,
+  VcGraphicsEllipsoidProps,
   VcGraphicsEllipsoidRef,
   VcGraphicsLabelProps,
   VcGraphicsModelProps,
@@ -206,11 +207,11 @@ export type VcEntityProps = {
   /**
    * A ellipse to associate with this entity.
    */
-  ellipse?: Cesium.BillboardGraphics | VcGraphicsBillboardProps
+  ellipse?: Cesium.EllipseGraphics | VcGraphicsEllipseProps
   /**
    * A ellipsoid to associate with this entity.
    */
-  ellipsoid?: Cesium.EllipseGraphics | VcGraphicsEllipseProps
+  ellipsoid?: Cesium.EllipsoidGraphics | VcGraphicsEllipsoidProps
   /**
    * A options.label to associate with this entity.
    */

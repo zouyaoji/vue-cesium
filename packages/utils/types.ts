@@ -58,18 +58,18 @@ interface MaterialOption {
   fabric: {
     type: string
     uniforms: {
-      color?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option
+      color?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
       image?: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement
       repeat?: Cesium.Cartesian2 | Cartesian2Option | Array<number> | number
       transparent?: boolean
-      evenColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option
-      oddColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option
-      gapColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option
+      evenColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
+      oddColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
+      gapColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
       dashLength?: number
       dashPattern?: number
       glowPower?: number
       taperPower?: number
-      outlineColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option
+      outlineColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
       outlineWidth?: number
       cellAlpha?: number
       lineCount?: Cesium.Cartesian2 | Cartesian2Option | Array<number> | number
