@@ -881,12 +881,16 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       eventsState.registerEvents(false)
     }
 
+    const { removeCesiumScript } = props
+
     viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
     viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
     viewer._vcPickScreenSpaceEventHandler = undefined!
     viewer._vcViewerScreenSpaceEventHandler = undefined!
 
-    revokeExtensions(viewer)
+    removeCesiumScript && revokeExtensions(viewer)
+
+    delete vcInstance.appContext.config.globalProperties.$VueCesium[viewer.container.id]
 
     if (globalThis.XE) {
       earth && earth.destroy()
@@ -898,9 +902,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       viewer && viewer.destroy()
     }
 
-    vcInstance.viewer = undefined!
+    vcInstance.viewer = undefined
     vcInstance.mounted = false
-    const { removeCesiumScript } = props
     if (removeCesiumScript && globalThis.Cesium) {
       const scripts = document.getElementsByTagName('script')
       const removeScripts: Array<HTMLScriptElement | HTMLLinkElement> = []
