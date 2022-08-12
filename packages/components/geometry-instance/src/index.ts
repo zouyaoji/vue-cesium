@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-20 09:33:54
+ * @LastEditTime: 2022-08-12 11:48:54
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
+ * @FilePath: \10_vue-cesium\packages\components\geometry-instance\src\index.ts
  */
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide, VNode } from 'vue'
@@ -91,7 +91,6 @@ export default defineComponent({
 
     // provide
     provide(vcKey, getServices())
-    instance.appContext.config.globalProperties.$VueCesium = getServices()
 
     // expose public methods
     Object.assign(instance.proxy, {

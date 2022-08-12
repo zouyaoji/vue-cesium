@@ -205,5 +205,6 @@ export default {
     default: '1000'
   },
   viewerCreator: Function as PropType<VcViewerCreatorFunction>,
-  mars3dConfig: Object as PropType<Mars3dConfig>
+  mars3dConfig: Object as PropType<Mars3dConfig>,
+  containerId: String
 }

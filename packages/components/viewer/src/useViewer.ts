@@ -1615,7 +1615,14 @@ export interface VcViewerProps {
    * Default value: 1000
    */
   touchHoldArg?: string
+  /**
+   * for mars3d only.
+   */
   mars3dConfig?: Mars3dConfig
+  /**
+   * Specifies the container id of the viewer.
+   */
+  containerId?: string
   /**
    * Specify the initialization method of the viewer when loading non-standard third-party Cesium libraries.
    */

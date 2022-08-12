@@ -104,7 +104,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // provide
   provide(vcKey, getServices())
-  vcInstance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
   Object.assign(vcInstance.proxy, {

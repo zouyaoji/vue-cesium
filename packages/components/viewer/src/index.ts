@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-12 14:56:24
+ * @LastEditTime: 2022-08-12 11:40:04
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\viewer\src\index.ts
+ * @FilePath: \10_vue-cesium\packages\components\viewer\src\index.ts
  */
-import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, withDirectives } from 'vue'
+import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, withDirectives, computed } from 'vue'
 import type { VNode } from 'vue'
 import useViewer, { viewerProps } from './useViewer'
 import type { VcViewerProps } from './useViewer'
@@ -98,9 +98,14 @@ export default defineComponent({
     instance.cesiumMembersEvents = viewerEvents
     const viewerStates = useViewer(props, ctx, instance)
 
+    const containerId = computed<string>(() => {
+      return props.containerId || (ctx.attrs.id as string) || 'cesiumContainer'
+    })
+
     // provide
     provide<VcViewerProvider>(vcKey, viewerStates.getServices())
-    instance.appContext.config.globalProperties.$VueCesium = viewerStates.getServices()
+    instance.appContext.config.globalProperties.$VueCesium = instance.appContext.config.globalProperties.$VueCesium || {}
+    instance.appContext.config.globalProperties.$VueCesium[containerId.value] = viewerStates.getServices()
     // expose public methods
     Object.assign(instance.proxy, {
       creatingPromise: viewerStates.creatingPromise,
@@ -135,7 +140,7 @@ export default defineComponent({
             {
               ref: viewerStates.viewerRef,
               class: kebabCase(instance.proxy?.$options.name || ''),
-              id: ctx.attrs.id || 'cesiumContainer',
+              id: containerId.value,
               style: ctx.attrs.style || { width: '100%', height: '100%' }
             },
             hSlot(ctx.slots.default)

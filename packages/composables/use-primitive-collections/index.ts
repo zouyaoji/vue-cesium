@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-04 13:55:35
- * @LastEditTime: 2022-02-15 09:15:08
+ * @LastEditTime: 2022-08-12 11:47:16
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collections\index.ts
+ * @FilePath: \10_vue-cesium\packages\composables\use-primitive-collections\index.ts
  */
 /**
  * for
@@ -15,7 +15,7 @@
  * PolylineCollection
  */
 
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { provide } from 'vue'
@@ -47,7 +47,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     return primitives && primitives.remove(collection)
   }
 
-  const getServices = () => {
+  const getServices = (): VcViewerProvider => {
     return mergeDescriptors(commonState.getServices(), {
       get primitives() {
         return vcInstance.cesiumObject as Collection
@@ -57,7 +57,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // provide
   provide(vcKey, getServices())
-  vcInstance.appContext.config.globalProperties.$VueCesium = getServices()
 
   return {
     transformProps: commonState.transformProps,

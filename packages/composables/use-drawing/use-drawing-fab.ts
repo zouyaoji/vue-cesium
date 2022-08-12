@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-06-06 17:54:52
+ * @LastEditTime: 2022-08-12 11:47:07
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
+ * @FilePath: \10_vue-cesium\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
@@ -312,7 +312,6 @@ export default function (
   }
 
   provide<VcDrawingProvider>(vcKey, getServices())
-  instance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
   Object.assign(instance.proxy, {
