@@ -6,8 +6,9 @@ _2022-08-12_
 
 #### Bug 修复
 
-- Fix some incorrect types definitions.
-- Fix the problem of failing to get viewer through useVueCesium.
+- Fixed some incorrect types definitions.
+- Fixed the problem that failing to get viewer through useVueCesium.
+- Fixed the problem that the vc-overview-map component does not work properly on the mars3d platform.
 
 ### 3.0.16
 

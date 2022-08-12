@@ -726,7 +726,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       viewer = props.viewerCreator(vcInstance, $(viewerRef), options)
     } else {
       if (globalThis.mars3d) {
-        vcInstance.map = new mars3d.Map($(viewerRef).id, options)
+        vcInstance.map = new mars3d.Map($(viewerRef).id, {
+          scene: options,
+          control: options
+        })
         viewer = vcInstance.map?._viewer
       } else if (globalThis.DC) {
         vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
