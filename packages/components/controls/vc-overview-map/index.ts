@@ -113,7 +113,8 @@ export default defineComponent({
         {
           removeCesiumScript: false,
           showCredit: false,
-          sceneMode: 2
+          sceneMode: 2,
+          containerId: 'vc-overview-map'
         },
         props.viewerOpts
       )

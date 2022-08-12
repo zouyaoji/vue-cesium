@@ -202,7 +202,9 @@ Vue3 中在组合式 API 的加持下可以通过 `useVueCesium` 很方便的获
 :::tip
 注 1：推荐将 business-component 组件作为 vc-viewer 的子组件挂载，正如 [vue-cesium-demo](https://github.com/zouyaoji/vue-cesium-demo) 中的写法。
 
-注 2：如果 business-component 组件不是 vc-viewer 的子组件，vc-viewer 可能就还没初始化完成，就需要等待 $vc.creatingPromise 状态为 fulfilled 后才能获取到 viewer 。
+注 2：如果 business-component 组件不是 vc-viewer 的子组件，vc-viewer 可能就还没初始化完成，需要等 $vc.creatingPromise 状态为 fulfilled 后才能获取到 viewer 。
+
+注 3：如果有多个 vc-viewer 组件，且 business-component 组件不是 vc-viewer 的子组件，请给每个 vc-viewer 组件绑定 `containerId` 为不同的值，然后通过传参调用 useVueCesium(containerId) 以便获取对应的 $vc 。
 :::
 
 ## 使用模板

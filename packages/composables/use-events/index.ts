@@ -48,9 +48,9 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       pickEvents.forEach(eventName => {
         const listener = getInstanceListener(vcInstance, eventName)
         if (register) {
-          listener && (cesiumObject[eventName] = listener)
+          listener && (cesiumObject[`vc${eventName}`] = listener)
         } else {
-          listener && delete cesiumObject[eventName]
+          listener && delete cesiumObject[`vc${eventName}`]
         }
       })
     }
@@ -209,7 +209,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     eventSourceList.forEach(event => {
       if (event.callbackName) {
         const fn =
-          event.cesiumObject[event.callbackName] ||
+          event.cesiumObject[`vc${event.callbackName}`] ||
           event.cesiumObject[`on${capitalize(event.callbackName)}`] ||
           event.cesiumObject[kebabCase(`on${capitalize(event.callbackName)}`)]
 

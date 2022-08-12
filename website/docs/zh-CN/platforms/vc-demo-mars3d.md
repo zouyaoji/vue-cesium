@@ -32,7 +32,7 @@ app.mount('#app')
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer
     ref="vcViewer"
-    :mars3d-config="mars3dConfig"
+    :mars3d-config="viewerOpts.mars3dConfig"
     :animation="animation"
     :timeline="timeline"
     :fullscreenButton="fullscreenButton"
@@ -53,6 +53,16 @@ app.mount('#app')
     <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
+    <vc-overview-map ref="overview" :viewerOpts="viewerOpts" :offset="[5, 120]" position="bottom-left">
+      <!-- 天地图注记 -->
+      <vc-layer-imagery :sort-order="20">
+        <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      </vc-layer-imagery>
+      <!-- 天地图影像 -->
+      <vc-layer-imagery :sort-order="10">
+        <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      </vc-layer-imagery>
+    </vc-overview-map>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-row>
@@ -85,8 +95,10 @@ app.mount('#app')
           offset: [0, 32],
           position: 'bottom-right'
         },
-        mars3dConfig: {
-          include: 'mars3d'
+        viewerOpts: {
+          mars3dConfig: {
+            include: 'mars3d'
+          }
         }
       }
     },

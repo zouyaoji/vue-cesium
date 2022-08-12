@@ -192,6 +192,8 @@ In Vue3, with the blessing of Composition API, it can be easily obtained through
 Note 1: It is recommended to mount the business-component component as a subcomponent of vc-viewer, as written in [vue-cesium-demo](https://github.com/zouyaoji/vue-cesium-demo).
 
 Note 2: If the business-component component is not a sub-component of vc-viewer, vc-viewer may not be initialized yet, and you need to wait for the $vc.creatingPromise state to be fulfilled before you can get the viewer.
+
+Note 3: If there are multiple vc-viewer components and the business-component component is not a subcomponent of vc-viewer, please bind `containerId` to a different value for each vc-viewer component, and then call useVueCesium(containerId) to get the corresponding $vc.
 :::
 
 ## use template
