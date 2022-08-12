@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-04-08 13:48:01
+ * @LastEditTime: 2022-08-12 20:03:22
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
@@ -19,7 +19,7 @@ import type {
 } from './types'
 export const commonEmits = {
   beforeLoad: (instance: VcComponentInternalInstance) => true,
-  ready: (readyObj: VcReadyObject) => readyObj.viewer instanceof Cesium.Viewer,
+  ready: (readyObj: VcReadyObject) => true,
   destroyed: (instance: VcComponentInternalInstance) => true
 }
 
