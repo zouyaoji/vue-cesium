@@ -25,7 +25,7 @@ If `vc-viewer` is loaded successfully, it will return { Cesium, viewer, map }, t
 
 Use VueCesium to load Mars Technology Mars3D
 
-:::demo specifies the use of Mars3D through the cesiumPath attribute of `vc-viewer`
+:::demo specifies the use of Mars3D through the `mars3dConfig` prop of `vc-viewer`
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">

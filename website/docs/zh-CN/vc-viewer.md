@@ -22,7 +22,7 @@
     @cesium-ready="onCesiumReady"
     @ready="onViewerReady"
     @left-click="onLeftClick"
-    @touchEnd="onTouchEnd"
+    @touch-end="onTouchEnd"
   >
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :other-opts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
@@ -153,6 +153,8 @@
 |UTCoffset|number|| `optional` 本地时间与UTC时间的时差（分钟）。|
 |accessToken|string||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
 |cesiumPath|string||`optional` 指定用于初始化 `vc-viewer` 组件的 CesiumJS 库的 Web 服务地址。|
+|containerId|string|`'cesiumContainer'`|`optional` 指定 `vc-viewer` 容器 div 元素的 id。|
+|mars3dConfig|Mars3dConfig||`optional` 仅适用于 mars3d，指定用于初始化 `vc-viewer` 组件的 mars3d 库的配置参数。|
 |animation|boolean|`false`|`optional` 是否显示动画控件。|
 |baseLayerPicker| boolean|`false`|`optional` 是否显示基础图层切换按钮。|
 |fullscreenButton|boolean| `false`| `optional` 是否显示全屏切换按钮。|

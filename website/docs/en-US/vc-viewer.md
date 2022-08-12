@@ -148,6 +148,8 @@ Basic usage of `vc-viewer`.
 |UTCoffset|number|| `optional` The time difference (minutes) between local time and UTC time.|
 |accessToken|string||`optional` Specify the default [Cesium ion](https://cesium.com/ion/) access token.|
 |cesiumPath|string||`optional` Specify the web service address of the CesiumJS library used to initialize the `vc-viewer` component.|
+|containerId|string|`'cesiumContainer'`|`optional` Specifies the id of the `vc-viewer` container div element.。|
+|mars3dConfig|Mars3dConfig||`optional` For mars3d only, specifies configuration parameters for the mars3d library used to initialize the `vc-viewer` component.|
 |animation|boolean|`false`|`optional` If set to false, the Animation widget will not be created.|
 |baseLayerPicker| boolean|`false`|`optional` If set to false, the BaseLayerPicker widget will not be created.|
 |fullscreenButton|boolean| `false`| `optional` If set to false, the FullscreenButton widget will not be created.|

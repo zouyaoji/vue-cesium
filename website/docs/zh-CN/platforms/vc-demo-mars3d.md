@@ -26,7 +26,7 @@ app.mount('#app')
 
 使用 VueCesium 加载火星科技 Mars3D
 
-:::demo 通过 `vc-viewer` 的 cesiumPath 属性指定使用 Mars3D
+:::demo 通过 `vc-viewer` 的 `mars3dConfig` 属性指定使用 Mars3D
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">

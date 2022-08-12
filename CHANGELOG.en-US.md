@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.17
+
+_2022-08-12_
+
+#### Bug 修复
+
+- Fix some incorrect types definitions.
+- Fix the problem of failing to get viewer through useVueCesium.
+
 ### 3.0.16
 
 _2022-08-03_
