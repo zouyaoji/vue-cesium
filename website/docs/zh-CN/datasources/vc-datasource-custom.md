@@ -86,6 +86,9 @@
           },
           onMouseover: e => {
             console.log(e)
+          },
+          onClick: e => {
+            console.log(e)
           }
         },
         {
@@ -132,6 +135,9 @@
                     height: img.height,
                     image: options.iconOn,
                     scale: 0.5
+                  },
+                  onClick: e => {
+                    console.log('asd', e)
                   }
                 })
               }, [])
