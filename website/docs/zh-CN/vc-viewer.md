@@ -153,6 +153,7 @@
 |UTCoffset|number|| `optional` 本地时间与UTC时间的时差（分钟）。|
 |accessToken|string||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
 |cesiumPath|string||`optional` 指定用于初始化 `vc-viewer` 组件的 CesiumJS 库的 Web 服务地址。|
+|viewerCreator|VcViewerCreatorFunction||`optional` 指定用于初始化 `vc-viewer` 组件的 viewer 对象，当引入第三方库时可以用该参数来自定义 viewer 对象的初始化方式。|
 |containerId|string|`'cesiumContainer'`|`optional` 指定 `vc-viewer` 容器 div 元素的 id。|
 |mars3dConfig|Mars3dConfig||`optional` 仅适用于 mars3d，指定用于初始化 `vc-viewer` 组件的 mars3d 库的配置参数。|
 |animation|boolean|`false`|`optional` 是否显示动画控件。|

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-04-06 15:50:12
+ * @LastEditTime: 2022-08-12 22:32:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -47,6 +47,8 @@ VueCesium supports loading the official CesiumJS, or other third-party platforms
 - [Earth SDK](http://www.earthsdk.com/)
 - [Mars3D](http://mars3d.cn/)
 - [DC-SDK](http://dc.dvgis.cn/#/index)
+
+For other untested platforms, VueCesium can also be used, and a callback method can be passed in through the viewerCreator of the vc-viewer component. The initialization process of the viewer is handled by the user, and the viewer can be returned after initialization. [See details](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
 
 ## Bootstrap project
 

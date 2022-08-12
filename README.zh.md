@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-04-06 15:50:02
+ * @LastEditTime: 2022-08-12 22:31:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -47,6 +47,8 @@ VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方
 - [西部世界 Earth SDK](http://www.earthsdk.com/)
 - [火星科技 Mars3D](http://mars3d.cn/)
 - [数字视觉 DC-SDK](http://dc.dvgis.cn/#/index)
+
+其他未测试的平台，也可以使用 VueCesium ，可通过 vc-viewer 组件的 viewerCreator 传入一个回调方法，viewer 的初始化过程交由用户自主处理，并将初始化后得到到 viewer 返回即可。[详见](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
 
 ## 安装
 
