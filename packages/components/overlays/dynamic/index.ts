@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-07-05 17:57:55
+ * @LastEditTime: 2022-08-12 14:31:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -98,7 +98,7 @@ const emits = {
   'update:startTime': (startTime: Cesium.JulianDate) => true,
   'update:stopTime': (stopTime: Cesium.JulianDate) => true,
   onStop: (clock: Cesium.Clock) => true,
-  stopArrived: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange) => true
+  stopArrived: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange, clock: Cesium.Clock) => true
 }
 export default defineComponent({
   name: 'VcOverlayDynamic',
@@ -397,7 +397,7 @@ export default defineComponent({
             }
 
             if (arrivedFlag) {
-              emit('stopArrived', overlay, sampledPosition, lastOffset)
+              emit('stopArrived', overlay, sampledPosition, lastOffset, clock)
               break
             }
           }
@@ -748,7 +748,7 @@ export interface VcOverlayDynamicProps {
   /**
    * Triggers when a stop is reached.
    */
-  onStopArrived?: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange) => void
+  onStopArrived?: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange, clock: Cesium.Clock) => void
   /**
    * Triggers when currentTime changed.
    */
