@@ -318,6 +318,7 @@ export type VcColorSegments = [number, VcColor]
 
 export type VcMittEvents = {
   ready: VcReadyObject
+  [key: string]: any
 }
 
 export type AnyFunction<T> = (...args: any[]) => T
