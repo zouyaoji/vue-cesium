@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-03-05 11:15:34
+ * @LastEditTime: 2022-08-19 22:38:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\distance-legend\defaultProps.ts
@@ -33,5 +33,13 @@ export default {
   barBackground: {
     type: String,
     default: '#fff'
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }

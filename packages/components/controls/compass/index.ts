@@ -96,7 +96,7 @@ export default defineComponent({
       const { viewer } = $services
       return new Promise((resolve, reject) => {
         nextTick(() => {
-          if (!hasVcNavigation) {
+          if (!hasVcNavigation && props.teleportToViewer) {
             const viewerElement = (viewer as any)._element
             viewerElement.appendChild($(rootRef))
             resolve($(rootRef))
@@ -132,24 +132,28 @@ export default defineComponent({
 
     const updateRootStyle = () => {
       const css: CSSProperties = positionState.style.value
-      rootStyle.left = css.left
-      rootStyle.top = css.top
-      rootStyle.transform = css.transform
-      const side = positionState.attach.value
       const outerRingTarget = $(outerRingRef)?.$el as HTMLElement
       if (outerRingTarget !== void 0) {
         const clientRect = outerRingTarget.getBoundingClientRect()
         css.width = `${clientRect.width}px`
         css.height = `${clientRect.height}px`
+      }
 
-        if ((side.bottom || side.top) && !side.left && !side.right) {
-          css.left = '50%'
-          css.transform = 'translate(-50%, 0)'
-        }
+      if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+        rootStyle.left = css.left
+        rootStyle.top = css.top
+        rootStyle.transform = css.transform
+        const side = positionState.attach.value
+        if (outerRingTarget !== void 0) {
+          if ((side.bottom || side.top) && !side.left && !side.right) {
+            css.left = '50%'
+            css.transform = 'translate(-50%, 0)'
+          }
 
-        if ((side.left || side.right) && !side.top && !side.bottom) {
-          css.top = '50%'
-          css.transform = 'translate(0, -50%)'
+          if ((side.left || side.right) && !side.top && !side.bottom) {
+            css.top = '50%'
+            css.transform = 'translate(0, -50%)'
+          }
         }
       }
 
@@ -246,7 +250,7 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-compass ' + positionState.classes.value,
+            class: `vc-compass ${positionState.classes.value} ${props.customClass}`,
             style: rootStyle,
             onDblclick: compassState.handleDoubleClick,
             onMousedown: compassState.handleMouseDown,
@@ -295,6 +299,15 @@ export type VcCompassProps = {
    * Specify the parameters of the maker when the compass rotates.
    */
   markerOptions?: VcBtnTooltipProps
+  /**
+   * Specify the customClass of the vc-compass.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcCompass is loaded.
    */

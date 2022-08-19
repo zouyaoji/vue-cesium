@@ -96,10 +96,12 @@ export default function (props, $services: VcViewerProvider) {
       }
     }
 
-    return css
+    return typeof props.teleportToViewer === 'undefined' || props.teleportToViewer ? css : {}
   })
 
-  const classes = computed(() => `absolute absolute-${props.position}`)
+  const classes = computed(() =>
+    typeof props.teleportToViewer === 'undefined' || props.teleportToViewer ? `absolute absolute-${props.position}` : 'relative-position'
+  )
 
   return {
     attach,

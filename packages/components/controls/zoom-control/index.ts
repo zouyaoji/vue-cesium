@@ -81,7 +81,7 @@ export default defineComponent({
             setViewerCamera(viewer, resetView)
           }
 
-          if (!hasVcNavigation) {
+          if (!hasVcNavigation && props.teleportToViewer) {
             const viewerElement = (viewer as any)._element
             viewerElement.appendChild($(rootRef))
             resolve($(rootRef))
@@ -171,15 +171,17 @@ export default defineComponent({
         css.width = `${width + 4}px`
         css.height = `${height + 4}px`
 
-        const side = positionState.attach.value
-        if ((side.bottom || side.top) && !side.left && !side.right) {
-          css.left = '50%'
-          css.transform = 'translate(-50%, 0)'
-        }
+        if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+          const side = positionState.attach.value
+          if ((side.bottom || side.top) && !side.left && !side.right) {
+            css.left = '50%'
+            css.transform = 'translate(-50%, 0)'
+          }
 
-        if ((side.left || side.right) && !side.top && !side.bottom) {
-          css.top = '50%'
-          css.transform = 'translate(0, -50%)'
+          if ((side.left || side.right) && !side.top && !side.bottom) {
+            css.top = '50%'
+            css.transform = 'translate(0, -50%)'
+          }
         }
       }
       Object.assign(rootStyle, css)
@@ -249,6 +251,12 @@ export default defineComponent({
       return content
     }
 
+    Object.assign(instance.proxy, {
+      zoomIn: () => zoomControlState.zoomIn,
+      zoomOut: () => zoomControlState.zoomOut,
+      zoomReset: () => zoomControlState.zoomReset
+    })
+
     return () => {
       if (canRender.value) {
         const children: Array<VNode> = []
@@ -264,7 +272,7 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-zoom-control ' + positionState.classes.value,
+            class: `vc-zoom-control ${positionState.classes.value} ${props.customClass}`,
             style: rootStyle
           },
           h(
@@ -364,6 +372,15 @@ export type VcZoomControlProps = {
    * Specify the reset button parameters.
    */
   zoomResetOptions?: VcBtnTooltipProps
+  /**
+   * Specify the customClass of the vc-zoom-control.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcZoomControl is loaded.
    */

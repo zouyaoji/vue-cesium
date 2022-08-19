@@ -76,5 +76,13 @@ export default {
         offset: [0, 20],
         tip: void 0
       } as VcTooltipProps | false)
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }

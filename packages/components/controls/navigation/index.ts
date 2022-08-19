@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-03-05 11:37:41
+ * @LastEditTime: 2022-08-19 22:42:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
@@ -135,8 +135,11 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         nextTick(() => {
           const viewerElement = (viewer as any)._element
-          viewerElement.appendChild($(rootRef))
-          $(secondRootRef) && viewerElement.appendChild($(secondRootRef))
+          if (props.teleportToViewer) {
+            viewerElement.appendChild($(rootRef))
+            $(secondRootRef) && viewerElement.appendChild($(secondRootRef))
+          }
+
           resolve([$(rootRef), $(secondRootRef)])
         })
       })
@@ -201,14 +204,16 @@ export default defineComponent({
       rootStyle.top = css.top
       rootStyle.transform = css.transform
 
-      if ((side.bottom || side.top) && !side.left && !side.right) {
-        css.left = '50%'
-        css.transform = 'translate(-50%, 0)'
-      }
+      if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+        if ((side.bottom || side.top) && !side.left && !side.right) {
+          css.left = '50%'
+          css.transform = 'translate(-50%, 0)'
+        }
 
-      if ((side.left || side.right) && !side.top && !side.bottom) {
-        css.top = '50%'
-        css.transform = 'translate(0, -50%)'
+        if ((side.left || side.right) && !side.top && !side.bottom) {
+          css.top = '50%'
+          css.transform = 'translate(0, -50%)'
+        }
       }
 
       Object.assign(rootStyle, css, { height: `${height}px` })
@@ -219,14 +224,16 @@ export default defineComponent({
       secondRootStyle.top = cssSecondRoot.top
       secondRootStyle.transform = cssSecondRoot.transform
 
-      if ((sideSecondRoot.bottom || sideSecondRoot.top) && !sideSecondRoot.left && !sideSecondRoot.right) {
-        cssSecondRoot.left = '50%'
-        cssSecondRoot.transform = 'translate(-50%, 0)'
-      }
+      if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+        if ((sideSecondRoot.bottom || sideSecondRoot.top) && !sideSecondRoot.left && !sideSecondRoot.right) {
+          cssSecondRoot.left = '50%'
+          cssSecondRoot.transform = 'translate(-50%, 0)'
+        }
 
-      if ((sideSecondRoot.left || sideSecondRoot.right) && !sideSecondRoot.top && !sideSecondRoot.bottom) {
-        cssSecondRoot.top = '50%'
-        cssSecondRoot.transform = 'translate(0, -50%)'
+        if ((sideSecondRoot.left || sideSecondRoot.right) && !sideSecondRoot.top && !sideSecondRoot.bottom) {
+          cssSecondRoot.top = '50%'
+          cssSecondRoot.transform = 'translate(0, -50%)'
+        }
       }
 
       let height2 = 0
@@ -327,7 +334,7 @@ export default defineComponent({
             'div',
             {
               ref: rootRef,
-              class: 'vc-navigation ' + positionState.classes.value,
+              class: `vc-navigation ${positionState.classes.value} ${props.customClass}`,
               style: rootStyle
             },
             children
@@ -397,6 +404,15 @@ export interface VcNavigationProps {
    * Specify the other controls(status bar & distance legend) options of the component. false means no display.
    */
   otherOpts?: false | VcNavigationOtherOpts
+  /**
+   * Specify the customClass of the vc-navigation.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcNavigation is loaded.
    */

@@ -64,7 +64,7 @@ export default defineComponent({
         canRender.value = true
         nextTick(() => {
           const { viewer } = $services
-          if (!hasVcNavigation) {
+          if (!hasVcNavigation && props.teleportToViewer) {
             const viewerElement = (viewer as any)._element
             viewerElement.appendChild($(rootRef))
             resolve($(rootRef))
@@ -114,14 +114,16 @@ export default defineComponent({
           // css.width = `${clientRect.width}px`
           // css.height = `${clientRect.height}px`
 
-          if ((side.bottom || side.top) && !side.left && !side.right) {
-            css.left = '50%'
-            css.transform = 'translate(-50%, 0)'
-          }
+          if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+            if ((side.bottom || side.top) && !side.left && !side.right) {
+              css.left = '50%'
+              css.transform = 'translate(-50%, 0)'
+            }
 
-          if ((side.left || side.right) && !side.top && !side.bottom) {
-            css.top = '50%'
-            css.transform = 'translate(0, -50%)'
+            if ((side.left || side.right) && !side.top && !side.bottom) {
+              css.top = '50%'
+              css.transform = 'translate(0, -50%)'
+            }
           }
         }
       }
@@ -276,7 +278,7 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-print ' + positionState.classes.value,
+            class: `vc-print ${positionState.classes.value} ${props.customClass}`,
             style: rootStyle
           },
           child
@@ -364,6 +366,15 @@ export type VcPrintProps = {
    * The screenshot name.
    */
   screenshotName?: string
+  /**
+   * Specify the customClass of the vc-print.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcPrint is loaded.
    * @param instance

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-22 09:32:32
+ * @LastEditTime: 2022-08-19 22:40:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\defaultProps.ts
@@ -58,6 +58,14 @@ const defaultProps = {
         statusBarOpts: getDefaultOptionByProps(statusBarDefaultProps, ['position', 'offset']) as VcStatusBarProps,
         distancelegendOpts: getDefaultOptionByProps(distancelegendDefaultProps, ['position', 'offset']) as VcDistanceLegendProps
       } as VcNavigationOtherOpts)
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }
 export type VcNavigationProps = ExtractPropTypes<typeof defaultProps>

@@ -70,10 +70,7 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         nextTick(() => {
           const { viewer } = $services
-          // const viewerElement = (viewer as any)._element as HTMLElement
-          // viewerElement.appendChild($(rootRef)?.$el)
-          // resolve($(rootRef)?.$el)
-          if (!hasVcNavigation) {
+          if (!hasVcNavigation && props.teleportToViewer) {
             const viewerElement = (viewer as any)._element
             viewerElement.appendChild($(rootRef)?.$el)
             resolve($(rootRef)?.$el)
@@ -124,17 +121,19 @@ export default defineComponent({
       css.background = props.background
       css.color = props.color
 
-      const side = positionState.attach.value
+      if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+        const side = positionState.attach.value
+        if ((side.bottom || side.top) && !side.left && !side.right) {
+          css.left = '50%'
+          css.transform = 'translate(-50%, 0)'
+        }
 
-      if ((side.bottom || side.top) && !side.left && !side.right) {
-        css.left = '50%'
-        css.transform = 'translate(-50%, 0)'
+        if ((side.left || side.right) && !side.top && !side.bottom) {
+          css.top = '50%'
+          css.transform = 'translate(0, -50%)'
+        }
       }
 
-      if ((side.left || side.right) && !side.top && !side.bottom) {
-        css.top = '50%'
-        css.transform = 'translate(0, -50%)'
-      }
       css.width = `${props.width}px`
 
       Object.assign(rootStyle, css)
@@ -213,7 +212,7 @@ export default defineComponent({
           VcBtn,
           {
             ref: rootRef,
-            class: 'vc-distance-legend ' + positionState.classes.value,
+            class: `vc-distance-legend ${positionState.classes.value} ${props.customClass}`,
             style: rootStyle,
             stack: true,
             noCaps: true
@@ -270,6 +269,15 @@ export type VcDistanceLegendProps = {
    * Default value: #fff
    */
   barBackground?: string
+  /**
+   * Specify the customClass of the vc-distance-legend.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcCompass is loaded.
    */

@@ -112,7 +112,7 @@ export default defineComponent({
 
       const promiseAppend = new Promise((resolve, reject) => {
         nextTick(() => {
-          if (!hasVcNavigation) {
+          if (!hasVcNavigation && props.teleportToViewer) {
             const viewerElement = ($services.viewer as any)._element
             viewerElement.appendChild($(rootRef))
             resolve($(rootRef))
@@ -175,18 +175,20 @@ export default defineComponent({
         const side = positionState.attach.value
         const btnTarget = $(btnRef)?.$el
         if (btnTarget !== void 0) {
-          const clientRect = btnTarget.getBoundingClientRect()
+          // const clientRect = btnTarget.getBoundingClientRect()
           // css.width = `${clientRect.width}px`
           // css.height = `${clientRect.height}px`
 
-          if ((side.bottom || side.top) && !side.left && !side.right) {
-            css.left = '50%'
-            css.transform = 'translate(-50%, 0)'
-          }
+          if (typeof props.teleportToViewer === 'undefined' || props.teleportToViewer) {
+            if ((side.bottom || side.top) && !side.left && !side.right) {
+              css.left = '50%'
+              css.transform = 'translate(-50%, 0)'
+            }
 
-          if ((side.left || side.right) && !side.top && !side.bottom) {
-            css.top = '50%'
-            css.transform = 'translate(0, -50%)'
+            if ((side.left || side.right) && !side.top && !side.bottom) {
+              css.top = '50%'
+              css.transform = 'translate(0, -50%)'
+            }
           }
         }
       }
@@ -441,7 +443,7 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-my-location ' + positionState.classes.value,
+            class: `vc-my-location ${positionState.classes.value} ${props.customClass}`,
             style: rootStyle
           },
           [
@@ -604,7 +606,19 @@ export type VcMyLocationProps = {
    * The tooltip parameter.
    */
   tooltip?: false | VcTooltipProps
-  loadingType?: string
+  /**
+   * Specify the spinner style of the positioning transition
+   */
+  loadingType?: 'bars' | 'ios' | 'orbit' | 'oval' | 'puff' | 'tail'
+  /**
+   * Specify the customClass of the vc-my-location.
+   */
+  customClass?: string
+  /**
+   * Specify whether to add to the cesium-viewer node.
+   * Default value: true
+   */
+  teleportToViewer?: boolean
   /**
    * Triggers before the VcCompass is loaded.
    */

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-04-12 16:43:35
+ * @LastEditTime: 2022-08-19 22:22:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\print\defaultProps.ts
@@ -67,5 +67,13 @@ export default {
         tip: void 0
       } as VcTooltipProps | false)
   },
-  screenshotName: String
+  screenshotName: String,
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
+  }
 }

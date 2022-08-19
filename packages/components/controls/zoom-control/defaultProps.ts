@@ -112,6 +112,14 @@ const defaultProps = {
           tip: void 0
         }
       } as VcBtnTooltipProps)
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }
 

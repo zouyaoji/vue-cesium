@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-21 22:52:44
+ * @LastEditTime: 2022-08-19 15:44:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\compass\defaultProps.ts
@@ -61,6 +61,14 @@ const defaultProps = {
         size: '96px',
         color: '#1976D2'
       } as VcBtnTooltipProps)
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }
 const defaultOptions = getDefaultOptionByProps<typeof defaultProps>(defaultProps)

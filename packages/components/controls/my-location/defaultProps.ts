@@ -122,5 +122,13 @@ export default {
   loadingType: {
     type: String,
     default: 'puff'
+  },
+  customClass: {
+    type: String,
+    default: ''
+  },
+  teleportToViewer: {
+    type: Boolean,
+    default: true
   }
 }
