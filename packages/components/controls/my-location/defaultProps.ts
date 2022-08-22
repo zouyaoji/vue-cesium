@@ -120,7 +120,7 @@ export default {
       } as VcTooltipProps | false)
   },
   loadingType: {
-    type: String,
+    type: String as PropType<'bars' | 'ios' | 'orbit' | 'oval' | 'puff' | 'tail'>,
     default: 'puff'
   },
   customClass: {
