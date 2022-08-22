@@ -830,11 +830,11 @@ export function setViewerCamera(viewer: Cesium.Viewer, camera: VcCamera) {
 export function flyToCamera(viewer: Cesium.Viewer, camera: VcCamera, options?) {
   const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.flyTo({
-    destination: options.destination || destination,
-    orientation: options.orientation || orientation,
-    duration: options.duration,
-    complete: options.complete,
-    cancel: options.cancel
+    destination: options?.destination || destination,
+    orientation: options?.orientation || orientation,
+    duration: options?.duration,
+    complete: options?.complete,
+    cancel: options?.cancel
   })
 }
 
