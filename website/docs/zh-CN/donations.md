@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-08-12 10:56:43
+ * @LastEditTime: 2022-08-22 21:35:02
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \10_vue-cesium\website\docs\zh-CN\donations.md
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
 -->
 
 ## 赞助
@@ -28,7 +28,8 @@
 
   | 金额    | 来源   | 赞助人                                          | 留言                              | 时间       |
   | ------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
-  | ¥ 66.66 | WeChat | g\*e                                            | 祝 vue-cesium 越来越好            | 2022-08-12 |
+  | ¥ 20.0  | WeChat | \*G                                             | -                                 | 2022-08-20 |
+  | ¥ 66.66 | WeChat | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
   | ¥ 20.0  | WeChat | \*龙                                            | 非常不错                          | 2022-07-28 |
   | ¥ 100.0 | WeChat | \*易                                            | -                                 | 2022-03-15 |
   | ¥ 66.66 | QQ     | Levi                                            | 恭喜发财                          | 2022-01-28 |
