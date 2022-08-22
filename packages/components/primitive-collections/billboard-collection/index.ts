@@ -165,6 +165,10 @@ export type VcCollectionBillboardProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcCollectionBillboard is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

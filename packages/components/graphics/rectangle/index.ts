@@ -169,6 +169,10 @@ export type VcGraphicsRectangleProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGraphicsRectangle is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

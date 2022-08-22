@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-08-10 21:36:23
+ * @LastEditTime: 2022-08-22 20:31:30
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \10_vue-cesium\packages\components\analyses\flood\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
  */
 import { defineComponent, getCurrentInstance, PropType, ref, h, createCommentVNode, WatchStopHandle, onUnmounted, watch } from 'vue'
 import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
@@ -226,6 +226,10 @@ export interface VcAnalysisFloodProps {
    * Triggers when the VcAnalysisFlood is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
   /**
    * Triggers when the VcAnalysisFlood is destroyed.
    */

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-04 21:42:14
- * @LastEditTime: 2022-06-24 16:54:13
+ * @LastEditTime: 2022-08-22 20:31:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\sightline\index.ts
@@ -107,6 +107,10 @@ export type VcAnalysisSightlineProps = {
    * Triggers when the VcAnalysisSightline is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
   /**
    * Triggers when the VcAnalysisSightline is destroyed.
    */

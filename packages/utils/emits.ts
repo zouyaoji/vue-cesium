@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-08-12 20:03:22
+ * @LastEditTime: 2022-08-22 20:10:58
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
@@ -20,6 +20,7 @@ import type {
 export const commonEmits = {
   beforeLoad: (instance: VcComponentInternalInstance) => true,
   ready: (readyObj: VcReadyObject) => true,
+  unready: (e: any) => true,
   destroyed: (instance: VcComponentInternalInstance) => true
 }
 

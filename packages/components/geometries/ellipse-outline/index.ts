@@ -102,6 +102,10 @@ export type VcGeometryEllipseOutlineProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGeometryEllipseOutline is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

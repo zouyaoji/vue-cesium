@@ -58,6 +58,10 @@ export type VcImageryProviderSingletileProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderSingletile is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

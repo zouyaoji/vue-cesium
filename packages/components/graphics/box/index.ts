@@ -116,6 +116,10 @@ export type VcGraphicsBoxProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGraphicsBox is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

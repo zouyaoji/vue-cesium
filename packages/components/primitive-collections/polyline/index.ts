@@ -91,6 +91,10 @@ export type VcPolylineProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcPolyline is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

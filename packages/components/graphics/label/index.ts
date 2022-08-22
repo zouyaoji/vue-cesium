@@ -190,6 +190,10 @@ export type VcGraphicsLabelProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGraphicsLabel is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

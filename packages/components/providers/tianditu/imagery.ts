@@ -172,6 +172,10 @@ export type VcImageryProviderTiandituProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderTianditu is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

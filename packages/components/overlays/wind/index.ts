@@ -307,6 +307,10 @@ export interface VcOverlayWindmapProps {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcOverlayWindmap is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

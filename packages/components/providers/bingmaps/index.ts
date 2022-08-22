@@ -84,6 +84,10 @@ export type VcImageryProviderBingProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderBing is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

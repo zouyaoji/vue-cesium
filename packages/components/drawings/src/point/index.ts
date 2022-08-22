@@ -92,6 +92,10 @@ export type VcDrawingPointProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcDrawingPoint is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

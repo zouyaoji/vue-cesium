@@ -69,6 +69,10 @@ export type VcGeometryRectangleOutlineProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGeometryRectangleOutline is destroyed
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

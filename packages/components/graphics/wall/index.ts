@@ -128,6 +128,10 @@ export type VcGraphicsWallProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGraphicsWall is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

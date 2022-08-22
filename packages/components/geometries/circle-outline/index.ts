@@ -74,6 +74,10 @@ export type VcGeometryCircleOutlineProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGeometryCircleOutline is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

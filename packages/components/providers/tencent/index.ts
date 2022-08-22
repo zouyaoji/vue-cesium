@@ -131,6 +131,10 @@ export interface VcImageryProviderTencentProps {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderTencent is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

@@ -339,17 +339,30 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       let isLoading = false
       if ($services.viewer) {
         isLoading = true
-        load().then(e => {
-          resolve(e)
-          isLoading = false
-        })
+        load()
+          .then(e => {
+            resolve(e)
+            isLoading = false
+          })
+          .catch(e => {
+            emit('unready', e)
+            reject(e)
+          })
       }
       parentVcInstance.vcMitt.on('ready', () => {
         if (!isLoading && !vcInstance.isUnmounted) {
-          resolve(load())
+          load()
+            .then(e => {
+              resolve(e)
+            })
+            .catch(e => {
+              emit('unready', e)
+              reject(e)
+            })
         }
       })
     } catch (e) {
+      emit('unready', e)
       reject(e)
     }
   })

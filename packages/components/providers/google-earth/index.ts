@@ -64,6 +64,10 @@ export type VcImageryProviderGoogleProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderGoogle is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

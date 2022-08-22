@@ -183,6 +183,10 @@ export type VcDatasourceGeojsonProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcDatasourceGeojson is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

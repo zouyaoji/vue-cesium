@@ -43,6 +43,10 @@ export type VcGeometryPlaneProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGeometryPlane is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

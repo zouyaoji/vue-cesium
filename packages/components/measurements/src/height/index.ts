@@ -122,6 +122,10 @@ export type VcMeasurementHeightProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcMeasurementHeight is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

@@ -888,8 +888,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
     viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
-    viewer._vcPickScreenSpaceEventHandler = undefined!
-    viewer._vcViewerScreenSpaceEventHandler = undefined!
+    viewer._vcPickScreenSpaceEventHandler = undefined
+    viewer._vcViewerScreenSpaceEventHandler = undefined
 
     removeCesiumScript && revokeExtensions(viewer)
 
@@ -1332,8 +1332,16 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     try {
       logger.debug('viewer - onMounted')
       await globalConfig.value?.__viewerUnloadingPromise
-      createResolve(load())
+      load()
+        .then(e => {
+          createResolve(e)
+        })
+        .catch(e => {
+          emit('unready', e)
+          reject(e)
+        })
     } catch (e) {
+      emit('unready', e)
       reject(e)
     }
   })
@@ -1641,6 +1649,10 @@ export interface VcViewerProps {
    * Triggers when the VcViewer is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
   /**
    * Triggers when the VcViewer is destroyed.
    */

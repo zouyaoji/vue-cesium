@@ -140,6 +140,10 @@ export type VcDrawingPolygonProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcDrawingPolygon is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

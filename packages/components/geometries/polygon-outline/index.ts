@@ -89,6 +89,10 @@ export type VcGeometryPolygonOutlineProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcGeometryPolygonOutline is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void

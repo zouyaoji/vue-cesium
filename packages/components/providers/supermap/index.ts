@@ -98,6 +98,10 @@ export type VcImageryProviderSupermapProps = {
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
+   * Triggers when the component load failed.
+   */
+  onUnready?: (e: any) => void
+  /**
    * Triggers when the VcImageryProviderSupermap is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
