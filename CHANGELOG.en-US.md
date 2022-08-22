@@ -1,10 +1,19 @@
 ## Changelog
 
+### 3.0.18
+
+_2022-08-23_
+
+#### New feature
+
+- Navigation controls add relative positioning options.
+- All components add an `unready` event to provide support for the processing logic of component loading failure.[Detail](https://github.com/zouyaoji/vue-cesium/discussions/260)
+
 ### 3.0.17
 
 _2022-08-12_
 
-#### Bug 修复
+#### Bug fixes
 
 - Fixed some incorrect types definitions.
 - Fixed the problem that failing to get viewer through useVueCesium.
