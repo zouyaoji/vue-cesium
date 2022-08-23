@@ -16,7 +16,7 @@ Basic usage of the `vc-imagery-provider-wms` component.
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-imagery-provider-wms
         ref="provider"
-        url="http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
+        url="https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
         layers="Hydrography:bores"
         :parameters="{transparent: true, format: 'image/png'}"
       ></vc-imagery-provider-wms>

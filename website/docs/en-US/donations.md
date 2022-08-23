@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-08-22 21:34:51
+ * @LastEditTime: 2022-08-23 09:02:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
@@ -26,7 +26,7 @@
 
   | amount  | channel | sponsor                                         | message                           | date       |
   | ------- | ------- | ----------------------------------------------- | --------------------------------- | ---------- |
-  | ¥ 20.0  | WeChat  | \*G                                             | -                                 | 2022-08-20 |
+  | ¥ 20.0  | WeChat  | \*G                                             | -                                 | 2022-08-21 |
   | ¥ 66.66 | WeChat  | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
   | ¥ 20.0  | WeChat  | \*龙                                            | 非常不错                          | 2022-07-28 |
   | ¥ 100.0 | WeChat  | \*易                                            | -                                 | 2022-03-15 |
