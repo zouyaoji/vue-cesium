@@ -827,14 +827,29 @@ export function setViewerCamera(viewer: Cesium.Viewer, camera: VcCamera) {
   })
 }
 
-export function flyToCamera(viewer: Cesium.Viewer, camera: VcCamera, options?) {
-  const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
+export function flyToCamera(
+  viewer: Cesium.Viewer,
+  cameraOpts: VcCamera,
+  options?: {
+    destination?: Cesium.Cartesian3 | Cesium.Rectangle
+    orientation?: any
+    duration?: number
+    complete?: Cesium.Camera.FlightCompleteCallback
+    cancel?: Cesium.Camera.FlightCancelledCallback
+    endTransform?: Cesium.Matrix4
+    maximumHeight?: number
+    pitchAdjustHeight?: number
+    flyOverLongitude?: number
+    flyOverLongitudeWeight?: number
+    convert?: boolean
+    easingFunction?: Cesium.EasingFunction.Callback
+  }
+) {
+  const { destination, orientation } = makeCameraOptions(cameraOpts, viewer.scene.globe.ellipsoid)
   viewer.camera.flyTo({
+    ...options,
     destination: options?.destination || destination,
-    orientation: options?.orientation || orientation,
-    duration: options?.duration,
-    complete: options?.complete,
-    cancel: options?.cancel
+    orientation: options?.orientation || orientation
   })
 }
 
