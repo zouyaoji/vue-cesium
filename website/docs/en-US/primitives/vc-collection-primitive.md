@@ -250,6 +250,7 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 | positions | VcCartesian3Array | | `optional` The positions. |
 | polygonHierarchy | VcPolygonHierarchy | | `optional` The polygonHierarchy. |
 | clampToGround | boolean | `false` | `optional` Specify whether the polygon is attached to the ground or 3dtiles. |
+| arcType | number \| Cesium.ArcType | | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. |
 | classificationType | number \| Cesium.ClassificationType | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
 | appearance | VcAppearance | | `optional` The appearance. |
 | depthFailColor | Object\|Array\|String | | `optional` Specify the depthFailColor. |

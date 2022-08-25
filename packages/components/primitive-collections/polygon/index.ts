@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2022-05-14 23:06:03
+ * @LastEditTime: 2022-08-25 21:31:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -23,6 +23,7 @@ import {
   show,
   enableMouseEvent,
   positions,
+  arcType,
   classificationType,
   polygonHierarchy,
   clampToGround,
@@ -44,6 +45,7 @@ export const polygonProps = {
   ...depthFailAppearance,
   ...show,
   ...id,
+  ...arcType,
   ...classificationType,
   ...clampToGround,
   ...ellipsoid,
@@ -183,6 +185,10 @@ export type VcPolygonProps = {
    * 	A polygon hierarchy that can include holes.
    */
   polygonHierarchy?: VcPolygonHierarchy
+  /**
+   * The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB.
+   */
+  arcType?: number | Cesium.ArcType
   /**
    * An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground.
    */

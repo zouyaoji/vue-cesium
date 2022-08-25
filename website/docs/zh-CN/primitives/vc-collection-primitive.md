@@ -252,6 +252,7 @@
 | positions           | VcCartesian3Array                   |         | `optional` 指定 polygon 的位置属性。                         |
 | polygonHierarchy    | VcPolygonHierarchy                  |         | `optional` 指定 polygon 的位置属性，岛洞多边形请用这个属性。 |
 | clampToGround       | boolean                             | `false` | `optional` 指定 polygon 是否贴地。                           |
+| arcType             | number \| Cesium.ArcType            |         | `optional` 指定 polygon 的弧线类型。                         |
 | classificationType  | number \| Cesium.ClassificationType |         | `optional` 指定 polygon 贴地/贴对象模式。                    |
 | appearance          | VcAppearance                        |         | `optional` 指定 polygon 外观参数。                           |
 | depthFailAppearance | VcAppearance                        |         | `optional` 指定 polygon 在深度检测无效时的外观参数。         |

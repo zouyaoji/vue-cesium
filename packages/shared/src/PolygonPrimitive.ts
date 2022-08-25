@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2022-01-07 11:40:33
+ * @LastEditTime: 2022-08-25 20:10:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -17,6 +17,7 @@ class PolygonPrimitive {
   _ellipsoid: Cesium.Ellipsoid
   _clampToGround: boolean
   _classificationType: number
+  _arcType: number
   _allowPicking: boolean
   _asynchronous: boolean
   _polygonHierarchy: Cesium.PolygonHierarchy
@@ -24,7 +25,7 @@ class PolygonPrimitive {
   _depthFailAppearance: Cesium.Appearance
 
   constructor(options) {
-    const { defined, defaultValue, Color, createGuid, BoundingSphere, Ellipsoid, ClassificationType } = Cesium
+    const { defined, defaultValue, createGuid, BoundingSphere, Ellipsoid, ClassificationType, ArcType } = Cesium
     options = defaultValue(options, {})
     this.show = defaultValue(options.show, true)
     this._id = defined(options.id) ? options.id : createGuid()
@@ -35,6 +36,7 @@ class PolygonPrimitive {
     this._polygonHierarchy = options.polygonHierarchy
     this._clampToGround = defaultValue(options.clampToGround, false)
     this._classificationType = defaultValue(options.classificationType, ClassificationType.BOTH)
+    this._arcType = defaultValue(options.arcType, ArcType.RHUMB)
     this._allowPicking = defaultValue(options.allowPicking, true)
     this._asynchronous = defaultValue(options.asynchronous, false)
     this._boundingSphere = new BoundingSphere()
@@ -183,13 +185,15 @@ class PolygonPrimitive {
         geometry: this._polygonHierarchy
           ? new PolygonGeometry({
               polygonHierarchy: this._polygonHierarchy,
-              ellipsoid: this._ellipsoid
+              ellipsoid: this._ellipsoid,
+              arcType: this._arcType
             })
           : PolygonGeometry.fromPositions({
               positions: this._positions.map(function (e) {
                 return Cartesian3.clone(e)
               }),
-              ellipsoid: this._ellipsoid
+              ellipsoid: this._ellipsoid,
+              arcType: this._arcType
             }),
         id: this._id
       }),
