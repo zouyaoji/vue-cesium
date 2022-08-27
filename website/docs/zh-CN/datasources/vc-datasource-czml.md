@@ -18,6 +18,7 @@ Czml 数据源组件的基础用法。
       :show="show"
       @click="onClicked"
     ></vc-datasource-czml>
+    <vc-datasource-czml :czml="czml"></vc-datasource-czml>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -50,8 +51,108 @@ Czml 数据源组件的基础用法。
         // viewer.zoomTo(cesiumObject)
         viewer.camera.flyHome(0)
       }
+      const czml = [
+        {
+          id: 'document',
+          name: 'CZML Geometries: Polyline',
+          version: '1.0'
+        },
+        {
+          id: 'redLine',
+          name: 'Red line clamped to terain',
+          polyline: {
+            positions: {
+              cartographicDegrees: [-75, 35, 0, -125, 35, 0]
+            },
+            material: {
+              solidColor: {
+                color: {
+                  rgba: [255, 0, 0, 255]
+                }
+              }
+            },
+            width: 5,
+            clampToGround: true
+          }
+        },
+        {
+          id: 'blueLine',
+          name: 'Glowing blue line on the surface',
+          polyline: {
+            positions: {
+              cartographicDegrees: [-75, 37, 0, -125, 37, 0]
+            },
+            material: {
+              polylineGlow: {
+                color: {
+                  rgba: [0, 0, 255, 255]
+                },
+                glowPower: 0.2
+              }
+            },
+            width: 10
+          }
+        },
+        {
+          id: 'orangeLine',
+          name: 'Orange line with black outline at height and following the surface',
+          polyline: {
+            positions: {
+              cartographicDegrees: [-75, 39, 250000, -125, 39, 250000]
+            },
+            material: {
+              polylineOutline: {
+                color: {
+                  rgba: [255, 165, 0, 255]
+                },
+                outlineColor: {
+                  rgba: [0, 0, 0, 255]
+                },
+                outlineWidth: 2
+              }
+            },
+            width: 5
+          }
+        },
+        {
+          id: 'purpleLine',
+          name: 'Purple arrow at height',
+          polyline: {
+            positions: {
+              cartographicDegrees: [-75, 43, 500000, -125, 43, 500000]
+            },
+            material: {
+              polylineArrow: {
+                color: {
+                  rgba: [148, 0, 211, 255]
+                }
+              }
+            },
+            followSurface: false,
+            width: 10
+          }
+        },
+        {
+          id: 'dashedLine',
+          name: 'Blue dashed line',
+          polyline: {
+            positions: {
+              cartographicDegrees: [-75, 45, 500000, -125, 45, 500000]
+            },
+            material: {
+              polylineDash: {
+                color: {
+                  rgba: [0, 255, 255, 255]
+                }
+              }
+            },
+            width: 4
+          }
+        }
+      ]
 
       return {
+        czml,
         unload,
         reload,
         load,
@@ -69,14 +170,15 @@ Czml 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名           | 类型           | 默认值 | 描述                                        |
-| ---------------- | -------------- | ------ | ------------------------------------------- |
-| czml             | String\|Object |        | `required` 指定 czml 对象或者 url。         |
-| show             | Boolean        | `true` | `optional` 指定数据源是否可见。             |
-| enableMouseEvent | Boolean        | `true` | `optional` 指定鼠标事件是否生效。           |
-| entities         | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| sourceUri        | String         |        | `optional` 指定引用资源 url 的相对路径。    |
-| credit           | String\|Object |        | `optional` 指定数据源描述信息。             |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ---------------- | ------------------------------ | ------ | ------------------------------------------- |
+| czml | string\|Cesium.Resource\|any[] | | `required` 指定 czml 对象或者 url。 |
+| show | boolean | `true` | `optional` 指定数据源是否可见。 |
+| enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/zh-CN/component/vc-entity)\> | `[]` | `optional` 指定要添加到该数据源的实体集合。 |
+| sourceUri | string | | `optional` 指定引用资源 url 的相对路径。 |
+| credit | string\|Cesium.Credit | | `optional` 指定数据源描述信息。 |
 
 ### 事件
 

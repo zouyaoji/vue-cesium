@@ -69,14 +69,14 @@ Basic usage of VcDatasourceCzml component.
 
 ### Props
 
-<!-- prettier-ignore -->
+//---
 | Name | Type | Default | Description |
 | -------- | -------------- | ------- | ------------------------------------------- |
-| czml | String\|Object | | `required` An optional name for the data source. This value will be overwritten if a loaded document contains a name. |
-| show | Boolean | `true` | `optional` Specifies whether the datasource is visible. |
-| entities | Array | `[]` | `optional` Specify the collection of entities to be added to this datasource. |
-| sourceUri | String | | `optional` Overrides the url to use for resolving relative links. |
-| credit | String\|Object | | `optional` A credit for the data source, which is displayed on the canvas. |
+| czml | string\|Cesium.Resource\|any[] | | `required` An optional name for the data source. This value will be overwritten if a loaded document contains a name. |
+| show | boolean | `true` | `optional` Specifies whether the datasource is visible. |
+| entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/en-US/component/vc-entity)\> | `[]` | `optional` Specify the collection of entities to be added to this datasource. |
+| sourceUri | string | | `optional` Overrides the url to use for resolving relative links. |
+| credit | string\|Cesium.Credit | | `optional` A credit for the data source, which is displayed on the canvas. |
 
 ### Events
 

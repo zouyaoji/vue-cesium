@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 15:00:11
+ * @LastEditTime: 2022-08-27 23:08:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\datasources\czml\index.ts
@@ -24,7 +24,7 @@ export const czmlDatasourceProps = {
     default: () => []
   },
   czml: {
-    type: [String, Object] as PropType<string | Cesium.Resource>,
+    type: [String, Object, Array] as PropType<string | Cesium.Resource | Array<any>>,
     required: true
   },
   ...sourceUri,
@@ -85,7 +85,7 @@ export type VcDatasourceCzmlProps = {
   /**
    * A url or CZML object to be processed.
    */
-  czml: string | Cesium.Resource
+  czml: string | Cesium.Resource | any[]
   /**
    * Overrides the url to use for resolving relative links.
    */
