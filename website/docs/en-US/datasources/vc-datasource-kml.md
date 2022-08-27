@@ -69,17 +69,18 @@ Basic usage of VcDatasourceKml component.
 
 ### Props
 
-| Name          | Type              | Default | Description                                                                                             |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
 | ------------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------- |
-| data          | String\|Object    |         | `required` Overrides the url to use for resolving relative links and other KML network features.        |
-| show          | Boolean           | `true`  | `optional` Specify whether the data source is displayed.                                                |
-| entities      | Array             | `[]`    | `optional` Specify the collection of entities to be added to this data source.                          |
-| camera        | Object            |         | `optional` The camera that is used for viewRefreshModes and sending camera properties to network links. |
-| canvas        | HTMLCanvasElement |         | `optional` The canvas that is used for sending viewer properties to network links.                      |
-| sourceUri     | String            |         | `optional` Overrides the url to use for resolving relative links and other KML network features.        |
-| clampToGround | Boolean           | `false` | `optional` true if the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground. |
-| ellipsoid     | Object            |         | `optional` The global ellipsoid used for geographical calculations.                                     |
-| credit        | String\|Object    |         | `optional` A credit for the data source, which is displayed on the canvas.                              |
+| data | string \| Cesium.Resource \| Blob | | `required` Overrides the url to use for resolving relative links and other KML network features. |
+| show | boolean | `true` | `optional` Specify whether the data source is displayed. |
+| entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/en-US/component/vc-entity)\> | `[]` | `optional` Specify the collection of entities to be added to this data source. |
+| camera | Cesium.Camera | | `optional` The camera that is used for viewRefreshModes and sending camera properties to network links. |
+| canvas | HTMLCanvasElement | | `optional` The canvas that is used for sending viewer properties to network links. |
+| sourceUri | string | | `optional` Overrides the url to use for resolving relative links and other KML network features. |
+| clampToGround | boolean | `false` | `optional` true if the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground. |
+| ellipsoid | Cesium.Ellipsoid | | `optional` The global ellipsoid used for geographical calculations. |
+| credit | string\|Cesium.Credit | | `optional` A credit for the data source, which is displayed on the canvas. |
 
 ### Events
 

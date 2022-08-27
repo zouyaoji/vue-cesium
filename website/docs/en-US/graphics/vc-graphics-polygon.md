@@ -156,27 +156,27 @@ Basic usage of VcGraphicsPolygon component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the polygon. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the polygon. |
 | hierarchy | Object\|Array | | `optional` A Property specifying the PolygonHierarchy. |
-| height | Number | `0` | `optional` A numeric Property specifying the altitude of the polygon relative to the ellipsoid surface. |
-| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the polygon's extruded face relative to the ellipsoid surface. |
-| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| stRotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the polygon texture counter-clockwise from north. |
-| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
-| outline | Boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
-| perPositionHeight | Boolean | `false` | `optional` A boolean specifying whether or not the the height of each position is used. |
-| closeTop | Boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
-| closeBottom | Boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
-| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
-| shadows | Number | `0` | `optional` An enum Property specifying whether the polygon casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2|
+| height | number | `0` | `optional` A numeric Property specifying the altitude of the polygon relative to the ellipsoid surface. |
+| heightReference | number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the polygon's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| stRotation | number | `0.0` | `optional` A numeric property specifying the rotation of the polygon texture counter-clockwise from north. |
+| granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
+| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
+| outline | boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| perPositionHeight | boolean | `false` | `optional` A boolean specifying whether or not the the height of each position is used. |
+| closeTop | boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
+| closeBottom | boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
+| arcType | number | `1` | `optional` The type of line the polygon edges must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
+| shadows | number | `0` | `optional` An enum Property specifying whether the polygon casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2|
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this polygon will be displayed.  |
-| classificationType | Number | `2` | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| zIndex | Number | `0` | `optional` A property specifying the zIndex used for ordering ground geometry. Only has an effect if the polygon is constant and neither height or extrudedHeight are specified. |
+| classificationType | number | `2` | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | number | `0` | `optional` A property specifying the zIndex used for ordering ground geometry. Only has an effect if the polygon is constant and neither height or extrudedHeight are specified. |
 
 ### Events
 

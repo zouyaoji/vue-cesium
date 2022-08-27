@@ -209,9 +209,9 @@
 
 | 属性名            | 类型                      | 默认值 | 描述                                                                   |
 | ----------------- | ------------------------- | ------ | ---------------------------------------------------------------------- |
-| show              | Boolean                   | `true` | `optional` 指定图元集合中的图元是否显示。                              |
-| destroyPrimitives | Boolean                   | `true` | `optional` 指定移除图元集合时是否销毁集合中的图元。                    |
-| enableMouseEvent  | Boolean                   | `true` | `optional` 指定鼠标事件是否生效。                                      |
+| show              | boolean                   | `true` | `optional` 指定图元集合中的图元是否显示。                              |
+| destroyPrimitives | boolean                   | `true` | `optional` 指定移除图元集合时是否销毁集合中的图元。                    |
+| enableMouseEvent  | boolean                   | `true` | `optional` 指定鼠标事件是否生效。                                      |
 | polygons          | Array\<PolygonPrimitive\> | `[]`   | `optional` 指定面图元集合。 数组对象结构与 `vc-polygon` 组件属性相同。 |
 
 ### 事件

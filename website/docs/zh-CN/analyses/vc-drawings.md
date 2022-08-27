@@ -100,7 +100,7 @@ ctrl + 右键取消绘制。
           direction: 'right'
         },
         polylineDrawingOpts: {
-          loop: true,
+          // loop: true,
           onClick(e) {
             console.log(e)
           }

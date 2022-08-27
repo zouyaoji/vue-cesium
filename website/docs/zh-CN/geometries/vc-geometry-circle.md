@@ -116,13 +116,13 @@
 | 属性名         | 类型   | 默认值 | 描述                                                                     |
 | -------------- | ------ | ------ | ------------------------------------------------------------------------ |
 | center         | Object |        | `required` 指定圆形中心点。                                              |
-| radius         | Number |        | `required` 指定圆形半径。                                                |
+| radius         | number |        | `required` 指定圆形半径。                                                |
 | ellipsoid      | Object |        | `optional` 指定圆形参考椭球体。                                          |
-| height         | Number | `0.0`  | `optional` 指定圆形离地表的高度（米）。                                  |
-| granularity    | Number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。                          |
+| height         | number | `0.0`  | `optional` 指定圆形离地表的高度（米）。                                  |
+| granularity    | number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。                          |
 | vertexFormat   | Object |        | `optional` 指定要计算的顶点属性。                                        |
-| extrudedHeight | Number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                                    |
-| stRotation     | Number | `0.0`  | `optional` 指定圆形纹理的旋转坐标（以弧度为单位）。 正旋转为逆时针方向。 |
+| extrudedHeight | number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                                    |
+| stRotation     | number | `0.0`  | `optional` 指定圆形纹理的旋转坐标（以弧度为单位）。 正旋转为逆时针方向。 |
 
 ### 事件
 
@@ -143,12 +143,12 @@
 | 属性名                | 类型   | 默认值 | 描述                                                  |
 | --------------------- | ------ | ------ | ----------------------------------------------------- |
 | center                | Object |        | `required` 指定圆形中心点。                           |
-| radius                | Number |        | `required` 指定圆形半径。                             |
+| radius                | number |        | `required` 指定圆形半径。                             |
 | ellipsoid             | Object |        | `optional` 指定圆形参考椭球体。                       |
-| height                | Number | `0.0`  | `optional` 指定圆形离地表的高度（米）。               |
-| granularity           | Number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。       |
-| extrudedHeight        | Number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                 |
-| numberOfVerticalLines | Number | `16`   | `optional` 指定圆形在拉伸时顶部与底部之间绘制的线数。 |
+| height                | number | `0.0`  | `optional` 指定圆形离地表的高度（米）。               |
+| granularity           | number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。       |
+| extrudedHeight        | number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                 |
+| numberOfVerticalLines | number | `16`   | `optional` 指定圆形在拉伸时顶部与底部之间绘制的线数。 |
 
 ### VcGeometryCicleOutline 事件
 

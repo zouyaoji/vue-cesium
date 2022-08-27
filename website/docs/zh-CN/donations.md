@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-08-22 21:35:02
+ * @LastEditTime: 2022-08-24 09:38:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -31,6 +31,7 @@
   | ¥ 20.0  | WeChat | \*G                                             | -                                 | 2022-08-21 |
   | ¥ 66.66 | WeChat | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
   | ¥ 20.0  | WeChat | \*龙                                            | 非常不错                          | 2022-07-28 |
+  | ¥ 20.0  | QQ     | 兔子。                                          |                                   | 2022-07-23 |
   | ¥ 100.0 | WeChat | \*易                                            | -                                 | 2022-03-15 |
   | ¥ 66.66 | QQ     | Levi                                            | 恭喜发财                          | 2022-01-28 |
   | ¥ 66.66 | QQ     | Levi                                            | 多谢大佬开源                      | 2022-01-11 |

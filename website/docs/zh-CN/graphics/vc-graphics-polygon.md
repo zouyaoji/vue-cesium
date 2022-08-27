@@ -156,27 +156,27 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ----- | ---- | ---- | -----  |
-| show | Boolean | `true` | `optional` 指定 polygon 是否显示。 |
+| show | boolean | `true` | `optional` 指定 polygon 是否显示。 |
 | hierarchy | Object\|Array | | `optional` 指定 polygon 的 PolygonHierarchy 属性。 |
-| height | Number | `0` | `optional` 指定 polygon 的高度。 |
-| heightReference | Number | | `optional` 指定 polygon 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` 指定 polygon 拉伸高度。 |
-| extrudedHeightReference | Number | | `optional` 指定 polygon 拉伸的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| stRotation | Number | `0.0` | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。 |
-| granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 |
-| fill | Boolean | `true` | `optional` 指定 polygon 是否填充材质。 |
-| material | Object\|String\|Array | `'white'` | `optional` 指定 polygon 材质。 |
-| outline | Boolean | `false` | `optional` 指定 polygon 是否绘制轮廓线。 |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 polygon 轮廓线颜色。 |
-| outlineWidth | Number | `1.0` | `optional` 指定 polygon 轮廓线宽度。 |
-| perPositionHeight | Boolean | `false` | `optional` 指定 polygon 是否使用每个位置的高度。 |
-| closeTop | Boolean | `true` | `optional` 指定 polygon 拉伸出来的顶部是否闭合。 |
-| closeBottom | Boolean | `true` | `optional` 指定 polygon 拉伸出来的底部是否闭合。 |
-| arcType | Number | `1` | `optional` 指定 polygon 线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**|0/1/2|
-| shadows | Number | `0` | `optional` 指定 polygon 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| height | number | `0` | `optional` 指定 polygon 的高度。 |
+| heightReference | number | | `optional` 指定 polygon 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number | | `optional` 指定 polygon 拉伸高度。 |
+| extrudedHeightReference | number | | `optional` 指定 polygon 拉伸的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| stRotation | number | `0.0` | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。 |
+| granularity | number | | `optional` 指定每个经纬度之间的采样粒度。 |
+| fill | boolean | `true` | `optional` 指定 polygon 是否填充材质。 |
+| material | Object\|string\|Array | `'white'` | `optional` 指定 polygon 材质。 |
+| outline | boolean | `false` | `optional` 指定 polygon 是否绘制轮廓线。 |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 polygon 轮廓线颜色。 |
+| outlineWidth | number | `1.0` | `optional` 指定 polygon 轮廓线宽度。 |
+| perPositionHeight | boolean | `false` | `optional` 指定 polygon 是否使用每个位置的高度。 |
+| closeTop | boolean | `true` | `optional` 指定 polygon 拉伸出来的顶部是否闭合。 |
+| closeBottom | boolean | `true` | `optional` 指定 polygon 拉伸出来的底部是否闭合。 |
+| arcType | number | `1` | `optional` 指定 polygon 线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**|0/1/2|
+| shadows | number | `0` | `optional` 指定 polygon 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | distanceDisplayCondition | Object\|Array | | `optional` 指定 polygon 随相机距离改变是否显示参数。 |
-| classificationType | Number | `2` | `optional` 指定 polygon 贴对象模式。  **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| zIndex | Number | `0` | `optional` 指定 polygon 顺序，没有高度和拉伸高度时有效。 |
+| classificationType | number | `2` | `optional` 指定 polygon 贴对象模式。  **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | number | `0` | `optional` 指定 polygon 顺序，没有高度和拉伸高度时有效。 |
 
 ### 事件
 

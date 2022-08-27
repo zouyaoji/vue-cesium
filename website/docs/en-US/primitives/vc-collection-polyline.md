@@ -112,10 +112,10 @@ Basic usage of VcCollectionPolyline component.
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
-| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
-| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| show | boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
 | polylines | Array | `[]` | `optional` Specify an array of polylines collections. The structure of the array object is the same as the attribute of the `vc-point` component. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### Events
 
@@ -153,12 +153,12 @@ Loading a renderable polyline. It is equivalent to initializing a `Cesium.Polyli
 | ---- | ---- | ------- | ----------- |
 | distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this polyline will be displayed. |
 | id | Object | | `optional` The user-defined value returned when the polyline is picked. |
-| loop | Boolean | false | `optional` Whether a line segment will be added between the first and last polyline positions. |
-| material | Object\|Array\|String | | `optional` The surface appearance of the polyline.This can be one of several built-in Material objects or a custom material, scripted with Fabric. |
+| loop | boolean | false | `optional` Whether a line segment will be added between the first and last polyline positions. |
+| material | Object\|Array\|string | | `optional` The surface appearance of the polyline.This can be one of several built-in Material objects or a custom material, scripted with Fabric. |
 | positions | Array | | `optional` The positions of the polyline. |
-| show | Boolean | true | `optional` Determines if this polyline will be shown. Use this to hide or show a polyline, instead of removing it and re-adding it to the collection. |
-| width | Number | 1.0 | `optional` The width of the polyline. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| show | boolean | true | `optional` Determines if this polyline will be shown. Use this to hide or show a polyline, instead of removing it and re-adding it to the collection. |
+| width | number | 1.0 | `optional` The width of the polyline. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### VcPolyline Events
 

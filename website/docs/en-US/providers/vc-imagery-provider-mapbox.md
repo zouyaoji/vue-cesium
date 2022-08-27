@@ -90,7 +90,7 @@ Basic usage of the `vc-imagery-provider-mapbox` component.
 | styleId | string | | `optional` The Mapbox Style ID. |
 | accessToken | string | | `optional` 	The public access token for the imagery. |
 | tilesize | number | `512` | `optional` The size of the image tiles. |
-| scaleFactor | Boolean |  | `optional` Determines if tiles are rendered at a @2x scale factor. |
+| scaleFactor | boolean |  | `optional` Determines if tiles are rendered at a @2x scale factor. |
 | ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | maximumLevel | number | | `optional` 	The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |

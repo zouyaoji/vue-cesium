@@ -84,17 +84,17 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ------ | --- | ----- | ----- | ----- |
-| show | Boolean | `true` | `optional` 指定 wall 是否显示。 |
+| show | boolean | `true` | `optional` 指定 wall 是否显示。 |
 | positions | Array | | `optional` 指定 wall 顶部的位置数组。 |
 | minimumHeights | Array | | `optional` 指定 wall 底部的高度数组。 |
 | maximumHeights | Array | | `optional` 指定 wall 顶部的高度数组。 |
-| granularity | Number | | `optional` 指定每个纬度和经度之间的角距离。 |
-| fill | Boolean | `true` | `optional` 指定 wall 是否填充材质。 |
-| material | Object\|String\|Array | `'white'` | `optional` 指定 wall 材质。 |
-| outline | Boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
-| outlineWidth | Number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |
-| shadows | Number | `0` | `optional` 指定 wall 是否投射或接收阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| granularity | number | | `optional` 指定每个纬度和经度之间的角距离。 |
+| fill | boolean | `true` | `optional` 指定 wall 是否填充材质。 |
+| material | Object\|string\|Array | `'white'` | `optional` 指定 wall 材质。 |
+| outline | boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
+| outlineWidth | number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |
+| shadows | number | `0` | `optional` 指定 wall 是否投射或接收阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | Object\|Array | | `optional` 指定 wall 随相机距离改变的显示条件。 |
 
 ### 事件

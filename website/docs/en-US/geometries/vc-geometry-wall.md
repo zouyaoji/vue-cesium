@@ -125,7 +125,7 @@ Basic usage of VcGeometryWall component.
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | positions | Array | | `required` An array of Cartesian objects, which are the points of the wall. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
 | minimumHeights | Array | | `optional`An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
 | ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |
@@ -151,7 +151,7 @@ Loading a wall geometry outline. It is equivalent to initializing a `Cesium.Wall
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | positions | Array | | `required` An array of Cartesian objects, which are the points of the wall. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
 | minimumHeights | Array | | `optional` An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
 | ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |

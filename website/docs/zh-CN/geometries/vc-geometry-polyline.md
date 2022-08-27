@@ -119,11 +119,11 @@
 | 属性名          | 类型    | 默认值  | 描述                                                                             | 可选值 |
 | --------------- | ------- | ------- | -------------------------------------------------------------------------------- | ------ |
 | positions       | Array   |         | `required` 指定表示线条的位置数组。                                              |
-| width           | Number  | `1.0`   | `optional` 指定线的宽度（像素）。                                                |
+| width           | number  | `1.0`   | `optional` 指定线的宽度（像素）。                                                |
 | colors          | Array   |         | `optional` 指定每个顶点或每个线段的颜色数组。                                    |
-| colorsPerVertex | Boolean | `false` | `optional` 指定颜色数组是根据线段数取均值还是通过线段顶点插值。                  |
-| arcType         | Number  | `1`     | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                     | 0/1/2  |
-| granularity     | Number  |         | `optional` 指定每个纬度和经度之间的距离（以弧度为单位），arcType 不为 0 时有效。 |
+| colorsPerVertex | boolean | `false` | `optional` 指定颜色数组是根据线段数取均值还是通过线段顶点插值。                  |
+| arcType         | number  | `1`     | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                     | 0/1/2  |
+| granularity     | number  |         | `optional` 指定每个纬度和经度之间的距离（以弧度为单位），arcType 不为 0 时有效。 |
 | vertexFormat    | Object  |         | `optional` 指定要缓存的顶点属性类型。                                            |
 | ellipsoid       | Object  |         | `optional` 指定参考椭球体。                                                      |        |
 

@@ -78,8 +78,8 @@
 
 | 属性名    | 类型           | 默认值 | 描述                          |
 | --------- | -------------- | ------ | ----------------------------- |
-| url       | String\|Object |        | `required` 指定服务地址。     |
-| token     | String         |        | `optional` 指定服务授权令牌。 |
+| url       | string\|Object |        | `required` 指定服务地址。     |
+| token     | string         |        | `optional` 指定服务授权令牌。 |
 | ellipsoid | Object         |        | `optional` 指定参考椭球体。   |
 
 ### 事件

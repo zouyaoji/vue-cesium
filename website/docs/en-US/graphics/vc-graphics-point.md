@@ -66,16 +66,16 @@ Basic usage of the VcGraphicsPoint component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the point. |
-| pixelSize | Number | `1` | `optional` A numeric Property specifying the size in pixels. |
-| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| color | Object\|String\|Array | `'white'` | `optional` A Property specifying the Color of the point. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the point. |
+| pixelSize | number | `1` | `optional` A numeric Property specifying the size in pixels. |
+| heightReference | number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| color | Object\|string\|Array | `'white'` | `optional` A Property specifying the Color of the point. |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
 | scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to scale the point based on distance. |
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this point will be displayed. |
-| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+| disableDepthTestDistance | number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
 ### Events
 

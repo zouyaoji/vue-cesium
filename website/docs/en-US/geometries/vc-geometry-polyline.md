@@ -119,11 +119,11 @@ Basic usage of VcGeometryPolyline component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of Cartesian3 defining the positions in the polyline as a line strip.|
-| width | Number | `1.0` | `optional` The width in pixels. |
+| width | number | `1.0` | `optional` The width in pixels. |
 | colors | Array | | `optional` An Array of Color defining the per vertex or per segment colors. |
-| colorsPerVertex | Boolean | `false` | `optional` A boolean that determines whether the colors will be flat across each segment of the line or interpolated across the vertices. |
-| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
+| colorsPerVertex | boolean | `false` | `optional` A boolean that determines whether the colors will be flat across each segment of the line or interpolated across the vertices. |
+| arcType | number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
 | ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
 

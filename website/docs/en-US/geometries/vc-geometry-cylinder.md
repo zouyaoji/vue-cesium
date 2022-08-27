@@ -138,9 +138,9 @@ Basic usage of VcGeometryCylinder component.
 | Name         | Type   | Default | Description                                                                        |
 | ------------ | ------ | ------- | ---------------------------------------------------------------------------------- |
 | length       | Array  |         | `required` A numeric Property specifying the length of the cylinder.               |
-| topRadius    | Number |         | `required` A numeric Property specifying the radius of the top of the cylinder.    |
-| bottomRadius | Number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder. |
-| slices       | Number | `128`   | `optional` The number of edges around the perimeter of the cylinder.               |
+| topRadius    | number |         | `required` A numeric Property specifying the radius of the top of the cylinder.    |
+| bottomRadius | number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder. |
+| slices       | number | `128`   | `optional` The number of edges around the perimeter of the cylinder.               |
 | vertexFormat | Object |         | `optional` The vertex attributes to be computed.                                   |
 
 ### Events
@@ -162,10 +162,10 @@ Loading a cylinder geometry outline. It is equivalent to initializing a `Cesium.
 | Name                  | Type   | Default | Description                                                                             |
 | --------------------- | ------ | ------- | --------------------------------------------------------------------------------------- |
 | length                | Array  |         | `required` A numeric Property specifying the length of the cylinder.                    |
-| topRadius             | Number |         | `required` A numeric Property specifying the radius of the top of the cylinder.         |
-| bottomRadius          | Number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder.      |
-| slices                | Number | `128`   | `optional` The number of edges around the perimeter of the cylinder.                    |
-| numberOfVerticalLines | Number | `16`    | `optional` Number of lines to draw between the top and bottom surfaces of the cylinder. |
+| topRadius             | number |         | `required` A numeric Property specifying the radius of the top of the cylinder.         |
+| bottomRadius          | number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder.      |
+| slices                | number | `128`   | `optional` The number of edges around the perimeter of the cylinder.                    |
+| numberOfVerticalLines | number | `16`    | `optional` Number of lines to draw between the top and bottom surfaces of the cylinder. |
 
 ### VcGeometryCylinderOutline Events
 

@@ -101,10 +101,10 @@ The basic usage of the VcGeometryGroundPolyline component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of Cartesian3 defining the polyline's points. Heights above the ellipsoid will be ignored. |
-| width | Number | `1.0` | `optional` The screen space width in pixels. |
-| granularity | Number | | `optional` The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation. |
-| loop | Boolean | false | `optional` Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop. |
-| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2/|
+| width | number | `1.0` | `optional` The screen space width in pixels. |
+| granularity | number | | `optional` The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation. |
+| loop | boolean | false | `optional` Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop. |
+| arcType | number | `1` | `optional` The type of line the polyline segments must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2/|
 
 ### Events
 

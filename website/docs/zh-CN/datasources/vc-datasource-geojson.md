@@ -97,22 +97,23 @@ GeoJson 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名           | 类型                  | 默认值  | 描述                                                                              |
-| ---------------- | --------------------- | ------- | --------------------------------------------------------------------------------- |
-| data             | String\|Object        |         | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。                            |
-| show             | Boolean               | `true`  | `optional` 指定数据源是否显示。                                                   |
-| enableMouseEvent | Boolean               | `true`  | `optional` 指定鼠标事件是否生效。                                                 |
-| entities         | Array                 | `[]`    | `optional` 指定要添加到该数据源的实体集合。                                       |
-| sourceUri        | String                |         | `optional` 指定引用资源 url 的相对路径。                                          |
-| describe         | Function              |         | `optional` 指定数据源描述信息函数，该函数返回一个字符串，将属性转换为 html 描述。 |
-| markerSize       | Number                | `48`    | `optional` 指定点对象创建的图钉的像素大小。                                       |
-| markerSymbol     | String                |         | `optional` 指定点对象创建的图钉的风格符号。                                       |
-| markerColor      | Object\|String\|Array |         | `optional` 指定点对象创建的图钉的颜色。                                           |
-| stroke           | Object\|String\|Array |         | `optional` 指定线、面对象的边框颜色。                                             |
-| strokeWidth      | Number                | `2`     | `optional` 指定线、面对象的边框宽度。                                             |
-| fill             | Object\|String\|Array |         | `optional` 指定面对象的填充色。                                                   |
-| clampToGround    | Boolean               | `false` | `optional` 指定对象是否贴地。                                                     |
-| credit           | String\|Object        |         | `optional` 指定数据源描述信息。                                                   |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ---------------- | -------------------------------------- | ------- | --------------------------------------------------------------------------------- |
+| data | Cesium.Resource \| string \| AnyObject | | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。 |
+| show | boolean | `true` | `optional` 指定数据源是否显示。 |
+| enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/zh-CN/component/vc-entity)\> | `[]` | `optional` 指定要添加到该数据源的实体集合。 |
+| sourceUri | string | | `optional` 指定引用资源 url 的相对路径。 |
+| describe | (properties: AnyObject, nameProperty: string) => string \| AnyObject | | `optional` 指定数据源描述信息函数，该函数返回一个字符串，将属性转换为 html 描述。 |
+| markerSize | number | `48` | `optional` 指定点对象创建的图钉的像素大小。 |
+| markerSymbol | string | | `optional` 指定点对象创建的图钉的风格符号。 |
+| markerColor | VcColor | | `optional` 指定点对象创建的图钉的颜色。 |
+| stroke | VcColor | | `optional` 指定线、面对象的边框颜色。 |
+| strokeWidth | number | `2` | `optional` 指定线、面对象的边框宽度。 |
+| fill | VcColor | | `optional` 指定面对象的填充色。 |
+| clampToGround | boolean | `false` | `optional` 指定对象是否贴地。 |
+| credit | string\|Cesium.Credit | | `optional` 指定数据源描述信息。 |
 
 ### 事件
 

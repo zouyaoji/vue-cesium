@@ -144,9 +144,9 @@
 | polylinePositions | Array  |        | `required` 指定 polyline volume 位置信息。                                        |
 | shapePositions    | Array  |        | `required` 指定 polyline volume 拉伸的形状数组。                                  |
 | ellipsoid         | Object |        | `optional` 指定 polyline volume 参考椭球体。                                      |
-| granularity       | Number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
+| granularity       | number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
 | vertexFormat      | Object |        | `optional` 指定 polyline volume 顶点属性渲染方式。                                |
-| cornerType        | Number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+| cornerType        | number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
 
 ### 事件
 
@@ -169,8 +169,8 @@
 | polylinePositions | Array  |        | `required` 指定 polyline volume 位置信息。                                        |
 | shapePositions    | Array  |        | `required` 指定 polyline volume 拉伸的形状数组。                                  |
 | ellipsoid         | Object |        | `optional` 指定 polyline volume 参考椭球体。                                      |
-| granularity       | Number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
-| cornerType        | Number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+| granularity       | number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
+| cornerType        | number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
 
 ### VcGeometryPolylineVolumeOutline 事件
 

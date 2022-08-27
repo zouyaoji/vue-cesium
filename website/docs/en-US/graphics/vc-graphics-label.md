@@ -47,27 +47,27 @@ Basic usage of the VcGraphicsLabel component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the label. |
-| text | String | | `optional` A Property specifying the text. Explicit newlines '\n' are supported. |
-| font | String | `'30px sans-serif'` | `optional` A Property specifying the CSS font. |
-| labelStyle | Number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
-| scale | Number | `1.0` | `optional` A numeric Property specifying the scale to apply to the text. |
-| showBackground | Boolean | `false` | `optional` A boolean Property specifying the visibility of the background behind the label. |
-| backgroundColor | Object\|String\|Array | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` A Property specifying the background Color. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the label. |
+| text | string | | `optional` A Property specifying the text. Explicit newlines '\n' are supported. |
+| font | string | `'30px sans-serif'` | `optional` A Property specifying the CSS font. |
+| labelStyle | number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
+| scale | number | `1.0` | `optional` A numeric Property specifying the scale to apply to the text. |
+| showBackground | boolean | `false` | `optional` A boolean Property specifying the visibility of the background behind the label. |
+| backgroundColor | Object\|string\|Array | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` A Property specifying the background Color. |
 | backgroundPadding | Object\|Array | `{x: 7, y: 5}` | `optional` A Cartesian2 Property specifying the horizontal and vertical background padding in pixels. |
 | pixelOffset | Object\|Array | `{x: 0, y: 0 }` | `optional` A Cartesian2 Property specifying the pixel offset. |
 | eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset.|
-| horizontalOrigin | Number | `0` | `optional` A Property specifying the HorizontalOrigin. |
-| verticalOrigin | Number | `0` | `optional` A Property specifying the VerticalOrigin. |
-| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. |
-| fillColor | Object\|String\|Array | `white` | `optional` A Property specifying the fill Color. |
-| outlineColor | Object\|String\|Array | `black` | `optional` A Property specifying the outline Color. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the outline width. |
+| horizontalOrigin | number | `0` | `optional` A Property specifying the HorizontalOrigin. |
+| verticalOrigin | number | `0` | `optional` A Property specifying the VerticalOrigin. |
+| heightReference | number | `0` | `optional` A Property specifying what the height is relative to. |
+| fillColor | Object\|string\|Array | `white` | `optional` A Property specifying the fill Color. |
+| outlineColor | Object\|string\|Array | `black` | `optional` A Property specifying the outline Color. |
+| outlineWidth | number | `1.0` | `optional` A numeric Property specifying the outline width. |
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
 | scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. |
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this label will be displayed. |
-| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+| disableDepthTestDistance | number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
 ### Events
 

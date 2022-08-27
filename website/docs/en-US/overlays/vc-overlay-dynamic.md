@@ -349,18 +349,18 @@ Basic usage of VcOverlayDynamic component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` Specify whether to display the CustomDataSource that hosts the dynamic overlays. |
-| name | String | `'__vc__overlay__dynamic__'` | `optional` Specify the name of the CustomDataSource. |
-| startTime | String\| Date \| JulianDate | | `optional` Specify the start time of the clock. |
-| stopTime | String\| Date \| JulianDate | | `optional` Specify the stop time of the clock. |
-| currentTime | String\| Date \| JulianDate | | `optional` Specify the current time. |
-| clockRange | Number\| Cesium.ClockRange | `0` | `optional` Determines how the clock should behave when Clock#startTime or Clock#stopTime is reached. |
-| clockStep | Number\| Cesium.ClockStep | `1` | `optional` Determines if calls to Clock#tick are frame dependent or system clock dependent. |
-| shouldAnimate | Boolean | `true` | `optional` Indicates whether Clock#tick should attempt to advance time. The clock will only tick when both Clock#canAnimate and Clock#shouldAnimate are true. |
-| canAnimate | Boolean | `true` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
-| multiplier | Number | `1.0` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
+| show | boolean | `true` | `optional` Specify whether to display the CustomDataSource that hosts the dynamic overlays. |
+| name | string | `'__vc__overlay__dynamic__'` | `optional` Specify the name of the CustomDataSource. |
+| startTime | string\| Date \| JulianDate | | `optional` Specify the start time of the clock. |
+| stopTime | string\| Date \| JulianDate | | `optional` Specify the stop time of the clock. |
+| currentTime | string\| Date \| JulianDate | | `optional` Specify the current time. |
+| clockRange | number\| Cesium.ClockRange | `0` | `optional` Determines how the clock should behave when Clock#startTime or Clock#stopTime is reached. |
+| clockStep | number\| Cesium.ClockStep | `1` | `optional` Determines if calls to Clock#tick are frame dependent or system clock dependent. |
+| shouldAnimate | boolean | `true` | `optional` Indicates whether Clock#tick should attempt to advance time. The clock will only tick when both Clock#canAnimate and Clock#shouldAnimate are true. |
+| canAnimate | boolean | `true` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
+| multiplier | number | `1.0` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
 | dynamicOverlays | Array\<DynamicOverlayOpts\> | `[]` | `optional` Specify the dynamicOverlays array. |
-| defaultInterval | Number | `3.0` | `optional` Specify the default refresh interval of the default position information, and it is available to change the position of the dynamic overlays in real time. |
+| defaultInterval | number | `3.0` | `optional` Specify the default refresh interval of the default position information, and it is available to change the position of the dynamic overlays in real time. |
 
 ### Events
 

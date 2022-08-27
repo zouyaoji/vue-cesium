@@ -87,24 +87,24 @@
 
 | 属性名           | 类型                   | 默认值         | 描述                                                                                |
 | ---------------- | ---------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| url              | String\|Object         |                | `required` 指定 wmts 服务地址。                                                     |
-| format           | String                 | `'image/jpeg'` | `optional` 指定服务的 MIME 类型。                                                   |
-| layer            | String                 |                | `required` 指定 WMTS 请求图层名称。                                                 |
-| wmtsStyle        | String                 |                | `required` 指定 WMTS 请求样式名称。                                                 |
-| tileMatrixSetID  | String                 |                | `required` 指定 WMTS 请求的 TileMatrixSet 的标识符。                                |
+| url              | string\|Object         |                | `required` 指定 wmts 服务地址。                                                     |
+| format           | string                 | `'image/jpeg'` | `optional` 指定服务的 MIME 类型。                                                   |
+| layer            | string                 |                | `required` 指定 WMTS 请求图层名称。                                                 |
+| wmtsStyle        | string                 |                | `required` 指定 WMTS 请求样式名称。                                                 |
+| tileMatrixSetID  | string                 |                | `required` 指定 WMTS 请求的 TileMatrixSet 的标识符。                                |
 | tileMatrixLabels | Array                  |                | `optional` 指定 TileMatrix 中用于 WMTS 请求的标识符列表，每个 TileMatrix 级别一个。 |
 | clock            | Clock                  |                | `optional` 确定时间维度值时使用的 Clock 实例。 指定 options.times 时必需。          |
 | times            | TimeIntervalCollection |                | `optional` TimeIntervalCollection，其 data 属性是一个包含时间动态维度及其值的对象。 |
 | dimensions       | Object                 |                | `optional` 指定包含静态尺寸及其值的对象。                                           |
-| tileWidth        | Number                 | `256`          | `optional` 像元宽度。                                                               |
-| tileHeight       | Number                 | `256`          | `optional` 像元高度。                                                               |
+| tileWidth        | number                 | `256`          | `optional` 像元宽度。                                                               |
+| tileHeight       | number                 | `256`          | `optional` 像元高度。                                                               |
 | tilingScheme     | TilingScheme           |                | `optional` 指定切片方案。                                                           |
 | rectangle        | Object\|Array          |                | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                |
-| minimumLevel     | Number                 | `0`            | `optional` 图层可以显示的最小层级。                                                 |
-| maximumLevel     | Number                 |                | `optional` 图层可以显示的最大层级，undefined 表示没有限制。                         |
+| minimumLevel     | number                 | `0`            | `optional` 图层可以显示的最小层级。                                                 |
+| maximumLevel     | number                 |                | `optional` 图层可以显示的最大层级，undefined 表示没有限制。                         |
 | ellipsoid        | Ellipsoid              |                | `optional` 参考椭球体，没指定默认 WGS84 椭球。                                      |
-| credit           | Credit\| String        |                | `optional` 数据源描述信息。                                                         |
-| subdomains       | String \| Array        | `'abc'`        | `optional` 指定 URL 模板中{s}占位符的子域。                                         |
+| credit           | Credit\| string        |                | `optional` 数据源描述信息。                                                         |
+| subdomains       | string \| Array        | `'abc'`        | `optional` 指定 URL 模板中{s}占位符的子域。                                         |
 
 ### 事件
 

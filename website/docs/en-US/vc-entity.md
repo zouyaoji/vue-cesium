@@ -87,10 +87,10 @@ Basic usage of `vc-entity`.
 
 | Name           | Type                    | Default | Description                                                                               |
 | -------------- | ----------------------- | ------- | ----------------------------------------------------------------------------------------- |
-| id             | String                  |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated. |
-| name           | String                  |         | `optional` A human readable name to display to users. It does not have to be unique.      |
+| id             | string                  |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated. |
+| name           | string                  |         | `optional` A human readable name to display to users. It does not have to be unique.      |
 | availability   |                         |         | `optional` The availability, if any, associated with this object.                         |
-| show           | Boolean                 | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
+| show           | boolean                 | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
 | description    |                         |         | `optional` A string Property specifying an HTML description for this entity.              |
 | position       | Object\|Array\|Function |         | `optional` A Property specifying the entity position.                                     |
 | orientation    |                         |         | `optional` A Property specifying the entity orientation.                                  |

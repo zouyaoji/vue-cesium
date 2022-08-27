@@ -206,9 +206,9 @@ Basic usage of VcCollectionPrimitive component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ----------------- | ------- | ------- | ------------------------------------------------------------------------------------------ |
-| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
-| destroyPrimitives | Boolean | `true` | `optional` Determines if primitives in the collection are destroyed when they are removed. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| show | boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| destroyPrimitives | boolean | `true` | `optional` Determines if primitives in the collection are destroyed when they are removed. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 | polygons | Array\<PolygonPrimitive\> | `[]` | Specify an array of polygons collections. The structure of the array object is the same as the attribute of the `vc-polygon` component.|
 
 ### Events
@@ -253,7 +253,7 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 | arcType | number \| Cesium.ArcType | | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. |
 | classificationType | number \| Cesium.ClassificationType | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
 | appearance | VcAppearance | | `optional` The appearance. |
-| depthFailColor | Object\|Array\|String | | `optional` Specify the depthFailColor. |
+| depthFailColor | Object\|Array\|string | | `optional` Specify the depthFailColor. |
 | depthFailAppearance | VcAppearance | | `optional` Specify the depthFailAppearance. |
 | ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | allowPicking | boolean | `true` | `optional` When true, polygon will only be pickable with Scene#pick. When false, GPU memory is saved. |

@@ -90,10 +90,10 @@
 
 | 属性名         | 类型                    | 默认值 | 描述                                                             |
 | -------------- | ----------------------- | ------ | ---------------------------------------------------------------- |
-| id             | String                  |        | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
-| name           | String                  |        | `optional` 指定 entity 名称，名称可不必唯一。                    |
+| id             | string                  |        | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
+| name           | string                  |        | `optional` 指定 entity 名称，名称可不必唯一。                    |
 | availability   |                         |        | `optional` 指定 entity 关联的可用性参数。                        |
-| show           | Boolean                 | `true` | `optional` 指定 entity 及其子项是否显示。                        |
+| show           | boolean                 | `true` | `optional` 指定 entity 及其子项是否显示。                        |
 | description    |                         |        | `optional` 指定 entity 的 HTML 描述信息。                        |
 | position       | Object\|Array\|Function |        | `optional` 指定 entity 的位置。                                  |
 | orientation    |                         |        | `optional` 指定 entity 的方向。                                  |

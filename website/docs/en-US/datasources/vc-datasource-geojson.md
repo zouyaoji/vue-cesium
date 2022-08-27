@@ -95,19 +95,19 @@ Basic usage of VcDatasourceGeojson component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ------------- | --------------------- | ------- | --------------------------------------------------------------------------------- |
-| data | String\|Object | | `required` A url, GeoJSON object, or TopoJSON object to be loaded. |
-| show | Boolean | `true` | `optional` Overrides the url to use for resolving relative links. |
-| entities | Array | `[]` | `optional` Specify the collection of entities to be added to the datasource. |
-| sourceUri | String | | `optional` lOverrides the url to use for resolving relative links.|
-| describe | Function | | `optional` A function which returns a Property object (or just a string), which converts the properties into an html description. |
-| markerSize | Number | `48` | `optional` The default size of the map pin created for each point, in pixels. |
-| markerSymbol | String | | `optional` The default symbol of the map pin created for each point. |
-| markerColor | Object\|String\|Array | | `optional` The default color of the map pin created for each point. |
-| stroke | Object\|String\|Array | | `optional` lThe default color of polylines and polygon outlines. |
-| strokeWidth | Number | `2` | `optional` The default width of polylines and polygon outlines. |
-| fill | Object\|String\|Array | | `optional` The default color for polygon interiors. |
-| clampToGround | Boolean | `false` | `optional` true if we want the features clamped to the ground. |
-| credit | String\|Object | | `optional` A credit for the data source, which is displayed on the canvas. |
+| data | string\|Object | | `required` A url, GeoJSON object, or TopoJSON object to be loaded. |
+| show | boolean | `true` | `optional` Overrides the url to use for resolving relative links. |
+| entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/en-US/component/vc-entity)\> | `[]` | `optional` Specify the collection of entities to be added to the datasource. |
+| sourceUri | string | | `optional` lOverrides the url to use for resolving relative links.|
+| describe | (properties: AnyObject, nameProperty: string) => string \| AnyObject | | `optional` A function which returns a Property object (or just a string), which converts the properties into an html description. |
+| markerSize | number | `48` | `optional` The default size of the map pin created for each point, in pixels. |
+| markerSymbol | string | | `optional` The default symbol of the map pin created for each point. |
+| markerColor | VcColor | | `optional` The default color of the map pin created for each point. |
+| stroke | VcColor | | `optional` lThe default color of polylines and polygon outlines. |
+| strokeWidth | number | `2` | `optional` The default width of polylines and polygon outlines. |
+| fill | VcColor | | `optional` The default color for polygon interiors. |
+| clampToGround | boolean | `false` | `optional` true if we want the features clamped to the ground. |
+| credit | string\|Cesium.Credit | | `optional` A credit for the data source, which is displayed on the canvas. |
 
 ### Events
 

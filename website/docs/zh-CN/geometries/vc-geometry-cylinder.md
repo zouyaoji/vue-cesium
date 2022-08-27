@@ -138,9 +138,9 @@
 | 属性名       | 类型   | 默认值 | 描述                              |
 | ------------ | ------ | ------ | --------------------------------- |
 | length       | Array  |        | `required` 指定圆柱体长度。       |
-| topRadius    | Number |        | `required` 指定圆柱体顶部半径。   |
-| bottomRadius | Number |        | `required` 指定圆柱体底部半径。   |
-| slices       | Number | `128`  | `optional` 指定圆柱圆周边数。     |
+| topRadius    | number |        | `required` 指定圆柱体顶部半径。   |
+| bottomRadius | number |        | `required` 指定圆柱体底部半径。   |
+| slices       | number | `128`  | `optional` 指定圆柱圆周边数。     |
 | vertexFormat | Object |        | `optional` 指定顶点属性渲染方式。 |
 
 ### 事件
@@ -162,10 +162,10 @@
 | 属性名                | 类型   | 默认值 | 描述                                      |
 | --------------------- | ------ | ------ | ----------------------------------------- |
 | length                | Array  |        | `required` 指定圆柱体长度。               |
-| topRadius             | Number |        | `required` 指定圆柱体顶部半径。           |
-| bottomRadius          | Number |        | `required` 指定圆柱体底部半径。           |
-| slices                | Number | `128`  | `optional` 指定圆柱圆周边数。             |
-| numberOfVerticalLines | Number | `16`   | `optional` 指定圆柱体顶部到底部的线条数。 |
+| topRadius             | number |        | `required` 指定圆柱体顶部半径。           |
+| bottomRadius          | number |        | `required` 指定圆柱体底部半径。           |
+| slices                | number | `128`  | `optional` 指定圆柱圆周边数。             |
+| numberOfVerticalLines | number | `16`   | `optional` 指定圆柱体顶部到底部的线条数。 |
 
 ### VcGeometryCylinderOutline 事件
 

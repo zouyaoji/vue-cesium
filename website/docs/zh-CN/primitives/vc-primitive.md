@@ -74,18 +74,18 @@
 | geometryInstances | Object\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
 | appearance | Object | | `optional` 指定图元的外观参数。 |
 | depthFailAppearance | Object | | `optional` 指定图元在深度测试失败后的外观。 |
-| show | Boolean | `true` | `optional` 指定图元是否显示。 |
+| show | boolean | `true` | `optional` 指定图元是否显示。 |
 | modelMatrix | Object | | `optional` 指定图元从模型坐标转换为世界坐标的 4 x 4 矩阵。 |
-| vertexCacheOptimize | Boolean | `false` | `optional` 指定是否优化几何体顶点着色器之前和之后的缓存。 |
-| interleave | Boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |
-| compressVertices | Boolean | `true` | `optional` 指定是否压缩几何体顶点，压缩可以以节省内存。 |
-| releaseGeometryInstances | Boolean | `true` | `optional` 指定是否保留图元对几何体实例的输入，不保留可以节省内存。 |
-| allowPicking | Boolean | `true` | `optional` 指定图元是否可以被 Scene.pick 拾取，关闭拾取可以节省内存。 |
-| cull | Boolean | `true` | `optional` 指定是否能被渲染器视锥体剔除。 |
-| asynchronous | Boolean | `true` | `optional` 指定图元时异步加载还是同步加载。 |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示图元的边界球，用于调试使用。 |
-| shadows | Number | `0` | `optional` 指定图元是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| vertexCacheOptimize | boolean | `false` | `optional` 指定是否优化几何体顶点着色器之前和之后的缓存。 |
+| interleave | boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |
+| compressVertices | boolean | `true` | `optional` 指定是否压缩几何体顶点，压缩可以以节省内存。 |
+| releaseGeometryInstances | boolean | `true` | `optional` 指定是否保留图元对几何体实例的输入，不保留可以节省内存。 |
+| allowPicking | boolean | `true` | `optional` 指定图元是否可以被 Scene.pick 拾取，关闭拾取可以节省内存。 |
+| cull | boolean | `true` | `optional` 指定是否能被渲染器视锥体剔除。 |
+| asynchronous | boolean | `true` | `optional` 指定图元时异步加载还是同步加载。 |
+| debugShowBoundingVolume | boolean | `false` | `optional` 指定是否显示图元的边界球，用于调试使用。 |
+| shadows | number | `0` | `optional` 指定图元是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
 
 ### 事件
 

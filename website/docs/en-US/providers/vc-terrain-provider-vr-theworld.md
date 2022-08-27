@@ -69,8 +69,8 @@ Basic usage of the `vc-terrain-provider-vr-theworld` component.
 
 | Name      | Type           | Default | Description                                                                                |
 | --------- | -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| url       | String\|Object |         | `required` The URL of the VR-TheWorld TileMap.                                             |
-| token     | String         |         | `optional` The ellipsoid. If this parameter is not specified, the WGS84 ellipsoid is used. |
+| url       | string\|Object |         | `required` The URL of the VR-TheWorld TileMap.                                             |
+| token     | string         |         | `optional` The ellipsoid. If this parameter is not specified, the WGS84 ellipsoid is used. |
 | ellipsoid | Object         |         | `optional` A credit for the data source, which is displayed on the canvas.                 |
 
 ### Events

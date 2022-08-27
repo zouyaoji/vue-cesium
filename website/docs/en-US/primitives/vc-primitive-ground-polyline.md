@@ -102,15 +102,15 @@ Basic usage of VcPrimitiveGround component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | geometryInstances | Object\|Array | | `optional` GeometryInstances containing GroundPolylineGeometry. |
 | appearance | Object | | `optional` The Appearance used to render the polyline. Defaults to a white color Material on a PolylineMaterialAppearance. |
-| show | Boolean | `true` | `optional` Determines if this primitive will be shown. |
-| interleave | Boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
-| releaseGeometryInstances | Boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
-| allowPicking | Boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
-| asynchronous | Boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
-| classificationType | Number | `2` | `optional` Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
-| debugShowShadowVolume | Boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation to have effect. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| show | boolean | `true` | `optional` Determines if this primitive will be shown. |
+| interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
+| releaseGeometryInstances | boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
+| allowPicking | boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| asynchronous | boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
+| classificationType | number | `2` | `optional` Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| debugShowShadowVolume | boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation to have effect. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### Events
 

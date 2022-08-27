@@ -160,5 +160,5 @@ Basic usage of `vc-config-provider`.
 | Name   | Type               | Default                                                                           | Description   |
 | ------ | ------------------ | --------------------------------------------------------------------------------- | ------------- |
 | locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` Locale Object. |
-| cesiumPath | String | `'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS url. |
-| accessToken | String | `'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'` | `optional` accessToken. |
+| cesiumPath | string | `'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS url. |
+| accessToken | string | `'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'` | `optional` accessToken. |

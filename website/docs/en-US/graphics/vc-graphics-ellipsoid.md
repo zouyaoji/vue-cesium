@@ -85,18 +85,18 @@ Basic usage of the VcGraphicsEllipsoid component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipsoid. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipsoid. |
 | radii | Object | | `optional` A Cartesian3 Property specifying the radii of the ellipsoid. |
-| heightReference | Number | | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
-| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |
-| outline | Boolean | `false` | `optional` A boolean Property specifying whether the ellipsoid is outlined. |
-| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| stackPartitions | Number | `64` | `optional` A Property specifying the number of stacks. |
-| slicePartitions | Number | `64` | `optional` A Property specifying the number of radial slices. |
-| subdivisions | Number | `128` | `optional` A Property specifying the number of samples per outline ring, determining the granularity of the curvature. |
-| shadows | Number | `0` | `optional` An enum Property specifying whether the ellipsoid casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| heightReference | number | | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
+| material | Object\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |
+| outline | boolean | `false` | `optional` A boolean Property specifying whether the ellipsoid is outlined. |
+| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| stackPartitions | number | `64` | `optional` A Property specifying the number of stacks. |
+| slicePartitions | number | `64` | `optional` A Property specifying the number of radial slices. |
+| subdivisions | number | `128` | `optional` A Property specifying the number of samples per outline ring, determining the granularity of the curvature. |
+| shadows | number | `0` | `optional` An enum Property specifying whether the ellipsoid casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this ellipsoid will be displayed. |
 
 ### Events

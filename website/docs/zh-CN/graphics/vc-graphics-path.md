@@ -143,12 +143,12 @@
 
 | 属性名                   | 类型                  | 默认值    | 描述                                              |
 | ------------------------ | --------------------- | --------- | ------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 path 是否显示。                   |
-| leadTime                 | Number                |           | `optional` 指定 path 前面要显示的秒数。           |
-| trailTime                | Number                |           | `optional` 指定 path 后面要显示的秒数。           |
-| width                    | Number                | `1.0`     | `optional` 指定 path 像素宽度。                   |
-| resolution               | Number                | `60`      | `optional` 指定 path 步进最大秒数。               |
-| material                 | Object\|String\|Array | `'white'` | `optional` 指定 path 材质。                       |
+| show                     | boolean               | `true`    | `optional` 指定 path 是否显示。                   |
+| leadTime                 | number                |           | `optional` 指定 path 前面要显示的秒数。           |
+| trailTime                | number                |           | `optional` 指定 path 后面要显示的秒数。           |
+| width                    | number                | `1.0`     | `optional` 指定 path 像素宽度。                   |
+| resolution               | number                | `60`      | `optional` 指定 path 步进最大秒数。               |
+| material                 | Object\|string\|Array | `'white'` | `optional` 指定 path 材质。                       |
 | distanceDisplayCondition | Object\|Array         |           | `optional` 指定 path 随相机距离改变是否显示参数。 |
 
 ### 事件

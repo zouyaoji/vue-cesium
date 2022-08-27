@@ -117,13 +117,13 @@
 | 属性名         | 类型          | 默认值 | 描述                                                             |
 | -------------- | ------------- | ------ | ---------------------------------------------------------------- |
 | rectangle      | Object\|Array |        | `required` 指定矩形四至参数。                                    |
-| vertexFormat   | Number        |        | `optional` 指定矩形要缓存的顶点属性。                            |
+| vertexFormat   | number        |        | `optional` 指定矩形要缓存的顶点属性。                            |
 | ellipsoid      | Object        |        | `optional` 指定矩形所在的椭球体。                                |
-| granularity    | Number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。        |
-| height         | Number        | `0`    | `optional` 指定矩形高度。                                        |
-| rotation       | Number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。        |
-| stRotation     | Number        | `0.0`  | `optional` 指定矩形的纹理旋转坐标（弧度）， 逆时针方向为正旋转。 |
-| extrudedHeight | Number        |        | `optional` 指定矩形拉伸高度。                                    |
+| granularity    | number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。        |
+| height         | number        | `0`    | `optional` 指定矩形高度。                                        |
+| rotation       | number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。        |
+| stRotation     | number        | `0.0`  | `optional` 指定矩形的纹理旋转坐标（弧度）， 逆时针方向为正旋转。 |
+| extrudedHeight | number        |        | `optional` 指定矩形拉伸高度。                                    |
 
 ### 事件
 
@@ -145,10 +145,10 @@
 | -------------- | ------------- | ------ | --------------------------------------------------------- |
 | rectangle      | Object\|Array |        | `required` 指定矩形四至参数。                             |
 | ellipsoid      | Object        |        | `optional` 指定矩形所在的椭球体。                         |
-| granularity    | Number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。 |
-| height         | Number        | `0`    | `optional` 指定矩形高度。                                 |
-| rotation       | Number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。 |
-| extrudedHeight | Number        |        | `optional` 指定矩形拉伸高度。                             |
+| granularity    | number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。 |
+| height         | number        | `0`    | `optional` 指定矩形高度。                                 |
+| rotation       | number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。 |
+| extrudedHeight | number        |        | `optional` 指定矩形拉伸高度。                             |
 
 ### VcGeometryRectangleOutline 事件
 

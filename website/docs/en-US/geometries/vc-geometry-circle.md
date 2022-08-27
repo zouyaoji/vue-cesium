@@ -116,13 +116,13 @@ Basic usage of VcGeometryCircle component.
 | Name           | Type   | Default | Description                                                                                               |
 | -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
 | center         | Object |         | `required` The circle's center point in the fixed frame.                                                  |
-| radius         | Number |         | `required` The radius in meters.                                                                          |
+| radius         | number |         | `required` The radius in meters.                                                                          |
 | ellipsoid      | Object |         | `optional` The ellipsoid the circle will be on.                                                           |
-| height         | Number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
-| granularity    | Number | `0.02`  | `optional` The angular distance between points on the circle in radians.                                  |
+| height         | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
+| granularity    | number | `0.02`  | `optional` The angular distance between points on the circle in radians.                                  |
 | vertexFormat   | Object |         | `optional` The vertex attributes to be computed.                                                          |
-| extrudedHeight | Number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface.           |
-| stRotation     | Number | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface.           |
+| stRotation     | number | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
 
 ### Events
 
@@ -143,12 +143,12 @@ Loading the circle geometry outline. It is equivalent to initializing a `Cesium.
 | Name                  | Type   | Default | Description                                                                                     |
 | --------------------- | ------ | ------- | ----------------------------------------------------------------------------------------------- |
 | center                | Object |         | `required` The circle's center point in the fixed frame.                                        |
-| radius                | Number |         | `required` The radius in meters.                                                                |
+| radius                | number |         | `required` The radius in meters.                                                                |
 | ellipsoid             | Object |         | `optional` The ellipsoid the circle will be on.                                                 |
-| height                | Number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                 |
-| granularity           | Number | `0.02`  | `optional` The angular distance between points on the circle in radians.                        |
-| extrudedHeight        | Number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface. |
-| numberOfVerticalLines | Number | `16`    | `optional` Number of lines to draw between the top and bottom of an extruded circle.            |
+| height                | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                 |
+| granularity           | number | `0.02`  | `optional` The angular distance between points on the circle in radians.                        |
+| extrudedHeight        | number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface. |
+| numberOfVerticalLines | number | `16`    | `optional` Number of lines to draw between the top and bottom of an extruded circle.            |
 
 ### VcGeometryCicleOutline Events
 

@@ -79,7 +79,7 @@ Basic usage of VcPostProcessStageScan component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ------- | ------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| type | String | `'radar'` | `optional` Specify the scan type, optional values are'radar','circle'. |
+| type | string | `'radar'` | `optional` Specify the scan type, optional values are'radar','circle'. |
 | options | Object | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` Specify optional parameters. |
 
 ### Events

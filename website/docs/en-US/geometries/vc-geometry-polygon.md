@@ -148,16 +148,16 @@ Basic usage of VcGeometryPolygon component.
 | Name | Type | Default | Description | Accepted Values |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | --------------- |
 | polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
-| height | Number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
-| extrudedHeight | Number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
+| height | number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
+| extrudedHeight | number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
-| stRotation | Number\|Object | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| stRotation | number\|Object | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
 | ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| perPositionHeight | Boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
-| closeTop | Boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
-| closeBottom | Boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
-| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| perPositionHeight | boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
+| closeTop | boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
+| closeBottom | boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
+| arcType | number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
 
 ### Events
 
@@ -179,13 +179,13 @@ Loading a polygon geometry outline. It is equivalent to initializing a `Cesium.P
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
-| height | Number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
-| extrudedHeight | Number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
+| height | number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
+| extrudedHeight | number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
 | ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| perPositionHeight | Boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
-| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2|
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| perPositionHeight | boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
+| arcType | number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2|
 
 ### VcGeometryPolygonOutline Events
 

@@ -125,11 +125,11 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ----- | ---- | ----- | --------- |
-| show | Boolean | `true` | `optional` 指定该积云图元集合是否显示。 |
-| noiseDetail | Number | `16.0` | `optional` 指定噪声纹理数值。 |
+| show | boolean | `true` | `optional` 指定该积云图元集合是否显示。 |
+| noiseDetail | number | `16.0` | `optional` 指定噪声纹理数值。 |
 | noiseOffset | Object: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` 指定噪声纹理数值的平移参数。 |
-| debugBillboards | Boolean |`16.0`|`optional` 仅用于调试。确定广告牌是否以不透明颜色呈现。 |
-| debugEllipsoids | Boolean |`16.0`|`optional` 仅用于调试。确定云是否将作为不透明椭圆体呈现。 |
+| debugBillboards | boolean |`16.0`|`optional` 仅用于调试。确定广告牌是否以不透明颜色呈现。 |
+| debugEllipsoids | boolean |`16.0`|`optional` 仅用于调试。确定云是否将作为不透明椭圆体呈现。 |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` 指定积云集合数组。 数组对象结构与 `vc-cumulus-cloud` 组件属性相同。 |
 
 ### VcCollectionCloud 事件
@@ -167,13 +167,13 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| brightness  | Number | `1.0` | `optional` 指定积云的亮度。 |
+| brightness  | number | `1.0` | `optional` 指定积云的亮度。 |
 | color | VcColor | `'white'` | `optional` 指定基于的颜色。 |
 | maximumSize  | VcPosition | | `optional` 指定积云云的最大大小。 |
 | position | VcPosition | | `optional` 指定积云的位置。|
 | scale | VcCartesian2 | | `optional` 指定积云布告板的缩放。单位米。 |
-| show | Boolean | `true` | `optional` 指定积云是否可见。 |
-| slice | Number | `-1.0` | `optional` 指定基于广告牌上的“切片”。 |
+| show | boolean | `true` | `optional` 指定积云是否可见。 |
+| slice | number | `-1.0` | `optional` 指定基于广告牌上的“切片”。 |
 
 ### VcCumulusCloud 事件
 

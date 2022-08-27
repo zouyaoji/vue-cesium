@@ -147,16 +147,16 @@
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
 | polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
-| height            | Number        | `0`     | `optional` 指定 polygon 的高度。                                     |
-| extrudedHeight    | Number        |         | `optional` 指定 polygon 拉伸高度。                                   |
+| height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
+| extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
 | vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
-| stRotation        | Number        | `0.0`   | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。               |
+| stRotation        | number        | `0.0`   | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。               |
 | ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
-| granularity       | Number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
-| perPositionHeight | Boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
-| closeTop          | Boolean       | `true`  | `optional` 指定 polygon 拉伸出来的顶部是否闭合。                     |
-| closeBottom       | Boolean       | `true`  | `optional` 指定 polygon 拉伸出来的底部是否闭合。                     |
-| arcType           | Number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
+| granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
+| perPositionHeight | boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
+| closeTop          | boolean       | `true`  | `optional` 指定 polygon 拉伸出来的顶部是否闭合。                     |
+| closeBottom       | boolean       | `true`  | `optional` 指定 polygon 拉伸出来的底部是否闭合。                     |
+| arcType           | number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
 
 ### 事件
 
@@ -177,13 +177,13 @@
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
 | polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
-| height            | Number        | `0`     | `optional` 指定 polygon 的高度。                                     |
-| extrudedHeight    | Number        |         | `optional` 指定 polygon 拉伸高度。                                   |
+| height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
+| extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
 | vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
 | ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
-| granularity       | Number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
-| perPositionHeight | Boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
-| arcType           | Number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
+| granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
+| perPositionHeight | boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
+| arcType           | number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
 
 ### VcGeometryPolygonOutline 事件
 

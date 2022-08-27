@@ -84,17 +84,17 @@ Basic usage of the VcGraphicsWall component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the wall. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the wall. |
 | positions | Array | | `optional` A Property specifying the array of Cartesian3 positions which define the top of the wall.  |
 | minimumHeights | Array | | `optional` A Property specifying an array of heights to be used for the bottom of the wall instead of the globe surface. |
 | maximumHeights | Array | | `optional` A Property specifying an array of heights to be used for the top of the wall instead of the height of each position. |
-| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the wall is filled with the provided material. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
-| outline | Boolean | false | `optional` A boolean Property specifying whether the wall is outlined. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| shadows | Number | `0` | `optional` An enum Property specifying whether the wall casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | boolean | `true` | `optional` A boolean Property specifying whether the wall is filled with the provided material. |
+| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
+| outline | boolean | false | `optional` A boolean Property specifying whether the wall is outlined. |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | number | `0` | `optional` An enum Property specifying whether the wall casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this wall will be displayed. |
 
 ### Events

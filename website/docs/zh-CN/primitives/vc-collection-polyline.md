@@ -111,8 +111,8 @@
 | 属性名                  | 类型    | 默认值  | 描述                                                                    |
 | ----------------------- | ------- | ------- | ----------------------------------------------------------------------- |
 | modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。            |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。           |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                       |
+| debugShowBoundingVolume | boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。           |
+| enableMouseEvent        | boolean | `true`  | `optional` 指定鼠标事件是否生效。                                       |
 | polylines               | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-polyline` 组件属性相同。 |
 
 ### 事件
@@ -149,12 +149,12 @@
 | ------------------------ | --------------------- | ------ | ----------------------------------------------------------- |
 | distanceDisplayCondition | Object\|Array         |        | `optional` 指定 polyline 显示条件随相机距离改变的参数。     |
 | id                       | Object                |        | `optional` 指定与 polyline 关联的信息，拾取时返回该属性值。 |
-| loop                     | Boolean               | false  | `optional` 指定 polyline 是否首尾相连。                     |
-| material                 | Object\|Array\|String |        | `optional` 指定 polyline 材质。                             |
+| loop                     | boolean               | false  | `optional` 指定 polyline 是否首尾相连。                     |
+| material                 | Object\|Array\|string |        | `optional` 指定 polyline 材质。                             |
 | positions                | Array                 |        | `optional` 指定 polyline 的位置。                           |
-| show                     | Boolean               | true   | `optional` 指定 polyline 是否显示。                         |
-| width                    | Number                | 1.0    | `optional` 指定 polyline 宽度。                             |
-| enableMouseEvent         | Boolean               | `true` | `optional` 指定鼠标事件是否生效。                           |
+| show                     | boolean               | true   | `optional` 指定 polyline 是否显示。                         |
+| width                    | number                | 1.0    | `optional` 指定 polyline 宽度。                             |
+| enableMouseEvent         | boolean               | `true` | `optional` 指定鼠标事件是否生效。                           |
 
 ### VcPolyline 事件
 

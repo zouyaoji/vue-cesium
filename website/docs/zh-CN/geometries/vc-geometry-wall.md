@@ -124,7 +124,7 @@
 | 属性名         | 类型   | 默认值 | 描述                                              |
 | -------------- | ------ | ------ | ------------------------------------------------- |
 | positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | Number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
+| granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
 | maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
 | minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
 | ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |
@@ -149,7 +149,7 @@
 | 属性名         | 类型   | 默认值 | 描述                                              |
 | -------------- | ------ | ------ | ------------------------------------------------- |
 | positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | Number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
+| granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
 | maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
 | minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
 | ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |

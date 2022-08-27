@@ -110,11 +110,11 @@ Basic usage of the `vc-imagery-provider-urltemplate` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-|url|String\|Object||`required` The URL template to use to request tiles.|
-|pickFeaturesUrl|String\|Object||`optional` The URL template to use to pick features. |
+|url|string\|Object||`required` The URL template to use to request tiles.|
+|pickFeaturesUrl|string\|Object||`optional` The URL template to use to pick features. |
 |urlSchemeZeroPadding|Object||`optional` Gets the URL scheme zero padding for each tile coordinate.|
-|subdomains|String\|Array|`'abc'`|`optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain.|
-|credit|String\|Object|`''`|`optional` A credit for the data source, which is displayed on the canvas.|
+|subdomains|string\|Array|`'abc'`|`optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain.|
+|credit|string\|Object|`''`|`optional` A credit for the data source, which is displayed on the canvas.|
 |minimumLevel|Number|`0`|`optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.|
 |maximumLevel|Number||`optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit.|
 |rectangle|Object\|Array||`optional` The rectangle, in radians, covered by the image. |
@@ -126,7 +126,7 @@ Basic usage of the `vc-imagery-provider-urltemplate` component.
 |getFeatureInfoFormats|Array||`optional` The formats in which to get feature information at a specific location when UrlTemplateImageryProvider#pickFeatures is invoked. If this parameter is not specified, feature picking is disabled.|
 |enablePickFeatures|Boolean|`true`|`optional` If true, UrlTemplateImageryProvider#pickFeatures will request the options.pickFeaturesUrl and attempt to interpret the features included in the response. If false, UrlTemplateImageryProvider#pickFeatures will immediately return undefined (indicating no pickable features) without communicating with the server. Set this property to false if you know your data source does not support picking features or if you don't want this provider's features to be pickable. Note that this can be dynamically overridden by modifying the UriTemplateImageryProvider#enablePickFeatures property.|
 |customTags|Object||`optional` Allow to replace custom keywords in the URL template. The object must have strings as keys and functions as values.|
-| projectionTransforms | Boolean\|Object | `false` | `optional` Specify the projection transformation parameters. |
+| projectionTransforms | boolean\|Object | `false` | `optional` Specify the projection transformation parameters. |
 
 ### Events
 

@@ -100,10 +100,10 @@
 | 属性名      | 类型    | 默认值 | 描述                                                                                | 可选值 |
 | ----------- | ------- | ------ | ----------------------------------------------------------------------------------- | ------ |
 | positions   | Array   |        | `required` 指定表示线条的位置数组。                                                 |
-| width       | Number  | `1.0`  | `optional` 指定线的宽度（像素）。                                                   |
-| granularity | Number  |        | `optional` 指定插值点的距离间隔（以米为单位）。 默认为 9999.0 米。 零表示没有插值。 |
-| loop        | Boolean | false  | `optional` 指定折线是否首尾相连。                                                   |
-| arcType     | Number  | `1`    | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                        | 0/1/2  |
+| width       | number  | `1.0`  | `optional` 指定线的宽度（像素）。                                                   |
+| granularity | number  |        | `optional` 指定插值点的距离间隔（以米为单位）。 默认为 9999.0 米。 零表示没有插值。 |
+| loop        | boolean | false  | `optional` 指定折线是否首尾相连。                                                   |
+| arcType     | number  | `1`    | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                        | 0/1/2  |
 
 ### 事件
 

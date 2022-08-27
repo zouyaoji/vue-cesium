@@ -115,17 +115,17 @@ Basic usage of VcPrimitiveGround component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | geometryInstances | Object\|Array | | `optional` The geometry instances to render. This can either be a single instance or an array of length one.|
 | appearance | Object | | `optional` The appearance used to render the primitive. Defaults to a flat PerInstanceColorAppearance when GeometryInstances have a color attribute. |
-| show | Boolean | `true` | `optional` Determines if this primitive will be shown. |
-| vertexCacheOptimize | Boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
-| interleave | Boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
-| compressVertices | Boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |
-| releaseGeometryInstances | Boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
-| allowPicking | Boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
-| asynchronous | Boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
-| classificationType | Number | `2` | `optional`Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
-| debugShowShadowVolume | Boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation for the volumes to be created before the geometry is released or options.releaseGeometryInstance must be false. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| show | boolean | `true` | `optional` Determines if this primitive will be shown. |
+| vertexCacheOptimize | boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
+| interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
+| compressVertices | boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |
+| releaseGeometryInstances | boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
+| allowPicking | boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| asynchronous | boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
+| classificationType | number | `2` | `optional`Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| debugShowShadowVolume | boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation for the volumes to be created before the geometry is released or options.releaseGeometryInstance must be false. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### Events
 

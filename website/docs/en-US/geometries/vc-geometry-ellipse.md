@@ -126,14 +126,14 @@ Basic usage of VcGeometryEllipse component.
 | Name           | Type           | Default | Description                                                                                      |
 | -------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
 | center         | Object\|Array  |         | `required` The ellipse's center point in the fixed frame.                                        |
-| semiMajorAxis  | Number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
-| semiMinorAxis  | Number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
+| semiMajorAxis  | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
+| semiMinorAxis  | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
 | ellipsoid      | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
-| height         | Number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
-| extrudedHeight | Number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
-| rotation       | Number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
-| stRotation     | Number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
-| granularity    | Number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
+| height         | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
+| extrudedHeight | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
+| rotation       | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
+| stRotation     | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| granularity    | number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
 | vertexFormat   | Object         |         | `optional` The vertex attributes to be computed.                                                 |
 
 ### Events
@@ -155,15 +155,15 @@ Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.
 | Name                  | Type           | Default | Description                                                                                      |
 | --------------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
 | center                | Object         |         | `required` The ellipse's center point in the fixed frame.                                        |
-| semiMajorAxis         | Number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
-| semiMinorAxis         | Number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
+| semiMajorAxis         | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
+| semiMinorAxis         | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
 | ellipsoid             | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
-| height                | Number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
-| extrudedHeight        | Number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
-| rotation              | Number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
-| stRotation            | Number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
-| granularity           | Number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
-| numberOfVerticalLines | Number         | `16`    | `optional` Number of lines to draw between the top and bottom surface of an extruded ellipse.    |
+| height                | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
+| extrudedHeight        | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
+| rotation              | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
+| stRotation            | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| granularity           | number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
+| numberOfVerticalLines | number         | `16`    | `optional` Number of lines to draw between the top and bottom surface of an extruded ellipse.    |
 
 ### VcGeometryEllipseOutline Events
 

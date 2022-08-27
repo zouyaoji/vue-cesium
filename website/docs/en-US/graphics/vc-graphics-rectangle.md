@@ -92,24 +92,24 @@ Basic usage of VcGraphicsRectangle component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the rectangle. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the rectangle. |
 | coordinates | Object\|Array | | `optional` The Property specifying the Rectangle. |
-| height | Number | `0` | `optional` A numeric Property specifying the altitude of the rectangle relative to the ellipsoid surface. |
-| heightReference | Number | `true` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the rectangle's extruded face relative to the ellipsoid surface. |
-| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| rotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle clockwise from north. |
-| stRotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle texture counter-clockwise from north. |
-| granularity | Number | | `optional` A numeric Property specifying the angular distance between points on the rectangle. |
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the rectangle is filled with the provided material. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the rectangle. |
-| outline | Boolean | `false` | `optional` A boolean Property specifying whether the rectangle is outlined. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| shadows | Number | `0` | `optional` An enum Property specifying whether the rectangle casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| height | number | `0` | `optional` A numeric Property specifying the altitude of the rectangle relative to the ellipsoid surface. |
+| heightReference | number | `true` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the rectangle's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| rotation | number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle clockwise from north. |
+| stRotation | number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle texture counter-clockwise from north. |
+| granularity | number | | `optional` A numeric Property specifying the angular distance between points on the rectangle. |
+| fill | boolean | `true` | `optional` A boolean Property specifying whether the rectangle is filled with the provided material. |
+| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the rectangle. |
+| outline | boolean | `false` | `optional` A boolean Property specifying whether the rectangle is outlined. |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | number | `0` | `optional` An enum Property specifying whether the rectangle casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
-| classificationType | Number | `2` | `optional` An enum Property specifying whether this rectangle will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| zIndex | Number | `0` | `optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if the rectangle is constant and neither height or extrudedHeight are specified. |
+| classificationType | number | `2` | `optional` An enum Property specifying whether this rectangle will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | number | `0` | `optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if the rectangle is constant and neither height or extrudedHeight are specified. |
 
 ### Events
 

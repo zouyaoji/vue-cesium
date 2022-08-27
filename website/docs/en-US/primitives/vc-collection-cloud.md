@@ -123,11 +123,11 @@ Basic usage of VcCollectionCloud component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| show | Boolean | `true` | `optional` Whether to display the clouds. |
-| noiseDetail | Number | `16.0` | `optional` Desired amount of detail in the noise texture. |
+| show | boolean | `true` | `optional` Whether to display the clouds. |
+| noiseDetail | number | `16.0` | `optional` Desired amount of detail in the noise texture. |
 | noiseOffset | Object: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` Desired translation of data in noise texture.|
-| debugBillboards | Boolean |`16.0`| `optional` For debugging only. Determines if the billboards are rendered with an opaque color. |
-| debugEllipsoids | Boolean |`16.0`| `optional` For debugging only. Determines if the clouds will be rendered as opaque ellipsoids. |
+| debugBillboards | boolean |`16.0`| `optional` For debugging only. Determines if the billboards are rendered with an opaque color. |
+| debugEllipsoids | boolean |`16.0`| `optional` For debugging only. Determines if the clouds will be rendered as opaque ellipsoids. |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` Specifies an array of cumulus collections. The array object structure is the same as the `vc-cumulus-cloud` component properties. |
 
 ### VcCollectionCloud Events
@@ -166,13 +166,13 @@ Loading cumulus cloud. It is equivalent to initializing a `Cesium.CumulusCloud` 
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| brightness  | Number | `1.0` | `optional` Specify the brightness of the cloud. This can be used to give clouds a darker, grayer appearance. |
+| brightness  | number | `1.0` | `optional` Specify the brightness of the cloud. This can be used to give clouds a darker, grayer appearance. |
 | color | VcColor | `'white'` | `optional` Specify the color of the cloud. |
 | maximumSize  | VcPosition | | `optional` Specify the maximum size of the cumulus cloud rendered on the billboard. This defines a maximum ellipsoid volume that the cloud can appear in. Rather than guaranteeing a specific size, this specifies a boundary for the cloud to appear in, and changing it can affect the shape of the cloud. |
 | position | VcPosition | | `optional` Specify the Cartesian position of this cumulus cloud.|
 | scale | VcCartesian2 | | `optional` Specify the scale of the cumulus cloud billboard in meters. The scale property will affect the size of the billboard, but not the cloud's actual appearance. |
-| show | Boolean | `true` | `optional` Determines if this cumulus cloud will be shown. Use this to hide or show a cloud, instead of removing it and re-adding it to the collection. |
-| slice | Number | `-1.0` | `optional` If slice is set to a negative number, the cloud will not render a cross-section. Instead, it will render the outside of the ellipsoid that is visible. For clouds with small values of `maximumSize.z`, this can produce good-looking results, but for larger clouds, this can result in a cloud that is undesirably warped to the ellipsoid volume. |
+| show | boolean | `true` | `optional` Determines if this cumulus cloud will be shown. Use this to hide or show a cloud, instead of removing it and re-adding it to the collection. |
+| slice | number | `-1.0` | `optional` If slice is set to a negative number, the cloud will not render a cross-section. Instead, it will render the outside of the ellipsoid that is visible. For clouds with small values of `maximumSize.z`, this can produce good-looking results, but for larger clouds, this can result in a cloud that is undesirably warped to the ellipsoid volume. |
 
 ### VcCumulusCloud Events
 

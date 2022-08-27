@@ -117,13 +117,13 @@ Basic usage of VcGeometryRectangle component.
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
-| vertexFormat | Number | | `optional` The vertex attributes to be computed. |
+| vertexFormat | number | | `optional` The vertex attributes to be computed. |
 | ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| height | Number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
-| rotation | Number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
-| stRotation | Number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
-| extrudedHeight | Number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
+| rotation | number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
+| stRotation | number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
 
 ### Events
 
@@ -146,11 +146,11 @@ Loading a rectangle geometry outline. It is equivalent to initializing a `Cesium
 | ---- | ---- | ------- | ----------- |
 | rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
 | ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| height | Number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
-| rotation | Number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
-| stRotation | Number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
-| extrudedHeight | Number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
+| rotation | number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
+| stRotation | number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
 
 ### VcGeometryRectangleOutline Events
 

@@ -121,13 +121,13 @@ Basic usage of VcGeometryCorridor component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of positions that define the center of the corridor. |
-| width | Number | | `required` The distance between the edges of the corridor in meters. |
+| width | number | | `required` The distance between the edges of the corridor in meters. |
 | ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| height | Number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
-| extrudedHeight | Number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
+| extrudedHeight | number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed.|
-| cornerType | Number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| cornerType | number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
 ### Events
 
@@ -149,12 +149,12 @@ Loading a corridor geometry outline. It is equivalent to initializing a `Cesium.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of positions that define the center of the corridor outline. |
-| width | Number | | `required` The distance between the edges of the corridor outline. |
+| width | number | | `required` The distance between the edges of the corridor outline. |
 | ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
-| height | Number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
-| extrudedHeight | Number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
-| cornerType | Number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
+| extrudedHeight | number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
+| cornerType | number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
 ### VcGeometryPolygonCoplanarOutline Events
 

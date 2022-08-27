@@ -144,12 +144,12 @@ Basic usage of the VcGraphicsPath component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the path. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the path. |
 | leadTime | Object | | `optional` A Property specifying the number of seconds behind the object to show. |
 | trailTime | Object | | `optional` A Property specifying the number of seconds in front of the object to show. |
-| width | Number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
-| resolution | Number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to draw the path. |
+| width | number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
+| resolution | number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
+| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to draw the path. |
 | distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this path will be displayed.  |
 
 ### Events

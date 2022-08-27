@@ -247,8 +247,8 @@ Basic usage of VcDatasourceCustom component.
 
 | Name             | Type    | Default | Description                                                                    |
 | ---------------- | ------- | ------- | ------------------------------------------------------------------------------ |
-| name             | String  |         | `optional` A human-readable name for this instance.                            |
-| show             | Boolean | `true`  | `optional` Specify whether the data source is displayed.                       |
+| name             | string  |         | `optional` A human-readable name for this instance.                            |
+| show             | boolean | `true`  | `optional` Specify whether the data source is displayed.                       |
 | entities         | Array   | `[]`    | `optional` Specify the collection of entities to be added to this data source. |
 | destroy          | boolean | `false` | `optional` Whether to destroy the data source in addition to removing it.      |
 | enableMouseEvent | boolean | `true`  | `optional` Specify whether to respond to mouse pick events.                    |

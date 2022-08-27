@@ -219,35 +219,35 @@ Basic usage of VcPrimitiveParticle component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| show | Boolean | true | `optional`Whether to display the particle system. |
+| show | boolean | true | `optional`Whether to display the particle system. |
 | updateCallback | Function | | `optional` The callback function to be called each frame to update a particle.|
 | emitter | Object | | `optional` The particle emitter for this system. |
 | modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
 | emitterModelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system emitter within the particle systems local coordinate system. |
-| emissionRate | Number | `5` | `optional` The number of particles to emit per second. |
+| emissionRate | number | `5` | `optional` The number of particles to emit per second. |
 | bursts | Array | `false` | `optional` An array of [ParticleBurst](https://cesium.com/docs/cesiumjs-ref-doc/ParticleBurst.html), emitting bursts of particles at periodic times.|
-| loop | Boolean | `true` | `optional` Whether the particle system should loop its bursts when it is complete. |
-| scale | Number | `1.0` | `optional` Sets the scale to apply to the image of the particle for the duration of its particleLife. |
-| startScale | Number | | `optional` The final scale to apply to the image of the particle at the end of its life. |
-| endScale | Number | | `optional` Sets the color of a particle for the duration of its particleLife. |
-| color | Object\|Array\|String | | `optional` Sets the color of a particle for the duration of its particleLife. |
-| startColor | Object\|Array\|String | | `optional` The color of the particle at the beginning of its life. |
-| endColor | Object\|Array\|String | | `optional` The color of the particle at the end of its life.|
-| image | Object\|String | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |
+| loop | boolean | `true` | `optional` Whether the particle system should loop its bursts when it is complete. |
+| scale | number | `1.0` | `optional` Sets the scale to apply to the image of the particle for the duration of its particleLife. |
+| startScale | number | | `optional` The final scale to apply to the image of the particle at the end of its life. |
+| endScale | number | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| color | Object\|Array\|string | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| startColor | Object\|Array\|string | | `optional` The color of the particle at the beginning of its life. |
+| endColor | Object\|Array\|string | | `optional` The color of the particle at the end of its life.|
+| image | Object\|string | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |
 | imageSize | Object | | `optional` If set, overrides the minimumImageSize and maximumImageSize inputs that scale the particle image's dimensions in pixels. |
 | minimumImageSize | Object | | `optional` Sets the minimum bound, width by height, above which to randomly scale the particle image's dimensions in pixels. |
 | maximumImageSize | Object | | `optional` Sets the maximum bound, width by height, below which to randomly scale the particle image's dimensions in pixels. |
-| speed | Number | `1.0` | `optional` If set, overrides the minimumSpeed and maximumSpeed inputs with this value. |
-| minimumSpeed | Number | | `optional` Sets the minimum bound in meters per second above which a particle's actual speed will be randomly chosen.|
-| maximumSpeed | Number | | `optional` Sets the maximum bound in meters per second below which a particle's actual speed will be randomly chosen. |
-| lifetime | Number | | `optional` How long the particle system will emit particles, in seconds. |
-| particleLife | Number | `5.0` | `optional` If set, overrides the minimumParticleLife and maximumParticleLife inputs with this value. |
-| minimumParticleLife | Number | | `optional` Sets the minimum bound in seconds for the possible duration of a particle's life above which a particle's actual life will be randomly chosen. |
-| maximumParticleLife | Number | | `optional` Sets the maximum bound in seconds for the possible duration of a particle's life below which a particle's actual life will be randomly chosen. |
-| mass | Number | `1.0` | `optional` Sets the minimum and maximum mass of particles in kilograms. |
-| minimumMass | Number | | `optional` Sets the minimum bound for the mass of a particle in kilograms. A particle's actual mass will be chosen as a random amount above this value. |
-| maximumMass | Number | | `optional` Sets the maximum mass of particles in kilograms. A particle's actual mass will be chosen as a random amount below this value. |
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| speed | number | `1.0` | `optional` If set, overrides the minimumSpeed and maximumSpeed inputs with this value. |
+| minimumSpeed | number | | `optional` Sets the minimum bound in meters per second above which a particle's actual speed will be randomly chosen.|
+| maximumSpeed | number | | `optional` Sets the maximum bound in meters per second below which a particle's actual speed will be randomly chosen. |
+| lifetime | number | | `optional` How long the particle system will emit particles, in seconds. |
+| particleLife | number | `5.0` | `optional` If set, overrides the minimumParticleLife and maximumParticleLife inputs with this value. |
+| minimumParticleLife | number | | `optional` Sets the minimum bound in seconds for the possible duration of a particle's life above which a particle's actual life will be randomly chosen. |
+| maximumParticleLife | number | | `optional` Sets the maximum bound in seconds for the possible duration of a particle's life below which a particle's actual life will be randomly chosen. |
+| mass | number | `1.0` | `optional` Sets the minimum and maximum mass of particles in kilograms. |
+| minimumMass | number | | `optional` Sets the minimum bound for the mass of a particle in kilograms. A particle's actual mass will be chosen as a random amount above this value. |
+| maximumMass | number | | `optional` Sets the maximum mass of particles in kilograms. A particle's actual mass will be chosen as a random amount below this value. |
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### Events
 

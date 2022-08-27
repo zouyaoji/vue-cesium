@@ -88,24 +88,24 @@ Basic usage of the `vc-imagery-provider-wmts` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String\|Object | | `required`The base URL for the WMTS GetTile operation (for KVP-encoded requests) or the tile-URL template (for RESTful requests). The tile-URL template should contain the following variables: {style}, {TileMatrixSet}, {TileMatrix}, {TileRow}, {TileCol}. The first two are optional if actual values are hardcoded or not required by the server. The {s} keyword may be used to specify subdomains.。 |
-| format | String | `'image/jpeg'` | `optional` The MIME type for images to retrieve from the server. |
-| wmtsStyle | String | | `required`The layer name for WMTS requests. |
-| style | String | | `required`The style name for WMTS requests. |
-| tileMatrixSetID | String | | `required`The identifier of the TileMatrixSet to use for WMTS requests. |
+| url | string\|Object | | `required`The base URL for the WMTS GetTile operation (for KVP-encoded requests) or the tile-URL template (for RESTful requests). The tile-URL template should contain the following variables: {style}, {TileMatrixSet}, {TileMatrix}, {TileRow}, {TileCol}. The first two are optional if actual values are hardcoded or not required by the server. The {s} keyword may be used to specify subdomains.。 |
+| format | string | `'image/jpeg'` | `optional` The MIME type for images to retrieve from the server. |
+| wmtsStyle | string | | `required`The layer name for WMTS requests. |
+| style | string | | `required`The style name for WMTS requests. |
+| tileMatrixSetID | string | | `required`The identifier of the TileMatrixSet to use for WMTS requests. |
 | tileMatrixLabels | Array | | `optional` A list of identifiers in the TileMatrix to use for WMTS requests, one per TileMatrix level. |
 | clock | Clock | | `optional` A Clock instance that is used when determining the value for the time dimension. Required when options.times is specified. |
 | times | TimeIntervalCollection | | `optional` TimeIntervalCollection with its data property being an object containing time dynamic dimension and their values. |
 | dimensions | Object | | `optional` A object containing static dimensions and their values. |
-| tileWidth | Number | `256` | `optional` The tile width in pixels. |
-| tileHeight | Number | `256` | `optional` The tile height in pixels. |
+| tileWidth | number | `256` | `optional` The tile width in pixels. |
+| tileHeight | number | `256` | `optional` The tile height in pixels. |
 | tilingScheme | TilingScheme | | `optional` The tiling scheme corresponding to the organization of the tiles in the TileMatrixSet. |
 | rectangle | Object\|Array | | `optional` The rectangle covered by the layer. |
-| minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. |
-| maximumLevel | Number | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. |
+| maximumLevel | number | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | ellipsoid | Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
-| credit | Credit | String | | `optional` A credit for the data source, which is displayed on the canvas. |
-| subdomains | String \| Array | `'abc'` | `optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain. |
+| credit | Credit | string | | `optional` A credit for the data source, which is displayed on the canvas. |
+| subdomains | string \| Array | `'abc'` | `optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain. |
 
 ### Events
 

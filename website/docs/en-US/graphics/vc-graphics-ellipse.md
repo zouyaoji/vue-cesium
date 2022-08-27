@@ -86,26 +86,26 @@ Basic usage of the VcGraphicsEllipse component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipse. |
-| semiMajorAxis | Number | | `optional` The numeric Property specifying the semi-major axis. |
-| semiMinorAxis | Number | | `optional` The numeric Property specifying the semi-minor axis. |
-| height | Number | `0` | `optional` A numeric Property specifying the altitude of the ellipse relative to the ellipsoid surface. |
-| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the ellipse's extruded face relative to the ellipsoid surface. |
-| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| rotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the ellipse counter-clockwise from north. |
-| stRotation | Number\|Object | `0.0` | `optional` A numeric property specifying the rotation of the ellipse texture counter-clockwise from north. |
-| granularity | Number | | `optional` A numeric Property specifying the angular distance between points on the ellipse. |
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the ellipse is filled with the provided material. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |
-| outline | Boolean | `false` | `optional` A boolean Property specifying whether the ellipse is outlined. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| numberOfVerticalLines | Number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
-| shadows | Number | `0` | `optional` An enum Property specifying whether the ellipse casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipse. |
+| semiMajorAxis | number | | `optional` The numeric Property specifying the semi-major axis. |
+| semiMinorAxis | number | | `optional` The numeric Property specifying the semi-minor axis. |
+| height | number | `0` | `optional` A numeric Property specifying the altitude of the ellipse relative to the ellipsoid surface. |
+| heightReference | number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the ellipse's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| rotation | number | `0.0` | `optional` A numeric property specifying the rotation of the ellipse counter-clockwise from north. |
+| stRotation | number\|Object | `0.0` | `optional` A numeric property specifying the rotation of the ellipse texture counter-clockwise from north. |
+| granularity | number | | `optional` A numeric Property specifying the angular distance between points on the ellipse. |
+| fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipse is filled with the provided material. |
+| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |
+| outline | boolean | `false` | `optional` A boolean Property specifying whether the ellipse is outlined. |
+| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| numberOfVerticalLines | number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
+| shadows | number | `0` | `optional` An enum Property specifying whether the ellipse casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this ellipse will be displayed. |
-| classificationType | Number | `2` | `optional` An enum Property specifying whether this ellipse will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| zIndex | Number | | `optional` A property specifying the zIndex of the Ellipse. Used for ordering ground geometry. Only has an effect if the ellipse is constant and neither height or exturdedHeight are specified. |
+| classificationType | number | `2` | `optional` An enum Property specifying whether this ellipse will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | number | | `optional` A property specifying the zIndex of the Ellipse. Used for ordering ground geometry. Only has an effect if the ellipse is constant and neither height or exturdedHeight are specified. |
 
 ### Events
 

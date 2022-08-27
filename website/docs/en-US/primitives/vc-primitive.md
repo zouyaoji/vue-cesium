@@ -74,18 +74,18 @@ Basic usage of VcPrimitive component.
 | geometryInstances | Object\|Array | | `optional` The geometry instances - or a single geometry instance - to render. |
 | appearance | Object | | `optional` The appearance used to render the primitive. |
 | depthFailAppearance | Object | | `optional` The appearance used to shade this primitive when it fails the depth test. |
-| show | Boolean | `true` | `optional` Determines if this primitive will be shown. |
+| show | boolean | `true` | `optional` Determines if this primitive will be shown. |
 | modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the primitive (all geometry instances) from model to world coordinates. |
-| vertexCacheOptimize | Boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
-| interleave | Boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
-| compressVertices | Boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |
-| releaseGeometryInstances | Boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
-| allowPicking | Boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
-| cull | Boolean | `true` | `optional` When true, the renderer frustum culls and horizon culls the primitive's commands based on their bounding volume. Set this to false for a small performance gain if you are manually culling the primitive. |
-| asynchronous | Boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready. |
-| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
-| shadows | Number | `0` | `optional` Determines whether this primitive casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| vertexCacheOptimize | boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
+| interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
+| compressVertices | boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |
+| releaseGeometryInstances | boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
+| allowPicking | boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| cull | boolean | `true` | `optional` When true, the renderer frustum culls and horizon culls the primitive's commands based on their bounding volume. Set this to false for a small performance gain if you are manually culling the primitive. |
+| asynchronous | boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready. |
+| debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| shadows | number | `0` | `optional` Determines whether this primitive casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### Events
 

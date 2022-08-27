@@ -122,9 +122,9 @@ The basic usage of VcGeometrySphere component.
 
 | Name            | Type   | Default | Description                                                                   |
 | --------------- | ------ | ------- | ----------------------------------------------------------------------------- |
-| radius          | Number | `1.0`   | `optional` The radius of the sphere.                                          |
-| stackPartitions | Number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.        |
-| slicePartitions | Number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices. |
+| radius          | number | `1.0`   | `optional` The radius of the sphere.                                          |
+| stackPartitions | number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.        |
+| slicePartitions | number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices. |
 | vertexFormat    | Object |         | `optional` The vertex attributes to be computed.                              |
 
 ### Events
@@ -145,10 +145,10 @@ Loading a sphere geometry outline. It is equivalent to initializing a `Cesium.Sp
 
 | Name            | Type   | Default | Description                                                                              |
 | --------------- | ------ | ------- | ---------------------------------------------------------------------------------------- |
-| radius          | Number | `1.0`   | `optional` The radius of the sphere.                                                     |
-| stackPartitions | Number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.                   |
-| slicePartitions | Number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices.            |
-| subdivisions    | Number | `200`   | `optional` The number of points per line, determining the granularity of the curvature . |
+| radius          | number | `1.0`   | `optional` The radius of the sphere.                                                     |
+| stackPartitions | number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.                   |
+| slicePartitions | number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices.            |
+| subdivisions    | number | `200`   | `optional` The number of points per line, determining the granularity of the curvature . |
 
 ### VcGeometrySphereOutline Events
 

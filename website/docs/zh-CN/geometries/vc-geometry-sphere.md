@@ -122,9 +122,9 @@
 
 | 属性名          | 类型   | 默认值 | 描述                                      |
 | --------------- | ------ | ------ | ----------------------------------------- |
-| radius          | Number | `1.0`  | `optional` 指定球体半径。                 |
-| stackPartitions | Number | `0.0`  | `optional` 指定将球体横向划分为层的次数。 |
-| slicePartitions | Number | `10`   | `optional` 指定将球体纵向划分为片的次数。 |
+| radius          | number | `1.0`  | `optional` 指定球体半径。                 |
+| stackPartitions | number | `0.0`  | `optional` 指定将球体横向划分为层的次数。 |
+| slicePartitions | number | `10`   | `optional` 指定将球体纵向划分为片的次数。 |
 | vertexFormat    | Object |        | `optional` 指定椭球体顶点属性渲染方式。   |
 
 ### 事件
@@ -145,10 +145,10 @@
 
 | 属性名          | 类型   | 默认值 | 描述                                                    |
 | --------------- | ------ | ------ | ------------------------------------------------------- |
-| radius          | Number | `1.0`  | `optional` 指定球体半径。                               |
-| stackPartitions | Number | `0.0`  | `optional` 指定将球体横向划分为层的次数。               |
-| slicePartitions | Number | `10`   | `optional` 指定将球体纵向划分为片的次数。               |
-| subdivisions    | Number | `200`  | `optional` 指定球体轮廓线上的点数，确定弧线的光滑粒度。 |
+| radius          | number | `1.0`  | `optional` 指定球体半径。                               |
+| stackPartitions | number | `0.0`  | `optional` 指定将球体横向划分为层的次数。               |
+| slicePartitions | number | `10`   | `optional` 指定将球体纵向划分为片的次数。               |
+| subdivisions    | number | `200`  | `optional` 指定球体轮廓线上的点数，确定弧线的光滑粒度。 |
 
 ### VcGeometrySphereOutline 事件
 
