@@ -48,7 +48,7 @@
 }
 
 .disabled,
-[disabled] {
+[disabled=true] {
   &,
   * {
     outline: 0 !important;
@@ -57,7 +57,7 @@
 }
 
 .disabled,
-[disabled] {
+[disabled=true] {
   opacity: 0.6 !important;
 }
 
