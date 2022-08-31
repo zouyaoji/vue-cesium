@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-08-24 09:38:36
+ * @LastEditTime: 2022-08-31 22:09:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -26,19 +26,20 @@
 
 - 特别感谢以下捐赠者：
 
-  | 金额    | 来源   | 赞助人                                          | 留言                              | 时间       |
-  | ------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
-  | ¥ 20.0  | WeChat | \*G                                             | -                                 | 2022-08-21 |
-  | ¥ 66.66 | WeChat | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
-  | ¥ 20.0  | WeChat | \*龙                                            | 非常不错                          | 2022-07-28 |
-  | ¥ 20.0  | QQ     | 兔子。                                          |                                   | 2022-07-23 |
-  | ¥ 100.0 | WeChat | \*易                                            | -                                 | 2022-03-15 |
-  | ¥ 66.66 | QQ     | Levi                                            | 恭喜发财                          | 2022-01-28 |
-  | ¥ 66.66 | QQ     | Levi                                            | 多谢大佬开源                      | 2022-01-11 |
-  | ¥ 88.0  | WeChat | \*丫                                            | 有学习群吗？                      | 2021-10-28 |
-  | ¥ 200.0 | WeChat | [木遥](https://github.com/muyao1987)            | mars3d 谢谢                       | 2021-07-05 |
-  | ¥ 150.0 | WeChat | [\*飞](https://github.com/ZephyrTan)            | 持续迭代，更牛的模块              | 2021-06-09 |
-  | $ 50.0  | Paypal | [boriskogan81](https://github.com/boriskogan81) | Thank you for your great library! | 2020-05-27 |
-  | ¥ 100.0 | AliPay | -。向日葵                                       | 咨询费                            | 2020-05-21 |
+  | 金额     | 来源   | 赞助人                                          | 留言                              | 时间       |
+  | -------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 188.88 | WeChat | \*意                                            | 支持一下                          | 2022-08-31 |
+  | ¥ 20.0   | WeChat | \*G                                             | -                                 | 2022-08-21 |
+  | ¥ 66.66  | WeChat | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
+  | ¥ 20.0   | WeChat | \*龙                                            | 非常不错                          | 2022-07-28 |
+  | ¥ 20.0   | QQ     | 兔子。                                          |                                   | 2022-07-23 |
+  | ¥ 100.0  | WeChat | \*易                                            | -                                 | 2022-03-15 |
+  | ¥ 66.66  | QQ     | Levi                                            | 恭喜发财                          | 2022-01-28 |
+  | ¥ 66.66  | QQ     | Levi                                            | 多谢大佬开源                      | 2022-01-11 |
+  | ¥ 88.0   | WeChat | \*丫                                            | 有学习群吗？                      | 2021-10-28 |
+  | ¥ 200.0  | WeChat | [木遥](https://github.com/muyao1987)            | mars3d 谢谢                       | 2021-07-05 |
+  | ¥ 150.0  | WeChat | [\*飞](https://github.com/ZephyrTan)            | 持续迭代，更牛的模块              | 2021-06-09 |
+  | $ 50.0   | Paypal | [boriskogan81](https://github.com/boriskogan81) | Thank you for your great library! | 2020-05-27 |
+  | ¥ 100.0  | AliPay | -。向日葵                                       | 咨询费                            | 2020-05-21 |
 
   如果有漏掉的同学，请联系我；如果您不想自己的名字显示在这里，可以发邮件或者 qq 告诉我
