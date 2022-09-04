@@ -1,4 +1,6 @@
 import TiandituMapsStyle from './TiandituMapsStyle'
+import Uri from 'urijs'
+
 const TiandituMapsStyleUrl = {}
 const TiandituMapsStyleLayer = {}
 const TiandituMapsStyleID = {}
@@ -206,7 +208,7 @@ class TiandituImageryProvider {
  * @private
  */
 function buildImageResource(this, x, y, level) {
-  const { combine, defined, defaultValue, queryToObject, objectToQuery, Uri } = Cesium
+  const { combine, defined, defaultValue, queryToObject, objectToQuery } = Cesium
   const freezeObject = Object.freeze
   const options = freezeObject({
     service: 'WMTS',

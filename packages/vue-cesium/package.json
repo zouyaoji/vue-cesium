@@ -55,7 +55,8 @@
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.1",
     "mitt": "^3.0.0",
-    "proj4": "^2.7.5"
+    "proj4": "^2.7.5",
+    "urijs": "^1.19.11"
   },
   "vetur": {
     "tags": "tags.json",

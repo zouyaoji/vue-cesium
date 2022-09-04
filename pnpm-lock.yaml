@@ -119,6 +119,7 @@ importers:
       ts-morph: 13.0.3
       type-fest: ^2.18.0
       typescript: 4.5.5
+      urijs: ^1.19.11
       url-loader: ^4.1.1
       vue: 3.2.30
       vue-cesium: workspace:*
@@ -146,6 +147,7 @@ importers:
       lodash-unified: 1.0.1_3ib2ivapxullxkx3xftsimdk7u
       mitt: 3.0.0
       proj4: 2.7.5
+      urijs: 1.19.11
       vue-cesium: link:packages/vue-cesium
     devDependencies:
       '@babel/cli': 7.16.0_@babel+core@7.16.0
@@ -321,6 +323,7 @@ importers:
       lodash-unified: ^1.0.1
       mitt: ^3.0.0
       proj4: ^2.7.5
+      urijs: ^1.19.11
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
       '@vue/shared': 3.2.26
@@ -331,6 +334,7 @@ importers:
       lodash-unified: 1.0.1_x2wgbdn67su72qcpoerjuvxru4
       mitt: 3.0.0
       proj4: 2.7.5
+      urijs: 1.19.11
 
 packages:
   /@algolia/cache-browser-local-storage/4.11.0:
@@ -6242,8 +6246,8 @@ packages:
     engines: { node: '>=10' }
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -8678,6 +8682,16 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
+  /follow-redirects/1.14.5:
+    resolution: { integrity: sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA== }
+    engines: { node: '>=4.0' }
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: true
+
   /follow-redirects/1.14.5_debug@4.3.3:
     resolution: { integrity: sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA== }
     engines: { node: '>=4.0' }
@@ -9670,7 +9684,7 @@ packages:
     engines: { node: '>=8.0.0' }
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.5_debug@4.3.3
+      follow-redirects: 1.14.5
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -10417,7 +10431,7 @@ packages:
     dev: true
 
   /isexe/2.0.0:
-    resolution: { integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA= }
+    resolution: { integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw== }
     dev: true
 
   /isobject/2.1.0:
@@ -16853,6 +16867,10 @@ packages:
     dependencies:
       punycode: 2.1.1
     dev: true
+
+  /urijs/1.19.11:
+    resolution: { integrity: sha512-HXgFDgDommxn5/bIv0cnQZsPhHDA90NPHD6+c/v21U5+Sx5hoP8+dP9IZXBU1gIfvdRfhG8cel9QNPeionfcCQ== }
+    dev: false
 
   /urix/0.1.0:
     resolution: { integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI= }

@@ -64,6 +64,7 @@
     "lodash-unified": "^1.0.1",
     "mitt": "^3.0.0",
     "proj4": "^2.7.5",
+    "urijs": "^1.19.11",
     "vue-cesium": "workspace:*"
   },
   "devDependencies": {
