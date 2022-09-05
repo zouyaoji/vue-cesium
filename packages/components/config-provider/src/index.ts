@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-05-18 11:51:23
+ * @LastEditTime: 2022-09-06 01:15:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\config-provider\src\index.ts
@@ -26,6 +26,10 @@ export default defineComponent({
       type: String,
       default:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'
+    },
+    reloadMode: {
+      type: String as PropType<'once' | 'all'>,
+      default: 'all'
     }
   },
 
@@ -50,6 +54,10 @@ export type VcConfigProviderProps = {
    * Default value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ
    */
   accessToken?: string
+  /**
+   * If multiple component properties are changed at once. 'all' means reload them in sequence; 'once' means reload only once after the last property has been changed.
+   */
+  reloadMode?: 'once' | 'all'
 }
 
 export interface VcConfigProviderSlots {

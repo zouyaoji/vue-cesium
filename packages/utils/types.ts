@@ -235,6 +235,7 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   mounted: boolean
   loading: boolean
   unloadingPromise?: Promise<boolean>
+  reloadingPromise?: Promise<boolean>
   Cesium: typeof Cesium
   viewer: Cesium.Viewer
   viewerElement?: HTMLElement

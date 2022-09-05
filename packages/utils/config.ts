@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-08-03 10:51:17
+ * @LastEditTime: 2022-09-06 01:10:05
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \10_vue-cesium\packages\utils\config.ts
+ * @FilePath: \vue-cesium@next\packages\utils\config.ts
  */
 import type { Language } from '@vue-cesium/locale'
 import type { InjectionKey, Ref } from 'vue'
@@ -16,6 +16,7 @@ export interface ConfigProviderContext {
   accessToken?: string
   locale?: Language
   mars3dConfig?: Mars3dConfig // for mars3d
+  reloadMode?: 'once' | 'all'
   __scriptPromise?: Promise<unknown>
   __viewerUnloadingPromise?: Promise<boolean>
   [propName: string]: any

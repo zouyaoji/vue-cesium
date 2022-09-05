@@ -10,12 +10,14 @@ import useLog from '../private/use-log'
 import { useLocale } from '../use-locale'
 import useEvents from '../use-events'
 import { isEqual } from 'lodash-unified'
+import useTimeout from '../private/use-timeout'
+import { useGlobalConfig } from '../use-global-config'
 
 const callbackCmpNames = ['Graphics', 'VcEntity', 'Datasource', 'VcOverlayDynamic']
 
-export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
+export default function (props, { emit, attrs }, vcInstance: VcComponentInternalInstance) {
   const logger = useLog(vcInstance)
-
+  const { registerTimeout, removeTimeout } = useTimeout()
   // state
   vcInstance.alreadyListening = []
   vcInstance.removeCallbacks = []
@@ -55,6 +57,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     'wall'
   ]
 
+  const globalConfig = useGlobalConfig()
   // methods
   const beforeLoad = async () => {
     emit('beforeLoad', vcInstance)
@@ -140,8 +143,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         })
       : false
   }
+  const beforeReload = async () => {
+    await vcInstance.reloadingPromise
+  }
 
   const reload = async () => {
+    await beforeReload()
+
     return unload().then(() => {
       return load()
     })
@@ -253,9 +261,28 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               } else {
                 // The attribute is not writable, and the property is changed indirectly through reloading the component.
                 // 属性不可写，通过重加载组件间接实现改变属性
-
-                if (!isEqual(val, oldVal)) {
-                  ;(vcInstance.proxy as VcComponentPublicInstance).reload()
+                if (!isEqual(val, oldVal) || Array.isArray(val)) {
+                  if (attrs['reload-mode'] === 'once' || attrs['reloadMode'] === 'once' || globalConfig.value.reloadMode === 'once') {
+                    // If multiple component properties are changed at once, reload only once after the last property has been changed.
+                    // 如果一瞬间多个组件属性被改变，只在最后一个属性改变完后 reload 一次。
+                    removeTimeout()
+                    registerTimeout(() => {
+                      ;(vcInstance.proxy as VcComponentPublicInstance).reload()
+                    }, 0)
+                  } else {
+                    // If multiple component properties are changed at once, reload them in sequence.
+                    // 如果一瞬间多个组件属性被改变，只在最后一个属性改变完后 reload 一次。
+                    vcInstance.reloadingPromise = new Promise((resolve, reject) => {
+                      ;(vcInstance.proxy as VcComponentPublicInstance)
+                        .reload()
+                        .then(() => {
+                          resolve(true)
+                        })
+                        .catch(e => {
+                          reject(e)
+                        })
+                    })
+                  }
                 }
               }
             },
