@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-09 16:19:57
- * @LastEditTime: 2022-08-03 13:57:05
+ * @LastEditTime: 2022-09-06 23:17:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-global-config\index.ts
@@ -14,7 +14,11 @@ import { keysOf } from '@vue-cesium/utils/objects'
 
 const globalConfig = ref<ConfigProviderContext>()
 
-export function useGlobalConfig<K extends keyof ConfigProviderContext>(key: K): Ref<ConfigProviderContext[K]>
+export function useGlobalConfig<K extends keyof ConfigProviderContext, D extends ConfigProviderContext[K]>(
+  key: K,
+  defaultValue?: D
+): Ref<Exclude<ConfigProviderContext[K], undefined> | D>
+
 export function useGlobalConfig(): Ref<ConfigProviderContext>
 export function useGlobalConfig(key?: keyof ConfigProviderContext, defaultValue = undefined) {
   const config = getCurrentInstance() ? inject(configProviderContextKey, globalConfig) : globalConfig
@@ -37,7 +41,7 @@ export const provideGlobalConfig = (config: MaybeRef<ConfigProviderContext>, app
 
   const context = computed(() => {
     const cfg = unref(config)
-    if (!oldConfig) return cfg
+    if (!oldConfig.value) return cfg
     return mergeConfig(oldConfig.value, cfg)
   })
   provideFn(configProviderContextKey, context)
