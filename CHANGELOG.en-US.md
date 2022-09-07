@@ -1,5 +1,19 @@
 ## Changelog
 
+### 3.0.19
+
+_2022-09-07_
+
+#### Optimization
+
+- Add the global configuration `reloadMode`, when modifying many non-responsive property changes in an instant requires calling the reload method of the component, indicating whether to execute the reload method every time, or execute the reload method only once after all changes are completed.
+- When the `vc-selection-indicator` component picks up `Cesium3DTileFeature`, the position of the indicator takes priority to the position of the property field `position`, if it is empty, it takes the center point of the bounding box.
+
+#### Bug fixes
+
+- Fixed the issue that Cesium.Uri was removed from Cesium 1.97, which caused the `vc-imagery-provider-tianditu` component to be abnormal.
+- Fixed the issue that failed to import components on demand.
+
 ### 3.0.18
 
 _2022-08-23_

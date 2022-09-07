@@ -105,7 +105,7 @@ Please add the following configuration to the `tsconfig.json` or `jsconfig.json`
     // ...
     "types": ["vue-cesium/global", "vue-cesium/Cesium"]
   },
-  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts"]
+  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts", "node_modules/vue-cesium/global.d.ts"]
 }
 ```
 

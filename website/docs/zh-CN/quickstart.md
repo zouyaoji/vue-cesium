@@ -116,7 +116,7 @@ import 'vue-cesium/dist/index.css'
       "vue-cesium/Cesium"
     ]
   },
-  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts"]
+  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts", "node_modules/vue-cesium/global.d.ts"]
 }
 ```
 

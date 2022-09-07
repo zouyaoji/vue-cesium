@@ -82,6 +82,7 @@
           colors2.value.push(Cesium.Color.fromRandom({ alpha: 1.0 }))
         }
         window.positions1 = positions1
+        window.colors1 = colors1
         appearance.value = new Cesium.PolylineColorAppearance()
         vertexFormat.value = Cesium.PolylineColorAppearance.VERTEX_FORMAT
       }

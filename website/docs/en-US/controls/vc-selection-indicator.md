@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-13 16:48:20
- * @LastEditTime: 2022-03-08 23:29:23
+ * @LastEditTime: 2022-09-07 21:24:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\controls\vc-selection-indicator.md
@@ -10,6 +10,8 @@
 ## VcSelectionIndicator
 
 Load a custom selector component to replace the selectionIndicator that comes with Cesium.
+
+**Note:** If the picked object is `Cesium3DTileFeature` the position of the indicator is the center point of the bounding box of the object. If it is a manual model and you want a more precise position, please use the `position` attribute in the building attribute field to describe the position information of the feature, such as `'[108, 32]'` .
 
 ### Basic usage
 

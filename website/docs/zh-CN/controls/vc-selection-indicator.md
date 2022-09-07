@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-04 10:37:42
- * @LastEditTime: 2022-03-08 23:19:17
+ * @LastEditTime: 2022-09-07 21:31:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
@@ -11,6 +11,8 @@
 
 加载自定义选择器组件，替换 Cesium 自带的 selectionIndicator。
 
+**注意：** 如果是拾取到的对象是 `Cesium3DTileFeature` 指示器的位置是该对象的包围盒的中心点。如果是手工模型并且想要更精准的位置请在建筑属性字段用 `position` 属性描述该要素的位置信息，如 `'[108, 32]'` 。
+
 ### 基础用法
 
 选择器组件的基础用法。
@@ -19,7 +21,7 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer :selection-indicator="false" :info-box="false">
+  <vc-viewer :selection-indicator="true" :info-box="true">
     <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
     <vc-entity ref="entity" :billboard="billboard" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -27,6 +29,15 @@
     <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
+    <vc-layer-imagery>
+      <vc-imagery-provider-wms
+        ref="provider"
+        url="https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
+        layers="Hydrography:bores"
+        :parameters="{transparent: true, format: 'image/png'}"
+      ></vc-imagery-provider-wms>
+    </vc-layer-imagery>
+    <vc-primitive-tileset url="https://resource.dvgis.cn/data/3dtiles/ljz/tileset.json"> </vc-primitive-tileset>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -63,7 +74,6 @@
       },
       unload() {
         this.$refs.selectionIndicator.unload()
-        window.aa = this.$refs.selectionIndicator
       },
       load() {
         this.$refs.selectionIndicator.load()
