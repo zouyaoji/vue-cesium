@@ -133,7 +133,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     ignoreSplitter,
     viewer
   ) => {
-    const { defined, defaultValue, when } = Cesium
+    const { defined, defaultValue } = Cesium
     ignoreSplitter = defaultValue(ignoreSplitter, false)
     const result = new PickedFeatures()
 

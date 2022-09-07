@@ -1,12 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-19 10:03:30
+ * @LastEditTime: 2022-09-07 21:20:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
  */
 
+import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import type { VcCesiumObject } from '@vue-cesium/utils/types'
 
 class Feature {
@@ -51,7 +52,16 @@ class Feature {
     } else if (cesiumObject instanceof Cesium.Model) {
       feature.position = Cesium.Matrix4.getTranslation(cesiumObject.modelMatrix, new Cesium.Cartesian3())
     } else if (cesiumObject instanceof Cesium.Cesium3DTileset) {
-      feature.position = Cesium.Matrix4.getTranslation(pickedFeature.content._contentModelMatrix, new Cesium.Cartesian3())
+      let position = pickedFeature.content.tile.boundingSphere.center
+      let positionProperty = pickedFeature?.getProperty?.('position')
+      if (Cesium.defined(positionProperty)) {
+        if (typeof positionProperty === 'string') {
+          positionProperty = JSON.parse(positionProperty)
+        }
+
+        position = makeCartesian3(positionProperty) as Cesium.Cartesian3
+      }
+      feature.position = position
     } else {
       feature.position = Feature.getBoundingSphere(cesiumObject, viewer)?.center
     }
@@ -59,6 +69,8 @@ class Feature {
     feature.cesiumObject = cesiumObject
     feature.pickedFeature = pickedFeature
     feature.windowPosition = screenPosition
+    feature.description = cesiumObject?.description || cesiumObject?.description?.getValue()
+    feature.properties = cesiumObject?.properties || cesiumObject?.properties?.getValue()
     return feature
   }
 
