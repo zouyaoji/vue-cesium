@@ -1543,7 +1543,8 @@ const shapePositions = {
   shapePositions: {
     type: Array as PropType<VcCartesian2Array>,
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2Array
+      cesiumObjectBuilder: makeCartesian2Array,
+      deep: true
     }
   }
 }
@@ -1555,7 +1556,8 @@ const polylinePositions = {
   polylinePositions: {
     type: Array as PropType<VcCartesian3Array>,
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3Array
+      cesiumObjectBuilder: makeCartesian3Array,
+      deep: true
     }
   }
 }
@@ -1616,7 +1618,8 @@ const colors = {
   colors: {
     type: Array as PropType<Array<VcColor>>,
     watcherOptions: {
-      cesiumObjectBuilder: makeColors
+      cesiumObjectBuilder: makeColors,
+      deep: true
     }
   }
 }
