@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:02
- * @LastEditTime: 2022-08-12 20:05:16
+ * @LastEditTime: 2022-09-11 11:51:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-vue-cesium\index.ts
@@ -20,7 +20,7 @@ export default function useVueCesium(containerId?: string): VcViewerProvider {
   const logger = useLog()
   if (instance) {
     if (containerId) {
-      const $vc = instance.appContext.config.globalProperties.$VueCesium[containerId]
+      const $vc = instance.appContext.config.globalProperties?.$VueCesium?.[containerId]
       if (!$vc) {
         logger.warn(`Failed to get $vc, reason: vc-viewer with containerId: ${containerId} was not found.`)
       }
