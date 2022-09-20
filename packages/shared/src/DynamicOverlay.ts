@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 14:20:28
- * @LastEditTime: 2022-06-28 10:48:13
+ * @LastEditTime: 2022-09-08 15:41:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\DynamicOverlay.ts
@@ -29,19 +29,22 @@ class DynamicOverlay {
     const entity = new Entity(options)
     entity.position = this._sampledPosition
 
-    // entity.orientation = new VelocityOrientationProperty(this._sampledPosition)
-    const orientation = new VelocityOrientationProperty(this._sampledPosition)
-    // 停止时保持方向
-    let lastOri
-    entity.orientation = new CallbackProperty((time, result) => {
-      const ori = orientation.getValue(time)
-      if (ori) {
-        lastOri = ori
-      } else {
-        return lastOri
-      }
-      return ori
-    }, false)
+    if (!Cesium.defined(options.orientation)) {
+      // entity.orientation = new VelocityOrientationProperty(this._sampledPosition)
+      const orientation = new VelocityOrientationProperty(this._sampledPosition)
+      // 停止时保持方向
+      let lastOri
+      entity.orientation = new CallbackProperty((time, result) => {
+        const ori = orientation.getValue(time)
+        if (ori) {
+          lastOri = ori
+        } else {
+          return lastOri
+        }
+        return ori
+      }, false)
+    }
+
     this._entity = entity
     // A velocity vector property will give us the entity's speed and direction at any given time.
     this._velocityVectorProperty = new Cesium.VelocityVectorProperty(this._sampledPosition, false)
