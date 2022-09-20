@@ -314,6 +314,7 @@ export default defineComponent({
     }
 
     const setData = (data, heatmapInstance: h337.Heatmap<string, string, string>) => {
+      console.log('setData')
       if (data) {
         const { height, xoffset, yoffset, factor, spacing } = config.value
         const xField = options.value.xField || 'x'
@@ -327,11 +328,11 @@ export default defineComponent({
           }
           const mp = project.value.project(Cesium.Cartographic.fromDegrees(gp[xField], gp[yField]))
           const hp: VcHeatMapData = {
-            x: Math.round((mp.x - xoffset) / factor + spacing),
-            y: Math.round((mp.y - yoffset) / factor + spacing),
-            value: undefined
+            [xField]: Math.round((mp.x - xoffset) / factor + spacing),
+            [yField]: Math.round((mp.y - yoffset) / factor + spacing),
+            [valueField]: undefined
           }
-          hp.y = height - hp.y
+          hp[yField] = height - hp[yField]
           if (gp[valueField] || gp[valueField] === 0) {
             hp[valueField] = gp[valueField]
           }
