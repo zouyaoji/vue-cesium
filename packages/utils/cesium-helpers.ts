@@ -353,7 +353,7 @@ export function makeDistanceDisplayCondition(val: VcDistanceDisplayCondition, is
  * const color = makeColor(options) // return Cesium.Color
  */
 export function makeColor(val: VcColor, isConstant = false): CesiumColor | undefined {
-  const { Color, CallbackProperty } = Cesium
+  const { Color, CallbackProperty, defaultValue } = Cesium
 
   if (val instanceof Color || val instanceof CallbackProperty) {
     return val
@@ -366,15 +366,20 @@ export function makeColor(val: VcColor, isConstant = false): CesiumColor | undef
   if (isPlainObject(val)) {
     if (hasOwn(val, 'red')) {
       const value = val as ColorInByteOption
-      return Color.fromBytes(value.red, value.green || 255, value.blue || 255, value.alpha || 255)
+      return Color.fromBytes(
+        defaultValue(value.red, 255),
+        defaultValue(value.green, 255),
+        defaultValue(value.blue, 255),
+        defaultValue(value.alpha, 255)
+      )
     } else if (hasOwn(val, 'x')) {
       const value = val as Cartesian4Option
-      return new Color(value.x, value.y || 1, value.z || 1, value.w || 1)
+      return new Color(defaultValue(value.x, 1), defaultValue(value.y, 1), defaultValue(value.z, 1), defaultValue(value.w, 1))
     }
   }
 
   if (isArray(val)) {
-    return Color.fromBytes(val[0], val[1], val[2], val[3] || 255)
+    return Color.fromBytes(val[0], val[1], val[2], defaultValue(val[3], 255))
   }
 
   if (isFunction(val)) {
@@ -414,7 +419,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     PolylineGlowMaterialProperty,
     PolylineOutlineMaterialProperty,
     StripeMaterialProperty,
-    StripeOrientation
+    StripeOrientation,
+    defaultValue
   } = Cesium
 
   if (
@@ -456,54 +462,54 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
       case 'Image':
         return new ImageMaterialProperty({
           image: value.fabric.uniforms.image,
-          repeat: makeCartesian2((value.fabric.uniforms.repeat as Cartesian2Option) || { x: 1.0, y: 1.0 }),
-          color: makeColor(value.fabric.uniforms.color!) || Color.WHITE,
-          transparent: value.fabric.uniforms.transparent || false
+          repeat: makeCartesian2(defaultValue(value.fabric.uniforms.repeat as Cartesian2Option, { x: 1.0, y: 1.0 })),
+          color: defaultValue(makeColor(value.fabric.uniforms.color), Color.WHITE),
+          transparent: defaultValue(value.fabric.uniforms.transparent, false)
         })
       case 'Color':
-        return new ColorMaterialProperty(makeColor(value.fabric.uniforms.color || Color.WHITE))
+        return new ColorMaterialProperty(makeColor(defaultValue(value.fabric.uniforms.color, Color.WHITE)))
       case 'PolylineArrow':
-        return new PolylineArrowMaterialProperty(makeColor(value.fabric.uniforms.color || Color.WHITE))
+        return new PolylineArrowMaterialProperty(makeColor(defaultValue(value.fabric.uniforms.color, Color.WHITE)))
       case 'PolylineDash':
         return new PolylineDashMaterialProperty({
-          color: makeColor(value.fabric.uniforms.color || 'white') || Color.WHITE,
-          gapColor: makeColor(value.fabric.uniforms.gapColor!) || Color.TRANSPARENT,
-          dashLength: value.fabric.uniforms.taperPower || 16.0,
-          dashPattern: value.fabric.uniforms.taperPower || 255.0
+          color: makeColor(defaultValue(value.fabric.uniforms.color, 'white')),
+          gapColor: makeColor(defaultValue(value.fabric.uniforms.gapColor, Color.TRANSPARENT)),
+          dashLength: defaultValue(value.fabric.uniforms.taperPower, 16.0),
+          dashPattern: defaultValue(value.fabric.uniforms.taperPower, 255.0)
         })
       case 'PolylineGlow':
         return new PolylineGlowMaterialProperty({
-          color: makeColor(value.fabric.uniforms.color!) || Color.WHITE,
-          glowPower: value.fabric.uniforms.glowPower || 0.25,
-          taperPower: value.fabric.uniforms.taperPower || 1.0
+          color: makeColor(defaultValue(value.fabric.uniforms.color, Color.WHITE)),
+          glowPower: defaultValue(value.fabric.uniforms.glowPower, 0.25),
+          taperPower: defaultValue(value.fabric.uniforms.taperPower, 1.0)
         })
       case 'PolylineOutline':
         return new PolylineOutlineMaterialProperty({
-          color: makeColor(value.fabric.uniforms.color!) || Color.WHITE,
-          outlineColor: makeColor(value.fabric.uniforms.outlineColor!) || Color.BLACK,
-          outlineWidth: value.fabric.uniforms.outlineWidth || 1.0
+          color: makeColor(defaultValue(value.fabric.uniforms.color, Color.WHITE)),
+          outlineColor: makeColor(defaultValue(value.fabric.uniforms.outlineColor, Color.BLACK)),
+          outlineWidth: defaultValue(value.fabric.uniforms.outlineWidth, 1.0)
         })
       case 'Checkerboard':
         return new CheckerboardMaterialProperty({
-          evenColor: makeColor(value.fabric.uniforms.evenColor!) || Color.WHITE,
-          oddColor: makeColor(value.fabric.uniforms.oddColor!) || Color.BLACK,
-          repeat: makeCartesian2((value.fabric.uniforms.repeat as Cartesian2Option) || { x: 2, y: 2 })
+          evenColor: makeColor(defaultValue(value.fabric.uniforms.evenColor, Color.WHITE)),
+          oddColor: makeColor(defaultValue(value.fabric.uniforms.oddColor, Color.BLACK)),
+          repeat: defaultValue(makeCartesian2(value.fabric.uniforms.repeat as Cartesian2Option), { x: 2, y: 2 })
         })
       case 'Grid':
         return new GridMaterialProperty({
-          color: makeColor(value.fabric.uniforms.color!) || Color.WHITE,
-          cellAlpha: value.fabric.uniforms.cellAlpha || 0.1,
-          lineCount: makeCartesian2((value.fabric.uniforms.lineCount as Cartesian2Option) || { x: 8, y: 8 }),
-          lineThickness: makeCartesian2((value.fabric.uniforms.lineThickness as Cartesian2Option) || { x: 1, y: 1 }),
-          lineOffset: makeCartesian2((value.fabric.uniforms.lineOffset as Cartesian2Option) || { x: 0, y: 0 })
+          color: makeColor(defaultValue(value.fabric.uniforms.color, Color.WHITE)),
+          cellAlpha: defaultValue(value.fabric.uniforms.cellAlpha, 0.1),
+          lineCount: defaultValue(makeCartesian2(value.fabric.uniforms.lineCount as Cartesian2Option), { x: 8, y: 8 }),
+          lineThickness: defaultValue(makeCartesian2(value.fabric.uniforms.lineThickness as Cartesian2Option), { x: 1, y: 1 }),
+          lineOffset: defaultValue(makeCartesian2(value.fabric.uniforms.lineOffset as Cartesian2Option), { x: 0, y: 0 })
         })
       case 'Stripe':
         return new StripeMaterialProperty({
-          orientation: value.fabric.uniforms.orientation || StripeOrientation.HORIZONTAL,
-          evenColor: makeColor(value.fabric.uniforms.evenColor || 'white'),
-          oddColor: makeColor(value.fabric.uniforms.oddColor || 'black'),
-          offset: value.fabric.uniforms.offset || 0,
-          repeat: (value.fabric.uniforms.repeat as number) || 1
+          orientation: defaultValue(value.fabric.uniforms.orientation, StripeOrientation.HORIZONTAL),
+          evenColor: makeColor(defaultValue(value.fabric.uniforms.evenColor, 'white')),
+          oddColor: makeColor(defaultValue(value.fabric.uniforms.oddColor, 'black')),
+          offset: defaultValue(value.fabric.uniforms.offset, 0),
+          repeat: defaultValue(value.fabric.uniforms.repeat as number, 1)
         })
     }
   }
@@ -770,7 +776,7 @@ export function captureScreenshot(viewer: Cesium.Viewer) {
 }
 
 export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid) {
-  const { Math: CesiumMath, Rectangle } = Cesium
+  const { Math: CesiumMath, Rectangle, defaultValue } = Cesium
 
   let destination: Cesium.Cartesian3 | Cesium.Rectangle | undefined = undefined
   let orientation: HeadingPitchRollOption = {}
@@ -780,15 +786,15 @@ export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid
     destination = makeCartesian3(position!, ellipsoid) as Cesium.Cartesian3
     if ((hasOwn(position!, 'lng') && hasOwn(position!, 'lat')) || isArray(position)) {
       orientation = {
-        heading: CesiumMath.toRadians(camera.heading || 360),
-        pitch: CesiumMath.toRadians(camera.pitch || -90),
-        roll: CesiumMath.toRadians(camera.roll || 0)
+        heading: CesiumMath.toRadians(defaultValue(camera.heading, 360)),
+        pitch: CesiumMath.toRadians(defaultValue(camera.pitch, -90)),
+        roll: CesiumMath.toRadians(defaultValue(camera.roll, 0))
       }
     } else {
       orientation = {
-        heading: camera.heading || 2 * Math.PI,
-        pitch: camera.pitch || -Math.PI / 2,
-        roll: camera.roll || 0
+        heading: defaultValue(camera.heading, 2 * Math.PI),
+        pitch: defaultValue(camera.pitch, -Math.PI / 2),
+        roll: defaultValue(camera.roll, 0)
       }
     }
   } else if (hasOwn(camera, 'rectangle')) {
@@ -800,15 +806,15 @@ export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid
       isArray(rectangle)
     ) {
       orientation = {
-        heading: CesiumMath.toRadians(camera.heading || 360),
-        pitch: CesiumMath.toRadians(camera.pitch || -90),
-        roll: CesiumMath.toRadians(camera.roll || 0)
+        heading: CesiumMath.toRadians(defaultValue(camera.heading, 360)),
+        pitch: CesiumMath.toRadians(defaultValue(camera.pitch, -90)),
+        roll: CesiumMath.toRadians(defaultValue(camera.roll, 0))
       }
     } else {
       orientation = {
-        heading: camera.heading || 2 * Math.PI,
-        pitch: camera.pitch || -Math.PI / 2,
-        roll: camera.roll || 0
+        heading: defaultValue(camera.heading, 2 * Math.PI),
+        pitch: defaultValue(camera.pitch, -Math.PI / 2),
+        roll: defaultValue(camera.roll, 0)
       }
     }
   }
