@@ -42,7 +42,7 @@ export function removeEmpty(obj: any): AnyObject {
   const finalObj: AnyObject = {}
   Object.setPrototypeOf(finalObj, proto)
   Object.keys(obj).forEach(key => {
-    const className = getObjClassName(obj[key])
+    const className = getObjClassName(obj[key], true)
     if ((obj[key] && isArray(obj[key])) || obj[key] instanceof Element) {
       finalObj[key] = obj[key]
     } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) {
@@ -102,13 +102,16 @@ export function getCesiumClassName(obj) {
   return result
 }
 
-export function getObjClassName(obj: AnyObject): string {
-  const cesiumClassName = getCesiumClassName(obj)
-
-  if (cesiumClassName) {
-    return cesiumClassName
-  }
+export function getObjClassName(obj: AnyObject, findCesiumClass = false): string {
   if (obj && obj.constructor) {
+    if (findCesiumClass) {
+      const cesiumClassName = getCesiumClassName(obj)
+
+      if (cesiumClassName) {
+        return cesiumClassName
+      }
+    }
+
     return obj.constructor.name
   }
   return typeof obj

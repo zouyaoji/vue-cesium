@@ -3,7 +3,7 @@ import mitt, { Emitter } from 'mitt'
 import { useLocale } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { dirname, removeEmpty, isEmptyObj, hasOwn } from '@vue-cesium/utils/util'
+import { dirname, isEmptyObj, hasOwn } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import type {
   VcComponentInternalInstance,
@@ -610,115 +610,24 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     const { Ion, buildModuleUrl, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
     const accessToken = props.accessToken ? props.accessToken : globalConfig.value.accessToken
-    Ion.defaultAccessToken = accessToken!
-
-    const {
-      animation,
-      baseLayerPicker,
-      fullscreenButton,
-      vrButton,
-      geocoder,
-      homeButton,
-      infoBox,
-      sceneModePicker,
-      selectionIndicator,
-      timeline,
-      navigationHelpButton,
-      navigationInstructionsInitiallyVisible,
-      scene3DOnly,
-      shouldAnimate,
-      clockViewModel,
-      selectedImageryProviderViewModel,
-      imageryProviderViewModels,
-      selectedTerrainProviderViewModel,
-      terrainProviderViewModels,
-      imageryProvider,
-      terrainProvider,
-      skyBox,
-      skyAtmosphere,
-      fullscreenElement,
-      useDefaultRenderLoop,
-      targetFrameRate,
-      showRenderLoopErrors,
-      useBrowserRecommendedResolution,
-      automaticallyTrackDataSourceClocks,
-      contextOptions,
-      sceneMode,
-      mapProjection,
-      globe,
-      orderIndependentTranslucency,
-      creditContainer,
-      creditViewport,
-      dataSources,
-      terrainExaggeration,
-      shadows,
-      terrainShadows,
-      mapMode2D,
-      projectionPicker,
-      requestRenderMode,
-      maximumRenderTimeChange,
-      camera,
-      navigation
-    } = props
+    Ion.defaultAccessToken = accessToken
 
     const url = buildModuleUrl('Assets/Textures/NaturalEarthII')
+    const options: AnyObject = {}
+    props &&
+      Object.keys(props).forEach(vueProp => {
+        if (props[vueProp] === undefined || props[vueProp] === null) {
+          return
+        }
+        options[vueProp] = props[vueProp]
+      })
 
-    let options: AnyObject = {
-      animation,
-      baseLayerPicker,
-      fullscreenButton,
-      vrButton,
-      geocoder,
-      homeButton,
-      infoBox,
-      sceneModePicker,
-      selectionIndicator,
-      timeline,
-      navigationHelpButton,
-      navigationInstructionsInitiallyVisible,
-      scene3DOnly,
-      shouldAnimate,
-      clockViewModel,
-      selectedImageryProviderViewModel,
-      imageryProviderViewModels,
-      selectedTerrainProviderViewModel,
-      terrainProviderViewModels,
-      imageryProvider: isEmptyObj(imageryProvider)
-        ? new TileMapServiceImageryProvider({
-            url
-          })
-        : imageryProvider,
-      terrainProvider,
-      skyBox,
-      skyAtmosphere,
-      fullscreenElement: isEmptyObj(fullscreenElement) ? $(viewerRef) : fullscreenElement,
-      useDefaultRenderLoop,
-      targetFrameRate,
-      showRenderLoopErrors,
-      useBrowserRecommendedResolution,
-      automaticallyTrackDataSourceClocks,
-      contextOptions,
-      sceneMode,
-      mapProjection,
-      globe,
-      orderIndependentTranslucency,
-      creditContainer,
-      creditViewport,
-      dataSources,
-      terrainExaggeration,
-      shadows,
-      terrainShadows,
-      mapMode2D,
-      projectionPicker,
-      requestRenderMode,
-      maximumRenderTimeChange,
-      navigation
-    }
-    options = removeEmpty(options)
+    options.imageryProvider = isEmptyObj(options.imageryProvider) ? new TileMapServiceImageryProvider({ url }) : options.imageryProvider
+    options.fullscreenElement = isEmptyObj(options.fullscreenElement) ? $(viewerRef) : options.fullscreenElement
 
-    if (Cesium.VERSION >= '1.83') {
-      delete options.terrainExaggeration
-    }
+    // if (Cesium.VERSION >= '1.83') {
+    //   delete options.terrainExaggeration
+    // }
 
     let viewer: Cesium.Viewer
 
@@ -751,19 +660,19 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     vcInstance.mounted = true
 
     if (Cesium.VERSION >= '1.83') {
-      viewer.scene.globe.terrainExaggeration = terrainExaggeration
+      viewer.scene.globe.terrainExaggeration = options.terrainExaggeration
     }
 
     // vue-cesium 扩展补充
     // vue-cesium extension
-    defined(camera) && setViewerCamera(viewer, camera)
+    defined(options.camera) && setViewerCamera(viewer, options.camera)
 
     const listener = getInstanceListener(vcInstance, 'update:camera')
     listener &&
       viewer.camera.changed.addEventListener(() => {
         const cartographic = viewer.camera.positionCartographic
         let cameraNew: VcCamera
-        if (hasOwn(camera.position, 'lng')) {
+        if (hasOwn(options.camera.position, 'lng')) {
           cameraNew = {
             position: {
               lng: CesiumMath.toDegrees(cartographic.longitude),

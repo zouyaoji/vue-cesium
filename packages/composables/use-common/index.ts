@@ -1,7 +1,7 @@
 import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcMittEvents, VcViewerProvider } from '@vue-cesium/utils/types'
 import { inject, onUnmounted, WatchStopHandle } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
+import { getObjClassName, isEmptyObj, isFunction } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import * as cesiumProps from '@vue-cesium/utils/cesium-props'
@@ -37,25 +37,25 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
   const eventsState = useEvents(props, vcInstance, logger)
   vcInstance.children = []
 
-  const entityGraphics = [
-    'billboard',
-    'box',
-    'corridor',
-    'cylinder',
-    'ellipse',
-    'ellipsoid',
-    'label',
-    'model',
-    'tileset',
-    'path',
-    'plane',
-    'point',
-    'polygon',
-    'polyline',
-    'polylineVolume',
-    'rectangle',
-    'wall'
-  ]
+  const entityGraphics = {
+    billboard: true,
+    box: true,
+    corridor: true,
+    cylinder: true,
+    ellipse: true,
+    ellipsoid: true,
+    label: true,
+    model: true,
+    tileset: true,
+    path: true,
+    plane: true,
+    point: true,
+    polygon: true,
+    polyline: true,
+    polylineVolume: true,
+    rectangle: true,
+    wall: true
+  }
 
   const globalConfig = useGlobalConfig()
   // methods
@@ -299,7 +299,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
   }
 
   const transformProps = <T>(props: T, childProps?: any) => {
-    let options: any = {}
+    const options: any = {}
     props &&
       Object.keys(props).forEach(vueProp => {
         let cesiumProp = vueProp
@@ -311,11 +311,20 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
           cesiumProp = 'key'
         }
 
+        if (props[vueProp] === undefined || props[vueProp] === null) {
+          return
+        }
+
         const className = getObjClassName(props[vueProp])
+
+        // 由于 Cesium 1.96+ 版本不太好获取 Cesium 的 className 了，太耗时影响性能，干脆注释
+        // className.indexOf('Graphics') === -1 &&
+        // 副作用是：通过实体渲染的 point billboard label 等传原生的 Graphics 对象可能会有问题
+        // 可传扁平对象来避免此问题。
         if (
           className &&
-          className.indexOf('Graphics') === -1 &&
-          entityGraphics.indexOf(cesiumProp) !== -1 &&
+          // className.indexOf('Graphics') === -1 &&
+          entityGraphics[cesiumProp] &&
           (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
         ) {
           options[cesiumProp] = transformProps(props[vueProp], childProps)
@@ -324,7 +333,6 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
         }
       })
 
-    options = removeEmpty(options)
     return options as T
   }
 
@@ -333,7 +341,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
     if (
       className &&
       className.indexOf('Graphics') === -1 &&
-      entityGraphics.indexOf(prop) !== -1 &&
+      entityGraphics[prop] &&
       (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
     ) {
       return transformProps(value, childProps)
