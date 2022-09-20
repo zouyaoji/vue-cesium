@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-09-07 21:20:56
+ * @LastEditTime: 2022-09-10 21:29:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
@@ -70,7 +70,7 @@ class Feature {
     feature.pickedFeature = pickedFeature
     feature.windowPosition = screenPosition
     feature.description = cesiumObject?.description || cesiumObject?.description?.getValue()
-    feature.properties = cesiumObject?.properties || cesiumObject?.properties?.getValue()
+    feature.properties = cesiumObject?.properties || cesiumObject?.properties?.getValue() || cesiumObject?.feature?.properties
     return feature
   }
 
