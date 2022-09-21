@@ -86,7 +86,7 @@ Basic usage of the VcGraphicsEllipsoid component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipsoid. |
-| radii | Object | | `optional` A Cartesian3 Property specifying the radii of the ellipsoid. |
+| radii | VcPosition | | `optional` A Cartesian3 Property specifying the radii of the ellipsoid. |
 | heightReference | number | | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
 | material | Object\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |

@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-07 10:54:09
- * @LastEditTime: 2022-05-18 11:56:39
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-09-21 10:49:55
+ * @LastEditors: ly
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\vc-config-provider.md
+ * @FilePath: \vue-cesium\website\docs\en-US\vc-config-provider.md
 -->
 
 # VcConfigProvider
@@ -159,6 +159,6 @@ Basic usage of `vc-config-provider`.
 <!-- prettier-ignore -->
 | Name   | Type               | Default                                                                           | Description   |
 | ------ | ------------------ | --------------------------------------------------------------------------------- | ------------- |
-| locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` Locale Object. |
+| locale | <Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` Locale Object. |
 | cesiumPath | string | `'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS url. |
 | accessToken | string | `'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'` | `optional` accessToken. |

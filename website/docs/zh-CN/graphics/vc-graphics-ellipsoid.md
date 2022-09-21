@@ -86,7 +86,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ----- | ----- | --- | ------ |
 | show | boolean | `true` | `optional` 指定 ellipsoid 是否显示。 |
-| radii | Object | | `optional` 指定 ellipsoid 的半径参数。 |
+| radii | VcPosition | | `optional` 指定 ellipsoid 的半径参数。 |
 | heightReference | number | | `optional` 指定 ellipsoid 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** | 0/1/2 |
 | fill | boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
 | material | Object\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |

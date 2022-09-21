@@ -76,7 +76,7 @@ Basic usage of the VcGraphicsModel component.
 | imageBasedLightingFactor | Object\|Array | `{x: 1.0, y: 1.0}` | `optional` A property specifying the contribution from diffuse and specular image-based lighting. |
 | lightColor | Object\|string\|Array | | `optional` A property specifying the light color to use when shading the model. The default sun light color will be used when undefined. |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera.A Property specifying at what distance from the camera that this model will be displayed. |
-| nodeTransformations | Object | | `optional` An object, where keys are names of nodes, and values are TranslationRotationScale Properties describing the transformation to apply to that node. The transformation is applied after the node's existing transformation as specified in the glTF, and does not replace the node's existing transformation. |
+| nodeTransformations | Cesium.TranslationRotationScale | | `optional` An object, where keys are names of nodes, and values are TranslationRotationScale Properties describing the transformation to apply to that node. The transformation is applied after the node's existing transformation as specified in the glTF, and does not replace the node's existing transformation. |
 | articulations | Object | | `optional` An object, where keys are composed of an articulation name, a single space, and a stage name, and the values are numeric properties. |
 | clippingPlanes | Object | | `optional` A property specifying the ClippingPlaneCollection used to selectively disable rendering the model. |
 

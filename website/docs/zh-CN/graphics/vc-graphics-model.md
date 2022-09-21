@@ -76,7 +76,7 @@
 | imageBasedLightingFactor | Object\|Array | `{x: 1.0, y: 1.0}` | `optional` 指定漫反射和镜面反射因子。 |
 | lightColor | Object\|string\|Array | | `optional` 指定着色模型时要使用的灯光颜色的属性。未指定是太阳颜色。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定模型随相机改变的显示条件。 |
-| nodeTransformations | Object | | `optional` 设置 TranslationRotationScale 节点转换参数。 |
+| nodeTransformations | Cesium.TranslationRotationScale | | `optional` 设置 TranslationRotationScale 节点转换参数。 |
 | articulations | Object | | `optional` |
 | clippingPlanes | Object | | `optional` 指定模型屏幕裁剪参数。 |
 

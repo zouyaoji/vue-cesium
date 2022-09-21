@@ -96,7 +96,7 @@
 | getFeatureInfoParameters | Object          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |
 | enablePickFeatures       | boolean         | `true`  | `optional` 指定是否支持拾取对象，通过 GetFeatureInfo 获取，需要服务支持。          |
 | getFeatureInfoFormats    | Array           |         | `optional` 指定 WMS GetFeatureInfo 请求的格式。                                    |
-| rectangle                | Object\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
+| rectangle | VcRectangle\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
 | tilingScheme             | Object          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
 | ellipsoid      | Cesium.Ellipsoid          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
 | tileWidth                | number          | `256`   | `optional` 指定像元宽度。                                                          |

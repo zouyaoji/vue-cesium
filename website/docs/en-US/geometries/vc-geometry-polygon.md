@@ -147,7 +147,7 @@ Basic usage of VcGeometryPolygon component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | --------------- |
-| polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
+| polygonHierarchy | VcPolygonHierarchy\|Array | | `required` A polygon hierarchy that can include holes. |
 | height | number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
 | extrudedHeight | number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
 | vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |
@@ -178,7 +178,7 @@ Loading a polygon geometry outline. It is equivalent to initializing a `Cesium.P
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
+| polygonHierarchy | VcPolygonHierarchy\|Array | | `required` A polygon hierarchy that can include holes. |
 | height | number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
 | extrudedHeight | number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
 | vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |

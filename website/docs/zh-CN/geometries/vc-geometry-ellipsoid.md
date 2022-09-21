@@ -130,7 +130,7 @@
 
 | 属性名          | 类型          | 默认值 | 描述                                                        |
 | --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii           | Object\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
+| radii | VcPosition\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
 | innerRadii      | number        |        | `optional` 指定椭球体在 x、y、z 方向上的内半径。            |
 | minimumClock    | number        | `0.0`  | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最小角度。 |
 | maximumClock    | number        | `2*PI` | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最大角度。 |
@@ -158,7 +158,7 @@
 
 | 属性名          | 类型          | 默认值 | 描述                                                        |
 | --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii           | Object\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
+| radii | VcPosition\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
 | innerRadii      | number        |        | `optional` 指定椭球体在 x、y、z 方向上的内半径。            |
 | minimumClock    | number        | `0.0`  | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最小角度。 |
 | maximumClock    | number        | `2*PI` | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最大角度。 |

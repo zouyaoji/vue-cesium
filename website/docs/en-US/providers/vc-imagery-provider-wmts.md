@@ -100,7 +100,7 @@ Basic usage of the `vc-imagery-provider-wmts` component.
 | tileWidth | number | `256` | `optional` The tile width in pixels. |
 | tileHeight | number | `256` | `optional` The tile height in pixels. |
 | tilingScheme | TilingScheme | | `optional` The tiling scheme corresponding to the organization of the tiles in the TileMatrixSet. |
-| rectangle | Object\|Array | | `optional` The rectangle covered by the layer. |
+| rectangle | VcRectangle\|Array | | `optional` The rectangle covered by the layer. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. |
 | maximumLevel | number | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | ellipsoid | Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |

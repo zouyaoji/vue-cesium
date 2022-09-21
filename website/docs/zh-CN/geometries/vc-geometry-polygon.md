@@ -146,7 +146,7 @@
 
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
+| polygonHierarchy | VcPolygonHierarchy\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
 | vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
@@ -176,7 +176,7 @@
 
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
+| polygonHierarchy | VcPolygonHierarchy\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
 | vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |

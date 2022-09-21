@@ -116,7 +116,7 @@
 | credit                | string          | `''`    | `optional` 指定服务的描述信息                                                                |
 | minimumLevel          | number          | `0`     | `optional` 最小层级。                                                                        |
 | maximumLevel          | number          |         | `optional` 最大层级。                                                                        |
-| rectangle             | Object\|Array   |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
+| rectangle | VcRectangle\|Array   |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
 | tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                              |
 | ellipsoid      | Cesium.Ellipsoid          |         | `optional` 参考椭球体。                                                                      |
 | tileWidth             | number          | `256`   | `optional` 像元宽度。                                                                        |

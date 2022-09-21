@@ -131,7 +131,7 @@ The basic usage of VcGeometryEllipsoid component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| radii | VcPosition\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
 | innerRadii | number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
 | minimumClock | number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
 | maximumClock | number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
@@ -160,7 +160,7 @@ Loading a ellipsoid geometry outline. It is equivalent to initializing a `Cesium
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | --------------- | ------------- | ------- | ----------------------------------------------------------- |
-| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| radii | VcPosition\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
 | innerRadii | number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
 | minimumClock | number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
 | maximumClock | number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |

@@ -135,8 +135,8 @@ Basic usage of the VcGeometryFrustum component.
 | Name         | Type          | Default | Description                                      |
 | ------------ | ------------- | ------- | ------------------------------------------------ |
 | frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |         | `optional` The frustum.                          |
-| origin       | Object\|Array |         | `optional` The origin of the frustum.            |
-| orientation  | Object\|Array |         | `optional` The orientation of the frustum.       |
+| origin       | VcPosition\|Array |         | `optional` The origin of the frustum.            |
+| orientation  | Cesium.Quaternion\|Array |         | `optional` The orientation of the frustum.       |
 | vertexFormat | Cesium.VertexFormat        |         | `optional` The vertex attributes to be computed. |
 
 ### Events
@@ -158,8 +158,8 @@ Loading a frustum geometry outline. It is equivalent to initializing a `Cesium.F
 | Name        | Type          | Default | Description                                |
 | ----------- | ------------- | ------- | ------------------------------------------ |
 | frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |         | `optional` The frustum.                    |
-| origin      | Object\|Array |         | `optional` The origin of the frustum.      |
-| orientation | Object\|Array |         | `optional` The orientation of the frustum. |
+| origin       | VcPosition\|Array |         | `optional` The origin of the frustum.      |
+| orientation  | Cesium.Quaternion\|Array |         | `optional` The orientation of the frustum. |
 
 ### VcGeometryFrustumOutline Events
 

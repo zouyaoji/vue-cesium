@@ -97,7 +97,7 @@ Basic usage of the `vc-imagery-provider-wms` component.
 | getFeatureInfoParameters | Object | | `optional` Additional parameters to pass to the WMS server in the GetFeatureInfo URL. |
 | enablePickFeatures | boolean | `true` | `optional` If true, WebMapServiceImageryProvider#pickFeatures will invoke the GetFeatureInfo operation on the WMS server and return the features included in the response. If false, WebMapServiceImageryProvider#pickFeatures will immediately return undefined (indicating no pickable features) without communicating with the server. Set this property to false if you know your WMS server does not support GetFeatureInfo or if you don't want this provider's features to be pickable. Note that this can be dynamically overridden by modifying the WebMapServiceImageryProvider#enablePickFeatures property. |
 | getFeatureInfoFormats | Array | | `optional` The formats in which to try WMS GetFeatureInfo requests. |
-| rectangle | Object\|Array | | `optional` The rectangle of the layer. |
+| rectangle | VcRectangle\|Array | | `optional` The rectangle of the layer. |
 | tilingScheme | Object | | `optional` The tiling scheme to use to divide the world into tiles. |
 | ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
 | tileWidth | number | `256` | `optional` The width of each tile in pixels. |
