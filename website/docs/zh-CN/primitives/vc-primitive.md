@@ -71,7 +71,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------ | ---- | ------ | ---- |---|
-| Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
+| geometryInstances|Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
 | appearance | VcAppearance | | `optional` 指定图元的外观参数。 |
 | depthFailAppearance | VcAppearance | | `optional` 指定图元在深度测试失败后的外观。 |
 | show | boolean | `true` | `optional` 指定图元是否显示。 |

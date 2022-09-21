@@ -88,35 +88,35 @@
 
 ### 属性
 
-| 属性名         | 类型                    | 默认值 | 描述                                                             |
-| -------------- | ----------------------- | ------ | ---------------------------------------------------------------- |
-| id             | string                  |        | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
-| name           | string                  |        | `optional` 指定 entity 名称，名称可不必唯一。                    |
-| availability   |                         |        | `optional` 指定 entity 关联的可用性参数。                        |
-| show           | boolean                 | `true` | `optional` 指定 entity 及其子项是否显示。                        |
-| description    |                         |        | `optional` 指定 entity 的 HTML 描述信息。                        |
-| position       | VcPosition\|Array\|Function |        | `optional` 指定 entity 的位置。                                  |
-| orientation    |                         |        | `optional` 指定 entity 的方向。                                  |
-| viewFrom       |                         |        | `optional` 指定 entity 的初始偏移量。                            |
-| parent         |                         |        | `optional` 指定 entity 关联的父实体。                            |
-| billboard      |                         |        | `optional` 指定 entity 关联的布告板。                            |
-| box            |                         |        | `optional` 指定 entity 关联的盒子对象。                          |
-| corridor       |                         |        | `optional` 指定 entity 关联的走廊对象。                          |
-| cylinder       |                         |        | `optional` 指定 entity 关联的圆柱对象。                          |
-| ellipse        |                         |        | `optional` 指定 entity 关联的椭圆对象。                          |
-| ellipsoid      |                         |        | `optional` 指定 entity 关联的椭球体对象。                        |
-| label          |                         |        | `optional` 指定 entity 关联的标签对象。                          |
-| model          |                         |        | `optional` 指定 entity 关联的模型对象。                          |
-| tileset        |                         |        | `optional` 指定 entity 关联的 tileset 对象。                     |
-| path           |                         |        | `optional` 指定 entity 关联的路径对象。                          |
-| plane          |                         |        | `optional` 指定 entity 关联的平面对象。                          |
-| point          |                         |        | `optional` 指定 entity 关联的点对象。                            |
-| polygon        |                         |        | `optional` 指定 entity 关联的多边形对象。                        |
-| polyline       |                         |        | `optional` 指定 entity 关联的折线对象。                          |
-| properties     |                         |        | `optional` 指定 entity 关联的属性。                              |
-| polylineVolume |                         |        | `optional` 指定 entity 关联的多线段柱体对象。                    |
-| rectangle      |                         |        | `optional` 指定 entity 关联的矩形对象。                          |
-| wall           |                         |        | `optional` 指定 entity 关联的墙对象。                            |
+| 属性名         | 类型                                                                               | 默认值 | 描述                                                             |
+| -------------- | ---------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------- |
+| id             | string                                                                             |        | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
+| name           | string                                                                             |        | `optional` 指定 entity 名称，名称可不必唯一。                    |
+| availability   | Cesium.TimeIntervalCollection                                                      |        | `optional` 指定 entity 关联的可用性参数。                        |
+| show           | boolean                                                                            | `true` | `optional` 指定 entity 及其子项是否显示。                        |
+| description    | string \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\>          |        | `optional` 指定 entity 的 HTML 描述信息。                        |
+| position       | VcPosition\|Array\|Function                                                        |        | `optional` 指定 entity 的位置。                                  |
+| orientation    | Cesium.Quaternion \| Cesium.VelocityOrientationProperty \| Cesium.CallbackProperty |        | `optional` 指定 entity 的方向。                                  |
+| viewFrom       | VcPosition \| Cesium.CallbackProperty                                              |        | `optional` 指定 entity 的初始偏移量。                            |
+| parent         | Cesium.Entity                                                                      |        | `optional` 指定 entity 关联的父实体。                            |
+| billboard      | Cesium.BillboardGraphics \| VcGraphicsBillboardProps                               |        | `optional` 指定 entity 关联的布告板。                            |
+| box            | Cesium.BoxGraphics \| VcGraphicsBoxProps                                           |        | `optional` 指定 entity 关联的盒子对象。                          |
+| corridor       | Cesium.CorridorGraphics \| VcGraphicsCorridorProps                                 |        | `optional` 指定 entity 关联的走廊对象。                          |
+| cylinder       | Cesium.CylinderGraphics \| VcGraphicsCylinderProps                                 |        | `optional` 指定 entity 关联的圆柱对象。                          |
+| ellipse        | Cesium.EllipseGraphics \| VcGraphicsEllipseProps                                   |        | `optional` 指定 entity 关联的椭圆对象。                          |
+| ellipsoid      | Cesium.EllipsoidGraphics \| VcGraphicsEllipsoidProps                               |        | `optional` 指定 entity 关联的椭球体对象。                        |
+| label          | Cesium.LabelGraphics \| VcGraphicsLabelProps                                       |        | `optional` 指定 entity 关联的标签对象。                          |
+| model          | Cesium.ModelGraphics \| VcGraphicsModelProps                                       |        | `optional` 指定 entity 关联的模型对象。                          |
+| tileset        | Cesium.Cesium3DTilesetGraphics \| VcGraphicsTilesetProps                           |        | `optional` 指定 entity 关联的 tileset 对象。                     |
+| path           | Cesium.PathGraphics \| VcGraphicsPathProps                                         |        | `optional` 指定 entity 关联的路径对象。                          |
+| plane          | Cesium.PlaneGraphics \| VcGraphicsPlaneProps                                       |        | `optional` 指定 entity 关联的平面对象。                          |
+| point          | Cesium.PointGraphics \| VcGraphicsPointProps                                       |        | `optional` 指定 entity 关联的点对象。                            |
+| polygon        | Cesium.PolygonGraphics \| VcGraphicsPolygonProps                                   |        | `optional` 指定 entity 关联的多边形对象。                        |
+| polyline       | Cesium.PolylineGraphics \| VcGraphicsPolylineProps                                 |        | `optional` 指定 entity 关联的折线对象。                          |
+| properties     | AnyObject                                                                          |        | `optional` 指定 entity 关联的属性。                              |
+| polylineVolume | Cesium.PolylineVolumeGraphics \| VcGraphicsPolylineVolumeProps                     |        | `optional` 指定 entity 关联的多线段柱体对象。                    |
+| rectangle      | Cesium.RectangleGraphics \| VcGraphicsRectangleProps                               |        | `optional` 指定 entity 关联的矩形对象。                          |
+| wall           | Cesium.WallGraphics \| VcGraphicsWallProps                                         |        | `optional` 指定 entity 关联的墙对象。                            |
 
 :::tip
 

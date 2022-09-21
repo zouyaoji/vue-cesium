@@ -71,7 +71,7 @@ Basic usage of VcPrimitive component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` The geometry instances - or a single geometry instance - to render. |
+| geometryInstances|Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` The geometry instances - or a single geometry instance - to render. |
 | appearance | VcAppearance | | `optional` The appearance used to render the primitive. |
 | depthFailAppearance | VcAppearance | | `optional` The appearance used to shade this primitive when it fails the depth test. |
 | show | boolean | `true` | `optional` Determines if this primitive will be shown. |
