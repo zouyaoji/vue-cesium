@@ -150,7 +150,7 @@ Basic usage of the VcGraphicsPath component.
 | width | number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
 | resolution | number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
 | material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to draw the path. |
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this path will be displayed.  |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this path will be displayed.  |
 
 ### Events
 

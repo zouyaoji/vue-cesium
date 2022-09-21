@@ -103,7 +103,7 @@
 | outlineWidth | number | `1.0` | `optional` 指定 ellipse 轮廓线宽度。 |
 | numberOfVerticalLines | number | `16` | `optional` 指定 ellipse 沿轮廓周长绘制的垂直线数。 |
 | shadows | number | `0` | `optional` 指定 ellipse 是否投射接收每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 ellipse 随相机距离的显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 ellipse 随相机距离的显示条件。 |
 | classificationType | number | `2` | `optional` 指定 ellipse 的贴地模式。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
 | zIndex | number | | `optional` 指定 ellipse 顺序，没有高度和拉伸高度才有效。 |
 

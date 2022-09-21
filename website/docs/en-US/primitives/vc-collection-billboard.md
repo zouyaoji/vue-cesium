@@ -149,7 +149,7 @@ Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to
 | alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` The aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector. |
 | color | Object\|string\|Array | `'white'` | `optional` The color that is multiplied with the billboard's texture. |
 | disableDepthTestDistance | number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
-| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this billboard will be displayed.|
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this billboard will be displayed.|
 | eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` The 3D Cartesian offset applied to this billboard in eye coordinates.|
 | height | number | | `optional` The height for the billboard. If undefined, the image height will be used. |
 | heightReference | number | `0` | `optional` The height reference of this billboard. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|

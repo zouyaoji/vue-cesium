@@ -147,7 +147,7 @@
 | alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
 | color | Object\|string\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
 | disableDepthTestDistance | number | | `optional` 指定 billboard 的深度检测距离。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |
 | eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移量。|
 | height | number | | `optional` 指定 billboard 的高度（像素）。 |
 | heightReference | number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|

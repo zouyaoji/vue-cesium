@@ -131,7 +131,7 @@ Basic usage of VcPrimitiveGround component.
 | debugWireframe | boolean | `false` | `optional` For debugging only. Draws the model in wireframe. |
 | heightReference | number | `0` | `optional` Determines how the model is drawn relative to terrain. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
 | scene | Object | `false` | `optional` Must be passed in for models that use the height reference property. |
-| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this model will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this model will be displayed. |
 | color | Object\|string\|Array | `'white'` | `optional` A color that blends with the model's rendered color. |
 | colorBlendMode | number | `0` | `optional` Defines how the color blends with the model. **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |0/1/2|
 | colorBlendAmount | number | `0.5` | `optional` Value used to determine the color strength when the colorBlendMode is MIX. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two. |

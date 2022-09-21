@@ -88,7 +88,7 @@
 | numberOfVerticalLines | number | `16` | `optional` 指定沿轮廓线周长绘制的垂直线数。 |
 | slices | number | `128` | `optional` 指定 cylinder 边节点数量。 |
 | shadows | number | `0` | `optional` 指定 cylinder 是否投射或接收每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 cylinder 随相机距离显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 cylinder 随相机距离显示条件。 |
 
 ### 事件
 

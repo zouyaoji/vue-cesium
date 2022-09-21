@@ -97,7 +97,7 @@ Basic usage of the VcGraphicsEllipsoid component.
 | slicePartitions | number | `64` | `optional` A Property specifying the number of radial slices. |
 | subdivisions | number | `128` | `optional` A Property specifying the number of samples per outline ring, determining the granularity of the curvature. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the ellipsoid casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this ellipsoid will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this ellipsoid will be displayed. |
 
 ### Events
 

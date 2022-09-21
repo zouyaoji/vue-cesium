@@ -74,7 +74,7 @@ Basic usage of the VcGraphicsPoint component.
 | outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
 | scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to scale the point based on distance. |
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this point will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this point will be displayed. |
 | disableDepthTestDistance | number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
 ### Events

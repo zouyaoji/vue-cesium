@@ -147,8 +147,8 @@
 
 | 属性名                   | 类型                  | 默认值 | 描述                                                        |
 | ------------------------ | --------------------- | ------ | ----------------------------------------------------------- |
-| distanceDisplayCondition | Object\|Array         |        | `optional` 指定 polyline 显示条件随相机距离改变的参数。     |
-| id                       | Object                |        | `optional` 指定与 polyline 关联的信息，拾取时返回该属性值。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array         |        | `optional` 指定 polyline 显示条件随相机距离改变的参数。     |
+| id | any                |        | `optional` 指定与 polyline 关联的信息，拾取时返回该属性值。 |
 | loop                     | boolean               | false  | `optional` 指定 polyline 是否首尾相连。                     |
 | material                 | Object\|Array\|string |        | `optional` 指定 polyline 材质。                             |
 | positions                | Array                 |        | `optional` 指定 polyline 的位置。                           |

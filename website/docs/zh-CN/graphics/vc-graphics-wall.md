@@ -95,7 +95,7 @@
 | outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |
 | shadows | number | `0` | `optional` 指定 wall 是否投射或接收阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 wall 随相机距离改变的显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 wall 随相机距离改变的显示条件。 |
 
 ### 事件
 

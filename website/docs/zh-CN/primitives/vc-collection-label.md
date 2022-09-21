@@ -167,7 +167,7 @@
 | backgroundColor  | Object\|Array\|string | { x: 0.165, y: 0.165, z: 0.165, w: 0.8 } | `optional` 指定 label 背景颜色。 |
 | backgroundPadding  | Object\|Array | | `optional` 指定 label 背景x、y方向偏移量。|
 | disableDepthTestDistance | number | | `optional` 指定 label 的深度检测距离。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 label 显示条件随相机距离改变的参数。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 label 显示条件随相机距离改变的参数。 |
 | eyeOffset | Object\Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 label 视角偏移量。|
 | fillColor | Object\|string\|Array | `white` | `optional` 指定 label 填充颜色。 |
 | font | string | `'30px sans-serif'` | `optional` 指定 label CSS 字体。 |

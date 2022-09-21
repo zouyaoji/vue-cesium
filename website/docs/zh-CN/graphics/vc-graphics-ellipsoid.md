@@ -97,7 +97,7 @@
 | slicePartitions | number | `64` | `optional` 指定 ellipsoid 径向线数量。 |
 | subdivisions | number | `128` | `optional` 指定 ellipsoid 每个轮环的样本数，确定曲率粒度。 |
 | shadows | number | `0` | `optional` 指定 ellipsoid 是否投射或接受每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 ellipsoid 随相机距离的显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 ellipsoid 随相机距离的显示条件。 |
 
 ### 事件
 

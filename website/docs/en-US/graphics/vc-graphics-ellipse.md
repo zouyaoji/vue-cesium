@@ -103,7 +103,7 @@ Basic usage of the VcGraphicsEllipse component.
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | numberOfVerticalLines | number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the ellipse casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this ellipse will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` A Property specifying at what distance from the camera that this ellipse will be displayed. |
 | classificationType | number | `2` | `optional` An enum Property specifying whether this ellipse will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
 | zIndex | number | | `optional` A property specifying the zIndex of the Ellipse. Used for ordering ground geometry. Only has an effect if the ellipse is constant and neither height or exturdedHeight are specified. |
 

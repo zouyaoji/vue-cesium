@@ -79,7 +79,7 @@
 | clampToGround | boolean | `false` | `optional` 指定线是否贴地。 |
 | shadows | number | | `optional` 指定这些是否投射或接收来自每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | classificationType | number | `2` | `optional` 指定相机到线的距离。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定相机到线的距离。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定相机到线的距离。 |
 | zIndex | number | `0` | `optional` 指定用于排序地面几何的 zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。 |
 
 ### 事件

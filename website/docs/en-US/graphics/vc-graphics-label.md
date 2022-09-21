@@ -66,7 +66,7 @@ Basic usage of the VcGraphicsLabel component.
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
 | scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. |
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this label will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this label will be displayed. |
 | disableDepthTestDistance | number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
 ### Events

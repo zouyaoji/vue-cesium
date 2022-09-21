@@ -151,8 +151,8 @@ Loading a renderable polyline. It is equivalent to initializing a `Cesium.Polyli
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this polyline will be displayed. |
-| id | Object | | `optional` The user-defined value returned when the polyline is picked. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this polyline will be displayed. |
+| id | any | | `optional` The user-defined value returned when the polyline is picked. |
 | loop | boolean | false | `optional` Whether a line segment will be added between the first and last polyline positions. |
 | material | Object\|Array\|string | | `optional` The surface appearance of the polyline.This can be one of several built-in Material objects or a custom material, scripted with Fabric. |
 | positions | Array | | `optional` The positions of the polyline. |

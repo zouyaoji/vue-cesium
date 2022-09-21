@@ -107,7 +107,7 @@ Basic usage of VcGraphicsRectangle component.
 | outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the rectangle casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
 | classificationType | number | `2` | `optional` An enum Property specifying whether this rectangle will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
 | zIndex | number | `0` | `optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if the rectangle is constant and neither height or extrudedHeight are specified. |
 

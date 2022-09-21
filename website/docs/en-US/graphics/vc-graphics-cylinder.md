@@ -88,7 +88,7 @@ Basic usage of the VcGraphicsCylinder component.
 | numberOfVerticalLines | number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
 | slices | number | `128` | `optional` The number of edges around the perimeter of the cylinder. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the cylinder casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this cylinder will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this cylinder will be displayed. |
 
 ### Events
 

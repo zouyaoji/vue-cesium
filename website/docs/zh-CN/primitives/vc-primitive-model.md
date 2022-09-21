@@ -127,7 +127,7 @@
 | debugWireframe | boolean | `false` | `optional` 可选的仅用于调试。 仅用于调试。 在线框中绘制模型。 |
 | heightReference | number | `0` | `optional` 指定 model 的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | scene | Object | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 model 随相机改变的显示条件。|
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 model 随相机改变的显示条件。|
 | color | Object\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
 | colorBlendMode | number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |
 | colorBlendAmount | number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |

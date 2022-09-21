@@ -66,7 +66,7 @@
 | translucencyByDistance | Object\|Array | | `optional` 指定 label 透明度随相机距离改变的参数。 |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 偏移量随相机距离改变的参数。 |
 | scaleByDistance | Object\|Array | | `optional` 指定 label 缩放随相机距离改变的参数。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 label 相机距离的显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 label 相机距离的显示条件。 |
 | disableDepthTestDistance | number | | `optional` 指定 label 的深度测试距离。 |
 
 ### 事件

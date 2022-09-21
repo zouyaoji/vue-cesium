@@ -169,7 +169,7 @@ Loading a viewport-aligned text positioned in the 3D scene. It is equivalent to 
 | backgroundColor  | Object\|Array\|string | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` The background color of this label. |
 | backgroundPadding  | Object\|Array | | `optional` The background padding, in pixels, of this label.|
 | disableDepthTestDistance | number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
-| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this label will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this label will be displayed. |
 | eyeOffset | Object\Array | `{x: 0, y: 0, z: 0}` | `optional` The 3D Cartesian offset applied to this label in eye coordinates.|
 | fillColor | Object\|string\|Array | `white` | `optional` The fill color of this label. |
 | font | string | `'30px sans-serif'` | `optional`  The font used to draw this label. Fonts are specified using the same syntax as the CSS 'font' property. |

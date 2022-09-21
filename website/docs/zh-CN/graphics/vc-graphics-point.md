@@ -74,7 +74,7 @@
 | outlineWidth | number | `0` | `optional` 指定 point 轮廓像素宽度。 |
 | scaleByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的缩放参数。 |
 | translucencyByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的透明度参数。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 point 随相机距离显隐参数。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 point 随相机距离显隐参数。 |
 | disableDepthTestDistance | number | | `optional` 指定 point 深度测试参数。 |
 
 ### 事件

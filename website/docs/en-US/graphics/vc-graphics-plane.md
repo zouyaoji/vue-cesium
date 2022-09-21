@@ -94,7 +94,7 @@ Basic usage of the VcGraphicsPlane component.
 | outlineColor | Object\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the plane casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this plane will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this plane will be displayed. |
 
 ### Events
 

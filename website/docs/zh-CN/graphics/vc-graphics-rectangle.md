@@ -108,7 +108,7 @@
 | outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 rectangle 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 rectangle 轮廓线宽度。 |
 | shadows | number | `0` | `optional` 指定 rectangle 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 rectangle 随相机距离改变是否显示参数。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 rectangle 随相机距离改变是否显示参数。 |
 | classificationType | number | `2` | `optional` 指定 rectangle 贴对象模式 。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
 | zIndex | number | `0` | `optional` 指定 rectangle 顺序，没设置高度和拉伸高度时有效。 |
 
