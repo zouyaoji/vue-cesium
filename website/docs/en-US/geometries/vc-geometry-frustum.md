@@ -1,3 +1,10 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:01:55
+ * @FilePath: \vue-cesium\website\docs\en-US\geometries\vc-geometry-frustum.md
+-->
 ## VcGeometryFrustum
 
 Loading a frustum geometry. It is equivalent to initializing a `Cesium.FrustumGeometry` instance.

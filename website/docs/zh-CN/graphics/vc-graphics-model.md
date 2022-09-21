@@ -68,12 +68,12 @@
 | clampAnimations | boolean | `true` | `optional` 指定动画在没有帧动画的时候保持最后一个姿势。 |
 | shadows | number | `1` | `optional` 指定 model 是否投射或接收每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | heightReference | number | `0` | `optional` 指定 model 的高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| silhouetteColor | Object\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
+| silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
-| color | Object\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
+| color | VcColor\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
 | colorBlendMode | number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** | 0/1/2 |
 | colorBlendAmount | number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
-| imageBasedLightingFactor | Object\|Array | `{x: 1.0, y: 1.0}` | `optional` 指定漫反射和镜面反射因子。 |
+| imageBasedLightingFactor | VcCartesian2\|Array | `{x: 1.0, y: 1.0}` | `optional` 指定漫反射和镜面反射因子。 |
 | lightColor | Object\|string\|Array | | `optional` 指定着色模型时要使用的灯光颜色的属性。未指定是太阳颜色。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定模型随相机改变的显示条件。 |
 | nodeTransformations | Cesium.TranslationRotationScale | | `optional` 设置 TranslationRotationScale 节点转换参数。 |

@@ -141,7 +141,7 @@
 
 | 属性名                   | 类型                      | 默认值    | 描述                                                     |
 | ------------------------ | ------------------------- | --------- | -------------------------------------------------------- |
-| color                    | Object\|Array\|string     | `'white'` | `optional` 指定 point 的颜色。                           |
+| color | VcColor\|Array\|string     | `'white'` | `optional` 指定 point 的颜色。                           |
 | disableDepthTestDistance | number                    |           | `optional` 指定 point 深度检测距离。                     |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array             |           | `optional` 指定 point 显示条件随相机距离改变的参数。     |
 | id                       | \*                        |           | `optional` 指定与 point 关联的信息，拾取时返回该属性值。 |
@@ -149,9 +149,9 @@
 | outlineWidth             | number                    | `0`       | `optional` 指定 point 的轮廓宽度。                       |
 | pixelSize                | number                    | `1`       | `optional` 指定 point 的像素大小。                       |
 | position       | VcPosition\|Array             |           | `optional` 指定 point 的位置。                           |
-| scaleByDistance          | Object\|Array             |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
+| scaleByDistance | VcNearFarScalar\|Array             |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
 | show                     | boolean                   | `true`    | `optional` 指定 point 是否显示。                         |
-| translucencyByDistance   | Object\|Array             |           | `optional` 指定 point 透明度随相机距离改变的参数。       |
+| translucencyByDistance | VcNearFarScalar\|Array             |           | `optional` 指定 point 透明度随相机距离改变的参数。       |
 | enableMouseEvent         | boolean                   | `true`    | `optional` 指定鼠标事件是否生效。                        |
 
 ### VcPoint 事件

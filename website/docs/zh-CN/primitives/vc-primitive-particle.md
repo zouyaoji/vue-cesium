@@ -230,7 +230,7 @@
 | scale | number | `1.0` | `optional` 设置比例尺，以在其粒子寿命期间应用到粒子图像。 |
 | startScale | number |  | `optional` 在粒子寿命开始时应用于粒子图像的初始比例。|
 | endScale | number | | `optional` 在粒子寿命结束时应用于粒子图像的最终比例。 |
-| color | Object\|Array\|string | | `optional` 设置粒子在其粒子寿命期间的颜色。 |
+| color | VcColor\|Array\|string | | `optional` 设置粒子在其粒子寿命期间的颜色。 |
 | startColor | Object\|Array\|string | | `optional` 粒子在其生命初期的颜色。 |
 | endColor | Object\|Array\|string | | `optional` 粒子寿命结束时的颜色。|
 | image | Object\|string | | `optional` 用于广告牌的URI，HTMLImageElement或HTMLCanvasElement。 |

@@ -230,7 +230,7 @@ Basic usage of VcPrimitiveParticle component.
 | scale | number | `1.0` | `optional` Sets the scale to apply to the image of the particle for the duration of its particleLife. |
 | startScale | number | | `optional` The final scale to apply to the image of the particle at the end of its life. |
 | endScale | number | | `optional` Sets the color of a particle for the duration of its particleLife. |
-| color | Object\|Array\|string | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| color | VcColor\|Array\|string | | `optional` Sets the color of a particle for the duration of its particleLife. |
 | startColor | Object\|Array\|string | | `optional` The color of the particle at the beginning of its life. |
 | endColor | Object\|Array\|string | | `optional` The color of the particle at the end of its life.|
 | image | Object\|string | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |

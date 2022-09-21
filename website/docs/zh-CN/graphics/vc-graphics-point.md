@@ -69,11 +69,11 @@
 | show | boolean | `true` | `optional` 指定 point 是否显示。 |
 | pixelSize | number | `1` | `optional` 指定 point 像素大小。 |
 | heightReference | number | `0` | `optional` 指定 point 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
-| color | Object\|string\|Array | `'white'` | `optional` 指定 point 颜色。 |
+| color | VcColor\|string\|Array | `'white'` | `optional` 指定 point 颜色。 |
 | outlineColor | VcColor\|string\|Array | `'black'` | `optional` 指定 point 轮廓颜色。 |
 | outlineWidth | number | `0` | `optional` 指定 point 轮廓像素宽度。 |
-| scaleByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的缩放参数。 |
-| translucencyByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的透明度参数。 |
+| scaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 point 随相机距离改变的缩放参数。 |
+| translucencyByDistance | VcNearFarScalar\|Array | | `optional` 指定 point 随相机距离改变的透明度参数。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 point 随相机距离显隐参数。 |
 | disableDepthTestDistance | number | | `optional` 指定 point 深度测试参数。 |
 

@@ -164,29 +164,29 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| backgroundColor  | Object\|Array\|string | { x: 0.165, y: 0.165, z: 0.165, w: 0.8 } | `optional` 指定 label 背景颜色。 |
-| backgroundPadding  | Object\|Array | | `optional` 指定 label 背景x、y方向偏移量。|
+| backgroundColor | VcColor\|Array\|string | { x: 0.165, y: 0.165, z: 0.165, w: 0.8 } | `optional` 指定 label 背景颜色。 |
+| backgroundPadding | VcCartesian2\|Array | | `optional` 指定 label 背景x、y方向偏移量。|
 | disableDepthTestDistance | number | | `optional` 指定 label 的深度检测距离。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 label 显示条件随相机距离改变的参数。 |
-| eyeOffset | Object\Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 label 视角偏移量。|
-| fillColor | Object\|string\|Array | `white` | `optional` 指定 label 填充颜色。 |
+| eyeOffset | VcPosition\Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 label 视角偏移量。|
+| fillColor | VcColor\|string\|Array | `white` | `optional` 指定 label 填充颜色。 |
 | font | string | `'30px sans-serif'` | `optional` 指定 label CSS 字体。 |
 | heightReference | number | `0` | `optional` 指定 label 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` 指定 label 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
 | id | \* | | `optional` 指定与 label 关联的信息，拾取时返回该属性值。 |
 | outlineColor | VcColor\|Array\|string | `'black'` | `optional` 指定 label 的轮廓颜色。 |
 | outlineWidth | number | `0` | `optional` 指定 label 的轮廓宽度。 |
-| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 label 像素偏移量。 |
-| pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 像素偏移量随相机距离改变的参数。|
+| pixelOffset | VcCartesian2\|Array | `{x: 0, y: 0}` | `optional` 指定 label 像素偏移量。 |
+| pixelOffsetScaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 label 像素偏移量随相机距离改变的参数。|
 | position       | VcPosition | | `optional` 指定 label 的位置。|
 | scale | number | `1.0` | `optional` 指定 label 缩放比例。 |
-| scaleByDistance | Object\|Array | | `optional` 指定 label 的缩放比例随相机距离改变的参数。|
+| scaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 label 的缩放比例随相机距离改变的参数。|
 | show | boolean | `true` | `optional` 指定 label 是否显示。 |
 | showBackground | boolean | `false` | `optional` 指定 label 是否显示背景。 |
 | labelStyle | number | `0` | `optional` 指定 label 绘制风格。**FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
 | text | string | | `optional` 指定 label 文字，支持'\n'换行符。 |
 | totalScale  | number | `1.0` | `optional` 获取 label 的总比例，该比例是标签的比例乘以所计算的所需字体的相对大小与生成的字形大小的比例。 |
-| translucencyByDistance | Object\|Array | | `optional` 指定 label 透明度随相机距离改变的参数。|
+| translucencyByDistance | VcNearFarScalar\|Array | | `optional` 指定 label 透明度随相机距离改变的参数。|
 | verticalOrigin | number | `0` | `optional` 指定 label 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
 | enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
 

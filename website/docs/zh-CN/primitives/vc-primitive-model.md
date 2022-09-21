@@ -128,10 +128,10 @@
 | heightReference | number | `0` | `optional` 指定 model 的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | scene | Object | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 model 随相机改变的显示条件。|
-| color | Object\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
+| color | VcColor\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
 | colorBlendMode | number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |
 | colorBlendAmount | number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
-| silhouetteColor | Object\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
+| silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
 | clippingPlanes | Object | | `optional` 指定 model 屏幕裁剪参数。 |
 | dequantizeInShader | boolean | `true` | `optional` 确定是否在 GPU 上对 Draco 编码的模型进行了反量化。 这减少了编码模型的总内存使用量。|

@@ -1,3 +1,10 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:09:36
+ * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-label.md
+-->
 ## VcGraphicsLabel
 
 Loading a label graphic. It is equivalent to initializing a `Cesium.LabelGraphics` instance.
@@ -53,19 +60,19 @@ Basic usage of the VcGraphicsLabel component.
 | labelStyle | number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
 | scale | number | `1.0` | `optional` A numeric Property specifying the scale to apply to the text. |
 | showBackground | boolean | `false` | `optional` A boolean Property specifying the visibility of the background behind the label. |
-| backgroundColor | Object\|string\|Array | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` A Property specifying the background Color. |
-| backgroundPadding | Object\|Array | `{x: 7, y: 5}` | `optional` A Cartesian2 Property specifying the horizontal and vertical background padding in pixels. |
-| pixelOffset | Object\|Array | `{x: 0, y: 0 }` | `optional` A Cartesian2 Property specifying the pixel offset. |
-| eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset.|
+| backgroundColor | VcColor\|string\|Array | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` A Property specifying the background Color. |
+| backgroundPadding | VcCartesian2\|Array | `{x: 7, y: 5}` | `optional` A Cartesian2 Property specifying the horizontal and vertical background padding in pixels. |
+| pixelOffset | VcCartesian2\|Array | `{x: 0, y: 0 }` | `optional` A Cartesian2 Property specifying the pixel offset. |
+| eyeOffset | VcPosition\|Array | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset.|
 | horizontalOrigin | number | `0` | `optional` A Property specifying the HorizontalOrigin. |
 | verticalOrigin | number | `0` | `optional` A Property specifying the VerticalOrigin. |
 | heightReference | number | `0` | `optional` A Property specifying what the height is relative to. |
-| fillColor | Object\|string\|Array | `white` | `optional` A Property specifying the fill Color. |
+| fillColor | VcColor\|string\|Array | `white` | `optional` A Property specifying the fill Color. |
 | outlineColor | VcColor\|string\|Array | `black` | `optional` A Property specifying the outline Color. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the outline width. |
-| translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
-| pixelOffsetScaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
-| scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. |
+| translucencyByDistance | VcNearFarScalar\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
+| pixelOffsetScaleByDistance | VcNearFarScalar\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
+| scaleByDistance | VcNearFarScalar\|Array | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this label will be displayed. |
 | disableDepthTestDistance | number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
