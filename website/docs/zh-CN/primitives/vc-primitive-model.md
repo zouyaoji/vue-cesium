@@ -133,7 +133,7 @@
 | colorBlendAmount | number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
 | silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
-| clippingPlanes | Object | | `optional` 指定 model 屏幕裁剪参数。 |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection> | | `optional` 指定 model 屏幕裁剪参数。 |
 | dequantizeInShader | boolean | `true` | `optional` 确定是否在 GPU 上对 Draco 编码的模型进行了反量化。 这减少了编码模型的总内存使用量。|
 | imageBasedLightingFactor | Array\|Object | | `optional` 缩放来自地球，天空，大气层和星空盒的基于漫反射和镜面反射图像的照明。|
 | lightColor | Array\|Object | | `optional` 为模型着色时的浅色。 未定义时，将使用场景的灯光颜色。 |

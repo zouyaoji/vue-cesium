@@ -137,7 +137,7 @@ Basic usage of VcPrimitiveGround component.
 | colorBlendAmount | number | `0.5` | `optional` Value used to determine the color strength when the colorBlendMode is MIX. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two. |
 | silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` The silhouette color. If more than 256 models have silhouettes enabled, there is a small chance that overlapping models will have minor artifacts. |
 | silhouetteSize | number | `0.0` | `optional` The size of the silhouette in pixels. |
-| clippingPlanes | Object | | `optional` The ClippingPlaneCollection used to selectively disable rendering the model. |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection> | | `optional` The ClippingPlaneCollection used to selectively disable rendering the model. |
 | dequantizeInShader | boolean | `true` | `optional` Determines if a Draco encoded model is dequantized on the GPU. This decreases total memory usage for encoded models.|
 | imageBasedLightingFactor | Array\|Object | | `optional` Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.|
 | lightColor | Array\|Object | | `optional` The light color when shading the model. When undefined the scene's light color is used instead. |
