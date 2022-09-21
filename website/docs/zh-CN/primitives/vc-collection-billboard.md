@@ -156,7 +156,7 @@
 | image | string\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移量。 |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 billboard 像素偏移量随相机距离改变的参数。|
-| position | Object\|Array | | `optional` 指定 billboard 的位置。|
+| position       | VcPosition\|Array | | `optional` 指定 billboard 的位置。|
 | rotation | number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
 | scale | number | `1.0` | `optional` 指定 billboard 缩放比例。 |
 | scaleByDistance | Object\|Array | | `optional` 指定 billboard 随缩比例随相机距离改变的参数。|

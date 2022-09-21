@@ -120,7 +120,7 @@ Basic usage of VcGeometryBox component.
 | Name         | Type   | Default | Description                                                                                                 |
 | ------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
 | dimensions   | Object |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
-| vertexFormat | Object |         | `optional` The vertex attributes to be computed.                                                            |
+| vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed.                                                            |
 
 ### Events
 

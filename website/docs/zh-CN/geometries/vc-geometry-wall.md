@@ -128,7 +128,7 @@
 | maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
 | minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
 | ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定参考椭球体。                       |
-| vertexFormat   | Object |        | `optional` 指定顶点属性渲染方式。                 |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定顶点属性渲染方式。                 |
 
 ### 事件
 

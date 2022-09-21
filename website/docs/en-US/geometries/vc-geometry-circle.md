@@ -120,7 +120,7 @@ Basic usage of VcGeometryCircle component.
 | ellipsoid      | Cesium.Ellipsoid |         | `optional` The ellipsoid the circle will be on.                                                           |
 | height         | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
 | granularity    | number | `0.02`  | `optional` The angular distance between points on the circle in radians.                                  |
-| vertexFormat   | Object |         | `optional` The vertex attributes to be computed.                                                          |
+| vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed.                                                          |
 | extrudedHeight | number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface.           |
 | stRotation     | number | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
 

@@ -158,7 +158,7 @@ Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to
 | image | string\|Object | | `optional` The image to be used for this billboard. If a texture has already been created for the given image, the existing texture is used. |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this billboard. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` The near and far pixel offset scaling properties of a Billboard based on the billboard's distance from the camera.|
-| position | Object\|Array | | `optional` The position of this billboard.|
+| position       | VcPosition\|Array | | `optional` The position of this billboard.|
 | rotation | number | `0` | `optional` The rotation angle in radians. |
 | scale | number | `1.0` | `optional`  The uniform scale that is multiplied with the billboard's image size in pixels. |
 | scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a Billboard based on the billboard's distance from the camera.|

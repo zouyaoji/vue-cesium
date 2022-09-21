@@ -137,7 +137,7 @@
 | frustum      | Object        |        | `optional` 指定视锥体参数。         |
 | origin       | Object\|Array |        | `optional` 指定视锥体原点。         |
 | orientation  | Object\|Array |        | `optional` 指定视锥体旋转参数。     |
-| vertexFormat | Object        |        | `optional` 指定视锥体顶点渲染方式。 |
+| vertexFormat | Cesium.VertexFormat        |        | `optional` 指定视锥体顶点渲染方式。 |
 
 ### 事件
 

@@ -95,7 +95,7 @@
 | availability   |                         |        | `optional` 指定 entity 关联的可用性参数。                        |
 | show           | boolean                 | `true` | `optional` 指定 entity 及其子项是否显示。                        |
 | description    |                         |        | `optional` 指定 entity 的 HTML 描述信息。                        |
-| position       | Object\|Array\|Function |        | `optional` 指定 entity 的位置。                                  |
+| position       | VcPosition\|Array\|Function |        | `optional` 指定 entity 的位置。                                  |
 | orientation    |                         |        | `optional` 指定 entity 的方向。                                  |
 | viewFrom       |                         |        | `optional` 指定 entity 的初始偏移量。                            |
 | parent         |                         |        | `optional` 指定 entity 关联的父实体。                            |

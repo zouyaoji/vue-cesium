@@ -126,7 +126,7 @@ Basic usage of VcGeometryCorridor component.
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | height | number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
 | extrudedHeight | number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
-| vertexFormat | Object | | `optional` The vertex attributes to be computed.|
+| vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed.|
 | cornerType | number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
 ### Events

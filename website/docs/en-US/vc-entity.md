@@ -92,7 +92,7 @@ Basic usage of `vc-entity`.
 | availability   |                         |         | `optional` The availability, if any, associated with this object.                         |
 | show           | boolean                 | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
 | description    |                         |         | `optional` A string Property specifying an HTML description for this entity.              |
-| position       | Object\|Array\|Function |         | `optional` A Property specifying the entity position.                                     |
+| position       | VcPosition\|Array\|Function |         | `optional` A Property specifying the entity position.                                     |
 | orientation    |                         |         | `optional` A Property specifying the entity orientation.                                  |
 | viewFrom       |                         |         | `optional` A suggested initial offset for viewing this object.                            |
 | parent         |                         |         | `optional` A parent entity to associate with this entity.                                 |

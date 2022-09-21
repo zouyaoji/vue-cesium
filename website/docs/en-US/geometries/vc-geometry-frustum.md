@@ -137,7 +137,7 @@ Basic usage of the VcGeometryFrustum component.
 | frustum      | Object        |         | `optional` The frustum.                          |
 | origin       | Object\|Array |         | `optional` The origin of the frustum.            |
 | orientation  | Object\|Array |         | `optional` The orientation of the frustum.       |
-| vertexFormat | Object        |         | `optional` The vertex attributes to be computed. |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` The vertex attributes to be computed. |
 
 ### Events
 

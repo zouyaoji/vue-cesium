@@ -148,7 +148,7 @@
 | outlineColor             | Object \| Array \| string | `'black'` | `optional` 指定 point 的轮廓颜色。                       |
 | outlineWidth             | number                    | `0`       | `optional` 指定 point 的轮廓宽度。                       |
 | pixelSize                | number                    | `1`       | `optional` 指定 point 的像素大小。                       |
-| position                 | Object\|Array             |           | `optional` 指定 point 的位置。                           |
+| position       | VcPosition\|Array             |           | `optional` 指定 point 的位置。                           |
 | scaleByDistance          | Object\|Array             |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
 | show                     | boolean                   | `true`    | `optional` 指定 point 是否显示。                         |
 | translucencyByDistance   | Object\|Array             |           | `optional` 指定 point 透明度随相机距离改变的参数。       |

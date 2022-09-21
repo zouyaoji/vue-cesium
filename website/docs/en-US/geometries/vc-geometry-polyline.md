@@ -124,7 +124,7 @@ Basic usage of VcGeometryPolyline component.
 | colorsPerVertex | boolean | `false` | `optional` A boolean that determines whether the colors will be flat across each segment of the line or interpolated across the vertices. |
 | arcType | number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
-| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |
 | ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 
 ### Events

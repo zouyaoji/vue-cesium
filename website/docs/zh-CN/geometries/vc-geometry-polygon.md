@@ -149,7 +149,7 @@
 | polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
 | stRotation        | number        | `0.0`   | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。               |
 | ellipsoid      | Cesium.Ellipsoid        |         | `optional` 指定 polygon 参考椭球体。                                 |
 | granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
@@ -179,7 +179,7 @@
 | polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
 | ellipsoid      | Cesium.Ellipsoid        |         | `optional` 指定 polygon 参考椭球体。                                 |
 | granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
 | perPositionHeight | boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |

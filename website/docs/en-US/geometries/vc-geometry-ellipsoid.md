@@ -139,7 +139,7 @@ The basic usage of VcGeometryEllipsoid component.
 | maximumCone | number | `PI` | `optional` The maximum angle measured from the positive z-axis and toward the negative z-axis. |
 | stackPartitions | number | `10` | `optional` The number of times to partition the ellipsoid into stacks. |
 | slicePartitions | number | `8` | `optional` The number of times to partition the ellipsoid into radial slices.|
-| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |
 
 ### Events
 

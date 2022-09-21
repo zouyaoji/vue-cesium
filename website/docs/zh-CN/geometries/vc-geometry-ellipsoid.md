@@ -138,7 +138,7 @@
 | maximumCone     | number        | `PI`   | `optional` 指定椭球体从 z 轴正半轴到 z 轴负半轴的最大角度。 |
 | stackPartitions | number        | `64`   | `optional` 指定将椭球体横向划分为层的次数。                 |
 | slicePartitions | number        | `64`   | `optional` 指定将椭球体纵向划分为片的次数。                 |
-| vertexFormat    | Object        |        | `optional` 指定椭球体顶点属性渲染方式。                     |
+| vertexFormat | Cesium.VertexFormat        |        | `optional` 指定椭球体顶点属性渲染方式。                     |
 
 ### 事件
 

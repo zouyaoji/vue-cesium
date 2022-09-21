@@ -178,7 +178,7 @@
 | outlineWidth | number | `0` | `optional` 指定 label 的轮廓宽度。 |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 label 像素偏移量。 |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 像素偏移量随相机距离改变的参数。|
-| position | Object | | `optional` 指定 label 的位置。|
+| position       | VcPosition | | `optional` 指定 label 的位置。|
 | scale | number | `1.0` | `optional` 指定 label 缩放比例。 |
 | scaleByDistance | Object\|Array | | `optional` 指定 label 的缩放比例随相机距离改变的参数。|
 | show | boolean | `true` | `optional` 指定 label 是否显示。 |

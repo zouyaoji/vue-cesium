@@ -125,7 +125,7 @@
 | granularity    | number |        | `optional` 指定每个经纬度之间的采样粒度。                                 |
 | height         | number | `0`    | `optional` 指定 corridor 高度。                                           |
 | extrudedHeight | number |        | `optional` 指定 corridor 拉伸高度。                                       |
-| vertexFormat   | Object |        | `optional` 指定 corridor 要缓存的顶点属性。                               |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定 corridor 要缓存的顶点属性。                               |
 | cornerType     | number | `0`    | `optional` 指定 corridor 转角样式。**ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
 
 ### 事件

@@ -134,7 +134,7 @@
 | rotation       | number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |
 | stRotation     | number        | `0.0`  | `optional` 指定椭圆纹理以正北逆时针方向旋转的角度。 |
 | granularity    | number        |        | `optional` 指定椭圆上点之间的角距离（弧度）。       |
-| vertexFormat   | Object        |        | `optional` 指定顶点属性渲染方式。                   |
+| vertexFormat | Cesium.VertexFormat        |        | `optional` 指定顶点属性渲染方式。                   |
 
 ### 事件
 

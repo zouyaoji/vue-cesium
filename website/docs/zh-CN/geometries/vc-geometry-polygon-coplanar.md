@@ -122,7 +122,7 @@
 | ---------------- | ------------- | ------ | ------------------------------------------------------ |
 | polygonHierarchy | Object\|Array |        | `optional` 指定 polygon 的位置，可以包含岛洞。         |
 | stRotation       | number        | `0.0`  | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。 |
-| vertexFormat     | Object        |        | `optional` 指定 polygon 要缓存的顶点属性。             |
+| vertexFormat | Cesium.VertexFormat        |        | `optional` 指定 polygon 要缓存的顶点属性。             |
 | ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定 polygon 参考椭球体。                   |
 
 ### 事件

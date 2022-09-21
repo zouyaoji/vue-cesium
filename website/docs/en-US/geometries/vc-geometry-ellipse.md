@@ -134,7 +134,7 @@ Basic usage of VcGeometryEllipse component.
 | rotation       | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
 | stRotation     | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
 | granularity    | number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
-| vertexFormat   | Object         |         | `optional` The vertex attributes to be computed.                                                 |
+| vertexFormat | Cesium.VertexFormat         |         | `optional` The vertex attributes to be computed.                                                 |
 
 ### Events
 

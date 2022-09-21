@@ -150,7 +150,7 @@ Loading a graphical point positioned in the 3D scene. It is equivalent to initia
 | outlineColor | Object \| Array \| string | `'black'` | `optional` The outline color of the point. |
 | outlineWidth | number | `0` | `optional`The outline width in pixels. This width adds to pixelSize, increasing the total size of the point. |
 | pixelSize | number | `1` | `optional` The inner size of the point in pixels. |
-| position | Object\|Array | | `optional` The position of this point. |
+| position       | VcPosition\|Array | | `optional` The position of this point. |
 | scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a point based on the point's distance from the camera |
 | show | boolean | `true` | `optional` Determines if this point will be shown. Use this to hide or show a point, instead of removing it and re-adding it to the collection. |
 | translucencyByDistance | Object\|Array | | `optional` The near and far translucency properties of a point based on the point's distance from the camera. |

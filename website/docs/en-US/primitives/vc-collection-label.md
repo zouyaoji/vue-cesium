@@ -180,7 +180,7 @@ Loading a viewport-aligned text positioned in the 3D scene. It is equivalent to 
 | outlineWidth | number | `0` | `optional` The outline width of this label. |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this label. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` The near and far pixel offset scaling properties of a Label based on the Label's distance from the camera.|
-| position | Object | | `optional` The position of this label.|
+| position       | VcPosition | | `optional` The position of this label.|
 | scale | number | `1.0` | `optional` The uniform scale that is multiplied with the label's size in pixels. |
 | scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a Label based on the label's distance from the camera. |
 | show | boolean | `true` | `optional` Determines if this label will be shown. Use this to hide or show a label, instead of removing it and re-adding it to the collection. |

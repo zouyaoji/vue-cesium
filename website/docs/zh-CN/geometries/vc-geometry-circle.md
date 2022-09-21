@@ -120,7 +120,7 @@
 | ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定圆形参考椭球体。                                          |
 | height         | number | `0.0`  | `optional` 指定圆形离地表的高度（米）。                                  |
 | granularity    | number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。                          |
-| vertexFormat   | Object |        | `optional` 指定要计算的顶点属性。                                        |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定要计算的顶点属性。                                        |
 | extrudedHeight | number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                                    |
 | stRotation     | number | `0.0`  | `optional` 指定圆形纹理的旋转坐标（以弧度为单位）。 正旋转为逆时针方向。 |
 
