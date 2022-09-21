@@ -61,7 +61,7 @@
 | verticalOrigin | number | `0` | `optional` 指定 label 垂直对齐方式。 **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1**|0/1/2/-1|
 | heightReference | number | `0` | `optional` 指定 label 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | fillColor | Object\|string\|Array | `white` | `optional` 指定 label 填充颜色。 |
-| outlineColor | Object\|string\|Array | `black` | `optional` 指定 label 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `black` | `optional` 指定 label 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 label 轮廓线宽度。 |
 | translucencyByDistance | Object\|Array | | `optional` 指定 label 透明度随相机距离改变的参数。 |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 偏移量随相机距离改变的参数。 |

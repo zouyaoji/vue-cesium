@@ -174,7 +174,7 @@
 | heightReference | number | `0` | `optional` 指定 label 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` 指定 label 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
 | id | \* | | `optional` 指定与 label 关联的信息，拾取时返回该属性值。 |
-| outlineColor | Object\|Array\|string | `'black'` | `optional` 指定 label 的轮廓颜色。 |
+| outlineColor | VcColor\|Array\|string | `'black'` | `optional` 指定 label 的轮廓颜色。 |
 | outlineWidth | number | `0` | `optional` 指定 label 的轮廓宽度。 |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 label 像素偏移量。 |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 像素偏移量随相机距离改变的参数。|

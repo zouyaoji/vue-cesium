@@ -176,7 +176,7 @@ Loading a viewport-aligned text positioned in the 3D scene. It is equivalent to 
 | heightReference | number | `0` | `optional` The height reference of this billboard. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` The horizontal origin of this label, which determines if the label is drawn to the left, center, or right of its anchor position. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
 | id | \* | | `optional` The user-defined value returned when the label is picked. |
-| outlineColor | Object\|Array\|string | `'black'` | `optional` The outline color of this label. |
+| outlineColor | VcColor\|Array\|string | `'black'` | `optional` The outline color of this label. |
 | outlineWidth | number | `0` | `optional` The outline width of this label. |
 | pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this label. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` The near and far pixel offset scaling properties of a Label based on the Label's distance from the camera.|

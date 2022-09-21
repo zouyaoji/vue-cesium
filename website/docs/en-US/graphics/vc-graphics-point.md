@@ -70,7 +70,7 @@ Basic usage of the VcGraphicsPoint component.
 | pixelSize | number | `1` | `optional` A numeric Property specifying the size in pixels. |
 | heightReference | number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | color | Object\|string\|Array | `'white'` | `optional` A Property specifying the Color of the point. |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
 | scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to scale the point based on distance. |
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |

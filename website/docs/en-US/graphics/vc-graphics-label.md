@@ -61,7 +61,7 @@ Basic usage of the VcGraphicsLabel component.
 | verticalOrigin | number | `0` | `optional` A Property specifying the VerticalOrigin. |
 | heightReference | number | `0` | `optional` A Property specifying what the height is relative to. |
 | fillColor | Object\|string\|Array | `white` | `optional` A Property specifying the fill Color. |
-| outlineColor | Object\|string\|Array | `black` | `optional` A Property specifying the outline Color. |
+| outlineColor | VcColor\|string\|Array | `black` | `optional` A Property specifying the outline Color. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the outline width. |
 | translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
 | pixelOffsetScaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |

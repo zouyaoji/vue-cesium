@@ -145,7 +145,7 @@
 | disableDepthTestDistance | number                    |           | `optional` 指定 point 深度检测距离。                     |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array             |           | `optional` 指定 point 显示条件随相机距离改变的参数。     |
 | id                       | \*                        |           | `optional` 指定与 point 关联的信息，拾取时返回该属性值。 |
-| outlineColor             | Object \| Array \| string | `'black'` | `optional` 指定 point 的轮廓颜色。                       |
+| outlineColor | VcColor \| Array \| string | `'black'` | `optional` 指定 point 的轮廓颜色。                       |
 | outlineWidth             | number                    | `0`       | `optional` 指定 point 的轮廓宽度。                       |
 | pixelSize                | number                    | `1`       | `optional` 指定 point 的像素大小。                       |
 | position       | VcPosition\|Array             |           | `optional` 指定 point 的位置。                           |

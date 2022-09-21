@@ -99,7 +99,7 @@
 | fill | boolean | `true` | `optional` 指定 ellipse 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 ellipse 材质。 |
 | outline | boolean | `false` | `optional` 指定 ellipse 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 ellipse 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` 指定 ellipse 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 ellipse 轮廓线宽度。 |
 | numberOfVerticalLines | number | `16` | `optional` 指定 ellipse 沿轮廓周长绘制的垂直线数。 |
 | shadows | number | `0` | `optional` 指定 ellipse 是否投射接收每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|

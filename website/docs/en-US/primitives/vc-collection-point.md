@@ -147,7 +147,7 @@ Loading a graphical point positioned in the 3D scene. It is equivalent to initia
 | disableDepthTestDistance | number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this point will be displayed. |
 | id | \* | | `optional` The user-defined value returned when the point is picked. |
-| outlineColor | Object \| Array \| string | `'black'` | `optional` The outline color of the point. |
+| outlineColor | VcColor \| Array \| string | `'black'` | `optional` The outline color of the point. |
 | outlineWidth | number | `0` | `optional`The outline width in pixels. This width adds to pixelSize, increasing the total size of the point. |
 | pixelSize | number | `1` | `optional` The inner size of the point in pixels. |
 | position       | VcPosition\|Array | | `optional` The position of this point. |

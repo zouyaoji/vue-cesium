@@ -83,7 +83,7 @@
 | fill | boolean | `true` | `optional` 指定 cylinder 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
 | outline | boolean | `false` | `optional` 指定 cylinder 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 cylinder 轮廓线宽度。 |
 | numberOfVerticalLines | number | `16` | `optional` 指定沿轮廓线周长绘制的垂直线数。 |
 | slices | number | `128` | `optional` 指定 cylinder 边节点数量。 |

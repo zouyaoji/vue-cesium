@@ -167,7 +167,7 @@
 | fill | boolean | `true` | `optional` 指定 polygon 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 polygon 材质。 |
 | outline | boolean | `false` | `optional` 指定 polygon 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 polygon 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` 指定 polygon 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 polygon 轮廓线宽度。 |
 | perPositionHeight | boolean | `false` | `optional` 指定 polygon 是否使用每个位置的高度。 |
 | closeTop | boolean | `true` | `optional` 指定 polygon 拉伸出来的顶部是否闭合。 |

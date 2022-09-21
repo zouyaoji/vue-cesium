@@ -91,7 +91,7 @@
 | fill | boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
 | outline | boolean | `false` | `optional` 指定 ellipsoid 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 ellipsoid 轮廓线宽度。 |
 | stackPartitions | number | `64` | `optional` 指定 ellipsoid 横向线数量。 |
 | slicePartitions | number | `64` | `optional` 指定 ellipsoid 径向线数量。 |

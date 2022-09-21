@@ -119,7 +119,7 @@
 | fill | boolean | `true` | `optional` 指定 volume 是否填充材质。 |
 | material | VcMaterial\|string\|Array | | `optional` 指定 volume 材质。 |
 | outline | boolean | `false` | `optional` 指定 volume 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | | `optional` 指定 volume 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | | `optional` 指定 volume 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 volume 轮廓线宽度。 |
 | shadows | number | `0` | `optional` 指定 volume 是否投射或接受每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 volume 随相机距离改变是否显示参数。 |

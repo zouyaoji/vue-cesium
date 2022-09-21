@@ -119,7 +119,7 @@ Basic usage of the VcGraphicsPolylineVolume component.
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the volume is filled with the provided material. |
 | material | VcMaterial\|string\|Array | | `optional` A Property specifying the material used to fill the volume. |
 | outline | boolean | false | `optional` A boolean Property specifying whether the volume is outlined. |
-| outlineColor | Object\|string\|Array | | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | shadows | number | | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this volume will be displayed. |

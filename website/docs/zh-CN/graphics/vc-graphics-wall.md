@@ -92,7 +92,7 @@
 | fill | boolean | `true` | `optional` 指定 wall 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 wall 材质。 |
 | outline | boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |
 | shadows | number | `0` | `optional` 指定 wall 是否投射或接收阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 wall 随相机距离改变的显示条件。 |

@@ -83,7 +83,7 @@ Basic usage of the VcGraphicsCylinder component.
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the cylinder is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the cylinder. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the cylinder is outlined. |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | numberOfVerticalLines | number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
 | slices | number | `128` | `optional` The number of edges around the perimeter of the cylinder. |

@@ -167,7 +167,7 @@ Basic usage of VcGraphicsPolygon component.
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
 | perPositionHeight | boolean | `false` | `optional` A boolean specifying whether or not the the height of each position is used. |
 | closeTop | boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |

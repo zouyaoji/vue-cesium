@@ -91,7 +91,7 @@ Basic usage of the VcGraphicsEllipsoid component.
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the ellipsoid is outlined. |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | stackPartitions | number | `64` | `optional` A Property specifying the number of stacks. |
 | slicePartitions | number | `64` | `optional` A Property specifying the number of radial slices. |

@@ -99,7 +99,7 @@ Basic usage of the VcGraphicsEllipse component.
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipse is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the ellipse is outlined. |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | numberOfVerticalLines | number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the ellipse casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
