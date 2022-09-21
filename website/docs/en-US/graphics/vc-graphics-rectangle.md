@@ -1,3 +1,17 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:25:39
+ * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-rectangle.md
+-->
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:24:44
+ * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-rectangle.md
+-->
 ## VcGraphicsRectangle
 
 Loading a rectangle graphic. It is equivalent to initializing a `Cesium.RectangleGraphics` instance.
@@ -93,7 +107,7 @@ Basic usage of VcGraphicsRectangle component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the rectangle. |
-| coordinates | Object\|Array | | `optional` The Property specifying the Rectangle. |
+| coordinates | VcRectangle\|Array | | `optional` The Property specifying the Rectangle. |
 | height | number | `0` | `optional` A numeric Property specifying the altitude of the rectangle relative to the ellipsoid surface. |
 | heightReference | number | `true` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the rectangle's extruded face relative to the ellipsoid surface. |

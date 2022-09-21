@@ -130,7 +130,7 @@ Basic usage of VcPrimitiveGround component.
 | debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Draws the bounding sphere for each DrawCommand in the model. |
 | debugWireframe | boolean | `false` | `optional` For debugging only. Draws the model in wireframe. |
 | heightReference | number | `0` | `optional` Determines how the model is drawn relative to terrain. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
-| scene | Object | `false` | `optional` Must be passed in for models that use the height reference property. |
+| scene | Cesium.Scene | `false` | `optional` Must be passed in for models that use the height reference property. |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this model will be displayed. |
 | color | VcColor\|string\|Array | `'white'` | `optional` A color that blends with the model's rendered color. |
 | colorBlendMode | number | `0` | `optional` Defines how the color blends with the model. **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |0/1/2|

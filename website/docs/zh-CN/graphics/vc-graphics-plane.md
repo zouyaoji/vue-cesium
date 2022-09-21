@@ -86,7 +86,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | --- | -------- | ------ | -------- | --- |
 | show | boolean | `true` | `optional` 指定 plane 是否显示。 |
-| plane | Object\|Array | | `optional` 指定 plane 的法线和距离。 |
+| plane | VcPlane\|Array | | `optional` 指定 plane 的法线和距离。 |
 | dimensions   | VcPosition\|Array | | `optional` 指定 plane 的宽和高。 |
 | fill | boolean | `true` | `optional` 指定 plane 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 plane 的材质。 |

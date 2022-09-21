@@ -157,7 +157,7 @@ Basic usage of VcGraphicsPolygon component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the polygon. |
-| hierarchy | Object\|Array | | `optional` A Property specifying the PolygonHierarchy. |
+|  hierarchy | VcPolygonHierarchy\|Array | | `optional` A Property specifying the PolygonHierarchy. |
 | height | number | `0` | `optional` A numeric Property specifying the altitude of the polygon relative to the ellipsoid surface. |
 | heightReference | number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the polygon's extruded face relative to the ellipsoid surface. |

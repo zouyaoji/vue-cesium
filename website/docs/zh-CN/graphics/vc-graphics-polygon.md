@@ -157,7 +157,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ----- | ---- | ---- | -----  |
 | show | boolean | `true` | `optional` 指定 polygon 是否显示。 |
-| hierarchy | Object\|Array | | `optional` 指定 polygon 的 PolygonHierarchy 属性。 |
+|  hierarchy | VcPolygonHierarchy\|Array | | `optional` 指定 polygon 的 PolygonHierarchy 属性。 |
 | height | number | `0` | `optional` 指定 polygon 的高度。 |
 | heightReference | number | | `optional` 指定 polygon 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | extrudedHeight | number | | `optional` 指定 polygon 拉伸高度。 |

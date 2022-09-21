@@ -145,8 +145,8 @@ Basic usage of the VcGraphicsPath component.
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the path. |
-| leadTime | Object | | `optional` A Property specifying the number of seconds behind the object to show. |
-| trailTime | Object | | `optional` A Property specifying the number of seconds in front of the object to show. |
+| leadTime | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A Property specifying the number of seconds behind the object to show. |
+| trailTime | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A Property specifying the number of seconds in front of the object to show. |
 | width | number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
 | resolution | number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to draw the path. |

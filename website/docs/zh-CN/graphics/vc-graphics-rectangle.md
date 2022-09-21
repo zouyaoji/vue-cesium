@@ -94,7 +94,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ------ | --- | ------ | --- | ----  |
 | show | boolean | `true` | `optional` 指定 rectangle 是否显示。 |
-| coordinates | Object\|Array | | `optional` 指定 rectangle 的 Rectangle 属性。 |
+| coordinates | VcRectangle\|Array | | `optional` 指定 rectangle 的 Rectangle 属性。 |
 | height | number | `0` | `optional` 指定 rectangle 高度。 |
 | heightReference | number | | `optional` 指定 rectangle 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
 | extrudedHeight | number | | `optional` 指定 rectangle 拉伸高度。 |

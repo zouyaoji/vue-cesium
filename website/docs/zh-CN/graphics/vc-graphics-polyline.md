@@ -74,7 +74,7 @@
 | width | number | `1.0` | `optional` 指定线的宽度（像素）。 |
 | granularity | number | | `optional` 指定每个经纬度之间的采样粒度。 arcType 不是 ArcType.NONE 时有效。 |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` 指定用于绘制线的材质。 |
-| depthFailMaterial | Object\|string\|Array | | `optional` 指定用于绘制低于地形的线的材质。 |
+| depthFailMaterial | VcMaterial\|string\|Array | | `optional` 指定用于绘制低于地形的线的材质。 |
 | arcType | number | `1` | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2|
 | clampToGround | boolean | `false` | `optional` 指定线是否贴地。 |
 | shadows | number | | `optional` 指定这些是否投射或接收来自每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|

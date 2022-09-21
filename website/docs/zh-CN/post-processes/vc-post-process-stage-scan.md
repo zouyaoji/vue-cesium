@@ -93,7 +93,7 @@
 | 属性名  | 类型   | 默认值                                                                      | 描述                                                |
 | ------- | ------ | --------------------------------------------------------------------------- | --------------------------------------------------- |
 | type    | string | `'radar'`                                                                   | `optional` 指定扫描类型，可选值 'radar', 'circle'。 |
-| options | Object | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` 指定可选参数。                           |
+| options | HeatmapConfiguration | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` 指定可选参数。                           |
 
 ### 事件
 

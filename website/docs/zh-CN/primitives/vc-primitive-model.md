@@ -126,7 +126,7 @@
 | debugShowBoundingVolume | boolean | `false` | `optional` 可选的仅用于调试。 为模型中的每个 DrawCommand 绘制边界球。 |
 | debugWireframe | boolean | `false` | `optional` 可选的仅用于调试。 仅用于调试。 在线框中绘制模型。 |
 | heightReference | number | `0` | `optional` 指定 model 的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| scene | Object | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
+| scene | Cesium.Scene | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 model 随相机改变的显示条件。|
 | color | VcColor\|string\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
 | colorBlendMode | number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |
