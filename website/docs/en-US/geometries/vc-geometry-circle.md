@@ -117,7 +117,7 @@ Basic usage of VcGeometryCircle component.
 | -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
 | center         | Object |         | `required` The circle's center point in the fixed frame.                                                  |
 | radius         | number |         | `required` The radius in meters.                                                                          |
-| ellipsoid      | Object |         | `optional` The ellipsoid the circle will be on.                                                           |
+| ellipsoid      | Cesium.Ellipsoid |         | `optional` The ellipsoid the circle will be on.                                                           |
 | height         | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
 | granularity    | number | `0.02`  | `optional` The angular distance between points on the circle in radians.                                  |
 | vertexFormat   | Object |         | `optional` The vertex attributes to be computed.                                                          |
@@ -144,7 +144,7 @@ Loading the circle geometry outline. It is equivalent to initializing a `Cesium.
 | --------------------- | ------ | ------- | ----------------------------------------------------------------------------------------------- |
 | center                | Object |         | `required` The circle's center point in the fixed frame.                                        |
 | radius                | number |         | `required` The radius in meters.                                                                |
-| ellipsoid             | Object |         | `optional` The ellipsoid the circle will be on.                                                 |
+| ellipsoid      | Cesium.Ellipsoid |         | `optional` The ellipsoid the circle will be on.                                                 |
 | height                | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                 |
 | granularity           | number | `0.02`  | `optional` The angular distance between points on the circle in radians.                        |
 | extrudedHeight        | number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface. |

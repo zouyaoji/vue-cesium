@@ -118,7 +118,7 @@
 | maximumLevel          | number          |         | `optional` 最大层级。                                                                        |
 | rectangle             | Object\|Array   |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
 | tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                              |
-| ellipsoid             | Object          |         | `optional` 参考椭球体。                                                                      |
+| ellipsoid      | Cesium.Ellipsoid          |         | `optional` 参考椭球体。                                                                      |
 | tileWidth             | number          | `256`   | `optional` 像元宽度。                                                                        |
 | tileHeight            | number          | `256`   | `optional` 像元高度。                                                                        |
 | hasAlphaChannel       | boolean         | `true`  | `optional` 设置为 true 表示图层包含 alpha 透明通道，反之没有。                               |

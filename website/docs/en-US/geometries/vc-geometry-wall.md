@@ -128,7 +128,7 @@ Basic usage of VcGeometryWall component.
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
 | minimumHeights | Array | | `optional`An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
-| ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid for coordinate manipulation. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed.|
 
 ### Events
@@ -154,7 +154,7 @@ Loading a wall geometry outline. It is equivalent to initializing a `Cesium.Wall
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
 | minimumHeights | Array | | `optional` An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
-| ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid for coordinate manipulation. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed.|
 
 ### VcGeometryWallOutline Events

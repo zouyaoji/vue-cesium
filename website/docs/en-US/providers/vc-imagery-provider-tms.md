@@ -101,7 +101,7 @@ Basic usage of the `vc-imagery-provider-tms` component.
 | rectangle | Object\|Array | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | maximumLevel | number | | `optional` The rectangle, in radians, covered by the image. |
 | tilingScheme | Object | | `optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used. |
-| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
 | tileWidth | number | `256` | `optional` Pixel width of image tiles. |
 | tileHeight | number | `256` | `optional` Pixel height of image tiles.|
 | flipXY | boolean | | `optional` Older versions of gdal2tiles.py flipped X and Y values in tilemapresource.xml. Specifying this option will do the same, allowing for loading of these incorrect tilesets. |

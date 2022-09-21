@@ -128,7 +128,7 @@
 | center         | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis  | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis  | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid      | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
+| ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |
 | height         | number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
 | extrudedHeight | number        |        | `optional` 指定椭圆拉伸高度。                       |
 | rotation       | number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |
@@ -157,7 +157,7 @@
 | center                | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis         | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis         | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid             | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
+| ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |
 | height                | number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
 | extrudedHeight        | number        |        | `optional` 指定椭圆拉伸高度。                       |
 | rotation              | number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |

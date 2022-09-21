@@ -144,7 +144,7 @@ The basic usage of the VcGeometryPolylineVolume component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | polylinePositions | Array | | `required` An array of Cartesain3 positions that define the center of the polyline volume. |
 | shapePositions | Array | | `required` An array of Cartesian2 positions that define the shape to be extruded along the polyline.|
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
 | cornerType | number | | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
@@ -170,7 +170,7 @@ Loading a polyline with a volume outline. It is equivalent to initializing a `Ce
 | ---- | ---- | ------- | ----------- | --------------- |
 | polylinePositions | Array | | `required` An array of Cartesain3 positions that define the center of the polyline volume. |
 | shapePositions | Array | | `required` An array of Cartesian2 positions that define the shape to be extruded along the polyline. |
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | cornerType | number | | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 

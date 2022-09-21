@@ -98,7 +98,7 @@
 | getFeatureInfoFormats    | Array           |         | `optional` 指定 WMS GetFeatureInfo 请求的格式。                                    |
 | rectangle                | Object\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
 | tilingScheme             | Object          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
-| ellipsoid                | Object          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
+| ellipsoid      | Cesium.Ellipsoid          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
 | tileWidth                | number          | `256`   | `optional` 指定像元宽度。                                                          |
 | tileHeight               | number          | `256`   | `optional` 指定像元高度。                                                          |
 | minimumLevel             | number          | `0`     | `optional` 指定图层可以显示的最小层级。                                            |

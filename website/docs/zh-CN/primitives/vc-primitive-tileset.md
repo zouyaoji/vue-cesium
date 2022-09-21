@@ -95,7 +95,7 @@
 | loadSiblings | boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，确定在遍历期间是否始终下载可见切片的兄弟节点。 |
 | clippingPlanes | Object | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
 | classificationType | number | | `optional` 确定此 tileset 是否会对 terrain，3D Tiles 或两者进行分类。 有关限制和限制的详细信息，请参阅 Cesium3DTileset＃classificationType。**TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| ellipsoid | Object | Object | `optional` 决定地球的大小和形状参考椭球体。 |
+| ellipsoid      | Cesium.Ellipsoid | Object | `optional` 决定地球的大小和形状参考椭球体。 |
 | pointCloudShading | Object | | `optional` 用于构造 PointCloudShading 对象以基于几何误差和光照控制点衰减的选项。 |
 | imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
 | lightColor | Object\|Array | | `optional` 模型阴影的颜色和强度。 |

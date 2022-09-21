@@ -123,7 +123,7 @@ Basic usage of VcGeometryPolygonCoplanar component.
 | polygonHierarchy | Object\|Array  |         | `required` A polygon hierarchy that can include holes.                                                    |
 | vertexFormat     | Object         |         | `optional` The vertex attributes to be computed.                                                          |
 | stRotation       | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
-| ellipsoid        | Object         |         | `optional` The ellipsoid to be used as a reference.                                                       |
+| ellipsoid      | Cesium.Ellipsoid         |         | `optional` The ellipsoid to be used as a reference.                                                       |
 
 ### Events
 

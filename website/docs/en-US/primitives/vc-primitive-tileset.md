@@ -91,7 +91,7 @@ Basic usage of VcPrimitiveTileset component.
 | loadSiblings | boolean | false | `optional` When skipLevelOfDetail is true, determines whether siblings of visible tiles are always downloaded during traversal. |
 | clippingPlanes | Object | | `optional` The ClippingPlaneCollection used to selectively disable rendering the tileset. |
 | classificationType | number | | `optional` Determines whether terrain, 3D Tiles or both will be classified by this tileset. See Cesium3DTileset#classificationType for details about restrictions and limitations. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| ellipsoid | Object | Ellipsoid.WGS84 | `optional` The ellipsoid determining the size and shape of the globe. |
+| ellipsoid      | Cesium.Ellipsoid | Ellipsoid.WGS84 | `optional` The ellipsoid determining the size and shape of the globe. |
 | pointCloudShading | Object | | `optional` Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting. |
 | imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` Scales the diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox. |
 | lightColor | Object\|Array | | `optional` The light color when shading models. When undefined the scene's light color is used instead. |

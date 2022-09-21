@@ -125,7 +125,7 @@ Basic usage of VcGeometryPolyline component.
 | arcType | number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 
 ### Events
 

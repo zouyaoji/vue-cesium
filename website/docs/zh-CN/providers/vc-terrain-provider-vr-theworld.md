@@ -80,7 +80,7 @@
 | --------- | -------------- | ------ | ----------------------------- |
 | url       | string\|Object |        | `required` 指定服务地址。     |
 | token     | string         |        | `optional` 指定服务授权令牌。 |
-| ellipsoid | Object         |        | `optional` 指定参考椭球体。   |
+| ellipsoid      | Cesium.Ellipsoid         |        | `optional` 指定参考椭球体。   |
 
 ### 事件
 

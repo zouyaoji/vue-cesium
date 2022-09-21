@@ -128,7 +128,7 @@ Basic usage of VcGeometryEllipse component.
 | center         | Object\|Array  |         | `required` The ellipse's center point in the fixed frame.                                        |
 | semiMajorAxis  | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
 | semiMinorAxis  | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
-| ellipsoid      | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
+| ellipsoid      | Cesium.Ellipsoid         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
 | height         | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
 | extrudedHeight | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
 | rotation       | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
@@ -157,7 +157,7 @@ Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.
 | center                | Object         |         | `required` The ellipse's center point in the fixed frame.                                        |
 | semiMajorAxis         | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
 | semiMinorAxis         | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
-| ellipsoid             | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
+| ellipsoid      | Cesium.Ellipsoid         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
 | height                | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
 | extrudedHeight        | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
 | rotation              | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |

@@ -121,7 +121,7 @@
 | -------------- | ------ | ------ | ------------------------------------------------------------------------- | ------ |
 | positions      | Array  |        | `required` 指定描述 corridor 位置的经纬度(高度)数组。                     |
 | width          | number |        | `required` 指定 corridor 边之间的距离。                                   |
-| ellipsoid      | Object |        | `optional` 指定 corridor 参考椭球体。                                     |
+| ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定 corridor 参考椭球体。                                     |
 | granularity    | number |        | `optional` 指定每个经纬度之间的采样粒度。                                 |
 | height         | number | `0`    | `optional` 指定 corridor 高度。                                           |
 | extrudedHeight | number |        | `optional` 指定 corridor 拉伸高度。                                       |
@@ -148,7 +148,7 @@
 | -------------- | ------ | ------ | ------------------------------------------------------------------------- | ------ |
 | positions      | Array  |        | `required` 指定描述 corridor 位置的经纬度(高度)数组。                     |
 | width          | number |        | `required` 指定 corridor 边之间的距离。                                   |
-| ellipsoid      | Object |        | `optional` 指定 corridor 参考椭球体。                                     |
+| ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定 corridor 参考椭球体。                                     |
 | granularity    | number |        | `optional` 指定每个经纬度之间的采样粒度。                                 |
 | height         | number | `0`    | `optional` 指定 corridor 高度。                                           |
 | extrudedHeight | number |        | `optional` 指定 corridor 拉伸高度。                                       |

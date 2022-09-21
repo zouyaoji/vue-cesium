@@ -118,7 +118,7 @@ Basic usage of VcGeometryRectangle component.
 | ---- | ---- | ------- | ----------- |
 | rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
 | vertexFormat | number | | `optional` The vertex attributes to be computed. |
-| ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid on which the rectangle lies. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | height | number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
 | rotation | number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
@@ -145,7 +145,7 @@ Loading a rectangle geometry outline. It is equivalent to initializing a `Cesium
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
-| ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid on which the rectangle lies. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | height | number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
 | rotation | number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |

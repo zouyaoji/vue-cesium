@@ -99,7 +99,7 @@ Basic usage of the `vc-imagery-provider-wms` component.
 | getFeatureInfoFormats | Array | | `optional` The formats in which to try WMS GetFeatureInfo requests. |
 | rectangle | Object\|Array | | `optional` The rectangle of the layer. |
 | tilingScheme | Object | | `optional` The tiling scheme to use to divide the world into tiles. |
-| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
 | tileWidth | number | `256` | `optional` The width of each tile in pixels. |
 | tileHeight | number | `256` | `optional` The height of each tile in pixels. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
