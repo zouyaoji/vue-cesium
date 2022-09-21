@@ -165,7 +165,7 @@ Basic usage of `vc-viewer`.
 |navigationInstructionsInitiallyVisible|boolean|`false`|`optional` True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.|
 |scene3DOnly|boolean|`false`|`optional` When true, each geometry instance will only be rendered in 3D to save GPU memory.|
 |shouldAnimate|boolean|`false`|`optional` true if the clock should attempt to advance simulation time by default, false otherwise. |
-|clockViewModel|Object||`optional` The clock view model to use to control current time.|
+|clockViewModel|Cesium.ClockViewModel||`optional` The clock view model to use to control current time.|
 |selectedImageryProviderViewModel|Cesium.ProviderViewModel||`optional` The view model for the current base imagery layer, if not supplied the first available base layer is used. This value is only valid if `baseLayerPicker` is set to true.|
 |terrainProviderViewModels|Array<Cesium.ProviderViewModel>||`optional` The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if `baseLayerPicker` is set to true.|
 |imageryProvider|Cesium.ImageryProvider||`optional` The imagery provider to use. This value is only valid if `baseLayerPicker` is set to false.`vue-cesium` has replaced the default one with `NaturalEarthII` that comes with Cesium resources.|

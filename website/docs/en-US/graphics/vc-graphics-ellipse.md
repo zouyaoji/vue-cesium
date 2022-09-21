@@ -94,7 +94,7 @@ Basic usage of the VcGraphicsEllipse component.
 | extrudedHeight | number | | `optional` A numeric Property specifying the altitude of the ellipse's extruded face relative to the ellipsoid surface. |
 | extrudedHeightReference | number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | rotation | number | `0.0` | `optional` A numeric property specifying the rotation of the ellipse counter-clockwise from north. |
-| stRotation | number\|Object | `0.0` | `optional` A numeric property specifying the rotation of the ellipse texture counter-clockwise from north. |
+| stRotation | number | `0.0` | `optional` A numeric property specifying the rotation of the ellipse texture counter-clockwise from north. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between points on the ellipse. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipse is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |

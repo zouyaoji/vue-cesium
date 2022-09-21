@@ -133,12 +133,12 @@
 | colorBlendAmount | number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
 | silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
-| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection> | | `optional` 指定 model 屏幕裁剪参数。 |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction\<Cesium.ClippingPlaneCollection\> | | `optional` 指定 model 屏幕裁剪参数。 |
 | dequantizeInShader | boolean | `true` | `optional` 确定是否在 GPU 上对 Draco 编码的模型进行了反量化。 这减少了编码模型的总内存使用量。|
-| imageBasedLightingFactor | Array\|Object | | `optional` 缩放来自地球，天空，大气层和星空盒的基于漫反射和镜面反射图像的照明。|
-| lightColor | Array\|Object | | `optional` 为模型着色时的浅色。 未定义时，将使用场景的灯光颜色。 |
+| imageBasedLightingFactor | VcColor | | `optional` 缩放来自地球，天空，大气层和星空盒的基于漫反射和镜面反射图像的照明。|
+| lightColor | VcColor | | `optional` 为模型着色时的浅色。 未定义时，将使用场景的灯光颜色。 |
 | luminanceAtZenith | number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。|
-| sphericalHarmonicCoefficients | Array\|Object || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。|
+| sphericalHarmonicCoefficients | VcCartesian3Array || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。|
 | specularEnvironmentMaps | string ||`optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。|
 | credit | Cesium.Credit\|string | | `optional` 指定 model 的描述信息。 |
 | backFaceCulling | boolean | `true` | `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于材质的 doubleSided 属性； 如果为假，则禁用背面剔除。 如果 Model#color 是半透明的或 Model#silhouetteSize 大于 0.0，则不会剔除背面|

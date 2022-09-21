@@ -153,7 +153,7 @@
 | heightReference | number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` 指定 billboard 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/2|
 | id | \* | | `optional` 指定与 billboard 关联的信息，拾取时返回该属性值。 |
-| image | string\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
+| image | string | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
 | pixelOffset | VcCartesian2\|Array | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移量。 |
 | pixelOffsetScaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 billboard 像素偏移量随相机距离改变的参数。|
 | position       | VcPosition\|Array | | `optional` 指定 billboard 的位置。|

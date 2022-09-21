@@ -109,8 +109,8 @@
 
 | 属性名                | 类型            | 默认值  | 描述                                                                                         |
 | --------------------- | --------------- | ------- | -------------------------------------------------------------------------------------------- |
-| url                   | string\|Object  |         | `required` 指定服务地址。                                                                    |
-| pickFeaturesUrl       | string\|Object  |         | `optional` 指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
+| url                   | string\|Cesium.Resource  |         | `required` 指定服务地址。                                                                    |
+| pickFeaturesUrl       | string\|Cesium.Resource  |         | `optional` 指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
 | urlSchemeZeroPadding  | any          |         | `optional` 指定每个瓦片中心的偏移值。                                                        |
 | subdomains            | string          | `'abc'` | `optional` 指定服务的轮询子域名。                                                            |
 | credit                | string          | `''`    | `optional` 指定服务的描述信息                                                                |
@@ -125,7 +125,7 @@
 | getFeatureInfoFormats | Array           |         | `optional` 格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
 | enablePickFeatures    | boolean         | `true`  | `optional` 是否开启图层拾取。                                                                |
 | customTags            | any          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
-| projectionTransforms  | boolean\|Object | `false` | `optional` 指定纠偏参数。                                                                    |
+| projectionTransforms  | boolean\|ProjectionTransforms | `false` | `optional` 指定纠偏参数。                                                                    |
 
 ### 事件
 

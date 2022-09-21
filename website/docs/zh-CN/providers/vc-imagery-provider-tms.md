@@ -93,9 +93,9 @@
 
 | 属性名               | 类型            | 默认值  | 描述                                           |
 | -------------------- | --------------- | ------- | ---------------------------------------------- |
-| url                  | string\|Object  | `'.'`   | `optional` 指定图片服务地址。                  |
+| url                  | string\|Cesium.Resource  | `'.'`   | `optional` 指定图片服务地址。                  |
 | fileExtension        | string          | `'png'` | `optional` 指定图片服务影像扩展名。            |
-| credit               | string\|Object  | `''`    | `optional` 指定服务版权描述信息。              |
+| credit               | string\|projectionTransforms  | `''`    | `optional` 指定服务版权描述信息。              |
 | minimumLevel         | number          | `0`     | `optional` 指定服务最小层级。                  |
 | maximumLevel         | number          |         | `optional` 指定服务最大层级。                  |
 | rectangle | VcRectangle\|Array   |         | `optional` 指定影像加载的矩形范围。            |
@@ -104,7 +104,7 @@
 | tileWidth            | number          | `256`   | `optional` 指定图像瓦片宽度。                  |
 | tileHeight           | number          | `256`   | `optional` 指定图像瓦片高度。                  |
 | flipXY               | boolean         |         | `optional` 指定是否翻转 XY                     |
-| projectionTransforms | boolean\|Object | `false` | `optional` 指定投影变换参数。                  |
+| projectionTransforms | ProjectionTransforms | `false` | `optional` 指定投影变换参数。                  |
 
 ### 事件
 

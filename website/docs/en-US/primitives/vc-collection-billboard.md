@@ -155,7 +155,7 @@ Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to
 | heightReference | number | `0` | `optional` The height reference of this billboard. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` The horizontal origin of this billboard, which determines if the billboard is to the left, center, or right of its anchor position. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/2|
 | id | \* | | `optional` The user-defined object returned when the billboard is picked. |
-| image | string\|Object | | `optional` The image to be used for this billboard. If a texture has already been created for the given image, the existing texture is used. |
+| image | string | | `optional` The image to be used for this billboard. If a texture has already been created for the given image, the existing texture is used. |
 | pixelOffset | VcCartesian2\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this billboard. |
 | pixelOffsetScaleByDistance | VcNearFarScalar\|Array | | `optional` The near and far pixel offset scaling properties of a Billboard based on the billboard's distance from the camera.|
 | position       | VcPosition\|Array | | `optional` The position of this billboard.|

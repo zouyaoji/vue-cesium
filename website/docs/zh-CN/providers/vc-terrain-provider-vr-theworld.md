@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-01-26 17:14:18
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-09-21 14:23:05
+ * @LastEditors: ly
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-vr-theworld.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-vr-theworld.md
 -->
 
 ## VcTerrainProviderVrTheworld
@@ -78,7 +78,7 @@
 
 | 属性名    | 类型           | 默认值 | 描述                          |
 | --------- | -------------- | ------ | ----------------------------- |
-| url       | string\|Object |        | `required` 指定服务地址。     |
+| url       | string\|Cesium.Resource |        | `required` 指定服务地址。     |
 | token     | string         |        | `optional` 指定服务授权令牌。 |
 | ellipsoid      | Cesium.Ellipsoid         |        | `optional` 指定参考椭球体。   |
 

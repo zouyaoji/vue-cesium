@@ -87,7 +87,7 @@
 
 | 属性名           | 类型                   | 默认值         | 描述                                                                                |
 | ---------------- | ---------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| url              | string\|Object         |                | `required` 指定 wmts 服务地址。                                                     |
+| url              | string\|Cesium.Resource         |                | `required` 指定 wmts 服务地址。                                                     |
 | format           | string                 | `'image/jpeg'` | `optional` 指定服务的 MIME 类型。                                                   |
 | layer            | string                 |                | `required` 指定 WMTS 请求图层名称。                                                 |
 | wmtsStyle        | string                 |                | `required` 指定 WMTS 请求样式名称。                                                 |

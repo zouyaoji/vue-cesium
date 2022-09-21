@@ -95,7 +95,7 @@ Basic usage of VcDatasourceGeojson component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ------------- | --------------------- | ------- | --------------------------------------------------------------------------------- |
-| data | string\|Object | | `required` A url, GeoJSON object, or TopoJSON object to be loaded. |
+| data | Cesium.Resource \| string \| AnyObject | | `required` A url, GeoJSON object, or TopoJSON object to be loaded. |
 | show | boolean | `true` | `optional` Overrides the url to use for resolving relative links. |
 | entities | Array\<[VcEntityProps](https://zouyaoji.top/vue-cesium/#/en-US/component/vc-entity)\> | `[]` | `optional` Specify the collection of entities to be added to the datasource. |
 | sourceUri | string | | `optional` lOverrides the url to use for resolving relative links.|

@@ -132,7 +132,7 @@ Basic usage of VcGeometryEllipse component.
 | height         | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
 | extrudedHeight | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
 | rotation       | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
-| stRotation     | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| stRotation     | number | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
 | granularity    | number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
 | vertexFormat | Cesium.VertexFormat         |         | `optional` The vertex attributes to be computed.                                                 |
 
@@ -161,7 +161,7 @@ Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.
 | height                | number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
 | extrudedHeight        | number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
 | rotation              | number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
-| stRotation            | number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| stRotation            | number | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
 | granularity           | number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
 | numberOfVerticalLines | number         | `16`    | `optional` Number of lines to draw between the top and bottom surface of an extruded ellipse.    |
 

@@ -118,14 +118,14 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 | ---- | ---- | ------- | ----------- |
 | url | string | | `optional` Specify the service address. |
 | rectangle | VcRectangle | | `optional` The rectangle of the layer. This parameter is ignored when accessing a tiled layer. |
-| credit | string\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
+| credit | string \| Cesium.Credit | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | maximumLevel | number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | scale | number | `1` | `optional` Specify the scale. |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
 |subdomains|Array\<string\>|`['0', '1', '2', '3']`|`optional` Specify the service polling parameters.|
 | mapStyle | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` Specify the mapStyle. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
-| projectionTransforms | boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
+| projectionTransforms | ProjectionTransforms |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` Specify protocol of service. |
 
 :::tip

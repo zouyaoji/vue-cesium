@@ -94,9 +94,9 @@ Basic usage of the `vc-imagery-provider-tms` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | string\|Object | `'.'` | `optional` Path to image tiles on server. |
+| url | string \| Cesium.Resource \| Promise\<string\> | Promise\<Cesium.Resource\> | `'.'` | `optional` Path to image tiles on server. |
 | fileExtension | string | `'png'` | `optional` The file extension for images on the server. |
-| credit | string\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
+| credit | string\|Cesium.Credit | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | rectangle | VcRectangle\|Array | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | maximumLevel | number | | `optional` The rectangle, in radians, covered by the image. |

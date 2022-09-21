@@ -90,7 +90,7 @@
 
 | 属性名                   | 类型            | 默认值  | 描述                                                                               |
 | ------------------------ | --------------- | ------- | ---------------------------------------------------------------------------------- |
-| url                      | string\|Object  |         | `required` 指定 WMS 服务地址。                                                     |
+| url                      | string\|Cesium.Resource  |         | `required` 指定 WMS 服务地址。                                                     |
 | layers                   | string          |         | `required` 指定服务图层，多个图层用","隔开。                                       |
 | parameters | any          |         | `optional` 在 GetMap URL 中传递给 WMS 服务器的其他参数。                           |
 | getFeatureInfoParameters | any          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |

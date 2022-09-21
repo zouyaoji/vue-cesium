@@ -91,7 +91,7 @@ Basic usage of the `vc-imagery-provider-wms` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | string\|Object | | `required` The URL of the WMS service. The URL supports the same keywords as the UrlTemplateImageryProvider. |
+| url | string\|Cesium.Resource | | `required` The URL of the WMS service. The URL supports the same keywords as the UrlTemplateImageryProvider. |
 | layers | string | | `required` The layers to include, separated by commas. |
 | parameters | any | | `optional` Additional parameters to pass to the WMS server in the GetMap URL. |
 | getFeatureInfoParameters | any | | `optional` Additional parameters to pass to the WMS server in the GetFeatureInfo URL. |

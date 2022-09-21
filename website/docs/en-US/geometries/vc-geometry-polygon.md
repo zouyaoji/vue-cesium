@@ -151,7 +151,7 @@ Basic usage of VcGeometryPolygon component.
 | height | number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
 | extrudedHeight | number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
 | vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |
-| stRotation | number\|Object | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| stRotation | number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
 | ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | perPositionHeight | boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |

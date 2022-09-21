@@ -139,10 +139,10 @@ Basic usage of VcPrimitiveGround component.
 | silhouetteSize | number | `0.0` | `optional` The size of the silhouette in pixels. |
 | clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction\<Cesium.ClippingPlaneCollection\> | | `optional` The ClippingPlaneCollection used to selectively disable rendering the model. |
 | dequantizeInShader | boolean | `true` | `optional` Determines if a Draco encoded model is dequantized on the GPU. This decreases total memory usage for encoded models.|
-| imageBasedLightingFactor | Array\|Object | | `optional` Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.|
-| lightColor | Array\|Object | | `optional` The light color when shading the model. When undefined the scene's light color is used instead. |
+| imageBasedLightingFactor | VcCartesian2 | | `optional` Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.|
+| lightColor | VcColor | | `optional` The light color when shading the model. When undefined the scene's light color is used instead. |
 | luminanceAtZenith | number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map.|
-| sphericalHarmonicCoefficients | Array\|Object || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting.|
+| sphericalHarmonicCoefficients | VcCartesian3Array || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting.|
 | specularEnvironmentMaps | string || `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
 | credit | Cesium.Credit\|string | | `optional` A credit for the model, which is displayed on the canvas. |
 | backFaceCulling | boolean | `true` | `optional` Whether to cull back-facing geometry. When true, back face culling is determined by the material's doubleSided property; when false, back face culling is disabled. Back faces are not culled if Model#color is translucent or Model#silhouetteSize is greater than 0.0. |
