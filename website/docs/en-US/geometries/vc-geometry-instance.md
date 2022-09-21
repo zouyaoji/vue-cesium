@@ -161,7 +161,7 @@ Basic usage of geometry instance components.
 | Name        | Type   | Default | Description                                                                                            |
 | ----------- | ------ | ------- | ------------------------------------------------------------------------------------------------------ |
 | geometry    | Cesium.Geometry \| Cesium.GeometryFactory |         | `optional` The geometry to instance.                                                                   |
-| modelMatrix | Object |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
 | id          | Object |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
 | attributes  | Object |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
 

@@ -222,7 +222,7 @@
 | show | boolean | true | `optional` 是否显示粒子。  |
 | updateCallback | Function | | `optional` 更新回调函数。|
 | emitter | Object |  | `optional` 粒子触发器类型。 |
-| modelMatrix | Object | | `optional` 4x4转换矩阵，可将粒子系统从模型转换为世界坐标。 |
+| modelMatrix | Cesium.Matrix4 | | `optional` 4x4转换矩阵，可将粒子系统从模型转换为世界坐标。 |
 | emitterModelMatrix | Object | | `optional` 4x4转换矩阵，用于转换粒子系统局部坐标系内的粒子系统发射器。 |
 | emissionRate | number | `5` | `optional` 每秒要发射的粒子数。 |
 | bursts | Array | `false` | `optional` ParticleBurst 数组，在周期性时间发射粒子。 |

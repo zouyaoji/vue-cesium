@@ -117,7 +117,7 @@ Basic usage of VcPrimitiveGround component.
 | url | string | | `required` The url to the .gltf file. |
 | basePath | string | | `optional` The base path that paths in the glTF JSON are relative to. |
 | show | boolean | `true` | `optional` Determines if the model primitive will be shown. |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the model from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms the model from model to world coordinates. |
 | scale | number | `1.0` | `optional` A uniform scale applied to this model. |
 | minimumPixelSize | number | `0.0` | `optional` The approximate minimum pixel size of the model regardless of zoom. |
 | maximumScale | number | | `optional` The maximum scale for the model. |

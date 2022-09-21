@@ -111,7 +111,7 @@ Basic usage of VcCollectionPolyline component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
 | debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
 | show | boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
 | polylines | Array | `[]` | `optional` Specify an array of polylines collections. The structure of the array object is the same as the attribute of the `vc-point` component. |

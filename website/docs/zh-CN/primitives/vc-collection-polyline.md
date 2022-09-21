@@ -110,7 +110,7 @@
 
 | 属性名                  | 类型    | 默认值  | 描述                                                                    |
 | ----------------------- | ------- | ------- | ----------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。            |
+| modelMatrix | Cesium.Matrix4  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。            |
 | debugShowBoundingVolume | boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。           |
 | enableMouseEvent        | boolean | `true`  | `optional` 指定鼠标事件是否生效。                                       |
 | polylines               | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-polyline` 组件属性相同。 |

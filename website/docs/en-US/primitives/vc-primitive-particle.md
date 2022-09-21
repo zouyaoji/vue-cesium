@@ -222,7 +222,7 @@ Basic usage of VcPrimitiveParticle component.
 | show | boolean | true | `optional`Whether to display the particle system. |
 | updateCallback | Function | | `optional` The callback function to be called each frame to update a particle.|
 | emitter | Object | | `optional` The particle emitter for this system. |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
 | emitterModelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system emitter within the particle systems local coordinate system. |
 | emissionRate | number | `5` | `optional` The number of particles to emit per second. |
 | bursts | Array | `false` | `optional` An array of [ParticleBurst](https://cesium.com/docs/cesiumjs-ref-doc/ParticleBurst.html), emitting bursts of particles at periodic times.|

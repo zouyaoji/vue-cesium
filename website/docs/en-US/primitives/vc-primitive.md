@@ -75,7 +75,7 @@ Basic usage of VcPrimitive component.
 | appearance | Object | | `optional` The appearance used to render the primitive. |
 | depthFailAppearance | Object | | `optional` The appearance used to shade this primitive when it fails the depth test. |
 | show | boolean | `true` | `optional` Determines if this primitive will be shown. |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the primitive (all geometry instances) from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms the primitive (all geometry instances) from model to world coordinates. |
 | vertexCacheOptimize | boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
 | interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
 | compressVertices | boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |

@@ -123,7 +123,7 @@
 
 | 属性名                  | 类型    | 默认值  | 描述                                                                                   | 可选值 |
 | ----------------------- | ------- | ------- | -------------------------------------------------------------------------------------- | ------ |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
+| modelMatrix | Cesium.Matrix4  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
 | debugShowBoundingVolume | boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                          |
 | blendOption             | number  | `2`     | `optional` 指定颜色混合选项。 **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2** | 0/1/2  |
 | scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。                      |

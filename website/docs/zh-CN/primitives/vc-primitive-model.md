@@ -113,7 +113,7 @@
 | url | string | | `required` 指定 gltf 文件的 url 地址。 |
 | basePath | string | | `optional` 指定 glTF JSON 中 url 的相对路径。 |
 | show | boolean | `true` | `optional` 指定 model 图元是否显示。 |
-| modelMatrix | Object | | `optional` 指定将模型从模型坐标转换为世界坐标的 4x4 矩阵。 |
+| modelMatrix | Cesium.Matrix4 | | `optional` 指定将模型从模型坐标转换为世界坐标的 4x4 矩阵。 |
 | scale | number | `1.0` | `optional` 指定 model 缩放比例。 |
 | minimumPixelSize | number | `0.0` | `optional` 指定 model 的最小像素。 |
 | maximumScale | number | | `optional` 指定 model 最大像素。 |

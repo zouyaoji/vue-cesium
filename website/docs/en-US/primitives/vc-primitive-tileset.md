@@ -63,7 +63,7 @@ Basic usage of VcPrimitiveTileset component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | url | string | | `required` The url to a tileset JSON file. |
 | show | boolean | `true` | `optional` Determines if the tileset will be shown. |
-| modelMatrix | Object | `Matrix4.IDENTITY` | `optional` A 4x4 transformation matrix that transforms the tileset's root tile. |
+| modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` A 4x4 transformation matrix that transforms the tileset's root tile. |
 | shadows | number | `1` | `optional` Determines whether the tileset casts or receives shadows from light sources. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | maximumScreenSpaceError | number | `16` | `optional` The maximum screen space error used to drive level of detail refinement. |
 | maximumMemoryUsage | number | `512` | `optional` The maximum amount of memory in MB that can be used by the tileset. |

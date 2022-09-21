@@ -67,7 +67,7 @@
 | ------ | ---- | ------ | ---- |---|
 | url | string | | `required` 指定 tileset JSON 文件地址。 |
 | show | boolean | `true` | `optional` 是否显示 tileset 模型。 |
-| modelMatrix | Object | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
+| modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
 | shadows | number | `1` | `optional` 确定 tileset 是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | maximumScreenSpaceError | number | `16` | `optional` 用于驱动细节细化级别的最大屏幕空间错误。 |
 | maximumMemoryUsage | number | `512` | `optional` tileset 可以使用的最大内存量（MB）。 |
