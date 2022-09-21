@@ -165,7 +165,7 @@ Basic usage of VcGraphicsPolygon component.
 | stRotation | number | `0.0` | `optional` A numeric property specifying the rotation of the polygon texture counter-clockwise from north. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |

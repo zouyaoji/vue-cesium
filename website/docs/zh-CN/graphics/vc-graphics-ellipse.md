@@ -97,7 +97,7 @@
 | stRotation | number | `0.0` | `optional` 指定 ellipse 纹理正北逆时针旋转角度。 |
 | granularity | number | | `optional` 指定每个经纬度之间的采样粒度。 |
 | fill | boolean | `true` | `optional` 指定 ellipse 是否填充材质。 |
-| material | Object\|string\|Array | `'white'` | `optional` 指定 ellipse 材质。 |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 ellipse 材质。 |
 | outline | boolean | `false` | `optional` 指定 ellipse 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 ellipse 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 ellipse 轮廓线宽度。 |

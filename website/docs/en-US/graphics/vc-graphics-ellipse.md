@@ -97,7 +97,7 @@ Basic usage of the VcGraphicsEllipse component.
 | stRotation | number\|Object | `0.0` | `optional` A numeric property specifying the rotation of the ellipse texture counter-clockwise from north. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between points on the ellipse. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipse is filled with the provided material. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the ellipse. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the ellipse is outlined. |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |

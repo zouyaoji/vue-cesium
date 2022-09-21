@@ -90,7 +90,7 @@ Basic usage of the VcGraphicsWall component.
 | maximumHeights | Array | | `optional` A Property specifying an array of heights to be used for the top of the wall instead of the height of each position. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the wall is filled with the provided material. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
 | outline | boolean | false | `optional` A boolean Property specifying whether the wall is outlined. |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |

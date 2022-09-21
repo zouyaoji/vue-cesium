@@ -81,7 +81,7 @@
 | bottomRadius | number | | `optional` 指定 cylinder 的底部半径。 |
 | heightReference | number | | `optional` 指定 cylinder 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
 | fill | boolean | `true` | `optional` 指定 cylinder 是否填充材质。 |
-| material | Object\|string\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
+| material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
 | outline | boolean | `false` | `optional` 指定 cylinder 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 cylinder 轮廓线宽度。 |

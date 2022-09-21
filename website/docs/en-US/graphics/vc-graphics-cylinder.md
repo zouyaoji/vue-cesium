@@ -81,7 +81,7 @@ Basic usage of the VcGraphicsCylinder component.
 | bottomRadius | number | | `optional` A numeric Property specifying the radius of the bottom of the cylinder. |
 | heightReference | number | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the cylinder is filled with the provided material. |
-| material | Object\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the cylinder. |
+| material | VcMaterial\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the cylinder. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the cylinder is outlined. |
 | outlineColor | Object\|string\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |

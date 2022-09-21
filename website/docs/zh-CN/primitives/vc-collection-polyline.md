@@ -150,7 +150,7 @@
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array         |        | `optional` 指定 polyline 显示条件随相机距离改变的参数。     |
 | id | any                |        | `optional` 指定与 polyline 关联的信息，拾取时返回该属性值。 |
 | loop                     | boolean               | false  | `optional` 指定 polyline 是否首尾相连。                     |
-| material                 | Object\|Array\|string |        | `optional` 指定 polyline 材质。                             |
+| material | VcMaterial\|Array\|string |        | `optional` 指定 polyline 材质。                             |
 | positions                | Array                 |        | `optional` 指定 polyline 的位置。                           |
 | show                     | boolean               | true   | `optional` 指定 polyline 是否显示。                         |
 | width                    | number                | 1.0    | `optional` 指定 polyline 宽度。                             |

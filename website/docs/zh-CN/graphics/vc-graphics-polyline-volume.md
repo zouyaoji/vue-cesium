@@ -117,7 +117,7 @@
 | cornerType | number | `0` | `optional` 指定 volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 | granularity | number | | `optional` 指定每个经度和纬度之间的角距离。 |
 | fill | boolean | `true` | `optional` 指定 volume 是否填充材质。 |
-| material | Object\|string\|Array | | `optional` 指定 volume 材质。 |
+| material | VcMaterial\|string\|Array | | `optional` 指定 volume 材质。 |
 | outline | boolean | `false` | `optional` 指定 volume 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | | `optional` 指定 volume 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 volume 轮廓线宽度。 |

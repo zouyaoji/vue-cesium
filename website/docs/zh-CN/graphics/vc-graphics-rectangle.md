@@ -103,7 +103,7 @@
 | stRotation | number | `0.0` | `optional` 指定 rectangle 按正北逆时针旋转纹理。 |
 | granularity | number | | `optional` 指定每个经纬度之间的采样粒度。 |
 | fill | boolean | `true` | `optional` 指定 rectangle 是否填充材质。 |
-| material | Object\|string\|Array | `'white'` | `optional` 指定 rectangle 材质。 |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 rectangle 材质。 |
 | outline | boolean | `false` | `optional` 指定 rectangle 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 rectangle 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 rectangle 轮廓线宽度。 |

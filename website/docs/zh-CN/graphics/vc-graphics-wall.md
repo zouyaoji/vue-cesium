@@ -90,7 +90,7 @@
 | maximumHeights | Array | | `optional` 指定 wall 顶部的高度数组。 |
 | granularity | number | | `optional` 指定每个纬度和经度之间的角距离。 |
 | fill | boolean | `true` | `optional` 指定 wall 是否填充材质。 |
-| material | Object\|string\|Array | `'white'` | `optional` 指定 wall 材质。 |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 wall 材质。 |
 | outline | boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` 指定 wall 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |

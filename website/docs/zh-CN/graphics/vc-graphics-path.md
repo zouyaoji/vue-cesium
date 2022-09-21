@@ -148,7 +148,7 @@
 | trailTime                | number                |           | `optional` 指定 path 后面要显示的秒数。           |
 | width                    | number                | `1.0`     | `optional` 指定 path 像素宽度。                   |
 | resolution               | number                | `60`      | `optional` 指定 path 步进最大秒数。               |
-| material                 | Object\|string\|Array | `'white'` | `optional` 指定 path 材质。                       |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 path 材质。                       |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array         |           | `optional` 指定 path 随相机距离改变是否显示参数。 |
 
 ### 事件

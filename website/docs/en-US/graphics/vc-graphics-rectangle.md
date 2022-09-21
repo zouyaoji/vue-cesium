@@ -102,7 +102,7 @@ Basic usage of VcGraphicsRectangle component.
 | stRotation | number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle texture counter-clockwise from north. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between points on the rectangle. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the rectangle is filled with the provided material. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the rectangle. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the rectangle. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the rectangle is outlined. |
 | outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |

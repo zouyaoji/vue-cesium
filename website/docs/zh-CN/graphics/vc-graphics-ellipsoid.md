@@ -89,7 +89,7 @@
 | radii | VcPosition | | `optional` 指定 ellipsoid 的半径参数。 |
 | heightReference | number | | `optional` 指定 ellipsoid 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** | 0/1/2 |
 | fill | boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
-| material | Object\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
+| material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
 | outline | boolean | `false` | `optional` 指定 ellipsoid 是否绘制轮廓线。 |
 | outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 ellipsoid 轮廓线宽度。 |
