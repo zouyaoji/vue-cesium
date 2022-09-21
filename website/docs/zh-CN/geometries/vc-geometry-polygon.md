@@ -146,12 +146,12 @@
 
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
+| polygonHierarchy | VcPolygonHierarchy\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
 | stRotation        | number        | `0.0`   | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。               |
-| ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
+| ellipsoid      | Cesium.Ellipsoid        |         | `optional` 指定 polygon 参考椭球体。                                 |
 | granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
 | perPositionHeight | boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
 | closeTop          | boolean       | `true`  | `optional` 指定 polygon 拉伸出来的顶部是否闭合。                     |
@@ -176,11 +176,11 @@
 
 | 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
 | ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
+| polygonHierarchy | VcPolygonHierarchy\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
 | height            | number        | `0`     | `optional` 指定 polygon 的高度。                                     |
 | extrudedHeight    | number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
-| ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
+| ellipsoid      | Cesium.Ellipsoid        |         | `optional` 指定 polygon 参考椭球体。                                 |
 | granularity       | number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
 | perPositionHeight | boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
 | arcType           | number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |

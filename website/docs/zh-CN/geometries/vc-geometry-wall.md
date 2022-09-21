@@ -127,8 +127,8 @@
 | granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
 | maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
 | minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
-| ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |
-| vertexFormat   | Object |        | `optional` 指定顶点属性渲染方式。                 |
+| ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定参考椭球体。                       |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定顶点属性渲染方式。                 |
 
 ### 事件
 
@@ -152,7 +152,7 @@
 | granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
 | maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
 | minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
-| ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |
+| ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定参考椭球体。                       |
 
 ### VcGeometryWallOutline 事件
 

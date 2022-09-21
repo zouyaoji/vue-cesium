@@ -125,16 +125,16 @@
 
 | 属性名         | 类型          | 默认值 | 描述                                                |
 | -------------- | ------------- | ------ | --------------------------------------------------- |
-| center         | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
+| center         | VcPosition\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis  | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis  | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid      | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
+| ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |
 | height         | number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
 | extrudedHeight | number        |        | `optional` 指定椭圆拉伸高度。                       |
 | rotation       | number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |
 | stRotation     | number        | `0.0`  | `optional` 指定椭圆纹理以正北逆时针方向旋转的角度。 |
 | granularity    | number        |        | `optional` 指定椭圆上点之间的角距离（弧度）。       |
-| vertexFormat   | Object        |        | `optional` 指定顶点属性渲染方式。                   |
+| vertexFormat | Cesium.VertexFormat        |        | `optional` 指定顶点属性渲染方式。                   |
 
 ### 事件
 
@@ -154,10 +154,10 @@
 
 | 属性名                | 类型          | 默认值 | 描述                                                |
 | --------------------- | ------------- | ------ | --------------------------------------------------- |
-| center                | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
+| center         | VcPosition\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis         | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis         | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid             | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
+| ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |
 | height                | number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
 | extrudedHeight        | number        |        | `optional` 指定椭圆拉伸高度。                       |
 | rotation              | number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |

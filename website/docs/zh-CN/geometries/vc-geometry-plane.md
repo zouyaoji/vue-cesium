@@ -130,7 +130,7 @@
 
 | 属性名       | 类型   | 默认值 | 描述                              |
 | ------------ | ------ | ------ | --------------------------------- |
-| vertexFormat | Object |        | `optional` 指定顶点坐标渲染类型。 |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定顶点坐标渲染类型。 |
 
 ### 事件
 

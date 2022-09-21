@@ -90,12 +90,12 @@ Basic usage of the VcGraphicsWall component.
 | maximumHeights | Array | | `optional` A Property specifying an array of heights to be used for the top of the wall instead of the height of each position. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the wall is filled with the provided material. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
 | outline | boolean | false | `optional` A boolean Property specifying whether the wall is outlined. |
-| outlineColor | Object\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | shadows | number | `0` | `optional` An enum Property specifying whether the wall casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this wall will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this wall will be displayed. |
 
 ### Events
 

@@ -130,7 +130,7 @@ Basic usage of VcGeometryPlane component.
 
 | Name         | Type   | Default | Description                                      |
 | ------------ | ------ | ------- | ------------------------------------------------ |
-| vertexFormat | Object |         | `optional` The vertex attributes to be computed. |
+| vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed. |
 
 ### Events
 

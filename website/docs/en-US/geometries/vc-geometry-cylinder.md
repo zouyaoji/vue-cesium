@@ -141,7 +141,7 @@ Basic usage of VcGeometryCylinder component.
 | topRadius    | number |         | `required` A numeric Property specifying the radius of the top of the cylinder.    |
 | bottomRadius | number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder. |
 | slices       | number | `128`   | `optional` The number of edges around the perimeter of the cylinder.               |
-| vertexFormat | Object |         | `optional` The vertex attributes to be computed.                                   |
+| vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed.                                   |
 
 ### Events
 

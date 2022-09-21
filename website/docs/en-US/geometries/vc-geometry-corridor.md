@@ -122,11 +122,11 @@ Basic usage of VcGeometryCorridor component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of positions that define the center of the corridor. |
 | width | number | | `required` The distance between the edges of the corridor in meters. |
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | height | number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
 | extrudedHeight | number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
-| vertexFormat | Object | | `optional` The vertex attributes to be computed.|
+| vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed.|
 | cornerType | number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
 ### Events
@@ -150,7 +150,7 @@ Loading a corridor geometry outline. It is equivalent to initializing a `Cesium.
 | ---- | ---- | ------- | ----------- | --------------- |
 | positions | Array | | `required` An array of positions that define the center of the corridor outline. |
 | width | number | | `required` The distance between the edges of the corridor outline. |
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | granularity | number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
 | height | number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
 | extrudedHeight | number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |

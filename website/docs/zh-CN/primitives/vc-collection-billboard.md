@@ -103,10 +103,10 @@
 
 | 属性名                  | 类型    | 默认值  | 描述                                                                                   | 可选值 |
 | ----------------------- | ------- | ------- | -------------------------------------------------------------------------------------- | ------ |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
+| modelMatrix | Cesium.Matrix4  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
 | debugShowBoundingVolume | boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                          |
 | blendOption             | number  | `2`     | `optional` 指定颜色混合选项。 **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2** | 0/1/2  |
-| scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。                      |
+| scene | Cesium.Scene  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。                      |
 | show                    | boolean | `true`  | `optional` 指定该图元集合是否显示。                                                    |
 | billboards              | Array   | `[]`    | `optional` 指定布告板集合数组。 数组对象结构与 `vc-billboard` 组件属性相同。           |
 | enableMouseEvent        | boolean | `true`  | `optional` 指定鼠标事件是否生效。                                                      |
@@ -144,25 +144,25 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
-| color | Object\|string\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
+| alignedAxis | VcPosition\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
+| color | VcColor\|string\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
 | disableDepthTestDistance | number | | `optional` 指定 billboard 的深度检测距离。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |
-| eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移量。|
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |
+| eyeOffset | VcPosition\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移量。|
 | height | number | | `optional` 指定 billboard 的高度（像素）。 |
 | heightReference | number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | horizontalOrigin | number | `0` | `optional` 指定 billboard 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/2|
 | id | \* | | `optional` 指定与 billboard 关联的信息，拾取时返回该属性值。 |
-| image | string\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
-| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移量。 |
-| pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 billboard 像素偏移量随相机距离改变的参数。|
-| position | Object\|Array | | `optional` 指定 billboard 的位置。|
+| image | string | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
+| pixelOffset | VcCartesian2\|Array | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移量。 |
+| pixelOffsetScaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 billboard 像素偏移量随相机距离改变的参数。|
+| position       | VcPosition\|Array | | `optional` 指定 billboard 的位置。|
 | rotation | number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
 | scale | number | `1.0` | `optional` 指定 billboard 缩放比例。 |
-| scaleByDistance | Object\|Array | | `optional` 指定 billboard 随缩比例随相机距离改变的参数。|
+| scaleByDistance | VcNearFarScalar\|Array | | `optional` 指定 billboard 随缩比例随相机距离改变的参数。|
 | show | boolean | `true` | `optional` 指定 billboard 是否显示。 |
 | sizeInMeters | boolean | | `optional` 指定 billboard 的单位是否是米。 |
-| translucencyByDistance | Object\|Array | | `optional` 指定 billboard 透明度随相机距离改变参数。|
+| translucencyByDistance | VcNearFarScalar\|Array | | `optional` 指定 billboard 透明度随相机距离改变参数。|
 | verticalOrigin | number | `0` | `optional` 指定 billboard 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
 | width | number | | `optional` 指定 billboard 的宽度（像素）。 |
 | enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |

@@ -90,15 +90,15 @@
 
 | 属性名                   | 类型            | 默认值  | 描述                                                                               |
 | ------------------------ | --------------- | ------- | ---------------------------------------------------------------------------------- |
-| url                      | string\|Object  |         | `required` 指定 WMS 服务地址。                                                     |
+| url                      | string\|Cesium.Resource  |         | `required` 指定 WMS 服务地址。                                                     |
 | layers                   | string          |         | `required` 指定服务图层，多个图层用","隔开。                                       |
-| parameters               | Object          |         | `optional` 在 GetMap URL 中传递给 WMS 服务器的其他参数。                           |
-| getFeatureInfoParameters | Object          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |
+| parameters | any          |         | `optional` 在 GetMap URL 中传递给 WMS 服务器的其他参数。                           |
+| getFeatureInfoParameters | any          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |
 | enablePickFeatures       | boolean         | `true`  | `optional` 指定是否支持拾取对象，通过 GetFeatureInfo 获取，需要服务支持。          |
 | getFeatureInfoFormats    | Array           |         | `optional` 指定 WMS GetFeatureInfo 请求的格式。                                    |
-| rectangle                | Object\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
-| tilingScheme             | Object          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
-| ellipsoid                | Object          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
+| rectangle | VcRectangle\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
+| ellipsoid      | Cesium.Ellipsoid          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
 | tileWidth                | number          | `256`   | `optional` 指定像元宽度。                                                          |
 | tileHeight               | number          | `256`   | `optional` 指定像元高度。                                                          |
 | minimumLevel             | number          | `0`     | `optional` 指定图层可以显示的最小层级。                                            |
@@ -107,8 +107,8 @@
 | srs                      | string          |         | `optional` 指定 SRS 规范，用于 WMS 规范 1.1.0 或 1.1.1                             |
 | credit                   | Credit\| string |         | `optional` 指定服务描述信息。                                                      |
 | subdomains               | string\| Array  | `'abc'` | `optional` 指定服务子域 。                                                         |
-| clock                    | Object          |         | `optional` 确定时间维度的值时使用的 Clock 实例。 当指定 options.times 时是必需的。 |
-| times                    | Object          |         | `optional` TimeIntervalCollection 及其数据属性是一个包含时间动态维度及其值的对象。 |
+| clock | Cesium.Clock          |         | `optional` 确定时间维度的值时使用的 Clock 实例。 当指定 options.times 时是必需的。 |
+| times | Cesium.TimeIntervalCollection          |         | `optional` TimeIntervalCollection 及其数据属性是一个包含时间动态维度及其值的对象。 |
 
 ### 事件
 

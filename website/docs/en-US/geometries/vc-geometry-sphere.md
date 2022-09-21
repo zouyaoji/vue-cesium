@@ -125,7 +125,7 @@ The basic usage of VcGeometrySphere component.
 | radius          | number | `1.0`   | `optional` The radius of the sphere.                                          |
 | stackPartitions | number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.        |
 | slicePartitions | number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices. |
-| vertexFormat    | Object |         | `optional` The vertex attributes to be computed.                              |
+| vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed.                              |
 
 ### Events
 

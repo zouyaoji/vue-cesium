@@ -86,18 +86,18 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ----- | ----- | --- | ------ |
 | show | boolean | `true` | `optional` 指定 ellipsoid 是否显示。 |
-| radii | Object | | `optional` 指定 ellipsoid 的半径参数。 |
+| radii | VcPosition | | `optional` 指定 ellipsoid 的半径参数。 |
 | heightReference | number | | `optional` 指定 ellipsoid 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** | 0/1/2 |
 | fill | boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
-| material | Object\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
+| material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
 | outline | boolean | `false` | `optional` 指定 ellipsoid 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 ellipsoid 轮廓线宽度。 |
 | stackPartitions | number | `64` | `optional` 指定 ellipsoid 横向线数量。 |
 | slicePartitions | number | `64` | `optional` 指定 ellipsoid 径向线数量。 |
 | subdivisions | number | `128` | `optional` 指定 ellipsoid 每个轮环的样本数，确定曲率粒度。 |
 | shadows | number | `0` | `optional` 指定 ellipsoid 是否投射或接受每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 ellipsoid 随相机距离的显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 ellipsoid 随相机距离的显示条件。 |
 
 ### 事件
 

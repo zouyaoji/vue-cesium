@@ -94,14 +94,14 @@ Basic usage of the `vc-imagery-provider-tms` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | string\|Object | `'.'` | `optional` Path to image tiles on server. |
+| url | string \| Cesium.Resource \| Promise\<string\> | Promise\<Cesium.Resource\> | `'.'` | `optional` Path to image tiles on server. |
 | fileExtension | string | `'png'` | `optional` The file extension for images on the server. |
-| credit | string\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
+| credit | string\|Cesium.Credit | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
-| rectangle | Object\|Array | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| rectangle | VcRectangle\|Array | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | maximumLevel | number | | `optional` The rectangle, in radians, covered by the image. |
-| tilingScheme | Object | | `optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used. |
-| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme | | `optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used. |
+| ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
 | tileWidth | number | `256` | `optional` Pixel width of image tiles. |
 | tileHeight | number | `256` | `optional` Pixel height of image tiles.|
 | flipXY | boolean | | `optional` Older versions of gdal2tiles.py flipped X and Y values in tilemapresource.xml. Specifying this option will do the same, allowing for loading of these incorrect tilesets. |

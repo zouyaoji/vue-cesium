@@ -100,8 +100,8 @@ Basic usage of VcPrimitiveGround component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| geometryInstances | Object\|Array | | `optional` GeometryInstances containing GroundPolylineGeometry. |
-| appearance | Object | | `optional` The Appearance used to render the polyline. Defaults to a white color Material on a PolylineMaterialAppearance. |
+| geometryInstances|Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` GeometryInstances containing GroundPolylineGeometry. |
+| appearance | VcAppearance | | `optional` The Appearance used to render the polyline. Defaults to a white color Material on a PolylineMaterialAppearance. |
 | show | boolean | `true` | `optional` Determines if this primitive will be shown. |
 | interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
 | releaseGeometryInstances | boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |

@@ -125,8 +125,8 @@
 | colorsPerVertex | boolean | `false` | `optional` 指定颜色数组是根据线段数取均值还是通过线段顶点插值。                  |
 | arcType         | number  | `1`     | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                     | 0/1/2  |
 | granularity     | number  |         | `optional` 指定每个纬度和经度之间的距离（以弧度为单位），arcType 不为 0 时有效。 |
-| vertexFormat    | Object  |         | `optional` 指定要缓存的顶点属性类型。                                            |
-| ellipsoid       | Object  |         | `optional` 指定参考椭球体。                                                      |        |
+| vertexFormat | Cesium.VertexFormat  |         | `optional` 指定要缓存的顶点属性类型。                                            |
+| ellipsoid      | Cesium.Ellipsoid  |         | `optional` 指定参考椭球体。                                                      |        |
 
 ### 事件
 

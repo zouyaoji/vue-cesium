@@ -125,7 +125,7 @@
 | radius          | number | `1.0`  | `optional` 指定球体半径。                 |
 | stackPartitions | number | `0.0`  | `optional` 指定将球体横向划分为层的次数。 |
 | slicePartitions | number | `10`   | `optional` 指定将球体纵向划分为片的次数。 |
-| vertexFormat    | Object |        | `optional` 指定椭球体顶点属性渲染方式。   |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定椭球体顶点属性渲染方式。   |
 
 ### 事件
 

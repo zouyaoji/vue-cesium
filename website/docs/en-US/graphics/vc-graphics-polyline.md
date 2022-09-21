@@ -1,3 +1,10 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:21:29
+ * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-polyline.md
+-->
 ## VcGraphicsPolyline
 
 Loading a polyline graphic. It is equivalent to initializing a `Cesium.PolylineGraphics` instance.
@@ -73,13 +80,13 @@ Basic usage of VcGraphicsPolyline component.
 | positions | Array | | `optional` A Property specifying the array of Cartesian3 positions that define the line strip. |
 | width | number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
 | granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude if arcType is not ArcType.NONE. |
-| material | Object\|string\|Array | `'white'` | `optional` A Property specifying the material used to draw the polyline. |
-| depthFailMaterial | Object\|string\|Array | | `optional` A property specifying the material used to draw the polyline when it is below the terrain. |
+| material | VcMaterial\|string\|Array | `'white'` | `optional` A Property specifying the material used to draw the polyline. |
+| depthFailMaterial | VcMaterial\|string\|Array | | `optional` A property specifying the material used to draw the polyline when it is below the terrain. |
 | arcType | number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
 | clampToGround | boolean | `false` | `optional` A boolean Property specifying whether the Polyline should be clamped to the ground. |
 | shadows | number | | `optional` An enum Property specifying whether the polyline casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | classificationType | number | `2` | `optional` An enum Property specifying whether this polyline will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this polyline will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this polyline will be displayed. |
 | zIndex | number | `0` | `optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if `clampToGround` is true and polylines on terrain is supported. |
 
 ### Events

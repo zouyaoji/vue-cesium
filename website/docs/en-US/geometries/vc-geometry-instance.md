@@ -160,10 +160,10 @@ Basic usage of geometry instance components.
 
 | Name        | Type   | Default | Description                                                                                            |
 | ----------- | ------ | ------- | ------------------------------------------------------------------------------------------------------ |
-| geometry    | Object |         | `optional` The geometry to instance.                                                                   |
-| modelMatrix | Object |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
-| id          | Object |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
-| attributes  | Object |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
+| geometry    | Cesium.Geometry \| Cesium.GeometryFactory |         | `optional` The geometry to instance.                                                                   |
+| modelMatrix | Cesium.Matrix4 |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
+| id | any |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
+| attributes  | any |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
 
 ### Events
 
@@ -180,7 +180,7 @@ Basic usage of geometry instance components.
 | load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
 | reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
 | unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
 | getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Slots

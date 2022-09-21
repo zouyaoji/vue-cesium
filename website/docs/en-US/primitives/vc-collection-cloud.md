@@ -125,7 +125,7 @@ Basic usage of VcCollectionCloud component.
 | ---- | ---- | ------- | ----------- |
 | show | boolean | `true` | `optional` Whether to display the clouds. |
 | noiseDetail | number | `16.0` | `optional` Desired amount of detail in the noise texture. |
-| noiseOffset | Object: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` Desired translation of data in noise texture.|
+| noiseOffset | VcPosition: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` Desired translation of data in noise texture.|
 | debugBillboards | boolean |`16.0`| `optional` For debugging only. Determines if the billboards are rendered with an opaque color. |
 | debugEllipsoids | boolean |`16.0`| `optional` For debugging only. Determines if the clouds will be rendered as opaque ellipsoids. |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` Specifies an array of cumulus collections. The array object structure is the same as the `vc-cumulus-cloud` component properties. |

@@ -81,14 +81,14 @@
 | bottomRadius | number | | `optional` 指定 cylinder 的底部半径。 |
 | heightReference | number | | `optional` 指定 cylinder 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
 | fill | boolean | `true` | `optional` 指定 cylinder 是否填充材质。 |
-| material | Object\|string\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
+| material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
 | outline | boolean | `false` | `optional` 指定 cylinder 是否绘制轮廓线。 |
-| outlineColor | Object\|string\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
+| outlineColor | VcColor\|string\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
 | outlineWidth | number | `1.0` | `optional` 指定 cylinder 轮廓线宽度。 |
 | numberOfVerticalLines | number | `16` | `optional` 指定沿轮廓线周长绘制的垂直线数。 |
 | slices | number | `128` | `optional` 指定 cylinder 边节点数量。 |
 | shadows | number | `0` | `optional` 指定 cylinder 是否投射或接收每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 cylinder 随相机距离显示条件。 |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 cylinder 随相机距离显示条件。 |
 
 ### 事件
 

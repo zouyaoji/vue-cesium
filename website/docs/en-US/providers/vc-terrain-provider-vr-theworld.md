@@ -1,3 +1,10 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 10:22:15
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 14:22:54
+ * @FilePath: \vue-cesium\website\docs\en-US\providers\vc-terrain-provider-vr-theworld.md
+-->
 ## VcTerrainProviderVrTheworld
 
 Loading a terrain provider that that produces terrain geometry by tessellating height maps retrieved from a VT MÄK VR-TheWorld server. It is equivalent to initializing a `Cesium.VRTheWorldTerrainProvider` instance.
@@ -69,9 +76,9 @@ Basic usage of the `vc-terrain-provider-vr-theworld` component.
 
 | Name      | Type           | Default | Description                                                                                |
 | --------- | -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| url       | string\|Object |         | `required` The URL of the VR-TheWorld TileMap.                                             |
+| url       | string\|Cesium.Resource |         | `required` The URL of the VR-TheWorld TileMap.                                             |
 | token     | string         |         | `optional` The ellipsoid. If this parameter is not specified, the WGS84 ellipsoid is used. |
-| ellipsoid | Object         |         | `optional` A credit for the data source, which is displayed on the canvas.                 |
+| ellipsoid      | Cesium.Ellipsoid         |         | `optional` A credit for the data source, which is displayed on the canvas.                 |
 
 ### Events
 

@@ -67,7 +67,7 @@
 | ------ | ---- | ------ | ---- |---|
 | url | string | | `required` 指定 tileset JSON 文件地址。 |
 | show | boolean | `true` | `optional` 是否显示 tileset 模型。 |
-| modelMatrix | Object | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
+| modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
 | shadows | number | `1` | `optional` 确定 tileset 是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | maximumScreenSpaceError | number | `16` | `optional` 用于驱动细节细化级别的最大屏幕空间错误。 |
 | maximumMemoryUsage | number | `512` | `optional` tileset 可以使用的最大内存量（MB）。 |
@@ -93,12 +93,12 @@
 | skipLevels | number | 1 | `optional`当 skipLevelOfDetail 为 true 时，一个常量定义加载切片时要跳过的最小级别数。 当它为 0 时，不会跳过任何级别。与 skipScreenSpaceErrorFactor 结合使用以确定要加载的切片。 |
 | immediatelyLoadDesiredLevelOfDetail | boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，将只下载满足最大屏幕空间错误的切片。跳过因子将被忽略，并且只加载所需的切片。 |
 | loadSiblings | boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，确定在遍历期间是否始终下载可见切片的兄弟节点。 |
-| clippingPlanes | Object | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction\<Cesium.ClippingPlaneCollection\> | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
 | classificationType | number | | `optional` 确定此 tileset 是否会对 terrain，3D Tiles 或两者进行分类。 有关限制和限制的详细信息，请参阅 Cesium3DTileset＃classificationType。**TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| ellipsoid | Object | Object | `optional` 决定地球的大小和形状参考椭球体。 |
-| pointCloudShading | Object | | `optional` 用于构造 PointCloudShading 对象以基于几何误差和光照控制点衰减的选项。 |
-| imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
-| lightColor | Object\|Array | | `optional` 模型阴影的颜色和强度。 |
+| ellipsoid      | Cesium.Ellipsoid  | `optional` 决定地球的大小和形状参考椭球体。 |
+| pointCloudShading | Cesium.PointCloudShading | | `optional` 用于构造 PointCloudShading 对象以基于几何误差和光照控制点衰减的选项。 |
+| imageBasedLightingFactor | VcCartesian2\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
+| lightColor | VcColor\|Array | | `optional` 模型阴影的颜色和强度。 |
 | luminanceAtZenith | number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。 |
 | sphericalHarmonicCoefficients | Array || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
 | specularEnvironmentMaps | string | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |

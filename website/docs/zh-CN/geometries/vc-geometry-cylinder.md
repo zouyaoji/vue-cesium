@@ -141,7 +141,7 @@
 | topRadius    | number |        | `required` 指定圆柱体顶部半径。   |
 | bottomRadius | number |        | `required` 指定圆柱体底部半径。   |
 | slices       | number | `128`  | `optional` 指定圆柱圆周边数。     |
-| vertexFormat | Object |        | `optional` 指定顶点属性渲染方式。 |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定顶点属性渲染方式。 |
 
 ### 事件
 

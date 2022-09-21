@@ -1,3 +1,10 @@
+<!--
+ * @Author: ly
+ * @Date: 2022-09-21 09:41:12
+ * @LastEditors: ly
+ * @LastEditTime: 2022-09-21 11:01:55
+ * @FilePath: \vue-cesium\website\docs\en-US\geometries\vc-geometry-frustum.md
+-->
 ## VcGeometryFrustum
 
 Loading a frustum geometry. It is equivalent to initializing a `Cesium.FrustumGeometry` instance.
@@ -134,10 +141,10 @@ Basic usage of the VcGeometryFrustum component.
 
 | Name         | Type          | Default | Description                                      |
 | ------------ | ------------- | ------- | ------------------------------------------------ |
-| frustum      | Object        |         | `optional` The frustum.                          |
-| origin       | Object\|Array |         | `optional` The origin of the frustum.            |
-| orientation  | Object\|Array |         | `optional` The orientation of the frustum.       |
-| vertexFormat | Object        |         | `optional` The vertex attributes to be computed. |
+| frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |         | `optional` The frustum.                          |
+| origin       | VcPosition\|Array |         | `optional` The origin of the frustum.            |
+| orientation  | Cesium.Quaternion\|Array |         | `optional` The orientation of the frustum.       |
+| vertexFormat | Cesium.VertexFormat        |         | `optional` The vertex attributes to be computed. |
 
 ### Events
 
@@ -157,9 +164,9 @@ Loading a frustum geometry outline. It is equivalent to initializing a `Cesium.F
 
 | Name        | Type          | Default | Description                                |
 | ----------- | ------------- | ------- | ------------------------------------------ |
-| frustum     | Object        |         | `optional` The frustum.                    |
-| origin      | Object\|Array |         | `optional` The origin of the frustum.      |
-| orientation | Object\|Array |         | `optional` The orientation of the frustum. |
+| frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |         | `optional` The frustum.                    |
+| origin       | VcPosition\|Array |         | `optional` The origin of the frustum.      |
+| orientation  | Cesium.Quaternion\|Array |         | `optional` The orientation of the frustum. |
 
 ### VcGeometryFrustumOutline Events
 

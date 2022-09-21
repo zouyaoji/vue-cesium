@@ -85,35 +85,35 @@ Basic usage of `vc-entity`.
 
 ### Props
 
-| Name           | Type                    | Default | Description                                                                               |
-| -------------- | ----------------------- | ------- | ----------------------------------------------------------------------------------------- |
-| id             | string                  |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated. |
-| name           | string                  |         | `optional` A human readable name to display to users. It does not have to be unique.      |
-| availability   |                         |         | `optional` The availability, if any, associated with this object.                         |
-| show           | boolean                 | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
-| description    |                         |         | `optional` A string Property specifying an HTML description for this entity.              |
-| position       | Object\|Array\|Function |         | `optional` A Property specifying the entity position.                                     |
-| orientation    |                         |         | `optional` A Property specifying the entity orientation.                                  |
-| viewFrom       |                         |         | `optional` A suggested initial offset for viewing this object.                            |
-| parent         |                         |         | `optional` A parent entity to associate with this entity.                                 |
-| billboard      |                         |         | `optional` A billboard to associate with this entity.                                     |
-| box            |                         |         | `optional` A box to associate with this entity.                                           |
-| corridor       |                         |         | `optional` A corridor to associate with this entity.                                      |
-| cylinder       |                         |         | `optional` A cylinder to associate with this entity.                                      |
-| ellipse        |                         |         | `optional` A ellipse to associate with this entity.                                       |
-| ellipsoid      |                         |         | `optional` A ellipsoid to associate with this entity.                                     |
-| label          |                         |         | `optional` A options.label to associate with this entity.                                 |
-| model          |                         |         | `optional` A model to associate with this entity.                                         |
-| tileset        |                         |         | `optional` A tileset to associate with this entity.                                       |
-| path           |                         |         | `optional` A path to associate with this entity.                                          |
-| plane          |                         |         | `optional` A plane to associate with this entity.                                         |
-| point          |                         |         | `optional` A point to associate with this entity.                                         |
-| polygon        |                         |         | `optional` A polygon to associate with this entity.                                       |
-| polyline       |                         |         | `optional` A polyline to associate with this entity.                                      |
-| properties     |                         |         | `optional` Arbitrary properties to associate with this entity.                            |
-| polylineVolume |                         |         | `optional` A polylineVolume to associate with this entity.                                |
-| rectangle      |                         |         | `optional` A rectangle to associate with this entity.                                     |
-| wall           |                         |         | `optional` A wall to associate with this entity.                                          |
+| Name           | Type                                                                               | Default | Description                                                                               |
+| -------------- | ---------------------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| id             | string                                                                             |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated. |
+| name           | string                                                                             |         | `optional` A human readable name to display to users. It does not have to be unique.      |
+| availability   | Cesium.TimeIntervalCollection                                                      |         | `optional` The availability, if any, associated with this object.                         |
+| show           | boolean                                                                            | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
+| description    | string \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\>          |         | `optional` A string Property specifying an HTML description for this entity.              |
+| position       | VcPosition\|Array\|Function                                                        |         | `optional` A Property specifying the entity position.                                     |
+| orientation    | Cesium.Quaternion \| Cesium.VelocityOrientationProperty \| Cesium.CallbackProperty |         | `optional` A Property specifying the entity orientation.                                  |
+| viewFrom       | VcPosition \| Cesium.CallbackProperty                                              |         | `optional` A suggested initial offset for viewing this object.                            |
+| parent         | Cesium.Entity                                                                      |         | `optional` A parent entity to associate with this entity.                                 |
+| billboard      | Cesium.BillboardGraphics \| VcGraphicsBillboardProps                               |         | `optional` A billboard to associate with this entity.                                     |
+| box            | Cesium.BoxGraphics \| VcGraphicsBoxProps                                           |         | `optional` A box to associate with this entity.                                           |
+| corridor       | Cesium.CorridorGraphics \| VcGraphicsCorridorProps                                 |         | `optional` A corridor to associate with this entity.                                      |
+| cylinder       | Cesium.CylinderGraphics \| VcGraphicsCylinderProps                                 |         | `optional` A cylinder to associate with this entity.                                      |
+| ellipse        | Cesium.EllipseGraphics \| VcGraphicsEllipseProps                                   |         | `optional` A ellipse to associate with this entity.                                       |
+| ellipsoid      | Cesium.EllipsoidGraphics \| VcGraphicsEllipsoidProps                               |         | `optional` A ellipsoid to associate with this entity.                                     |
+| label          | Cesium.LabelGraphics \| VcGraphicsLabelProps                                       |         | `optional` A options.label to associate with this entity.                                 |
+| model          | Cesium.ModelGraphics \| VcGraphicsModelProps                                       |         | `optional` A model to associate with this entity.                                         |
+| tileset        | Cesium.Cesium3DTilesetGraphics \| VcGraphicsTilesetProps                           |         | `optional` A tileset to associate with this entity.                                       |
+| path           | Cesium.PathGraphics \| VcGraphicsPathProps                                         |         | `optional` A path to associate with this entity.                                          |
+| plane          | Cesium.PlaneGraphics \| VcGraphicsPlaneProps                                       |         | `optional` A plane to associate with this entity.                                         |
+| point          | Cesium.PointGraphics \| VcGraphicsPointProps                                       |         | `optional` A point to associate with this entity.                                         |
+| polygon        | Cesium.PolygonGraphics \| VcGraphicsPolygonProps                                   |         | `optional` A polygon to associate with this entity.                                       |
+| polyline       | Cesium.PolylineGraphics \| VcGraphicsPolylineProps                                 |         | `optional` A polyline to associate with this entity.                                      |
+| properties     | AnyObject                                                                          |         | `optional` Arbitrary properties to associate with this entity.                            |
+| polylineVolume | Cesium.PolylineVolumeGraphics \| VcGraphicsPolylineVolumeProps                     |         | `optional` A polylineVolume to associate with this entity.                                |
+| rectangle      | Cesium.RectangleGraphics \| VcGraphicsRectangleProps                               |         | `optional` A rectangle to associate with this entity.                                     |
+| wall           | Cesium.WallGraphics \| VcGraphicsWallProps                                         |         | `optional` A wall to associate with this entity.                                          |
 
 :::tip
 

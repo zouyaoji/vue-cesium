@@ -102,7 +102,7 @@ Basic usage of VcCollectionPoint component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
 | debugShowBoundingVolume | boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
 | blendOption | number | | `optional` The billboard blending option. The default is used for rendering both opaque and translucent billboards. However, if either all of the billboards are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x. **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2**|0/1/2|
 | show | boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
@@ -143,17 +143,17 @@ Loading a graphical point positioned in the 3D scene. It is equivalent to initia
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| color | Object\|Array\|string | `'white'` | `optional` The inner color of the point. |
+| color | VcColor\|Array\|string | `'white'` | `optional` The inner color of the point. |
 | disableDepthTestDistance | number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
-| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this point will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this point will be displayed. |
 | id | \* | | `optional` The user-defined value returned when the point is picked. |
-| outlineColor | Object \| Array \| string | `'black'` | `optional` The outline color of the point. |
+| outlineColor | VcColor \| Array \| string | `'black'` | `optional` The outline color of the point. |
 | outlineWidth | number | `0` | `optional`The outline width in pixels. This width adds to pixelSize, increasing the total size of the point. |
 | pixelSize | number | `1` | `optional` The inner size of the point in pixels. |
-| position | Object\|Array | | `optional` The position of this point. |
-| scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a point based on the point's distance from the camera |
+| position       | VcPosition\|Array | | `optional` The position of this point. |
+| scaleByDistance | VcNearFarScalar\|Array | | `optional` The near and far scaling properties of a point based on the point's distance from the camera |
 | show | boolean | `true` | `optional` Determines if this point will be shown. Use this to hide or show a point, instead of removing it and re-adding it to the collection. |
-| translucencyByDistance | Object\|Array | | `optional` The near and far translucency properties of a point based on the point's distance from the camera. |
+| translucencyByDistance | VcNearFarScalar\|Array | | `optional` The near and far translucency properties of a point based on the point's distance from the camera. |
 | enableMouseEvent | boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
 ### VcPoint Events

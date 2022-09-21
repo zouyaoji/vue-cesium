@@ -68,17 +68,17 @@ Basic usage of the VcGraphicsModel component.
 | clampAnimations | boolean | `true` | `optional` A boolean Property specifying if glTF animations should hold the last pose for time durations with no keyframes. |
 | shadows | number | `1` | `optional` An enum Property specifying whether the model casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | heightReference | number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| silhouetteColor | Object\|string\|Array | `'red'` | `optional` A Property specifying the Color of the silhouette. |
+| silhouetteColor | VcColor\|string\|Array | `'red'` | `optional` A Property specifying the Color of the silhouette. |
 | silhouetteSize | number | `0.0` | `optional` A numeric Property specifying the size of the silhouette in pixels. |
-| color | Object\|string\|Array | `'white'` | `optional` A Property specifying the Color that blends with the model's rendered color. |
+| color | VcColor\|string\|Array | `'white'` | `optional` A Property specifying the Color that blends with the model's rendered color. |
 | colorBlendMode | number | `0` | `optional` An enum Property specifying how the color blends with the model. **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |0/1/2|
 | colorBlendAmount | number | `0.5` | `optional` A numeric Property specifying the color strength when the colorBlendMode is MIX. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two. |
-| imageBasedLightingFactor | Object\|Array | `{x: 1.0, y: 1.0}` | `optional` A property specifying the contribution from diffuse and specular image-based lighting. |
-| lightColor | Object\|string\|Array | | `optional` A property specifying the light color to use when shading the model. The default sun light color will be used when undefined. |
-| distanceDisplayCondition | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera.A Property specifying at what distance from the camera that this model will be displayed. |
-| nodeTransformations | Object | | `optional` An object, where keys are names of nodes, and values are TranslationRotationScale Properties describing the transformation to apply to that node. The transformation is applied after the node's existing transformation as specified in the glTF, and does not replace the node's existing transformation. |
-| articulations | Object | | `optional` An object, where keys are composed of an articulation name, a single space, and a stage name, and the values are numeric properties. |
-| clippingPlanes | Object | | `optional` A property specifying the ClippingPlaneCollection used to selectively disable rendering the model. |
+| imageBasedLightingFactor | VcCartesian2\|Array | `{x: 1.0, y: 1.0}` | `optional` A property specifying the contribution from diffuse and specular image-based lighting. |
+| lightColor | VcColor\|string\|Array | | `optional` A property specifying the light color to use when shading the model. The default sun light color will be used when undefined. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera.A Property specifying at what distance from the camera that this model will be displayed. |
+| nodeTransformations | Cesium.TranslationRotationScale | | `optional` An object, where keys are names of nodes, and values are TranslationRotationScale Properties describing the transformation to apply to that node. The transformation is applied after the node's existing transformation as specified in the glTF, and does not replace the node's existing transformation. |
+| articulations | any | | `optional` An object, where keys are composed of an articulation name, a single space, and a stage name, and the values are numeric properties. |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection> | | `optional` A property specifying the ClippingPlaneCollection used to selectively disable rendering the model. |
 
 ### Events
 

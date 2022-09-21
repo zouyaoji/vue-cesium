@@ -131,7 +131,7 @@ The basic usage of VcGeometryEllipsoid component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| radii | VcPosition\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
 | innerRadii | number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
 | minimumClock | number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
 | maximumClock | number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
@@ -139,7 +139,7 @@ The basic usage of VcGeometryEllipsoid component.
 | maximumCone | number | `PI` | `optional` The maximum angle measured from the positive z-axis and toward the negative z-axis. |
 | stackPartitions | number | `10` | `optional` The number of times to partition the ellipsoid into stacks. |
 | slicePartitions | number | `8` | `optional` The number of times to partition the ellipsoid into radial slices.|
-| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| vertexFormat | Cesium.VertexFormat | | `optional` The vertex attributes to be computed. |
 
 ### Events
 
@@ -160,7 +160,7 @@ Loading a ellipsoid geometry outline. It is equivalent to initializing a `Cesium
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | --------------- | ------------- | ------- | ----------------------------------------------------------- |
-| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| radii | VcPosition\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
 | innerRadii | number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
 | minimumClock | number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
 | maximumClock | number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |

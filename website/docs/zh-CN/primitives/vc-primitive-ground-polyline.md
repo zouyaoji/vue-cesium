@@ -100,8 +100,8 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------ | ---- | ------ | ---- |---|
-| geometryInstances | Object\|Array | | `optional` 指定要渲染的贴地线几何体实例或者它的实例集合。 |
-| appearance | Object | | `optional` 指定图元的外观参数。 |
+| geometryInstances|Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` 指定要渲染的贴地线几何体实例或者它的实例集合。 |
+| appearance | VcAppearance | | `optional` 指定图元的外观参数。 |
 | show | boolean | `true` | `optional` 指定图元是否显示。 |
 | interleave | boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |
 | releaseGeometryInstances | boolean | `true` | `optional` 指定是否保留图元对几何体实例的输入，不保留可以节省内存。 |

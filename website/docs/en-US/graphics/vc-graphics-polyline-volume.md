@@ -117,12 +117,12 @@ Basic usage of the VcGraphicsPolylineVolume component.
 | cornerType | number | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 | granularity | number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the volume is filled with the provided material. |
-| material | Object\|string\|Array | | `optional` A Property specifying the material used to fill the volume. |
+| material | VcMaterial\|string\|Array | | `optional` A Property specifying the material used to fill the volume. |
 | outline | boolean | false | `optional` A boolean Property specifying whether the volume is outlined. |
-| outlineColor | Object\|string\|Array | | `optional` A Property specifying the Color of the outline. |
+| outlineColor | VcColor\|string\|Array | | `optional` A Property specifying the Color of the outline. |
 | outlineWidth | number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
 | shadows | number | | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this volume will be displayed. |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` A Property specifying at what distance from the camera that this volume will be displayed. |
 
 ### Events
 

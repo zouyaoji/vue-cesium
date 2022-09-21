@@ -221,22 +221,22 @@ Basic usage of VcPrimitiveParticle component.
 | ---- | ---- | ------- | ----------- |
 | show | boolean | true | `optional`Whether to display the particle system. |
 | updateCallback | Function | | `optional` The callback function to be called each frame to update a particle.|
-| emitter | Object | | `optional` The particle emitter for this system. |
-| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
-| emitterModelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system emitter within the particle systems local coordinate system. |
+| emitter | Cesium.ParticleEmitter | | `optional` The particle emitter for this system. |
+| modelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
+| emitterModelMatrix | Cesium.Matrix4 | | `optional` The 4x4 transformation matrix that transforms the particle system emitter within the particle systems local coordinate system. |
 | emissionRate | number | `5` | `optional` The number of particles to emit per second. |
 | bursts | Array | `false` | `optional` An array of [ParticleBurst](https://cesium.com/docs/cesiumjs-ref-doc/ParticleBurst.html), emitting bursts of particles at periodic times.|
 | loop | boolean | `true` | `optional` Whether the particle system should loop its bursts when it is complete. |
 | scale | number | `1.0` | `optional` Sets the scale to apply to the image of the particle for the duration of its particleLife. |
 | startScale | number | | `optional` The final scale to apply to the image of the particle at the end of its life. |
 | endScale | number | | `optional` Sets the color of a particle for the duration of its particleLife. |
-| color | Object\|Array\|string | | `optional` Sets the color of a particle for the duration of its particleLife. |
-| startColor | Object\|Array\|string | | `optional` The color of the particle at the beginning of its life. |
-| endColor | Object\|Array\|string | | `optional` The color of the particle at the end of its life.|
-| image | Object\|string | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |
-| imageSize | Object | | `optional` If set, overrides the minimumImageSize and maximumImageSize inputs that scale the particle image's dimensions in pixels. |
-| minimumImageSize | Object | | `optional` Sets the minimum bound, width by height, above which to randomly scale the particle image's dimensions in pixels. |
-| maximumImageSize | Object | | `optional` Sets the maximum bound, width by height, below which to randomly scale the particle image's dimensions in pixels. |
+| color | VcColor\|Array\|string | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| startColor | VcColor\|Array\|string | | `optional` The color of the particle at the beginning of its life. |
+| endColor| VcColor\|Array\|string | | `optional` The color of the particle at the end of its life.|
+| image | HTMLImageElement \| HTMLCanvasElement\|string | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |
+| imageSize | VcCartesian2 | | `optional` If set, overrides the minimumImageSize and maximumImageSize inputs that scale the particle image's dimensions in pixels. |
+| minimumImageSize | VcCartesian2 | | `optional` Sets the minimum bound, width by height, above which to randomly scale the particle image's dimensions in pixels. |
+| maximumImageSize| VcCartesian2 | | `optional` Sets the maximum bound, width by height, below which to randomly scale the particle image's dimensions in pixels. |
 | speed | number | `1.0` | `optional` If set, overrides the minimumSpeed and maximumSpeed inputs with this value. |
 | minimumSpeed | number | | `optional` Sets the minimum bound in meters per second above which a particle's actual speed will be randomly chosen.|
 | maximumSpeed | number | | `optional` Sets the maximum bound in meters per second below which a particle's actual speed will be randomly chosen. |

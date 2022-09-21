@@ -221,22 +221,22 @@
 | ------ | ---- | ------ | ---- |
 | show | boolean | true | `optional` 是否显示粒子。  |
 | updateCallback | Function | | `optional` 更新回调函数。|
-| emitter | Object |  | `optional` 粒子触发器类型。 |
-| modelMatrix | Object | | `optional` 4x4转换矩阵，可将粒子系统从模型转换为世界坐标。 |
-| emitterModelMatrix | Object | | `optional` 4x4转换矩阵，用于转换粒子系统局部坐标系内的粒子系统发射器。 |
+| emitter | Cesium.ParticleEmitter |  | `optional` 粒子触发器类型。 |
+| modelMatrix | Cesium.Matrix4 | | `optional` 4x4转换矩阵，可将粒子系统从模型转换为世界坐标。 |
+| emitterModelMatrix | Cesium.Matrix4 | | `optional` 4x4转换矩阵，用于转换粒子系统局部坐标系内的粒子系统发射器。 |
 | emissionRate | number | `5` | `optional` 每秒要发射的粒子数。 |
 | bursts | Array | `false` | `optional` ParticleBurst 数组，在周期性时间发射粒子。 |
 | loop | boolean | `true` | `optional` 粒子系统完成后是否应循环其爆发。 |
 | scale | number | `1.0` | `optional` 设置比例尺，以在其粒子寿命期间应用到粒子图像。 |
 | startScale | number |  | `optional` 在粒子寿命开始时应用于粒子图像的初始比例。|
 | endScale | number | | `optional` 在粒子寿命结束时应用于粒子图像的最终比例。 |
-| color | Object\|Array\|string | | `optional` 设置粒子在其粒子寿命期间的颜色。 |
-| startColor | Object\|Array\|string | | `optional` 粒子在其生命初期的颜色。 |
-| endColor | Object\|Array\|string | | `optional` 粒子寿命结束时的颜色。|
-| image | Object\|string | | `optional` 用于广告牌的URI，HTMLImageElement或HTMLCanvasElement。 |
-| imageSize | Object | | `optional` 如果设置，则将覆盖用来缩放粒子图像尺寸（以像素为单位）的minimumImageSize和maximumImageSize输入。 |
-| minimumImageSize | Object\|Array | | `optional` 设置宽度的最小范围，以高度为单位，在该范围之上可以随机缩放粒子图像的尺寸（以像素为单位）。 |
-| maximumImageSize | Object\|Array | | `optional` 设置最大边界（宽度乘以高度），在该边界以下可以随机缩放粒子图像的尺寸（以像素为单位）。 |
+| color | VcColor\|Array\|string | | `optional` 设置粒子在其粒子寿命期间的颜色。 |
+| startColor | VcColor\|Array\|string | | `optional` 粒子在其生命初期的颜色。 |
+| endColor| VcColor\|Array\|string | | `optional` 粒子寿命结束时的颜色。|
+| image | HTMLImageElement \| HTMLCanvasElement\|string | | `optional` 用于广告牌的URI，HTMLImageElement或HTMLCanvasElement。 |
+| imageSize | VcCartesian2 | | `optional` 如果设置，则将覆盖用来缩放粒子图像尺寸（以像素为单位）的minimumImageSize和maximumImageSize输入。 |
+| minimumImageSize | VcCartesian2\|Array | | `optional` 设置宽度的最小范围，以高度为单位，在该范围之上可以随机缩放粒子图像的尺寸（以像素为单位）。 |
+| maximumImageSize| VcCartesian2\|Array | | `optional` 设置最大边界（宽度乘以高度），在该边界以下可以随机缩放粒子图像的尺寸（以像素为单位）。 |
 | speed | number | `1.0` | `optional` 如果设置，则用该值覆盖minimumSpeed和maximumSpeed输入。 |
 | minimumSpeed | number | | `optional` 设置以米/秒为单位的最小范围，在该范围上可以随机选择粒子的实际速度。|
 | maximumSpeed | number | | `optional` 设置以米/秒为单位的最大范围，在该范围内将随机选择粒子的实际速度。 |

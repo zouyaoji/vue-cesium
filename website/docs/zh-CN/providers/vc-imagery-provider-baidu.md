@@ -118,14 +118,14 @@
 | ----- | ---- | ----- | ---- |
 | url | string |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `mapStyle` 属性。 |
 | rectangle | VcRectangle | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
-| credit | string\|Object | `''` | `optional` 服务版权描述信息。 |
+| credit | string\|Cesium.Credit | `''` | `optional` 服务版权描述信息。 |
 | minimumLevel | number | `0` | `optional` 最小层级。 |
 | maximumLevel | number | `18` | `optional` 最大层级。 |
 | scale | number | `1` | `optional` 指定缩放。 |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
 |subdomains|Array\<string\>|`['0', '1', '2', '3']`| `optional` 指定服务轮询参数。|
 | mapStyle | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
-| projectionTransforms | boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| projectionTransforms | ProjectionTransforms |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` 指定服务协议。 |
 
 :::tip
