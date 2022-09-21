@@ -140,7 +140,7 @@
 | luminanceAtZenith | number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。|
 | sphericalHarmonicCoefficients | Array\|Object || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。|
 | specularEnvironmentMaps | string ||`optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。|
-| credit | Object\|string | | `optional` 指定 model 的描述信息。 |
+| credit | Cesium.Credit\|string | | `optional` 指定 model 的描述信息。 |
 | backFaceCulling | boolean | `true` | `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于材质的 doubleSided 属性； 如果为假，则禁用背面剔除。 如果 Model#color 是半透明的或 Model#silhouetteSize 大于 0.0，则不会剔除背面|
 | enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
 

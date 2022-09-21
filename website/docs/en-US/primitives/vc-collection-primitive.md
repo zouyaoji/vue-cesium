@@ -253,7 +253,7 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 | arcType | number \| Cesium.ArcType | | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. |
 | classificationType | number \| Cesium.ClassificationType | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
 | appearance | VcAppearance | | `optional` The appearance. |
-| depthFailColor | Object\|Array\|string | | `optional` Specify the depthFailColor. |
+| depthFailColor | VcColor\|Array\|string | | `optional` Specify the depthFailColor. |
 | depthFailAppearance | VcAppearance | | `optional` Specify the depthFailAppearance. |
 | ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid to be used as a reference. |
 | allowPicking | boolean | `true` | `optional` When true, polygon will only be pickable with Scene#pick. When false, GPU memory is saved. |

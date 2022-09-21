@@ -144,7 +144,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
+| alignedAxis | VcPosition\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
 | color | VcColor\|string\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
 | disableDepthTestDistance | number | | `optional` 指定 billboard 的深度检测距离。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |

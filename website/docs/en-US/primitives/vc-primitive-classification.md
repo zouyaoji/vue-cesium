@@ -92,8 +92,8 @@ Basic usage of VcPrimitiveClassification component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| geometryInstances | Object\|Array | | `optional` The geometry instances to render. This can either be a single instance or an array of length one.|
-| appearance | Object | | `optional` The appearance used to render the primitive. Defaults to a flat PerInstanceColorAppearance when GeometryInstances have a color attribute. |
+| Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` The geometry instances to render. This can either be a single instance or an array of length one.|
+| appearance | VcAppearance | | `optional` The appearance used to render the primitive. Defaults to a flat PerInstanceColorAppearance when GeometryInstances have a color attribute. |
 | show | boolean | `true` | `optional` Determines if this primitive will be shown. |
 | vertexCacheOptimize | boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
 | interleave | boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |

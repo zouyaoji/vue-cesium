@@ -86,8 +86,8 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------ | ---- | ------ | ---- |---|
-| geometryInstances | Object\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
-| appearance | Object | | `optional` 指定图元的外观参数。 |
+| Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
+| appearance | VcAppearance | | `optional` 指定图元的外观参数。 |
 | show | boolean | `true` | `optional` 指定图元是否显示。 |
 | vertexCacheOptimize | boolean | `false` | `optional` 指定是否优化几何体顶点着色器之前和之后的缓存。 |
 | interleave | boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |

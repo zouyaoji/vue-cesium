@@ -127,7 +127,7 @@
 | ----- | ---- | ----- | --------- |
 | show | boolean | `true` | `optional` 指定该积云图元集合是否显示。 |
 | noiseDetail | number | `16.0` | `optional` 指定噪声纹理数值。 |
-| noiseOffset | Object: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` 指定噪声纹理数值的平移参数。 |
+| noiseOffset | VcPosition: VcPosition | `{x: 0, y: 0, z: 0}`|`optional` 指定噪声纹理数值的平移参数。 |
 | debugBillboards | boolean |`16.0`|`optional` 仅用于调试。确定广告牌是否以不透明颜色呈现。 |
 | debugEllipsoids | boolean |`16.0`|`optional` 仅用于调试。确定云是否将作为不透明椭圆体呈现。 |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` 指定积云集合数组。 数组对象结构与 `vc-cumulus-cloud` 组件属性相同。 |

@@ -146,7 +146,7 @@ Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` The aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector. |
+| alignedAxis | VcPosition\|Array | `{x: 0, y: 0, z: 0}` | `optional` The aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector. |
 | color | VcColor\|string\|Array | `'white'` | `optional` The color that is multiplied with the billboard's texture. |
 | disableDepthTestDistance | number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
 | distanceDisplayCondition | VcDistanceDisplayCondition\|Array | | `optional` The condition specifying at what distance from the camera that this billboard will be displayed.|
