@@ -125,7 +125,7 @@ Basic usage of VcGeometryEllipse component.
 
 | Name           | Type           | Default | Description                                                                                      |
 | -------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| center         | Object\|Array  |         | `required` The ellipse's center point in the fixed frame.                                        |
+| center         | VcPosition\|Array  |         | `required` The ellipse's center point in the fixed frame.                                        |
 | semiMajorAxis  | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
 | semiMinorAxis  | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
 | ellipsoid      | Cesium.Ellipsoid         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
@@ -154,7 +154,7 @@ Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.
 
 | Name                  | Type           | Default | Description                                                                                      |
 | --------------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| center                | Object         |         | `required` The ellipse's center point in the fixed frame.                                        |
+| center         | VcPosition         |         | `required` The ellipse's center point in the fixed frame.                                        |
 | semiMajorAxis         | number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
 | semiMinorAxis         | number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
 | ellipsoid      | Cesium.Ellipsoid         |         | `optional` The ellipsoid the ellipse will be on.                                                 |

@@ -119,7 +119,7 @@ Basic usage of VcGeometryBox component.
 
 | Name         | Type   | Default | Description                                                                                                 |
 | ------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
-| dimensions   | Object |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
+| dimensions   | VcPosition |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
 | vertexFormat | Cesium.VertexFormat |         | `optional` The vertex attributes to be computed.                                                            |
 
 ### Events
@@ -140,7 +140,7 @@ Loading a box geometry outline. It is equivalent to initializing a `Cesium.BoxOu
 
 | Name       | Type   | Default | Description                                                                                                 |
 | ---------- | ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
-| dimensions | Object |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
+| dimensions   | VcPosition |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
 
 ### VcGeometryBoxOutline Events
 

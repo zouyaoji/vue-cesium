@@ -87,7 +87,7 @@ Basic usage of the VcGraphicsPlane component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the plane. |
 | plane | Object\|Array | | `optional` A Plane Property specifying the normal and distance for the plane. |
-| dimensions | Object\|Array | | `optional` A Cartesian2 Property specifying the width and height of the plane. |
+| dimensions   | VcPosition\|Array | | `optional` A Cartesian2 Property specifying the width and height of the plane. |
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the plane is filled with the provided material. |
 | material | Object\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the plane. |
 | outline | boolean | `false` | `optional` A boolean Property specifying whether the plane is outlined. |

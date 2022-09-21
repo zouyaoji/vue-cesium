@@ -96,7 +96,7 @@ Basic usage of the `vc-imagery-provider-wmts` component.
 | tileMatrixLabels | Array | | `optional` A list of identifiers in the TileMatrix to use for WMTS requests, one per TileMatrix level. |
 | clock | Clock | | `optional` A Clock instance that is used when determining the value for the time dimension. Required when options.times is specified. |
 | times | TimeIntervalCollection | | `optional` TimeIntervalCollection with its data property being an object containing time dynamic dimension and their values. |
-| dimensions | Object | | `optional` A object containing static dimensions and their values. |
+| dimensions   | VcPosition | | `optional` A object containing static dimensions and their values. |
 | tileWidth | number | `256` | `optional` The tile width in pixels. |
 | tileHeight | number | `256` | `optional` The tile height in pixels. |
 | tilingScheme | TilingScheme | | `optional` The tiling scheme corresponding to the organization of the tiles in the TileMatrixSet. |

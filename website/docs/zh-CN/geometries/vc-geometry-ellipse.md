@@ -125,7 +125,7 @@
 
 | 属性名         | 类型          | 默认值 | 描述                                                |
 | -------------- | ------------- | ------ | --------------------------------------------------- |
-| center         | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
+| center         | VcPosition\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis  | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis  | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
 | ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |
@@ -154,7 +154,7 @@
 
 | 属性名                | 类型          | 默认值 | 描述                                                |
 | --------------------- | ------------- | ------ | --------------------------------------------------- |
-| center                | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
+| center         | VcPosition\|Array |        | `required` 指定椭圆的中心位置。                     |
 | semiMajorAxis         | number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
 | semiMinorAxis         | number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
 | ellipsoid      | Cesium.Ellipsoid        |        | `optional` 指定椭圆的参考椭球体。                   |

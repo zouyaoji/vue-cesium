@@ -115,7 +115,7 @@ Basic usage of VcGeometryCircle component.
 
 | Name           | Type   | Default | Description                                                                                               |
 | -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
-| center         | Object |         | `required` The circle's center point in the fixed frame.                                                  |
+| center         | VcPosition |         | `required` The circle's center point in the fixed frame.                                                  |
 | radius         | number |         | `required` The radius in meters.                                                                          |
 | ellipsoid      | Cesium.Ellipsoid |         | `optional` The ellipsoid the circle will be on.                                                           |
 | height         | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
@@ -142,7 +142,7 @@ Loading the circle geometry outline. It is equivalent to initializing a `Cesium.
 
 | Name                  | Type   | Default | Description                                                                                     |
 | --------------------- | ------ | ------- | ----------------------------------------------------------------------------------------------- |
-| center                | Object |         | `required` The circle's center point in the fixed frame.                                        |
+| center         | VcPosition |         | `required` The circle's center point in the fixed frame.                                        |
 | radius                | number |         | `required` The radius in meters.                                                                |
 | ellipsoid      | Cesium.Ellipsoid |         | `optional` The ellipsoid the circle will be on.                                                 |
 | height                | number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                 |

@@ -134,7 +134,7 @@
 
 | 属性名       | 类型          | 默认值 | 描述                                |
 | ------------ | ------------- | ------ | ----------------------------------- |
-| frustum      | Object        |        | `optional` 指定视锥体参数。         |
+| frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |        | `optional` 指定视锥体参数。         |
 | origin       | Object\|Array |        | `optional` 指定视锥体原点。         |
 | orientation  | Object\|Array |        | `optional` 指定视锥体旋转参数。     |
 | vertexFormat | Cesium.VertexFormat        |        | `optional` 指定视锥体顶点渲染方式。 |
@@ -157,7 +157,7 @@
 
 | 属性名      | 类型          | 默认值 | 描述                            |
 | ----------- | ------------- | ------ | ------------------------------- |
-| frustum     | Object        |        | `optional` 指定视锥体参数。     |
+| frustum     | Cesium.PerspectiveFrustum \| Cesium.OrthographicFrustum        |        | `optional` 指定视锥体参数。     |
 | origin      | Object\|Array |        | `optional` 指定视锥体原点。     |
 | orientation | Object\|Array |        | `optional` 指定视锥体旋转参数。 |
 

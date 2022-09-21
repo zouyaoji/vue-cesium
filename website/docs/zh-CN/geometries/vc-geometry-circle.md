@@ -115,7 +115,7 @@
 
 | 属性名         | 类型   | 默认值 | 描述                                                                     |
 | -------------- | ------ | ------ | ------------------------------------------------------------------------ |
-| center         | Object |        | `required` 指定圆形中心点。                                              |
+| center         | VcPosition |        | `required` 指定圆形中心点。                                              |
 | radius         | number |        | `required` 指定圆形半径。                                                |
 | ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定圆形参考椭球体。                                          |
 | height         | number | `0.0`  | `optional` 指定圆形离地表的高度（米）。                                  |
@@ -142,7 +142,7 @@
 
 | 属性名                | 类型   | 默认值 | 描述                                                  |
 | --------------------- | ------ | ------ | ----------------------------------------------------- |
-| center                | Object |        | `required` 指定圆形中心点。                           |
+| center         | VcPosition |        | `required` 指定圆形中心点。                           |
 | radius                | number |        | `required` 指定圆形半径。                             |
 | ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定圆形参考椭球体。                       |
 | height                | number | `0.0`  | `optional` 指定圆形离地表的高度（米）。               |

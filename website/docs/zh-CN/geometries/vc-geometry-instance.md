@@ -160,7 +160,7 @@
 
 | 属性名      | 类型   | 默认值 | 描述                                                                                                           |
 | ----------- | ------ | ------ | -------------------------------------------------------------------------------------------------------------- |
-| geometry    | Object |        | `required` 指定 geometry。                                                                                     |
+| geometry    | Cesium.Geometry \| Cesium.GeometryFactory |        | `required` 指定 geometry。                                                                                     |
 | modelMatrix | Object |        | `optional` 指定将几何图形从模型坐标转换为世界坐标的模型矩阵。                                                  |
 | id          | \*     |        | `optional` 指定与 geometry 关联的信息，拾取时或者 Primitive#getGeometryInstanceAttributes 方法将返回该属性值。 |
 | attributes  | Object |        | `optional` 指定每个实例的属性。                                                                                |

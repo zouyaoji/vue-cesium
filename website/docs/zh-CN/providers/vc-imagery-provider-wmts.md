@@ -95,7 +95,7 @@
 | tileMatrixLabels | Array                  |                | `optional` 指定 TileMatrix 中用于 WMTS 请求的标识符列表，每个 TileMatrix 级别一个。 |
 | clock            | Clock                  |                | `optional` 确定时间维度值时使用的 Clock 实例。 指定 options.times 时必需。          |
 | times            | TimeIntervalCollection |                | `optional` TimeIntervalCollection，其 data 属性是一个包含时间动态维度及其值的对象。 |
-| dimensions       | Object                 |                | `optional` 指定包含静态尺寸及其值的对象。                                           |
+| dimensions   | VcPosition                 |                | `optional` 指定包含静态尺寸及其值的对象。                                           |
 | tileWidth        | number                 | `256`          | `optional` 像元宽度。                                                               |
 | tileHeight       | number                 | `256`          | `optional` 像元高度。                                                               |
 | tilingScheme     | TilingScheme           |                | `optional` 指定切片方案。                                                           |

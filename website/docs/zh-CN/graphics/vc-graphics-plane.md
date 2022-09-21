@@ -87,7 +87,7 @@
 | --- | -------- | ------ | -------- | --- |
 | show | boolean | `true` | `optional` 指定 plane 是否显示。 |
 | plane | Object\|Array | | `optional` 指定 plane 的法线和距离。 |
-| dimensions | Object\|Array | | `optional` 指定 plane 的宽和高。 |
+| dimensions   | VcPosition\|Array | | `optional` 指定 plane 的宽和高。 |
 | fill | boolean | `true` | `optional` 指定 plane 是否填充材质。 |
 | material | Object\|string\|Array | `'WHITE'` | `optional` 指定 plane 的材质。 |
 | outline | boolean | `false` | `optional` 指定 plane 是否绘制轮廓线。 |
