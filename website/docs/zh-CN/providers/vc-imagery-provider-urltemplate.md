@@ -111,20 +111,20 @@
 | --------------------- | --------------- | ------- | -------------------------------------------------------------------------------------------- |
 | url                   | string\|Object  |         | `required` 指定服务地址。                                                                    |
 | pickFeaturesUrl       | string\|Object  |         | `optional` 指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
-| urlSchemeZeroPadding  | Object          |         | `optional` 指定每个瓦片中心的偏移值。                                                        |
+| urlSchemeZeroPadding  | any          |         | `optional` 指定每个瓦片中心的偏移值。                                                        |
 | subdomains            | string          | `'abc'` | `optional` 指定服务的轮询子域名。                                                            |
 | credit                | string          | `''`    | `optional` 指定服务的描述信息                                                                |
 | minimumLevel          | number          | `0`     | `optional` 最小层级。                                                                        |
 | maximumLevel          | number          |         | `optional` 最大层级。                                                                        |
 | rectangle | VcRectangle\|Array   |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
-| tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                              |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme          |         | `optional` 指定服务的投影参数。                                                              |
 | ellipsoid      | Cesium.Ellipsoid          |         | `optional` 参考椭球体。                                                                      |
 | tileWidth             | number          | `256`   | `optional` 像元宽度。                                                                        |
 | tileHeight            | number          | `256`   | `optional` 像元高度。                                                                        |
 | hasAlphaChannel       | boolean         | `true`  | `optional` 设置为 true 表示图层包含 alpha 透明通道，反之没有。                               |
 | getFeatureInfoFormats | Array           |         | `optional` 格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
 | enablePickFeatures    | boolean         | `true`  | `optional` 是否开启图层拾取。                                                                |
-| customTags            | Object          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
+| customTags            | any          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
 | projectionTransforms  | boolean\|Object | `false` | `optional` 指定纠偏参数。                                                                    |
 
 ### 事件

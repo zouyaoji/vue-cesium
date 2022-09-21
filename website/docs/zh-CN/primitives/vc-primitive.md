@@ -73,7 +73,7 @@
 | ------ | ---- | ------ | ---- |---|
 | Cesium.GeometryInstance \| Array\<Cesium.GeometryInstance\>\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
 | appearance | VcAppearance | | `optional` 指定图元的外观参数。 |
-| depthFailAppearance | Object | | `optional` 指定图元在深度测试失败后的外观。 |
+| depthFailAppearance | VcAppearance | | `optional` 指定图元在深度测试失败后的外观。 |
 | show | boolean | `true` | `optional` 指定图元是否显示。 |
 | modelMatrix | Cesium.Matrix4 | | `optional` 指定图元从模型坐标转换为世界坐标的 4 x 4 矩阵。 |
 | vertexCacheOptimize | boolean | `false` | `optional` 指定是否优化几何体顶点着色器之前和之后的缓存。 |

@@ -89,10 +89,10 @@ Basic usage of VcPrimitiveTileset component.
 | skipLevels | number | 1 | `optional` When skipLevelOfDetail is true, a constant defining the minimum number of levels to skip when loading tiles. When it is 0, no levels are skipped. Used in conjunction with skipScreenSpaceErrorFactor to determine which tiles to load. |
 | immediatelyLoadDesiredLevelOfDetail | boolean | false | `optional` When skipLevelOfDetail is true, only tiles that meet the maximum screen space error will ever be downloaded. Skipping factors are ignored and just the desired tiles are loaded.|
 | loadSiblings | boolean | false | `optional` When skipLevelOfDetail is true, determines whether siblings of visible tiles are always downloaded during traversal. |
-| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection> | | `optional` The ClippingPlaneCollection used to selectively disable rendering the tileset. |
+| clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction\<Cesium.ClippingPlaneCollection\> | | `optional` The ClippingPlaneCollection used to selectively disable rendering the tileset. |
 | classificationType | number | | `optional` Determines whether terrain, 3D Tiles or both will be classified by this tileset. See Cesium3DTileset#classificationType for details about restrictions and limitations. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
 | ellipsoid      | Cesium.Ellipsoid | Ellipsoid.WGS84 | `optional` The ellipsoid determining the size and shape of the globe. |
-| pointCloudShading | Object | | `optional` Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting. |
+| pointCloudShading | Cesium.PointCloudShading | | `optional` Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting. |
 | imageBasedLightingFactor | VcCartesian2\|Array | `[1.0, 1.0]` | `optional` Scales the diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox. |
 | lightColor | VcColor\|Array | | `optional` The light color when shading models. When undefined the scene's light color is used instead. |
 | luminanceAtZenith | number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map. |

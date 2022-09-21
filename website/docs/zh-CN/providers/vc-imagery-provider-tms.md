@@ -99,7 +99,7 @@
 | minimumLevel         | number          | `0`     | `optional` 指定服务最小层级。                  |
 | maximumLevel         | number          |         | `optional` 指定服务最大层级。                  |
 | rectangle | VcRectangle\|Array   |         | `optional` 指定影像加载的矩形范围。            |
-| tilingScheme         | Object          |         | `optional` 指定服务坐标系参数。                |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme          |         | `optional` 指定服务坐标系参数。                |
 | ellipsoid      | Cesium.Ellipsoid          |         | `optional` 指定参考椭球体。默认 WGS84 椭球体。 |
 | tileWidth            | number          | `256`   | `optional` 指定图像瓦片宽度。                  |
 | tileHeight           | number          | `256`   | `optional` 指定图像瓦片高度。                  |

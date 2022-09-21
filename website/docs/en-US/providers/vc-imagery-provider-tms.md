@@ -100,7 +100,7 @@ Basic usage of the `vc-imagery-provider-tms` component.
 | minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | rectangle | VcRectangle\|Array | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | maximumLevel | number | | `optional` The rectangle, in radians, covered by the image. |
-| tilingScheme | Object | | `optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used. |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme | | `optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used. |
 | ellipsoid      | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
 | tileWidth | number | `256` | `optional` Pixel width of image tiles. |
 | tileHeight | number | `256` | `optional` Pixel height of image tiles.|
