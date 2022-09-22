@@ -889,10 +889,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           keys[key] = true
           loadLibs.push(...libsConfig[key])
         }
-      } else if (cesiumPath.includes('dc.base')) {
+      } else if (cesiumPath.includes('dc.base.min.js')) {
         loadLibs.push(cesiumPath)
-        loadLibs.push(cesiumPath.replace('dc.base', 'dc.core'))
-        loadLibs.push(cesiumPath.replace('dc.base', 'dc.core').replace('.js', '.css'))
+        loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js'))
+        loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js').replace('/dc.core.min.js', '/dc.core.min.css'))
       } else if (cesiumPath.includes('/XbsjEarth.js')) {
         loadLibs.push(cesiumPath)
       } else {
