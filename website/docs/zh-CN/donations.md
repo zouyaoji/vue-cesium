@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-08-31 22:09:40
+ * @LastEditTime: 2022-09-22 12:45:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -28,6 +28,7 @@
 
   | 金额     | 来源   | 赞助人                                          | 留言                              | 时间       |
   | -------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 110.0  | AliPay | \*勇                                            | -                                 | 2022-09-21 |
   | ¥ 188.88 | WeChat | \*意                                            | 支持一下                          | 2022-08-31 |
   | ¥ 20.0   | WeChat | \*G                                             | -                                 | 2022-08-21 |
   | ¥ 66.66  | WeChat | [houluy](https://github.com/houluy)             | 祝 vue-cesium 越来越好            | 2022-08-12 |
