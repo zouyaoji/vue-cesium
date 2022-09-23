@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-08-03 09:42:07
+ * @LastEditTime: 2022-09-23 13:50:56
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \10_vue-cesium\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -53,6 +53,7 @@ export default defineComponent({
       const { viewer } = $services
       const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
       imageryLayer.sortOrder = props.sortOrder
+      imageryLayer.vcId = props.vcId || Cesium.createGuid()
       viewer.imageryLayers.add(imageryLayer)
       return !viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     }
@@ -192,6 +193,10 @@ export type VcLayerImageryProps = {
    * Specify the relative order of the layer.
    */
   sortOrder?: number
+  /**
+   * Specify vcId of the layer.
+   */
+  vcId?: string
   /**
    * Triggers before the VcLayerImagery is loaded.
    */

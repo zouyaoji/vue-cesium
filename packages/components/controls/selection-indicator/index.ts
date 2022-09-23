@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-03-05 11:22:33
+ * @LastEditTime: 2022-09-23 14:56:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
@@ -32,6 +32,14 @@ export const selectionIndicatorProps = {
   allowFeatureInfoRequests: {
     type: Boolean,
     default: true
+  },
+  includeImageryIds: {
+    type: Array,
+    default: () => []
+  },
+  excludeImageryIds: {
+    type: Array,
+    default: () => []
   },
   limit: {
     type: Number,
@@ -136,6 +144,14 @@ export interface VcSelectionIndicatorProps {
    * Default value: true
    */
   allowFeatureInfoRequests?: boolean
+  /**
+   * Specify that picking layers only work within the contained id array.
+   */
+  includeImageryIds?: string[]
+  /**
+   * Specify an array of ids to ignore when picking up an imagerylayer.
+   */
+  excludeImageryIds?: string[]
   /**
    * Specify the maximum number of picked objects.
    * Default value: 25

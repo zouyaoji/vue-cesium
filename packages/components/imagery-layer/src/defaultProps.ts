@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-15 17:45:45
+ * @LastEditTime: 2022-09-23 13:49:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\defaultProps.ts
@@ -60,5 +60,6 @@ export default {
     type: Number,
     default: 0.004
   },
-  sortOrder: Number
+  sortOrder: Number,
+  vcId: String
 }

@@ -3,6 +3,7 @@ import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch, WatchStopHa
 import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
 import { isArray } from '@vue-cesium/utils/util'
+import { pickImageryLayerFeatures } from './util'
 
 export default function (instance: VcComponentInternalInstance, props, $services: VcViewerProvider) {
   // state
@@ -108,8 +109,9 @@ export default function (instance: VcComponentInternalInstance, props, $services
 
     const providerCoords = attachProviderCoordHooks()
 
-    const pickRasterPromise = props.allowFeatureInfoRequests ? scene.imageryLayers.pickImageryLayerFeatures(pickRay, scene) : Promise.resolve()
-
+    const pickRasterPromise = props.allowFeatureInfoRequests
+      ? pickImageryLayerFeatures(pickRay, scene, props.includeImageryIds, props.excludeImageryIds)
+      : Promise.resolve()
     const result = buildPickedFeatures(
       providerCoords,
       pickPosition,
