@@ -214,13 +214,13 @@ Tip: For other controls (position bar and distance scale bar, regarded as a whol
 
 ### VcNavigation Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### VcNavigation Slots
 
@@ -303,13 +303,13 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 
 ### VcCompass Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### VcZoomControl Props
 
@@ -430,13 +430,13 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcZoomControl Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### VcPrint Props
 
@@ -471,13 +471,13 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcPrint Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### VcMyLocation Props
 
@@ -518,13 +518,13 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcMyLocation Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### VcStatusBar Props
 
@@ -559,7 +559,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
 | reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
 | unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise. |
 | getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
 | getMouseCoordsInfo | () => MouseCoords | Get the mouseCoords info. |
 | getCameraInfo | () =>{ heading: string; pitch: string; roll: string; height: string; level: string } | Get the camera info. |
@@ -588,10 +588,10 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcDistanceLegend Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |

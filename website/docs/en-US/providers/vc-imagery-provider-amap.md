@@ -1,4 +1,4 @@
-## AMapImageryProvider
+## VcImageryProviderAmap
 
 Load the amap tile service.
 

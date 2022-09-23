@@ -17,7 +17,7 @@
       <!-- 可到(https://www.bingmapsportal.com/)申请Key。 -->
       <vc-imagery-provider-bing
         ref="provider"
-        bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+        bm-key="AmGu3cvB_g1HbkQErEyvmLc9j0YIGWS7IdOqR7-hQbO8J92Fzrzkhy_bYKSsyoEx"
         :map-style="mapStyle"
       ></vc-imagery-provider-bing>
     </vc-layer-imagery>

@@ -156,10 +156,10 @@ The basic usage of the VcOverviewMap component.
 
 ### Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |

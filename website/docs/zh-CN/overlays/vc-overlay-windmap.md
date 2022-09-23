@@ -203,7 +203,7 @@ options 默认参数:
 | load               | () => Promise\<false \| VcReadyObject\>                   | 手动加载组件。                              |
 | reload             | () => Promise\<false \| VcReadyObject\>                   | 手动重新加载组件。                          |
 | unload             | () => Promise\<boolean\>                                  | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject>                   | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject>                  | 获取标志该组件是否创建成功的 Promise 对象。 |
 | getCesiumObject    | () => VcCesiumObject                                      | 获取该组件加载的 Cesium 对象。              |
 | getNearestUV       | (longitude: number, latitude: number) => [number, number] | 根据经纬度获取 U V 值。                     |
 

@@ -207,7 +207,7 @@ The parameter configuration of each drawing result is too long to list here. If 
 | load                             | () => Promise\<false \| VcReadyObject\>                    | Load components manually.                             |
 | reload                           | () => Promise\<false \| VcReadyObject\>                    | Reload components manually.                           |
 | unload                           | () => Promise\<boolean\>                                   | Destroy the loaded component manually.                |
-| getCreatingPromise               | () => Promise<boolean \| VcReadyObject>                    | Get the creatingPromise.                              |
+| getCreatingPromise               | () => Promise\<boolean \| VcReadyObject>                   | Get the creatingPromise.                              |
 | getCesiumObject                  | () => VcCesiumObject                                       | Get the Cesium object loaded by this component.       |
 | clearAll                         | () => void                                                 | Clear all drawing results.                            |
 | activate                         | () => void                                                 | End listening for the ScreenSpaceEventHandler events. |

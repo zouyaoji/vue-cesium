@@ -388,7 +388,7 @@ Basic usage of VcOverlayDynamic component.
 | load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
 | reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
 | unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise. |
 | getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
 | getOverlay | (e: number \| string \| DynamicOverlay)  => DynamicOverlay | Get dynamic overlay by id or index. e: id or index. |
 | getOverlays | () => Array\<DynamicOverlay\> | Get dynamic overlays. |

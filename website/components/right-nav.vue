@@ -17,11 +17,15 @@
         {{ item }}
       </el-link>
     </div>
+    <app-link href="https://new.502502.xyz/#/register?code=jlz6Frzz" style="position: absolute">
+      <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">jlz6Frzz</el-tag></span>
+    </app-link>
   </el-scrollbar>
+
   <ad-sense
     adSlot="4608014562"
     :adStyle="{ display: 'inline-block', width: '235px', height: '235px' }"
-    style="position: fixed; right: 10px; bottom: 10px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+    style="position: fixed; right: 10px; bottom: 20px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
   ></ad-sense>
 </template>
 
@@ -29,6 +33,7 @@
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, ref, computed } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import AdSense from './ad-sense.vue'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -41,6 +46,7 @@ export default defineComponent({
     let scrollContainer
     const active = ref('')
     const navScroll = ref(null)
+    const $route = useRoute()
 
     const handleAnchorClick = anchor => {
       scrollContainer.scrollTop = map.get(anchor)
@@ -49,10 +55,14 @@ export default defineComponent({
 
     let resizeObserver = null
 
-    // const adSlot = computed(() => {
-    //   const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
-    //   return cnHref ? '7202599371' : '4608014562'
-    // })
+    const adSlot = computed(() => {
+      const cnHref = location.href.indexOf('vue-cesium.songluck.com') > -1
+      return cnHref ? '7202599371' : '4608014562'
+    })
+
+    const otherAd = computed(() => {
+      return $route.path.indexOf('/zh-CN/') !== -1 ? '高速稳定梯子推荐' : 'Stable VPN Recommendation'
+    })
 
     //  const adSenseShow = ref(false)
 
@@ -99,6 +109,7 @@ export default defineComponent({
       navScroll,
       anchors,
       active,
+      otherAd,
       handleAnchorClick
     }
   }

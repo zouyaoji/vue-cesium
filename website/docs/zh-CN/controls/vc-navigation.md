@@ -243,13 +243,13 @@
 
 ### VcNavigation 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### VcNavigation 插槽
 
@@ -332,13 +332,13 @@
 
 ### VcCompass 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### VcZoomControl
 
@@ -463,13 +463,13 @@
 
 ### VcZoomControl 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### VcPrint
 
@@ -508,13 +508,13 @@
 
 ### VcPrint 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### VcMyLocation
 
@@ -560,13 +560,13 @@
 
 ### VcMyLocation 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### VcStatusBar
 
@@ -604,7 +604,7 @@
 | load               | () => Promise\<false \| VcReadyObject\>                                               | 手动加载组件。                              |
 | reload             | () => Promise\<false \| VcReadyObject\>                                               | 手动重新加载组件。                          |
 | unload             | () => Promise\<boolean\>                                                              | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject>                                               | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject>                                              | 获取标志该组件是否创建成功的 Promise 对象。 |
 | getCesiumObject    | () => VcCesiumObject                                                                  | 获取该组件加载的 Cesium 对象。              |
 | getMouseCoordsInfo | () => MouseCoords                                                                     | 获取鼠标坐标信息。                          |
 | getCameraInfo      | () => { heading: string; pitch: string; roll: string; height: string; level: string } | 获取相机信息。                              |
@@ -637,10 +637,10 @@
 
 ### VcDistanceLegend 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |

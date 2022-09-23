@@ -148,6 +148,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | -------------- | ----------------------- | ------ | --------------------------------------- |---|
 | sortOrder | number | |`optional` 指定图层相对顺序。|
+| vcId | string | |`optional` 指定图层的 vcId，`vc-selection-indicator` 拾取排除时需要。|
 | imageryProvider | VcImageryProvider | | `optional` 指定影像图层的瓦片提供方式。 |
 | rectangle | VcRectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
 | alpha | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |

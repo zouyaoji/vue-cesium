@@ -2,13 +2,18 @@
 
 ### 3.1.0
 
-_2022-09-XX_
+_2022-09-24_
 
 #### Bug 修复
 
 - 修复热力图组件自定义数据字段不起作用的问题。
 - 修复数据源组件加载海量数据速度慢的问题。
 - 修复加载 dc-sdk 时引用 cdn 地址不能正常加载的问题。
+
+#### 新特性
+
+- `vc-layer-imagery` 组件增加 `vcId` 属性。
+- `vc-selection-indicator` 增加 `includeImageryIds` 和 `excludeImageryIds` 属性，用于拾取影像要素时排除图层使用。
 
 ### 3.0.19
 

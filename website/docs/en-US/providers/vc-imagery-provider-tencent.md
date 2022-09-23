@@ -1,4 +1,4 @@
-## TencentImageryProvider
+## VcImageryProviderTencent
 
 Load the tencent tile service.
 

@@ -86,6 +86,7 @@ The basic usage of the image layer component.
 | Name | Type | Default | Description | Accepted Values |
 | -------------- | ----------------------- | ------ | --------------------------------------- |---|
 | sortOrder | number | |`optional` Specify the relative order of the layers.|
+| vcId | string | |`optional` Specify the vcId of the layer, required for `vc-selection-indicator` to pick exclusions.|
 | imageryProvider | VcImageryProvider | | `optional` The imagery provider to use. |
 | rectangle | VcRectangle | `imageryProvider.rectangle` | `optional` The rectangle of the layer. This rectangle can limit the visible portion of the imagery provider. |
 | alpha | number \| LayerPropCallback | `1.0` | `optional` The alpha blending value of this layer, from 0.0 to 1.0.  |

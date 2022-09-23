@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-13 16:48:20
- * @LastEditTime: 2022-09-07 21:24:51
+ * @LastEditTime: 2022-09-23 15:10:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\controls\vc-selection-indicator.md
@@ -81,13 +81,15 @@ Basic usage of the selector component.
 
 ### Props
 
-| Name                     | Type    | Default | Description                                                                                         |
-| ------------------------ | ------- | ------- | --------------------------------------------------------------------------------------------------- |
-| show                     | boolean | `true`  | `optional` Specifies whether the selection indicator is visible.                                    |
-| width                    | number  | `50`    | `optional` Specify the width of the selection indicator.                                            |
-| height                   | number  | `50`    | `optional` Specify the height of the selection indicator.                                           |
-| allowFeatureInfoRequests | boolean | `true`  | `optional` Asynchronously determines the imagery layer features that are intersected by a pick ray. |
-| height                   | number  | `25`    | `optional` Specify the maximum number of picked objects.                                            |
+| Name                     | Type     | Default | Description                                                                                         |
+| ------------------------ | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| show                     | boolean  | `true`  | `optional` Specifies whether the selection indicator is visible.                                    |
+| width                    | number   | `50`    | `optional` Specify the width of the selection indicator.                                            |
+| height                   | number   | `50`    | `optional` Specify the height of the selection indicator.                                           |
+| allowFeatureInfoRequests | boolean  | `true`  | `optional` Asynchronously determines the imagery layer features that are intersected by a pick ray. |
+| limit                    | number   | `25`    | `optional` Specify the maximum number of picked objects.                                            |
+| includeImageryIds        | string[] |         | `optional` Specify an array of vcIds to include when picking image features.                        |
+| excludeImageryIds        | string[] | `[]`    | `optional` Specify an array of vcIds to exclude when picking image features.                        |
 
 ### Events
 
@@ -106,7 +108,7 @@ Basic usage of the selector component.
 | load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
 | reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
 | unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise. |
 | getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
 | computeScreenSpacePosition | () => Cesium.Cartesian2 | A function that converts the world position of an object to a screen space position. |
 | update | () => void | Updates the view of the selection indicator to match the position and content properties of the view model |

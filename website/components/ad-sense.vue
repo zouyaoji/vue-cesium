@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-09-22 13:03:21
+ * @LastEditTime: 2022-09-23 00:16:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -19,9 +19,9 @@
         :data-ad-layout="dataAdLayout"
       ></ins>
     </div>
-    <app-link href="https://new.502502.xyz/#/register?code=jlz6Frzz">
+    <!-- <app-link href="https://new.502502.xyz/#/register?code=jlz6Frzz">
       <span style="padding-left: 20px">{{ otherAd }}</span>
-    </app-link>
+    </app-link> -->
   </div>
 </template>
 

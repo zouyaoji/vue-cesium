@@ -1,4 +1,4 @@
-## AMapImageryProvider
+## VcImageryProviderAmap
 
 加载高德地图瓦片服务。
 

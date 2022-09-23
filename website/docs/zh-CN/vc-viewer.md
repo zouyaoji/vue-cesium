@@ -18,6 +18,8 @@
     :fullscreen-button="fullscreenButton"
     :fullscreen-element="fullscreenElement"
     :info-box="infoBox"
+    :skyAtmosphere="false"
+    :skyBox="false"
     :show-credit="showCredit"
     @cesium-ready="onCesiumReady"
     @ready="onViewerReady"
@@ -29,6 +31,12 @@
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
+    <vc-layer-imagery>
+      <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    </vc-layer-imagery>
+    <vc-layer-imagery ref="layerText">
+      <vc-imagery-provider-tianditu map-style="cia_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-row>
@@ -95,6 +103,7 @@
     methods: {
       onViewerReady({ Cesium, viewer }) {
         this.loading = false
+        viewer.scene.globe.enableLighting = true
       },
       onCesiumReady(e) {
         console.log(e)
@@ -256,13 +265,13 @@
 
 ## 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ## 插槽
 

@@ -98,13 +98,13 @@ HTML 覆盖物组件的基础用法。
 
 ### 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
-| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                     | 获取该组件加载的 Cesium 对象。              |
 
 ### 参考
 

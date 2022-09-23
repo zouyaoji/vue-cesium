@@ -1,4 +1,4 @@
-## TencentImageryProvider
+## VcImageryProviderTencent
 
 加载腾讯地图瓦片服务。
 

@@ -9,6 +9,9 @@
           <router-view class="content" />
         </div>
         <footer-nav />
+        <app-link href="https://new.502502.xyz/#/register?code=jlz6Frzz">
+          <span style="padding-left: 20px">{{ otherAd }}</span>
+        </app-link>
         <ad-sense
           v-if="adSenseShow"
           adSlot="8270352624"
@@ -45,6 +48,9 @@ export default {
   computed: {
     showBackToTop() {
       return !this.$route.path.match(/backtop/)
+    },
+    otherAd() {
+      return this.$route.path.indexOf('/zh-CN/') !== -1 ? '高速稳定梯子推荐' : 'Stable VPN Recommendation'
     }
   },
   watch: {
