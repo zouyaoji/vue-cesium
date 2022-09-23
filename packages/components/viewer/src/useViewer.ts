@@ -889,7 +889,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           keys[key] = true
           loadLibs.push(...libsConfig[key])
         }
-      } else if (cesiumPath.includes('dc.base.min.js')) {
+      } else if (cesiumPath.includes('/dc.base.min.js')) {
         loadLibs.push(cesiumPath)
         loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js'))
         loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js').replace('/dc.core.min.js', '/dc.core.min.css'))

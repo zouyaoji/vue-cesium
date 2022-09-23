@@ -340,7 +340,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
     const className = getObjClassName(value)
     if (
       className &&
-      className.indexOf('Graphics') === -1 &&
+      // className.indexOf('Graphics') === -1 &&
       entityGraphics[prop] &&
       (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
     ) {

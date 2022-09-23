@@ -412,8 +412,10 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     Color,
     CheckerboardMaterialProperty,
     ColorMaterialProperty,
+    CompositeMaterialProperty,
     GridMaterialProperty,
     ImageMaterialProperty,
+    MaterialProperty,
     PolylineArrowMaterialProperty,
     PolylineDashMaterialProperty,
     PolylineGlowMaterialProperty,
@@ -428,13 +430,16 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     val instanceof Color ||
     val instanceof CheckerboardMaterialProperty ||
     val instanceof ColorMaterialProperty ||
+    val instanceof CompositeMaterialProperty ||
+    val instanceof GridMaterialProperty ||
     val instanceof ImageMaterialProperty ||
+    val instanceof MaterialProperty ||
     val instanceof PolylineArrowMaterialProperty ||
     val instanceof PolylineDashMaterialProperty ||
     val instanceof PolylineGlowMaterialProperty ||
     val instanceof PolylineOutlineMaterialProperty ||
-    val instanceof StripeMaterialProperty ||
-    getObjClassName(val as any).indexOf('MaterialProperty') !== -1
+    val instanceof StripeMaterialProperty
+    // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
   }
@@ -583,8 +588,8 @@ export function makeAppearance(this: VcComponentInternalInstance, val: VcAppeara
     val instanceof PolylineColorAppearance ||
     val instanceof EllipsoidSurfaceAppearance ||
     val instanceof PerInstanceColorAppearance ||
-    val instanceof PolylineMaterialAppearance ||
-    getObjClassName(val as any).indexOf('Appearance') !== -1
+    val instanceof PolylineMaterialAppearance
+    // getObjClassName(val as any).indexOf('Appearance') !== -1
   ) {
     return val as CesiumAppearance
   }

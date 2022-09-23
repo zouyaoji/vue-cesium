@@ -104,6 +104,7 @@ declare namespace Cesium {
      * Specify the relative order of the layers.
      */
     sortOrder?: number
+    vcId?: string
   }
 
   interface ImageryLayerCollection {
