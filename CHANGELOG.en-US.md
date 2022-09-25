@@ -1,5 +1,20 @@
 ## Changelog
 
+### 3.1.0
+
+_2022-09-25_
+
+#### Bug fixes
+
+- Fixed the issue that the custom data field of the `vc-overlay-heatmap` component does not work.
+- Fixed the issue that the datasource component was slow to load massive data.
+- Fixed the issue that the referenced cdn address cannot be loaded normally when loading dc-sdk.
+
+#### New feature
+
+- `vc-layer-imagery` component adds `vcId` property.
+- `vc-selection-indicator` adds `includeImageryIds` and `excludeImageryIds` properties to exclude layers from being used when picking image features.
+
 ### 3.0.19
 
 _2022-09-07_
