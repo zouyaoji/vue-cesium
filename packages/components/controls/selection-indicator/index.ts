@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-09-23 14:56:23
+ * @LastEditTime: 2022-09-25 16:19:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
  */
-import type { Ref } from 'vue'
+import type { PropType, Ref } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { $ } from '@vue-cesium/utils/private/vm'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
@@ -34,11 +34,11 @@ export const selectionIndicatorProps = {
     default: true
   },
   includeImageryIds: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: () => []
   },
   excludeImageryIds: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: () => []
   },
   limit: {

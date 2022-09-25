@@ -57,7 +57,7 @@ interface ColorInByteOption {
 interface MaterialOption {
   fabric: {
     type: string
-    uniforms: {
+    uniforms?: {
       color?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
       image?: string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement
       repeat?: Cesium.Cartesian2 | Cartesian2Option | Array<number> | number
@@ -438,17 +438,19 @@ export type CesiumMaterialProperty =
   | Cesium.PolylineOutlineMaterialProperty
   | Cesium.StripeMaterialProperty
   | Cesium.CallbackProperty
+
 export type VcMaterialProperty =
   | VcColor
   | MaterialOption
   | HTMLImageElement
   | HTMLCanvasElement
   | HTMLVideoElement
-  | VcCallbackPropertyFunction<CesiumMaterialProperty>
+  // | VcCallbackPropertyFunction<CesiumMaterialProperty>
+  // | VcCallbackPropertyFunction<Cesium.Color>
   | CesiumMaterialProperty
 
 export type CesiumMaterial = Cesium.Material | CesiumMaterialProperty
-export type VcMaterial = string | Array<number> | MaterialOption | CesiumMaterial
+export type VcMaterial = string | Array<number> | MaterialOption | CesiumMaterial | Cesium.Color | VcMaterialProperty
 
 export type CesiumAppearance =
   | Cesium.Appearance

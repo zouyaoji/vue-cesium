@@ -523,7 +523,7 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     return new CallbackProperty(val, isConstant)
   }
 
-  return val as CesiumMaterialProperty
+  return val as unknown as CesiumMaterialProperty
 }
 
 /**
