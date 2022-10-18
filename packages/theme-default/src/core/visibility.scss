@@ -47,18 +47,28 @@
   cursor: default !important;
 }
 
-.disabled,
-[disabled] {
-  &,
-  * {
-    outline: 0 !important;
-    cursor: not-allowed !important;
+button,
+command,
+fieldset,
+keygen,
+optgroup,
+option,
+select,
+input,
+textarea {
+  &.disabled,
+  &[disabled] {
+    &,
+    * {
+      outline: 0 !important;
+      cursor: not-allowed !important;
+    }
   }
-}
 
-.disabled,
-[disabled] {
-  opacity: 0.6 !important;
+  &.disabled,
+  &[disabled] {
+    opacity: 0.6 !important;
+  }
 }
 
 .hidden {
