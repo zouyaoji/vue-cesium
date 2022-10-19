@@ -87,6 +87,11 @@ Basic usage of the VcGraphicsEllipsoid component.
 | ---- | ---- | ------- | ----------- | --------------- |
 | show | boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipsoid. |
 | radii | VcPosition | | `optional` A Cartesian3 Property specifying the radii of the ellipsoid. |
+| innerRadii | VcPosition | | `optional` A Cartesian3 Property specifying the inner radii of the ellipsoid. |
+| minimumClock | number | `0.0` | `optional` A Property specifying the minimum clock angle of the ellipsoid. |
+| maximumClock | number | `2*Math.PI` | `optional` A Property specifying the maximum clock angle of the ellipsoid. |
+| minimumCone | number | `0.0` | `optional` A Property specifying the minimum cone angle of the ellipsoid. |
+| maximumCone | number | `Math.PI` | `optional` A Property specifying the maximum cone angle of the ellipsoid. |
 | heightReference | number | | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | fill | boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |

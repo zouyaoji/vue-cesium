@@ -87,6 +87,11 @@
 | ----- | ----- | ----- | --- | ------ |
 | show | boolean | `true` | `optional` 指定 ellipsoid 是否显示。 |
 | radii | VcPosition | | `optional` 指定 ellipsoid 的半径参数。 |
+| innerRadii | VcPosition | | `optional` 指定 ellipsoid 的内部半径参数。 |
+| minimumClock | number | `0.0` | `optional` 指定椭圆体的最小时钟角。 |
+| maximumClock | number | `2*Math.PI` | `optional` 指定椭球的最大时钟角。 |
+| minimumCone | number | `0.0` | `optional` 指定椭圆体的最小锥角。 |
+| maximumCone | number | `Math.PI` | `optional` 指定椭圆体的最大锥角。 |
 | heightReference | number | | `optional` 指定 ellipsoid 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** | 0/1/2 |
 | fill | boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
 | material | VcMaterial\|string\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |

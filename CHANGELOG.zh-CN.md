@@ -1,5 +1,12 @@
 ## 更新日志
 
+### 3.1.1
+
+#### Bug 修复
+
+- 单词拼写错误: retangle 应为 rectangle。[#291](https://github.com/zouyaoji/vue-cesium/issues/291)
+- 修改样式以解决与部分 UI 组件的冲突。[#292](https://github.com/zouyaoji/vue-cesium/pull/292)
+
 ### 3.1.0
 
 _2022-09-25_
