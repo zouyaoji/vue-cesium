@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:02
- * @LastEditTime: 2022-09-11 11:51:57
+ * @LastEditTime: 2022-10-20 01:49:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-vue-cesium\index.ts
@@ -13,7 +13,7 @@ import { vcKey } from '@vue-cesium/utils/config'
 
 export default function useVueCesium(containerId?: string): VcViewerProvider {
   const instance = getCurrentInstance()
-  const provides = instance.parent == null ? instance.vnode.appContext && instance.vnode.appContext.provides : (instance.parent as any).provides
+  const provides = instance?.parent === null ? instance.vnode.appContext && instance.vnode.appContext.provides : (instance?.parent as any)?.provides
   if ((!provides || !(vcKey in provides)) && !containerId) {
     containerId = 'cesiumContainer'
   }
