@@ -189,7 +189,7 @@ There are 1 ways to express `Cesium.Camera`:
 ```js
 interface CameraOption {
   position?: Cartesian3Option | CartographicInDegreeOption | Array<number>
-  retangle?: RectangleInDegreeOption | Array<number>
+  rectangle?: RectangleInDegreeOption | Array<number>
   heading?: number
   pitch?: number
   roll?: number

@@ -803,7 +803,7 @@ export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid
       }
     }
   } else if (hasOwn(camera, 'rectangle')) {
-    const rectangle = camera.retangle
+    const rectangle = camera.rectangle
     destination = makeRectangle(rectangle!) as Cesium.Rectangle
     Rectangle.validate(destination)
     if (

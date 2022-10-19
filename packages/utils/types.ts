@@ -185,7 +185,7 @@ interface Cartesian4Option {
 
 interface VcCamera {
   position?: VcPosition
-  retangle?: RectangleInDegreeOption | Array<number>
+  rectangle?: RectangleInDegreeOption | Array<number>
   heading?: number
   pitch?: number
   roll?: number

@@ -193,7 +193,7 @@ interface Cartesian4Option {
 ```js
 interface CameraOption {
   position?: Cartesian3Option | CartographicInDegreeOption | Array<number>
-  retangle?: RectangleInDegreeOption | Array<number>
+  rectangle?: RectangleInDegreeOption | Array<number>
   heading?: number
   pitch?: number
   roll?: number
