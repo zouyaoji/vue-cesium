@@ -1,13 +1,13 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-08-12 22:31:50
+ * @LastEditTime: 2022-10-29 02:14:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
 -->
 <p align="center">
-  <img width="300px" src="https://zouyaoji.top/vue-cesium/favicon.png">
+  <img width="300px" src="https://zouyaoji.top/vue-cesium/vue-cesium-logo.svg">
 </p>
 
 <p align="center">

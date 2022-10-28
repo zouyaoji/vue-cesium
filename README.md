@@ -7,7 +7,7 @@
  * @FilePath: \vue-cesium@next\README.md
 -->
 <p align="center">
-  <img width="300px" src="https://zouyaoji.top/vue-cesium/favicon.png">
+  <img width="300px" src="https://zouyaoji.top/vue-cesium/vue-cesium-logo.svg">
 </p>
 
 <p align="center">

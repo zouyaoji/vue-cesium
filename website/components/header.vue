@@ -190,17 +190,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .headerWrapper {
-  height: 80px;
+  height: 60px;
 }
 
 .header {
-  height: 80px;
+  height: 60px;
   background-color: #fff;
   color: #fff;
   top: 0;
   left: 0;
   width: 100%;
-  line-height: 80px;
+  line-height: 60px;
   z-index: 100;
   position: relative;
 
