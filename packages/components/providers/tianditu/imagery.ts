@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-11 18:05:37
+ * @LastEditTime: 2022-10-30 19:39:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\imagery.ts
@@ -34,8 +34,8 @@ export const tiandituImageryProviderProps = {
       | 'cta_w'
       | 'cva_c'
       | 'cva_w'
-      | 'ela_c'
-      | 'ela_w'
+      | 'eia_c'
+      | 'eia_w'
       | 'eva_c'
       | 'eva_w'
       | 'img_c'
@@ -56,8 +56,8 @@ export const tiandituImageryProviderProps = {
         'cta_w',
         'cva_c',
         'cva_w',
-        'ela_c',
-        'ela_w',
+        'eia_c',
+        'eia_w',
         'eva_c',
         'eva_w',
         'img_c',

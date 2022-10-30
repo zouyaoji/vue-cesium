@@ -125,7 +125,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ---- | ------ | --- | ------ |
 | url | string |  | `optional` 指定服务 url 地址。指定了 url 时 mapStyle 将无效。  |
-| mapStyle | string | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
+| mapStyle | string | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/eia_c/eia_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
 | credit | string\| Cesium.Credit | `'天地图全球影像服务'` | `optional` 服务版权描述信息。 |
 | token | string | | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
 | protocol | string | `https` | `optional` 指定请求协议类型。可以是`https`或者`http`。 |
@@ -145,8 +145,8 @@
   - 'cta_w': 天地图全球地形中文注记服务（墨卡托投影坐标系）。
   - 'cva_c': 天地图全球矢量中文注记服务（经纬度坐标系）。
   - 'cva_w': 天地图全球矢量中文注记服务（墨卡托投影坐标系）。
-  - 'ela_c': 天地图全球影像英文注记服务（经纬度坐标系）。
-  - 'ela_w': 天地图全球影像英文注记服务（墨卡托投影坐标系）。
+  - 'eia_c': 天地图全球影像英文注记服务（经纬度坐标系）。
+  - 'eia_w': 天地图全球影像英文注记服务（墨卡托投影坐标系）。
   - 'eva_c': 天地图全球矢量英文注记服务（经纬度坐标系）。
   - 'eva_w': 天地图全球矢量英文注记服务（墨卡托投影坐标系）。
   - 'img_c': 天地图全球影像地图服务（经纬度坐标系）。
