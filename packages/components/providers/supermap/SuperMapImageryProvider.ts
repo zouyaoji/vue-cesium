@@ -467,7 +467,7 @@ function onFulfilledTileMap(this, response) {
 function onRejected(this) {
   const { TileProviderError, RuntimeError } = Cesium
   const message = 'An error occurred while accessing ' + this._url + '.'
-  previousError = TileProviderError.handleError(previousError, this, this._errorEvent, message, 0, 0, 0, init.bind(this))
+  previousError = TileProviderError.reportError(previousError, this, this._errorEvent, message, 0, 0, 0, new Error(message))
   this._readyPromise.reject(new RuntimeError(message))
 }
 
