@@ -194,6 +194,12 @@ export default defineComponent({
 
     const onCameraChanged = () => {
       const { viewer } = $services
+      const scene = viewer.scene
+      const sscc = scene.screenSpaceCameraController
+      if (scene.mode === Cesium.SceneMode.MORPHING || !sscc.enableInputs) {
+        return
+      }
+
       const { Math: CesiumMath } = Cesium
       cameraInfo.heading = CesiumMath.toDegrees(viewer.camera.heading).toFixed(1)
       cameraInfo.pitch = CesiumMath.toDegrees(viewer.camera.pitch).toFixed(1)
