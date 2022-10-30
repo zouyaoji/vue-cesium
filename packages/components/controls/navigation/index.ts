@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-08-19 22:42:25
+ * @LastEditTime: 2022-10-31 00:03:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
  */
-import type { VNode, CSSProperties } from 'vue'
+import { VNode, CSSProperties, Teleport } from 'vue'
 import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
 import type {
   VcCompassEvt,
@@ -77,6 +77,7 @@ export default defineComponent({
     const rootStyle = reactive<CSSProperties>({})
     const secondRootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
+
     // watch
     watch(
       () => props,
@@ -129,23 +130,13 @@ export default defineComponent({
     }
 
     instance.createCesiumObject = async () => {
-      canRender.value = true
       const { viewer } = $services
       viewer.viewerWidgetResized?.addEventListener(onViewerWidgetResized)
-      return new Promise((resolve, reject) => {
-        nextTick(() => {
-          const viewerElement = (viewer as any)._element
-          if (props.teleportToViewer) {
-            viewerElement.appendChild($(rootRef))
-            $(secondRootRef) && viewerElement.appendChild($(secondRootRef))
-          }
-
-          resolve([$(rootRef), $(secondRootRef)])
-        })
-      })
+      return [$(rootRef), $(secondRootRef)]
     }
 
     instance.mount = async () => {
+      canRender.value = true
       updateRootStyle()
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
@@ -157,10 +148,8 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
-      const viewerElement = (viewer as any)._element
-      viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
-      viewerElement.contains($(secondRootRef)) && viewerElement.removeChild($(secondRootRef))
       viewer.viewerWidgetResized?.removeEventListener(onViewerWidgetResized)
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -329,40 +318,48 @@ export default defineComponent({
         children = hMergeSlot(ctx.slots.default, children)
 
         const root: VNode[] = []
-        root.push(
-          h(
+        const renderNavigationContent = h(
+          'div',
+          {
+            ref: rootRef,
+            class: `vc-navigation ${positionState.classes.value} ${props.customClass}`,
+            style: rootStyle
+          },
+          children
+        )
+
+        if (props.teleportToViewer) {
+          root.push(h(Teleport, { to: $services.viewer._element }, renderNavigationContent))
+        } else {
+          root.push(renderNavigationContent)
+        }
+
+        if (props.otherOpts !== false) {
+          const renderOtherContent = h(
             'div',
             {
-              ref: rootRef,
-              class: `vc-navigation ${positionState.classes.value} ${props.customClass}`,
-              style: rootStyle
+              ref: secondRootRef,
+              class: 'vc-location-other-controls ' + positionStateOther.classes.value,
+              style: secondRootStyle
             },
-            children
+            [
+              h(VcStatusBar, {
+                ref: statusBarRef,
+                ...otherControlOptions.value.statusBarOpts,
+                onStatusBarEvt
+              }),
+              h(VcDistanceLegend, {
+                ref: distanceLegendRef,
+                ...otherControlOptions.value.distancelegendOpts,
+                onDistanceLegendEvt
+              })
+            ]
           )
-        )
-        if (props.otherOpts !== false) {
-          root.push(
-            h(
-              'div',
-              {
-                ref: secondRootRef,
-                class: 'vc-location-other-controls ' + positionStateOther.classes.value,
-                style: secondRootStyle
-              },
-              [
-                h(VcStatusBar, {
-                  ref: statusBarRef,
-                  ...otherControlOptions.value.statusBarOpts,
-                  onStatusBarEvt
-                }),
-                h(VcDistanceLegend, {
-                  ref: distanceLegendRef,
-                  ...otherControlOptions.value.distancelegendOpts,
-                  onDistanceLegendEvt
-                })
-              ]
-            )
-          )
+          if (props.teleportToViewer) {
+            root.push(h(Teleport, { to: $services.viewer._element }, renderOtherContent))
+          } else {
+            root.push(renderOtherContent)
+          }
         }
         return root
       } else {

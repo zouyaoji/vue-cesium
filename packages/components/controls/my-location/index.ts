@@ -1,5 +1,5 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
-import type { CSSProperties, VNode } from 'vue'
+import { CSSProperties, Teleport, VNode } from 'vue'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import {
   VcBtn,
@@ -78,7 +78,6 @@ export default defineComponent({
     })
     // methods
     instance.createCesiumObject = async () => {
-      canRender.value = true
       const { viewer } = $services
       const { CustomDataSource } = Cesium
       const locationDsArray = viewer.dataSources.getByName('__vc-myLocation__')
@@ -112,13 +111,7 @@ export default defineComponent({
 
       const promiseAppend = new Promise((resolve, reject) => {
         nextTick(() => {
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = ($services.viewer as any)._element
-            viewerElement.appendChild($(rootRef))
-            resolve($(rootRef))
-          } else {
-            resolve($(rootRef))
-          }
+          resolve($(rootRef))
         })
       })
       return Promise.all([promiseAppend, promiseLoadAmap]).then(e => {
@@ -127,7 +120,10 @@ export default defineComponent({
     }
 
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -138,6 +134,7 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
       if (amapGeolocation) {
         const scripts = document.getElementsByTagName('script')
@@ -150,11 +147,6 @@ export default defineComponent({
         removeScripts.forEach(script => {
           document.getElementsByTagName('body')[0].removeChild(script)
         })
-      }
-
-      const viewerElement = ($services.viewer as any)._element
-      if (!hasVcNavigation) {
-        viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
       }
 
       viewer.viewerWidgetResized?.raiseEvent({
@@ -199,8 +191,9 @@ export default defineComponent({
     const onHandleClick = () => {
       $(tooltipRef)?.hide()
       positioning.value = true
-      if (isFunction(props.customAPI)) {
-        const position = props.customAPI(handleLocationError)
+      const customApi = props.customApi || props.customAPI
+      if (isFunction(customApi)) {
+        const position = customApi(handleLocationError)
         zoomToMyLocation(position)
       } else if (amapGeolocation && props.amap && props.amap.key) {
         amapGeolocation.getCurrentPosition((status, result) => {
@@ -439,7 +432,7 @@ export default defineComponent({
           inner.push(createCommentVNode('v-if'))
         }
 
-        return h(
+        const renderContent = h(
           'div',
           {
             ref: rootRef,
@@ -467,6 +460,8 @@ export default defineComponent({
             )
           ]
         )
+
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }
@@ -562,6 +557,10 @@ export type VcMyLocationProps = {
    * Specify a custom API for positioning.
    */
   customAPI?: (errorCallback) => { lng: number; lat: number }
+  /**
+   * Specify a custom API for positioning.
+   */
+  customApi?: (errorCallback) => { lng: number; lat: number }
   /**
    * Specify the description of the location point
    */

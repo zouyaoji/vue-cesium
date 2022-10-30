@@ -1,4 +1,4 @@
-import type { VNode } from 'vue'
+import { Teleport, VNode } from 'vue'
 import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import type { VcCompassEvt, VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
@@ -92,22 +92,13 @@ export default defineComponent({
 
     // methods
     instance.createCesiumObject = async () => {
-      canRender.value = true
-      const { viewer } = $services
-      return new Promise((resolve, reject) => {
-        nextTick(() => {
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = (viewer as any)._element
-            viewerElement.appendChild($(rootRef))
-            resolve($(rootRef))
-          } else {
-            resolve($(rootRef))
-          }
-        })
-      })
+      return $(rootRef)
     }
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -117,11 +108,8 @@ export default defineComponent({
       return compassState.load($services.viewer)
     }
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
-      const viewerElement = (viewer as any)._element
-      if (!hasVcNavigation) {
-        viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
-      }
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
@@ -246,7 +234,7 @@ export default defineComponent({
             : createCommentVNode('v-if')
         )
 
-        return h(
+        const renderContent = h(
           'div',
           {
             ref: rootRef,
@@ -260,6 +248,8 @@ export default defineComponent({
           },
           children
         )
+
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }

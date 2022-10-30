@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'vue'
+import { CSSProperties, Teleport } from 'vue'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
@@ -65,27 +65,18 @@ export default defineComponent({
     })
     // methods
     instance.createCesiumObject = async () => {
-      canRender.value = true
       distanceLabel.value = ''
-      return new Promise((resolve, reject) => {
-        nextTick(() => {
-          const { viewer } = $services
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = (viewer as any)._element
-            viewerElement.appendChild($(rootRef)?.$el)
-            resolve($(rootRef)?.$el)
-          } else {
-            resolve($(rootRef)?.$el)
-          }
-
-          viewer.scene.postRender.addEventListener(onScenePostRender)
-        })
-      })
+      return $(rootRef)
     }
 
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
+
       const { viewer } = $services
+      viewer.scene.postRender.addEventListener(onScenePostRender)
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
@@ -95,14 +86,9 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
       viewer.scene.postRender.removeEventListener(onScenePostRender)
-      const viewerElement = (viewer as any)._element as HTMLElement
-
-      if (!hasVcNavigation) {
-        viewerElement.contains($(rootRef)?.$el) && viewerElement.removeChild($(rootRef)?.$el)
-      }
-
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
@@ -208,7 +194,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value && distanceLabel.value !== void 0) {
-        return h(
+        const renderContent = h(
           VcBtn,
           {
             ref: rootRef,
@@ -225,6 +211,8 @@ export default defineComponent({
             })
           ]
         )
+
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }

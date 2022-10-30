@@ -1,4 +1,4 @@
-import type { VNode, CSSProperties } from 'vue'
+import { VNode, CSSProperties, Teleport } from 'vue'
 import { defineComponent, getCurrentInstance, nextTick, ref, reactive, h, createCommentVNode, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
@@ -55,6 +55,7 @@ export default defineComponent({
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
+    let debugShowFramesPerSecond = false
     // watch
     watch(
       () => props,
@@ -72,7 +73,6 @@ export default defineComponent({
     )
     // methods
     instance.createCesiumObject = async () => {
-      canRender.value = true
       const { viewer } = $services
 
       const viewerElement = (viewer as any)._element as HTMLElement
@@ -99,25 +99,19 @@ export default defineComponent({
       }
 
       if (props.showPerformanceInfo) {
+        debugShowFramesPerSecond = viewer.scene.debugShowFramesPerSecond
         viewer.scene.debugShowFramesPerSecond = true
         viewer.scene.postRender.addEventListener(onScenePostRender)
       }
 
-      return new Promise((resolve, reject) => {
-        nextTick(() => {
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = (viewer as any)._element
-            viewerElement.appendChild($(rootRef)?.$el)
-            resolve($(rootRef)?.$el)
-          } else {
-            resolve($(rootRef)?.$el)
-          }
-        })
-      })
+      return $(rootRef)
     }
 
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -128,6 +122,7 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
       const viewerElement = (viewer as any)._element as HTMLElement
       if (props.showMouseInfo) {
@@ -142,22 +137,20 @@ export default defineComponent({
       }
 
       if (props.showPerformanceInfo) {
-        if (viewer.scene._performanceDisplay) {
+        if (debugShowFramesPerSecond) {
           viewer.scene._performanceDisplay._container.style.display = 'block'
+        } else {
+          viewer.scene.debugShowFramesPerSecond = false
         }
 
         viewer.scene.postRender.removeEventListener(onScenePostRender)
       }
 
-      if (!hasVcNavigation) {
-        viewerElement.contains($(rootRef)?.$el) && viewerElement.removeChild($(rootRef)?.$el)
-      }
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)?.$el
       })
-
       return true
     }
 
@@ -190,7 +183,7 @@ export default defineComponent({
       performanceInfo.fps = scene._performanceDisplay?._fpsText.nodeValue
       performanceInfo.ms = scene._performanceDisplay?._msText.nodeValue
       scene._performanceDisplay._container.style.display = 'none'
-    }, 500)
+    }, 250)
 
     const onCameraChanged = () => {
       const { viewer } = $services
@@ -492,7 +485,7 @@ export default defineComponent({
           inner.push(createCommentVNode('v-if'))
         }
 
-        return h(
+        const renderContent = h(
           VcBtn,
           {
             ref: rootRef,
@@ -503,6 +496,8 @@ export default defineComponent({
           },
           () => inner
         )
+
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }

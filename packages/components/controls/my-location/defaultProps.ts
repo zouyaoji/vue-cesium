@@ -78,6 +78,7 @@ export default {
     default: () => [0, 0, 3000]
   },
   customAPI: Function as PropType<(errorCallback) => { lng: number; lat: number }>,
+  customApi: Function as PropType<(errorCallback) => { lng: number; lat: number }>,
   description: Function as PropType<(position, detail) => string>,
   ...positionProps,
   icon: {

@@ -1,4 +1,4 @@
-import type { CSSProperties, VNode } from 'vue'
+import { CSSProperties, Teleport, VNode } from 'vue'
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
 import type {
   VcCamera,
@@ -72,27 +72,19 @@ export default defineComponent({
     const zoomResetOptions = computed(() => Object.assign({}, defaultOptions.zoomResetOptions, props.zoomResetOptions))
     // methods
     instance.createCesiumObject = async () => {
-      return new Promise((resolve, reject) => {
-        canRender.value = true
-        nextTick(() => {
-          const { viewer } = $services
-          if (props.overrideViewerCamera) {
-            const resetView: VcCamera = props.defaultResetView
-            setViewerCamera(viewer, resetView)
-          }
+      const { viewer } = $services
+      if (props.overrideViewerCamera) {
+        const resetView: VcCamera = props.defaultResetView
+        setViewerCamera(viewer, resetView)
+      }
 
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = (viewer as any)._element
-            viewerElement.appendChild($(rootRef))
-            resolve($(rootRef))
-          } else {
-            resolve($(rootRef))
-          }
-        })
-      })
+      return $(rootRef)
     }
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -102,12 +94,8 @@ export default defineComponent({
       return true
     }
     instance.unmount = async () => {
+      canRender.value = false
       const { viewer } = $services
-      if (!hasVcNavigation) {
-        const viewerElement = (viewer as any)._element
-        viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
-      }
-
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
@@ -268,7 +256,7 @@ export default defineComponent({
         }
         children.push(h('li', null, getContent(zoomOutOptions.value, 'zoomOut')))
 
-        return h(
+        const renderContent = h(
           'div',
           {
             ref: rootRef,
@@ -283,6 +271,7 @@ export default defineComponent({
             children
           )
         )
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }

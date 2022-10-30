@@ -1,4 +1,4 @@
-import type { CSSProperties, VNode } from 'vue'
+import { CSSProperties, Teleport, VNode } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive } from 'vue'
 import type { VcPrintEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -60,22 +60,13 @@ export default defineComponent({
     )
     // methods
     instance.createCesiumObject = async () => {
-      return new Promise((resolve, reject) => {
-        canRender.value = true
-        nextTick(() => {
-          const { viewer } = $services
-          if (!hasVcNavigation && props.teleportToViewer) {
-            const viewerElement = (viewer as any)._element
-            viewerElement.appendChild($(rootRef))
-            resolve($(rootRef))
-          } else {
-            resolve($(rootRef))
-          }
-        })
-      })
+      return $(rootRef)
     }
     instance.mount = async () => {
-      updateRootStyle()
+      canRender.value = true
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -85,11 +76,7 @@ export default defineComponent({
       return true
     }
     instance.unmount = async () => {
-      const viewerElement = ($services.viewer as any)._element
-      if (!hasVcNavigation) {
-        viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
-      }
-
+      canRender.value = false
       const { viewer } = $services
 
       viewer.viewerWidgetResized?.raiseEvent({
@@ -274,7 +261,7 @@ export default defineComponent({
           )
         ]
 
-        return h(
+        const renderContent = h(
           'div',
           {
             ref: rootRef,
@@ -283,6 +270,7 @@ export default defineComponent({
           },
           child
         )
+        return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
       } else {
         return createCommentVNode('v-if')
       }
