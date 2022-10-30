@@ -1,5 +1,16 @@
 ## Changelog
 
+### 3.1.1
+
+_2022-10-31_
+
+#### Bug fixes
+
+- Misspelled word: retangle should be rectangle. [#291] (https://github.com/zouyaoji/vue-cesium/issues/291)
+- Modified styles to resolve conflicts with some UI components. [#292] (https://github.com/zouyaoji/vue-cesium/pull/292)
+- Fixed the crash issue when the `vc-status-bar` component got camera parameters abnormally when switching view modes.
+- Fixed the issue that the `vc-navigation` component does not work dynamically through the v-if directive.
+
 ### 3.1.0
 
 _2022-09-25_

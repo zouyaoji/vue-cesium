@@ -228,7 +228,7 @@ Basic usage of drawing components.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | string | `'top-right'` | `optional` Specify the location of the drawing component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| position | string | `'bottom-left'` | `optional` Specify the location of the drawing component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | [number, number] | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | boolean | `true` | `optional` Specify whether the drawn result is visible. |
 | mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|

@@ -53,6 +53,7 @@
   export default {
     data() {
       return {
+        flag: true,
         position: 'top-left',
         offset: [10, 80],
         compassOpts: {
@@ -184,7 +185,7 @@
       background="#F2C037"
     ></vc-my-location>
     <!-- 自定义 API 定位 -->
-    <vc-my-location position="top-left" :offset="[60, 0]" :custom-a-p-i="() => ({lng: 108, lat: 32})"></vc-my-location>
+    <vc-my-location position="top-left" :offset="[60, 0]" :custom-api="() => ({lng: 108, lat: 32})"></vc-my-location>
     <vc-status-bar position="bottom"></vc-status-bar>
     <vc-status-bar position="top-left" :offset="[120, 3]" :show-mouse-info="false" :show-performance-info="false"></vc-status-bar>
     <vc-distance-legend position="bottom-left" :offset="[5, 70]" background="#26A69A" bar-background="#F2C037" :width="80"></vc-distance-legend>
@@ -215,6 +216,8 @@
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定导航组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | [number, number] | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 | |
+| customClass | string | `''` | `optional` 指定导航组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定导航组件是否挂载到 viewer 节点下。如果为 false，vc-navigation 为 `relative` 定位。 | |
 | compassOpts | VcCompassProps\|false | 与 `VcCompass` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 | |
 | zoomOpts | VcZoomControlProps\|false | 与 `VcZoomControl` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 | |
 | printOpts | VcPrintProps\|false | 与 `VcPrint` 保持一致 | `optional` 指定打印控件参数，false 即不显示。 | |
@@ -268,6 +271,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ---- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定罗盘组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定罗盘组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定罗盘组件是否挂载到 viewer 节点下。如果为 false，vc-compass 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
 | enableCompassOuterRing | boolean | `true` | `optional` 指定罗盘外环是否可以操作。 ||
 | duration | number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
@@ -350,6 +355,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定缩放组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定缩放组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定缩放组件是否挂载到 viewer 节点下。如果为 false，vc-zoom-control 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 | |
 | enableResetButton | boolean | `true` | `optional` 指定是否启用重置按钮。 | |
 | zoomAmount | number | `2` | `optional` 指定放大缩小的数量级。 | |
@@ -481,6 +488,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定打印组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定打印组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定导打印是否挂载到 viewer 节点下。如果为 false，vc-print 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定打印控件基于位置的偏移量。 ||
 | showCredit | boolean | `true` | `optional` 指定打印图片时是否显示加载数据版权信息。 ||
 | showPrintView | boolean | `true` | `optional` 指定是否显示打印预览。 ||
@@ -526,6 +535,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定定位组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定定位组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定定位组件是否挂载到 viewer 节点下。如果为 false，vc-my-location 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定定位按钮基于位置的偏移量。 ||
 | geolocation | PositionOptions | | `optional` 指定浏览器定位参数。 ||
 | amap | Object | | `optional` 指定高德定位参数。如果设置则优先使用高德定位。 ||
@@ -578,6 +589,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定状态组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定状态组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定状态组件放是否挂载到 viewer 节点下。如果为 false，vc-status-bar 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定信息栏控件基于位置的偏移量。 （单独使用时有效） |
 | gridFileUrl | string | `https://zouyaoji.top/vue-cesium/SampleData/WW15MGH.DAC`| `optional` 指定鼠标拾取高度模型，用这个能提高获取的高度精度。 |
 | color | string | `'#fff'` | `optional` 指定信息栏颜色。 |
@@ -620,6 +633,8 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
 | position | string | `'top-right'` | `optional` 指定距离比例尺组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` 指定距离比例尺组件自定义 class。 | |
+| teleportToViewer | boolean | `true` | `optional` 指定距离比例尺组件放是否挂载到 viewer 节点下。如果为 false，vc-distance-legend 为 `relative` 定位。 | |
 | offset | [number, number] | `[0, 0]` | `optional` 指定距离比例尺控件基于位置的偏移量。 |
 | color | string | `'#fff'` | `optional` 指定距离比例尺控件颜色。 |
 | background | string | `'#3f4854'` | `optional` 指定距离比例尺背景。 |

@@ -20,6 +20,7 @@
     :info-box="infoBox"
     :skyAtmosphere="false"
     :skyBox="false"
+    :scene-mode-picker="true"
     :show-credit="showCredit"
     @cesium-ready="onCesiumReady"
     @ready="onViewerReady"
@@ -76,7 +77,7 @@
           pixelOffset: [0, 150]
         },
         billboard: {},
-        offset: [10, 25],
+        offset: [50, 25],
         otherOpts: {
           offset: [0, 32],
           position: 'bottom-right'

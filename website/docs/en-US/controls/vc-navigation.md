@@ -185,6 +185,8 @@ Customize navigation components as needed. The available components are: `vc-com
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-navigation. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specify the offset of the component. |
 | compassOpts | VcCompassProps\|false | Same as `VcCompass` | `optional` Specify the compass options of the component. false means no display. |
 | zoomOpts | VcZoomControlProps\|false | Same as `VcZoomControl` | `optional` Specify the zoom options of the component. false means no display. |
@@ -239,6 +241,8 @@ Compass component.
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-compass. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the position-based offset of the compass. |
 | enableCompassOuterRing | boolean | `true` | `optional` Specify whether the outer ring of the compass can be operated. |
 | duration | number | `1.5` | `optional` Specify the flight time to restore the pitch angle, in seconds. |
@@ -317,6 +321,8 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-zoom-control. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the offset of the zoom control. |
 | enableResetButton | boolean | `true` | `optional` Specify whether to enable the reset button. |
 | zoomAmount | number | `2` | `optional` Specify the zoom amount of zoom in and zoom out. |
@@ -444,6 +450,8 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-print. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the offset of the print control. (Valid when used independently) |
 | showCredit | boolean | `true` | `optional` Specify whether to display the copyright information of the loaded data when printing pictures. |
 | showPrintView | boolean | `true` | `optional` Specify whether to display the print preview. |
@@ -485,6 +493,8 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-my-location. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the offset of the positioning button based on the position.|
 | geolocation | PositionOptions | | `optional` Specify the browser geolocation positioning parameters. |
 | id | string | | `optional` Specify the id of the loading point after the positioning is successful. |
@@ -532,6 +542,8 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-status-bar. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the position-based offset of the information bar control. |
 | gridFileUrl | string | `https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC`| `optional` Specify the mouse to pick up the height model, use this to improve the accuracy of the height obtained. |
 | color | string | `'#fff'` | `optional` Specify the color of the information bar. |
@@ -571,6 +583,8 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
 | position | string | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| customClass | string | `''` | `optional` Specify the customClass of the vc-distance-legend. | |
+| teleportToViewer | boolean | `true` | `optional` Specify whether to add to the cesium-viewer node. If false, it becomes `relative` positioning. | |
 | offset | [number, number] | `[0, 0]` | `optional` Specifies the offset of the distance scale control based on the position.|
 | color | string | `'#fff'` | `optional` Specify the color of the distance scale control. |
 | background | string | `'#3f4854'` | `optional` Specify the distance scale background. |

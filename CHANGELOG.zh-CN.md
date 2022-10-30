@@ -2,10 +2,14 @@
 
 ### 3.1.1
 
+_2022-10-31_
+
 #### Bug 修复
 
 - 单词拼写错误: retangle 应为 rectangle。[#291](https://github.com/zouyaoji/vue-cesium/issues/291)
 - 修改样式以解决与部分 UI 组件的冲突。[#292](https://github.com/zouyaoji/vue-cesium/pull/292)
+- 修复在切换视图模式时 `vc-status-bar` 组件获取相机参数异常导致崩溃的问题。
+- `vc-navigation` 组件通过 v-if 指令动态显隐不起作用的问题。
 
 ### 3.1.0
 

@@ -258,7 +258,7 @@ ctrl + 右键取消绘制。
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | string | `'top-right'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| position | string | `'bottom-left'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | [number, number] | `[0, 0]` | `optional` 指定绘制组件基于位置的偏移量。 |
 | show | boolean | `true` | `optional` 指定绘制的结果是否可见。 |
 | mode | number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
