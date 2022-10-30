@@ -80,7 +80,7 @@ interface MaterialOption {
     }
   }
   strict?: boolean
-  translucent?: boolean | AnyFunction<void>
+  translucent?: boolean | AnyFunction
   minificationFilter?: Cesium.TextureMinificationFilter
   magnificationFilter?: Cesium.TextureMagnificationFilter
 }
@@ -322,7 +322,7 @@ export type VcMittEvents = {
   [key: string]: any
 }
 
-export type AnyFunction<T> = (...args: any[]) => T
+export type AnyFunction<T = void> = (...args: any[]) => T
 
 export type SFCWithInstall<T> = T & Plugin
 

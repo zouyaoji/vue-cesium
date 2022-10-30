@@ -166,6 +166,14 @@ declare namespace Cesium {
     enabled: boolean
   }
 
+  interface Event<Listener extends (...args: any[]) => void = (...args: any[]) => void> {
+    /**
+     * Raises the event by calling each registered listener with all supplied arguments.
+     * @param arguments - This method takes any number of parameters and passes them through to the listener functions.
+     */
+    raiseEvent(...arguments: Parameters<Listener>): void
+  }
+
   // eslint-disable-next-line no-var
   var SuperMapImageryProvider: any
   // eslint-disable-next-line no-var
