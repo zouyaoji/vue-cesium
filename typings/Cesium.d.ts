@@ -7,8 +7,8 @@ declare namespace Cesium {
   function sprintf(...args: any[]): string
   function appendForwardSlash(url: string): string
   const knockout: any
-  const when: any
-  const Uri: any
+  // const when: any
+  // const Uri: any
   const GlobeSurfaceTile: any
   const ManagedArray: any
   const VERSION: string
