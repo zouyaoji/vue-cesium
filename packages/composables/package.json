@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/composables",
-  "description": "Vue Cesium composables",
+  "description": "VueCesium composables",
   "version": "3.0.2-beta.12",
   "main": "index.js",
   "module": "index.js",

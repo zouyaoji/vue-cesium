@@ -3,7 +3,7 @@
     "lang": "zh-CN",
     "pages": {
       "index": {
-        "1": "Vue Cesium",
+        "1": "VueCesium",
         "2": "基于 Vue 3，面向开发者的 CesiumJS 组件库。",
         "3": "指南",
         "4": "了解设计指南，帮助开发人员搭建逻辑清晰、结构合理且高效易用的应用。",
@@ -70,7 +70,7 @@
     "lang": "en-US",
     "pages": {
       "index": {
-        "1": "Vue Cesium",
+        "1": "VueCesium",
         "2": "A Vue3 based component library of CesiumJS for developers.",
         "3": "Guide",
         "4": "Understand the design guidelines, helping designers build product that's logically sound, reasonably structured and easy to use.",

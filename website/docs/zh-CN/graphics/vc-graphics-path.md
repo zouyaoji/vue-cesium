@@ -13,7 +13,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer shouldAnimate animation timeline @ready="onViewerReady">
-    <vc-entity ref="entity" :availability="availability" :position="position" :orientation="orientation" description="Hello Vue Cesium">
+    <vc-entity ref="entity" :availability="availability" :position="position" :orientation="orientation" description="Hello VueCesium">
       <vc-graphics-path
         ref="path"
         :resolution="1"
@@ -141,15 +141,15 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                              |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------- |
-| show                     | boolean               | `true`    | `optional` 指定 path 是否显示。                   |
-| leadTime                 | number                |           | `optional` 指定 path 前面要显示的秒数。           |
-| trailTime                | number                |           | `optional` 指定 path 后面要显示的秒数。           |
-| width                    | number                | `1.0`     | `optional` 指定 path 像素宽度。                   |
-| resolution               | number                | `60`      | `optional` 指定 path 步进最大秒数。               |
-| material | VcMaterial\|string\|Array | `'white'` | `optional` 指定 path 材质。                       |
-| distanceDisplayCondition | VcDistanceDisplayCondition\|Array         |           | `optional` 指定 path 随相机距离改变是否显示参数。 |
+| 属性名                   | 类型                              | 默认值    | 描述                                              |
+| ------------------------ | --------------------------------- | --------- | ------------------------------------------------- |
+| show                     | boolean                           | `true`    | `optional` 指定 path 是否显示。                   |
+| leadTime                 | number                            |           | `optional` 指定 path 前面要显示的秒数。           |
+| trailTime                | number                            |           | `optional` 指定 path 后面要显示的秒数。           |
+| width                    | number                            | `1.0`     | `optional` 指定 path 像素宽度。                   |
+| resolution               | number                            | `60`      | `optional` 指定 path 步进最大秒数。               |
+| material                 | VcMaterial\|string\|Array         | `'white'` | `optional` 指定 path 材质。                       |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array |           | `optional` 指定 path 随相机距离改变是否显示参数。 |
 
 ### 事件
 

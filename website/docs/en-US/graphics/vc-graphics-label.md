@@ -5,6 +5,7 @@
  * @LastEditTime: 2022-09-21 11:09:36
  * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-label.md
 -->
+
 ## VcGraphicsLabel
 
 Loading a label graphic. It is equivalent to initializing a `Cesium.LabelGraphics` instance.
@@ -20,8 +21,8 @@ Basic usage of the VcGraphicsLabel component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity :position="[114, 40, 300000]" description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
-      <vc-graphics-label text="Hello Vue Cesium" font="20px sans-serif" :pixelOffset="[0, 20]" fillColor="red"></vc-graphics-label>
+    <vc-entity :position="[114, 40, 300000]" description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+      <vc-graphics-label text="Hello VueCesium" font="20px sans-serif" :pixelOffset="[0, 20]" fillColor="red"></vc-graphics-label>
     </vc-entity>
   </vc-viewer>
 </el-row>

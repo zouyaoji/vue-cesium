@@ -12,6 +12,7 @@
  * @LastEditTime: 2022-09-21 11:24:44
  * @FilePath: \vue-cesium\website\docs\en-US\graphics\vc-graphics-rectangle.md
 -->
+
 ## VcGraphicsRectangle
 
 Loading a rectangle graphic. It is equivalent to initializing a `Cesium.RectangleGraphics` instance.
@@ -27,14 +28,14 @@ Basic usage of VcGraphicsRectangle component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+    <vc-entity description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-rectangle
         ref="rectangle1"
         :coordinates="{ west: -110, south: 20, east: -80, north: 25 }"
         :material="[255,0,0,125]"
       ></vc-graphics-rectangle>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+    <vc-entity description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-rectangle
         :coordinates="[-110, 30, -100, 40]"
         :material="[0, 255, 0, 125]"
@@ -46,7 +47,7 @@ Basic usage of VcGraphicsRectangle component.
         ref="rectangle2"
       ></vc-graphics-rectangle>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+    <vc-entity description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-rectangle
         :coordinates="{ west: -92.0, south: 30.0, east: -82.0, north: 40.0 }"
         material="https://zouyaoji.top/vue-cesium/favicon.png"

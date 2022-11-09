@@ -44,7 +44,7 @@ Basic usage of the VcGraphicsBox component.
     setup() {
       // state
       const options = {
-        description: 'Hello Vue Cesium',
+        description: 'Hello VueCesium',
 
         position1: { lng: 105.0, lat: 40.0, height: 300000.0 },
         dimensions1: { x: 400000.0, y: 300000.0, z: 500000.0 },

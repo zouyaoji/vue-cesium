@@ -13,7 +13,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity :position="[114, 40, 1.0]" description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+    <vc-entity :position="[114, 40, 1.0]" description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-model ref="model" uri="https://zouyaoji.top/vue-cesium/SampleData/models/GroundVehicle/GroundVehicle.glb"></vc-graphics-model>
     </vc-entity>
   </vc-viewer>

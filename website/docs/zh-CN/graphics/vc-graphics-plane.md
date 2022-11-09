@@ -13,7 +13,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity :position="[114, 40, 300000]" description="Hello Vue Cesium">
+    <vc-entity :position="[114, 40, 300000]" description="Hello VueCesium">
       <vc-graphics-plane
         ref="plane1"
         :plane="{normal: { x: 1, y: 0, z: 0 }, distance: 0.0}"
@@ -21,7 +21,7 @@
         material="blue"
       ></vc-graphics-plane>
     </vc-entity>
-    <vc-entity :position="[107,40, 300000]" description="Hello Vue Cesium">
+    <vc-entity :position="[107,40, 300000]" description="Hello VueCesium">
       <vc-graphics-plane
         ref="plane2"
         :plane="[{ x: 0, y: 1, z: 0 }, 0]"
@@ -31,7 +31,7 @@
         outlineColor="black"
       ></vc-graphics-plane>
     </vc-entity>
-    <vc-entity :position="[100, 40, 300000]" description="Hello Vue Cesium">
+    <vc-entity :position="[100, 40, 300000]" description="Hello VueCesium">
       <vc-graphics-plane
         ref="plane3"
         :plane="{ normal: { x: 0, y: 0, z: 1 }, distance: 0.0 }"

@@ -16,7 +16,7 @@
     <vc-entity
       ref="entity1"
       :position="[105, 40, 200000]"
-      description="Hello Vue Cesium"
+      description="Hello VueCesium"
       @click="onEntityEvt"
       @mouseover="onEntityEvt"
       @mouseout="onEntityEvt"
@@ -30,7 +30,7 @@
         outlineColor="#006400"
       ></vc-graphics-cylinder>
     </vc-entity>
-    <vc-entity ref="entity2" :position="[110, 40, 200000]" description="Hello Vue Cesium">
+    <vc-entity ref="entity2" :position="[110, 40, 200000]" description="Hello VueCesium">
       <vc-graphics-cylinder :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" material="RED"></vc-graphics-cylinder>
     </vc-entity>
   </vc-viewer>

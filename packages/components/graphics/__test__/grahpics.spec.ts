@@ -302,7 +302,7 @@ const labelApp = {
           <vc-entity :position="[114, 40, 300000]" ref="entity">
             <vc-graphics-label
               ref="graphics"
-              text="Hello Vue Cesium"
+              text="Hello VueCesium"
               font="20px sans-serif"
               :pixelOffset="[0, 20]"
             ></vc-graphics-label>
@@ -320,7 +320,7 @@ describe('VcGraphicsLabel', () => {
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
     let graphics = readyObj?.cesiumObject as Cesium.LabelGraphics
     expect(graphics instanceof Cesium.LabelGraphics).toBe(true)
-    expect(graphics.text?.getValue(Cesium.JulianDate.now())).toEqual('Hello Vue Cesium')
+    expect(graphics.text?.getValue(Cesium.JulianDate.now())).toEqual('Hello VueCesium')
     expect(graphics.pixelOffset?.getValue(Cesium.JulianDate.now())).toBeDefined()
     await testVm.unload?.()
     graphics = testVm.getCesiumObject?.() as Cesium.LabelGraphics
@@ -521,7 +521,7 @@ const pointApp = {
     <div class="test-viewer">
       <vc-config-provider>
         <vc-viewer>
-          <vc-entity :position="[-80.12, 25.46]" description="Hello Vue Cesium">
+          <vc-entity :position="[-80.12, 25.46]" description="Hello VueCesium">
             <vc-graphics-point ref="graphics" color="lime" :pixelSize="32"></vc-graphics-point>
           </vc-entity>
         </vc-viewer>

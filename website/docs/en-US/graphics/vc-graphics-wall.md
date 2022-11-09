@@ -13,7 +13,7 @@ Basic usage of the VcGraphicsWall component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
+    <vc-entity description="Hello VueCesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-wall
         ref="wall1"
         :positions="[[-115,44,200000],[-90,44,200000]]"
@@ -21,7 +21,7 @@ Basic usage of the VcGraphicsWall component.
         :minimumHeights="[100000.0, 100000.0]"
       ></vc-graphics-wall>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-wall
         ref="wall2"
         :positions="[-107,43,100000,-97,43,100000,-97,40,100000,-107,40,100000,-107,43,100000]"
@@ -29,7 +29,7 @@ Basic usage of the VcGraphicsWall component.
         :outline="true"
       ></vc-graphics-wall>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-wall
         :positions="[[-115,50],[-112,50],[-107.5,50],[-105,50],[-102.5,50],[-100,50],[-97.5,50],[-95,50],[-92.5,50],[-90,50]]"
         :material="[0,0,125,125]"

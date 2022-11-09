@@ -54,7 +54,7 @@
     setup() {
       // state
       const options = reactive({
-        description: 'Hello Vue Cesium',
+        description: 'Hello VueCesium',
 
         corridor1: {},
         name1: 'Red corridor on surface with rounded corners',

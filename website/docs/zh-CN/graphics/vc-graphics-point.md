@@ -13,13 +13,13 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity :position="[-75.59777, 40.03883]" description="Hello Vue Cesium">
+    <vc-entity :position="[-75.59777, 40.03883]" description="Hello VueCesium">
       <vc-graphics-point ref="point1" color="red" :pixel-size="8"></vc-graphics-point>
     </vc-entity>
-    <vc-entity :position="[-80.5, 35.14]" description="Hello Vue Cesium">
+    <vc-entity :position="[-80.5, 35.14]" description="Hello VueCesium">
       <vc-graphics-point ref="point2" color="blue" :pixel-size="16"></vc-graphics-point>
     </vc-entity>
-    <vc-entity :position="[-80.12, 25.46]" description="Hello Vue Cesium">
+    <vc-entity :position="[-80.12, 25.46]" description="Hello VueCesium">
       <vc-graphics-point ref="point3" color="lime" :pixel-size="32"></vc-graphics-point>
     </vc-entity>
   </vc-viewer>

@@ -16,14 +16,14 @@
     <vc-entity
       ref="entity1"
       :position="[114, 40, 300000]"
-      description="Hello Vue Cesium"
+      description="Hello VueCesium"
       @click="onEntityEvt"
       @mouseover="onEntityEvt"
       @mouseout="onEntityEvt"
     >
       <vc-graphics-ellipsoid :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }" material="blue" :outline="true"></vc-graphics-ellipsoid>
     </vc-entity>
-    <vc-entity ref="entity2" :position="{lng: 107, lat: 40, height: 300000}" description="Hello Vue Cesium">
+    <vc-entity ref="entity2" :position="{lng: 107, lat: 40, height: 300000}" description="Hello VueCesium">
       <vc-graphics-ellipsoid
         :radii="{ x: 300000.0, y: 300000.0, z: 300000.0 }"
         :outline="true"
@@ -31,7 +31,7 @@
         outlineColor="black"
       ></vc-graphics-ellipsoid>
     </vc-entity>
-    <vc-entity ref="entity3" :position="[100, 40, 300000]" description="Hello Vue Cesium">
+    <vc-entity ref="entity3" :position="[100, 40, 300000]" description="Hello VueCesium">
       <vc-graphics-ellipsoid
         :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }"
         :fill="false"

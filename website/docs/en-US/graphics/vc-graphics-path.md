@@ -13,7 +13,7 @@ Basic usage of the VcGraphicsPath component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer shouldAnimate animation timeline @ready="onViewerReady">
-    <vc-entity ref="entity" :availability="availability" :position="position" :orientation="orientation" description="Hello Vue Cesium">
+    <vc-entity ref="entity" :availability="availability" :position="position" :orientation="orientation" description="Hello VueCesium">
       <vc-graphics-path
         ref="path"
         :resolution="1"

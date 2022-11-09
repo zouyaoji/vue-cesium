@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/locale",
-  "description": "Vue Cesium locale",
+  "description": "VueCesium locale",
   "version": "3.0.2-beta.3",
   "main": "index.js",
   "module": "index.js",

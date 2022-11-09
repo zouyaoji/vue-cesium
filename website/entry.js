@@ -73,7 +73,7 @@ router.isReady().then(() => {
         return
       }
     }
-    document.title = 'Vue Cesium'
+    document.title = 'VueCesium'
     ga('send', 'event', 'PageView', route.name)
   })
 })

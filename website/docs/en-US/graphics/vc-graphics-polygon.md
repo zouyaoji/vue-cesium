@@ -13,10 +13,10 @@ Basic usage of VcGraphicsPolygon component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon ref="polygon1" :hierarchy="[[-115,37],[-115,32],[-107,33],[-102,31],[-102,35]]" material="red"></vc-graphics-polygon>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon
         :hierarchy="[{ lng: -108.0, lat: 42.0 }, { lng: -100.0, lat: 42.0 }, { lng: -104.0, lat: 40.0 }]"
         material="green"
@@ -26,7 +26,7 @@ Basic usage of VcGraphicsPolygon component.
         ref="polygon2"
       ></vc-graphics-polygon>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon
         :hierarchy="[[-108,25,100000],[-100,25,100000],[-100,30,100000],[-108,30,100000]]"
         :material="[255,165,0,125]"
@@ -37,10 +37,10 @@ Basic usage of VcGraphicsPolygon component.
         ref="polygon3"
       ></vc-graphics-polygon>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon :hierarchy="hierarchy4" :material="[0,0,255,125]" :height="0" :outline="true" ref="polygon4"></vc-graphics-polygon>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon
         :hierarchy="[-90.0, 41.0, 0.0, -85.0, 41.0, 500000.0, -80.0, 41.0, 0.0]"
         :material="[0,255,255,125]"
@@ -50,7 +50,7 @@ Basic usage of VcGraphicsPolygon component.
         ref="polygon5"
       ></vc-graphics-polygon>
     </vc-entity>
-    <vc-entity description="Hello Vue Cesium">
+    <vc-entity description="Hello VueCesium">
       <vc-graphics-polygon
         :hierarchy="[[-120,45],[-80,45],[-80,55],[-120,55]]"
         material="purple"

@@ -26,11 +26,11 @@ Basic usage of VcDatasourceCustom component.
           scale: 0.25,
           color: 'lime'
         }"
-        description="Hello Vue Cesium"
+        description="Hello VueCesium"
         id="This is a billboard"
       >
       </vc-entity>
-      <vc-entity ref="entity2" :position="[105,40,200000]" description="Hello Vue Cesium">
+      <vc-entity ref="entity2" :position="[105,40,200000]" description="Hello VueCesium">
         <vc-graphics-cylinder
           ref="cylinder1"
           :length="400000.0"

@@ -31,7 +31,7 @@ const customApp = {
                 scale: 0.25,
                 color: 'lime'
               }"
-              description="Hello Vue Cesium"
+              description="Hello VueCesium"
               id="This is a billboard"
             >
             </vc-entity>
