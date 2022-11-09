@@ -4,7 +4,9 @@
       <div class="banner-desc">
         <h1>{{ langConfig[1] }}</h1>
         <p>{{ langConfig[2] }}</p>
-        <p>{{ langConfig[10] }}</p>
+        <p>
+          <strong>{{ langConfig[10] }}</strong>
+        </p>
       </div>
     </div>
     <div ref="indexMainImg" class="jumbotron">

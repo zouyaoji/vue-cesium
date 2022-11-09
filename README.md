@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-11-10 00:31:52
+ * @LastEditTime: 2022-11-10 00:46:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -50,7 +50,7 @@ VueCesium supports loading the official CesiumJS, or other third-party platforms
 
 For other untested platforms, VueCesium can also be used, and a callback method can be passed in through the viewerCreator of the vc-viewer component. The initialization process of the viewer is handled by the user, and the viewer can be returned after initialization. [See details](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
 
-Special note: VueCesium encapsulates the API of CesiumJS into Vue components, which is convenient for Vue projects to use. To express that it is based on Vue, a developer-oriented CesiumJS component library, named "VueCesium". Although the VueCesium name includes "Cesium", it is not directly related to CesiumJS official.
+<strong>Special note: VueCesium encapsulates the API of CesiumJS into Vue components, which is convenient for Vue projects to use. To express that it is based on Vue, a developer-oriented CesiumJS component library, named "VueCesium". Although the VueCesium name includes "Cesium", it is not directly related to CesiumJS official.</strong>
 
 ## Bootstrap project
 
