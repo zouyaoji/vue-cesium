@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-10-31 00:03:49
+ * @LastEditTime: 2022-11-05 00:39:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
@@ -132,12 +132,14 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       const { viewer } = $services
       viewer.viewerWidgetResized?.addEventListener(onViewerWidgetResized)
-      return [$(rootRef), $(secondRootRef)]
+      return [rootRef, secondRootRef]
     }
 
     instance.mount = async () => {
       canRender.value = true
-      updateRootStyle()
+      nextTick(() => {
+        updateRootStyle()
+      })
       const { viewer } = $services
       viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
@@ -169,21 +171,21 @@ export default defineComponent({
       const compassTarget = $(compassRef)?.$el as HTMLElement
       let height = 0
       let marginX = 0
-      if (compassTarget !== void 0) {
+      if (compassTarget !== void 0 && compassTarget.nodeName !== '#comment') {
         const margin = getComputedStyle(compassTarget.parentNode as Element).margin
         marginX = parseInt(margin)
         height += compassTarget.getBoundingClientRect().height + marginX * 2
       }
       const zoomControlTarget = $(zoomControlRef)?.$el as HTMLElement
-      if (zoomControlTarget !== void 0) {
+      if (zoomControlTarget !== void 0 && zoomControlTarget.nodeName !== '#comment') {
         height += zoomControlTarget.getBoundingClientRect().height + marginX * 2
       }
       const printTarget = $(printRef)?.$el as HTMLElement
-      if (printTarget !== void 0) {
+      if (printTarget !== void 0 && printTarget.nodeName !== '#comment') {
         height += printTarget.getBoundingClientRect().height + marginX * 2
       }
       const myLocationTarget = $(myLocationRef)?.$el as HTMLElement
-      if (myLocationTarget !== void 0) {
+      if (myLocationTarget !== void 0 && myLocationTarget.nodeName !== '#comment') {
         height += myLocationTarget.getBoundingClientRect().height + marginX * 2
       }
 
@@ -227,7 +229,7 @@ export default defineComponent({
 
       let height2 = 0
       const statusBarRefTarget = $(statusBarRef)?.$el as HTMLElement
-      if (statusBarRefTarget !== void 0) {
+      if (statusBarRefTarget !== void 0 && statusBarRefTarget.nodeName !== '#comment') {
         height2 += statusBarRefTarget.getBoundingClientRect().height
       }
       Object.assign(secondRootStyle, cssSecondRoot, { height: `${height2}px` })

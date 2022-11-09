@@ -92,7 +92,7 @@ export default defineComponent({
 
     // methods
     instance.createCesiumObject = async () => {
-      return $(rootRef)
+      return rootRef
     }
     instance.mount = async () => {
       canRender.value = true

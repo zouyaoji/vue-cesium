@@ -78,7 +78,7 @@ export default defineComponent({
         setViewerCamera(viewer, resetView)
       }
 
-      return $(rootRef)
+      return rootRef
     }
     instance.mount = async () => {
       canRender.value = true

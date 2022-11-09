@@ -104,7 +104,7 @@ export default defineComponent({
         viewer.scene.postRender.addEventListener(onScenePostRender)
       }
 
-      return $(rootRef)
+      return rootRef
     }
 
     instance.mount = async () => {

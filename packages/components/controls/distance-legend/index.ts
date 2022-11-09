@@ -66,7 +66,7 @@ export default defineComponent({
     // methods
     instance.createCesiumObject = async () => {
       distanceLabel.value = ''
-      return $(rootRef)
+      return rootRef
     }
 
     instance.mount = async () => {
