@@ -1,5 +1,11 @@
 ## Changelog
 
+### 3.1.2
+
+#### Bug fixes
+
+- Fixed the issue that the navigation component gets empty cesiumObject value through ready event.
+
 ### 3.1.1
 
 _2022-10-31_

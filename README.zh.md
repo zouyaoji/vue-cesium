@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-10-29 02:38:24
+ * @LastEditTime: 2022-11-10 00:31:27
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -49,6 +49,8 @@ VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方
 - [数字视觉 DC-SDK](http://dc.dvgis.cn/#/index)
 
 其他未测试的平台，也可以使用 VueCesium ，可通过 vc-viewer 组件的 viewerCreator 传入一个回调方法，viewer 的初始化过程交由用户自主处理，并将初始化后得到到 viewer 返回即可。[详见](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
+
+特别说明：VueCesium 是将 CesiumJS 的 API 封装成 Vue 组件，方便 Vue 项目使用。为了表达它是基于 Vue，面向开发者的 CesiumJS 组件库，取名为“VueCesium”。虽然 VueCesium 命名包含“Cesium”，但它与 CesiumJS 官方没有直接关系。
 
 ## 安装
 

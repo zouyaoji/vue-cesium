@@ -12,6 +12,7 @@
         "7": "使用 Demo 快速体验三维场景；使用前端框架封装的代码帮助工程师快速开发。",
         "8": "资源",
         "9": "下载相关资源，用其快速搭建页面原型或高保真视觉稿，提升产品设计效率。",
+        "10": "虽然 VueCesium 命名包含“Cesium”；但它与 CesiumJS 官方没有直接关系。",
         "lang": "zh-CN",
         "titleSize": "34",
         "paraSize": "18"
@@ -70,7 +71,7 @@
     "pages": {
       "index": {
         "1": "Vue Cesium",
-        "2": "a Vue 3 based component library of CesiumJS for developers",
+        "2": "A Vue3 based component library of CesiumJS for developers.",
         "3": "Guide",
         "4": "Understand the design guidelines, helping designers build product that's logically sound, reasonably structured and easy to use.",
         "5": "View Detail",
@@ -78,11 +79,7 @@
         "7": "Experience the 3D scene by strolling through component demos. Use encapsulated code to improve developing efficiency.",
         "8": "Resource",
         "9": "Download relevant design resources for shaping page prototype or visual draft, increasing design efficiency.",
-        "10": "Theme",
-        "11": "Online theme roller, visualize custom and manage site themes and component styles",
-        "12": "Theme customization is available!",
-        "13": "Click here",
-        "14": "Make your own theme",
+        "10": "Although the VueCesium name includes \"Cesium\", it is not directly related to CesiumJS official.",
         "lang": "en-US",
         "titleSize": "34",
         "paraSize": "18"

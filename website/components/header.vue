@@ -244,7 +244,7 @@ export default {
   .nav {
     float: right;
     height: 100%;
-    line-height: 80px;
+    line-height: 60px;
     background: transparent;
     padding: 0;
     margin: 0;

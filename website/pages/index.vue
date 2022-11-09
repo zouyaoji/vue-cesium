@@ -4,21 +4,21 @@
       <div class="banner-desc">
         <h1>{{ langConfig[1] }}</h1>
         <p>{{ langConfig[2] }}</p>
+        <p>{{ langConfig[10] }}</p>
       </div>
     </div>
     <div ref="indexMainImg" class="jumbotron">
-      <img src="~examples/assets/images/theme-index-blue.png" alt="">
+      <img src="~examples/assets/images/theme-index-blue.png" alt="" />
       <div
         class="jumbotron-red"
         :style="{
           height: mainImgOffset + 'px'
         }"
       >
-        <img src="~examples/assets/images/theme-index-red.png" alt="">
+        <img src="~examples/assets/images/theme-index-red.png" alt="" />
       </div>
     </div>
-    <div class="sponsors">
-    </div>
+    <div class="sponsors"></div>
     <div class="cards">
       <ul class="container">
         <!-- <li>
@@ -37,28 +37,20 @@
         </li> -->
         <li>
           <div class="card">
-            <img src="~examples/assets/images/component.png" alt="">
+            <img src="~examples/assets/images/component.png" alt="" />
             <h3>{{ langConfig[6] }}</h3>
             <p>{{ langConfig[7] }}</p>
-            <router-link
-              active-class="active"
-              :to="`/${ lang }/component/vc-viewer`"
-              exact
-            >
+            <router-link active-class="active" :to="`/${lang}/component/vc-viewer`" exact>
               {{ langConfig[5] }}
             </router-link>
           </div>
         </li>
         <li>
           <div class="card">
-            <img src="~examples/assets/images/resource.png" alt="">
+            <img src="~examples/assets/images/resource.png" alt="" />
             <h3>{{ langConfig[8] }}</h3>
             <p>{{ langConfig[9] }}</p>
-            <router-link
-              active-class="active"
-              :to="`/${ lang }/resource`"
-              exact
-            >
+            <router-link active-class="active" :to="`/${lang}/resource`" exact>
               {{ langConfig[5] }}
             </router-link>
           </div>
@@ -75,7 +67,7 @@ export default {
   data() {
     return {
       lang: this.$route.meta.lang,
-      mainImgOffset: 0,
+      mainImgOffset: 0
     }
   },
   computed: {
@@ -84,7 +76,7 @@ export default {
     },
     langConfig() {
       return pageLang.filter(config => config.lang === this.lang)[0].pages.index
-    },
+    }
   },
   created() {
     this.throttledHandleScroll = throttle(10, true, index => {
@@ -108,8 +100,8 @@ export default {
       if (calHeight < 0) calHeight = 0
       if (calHeight > eleHeight) calHeight = eleHeight
       this.mainImgOffset = calHeight
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -174,11 +166,11 @@ export default {
     width: 100%;
   }
   .jumbotron-red {
-    transition: height .1s;
-    background: #FFF;
+    transition: height 0.1s;
+    background: #fff;
     position: absolute;
     left: 0;
-    top:0;
+    top: 0;
     overflow: hidden;
   }
 }
@@ -192,15 +184,15 @@ export default {
     width: auto;
     display: flex;
     justify-content: center;
-    &::before, &::after {
+    &::before,
+    &::after {
       display: table;
-      content: "";
+      content: '';
     }
     &::after {
       clear: both;
     }
   }
-
 
   li {
     width: 33.3%;
@@ -218,13 +210,13 @@ export default {
 .card {
   height: 430px;
   width: 100%;
-  background:#ffffff;
-  border:1px solid #eaeefb;
-  border-radius:5px;
+  background: #ffffff;
+  border: 1px solid #eaeefb;
+  border-radius: 5px;
   box-sizing: border-box;
   text-align: center;
   position: relative;
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   bottom: 0;
 
   img {
@@ -246,7 +238,7 @@ export default {
     height: 53px;
     line-height: 52px;
     font-size: 14px;
-    color: #409EFF;
+    color: #409eff;
     text-align: center;
     border: 0;
     border-top: 1px solid #eaeefb;
@@ -258,18 +250,18 @@ export default {
     left: 0;
     background-color: #fff;
     border-radius: 0 0 5px 5px;
-    transition: all .3s;
+    transition: all 0.3s;
     text-decoration: none;
     display: block;
 
     &:hover {
       color: #fff;
-      background: #409EFF;
+      background: #409eff;
     }
   }
   &:hover {
     bottom: 6px;
-    box-shadow: 0 6px 18px 0 rgba(232,237,250,0.50);
+    box-shadow: 0 6px 18px 0 rgba(232, 237, 250, 0.5);
   }
 }
 @media (max-width: 1140px) {
@@ -335,7 +327,7 @@ export default {
   bottom: 0;
   z-index: 200;
   .intro-banner {
-    position: absolute
+    position: absolute;
   }
   img {
     width: 300px;
@@ -346,7 +338,7 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    color: #FFF;
+    color: #fff;
     text-align: center;
     font-weight: bold;
     font-size: 20px;
@@ -366,14 +358,14 @@ export default {
   top: 0;
   bottom: 0;
   z-index: 200;
-  .mask{
+  .mask {
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     background: #000;
-    opacity: .5;
+    opacity: 0.5;
   }
   .intro-banner {
     top: 50%;
@@ -397,7 +389,7 @@ export default {
         margin: 0;
         font-size: 48px;
         font-weight: bold;
-        color: #FFF;
+        color: #fff;
       }
     }
   }
