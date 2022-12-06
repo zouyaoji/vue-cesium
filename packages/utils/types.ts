@@ -261,6 +261,9 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
 interface VcViewerProvider {
   Cesium: typeof Cesium
   viewer: Cesium.Viewer
+  mars3dMap?: any
+  dcViewer?: any
+  earth?: any
   vm: VcComponentInternalInstance
   dataSources: Cesium.DataSourceCollection
   entities: Cesium.EntityCollection

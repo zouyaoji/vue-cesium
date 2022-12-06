@@ -1224,6 +1224,24 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         },
         get creatingPromise() {
           return creatingPromise
+        },
+        /**
+         * for mars3d only
+         */
+        get mars3dMap() {
+          return vcInstance.map
+        },
+        /**
+         * for dc-sdk only
+         */
+        get dcViewer() {
+          return vcInstance.dcViewer
+        },
+        /**
+         * for earth-sdk only
+         */
+        get earth() {
+          return vcInstance.earth
         }
       }
     )
