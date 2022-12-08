@@ -16,8 +16,8 @@
       href="https://raw.githubusercontent.com/zouyaoji/vue-cesium/dev/website/assets/images/vue-cesium-logo-small.svg"
       color="#409EFF"
     />
-    <title>A Vue 3 based component library of CesiumJS for developers | VueCesium</title>
-    <meta name="description" content="VueCesium, a Vue 3.x based component library of CesiumJS for GISer" />
+    <title>A Vue 3 based component library of CesiumJS for developers | Vue for Cesium</title>
+    <meta name="description" content="Vue for Cesium, a Vue 3.x based component library of CesiumJS for GISer" />
     <!-- 引入 fontawesome 图标资源-->
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <!-- 引入 阿里云 图标资源-->

@@ -17,7 +17,7 @@
         }}</a>
       </div>
       <div class="footer-social">
-        <p class="footer-social-title">VueCesium Group</p>
+        <p class="footer-social-title">Vue for Cesium Group</p>
         <el-popover ref="weixin" placement="top" width="120" popper-class="footer-popover" trigger="hover">
           <template #reference> <i class="vc-icons vc-icons-qq" style="cursor: pointer">16533444</i> </template>
           <template #default>

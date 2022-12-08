@@ -1,15 +1,15 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-27 16:43:45
- * @LastEditTime: 2022-02-26 11:00:05
+ * @LastEditTime: 2022-12-08 22:00:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\migration-from-2.x.md
 -->
 
-## Migration from VueCesium 2.x
+## Migration from Vue for Cesium 2.x
 
-This document will help you upgrade from VueCesium 2.x to VueCesium 3.x.
+This document will help you upgrade from Vue for Cesium 2.x to Vue for Cesium 3.x.
 
 ### Breaking changes
 

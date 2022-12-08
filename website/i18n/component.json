@@ -21,7 +21,7 @@
       "starter": "脚手架",
       "feedback": "反馈建议",
       "contribution": "贡献指南",
-      "vc": "VueCesium"
+      "vc": "Vue for Cesium"
     },
     "header": {
       "guide": "指南",
@@ -58,7 +58,7 @@
       "starter": "Starter kit",
       "feedback": "Feedback",
       "contribution": "Contribution",
-      "vc": "VueCesium"
+      "vc": "Vue for Cesium"
     },
     "header": {
       "guide": "Guide",

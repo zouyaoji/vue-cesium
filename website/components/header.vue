@@ -7,7 +7,7 @@
             <!-- logo -->
             <slot>
               <img src="../assets/images/vue-cesium-logo.svg" alt="vue-cesium-logo" class="nav-logo" />
-              <img src="../assets/images/vue-cesium-logo-small.svg" alt="element-logo" class="nav-logo-small" />
+              <!-- <img src="../assets/images/vue-cesium-logo-small.svg" alt="element-logo" class="nav-logo-small" /> -->
             </slot>
           </router-link>
         </h1>
@@ -275,7 +275,8 @@ export default {
   }
 
   .nav-logo {
-    width: 160px;
+    // width: 160px;
+    width: 39px;
   }
 
   .nav-logo,

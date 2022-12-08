@@ -3,7 +3,7 @@
     "lang": "zh-CN",
     "pages": {
       "index": {
-        "1": "VueCesium",
+        "1": "Vue for Cesium",
         "2": "基于 Vue 3，面向开发者的 CesiumJS 组件库。",
         "3": "指南",
         "4": "了解设计指南，帮助开发人员搭建逻辑清晰、结构合理且高效易用的应用。",
@@ -12,7 +12,7 @@
         "7": "使用 Demo 快速体验三维场景；使用前端框架封装的代码帮助工程师快速开发。",
         "8": "资源",
         "9": "下载相关资源，用其快速搭建页面原型或高保真视觉稿，提升产品设计效率。",
-        "10": "虽然 VueCesium 命名包含“Cesium”；但它与 CesiumJS 官方没有直接关系。",
+        "10": "虽然 Vue for Cesium 命名包含“Cesium”；但它与 CesiumJS 官方没有直接关系。",
         "lang": "zh-CN",
         "titleSize": "34",
         "paraSize": "18"
@@ -49,7 +49,7 @@
         "24": "MVVM 数据驱动 + 组件复用，极大简化代码量。",
         "27": "可控 Controllability",
         "28": "开源可控：",
-        "29": "VueCesium 采用 MIT 开源协议；",
+        "29": "Vue for Cesium 采用 MIT 开源协议；",
         "30": "产品可控：",
         "31": "用户可根据需求加载原生 Cesium 库、自己修改的 Cesium 库以及第三方扩展的 Cesium 库均可。"
       },
@@ -70,7 +70,7 @@
     "lang": "en-US",
     "pages": {
       "index": {
-        "1": "VueCesium",
+        "1": "Vue for Cesium",
         "2": "A Vue3 based component library of CesiumJS for developers.",
         "3": "Guide",
         "4": "Understand the design guidelines, helping designers build product that's logically sound, reasonably structured and easy to use.",
@@ -79,7 +79,7 @@
         "7": "Experience the 3D scene by strolling through component demos. Use encapsulated code to improve developing efficiency.",
         "8": "Resource",
         "9": "Download relevant design resources for shaping page prototype or visual draft, increasing design efficiency.",
-        "10": "Although the VueCesium name includes \"Cesium\", it is not directly related to CesiumJS official.",
+        "10": "Although the Vue for Cesium name includes \"Cesium\", it is not directly related to CesiumJS official.",
         "lang": "en-US",
         "titleSize": "34",
         "paraSize": "18"

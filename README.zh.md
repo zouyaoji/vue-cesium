@@ -1,13 +1,13 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-11-10 00:46:57
+ * @LastEditTime: 2022-12-08 22:12:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
 -->
 <p align="center">
-  <img width="300px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
+  <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
   <br>
 </p>
 
-<p align="center">VueCesium - 基于 Vue 3，面向开发者的 CesiumJS 组件库。</p>
+<p align="center">Vue for Cesium - 基于 Vue 3，面向开发者的 CesiumJS 组件库。</p>
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
@@ -40,7 +40,7 @@
 
 - 中国大陆[加速镜像站点](https://vue-cesium.songluck.com)
 
-VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台，目前通过测试平台有:
+Vue for Cesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台，目前通过测试平台有:
 
 - [官方 CesiumJS](https://cesium.com/platform/cesiumjs/)
 - [超图 SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
@@ -48,11 +48,7 @@ VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方
 - [火星科技 Mars3D](http://mars3d.cn/)
 - [数字视觉 DC-SDK](http://dc.dvgis.cn/#/index)
 
-其他未测试的平台，也可以使用 VueCesium ，可通过 vc-viewer 组件的 viewerCreator 传入一个回调方法，viewer 的初始化过程交由用户自主处理，并将初始化后得到到 viewer 返回即可。[详见](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
-
-<strong>
-特别说明：VueCesium 是将 CesiumJS 的 API 封装成 Vue 组件，方便 Vue 项目使用。为了表达它是基于 Vue，面向开发者的 CesiumJS 组件库，取名为“VueCesium”。虽然 VueCesium 命名包含“Cesium”，但它与 CesiumJS 官方没有直接关系。
-</strong>
+其他未测试的平台，也可以使用 Vue for Cesium ，可通过 vc-viewer 组件的 viewerCreator 传入一个回调方法，viewer 的初始化过程交由用户自主处理，并将初始化后得到到 viewer 返回即可。[详见](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/viewer/src/useViewer.ts#L725)
 
 ## 安装
 
@@ -76,7 +72,7 @@ $ pnpm website-dev
 
 ## 许可
 
-VueCesium is open source software licensed as
+Vue for Cesium is open source software licensed as
 [MIT](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE).
 
 Copyright (c) 2018-present, zouyaoji 370681295@qq.com

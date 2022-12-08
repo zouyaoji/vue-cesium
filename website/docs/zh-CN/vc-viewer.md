@@ -6,7 +6,7 @@
 
 使用 `vc-viewer` 标签和它的一些响应属性来初始化三维场景，并挂载 `vc-navigation` 导航和 `vc-entity` 实体组件，详细 API 请查阅它们的文档。
 
-:::demo 此例使用 Vue2.
+:::demo 此例使用 Vue 选项式 api 写法.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">

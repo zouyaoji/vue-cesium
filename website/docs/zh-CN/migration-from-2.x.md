@@ -1,15 +1,15 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-25 13:20:33
- * @LastEditTime: 2022-02-26 10:59:43
+ * @LastEditTime: 2022-12-08 22:00:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\migration-from-2.x.md
 -->
 
-## 从 VueCesium 2.x 升级
+## 从 Vue for Cesium 2.x 升级
 
-本文档将帮助你从 VueCesium 2.x 升级至 VueCesium.
+本文档将帮助你从 Vue for Cesium 2.x 升级至 Vue for Cesium 3.x.
 
 ### 不兼容更新
 

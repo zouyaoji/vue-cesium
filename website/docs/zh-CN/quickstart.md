@@ -1,8 +1,8 @@
 # 快速开始
 
-`VueCesium` 完成了 CesiumJS 的 Vue 组件化，你可以在你的 Vue 项目中使用这个库提供的各个组件。本库本身不含 CesiumJS，所以在引入时通常需要配置 CesiumJS 本身，见 [配置 VueCesium（本篇下文）](./#/zh-CN/component/quickstart#pei-zhi-vuecesium)。
+`Vue for Cesium` 完成了 CesiumJS 的 Vue 组件化，你可以在你的 Vue 项目中使用这个库提供的各个组件。本库本身不含 CesiumJS，所以在引入时通常需要配置 CesiumJS 本身，见 [配置 Vue for Cesium（本篇下文）](./#/zh-CN/component/quickstart#pei-zhi-vuecesium)。
 
-接下来将介绍如何在使用 Vue3 项目中引入 `VueCesium`。
+接下来将介绍如何在使用 Vue3 项目中引入 `Vue for Cesium`。
 
 ## 全量导入
 
@@ -28,9 +28,9 @@ app.mount('#app')
 
 ## 按需导入
 
-`VueCesium` 提供了基于 ES Module 开箱即用的 [Tree Shaking](https://webpack.js.org/guides/tree-shaking/) 功能。
+`Vue for Cesium` 提供了基于 ES Module 开箱即用的 [Tree Shaking](https://webpack.js.org/guides/tree-shaking/) 功能。
 
-例如，你可以在任意单文件组件中使用 VueCesium，这里以 `VcViewer` 组件为例。
+例如，你可以在任意单文件组件中使用 Vue for Cesium，这里以 `VcViewer` 组件为例。
 
 ```html
 <template>
@@ -52,9 +52,9 @@ app.mount('#app')
 
 （完整组件列表以 [reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/vue-cesium/component.ts) 为准）
 
-## 配置 VueCesium
+## 配置 Vue for Cesium
 
-你可以对 VueCesium 做一些自定义的配置：
+你可以对 Vue for Cesium 做一些自定义的配置：
 
 ```ts
 import enUS from 'vue-cesium/es/locale/lang/en-us'
@@ -122,9 +122,9 @@ import 'vue-cesium/dist/index.css'
 
 以上配置将适配 vscode 的 Volar 插件，并得到 CesiumJS API 提示。
 
-## 如何在 VueCesium 中继续使用原生 CesiumJS API 开发？
+## 如何在 Vue for Cesium 中继续使用原生 CesiumJS API 开发？
 
-VueCesium 可能并不完全能提供你所需的功能，但是保留了访问由 VueCesium 创建的 Cesium 有关实例对象的访问权限。
+Vue for Cesium 可能并不完全能提供你所需的功能，但是保留了访问由 Vue for Cesium 创建的 Cesium 有关实例对象的访问权限。
 
 通常，`VcViewer` 组件是创建 Cesium 观察者窗口的根组件，它的 `ready` 事件回调函数的参数可以解构成 `Cesium` 和 `viewer` 两个变量，用于原生 Cesium API 开发。
 
@@ -161,7 +161,7 @@ VueCesium 可能并不完全能提供你所需的功能，但是保留了访问�
 :::
 
 :::tip
-实际上 VueCesium 是通过动态标签引入 Cesium 的，所以 Cesium 变量其实是全局的。只是它最快需要在 vc-viewer 的 `cesiumReady` 事件之后才成为可访问的全局变量。如果您觉得这样不方便，也可以考虑将其直接写到项目模板文件 index.html 的 `head` 标签中，详见[#155](https://github.com/zouyaoji/vue-cesium/issues/155#issuecomment-1042470701)。一旦这样写，在 VueCesium 在初始化时 Cesium 变量就已经存在了，就不会再去通过动态标签再次引入 Cesium 了。
+实际上 Vue for Cesium 是通过动态标签引入 Cesium 的，所以 Cesium 变量其实是全局的。只是它最快需要在 vc-viewer 的 `cesiumReady` 事件之后才成为可访问的全局变量。如果您觉得这样不方便，也可以考虑将其直接写到项目模板文件 index.html 的 `head` 标签中，详见[#155](https://github.com/zouyaoji/vue-cesium/issues/155#issuecomment-1042470701)。一旦这样写，在 Vue for Cesium 在初始化时 Cesium 变量就已经存在了，就不会再去通过动态标签再次引入 Cesium 了。
 
 只是在 JS 项目中，如果配置了 ESLint ，我们需要告诉 ESLint Cesium 已经是全局变量了，而 TS 项目中则需要声明 Cesium 为全局变量或者引入 Cesium.d.ts (推荐后者) ，两者的配置请分别参考[ESLint 配置](https://github.com/zouyaoji/vue-cesium-starter/blob/main/.eslintrc.js#L11) 和 [TS 配置](https://github.com/zouyaoji/vue-cesium-demo/blob/main/tsconfig.json)。
 :::
@@ -225,7 +225,7 @@ Vue3 中在组合式 API 的加持下可以通过 `useVueCesium` 很方便的获
 
 ### 关于 Vue2
 
-由于 Vue2 将逐渐进入维护期，所以劳请自行创建项目使用 `VueCesium`.
+由于 Vue2 将逐渐进入维护期，所以劳请自行创建项目使用 `Vue for Cesium`.
 
 ## 开始使用
 

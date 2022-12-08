@@ -1,16 +1,16 @@
 {
   "zh-CN": {
-    "home": "VueCesium - Vue 3.x components for CesiumJS",
-    "guide": "指南 | VueCesium",
-    "component": "组件 | VueCesium",
-    "resource": "资源 | VueCesium",
-    "donations": "赞助 | VueCesium"
+    "home": "Vue for Cesium - Vue 3.x components for CesiumJS",
+    "guide": "指南 | Vue for Cesium",
+    "component": "组件 | Vue for Cesium",
+    "resource": "资源 | Vue for Cesium",
+    "donations": "赞助 | Vue for Cesium"
   },
   "en-US": {
-    "home": "VueCesium - Vue 3.x components for CesiumJS",
-    "guide": "Guide | VueCesium",
-    "component": "Component | VueCesium",
-    "resource": "Resource | VueCesium",
-    "donations": "Donation | VueCesium"
+    "home": "Vue for Cesium - Vue 3.x components for CesiumJS",
+    "guide": "Guide | Vue for Cesium",
+    "component": "Component | Vue for Cesium",
+    "resource": "Resource | Vue for Cesium",
+    "donations": "Donation | Vue for Cesium"
   }
 }

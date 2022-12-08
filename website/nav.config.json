@@ -25,7 +25,7 @@
         },
         {
           "path": "/migration-from-2.x",
-          "name": "从 VueCesium 2.x 升级"
+          "name": "从 2.x 升级"
         },
         {
           "path": "/base",
@@ -521,7 +521,7 @@
         },
         {
           "path": "/migration-from-2.x",
-          "name": "Migration from VueCesium 2.x"
+          "name": "Migration from 2.x"
         },
         {
           "path": "/base",

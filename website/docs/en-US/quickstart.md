@@ -1,6 +1,6 @@
 # Quick start
 
-`VueCesium` completes the Vue componentization of CesiumJS, you can use each component provided by this library in your Vue project. This library itself does not contain CesiumJS, so it is usually necessary to configure CesiumJS itself when importing, see [Configuring VueCesium (below this article)](./#/en-US/component/quickstart#configure-vuecesium).
+`Vue for Cesium` completes the Vue componentization of CesiumJS, you can use each component provided by this library in your Vue project. This library itself does not contain CesiumJS, so it is usually necessary to configure CesiumJS itself when importing, see [Configuring Vue for Cesium (below this article)](./#/en-US/component/quickstart#configure-vuecesium).
 
 ## Full import
 
@@ -26,10 +26,10 @@ The Cesium version at https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js is 
 
 ## On-demand Import
 
-`VueCesium` provides out of box [Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
+`Vue for Cesium` provides out of box [Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
 functionalities based on ES Module.
 
-For example, you can use VueCesium in any single-file component, such as the `VcViewer` component.
+For example, you can use Vue for Cesium in any single-file component, such as the `VcViewer` component.
 
 ```html
 <template>
@@ -49,9 +49,9 @@ For example, you can use VueCesium in any single-file component, such as the `Vc
 
 (The complete component list is subject to [reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/vue-cesium/component.ts))
 
-## Configure VueCesium
+## Configure Vue for Cesium
 
-You can do some custom configuration to VueCesium:
+You can do some custom configuration to Vue for Cesium:
 
 ```ts
 import enUS from 'vue-cesium/es/locale/lang/en-us'
@@ -111,9 +111,9 @@ Please add the following configuration to the `tsconfig.json` or `jsconfig.json`
 
 The above configuration will be adapted to the volar plugin of vscode and will be prompted by the Cesium API.
 
-## How to continue developing with native CesiumJS API in VueCesium?
+## How to continue developing with native CesiumJS API in Vue for Cesium?
 
-VueCesium may not provide exactly what you need, but retains access to Cesium-related instance objects created by VueCesium.
+Vue for Cesium may not provide exactly what you need, but retains access to Cesium-related instance objects created by Vue for Cesium.
 
 Usually, the `VcViewer` component is the root component for creating a Cesium observer window, and the parameters of its `ready` event callback function can be decomposed into two variables, `Cesium` and `viewer`, for native Cesium API development.
 
@@ -150,7 +150,7 @@ The `Cesium` variable is the namespace, through which you can access CesiumJS na
 :::
 
 :::tip
-In fact, VueCesium is introduced into Cesium through dynamic tags, so Cesium variables are actually global. It's just that it needs to become an accessible global variable after the `cesiumReady` event of vc-viewer at the earliest. If you find this inconvenient, you can also consider writing it directly into the `head` tag of the project template file index.html, see [#155](https://github.com/zouyaoji/vue-cesium/issues/155#issuecomment-1042470701). Once written like this, the Cesium variable already exists when VueCesium is initialized, and Cesium will not be introduced again through dynamic tags.
+In fact, Vue for Cesium is introduced into Cesium through dynamic tags, so Cesium variables are actually global. It's just that it needs to become an accessible global variable after the `cesiumReady` event of vc-viewer at the earliest. If you find this inconvenient, you can also consider writing it directly into the `head` tag of the project template file index.html, see [#155](https://github.com/zouyaoji/vue-cesium/issues/155#issuecomment-1042470701). Once written like this, the Cesium variable already exists when Vue for Cesium is initialized, and Cesium will not be introduced again through dynamic tags.
 
 Just in the JS project, if ESLint is configured, we need to tell ESLint that Cesium is a global variable, and in the TS project, we need to declare Cesium as a global variable or introduce Cesium.d.ts (the latter is recommended), the configuration of the two Please refer to [ESLint configuration](https://github.com/zouyaoji/vue-cesium-starter/blob/main/.eslintrc.js#L11) and [TS configuration](https://github.com/zouyaoji/vue-cesium-demo/blob/main/tsconfig.json).
 :::
@@ -165,7 +165,7 @@ In Vue3, with the blessing of Composition API, it can be easily obtained through
 // business-component.vue
 <template>
   <div class="business-component">
-    Hellow VueCesium
+    Hellow Vue for Cesium
     <button @click="onButtonClick"></button>
   </div>
 </template>
@@ -214,7 +214,7 @@ If you are interested in desktop applications, you can refer to [Vite2 + Vue3Ts 
 
 ### About Vue2
 
-Since Vue2 will gradually enter the maintenance period, please create your own project to use `VueCesium`.
+Since Vue2 will gradually enter the maintenance period, please create your own project to use `Vue for Cesium`.
 
 ## Let's Get Started
 
