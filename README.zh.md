@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-12-08 22:12:41
+ * @LastEditTime: 2022-12-11 23:29:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -33,6 +33,11 @@
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
+- 🎉 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+
+<p align="center">
+  <img width="600px" src="https://zouyaoji.top/vue-cesium/images/certified-dev-banner-light-sm_01.png">
+</p>
 
 ## 开始 | [English](./README.md)
 

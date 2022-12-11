@@ -2,9 +2,13 @@
 
 ### 3.1.2
 
+_2022-12-12_
+
 #### Bug fixes
 
 - Fixed the issue that the navigation component gets empty cesiumObject value through ready event.
+- Fixed the issue that the vertical measurement gets a wrong result.
+- Fixed the issue that the useVueCesium cannot get third-party library instantiation object.
 
 ### 3.1.1
 

@@ -1,13 +1,13 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-12-08 22:09:07
+ * @LastEditTime: 2022-12-11 23:30:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
 -->
 <p align="center">
-  <img width="300px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
+  <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
 </p>
 
 <p align="center">
@@ -33,6 +33,11 @@
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
+- 🎉 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+
+<p align="center">
+  <img width="600px" src="https://zouyaoji.top/vue-cesium/images/certified-dev-banner-light-sm_01.png">
+</p>
 
 ## Getting Started | [简体中文](./README.zh.md)
 

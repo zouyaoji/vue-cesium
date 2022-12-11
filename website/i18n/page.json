@@ -12,7 +12,7 @@
         "7": "使用 Demo 快速体验三维场景；使用前端框架封装的代码帮助工程师快速开发。",
         "8": "资源",
         "9": "下载相关资源，用其快速搭建页面原型或高保真视觉稿，提升产品设计效率。",
-        "10": "虽然 Vue for Cesium 命名包含“Cesium”；但它与 CesiumJS 官方没有直接关系。",
+        "10": "已加入 Cesium 认证开发者计划",
         "lang": "zh-CN",
         "titleSize": "34",
         "paraSize": "18"
@@ -62,7 +62,13 @@
         "2": "整理中",
         "paraHeight": "1.8",
         "placeholder1": "整理中",
-        "placeholder2": "资源正在整理和完善中"
+        "placeholder2": "资源正在整理和完善中...",
+        "links": [
+          {
+            "name": "超图 iClent3D-Cesium",
+            "href": "http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/webgl/examples.html#layer"
+          }
+        ]
       }
     }
   },
@@ -79,7 +85,7 @@
         "7": "Experience the 3D scene by strolling through component demos. Use encapsulated code to improve developing efficiency.",
         "8": "Resource",
         "9": "Download relevant design resources for shaping page prototype or visual draft, increasing design efficiency.",
-        "10": "Although the Vue for Cesium name includes \"Cesium\", it is not directly related to CesiumJS official.",
+        "10": "Joined the Cesium Certified Developer Program",
         "lang": "en-US",
         "titleSize": "34",
         "paraSize": "18"
@@ -138,7 +144,13 @@
         "2": "Under construction.",
         "paraHeight": "1.6",
         "placeholder1": "Under construction",
-        "placeholder2": "More resources are being developed"
+        "placeholder2": "More resources are being developed...",
+        "links": [
+          {
+            "name": "SuperMap's iClent3D-Cesium",
+            "href": "http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/webgl/examples.html#layer"
+          }
+        ]
       }
     }
   }

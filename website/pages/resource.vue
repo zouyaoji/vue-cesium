@@ -2,6 +2,13 @@
   <div class="page-container page-resource">
     <h2>{{ langConfig[1] }}</h2>
     <p>{{ langConfig.placeholder2 }}</p>
+
+    <template v-for="(link, index) in langConfig.links" :key="index">
+      <app-link :href="link.href">
+        {{ link.name }}
+      </app-link>
+    </template>
+
     <div class="cards">
       <ul class="container"></ul>
     </div>
