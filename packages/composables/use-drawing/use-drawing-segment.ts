@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-08-02 22:20:33
+ * @LastEditTime: 2022-12-11 23:40:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -804,13 +804,16 @@ export default function (props, ctx, cmpName: string) {
           canShowDrawTip.value = true
         }
       } else {
-        if (platform().hasTouch === true) {
-          const position = getWorldPosition(scene, movement, {} as any)
-          if (defined(position)) {
-            const positions = polyline.positions
-            positions[1] = position
+        if (cmpName !== 'VcMeasurementVertical') {
+          if (platform().hasTouch === true) {
+            const position = getWorldPosition(scene, movement, {} as any)
+            if (defined(position)) {
+              const positions = polyline.positions
+              positions[1] = position
+            }
           }
         }
+
         if (props.mode === 1) {
           drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
