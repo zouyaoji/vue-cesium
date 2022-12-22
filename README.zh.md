@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-12-11 23:29:49
+ * @LastEditTime: 2022-12-22 10:30:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://github.com/zouyaoji/vue-cesium/actions/workflows/publish-npm.yml" target="_blank">
-    <img src="https://img.shields.io/github/workflow/status/zouyaoji/vue-cesium/Publish%20to%20NPM%20registry?style=plastic">
+    <img src="https://img.shields.io/github/actions/workflow/status/zouyaoji/vue-cesium/publish-npm.yml?style=plastic">
   </a>
   <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
     <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic">
