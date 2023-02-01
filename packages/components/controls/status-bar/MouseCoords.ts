@@ -148,7 +148,7 @@ class MouseCoords {
   }
 
   sampleAccurateHeight(terrainProvider, position) {
-    const { Cartographic, sampleTerrainMostDetailed, when } = Cesium
+    const { Cartographic, sampleTerrainMostDetailed } = Cesium
     if (this.tileRequestInFlight) {
       // A tile request is already in flight, so reschedule for later.
       this.debounceSampleAccurateHeight.cancel()

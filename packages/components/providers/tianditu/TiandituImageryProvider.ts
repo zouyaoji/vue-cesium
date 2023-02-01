@@ -109,7 +109,7 @@ class TiandituImageryProvider {
           break
       }
     })
-    const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme, when } = Cesium
+    const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme } = Cesium
     options = defaultValue(options, {})
     this._mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
     this._url = options.url || defaultValue(options.url, TiandituMapsStyleUrl[this._mapStyle])
