@@ -153,16 +153,19 @@
         console.log(e)
       }
       const unload = () => {
-        console.log(datasourceRefs)
         datasourceRefs.value.forEach(datasourceRef => {
           datasourceRef.unload()
         })
       }
       const reload = () => {
-        datasourceRef.value.reload()
+        datasourceRefs.value.forEach(datasourceRef => {
+          datasourceRef.reload()
+        })
       }
       const load = () => {
-        datasourceRef.value.load()
+        datasourceRefs.value.forEach(datasourceRef => {
+          datasourceRef.load()
+        })
       }
       const onViewerReady = ({ Cesium, viewer }) => {
         _viewer = viewer
