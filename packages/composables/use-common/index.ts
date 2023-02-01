@@ -1,5 +1,5 @@
 import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcMittEvents, VcViewerProvider } from '@vue-cesium/utils/types'
-import { inject, onUnmounted, WatchStopHandle } from 'vue'
+import { inject, onBeforeUnmount, onUnmounted, WatchStopHandle } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
@@ -134,7 +134,11 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
           vcInstance.removeCallbacks.forEach(removeCallback => {
             removeCallback()
           })
+          // ensure custom events can be emitted after unmount.
+          // https://github.com/vuejs/core/issues/5674
+          vcInstance.isUnmounted = false
           emit('destroyed', vcInstance)
+          vcInstance.isUnmounted = true
           logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
           // If the component cannot be rendered without the parent component, the parent component needs to be removed.
@@ -404,6 +408,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
   logger.debug(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
     logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
+
     vcInstance.unloadingPromise = new Promise((resolve, reject) => {
       unload().then(() => {
         logger.debug(`${vcInstance.cesiumClass}---unloaded`)
