@@ -36,6 +36,7 @@ export default {
     let a = changeLogNodes[1].querySelector('a')
     a && a.remove()
     let release = changeLogNodes[1].textContent.trim()
+    console.log(release)
     let fragments = `<li><h3><a href="https://github.com/zouyaoji/vue-cesium/releases/tag/v${release}" target="_blank">${release}</a></h3>`
 
     for (let len = changeLogNodes.length, i = 2; i < len; i++) {
@@ -45,7 +46,7 @@ export default {
       if (node.tagName !== 'H3') {
         fragments += changeLogNodes[i].outerHTML
       } else {
-        release = changeLogNodes[i].textContent.trim()
+        release = changeLogNodes[i].textContent.replace('¶', '').trim()
         fragments += `</li><li><h3><a href="https://github.com/zouyaoji/vue-cesium/releases/tag/v${release}" target="_blank">${release}</a></h3>`
       }
     }
