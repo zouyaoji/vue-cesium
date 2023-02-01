@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-09-23 00:16:10
+ * @LastEditTime: 2023-02-01 15:23:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -19,7 +19,7 @@
         :data-ad-layout="dataAdLayout"
       ></ins>
     </div>
-    <!-- <app-link href="https://new.502502.xyz/#/register?code=jlz6Frzz">
+    <!-- <app-link href="https://xn--4gq62f52gdss.com/#/register?code=hbv1fTgZ">
       <span style="padding-left: 20px">{{ otherAd }}</span>
     </app-link> -->
   </div>
@@ -43,7 +43,7 @@ export default {
       return this.$route.path.indexOf('/zh-CN/') !== -1 ? '赞助商' : 'Sponsor'
     },
     otherAd() {
-      return this.$route.path.indexOf('/zh-CN/') !== -1 ? '高速稳定梯子推荐' : 'Stable VPN Recommendation'
+      return this.$route.path.indexOf('/zh-CN/') !== -1 ? '超便宜稳定梯子' : 'Stable VPN Recommendation'
     }
   },
   mounted() {

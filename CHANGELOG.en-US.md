@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.1.3
+
+_2023-02-01_
+
+#### Bug fixes
+
+- Fixed the issue that the version number of Cesium was compared wrongly.
+- Fixed the issue that custom events can not be emitted after unmount.
+
 ### 3.1.2
 
 _2022-12-12_

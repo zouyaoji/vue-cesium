@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/actions/workflow/status/zouyaoji/vue-cesium/publish-npm.yml?style=plastic">
   </a>
   <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
-    <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic">
+    <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic">
   </a>
   <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
     <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">

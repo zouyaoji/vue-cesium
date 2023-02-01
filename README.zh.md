@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-12-22 10:30:35
+ * @LastEditTime: 2023-02-02 00:41:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/actions/workflow/status/zouyaoji/vue-cesium/publish-npm.yml?style=plastic">
   </a>
   <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
-    <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic">
+    <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic">
   </a>
   <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
     <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">

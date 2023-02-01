@@ -13,7 +13,7 @@
         </h1>
         <h1>
           <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
-            <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic" />
+            <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic" />
           </a>
         </h1>
         <h1>
