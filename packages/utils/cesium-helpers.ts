@@ -1065,3 +1065,22 @@ export function heightToLevel(altitude: number) {
 
   return Math.round(D + (A - D) / (1 + Math.pow(altitude / C, B)))
 }
+
+export function compareCesiumVersion(a, b) {
+  const vAs = a.split('.').map(v => Number(v))
+  const bVersionA = vAs[0]
+  const lVersionA = vAs[1]
+  const vBs = b.split('.').map(v => Number(v))
+  const bVersionB = vBs[0]
+  const lVersionB = vBs[1]
+
+  if (bVersionA > bVersionB) {
+    return true
+  }
+
+  if (bVersionA === bVersionB && lVersionA >= lVersionB) {
+    return true
+  }
+
+  return false
+}

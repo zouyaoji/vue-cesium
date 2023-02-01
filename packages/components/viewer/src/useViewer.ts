@@ -19,7 +19,7 @@ import type {
   VcViewerProvider,
   Mars3dConfig
 } from '@vue-cesium/utils/types'
-import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
+import { compareCesiumVersion, setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
 import { useEvents } from '@vue-cesium/composables'
 import { getMars3dConfig as getDefaultMars3dConfig } from './loadUtil'
@@ -659,7 +659,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     vcInstance.viewerElement = (viewer as any)._element
     vcInstance.mounted = true
 
-    if (Cesium.VERSION >= '1.83') {
+    if (compareCesiumVersion(Cesium.VERSION, '1.83')) {
       viewer.scene.globe.terrainExaggeration = options.terrainExaggeration
     }
 
