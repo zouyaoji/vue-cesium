@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-06-24 16:54:54
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-02-09 18:11:26
+ * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
  */
@@ -69,6 +69,8 @@ const pinDrawingDefault: VcDrawingOpts = Object.assign({}, pointDrawingDefault, 
   showLabel: true
 })
 
+const fabActionOptsDefault: VcActionTooltipProps = Object.assign({}, {})
+
 const mainFabDefault = Object.assign({}, actionOptions, {
   direction: 'right',
   icon: 'vc-icons-drawing-button',
@@ -104,6 +106,10 @@ const drawingsProps = {
   mainFabOpts: {
     type: Object as PropType<VcActionTooltipProps & VcFabProps>,
     default: () => mainFabDefault
+  },
+  fabActionOpts: {
+    type: Object as PropType<VcActionTooltipProps>,
+    default: () => fabActionOptsDefault
   },
   pinActionOpts: {
     type: Object as PropType<VcActionTooltipProps>,
@@ -222,6 +228,10 @@ export type VcDrawingsProps = {
    * Specify the style options of the floating action button of the VcMeasurements component.
    */
   mainFabOpts?: VcActionTooltipProps & VcFabProps
+  /**
+   * Style options for other action buttons.
+   */
+  fabActionOpts?: VcActionTooltipProps
   /**
    * Specify the style options of the pin drawing action button.
    */
