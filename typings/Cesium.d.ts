@@ -26,7 +26,6 @@ declare namespace Cesium {
   const ShaderSource: any
   const S3MTilesLayer: any
   const SuperMapVersion: string
-
   interface Rectangle {
     expand: (widthFactor: number, heightFactor: number, result?: Rectangle) => Rectangle
   }
@@ -137,6 +136,7 @@ declare namespace Cesium {
   }
 
   interface ShadowMap {
+    constructor(e: any)
     // constructor(options: {
     //   lightCamera?: Camera
     //   enabled?: boolean
@@ -6620,6 +6620,12 @@ declare namespace Cesium {
      * @returns true if the browsers supports Web Assembly, false if not.
      */
     function supportsWebAssembly(): boolean
+    /**
+     * Detects whether the current browser supports a WebGL2 rendering context for the specified scene.
+     * @param scene - the Cesium scene specifying the rendering context
+     * @returns true if the browser supports a WebGL2 rendering context, false if not.
+     */
+    function supportsWebgl2(scene: Scene): boolean
   }
 
   /**
@@ -9957,9 +9963,10 @@ declare namespace Cesium {
      * Sets the rotation assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
      * @param rotation - The rotation matrix.
+     * @param result - The object onto which to store the result.
      * @returns The modified result parameter.
      */
-    static setRotation(matrix: Matrix2, rotation: Matrix2): Matrix2
+    static setRotation(matrix: Matrix2, rotation: Matrix2, result: Matrix2): Matrix2
     /**
      * Extracts the rotation matrix assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
@@ -10017,7 +10024,7 @@ declare namespace Cesium {
      * @param result - The object onto which to store the result.
      * @returns The modified result parameter.
      */
-    static multiplyByScale(matrix: Matrix2, scale: number, result: Matrix2): Matrix2
+    static multiplyByScale(matrix: Matrix2, scale: Cartesian2, result: Matrix2): Matrix2
     /**
      * Computes the product of a matrix times a uniform scale, as if the scale were a scale matrix.
      * @example
@@ -10421,9 +10428,10 @@ declare namespace Cesium {
      * Sets the rotation assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
      * @param rotation - The rotation matrix.
+     * @param result - The object onto which to store the result.
      * @returns The modified result parameter.
      */
-    static setRotation(matrix: Matrix3, rotation: Matrix3): Matrix3
+    static setRotation(matrix: Matrix3, rotation: Matrix3, result: Matrix3): Matrix3
     /**
      * Extracts the rotation matrix assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
@@ -10481,7 +10489,7 @@ declare namespace Cesium {
      * @param result - The object onto which to store the result.
      * @returns The modified result parameter.
      */
-    static multiplyByScale(matrix: Matrix3, scale: number, result: Matrix3): Matrix3
+    static multiplyByScale(matrix: Matrix3, scale: Cartesian3, result: Matrix3): Matrix3
     /**
      * Computes the product of a matrix times a uniform scale, as if the scale were a scale matrix.
      * @example
@@ -11100,9 +11108,10 @@ declare namespace Cesium {
      * Sets the rotation assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
      * @param rotation - The rotation matrix.
+     * @param result - The object onto which to store the result.
      * @returns The modified result parameter.
      */
-    static setRotation(matrix: Matrix4, rotation: Matrix3): Matrix4
+    static setRotation(matrix: Matrix4, rotation: Matrix3, result: Matrix4): Matrix4
     /**
      * Extracts the rotation matrix assuming the matrix is an affine transformation.
      * @param matrix - The matrix.
@@ -11809,7 +11818,7 @@ declare namespace Cesium {
 
   /**
    * Creates an instance of an OrientedBoundingBox.
-   * An OrientedBoundingBox of some object is a closed and convex cuboid. It can provide a tighter bounding volume than {@link BoundingSphere} or {@link AxisAlignedBoundingBox} in many cases.
+   * An OrientedBoundingBox of some object is a closed and convex rectangular cuboid. It can provide a tighter bounding volume than {@link BoundingSphere} or {@link AxisAlignedBoundingBox} in many cases.
    * @example
    * // Create an OrientedBoundingBox using a transformation matrix, a position where the box will be translated, and a scale.
    * const center = new Cesium.Cartesian3(1.0, 0.0, 0.0);
@@ -11818,7 +11827,7 @@ declare namespace Cesium {
    * const obb = new Cesium.OrientedBoundingBox(center, halfAxes);
    * @param [center = Cartesian3.ZERO] - The center of the box.
    * @param [halfAxes = Matrix3.ZERO] - The three orthogonal half-axes of the bounding box.
-   *                                          Equivalently, the transformation matrix, to rotate and scale a 0x0x0
+   *                                          Equivalently, the transformation matrix, to rotate and scale a 1x1x1
    *                                          cube centered at the origin.
    */
   export class OrientedBoundingBox {
@@ -12639,6 +12648,14 @@ declare namespace Cesium {
      * A pixel format containing an alpha channel.
      */
     ALPHA = WebGLConstants.ALPHA,
+    /**
+     * A pixel format containing a red channel
+     */
+    RED = WebGLConstants.RED,
+    /**
+     * A pixel format containing red and green channels.
+     */
+    RG = WebGLConstants.RG,
     /**
      * A pixel format containing red, green, and blue channels.
      */
@@ -17384,9 +17401,8 @@ declare namespace Cesium {
      * indicates that the preload has completed.
      * @example
      * const interval = new Cesium.TimeInterval(...);
-     * Promise.resolve(Cesium.Transforms.preloadIcrfFixed(interval)).then(function() {
-     *     // the data is now loaded
-     * });
+     * await Cesium.Transforms.preloadIcrfFixed(interval));
+     * // the data is now loaded
      * @param timeInterval - The interval to preload.
      * @returns A promise that, when resolved, indicates that the preload has completed
      *          and evaluation of the transformation between the fixed and ICRF axes will
@@ -22188,11 +22204,11 @@ declare namespace Cesium {
     addPlaylistEntry(entry: KmlTourFlyTo | KmlTourWait): void
     /**
      * Play this tour.
-     * @param viewer - viewer widget.
+     * @param widget - The widget.
      * @param [cameraOptions] - these options will be merged with {@link Camera#flyTo}
      * options for FlyTo playlist entries.
      */
-    play(viewer: Viewer, cameraOptions?: any): void
+    play(widget: Viewer | CesiumWidget, cameraOptions?: any): void
     /**
      * Stop curently playing tour.
      */
@@ -25316,6 +25332,49 @@ declare namespace Cesium {
   export type exportKmlModelCallback = (model: ModelGraphics, time: JulianDate, externalFiles: any) => string
 
   /**
+   * Options to control the setting up of a WebGL Context.
+   * <p>
+   * <code>allowTextureFilterAnisotropic</code> defaults to true, which enables
+   * anisotropic texture filtering when the WebGL extension is supported.
+   * Setting this to false will improve performance, but hurt visual quality,
+   * especially for horizon views.
+   * </p>
+   * @property [requestWebGl1 = false] - If true and the browser supports it, use a WebGL 1 rendering context
+   * @property [allowTextureFilterAnisotropic = true] - If true, use anisotropic filtering during texture sampling
+   * @property [webgl] - WebGL options to be passed on to canvas.getContext
+   * @property [getWebGLStub] - A function to create a WebGL stub for testing
+   */
+  export type ContextOptions = {
+    requestWebGl1?: boolean
+    allowTextureFilterAnisotropic?: boolean
+    webgl?: WebGLOptions
+    getWebGLStub?: (...params: any[]) => any
+  }
+
+  /**
+   * WebGL options to be passed on to HTMLCanvasElement.getContext().
+   * See {@link https://registry.khronos.org/webgl/specs/latest/1.0/#5.2|WebGLContextAttributes}
+   * but note the modified defaults for 'alpha', 'stencil', and 'powerPreference'
+   *
+   * <p>
+   * <code>alpha</code> defaults to false, which can improve performance
+   * compared to the standard WebGL default of true.  If an application needs
+   * to composite Cesium above other HTML elements using alpha-blending, set
+   * <code>alpha</code> to true.
+   * </p>
+   */
+  export type WebGLOptions = {
+    alpha?: boolean
+    depth?: boolean
+    stencil?: boolean
+    antialias?: boolean
+    premultipliedAlpha?: boolean
+    preserveDrawingBuffer?: boolean
+    powerPreference?: 'default' | 'low-power' | 'high-performance'
+    failIfMajorPerformanceCaveat?: boolean
+  }
+
+  /**
    * The data type of a pixel.
    */
   export enum PixelDatatype {
@@ -25720,9 +25779,12 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
+   * A billboard is created and its initial
+   * properties are set by calling {@link BillboardCollection#add}. Do not call the constructor directly.
+   * </div>
    * A viewport-aligned image positioned in the 3D scene, that is created
-   * and rendered using a {@link BillboardCollection}.  A billboard is created and its initial
-   * properties are set by calling {@link BillboardCollection#add}.
+   * and rendered using a {@link BillboardCollection}.
    * <br /><br />
    * <div align='center'>
    * <img src='Images/Billboard.png' width='400' height='300' /><br />
@@ -27495,6 +27557,10 @@ declare namespace Cesium {
      * Returns <code>undefined</code> if <code>extras</code> does not exist.
      */
     readonly extras: any
+    /**
+     * Gets the I3S Node for the tile.
+     */
+    i3sNode: string
   }
 
   /**
@@ -27690,13 +27756,6 @@ declare namespace Cesium {
      * @returns Whether the feature contains this property.
      */
     hasProperty(name: string): boolean
-    /**
-     * Returns an array of property names for the feature. This includes properties from this feature's
-     * class and inherited classes when using a batch table hierarchy.
-     * @param [results] - An array into which to store the results.
-     * @returns The names of the feature's properties.
-     */
-    getPropertyNames(results?: string[]): string[]
     /**
      * Returns an array of property IDs for the feature. This includes properties from this feature's
      * class and inherited classes when using a batch table hierarchy.
@@ -27973,13 +28032,6 @@ declare namespace Cesium {
      * @returns Whether the feature contains this property.
      */
     hasProperty(name: string): boolean
-    /**
-     * Returns an array of property names for the feature. This includes properties from this feature's
-     * class and inherited classes when using a batch table hierarchy.
-     * @param [results] - An array into which to store the results.
-     * @returns The names of the feature's properties.
-     */
-    getPropertyNames(results?: string[]): string[]
     /**
      * Returns an array of property IDs for the feature. This includes properties from this feature's
      * class and inherited classes when using a batch table hierarchy.
@@ -28703,6 +28755,105 @@ declare namespace Cesium {
      */
     meta: StyleExpression
   }
+
+  /**
+   * A {@link VoxelProvider} that fetches voxel data from a 3D Tiles tileset.
+   * <p>
+   * Implements the {@link VoxelProvider} interface.
+   * </p>
+   * @param options - Object with the following properties:
+   * @param options.url - The URL to a tileset JSON file.
+   */
+  export class Cesium3DTilesVoxelProvider extends VoxelProvider {
+    constructor(options: { url: Resource | string | Promise<Resource> | Promise<string> })
+    /**
+     * Gets a value indicating whether or not the provider is ready for use.
+     */
+    readonly ready: boolean
+    /**
+     * A transform from local space to global space. If undefined, the identity matrix will be used instead.
+     */
+    readonly globalTransform: Matrix4 | undefined
+    /**
+     * A transform from shape space to local space. If undefined, the identity matrix will be used instead.
+     */
+    readonly shapeTransform: Matrix4 | undefined
+    /**
+     * Gets the {@link VoxelShapeType}
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly shape: VoxelShapeType
+    /**
+     * Gets the minimum bounds.
+     * If undefined, the shape's default minimum bounds will be used instead.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly minBounds: Cartesian3 | undefined
+    /**
+     * Gets the maximum bounds.
+     * If undefined, the shape's default maximum bounds will be used instead.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maxBounds: Cartesian3 | undefined
+    /**
+     * Gets the number of voxels per dimension of a tile. This is the same for all tiles in the dataset.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly dimensions: Cartesian3
+    /**
+     * Gets the number of padding voxels before the tile. This improves rendering quality when sampling the edge of a tile, but it increases memory usage.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly paddingBefore: Cartesian3 | undefined
+    /**
+     * Gets the number of padding voxels after the tile. This improves rendering quality when sampling the edge of a tile, but it increases memory usage.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly paddingAfter: Cartesian3 | undefined
+    /**
+     * Gets the metadata names.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly names: string[]
+    /**
+     * Gets the metadata types.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly types: MetadataType[]
+    /**
+     * Gets the metadata component types.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly componentTypes: MetadataComponentType[]
+    /**
+     * Gets the metadata minimum values.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly minimumValues: number[][] | undefined
+    /**
+     * Gets the metadata maximum values.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maximumValues: number[][] | undefined
+    /**
+     * The maximum number of tiles that exist for this provider. This value is used as a hint to the voxel renderer to allocate an appropriate amount of GPU memory. If this value is not known it can be undefined.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maximumTileCount: number | undefined
+    /**
+     * Requests the data for a given tile. The data is a flattened 3D array ordered by X, then Y, then Z.
+     * This function should not be called before {@link VoxelProvider#ready} returns true.
+     * @param [options] - Object with the following properties:
+     * @param [options.tileLevel = 0] - The tile's level.
+     * @param [options.tileX = 0] - The tile's X coordinate.
+     * @param [options.tileY = 0] - The tile's Y coordinate.
+     * @param [options.tileZ = 0] - The tile's Z coordinate.
+     * @returns A promise to an array of typed arrays containing the requested voxel data or undefined if there was a problem loading the data.
+     */
+    requestData(options?: { tileLevel?: number; tileX?: number; tileY?: number; tileZ?: number }): Promise<any[][]> | undefined
+  }
+
+  export var readyPromise: any
 
   /**
    * A {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification|3D Tiles tileset},
@@ -30319,9 +30470,11 @@ declare namespace Cesium {
   }
 
   /**
-   * A cumulus cloud billboard positioned in the 3D scene, that is created and rendered using a {@link CloudCollection}.
+   * <div class="notice">
    * A cloud is created and its initial properties are set by calling {@link CloudCollection#add}.
-   * and {@link CloudCollection#remove}.
+   * and {@link CloudCollection#remove}. Do not call the constructor directly.
+   * </div>
+   * A cumulus cloud billboard positioned in the 3D scene, that is created and rendered using a {@link CloudCollection}.
    * <br /><br />
    * <div align='center'>
    * <img src='Images/CumulusCloud.png' width='400' height='300' /><br />
@@ -31302,6 +31455,11 @@ declare namespace Cesium {
      * Whether to cull back-facing terrain. Back faces are not culled when the camera is underground or translucency is enabled.
      */
     backFaceCulling: boolean
+    /**
+     * Determines the darkness of the vertex shadow.
+     * This only takes effect when <code>enableLighting</code> is <code>true</code>.
+     */
+    vertexShadowDarkness: number
     /**
      * Gets an ellipsoid describing the shape of this globe.
      */
@@ -32588,6 +32746,291 @@ declare namespace Cesium {
   }
 
   /**
+   * An I3SDataProvider is the main public class for I3S support. The url option
+   * should return a scene object. Currently supported I3S versions are 1.6 and
+   * 1.7/1.8 (OGC I3S 1.2). I3SFeature and I3SNode classes implement the
+   * Object Model for I3S entities, with public interfaces.
+   * @example
+   * const i3sData = new I3SDataProvider({
+   *   url: 'https://tiles.arcgis.com/tiles/z2tnIkrLQ2BRzr6P/arcgis/rest/services/Frankfurt2017_vi3s_18/SceneServer/layers/0'
+   * });
+   * viewer.scene.primitives.add(i3sData);
+   * @example
+   * const geoidService = new Cesium.ArcGISTiledElevationTerrainProvider({
+   *   url: "https://tiles.arcgis.com/tiles/z2tnIkrLQ2BRzr6P/arcgis/rest/services/EGM2008/ImageServer",
+   * });
+   * let i3sData = new I3SDataProvider({
+   *   url: 'https://tiles.arcgis.com/tiles/z2tnIkrLQ2BRzr6P/arcgis/rest/services/Frankfurt2017_vi3s_18/SceneServer/layers/0',
+   *   geoidTiledTerrainProvider: geoidService
+   * });
+   * viewer.scene.primitives.add(i3sData);
+   * @param options - Object with the following properties:
+   * @param options.url - The url of the I3S dataset.
+   * @param [options.name] - The name of the I3S dataset.
+   * @param [options.show = true] - Determines if the dataset will be shown.
+   * @param [options.geoidTiledTerrainProvider] - Tiled elevation provider describing an Earth Gravitational Model. If defined, geometry will be shifted based on the offsets given by this provider. Required to position I3S data sets with gravity-related height at the correct location.
+   * @param [options.traceFetches = false] - Debug option. When true, log a message whenever an I3S tile is fetched.
+   * @param [options.cesium3dTilesetOptions] - Object containing options to pass to an internally created {@link Cesium3DTileset}. See {@link Cesium3DTileset} for list of valid properties. All options can be used with the exception of <code>url</code> and <code>show</code> which are overridden by values from I3SDataProvider.
+   */
+  export class I3SDataProvider {
+    constructor(options: {
+      url: Resource | string
+      name?: string
+      show?: boolean
+      geoidTiledTerrainProvider?: ArcGISTiledElevationTerrainProvider
+      traceFetches?: boolean
+      cesium3dTilesetOptions?: any
+    })
+    /**
+     * Gets a human-readable name for this dataset.
+     */
+    readonly name: string
+    /**
+     * Determines if the dataset will be shown.
+     */
+    show: boolean
+    /**
+     * Gets or sets debugging and tracing of I3S fetches.
+     */
+    traceFetches: boolean
+    /**
+     * The terrain provider referencing the GEOID service to be used for orthometric to ellipsoidal conversion.
+     */
+    readonly geoidTiledTerrainProvider: ArcGISTiledElevationTerrainProvider
+    /**
+     * Gets the collection of layers.
+     */
+    readonly layers: I3SLayer[]
+    /**
+     * Gets the I3S data for this object.
+     */
+    readonly data: any
+    /**
+     * Gets the extent covered by this I3S.
+     */
+    readonly extent: Rectangle
+    /**
+     * Gets the promise that will be resolved when the I3S scene is loaded.
+     */
+    readonly readyPromise: Promise<I3SDataProvider>
+    /**
+     * When <code>true</code>, the I3S scene is loaded.
+     * This is set to <code>true</code> right before {@link I3SDataProvider#readyPromise} is resolved.
+     */
+    readonly ready: boolean
+    /**
+     * The resource used to fetch the I3S dataset.
+     */
+    readonly resource: Resource
+    /**
+     * Destroys the WebGL resources held by this object. Destroying an object allows for deterministic
+     * release of WebGL resources, instead of relying on the garbage collector to destroy this object.
+     * <p>
+     * Once an object is destroyed, it should not be used; calling any function other than
+     * <code>isDestroyed</code> will result in a {@link DeveloperError} exception. Therefore,
+     * assign the return value (<code>undefined</code>) to the object as done in the example.
+     * </p>
+     */
+    destroy(): void
+    /**
+     * Returns true if this object was destroyed; otherwise, false.
+     * <p>
+     * If this object was destroyed, it should not be used; calling any function other than
+     * <code>isDestroyed</code> will result in a {@link DeveloperError} exception.
+     * </p>
+     * @returns <code>true</code> if this object was destroyed; otherwise, <code>false</code>.
+     */
+    isDestroyed(): boolean
+  }
+
+  /**
+   * This class implements an I3S Feature.
+   * <p>
+   * Do not construct this directly, instead access tiles through {@link I3SNode}.
+   * </p>
+   */
+  export class I3SFeature {
+    constructor()
+    /**
+     * Gets the resource for the feature
+     */
+    readonly resource: Resource
+    /**
+     * Gets the I3S data for this object.
+     */
+    readonly data: any
+  }
+
+  /**
+   * This class implements an I3S Field which is custom data attached
+   * to nodes
+   */
+  export class I3SField {
+    constructor()
+    /**
+     * Gets the resource for the fields
+     */
+    readonly resource: Resource
+    /**
+     * Gets the header for this field.
+     */
+    readonly header: any
+    /**
+     * Gets the values for this field.
+     */
+    readonly values: any
+    /**
+     * Gets the name for the field.
+     */
+    readonly name: string
+    /**
+     * Loads the content.
+     * @returns A promise that is resolved when the field data is loaded
+     */
+    load(): Promise<void>
+  }
+
+  /**
+   * This class implements an I3S Geometry. Each I3SGeometry
+   * generates an in memory glTF to be used as content for a Cesium3DTile
+   * <p>
+   * Do not construct this directly, instead access tiles through {@link I3SNode}.
+   * </p>
+   */
+  export class I3SGeometry {
+    constructor()
+    /**
+     * Gets the resource for the geometry
+     */
+    readonly resource: Resource
+    /**
+     * Gets the I3S data for this object.
+     */
+    readonly data: any
+    /**
+     * Gets the custom attributes of the geometry.
+     */
+    readonly customAttributes: any
+    /**
+     * Find a triangle touching the point [px, py, pz], then return the vertex closest to the search point
+     * @param px - The x component of the point to query
+     * @param py - The y component of the point to query
+     * @param pz - The z component of the point to query
+     * @returns A structure containing the index of the closest point,
+     * the squared distance from the queried point to the point that is found,
+     * the distance from the queried point to the point that is found,
+     * the queried position in local space,
+     * the closest position in local space
+     */
+    getClosestPointIndexOnTriangle(px: number, py: number, pz: number): any
+  }
+
+  /**
+   * This class implements an I3S layer. In CesiumJS each I3SLayer creates a Cesium3DTileset.
+   * <p>
+   * Do not construct this directly, instead access layers through {@link I3SDataProvider}.
+   * </p>
+   */
+  export class I3SLayer {
+    constructor()
+    /**
+     * Gets the resource for the layer.
+     */
+    readonly resource: Resource
+    /**
+     * Gets the root node of this layer.
+     */
+    readonly rootNode: I3SNode
+    /**
+     * Gets the Cesium3DTileset for this layer.
+     */
+    readonly tileset: Cesium3DTileset
+    /**
+     * Gets the I3S data for this object.
+     */
+    readonly data: any
+    /**
+     * The version string of the loaded I3S dataset
+     */
+    readonly version: string
+    /**
+     * The major version number of the loaded I3S dataset
+     */
+    readonly majorVersion: number
+    /**
+     * The minor version number of the loaded I3S dataset
+     */
+    readonly minorVersion: number
+    /**
+     * When <code>true</code>, when the loaded I3S version is 1.6 or older
+     */
+    readonly legacyVersion16: boolean
+  }
+
+  /**
+   * This class implements an I3S Node. In CesiumJS each I3SNode creates a Cesium3DTile.
+   * <p>
+   * Do not construct this directly, instead access tiles through {@link I3SLayer}.
+   * </p>
+   */
+  export class I3SNode {
+    constructor()
+    /**
+     * Gets the resource for the node.
+     */
+    readonly resource: Resource
+    /**
+     * Gets the parent layer.
+     */
+    readonly layer: I3SLayer
+    /**
+     * Gets the parent node.
+     */
+    readonly parent: I3SNode | undefined
+    /**
+     * Gets the children nodes.
+     */
+    readonly children: I3SNode[]
+    /**
+     * Gets the collection of geometries.
+     */
+    readonly geometryData: I3SGeometry[]
+    /**
+     * Gets the collection of features.
+     */
+    readonly featureData: I3SFeature[]
+    /**
+     * Gets the collection of fields.
+     */
+    readonly fields: I3SField[]
+    /**
+     * Gets the Cesium3DTile for this node.
+     */
+    readonly tile: Cesium3DTile
+    /**
+     * Gets the I3S data for this object.
+     */
+    readonly data: any
+    /**
+     * Loads the node fields.
+     * @returns A promise that is resolved when the I3S Node fields are loaded
+     */
+    loadFields(): Promise<void>
+    /**
+     * Returns the fields for a given picked position
+     * @param pickedPosition - The picked position
+     * @returns Object containing field names and their values
+     */
+    getFieldsForPickedPosition(pickedPosition: Cartesian3): any
+    /**
+     * Returns the fields for a given feature
+     * @param featureIndex - Index of the feature whose attributes we want to get
+     * @returns Object containing field names and their values
+     */
+    getFieldsForFeature(featureIndex: number): any
+  }
+
+  /**
    * Properties for managing image-based lighting on tilesets and models.
    * Also manages the necessary resources and textures.
    * <p>
@@ -33494,8 +33937,9 @@ declare namespace Cesium {
   }
 
   /**
-   * A Label draws viewport-aligned text positioned in the 3D scene.  This constructor
-   * should not be used directly, instead create labels by calling {@link LabelCollection#add}.
+   * <div class="notice">
+   * Create labels by calling {@link LabelCollection#add}. Do not call the constructor directly.
+   * </div>
    */
   export class Label {
     constructor()
@@ -34924,6 +35368,445 @@ declare namespace Cesium {
   }
 
   /**
+   * A metadata class.
+   *
+   * <p>
+   * See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata|3D Metadata Specification} for 3D Tiles
+   * </p>
+   * @param options - Object with the following properties:
+   * @param options.id - The ID of the class.
+   * @param [options.name] - The name of the class.
+   * @param [options.description] - The description of the class.
+   * @param [options.properties] - The class properties, where each key is the property ID.
+   * @param [options.extras] - Extra user-defined properties.
+   * @param [options.extensions] - An object containing extensions.
+   */
+  export class MetadataClass {
+    constructor(options: {
+      id: string
+      name?: string
+      description?: string
+      properties?: {
+        [key: string]: MetadataClassProperty
+      }
+      extras?: any
+      extensions?: any
+    })
+    /**
+     * The class properties.
+     */
+    readonly properties: {
+      [key: string]: MetadataClassProperty
+    }
+    /**
+     * The ID of the class.
+     */
+    readonly id: string
+    /**
+     * The name of the class.
+     */
+    readonly name: string
+    /**
+     * The description of the class.
+     */
+    readonly description: string
+    /**
+     * Extra user-defined properties.
+     */
+    readonly extras: any
+    /**
+     * An object containing extensions.
+     */
+    readonly extensions: any
+  }
+
+  /**
+   * A metadata property, as part of a {@link MetadataClass}.
+   * <p>
+   * See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata|3D Metadata Specification} for 3D Tiles
+   * </p>
+   * @param options - Object with the following properties:
+   * @param options.id - The ID of the property.
+   * @param options.type - The type of the property such as SCALAR, VEC2, VEC3.
+   * @param [options.componentType] - The component type of the property. This includes integer (e.g. INT8 or UINT16), and floating point (FLOAT32 and FLOAT64) values.
+   * @param [options.enumType] - The enum type of the property. Only defined when type is ENUM.
+   * @param [options.isArray = false] - True if a property is an array (either fixed length or variable length), false otherwise.
+   * @param [options.isVariableLengthArray = false] - True if a property is a variable length array, false otherwise.
+   * @param [options.arrayLength] - The number of array elements. Only defined for fixed length arrays.
+   * @param [options.normalized = false] - Whether the property is normalized.
+   * @param [options.min] - A number or an array of numbers storing the minimum allowable value of this property. Only defined when type is a numeric type.
+   * @param [options.max] - A number or an array of numbers storing the maximum allowable value of this property. Only defined when type is a numeric type.
+   * @param [options.offset] - The offset to be added to property values as part of the value transform.
+   * @param [options.scale] - The scale to be multiplied to property values as part of the value transform.
+   * @param [options.noData] - The no-data sentinel value that represents null values.
+   * @param [options.default] - A default value to use when an entity's property value is not defined.
+   * @param [options.required = false] - Whether the property is required.
+   * @param [options.name] - The name of the property.
+   * @param [options.description] - The description of the property.
+   * @param [options.semantic] - An identifier that describes how this property should be interpreted.
+   * @param [options.extras] - Extra user-defined properties.
+   * @param [options.extensions] - An object containing extensions.
+   */
+  export class MetadataClassProperty {
+    constructor(options: {
+      id: string
+      type: MetadataType
+      componentType?: MetadataComponentType
+      enumType?: MetadataEnum
+      isArray?: boolean
+      isVariableLengthArray?: boolean
+      arrayLength?: number
+      normalized?: boolean
+      min?: number | number[] | number[][]
+      max?: number | number[] | number[][]
+      offset?: number | number[] | number[][]
+      scale?: number | number[] | number[][]
+      noData?: boolean | number | string | any[]
+      default?: boolean | number | string | any[]
+      required?: boolean
+      name?: string
+      description?: string
+      semantic?: string
+      extras?: any
+      extensions?: any
+    })
+    /**
+     * The ID of the property.
+     */
+    readonly id: string
+    /**
+     * The name of the property.
+     */
+    readonly name: string
+    /**
+     * The description of the property.
+     */
+    readonly description: string
+    /**
+     * The type of the property such as SCALAR, VEC2, VEC3
+     */
+    readonly type: MetadataType
+    /**
+     * The enum type of the property. Only defined when type is ENUM.
+     */
+    readonly enumType: MetadataEnum
+    /**
+     * The component type of the property. This includes integer
+     * (e.g. INT8 or UINT16), and floating point (FLOAT32 and FLOAT64) values
+     */
+    readonly componentType: MetadataComponentType
+    /**
+     * True if a property is an array (either fixed length or variable length),
+     * false otherwise.
+     */
+    readonly isArray: boolean
+    /**
+     * True if a property is a variable length array, false otherwise.
+     */
+    readonly isVariableLengthArray: boolean
+    /**
+     * The number of array elements. Only defined for fixed-size
+     * arrays.
+     */
+    readonly arrayLength: number
+    /**
+     * Whether the property is normalized.
+     */
+    readonly normalized: boolean
+    /**
+     * A number or an array of numbers storing the maximum allowable value of this property. Only defined when type is a numeric type.
+     */
+    readonly max: number | number[] | number[][]
+    /**
+     * A number or an array of numbers storing the minimum allowable value of this property. Only defined when type is a numeric type.
+     */
+    readonly min: number | number[] | number[][]
+    /**
+     * The no-data sentinel value that represents null values
+     */
+    readonly noData: boolean | number | string | any[]
+    /**
+     * A default value to use when an entity's property value is not defined.
+     */
+    readonly default: boolean | number | string | any[]
+    /**
+     * Whether the property is required.
+     */
+    readonly required: boolean
+    /**
+     * An identifier that describes how this property should be interpreted.
+     */
+    readonly semantic: string
+    /**
+     * The offset to be added to property values as part of the value transform.
+     */
+    readonly offset: number | number[] | number[][]
+    /**
+     * The scale to be multiplied to property values as part of the value transform.
+     */
+    readonly scale: number | number[] | number[][]
+    /**
+     * Extra user-defined properties.
+     */
+    readonly extras: any
+    /**
+     * An object containing extensions.
+     */
+    readonly extensions: any
+  }
+
+  /**
+   * An enum of metadata component types.
+   */
+  export enum MetadataComponentType {
+    /**
+     * An 8-bit signed integer
+     */
+    INT8 = 'INT8',
+    /**
+     * An 8-bit unsigned integer
+     */
+    UINT8 = 'UINT8',
+    /**
+     * A 16-bit signed integer
+     */
+    INT16 = 'INT16',
+    /**
+     * A 16-bit unsigned integer
+     */
+    UINT16 = 'UINT16',
+    /**
+     * A 32-bit signed integer
+     */
+    INT32 = 'INT32',
+    /**
+     * A 32-bit unsigned integer
+     */
+    UINT32 = 'UINT32',
+    /**
+     * A 64-bit signed integer. This type requires BigInt support.
+     */
+    INT64 = 'INT64',
+    /**
+     * A 64-bit signed integer. This type requires BigInt support
+     */
+    UINT64 = 'UINT64',
+    /**
+     * A 32-bit (single precision) floating point number
+     */
+    FLOAT32 = 'FLOAT32',
+    /**
+     * A 64-bit (double precision) floating point number
+     */
+    FLOAT64 = 'FLOAT64'
+  }
+
+  /**
+   * A metadata enum.
+   * <p>
+   * See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata|3D Metadata Specification} for 3D Tiles
+   * </p>
+   * @param options - Object with the following properties:
+   * @param options.id - The ID of the enum.
+   * @param options.values - The enum values.
+   * @param [options.valueType = MetadataComponentType.UINT16] - The enum value type.
+   * @param [options.name] - The name of the enum.
+   * @param [options.description] - The description of the enum.
+   * @param [options.extras] - Extra user-defined properties.
+   * @param [options.extensions] - An object containing extensions.
+   */
+  export class MetadataEnum {
+    constructor(options: {
+      id: string
+      values: MetadataEnumValue[]
+      valueType?: MetadataComponentType
+      name?: string
+      description?: string
+      extras?: any
+      extensions?: any
+    })
+    /**
+     * The enum values.
+     */
+    readonly values: MetadataEnumValue[]
+    /**
+     * The enum value type.
+     */
+    readonly valueType: MetadataComponentType
+    /**
+     * The ID of the enum.
+     */
+    readonly id: string
+    /**
+     * The name of the enum.
+     */
+    readonly name: string
+    /**
+     * The description of the enum.
+     */
+    readonly description: string
+    /**
+     * Extra user-defined properties.
+     */
+    readonly extras: any
+    /**
+     * An object containing extensions.
+     */
+    readonly extensions: any
+  }
+
+  /**
+   * A metadata enum value.
+   * <p>
+   * See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata|3D Metadata Specification} for 3D Tiles
+   * </p>
+   * @param options - Object with the following properties:
+   * @param options.value - The integer value.
+   * @param options.name - The name of the enum value.
+   * @param [options.description] - The description of the enum value.
+   * @param [options.extras] - Extra user-defined properties.
+   * @param [options.extensions] - An object containing extensions.
+   */
+  export class MetadataEnumValue {
+    constructor(options: { value: number; name: string; description?: string; extras?: any; extensions?: any })
+    /**
+     * The integer value.
+     */
+    readonly value: number
+    /**
+     * The name of the enum value.
+     */
+    readonly name: string
+    /**
+     * The description of the enum value.
+     */
+    readonly description: string
+    /**
+     * Extra user-defined properties.
+     */
+    readonly extras: any
+    /**
+     * An object containing extensions.
+     */
+    readonly extensions: any
+  }
+
+  /**
+   * A schema containing classes and enums.
+   * <p>
+   * See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata|3D Metadata Specification} for 3D Tiles
+   * </p>
+   * @param options - Object with the following properties:
+   * @param [options.id] - The ID of the schema
+   * @param [options.name] - The name of the schema.
+   * @param [options.description] - The description of the schema.
+   * @param [options.version] - The application-specific version of the schema.
+   * @param [options.classes] - Classes defined in the schema, where each key is the class ID.
+   * @param [options.enums] - Enums defined in the schema, where each key is the enum ID.
+   * @param [options.extras] - Extra user-defined properties.
+   * @param [options.extensions] - An object containing extensions.
+   */
+  export class MetadataSchema {
+    constructor(options: {
+      id?: string
+      name?: string
+      description?: string
+      version?: string
+      classes?: {
+        [key: string]: MetadataClass
+      }
+      enums?: {
+        [key: string]: MetadataEnum
+      }
+      extras?: any
+      extensions?: any
+    })
+    /**
+     * Classes defined in the schema.
+     */
+    readonly classes: {
+      [key: string]: MetadataClass
+    }
+    /**
+     * Enums defined in the schema.
+     */
+    readonly enums: {
+      [key: string]: MetadataEnum
+    }
+    /**
+     * The ID of the schema.
+     */
+    readonly id: string
+    /**
+     * The name of the schema.
+     */
+    readonly name: string
+    /**
+     * The description of the schema.
+     */
+    readonly description: string
+    /**
+     * The application-specific version of the schema.
+     */
+    readonly version: string
+    /**
+     * Extra user-defined properties.
+     */
+    readonly extras: any
+    /**
+     * An object containing extensions.
+     */
+    readonly extensions: any
+  }
+
+  /**
+   * An enum of metadata types. These metadata types are containers containing
+   * one or more components of type {@link MetadataComponentType}
+   */
+  export enum MetadataType {
+    /**
+     * A single component
+     */
+    SCALAR = 'SCALAR',
+    /**
+     * A vector with two components
+     */
+    VEC2 = 'VEC2',
+    /**
+     * A vector with three components
+     */
+    VEC3 = 'VEC3',
+    /**
+     * A vector with four components
+     */
+    VEC4 = 'VEC4',
+    /**
+     * A 2x2 matrix, stored in column-major format.
+     */
+    MAT2 = 'MAT2',
+    /**
+     * A 3x3 matrix, stored in column-major format.
+     */
+    MAT3 = 'MAT3',
+    /**
+     * A 4x4 matrix, stored in column-major format.
+     */
+    MAT4 = 'MAT4',
+    /**
+     * A boolean (true/false) value
+     */
+    BOOLEAN = 'BOOLEAN',
+    /**
+     * A UTF-8 encoded string value
+     */
+    STRING = 'STRING',
+    /**
+     * An enumerated value. This type is used in conjunction with a {@link MetadataEnum} to describe the valid values.
+     */
+    ENUM = 'ENUM'
+  }
+
+  /**
    * An object describing a uniform, its type, and an initial value
    * @property type - The Glsl type of the uniform.
    * @property value - The initial value of the uniform
@@ -34979,7 +35862,7 @@ declare namespace Cesium {
    *   `,
    *   fragmentShaderText: `
    *   void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material) {
-   *     material.normal = texture2D(u_normalMap, fsInput.attributes.texCoord_0);
+   *     material.normal = texture(u_normalMap, fsInput.attributes.texCoord_0);
    *     material.diffuse = v_selectedColor;
    *   }
    *   `
@@ -35101,7 +35984,7 @@ declare namespace Cesium {
     /**
      * Use unlit shading, i.e. skip lighting calculations. The model's
      * diffuse color (assumed to be linear RGB, not sRGB) is used directly
-     * when computing <code>gl_FragColor</code>. The alpha mode is still
+     * when computing <code>out_FragColor</code>. The alpha mode is still
      * applied.
      */
     UNLIT = 0,
@@ -35114,11 +35997,10 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
+   * To construct a Model, call {@link Model.fromGltf}. Do not call the constructor directly.
+   * </div>
    * A 3D model based on glTF, the runtime asset format for WebGL, OpenGL ES, and OpenGL.
-   * <p>
-   * Do not call this function directly, instead use the `from` functions to create
-   * the Model from your source data type.
-   * </p>
    * <p>
    * Cesium supports glTF assets with the following extensions:
    * <ul>
@@ -35126,22 +36008,55 @@ declare namespace Cesium {
    *  {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/AGI_articulations/README.md|AGI_articulations}
    *  </li>
    *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/CESIUM_primitive_outline|CESIUM_primitive_outline}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/1.0/Vendor/CESIUM_RTC/README.md|CESIUM_RTC}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_instance_features|EXT_instance_features}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features|EXT_mesh_features}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing|EXT_mesh_gpu_instancing}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_meshopt_compression|EXT_meshopt_compression}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata|EXT_structural_metadata}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_texture_webp|EXT_texture_webp}
+   *  </li>
+   *  <li>
    *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_draco_mesh_compression/README.md|KHR_draco_mesh_compression}
    *  </li>
    *  <li>
-   *  {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_materials_pbrSpecularGlossiness/README.md|KHR_materials_pbrSpecularGlossiness}
+   *  {@link https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Archived/KHR_techniques_webgl/README.md|KHR_techniques_webgl}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/blob/main/extensions/1.0/Khronos/KHR_materials_common/README.md|KHR_materials_common}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Archived/KHR_materials_pbrSpecularGlossiness|KHR_materials_pbrSpecularGlossiness}
    *  </li>
    *  <li>
    *  {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_materials_unlit/README.md|KHR_materials_unlit}
    *  </li>
    *  <li>
-   *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_transform/README.md|KHR_texture_transform}
+   *  {@link https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_mesh_quantization|KHR_mesh_quantization}
    *  </li>
    *  <li>
    *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_basisu|KHR_texture_basisu}
    *  </li>
    *  <li>
-   *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/1.0/Vendor/CESIUM_RTC/README.md|CESIUM_RTC}
+   *  {@link https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_transform/README.md|KHR_texture_transform}
+   *  </li>
+   *  <li>
+   *  {@link https://github.com/KhronosGroup/glTF/blob/main/extensions/1.0/Vendor/WEB3D_quantized_attributes/README.md|WEB3D_quantized_attributes}
    *  </li>
    * </ul>
    * </p>
@@ -35150,91 +36065,9 @@ declare namespace Cesium {
    * for maximum compatibility. This is because some samplers require power of 2 textures ({@link https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL|Using textures in WebGL})
    * and KHR_texture_basisu requires multiple of 4 dimensions ({@link https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_basisu/README.md#additional-requirements|KHR_texture_basisu additional requirements}).
    * </p>
-   * @param options - Object with the following properties:
-   * @param options.resource - The Resource to the 3D model.
-   * @param [options.show = true] - Whether or not to render the model.
-   * @param [options.modelMatrix = Matrix4.IDENTITY] - The 4x4 transformation matrix that transforms the model from model to world coordinates.
-   * @param [options.scale = 1.0] - A uniform scale applied to this model.
-   * @param [options.minimumPixelSize = 0.0] - The approximate minimum pixel size of the model regardless of zoom.
-   * @param [options.maximumScale] - The maximum scale size of a model. An upper limit for minimumPixelSize.
-   * @param [options.id] - A user-defined object to return when the model is picked with {@link Scene#pick}.
-   * @param [options.allowPicking = true] - When <code>true</code>, each primitive is pickable with {@link Scene#pick}.
-   * @param [options.clampAnimations = true] - Determines if the model's animations should hold a pose over frames where no keyframes are specified.
-   * @param [options.shadows = ShadowMode.ENABLED] - Determines whether the model casts or receives shadows from light sources.
-   * @param [options.debugShowBoundingVolume = false] - For debugging only. Draws the bounding sphere for each draw command in the model.
-   * @param [options.enableDebugWireframe = false] - For debugging only. This must be set to true for debugWireframe to work in WebGL1. This cannot be set after the model has loaded.
-   * @param [options.debugWireframe = false] - For debugging only. Draws the model in wireframe. Will only work for WebGL1 if enableDebugWireframe is set to true.
-   * @param [options.cull = true] - Whether or not to cull the model using frustum/horizon culling. If the model is part of a 3D Tiles tileset, this property will always be false, since the 3D Tiles culling system is used.
-   * @param [options.opaquePass = Pass.OPAQUE] - The pass to use in the {@link DrawCommand} for the opaque portions of the model.
-   * @param [options.customShader] - A custom shader. This will add user-defined GLSL code to the vertex and fragment shaders. Using custom shaders with a {@link Cesium3DTileStyle} may lead to undefined behavior.
-   * @param [options.content] - The tile content this model belongs to. This property will be undefined if model is not loaded as part of a tileset.
-   * @param [options.heightReference = HeightReference.NONE] - Determines how the model is drawn relative to terrain.
-   * @param [options.scene] - Must be passed in for models that use the height reference property.
-   * @param [options.distanceDisplayCondition] - The condition specifying at what distance from the camera that this model will be displayed.
-   * @param [options.color] - A color that blends with the model's rendered color.
-   * @param [options.colorBlendMode = ColorBlendMode.HIGHLIGHT] - Defines how the color blends with the model.
-   * @param [options.colorBlendAmount = 0.5] - Value used to determine the color strength when the <code>colorBlendMode</code> is <code>MIX</code>. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
-   * @param [options.silhouetteColor = Color.RED] - The silhouette color. If more than 256 models have silhouettes enabled, there is a small chance that overlapping models will have minor artifacts.
-   * @param [options.silhouetteSize = 0.0] - The size of the silhouette in pixels.
-   * @param [options.enableShowOutline = true] - Whether to enable outlines for models using the {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/CESIUM_primitive_outline|CESIUM_primitive_outline} extension. This can be set to false to avoid the additional processing of geometry at load time. When false, the showOutlines and outlineColor options are ignored.
-   * @param [options.showOutline = true] - Whether to display the outline for models using the {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/CESIUM_primitive_outline|CESIUM_primitive_outline} extension. When true, outlines are displayed. When false, outlines are not displayed.
-   * @param [options.outlineColor = Color.BLACK] - The color to use when rendering outlines.
-   * @param [options.clippingPlanes] - The {@link ClippingPlaneCollection} used to selectively disable rendering the model.
-   * @param [options.lightColor] - The light color when shading the model. When <code>undefined</code> the scene's light color is used instead.
-   * @param [options.imageBasedLighting] - The properties for managing image-based lighting on this model.
-   * @param [options.backFaceCulling = true] - Whether to cull back-facing geometry. When true, back face culling is determined by the material's doubleSided property; when false, back face culling is disabled. Back faces are not culled if the model's color is translucent.
-   * @param [options.credit] - A credit for the data source, which is displayed on the canvas.
-   * @param [options.showCreditsOnScreen = false] - Whether to display the credits of this model on screen.
-   * @param [options.splitDirection = SplitDirection.NONE] - The {@link SplitDirection} split to apply to this model.
-   * @param [options.projectTo2D = false] - Whether to accurately project the model's positions in 2D. If this is true, the model will be projected accurately to 2D, but it will use more memory to do so. If this is false, the model will use less memory and will still render in 2D / CV mode, but its positions may be inaccurate. This disables minimumPixelSize and prevents future modification to the model matrix. This also cannot be set after the model has loaded.
-   * @param [options.featureIdLabel = "featureId_0"] - Label of the feature ID set to use for picking and styling. For EXT_mesh_features, this is the feature ID's label property, or "featureId_N" (where N is the index in the featureIds array) when not specified. EXT_feature_metadata did not have a label field, so such feature ID sets are always labeled "featureId_N" where N is the index in the list of all feature Ids, where feature ID attributes are listed before feature ID textures. If featureIdLabel is an integer N, it is converted to the string "featureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
-   * @param [options.instanceFeatureIdLabel = "instanceFeatureId_0"] - Label of the instance feature ID set used for picking and styling. If instanceFeatureIdLabel is set to an integer N, it is converted to the string "instanceFeatureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
-   * @param [options.pointCloudShading] - Options for constructing a {@link PointCloudShading} object to control point attenuation based on geometric error and lighting.
-   * @param [options.classificationType] - Determines whether terrain, 3D Tiles or both will be classified by this model. This cannot be set after the model has loaded.
    */
   export class Model {
-    constructor(options: {
-      resource: Resource
-      show?: boolean
-      modelMatrix?: Matrix4
-      scale?: number
-      minimumPixelSize?: number
-      maximumScale?: number
-      id?: any
-      allowPicking?: boolean
-      clampAnimations?: boolean
-      shadows?: ShadowMode
-      debugShowBoundingVolume?: boolean
-      enableDebugWireframe?: boolean
-      debugWireframe?: boolean
-      cull?: boolean
-      opaquePass?: boolean
-      customShader?: CustomShader
-      content?: Cesium3DTileContent
-      heightReference?: HeightReference
-      scene?: Scene
-      distanceDisplayCondition?: DistanceDisplayCondition
-      color?: Color
-      colorBlendMode?: ColorBlendMode
-      colorBlendAmount?: number
-      silhouetteColor?: Color
-      silhouetteSize?: number
-      enableShowOutline?: boolean
-      showOutline?: boolean
-      outlineColor?: Color
-      clippingPlanes?: ClippingPlaneCollection
-      lightColor?: Cartesian3
-      imageBasedLighting?: ImageBasedLighting
-      backFaceCulling?: boolean
-      credit?: Credit | string
-      showCreditsOnScreen?: boolean
-      splitDirection?: SplitDirection
-      projectTo2D?: boolean
-      featureIdLabel?: string | number
-      instanceFeatureIdLabel?: string | number
-      pointCloudShading?: any
-      classificationType?: ClassificationType
-    })
+    constructor()
     /**
      * The 4x4 transformation matrix that transforms the model from model to world coordinates.
      * When this is the identity matrix, the model is drawn in world coordinates, i.e., Earth's Cartesian WGS84 coordinates.
@@ -35621,14 +36454,15 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
+   * Create animations by calling {@link ModelAnimationCollection#add}. Do not call the constructor directly.
+   * </div>
+   *
    * An active animation derived from a glTF asset. An active animation is an
    * animation that is either currently playing or scheduled to be played due to
    * being added to a model's {@link ModelAnimationCollection}. An active animation
    * is an instance of an animation; for example, there can be multiple active
    * animations for the same glTF animation, each with a different start time.
-   * <p>
-   * Create this by calling {@link ModelAnimationCollection#add}.
-   * </p>
    */
   export class ModelAnimation {
     constructor()
@@ -35738,7 +36572,11 @@ declare namespace Cesium {
   }
 
   /**
-   * A collection of active model animations. Access this using {@link Model#activeAnimations}.
+   * <div class="notice">
+   * Access a model's animations {@link Model#activeAnimations}. Do not call the constructor directly
+   * </div>
+   *
+   * A collection of active model animations.
    */
   export class ModelAnimationCollection {
     constructor()
@@ -36001,12 +36839,6 @@ declare namespace Cesium {
      */
     getPropertyInherited(name: string): any
     /**
-     * Returns an array of property names for the feature.
-     * @param [results] - An array into which to store the results.
-     * @returns The names of the feature's properties.
-     */
-    getPropertyNames(results?: string[]): string[]
-    /**
      * Returns an array of property IDs for the feature.
      * @param [results] - An array into which to store the results.
      * @returns The IDs of the feature's properties.
@@ -36032,14 +36864,15 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
+   * Use {@link Model#getNode} to get a node from a loaded model. Do not call the constructor directly.
+   * </div>
+   *
    * A model node with a modifiable transform to allow users to define their
    * own animations. While a model's asset can contain animations that target
    * a node's transform, this class allows users to change a node's transform
    * externally. In this way, animation can be driven by another source, not
    * just by the model's asset.
-   * <p>
-   * Use {@link Model#getNode} to get an instance from a loaded model.
-   * </p>
    * @example
    * const node = model.getNode("Hand");
    * node.matrix = Cesium.Matrix4.fromScale(new Cesium.Cartesian3(5.0, 1.0, 1.0), node.matrix);
@@ -36879,9 +37712,11 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
+   * A point is created and its initial properties are set by calling {@link PointPrimitiveCollection#add}. Do not call the constructor directly.
+   * </div>
    * A graphical point positioned in the 3D scene, that is created
-   * and rendered using a {@link PointPrimitiveCollection}.  A point is created and its initial
-   * properties are set by calling {@link PointPrimitiveCollection#add}.
+   * and rendered using a {@link PointPrimitiveCollection}.
    */
   export class PointPrimitive {
     constructor()
@@ -37153,30 +37988,14 @@ declare namespace Cesium {
   }
 
   /**
-   * A renderable polyline. Create this by calling {@link PolylineCollection#add}
-   * @param options - Object with the following properties:
-   * @param [options.show = true] - <code>true</code> if this polyline will be shown; otherwise, <code>false</code>.
-   * @param [options.width = 1.0] - The width of the polyline in pixels.
-   * @param [options.loop = false] - Whether a line segment will be added between the last and first line positions to make this line a loop.
-   * @param [options.material = Material.ColorType] - The material.
-   * @param [options.positions] - The positions.
-   * @param [options.id] - The user-defined object to be returned when this polyline is picked.
-   * @param [options.distanceDisplayCondition] - The condition specifying at what distance from the camera that this polyline will be displayed.
-   * @param polylineCollection - The renderable polyline collection.
+   * <div class="notice">
+   * Create this by calling {@link PolylineCollection#add}. Do not call the constructor directly.
+   * </div>
+   *
+   * A renderable polyline.
    */
   export class Polyline {
-    constructor(
-      options: {
-        show?: boolean
-        width?: number
-        loop?: boolean
-        material?: Material
-        positions?: Cartesian3[]
-        id?: any
-        distanceDisplayCondition?: DistanceDisplayCondition
-      },
-      polylineCollection: PolylineCollection
-    )
+    constructor()
     /**
      * Determines if this polyline will be shown.  Use this to hide or show a polyline, instead
      * of removing it and re-adding it to the collection.
@@ -37560,12 +38379,12 @@ declare namespace Cesium {
    * // Simple stage to change the color
    * const fs =`
    *     uniform sampler2D colorTexture;
-   *     varying vec2 v_textureCoordinates;
+   *     in vec2 v_textureCoordinates;
    *     uniform float scale;
    *     uniform vec3 offset;
    *     void main() {
-   *         vec4 color = texture2D(colorTexture, v_textureCoordinates);
-   *         gl_FragColor = vec4(color.rgb * scale + offset, 1.0);
+   *         vec4 color = texture(colorTexture, v_textureCoordinates);
+   *         out_FragColor = vec4(color.rgb * scale + offset, 1.0);
    *     }`;
    * scene.postProcessStages.add(new Cesium.PostProcessStage({
    *     fragmentShader : fs,
@@ -37581,15 +38400,15 @@ declare namespace Cesium {
    * // If czm_selected returns true, the current fragment belongs to geometry in the selected array.
    * const fs =`
    *     uniform sampler2D colorTexture;
-   *     varying vec2 v_textureCoordinates;
+   *     in vec2 v_textureCoordinates;
    *     uniform vec4 highlight;
    *     void main() {
-   *         vec4 color = texture2D(colorTexture, v_textureCoordinates);
+   *         vec4 color = texture(colorTexture, v_textureCoordinates);
    *         if (czm_selected()) {
    *             vec3 highlighted = highlight.a * highlight.rgb + (1.0 - highlight.a) * color.rgb;
-   *             gl_FragColor = vec4(highlighted, 1.0);
+   *             out_FragColor = vec4(highlighted, 1.0);
    *         } else {
-   *             gl_FragColor = color;
+   *             out_FragColor = color;
    *         }
    *     }`;
    * const stage = scene.postProcessStages.add(new Cesium.PostProcessStage({
@@ -37704,7 +38523,7 @@ declare namespace Cesium {
      * if (czm_selected(v_textureCoordinates)) {
      *     // apply post-process stage
      * } else {
-     *     gl_FragColor = texture2D(colorTexture, v_textureCoordinates);
+     *     out_FragColor = texture(colorTexture, v_textureCoordinates);
      * }
      * </code>
      * </p>
@@ -38571,43 +39390,6 @@ declare namespace Cesium {
   /**
    * The container for all 3D graphical objects and state in a Cesium virtual scene.  Generally,
    * a scene is not created directly; instead, it is implicitly created by {@link CesiumWidget}.
-   * <p>
-   * <em><code>contextOptions</code> parameter details:</em>
-   * </p>
-   * <p>
-   * The default values are:
-   * <code>
-   * {
-   *   webgl : {
-   *     alpha : false,
-   *     depth : true,
-   *     stencil : false,
-   *     antialias : true,
-   *     powerPreference: 'high-performance',
-   *     premultipliedAlpha : true,
-   *     preserveDrawingBuffer : false,
-   *     failIfMajorPerformanceCaveat : false
-   *   },
-   *   allowTextureFilterAnisotropic : true
-   * }
-   * </code>
-   * </p>
-   * <p>
-   * The <code>webgl</code> property corresponds to the {@link http://www.khronos.org/registry/webgl/specs/latest/#5.2|WebGLContextAttributes}
-   * object used to create the WebGL context.
-   * </p>
-   * <p>
-   * <code>webgl.alpha</code> defaults to false, which can improve performance compared to the standard WebGL default
-   * of true.  If an application needs to composite Cesium above other HTML elements using alpha-blending, set
-   * <code>webgl.alpha</code> to true.
-   * </p>
-   * <p>
-   * The other <code>webgl</code> properties match the WebGL defaults for {@link http://www.khronos.org/registry/webgl/specs/latest/#5.2|WebGLContextAttributes}.
-   * </p>
-   * <p>
-   * <code>allowTextureFilterAnisotropic</code> defaults to true, which enables anisotropic texture filtering when the
-   * WebGL extension is supported.  Setting this to false will improve performance, but hurt visual quality, especially for horizon views.
-   * </p>
    * @example
    * // Create scene without anisotropic texture filtering
    * const scene = new Cesium.Scene({
@@ -38618,7 +39400,7 @@ declare namespace Cesium {
    * });
    * @param options - Object with the following properties:
    * @param options.canvas - The HTML canvas element to create the scene for.
-   * @param [options.contextOptions] - Context and WebGL creation properties.  See details above.
+   * @param [options.contextOptions] - Context and WebGL creation properties.
    * @param [options.creditContainer] - The HTML element in which the credits will be displayed.
    * @param [options.creditViewport] - The HTML element in which to display the credit popup.  If not specified, the viewport will be a added as a sibling of the canvas.
    * @param [options.mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
@@ -38628,27 +39410,25 @@ declare namespace Cesium {
    * @param [options.mapMode2D = MapMode2D.INFINITE_SCROLL] - Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.
    * @param [options.requestRenderMode = false] - If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling improves performance of the application, but requires using {@link Scene#requestRender} to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
    * @param [options.maximumRenderTimeChange = 0.0] - If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
-   * @param [depthPlaneEllipsoidOffset = 0.0] - Adjust the DepthPlane to address rendering artefacts below ellipsoid zero elevation.
+   * @param [options.depthPlaneEllipsoidOffset = 0.0] - Adjust the DepthPlane to address rendering artefacts below ellipsoid zero elevation.
    * @param [options.msaaSamples = 1] - If provided, this value controls the rate of multisample antialiasing. Typical multisampling rates are 2, 4, and sometimes 8 samples per pixel. Higher sampling rates of MSAA may impact performance in exchange for improved visual quality. This value only applies to WebGL2 contexts that support multisample render targets.
    */
   export class Scene {
-    constructor(
-      options: {
-        canvas: HTMLCanvasElement
-        contextOptions?: any
-        creditContainer?: Element
-        creditViewport?: Element
-        mapProjection?: MapProjection
-        orderIndependentTranslucency?: boolean
-        scene3DOnly?: boolean
-        shadows?: boolean
-        mapMode2D?: MapMode2D
-        requestRenderMode?: boolean
-        maximumRenderTimeChange?: number
-        msaaSamples?: number
-      },
+    constructor(options: {
+      canvas: HTMLCanvasElement
+      contextOptions?: ContextOptions
+      creditContainer?: Element
+      creditViewport?: Element
+      mapProjection?: MapProjection
+      orderIndependentTranslucency?: boolean
+      scene3DOnly?: boolean
+      shadows?: boolean
+      mapMode2D?: MapMode2D
+      requestRenderMode?: boolean
+      maximumRenderTimeChange?: number
       depthPlaneEllipsoidOffset?: number
-    )
+      msaaSamples?: number
+    })
     /**
      * Exceptions occurring in <code>render</code> are always caught in order to raise the
      * <code>renderError</code> event.  If this property is true, the error is rethrown
@@ -39067,7 +39847,7 @@ declare namespace Cesium {
     getCompressedTextureFormatSupported(format: string): boolean
     /**
      * Update and render the scene. It is usually not necessary to call this function
-     * directly because {@link CesiumWidget} or {@link Viewer} do it automatically.
+     * directly because {@link CesiumWidget} will do it automatically.
      * @param [time] - The simulation time at which to render.
      */
     render(time?: JulianDate): void
@@ -39489,41 +40269,17 @@ declare namespace Cesium {
   }
 
   /**
+   * <div class="notice">
    * Use {@link Viewer#shadowMap} to get the scene's shadow map. Do not construct this directly.
+   * </div>
    *
    * <p>
    * The normalOffset bias pushes the shadows forward slightly, and may be disabled
    * for applications that require ultra precise shadows.
    * </p>
-   * @param options - An object containing the following properties:
-   * @param options.lightCamera - A camera representing the light source.
-   * @param [options.enabled = true] - Whether the shadow map is enabled.
-   * @param [options.isPointLight = false] - Whether the light source is a point light. Point light shadows do not use cascades.
-   * @param [options.pointLightRadius = 100.0] - Radius of the point light.
-   * @param [options.cascadesEnabled = true] - Use multiple shadow maps to cover different partitions of the view frustum.
-   * @param [options.numberOfCascades = 4] - The number of cascades to use for the shadow map. Supported values are one and four.
-   * @param [options.maximumDistance = 5000.0] - The maximum distance used for generating cascaded shadows. Lower values improve shadow quality.
-   * @param [options.size = 2048] - The width and height, in pixels, of each shadow map.
-   * @param [options.softShadows = false] - Whether percentage-closer-filtering is enabled for producing softer shadows.
-   * @param [options.darkness = 0.3] - The shadow darkness.
-   * @param [options.normalOffset = true] - Whether a normal bias is applied to shadows.
-   * @param [options.fadingEnabled = true] - Whether shadows start to fade out once the light gets closer to the horizon.
    */
   export class ShadowMap {
-    constructor(options: {
-      lightCamera: Camera
-      enabled?: boolean
-      isPointLight?: boolean
-      pointLightRadius?: number
-      cascadesEnabled?: boolean
-      numberOfCascades?: number
-      maximumDistance?: number
-      size?: number
-      softShadows?: boolean
-      darkness?: number
-      normalOffset?: boolean
-      fadingEnabled?: boolean
-    })
+    constructor(options: any)
     /**
      * Determines the darkness of the shadows.
      */
@@ -41017,6 +41773,275 @@ declare namespace Cesium {
   }
 
   /**
+   * A primitive that renders voxel data from a {@link VoxelProvider}.
+   * @param [options] - Object with the following properties:
+   * @param [options.provider] - The voxel provider that supplies the primitive with tile data.
+   * @param [options.modelMatrix = Matrix4.IDENTITY] - The model matrix used to transform the primitive.
+   * @param [options.customShader] - The custom shader used to style the primitive.
+   * @param [options.clock] - The clock used to control time dynamic behavior.
+   */
+  export class VoxelPrimitive {
+    constructor(options?: { provider?: VoxelProvider; modelMatrix?: Matrix4; customShader?: CustomShader; clock?: Clock })
+    /**
+     * Gets a value indicating whether or not the primitive is ready for use.
+     */
+    readonly ready: boolean
+    /**
+     * Gets the promise that will be resolved when the primitive is ready for use.
+     */
+    readonly readyPromise: Promise<VoxelPrimitive>
+    /**
+     * Gets the {@link VoxelProvider} associated with this primitive.
+     */
+    readonly provider: VoxelProvider
+    /**
+     * Gets the bounding sphere.
+     */
+    readonly boundingSphere: BoundingSphere
+    /**
+     * Gets the oriented bounding box.
+     */
+    readonly orientedBoundingBox: OrientedBoundingBox
+    /**
+     * Gets the model matrix.
+     */
+    readonly modelMatrix: Matrix4
+    /**
+     * Gets the shape type.
+     */
+    readonly shape: VoxelShapeType
+    /**
+     * Gets the voxel dimensions.
+     */
+    readonly dimensions: Cartesian3
+    /**
+     * Gets the minimum value per channel of the voxel data.
+     */
+    readonly minimumValues: number[][]
+    /**
+     * Gets the maximum value per channel of the voxel data.
+     */
+    readonly maximumValues: number[][]
+    /**
+     * Gets or sets whether or not this primitive should be displayed.
+     */
+    show: boolean
+    /**
+     * Gets or sets whether or not the primitive should update when the view changes.
+     */
+    disableUpdate: boolean
+    /**
+     * Gets or sets whether or not to render debug visualizations.
+     */
+    debugDraw: boolean
+    /**
+     * Gets or sets whether or not to test against depth when rendering.
+     */
+    depthTest: boolean
+    /**
+     * Gets or sets whether or not to jitter the view ray during the raymarch.
+     * This reduces stair-step artifacts but introduces noise.
+     */
+    jitter: boolean
+    /**
+     * Gets or sets the nearest sampling.
+     */
+    nearestSampling: boolean
+    /**
+     * Gets or sets the screen space error in pixels. If the screen space size
+     * of a voxel is greater than the screen space error, the tile is subdivided.
+     * Lower screen space error corresponds with higher detail rendering, but could
+     * result in worse performance and higher memory consumption.
+     */
+    screenSpaceError: number
+    /**
+     * Gets or sets the step size multiplier used during raymarching.
+     * The lower the value, the higher the rendering quality, but
+     * also the worse the performance.
+     */
+    stepSize: number
+    /**
+     * Gets or sets the minimum bounds in the shape's local coordinate system.
+     * Voxel data is stretched or squashed to fit the bounds.
+     */
+    minBounds: Cartesian3
+    /**
+     * Gets or sets the maximum bounds in the shape's local coordinate system.
+     * Voxel data is stretched or squashed to fit the bounds.
+     */
+    maxBounds: Cartesian3
+    /**
+     * Gets or sets the minimum clipping location in the shape's local coordinate system.
+     * Any voxel content outside the range is clipped.
+     */
+    minClippingBounds: Cartesian3
+    /**
+     * Gets or sets the maximum clipping location in the shape's local coordinate system.
+     * Any voxel content outside the range is clipped.
+     */
+    maxClippingBounds: Cartesian3
+    /**
+     * The {@link ClippingPlaneCollection} used to selectively disable rendering the primitive.
+     */
+    clippingPlanes: ClippingPlaneCollection
+    /**
+     * Gets or sets the custom shader. If undefined, {@link VoxelPrimitive.DefaultCustomShader} is set.
+     */
+    customShader: CustomShader
+    /**
+     * Gets an event that is raised whenever a custom shader is compiled.
+     */
+    readonly customShaderCompilationEvent: Event
+    /**
+     * Returns true if this object was destroyed; otherwise, false.
+     * <br /><br />
+     * If this object was destroyed, it should not be used; calling any function other than
+     * <code>isDestroyed</code> will result in a {@link DeveloperError} exception.
+     * @returns <code>true</code> if this object was destroyed; otherwise, <code>false</code>.
+     */
+    isDestroyed(): boolean
+    /**
+     * Destroys the WebGL resources held by this object.  Destroying an object allows for deterministic
+     * release of WebGL resources, instead of relying on the garbage collector to destroy this object.
+     * <br /><br />
+     * Once an object is destroyed, it should not be used; calling any function other than
+     * <code>isDestroyed</code> will result in a {@link DeveloperError} exception.  Therefore,
+     * assign the return value (<code>undefined</code>) to the object as done in the example.
+     * @example
+     * voxelPrimitive = voxelPrimitive && voxelPrimitive.destroy();
+     */
+    destroy(): void
+  }
+
+  /**
+   * Provides voxel data. Intended to be used with {@link VoxelPrimitive}.
+   * This type describes an interface and is not intended to be instantiated directly.
+   */
+  export class VoxelProvider {
+    constructor()
+    /**
+     * Gets a value indicating whether or not the provider is ready for use.
+     */
+    readonly ready: boolean
+    /**
+     * Gets the promise that will be resolved when the provider is ready for use.
+     */
+    readonly readyPromise: Promise<VoxelProvider>
+    /**
+     * A transform from local space to global space. If undefined, the identity matrix will be used instead.
+     */
+    readonly globalTransform: Matrix4 | undefined
+    /**
+     * A transform from shape space to local space. If undefined, the identity matrix will be used instead.
+     */
+    readonly shapeTransform: Matrix4 | undefined
+    /**
+     * Gets the {@link VoxelShapeType}
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly shape: VoxelShapeType
+    /**
+     * Gets the minimum bounds.
+     * If undefined, the shape's default minimum bounds will be used instead.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly minBounds: Cartesian3 | undefined
+    /**
+     * Gets the maximum bounds.
+     * If undefined, the shape's default maximum bounds will be used instead.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maxBounds: Cartesian3 | undefined
+    /**
+     * Gets the number of voxels per dimension of a tile. This is the same for all tiles in the dataset.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly dimensions: Cartesian3
+    /**
+     * Gets the number of padding voxels before the tile. This improves rendering quality when sampling the edge of a tile, but it increases memory usage.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly paddingBefore: Cartesian3 | undefined
+    /**
+     * Gets the number of padding voxels after the tile. This improves rendering quality when sampling the edge of a tile, but it increases memory usage.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly paddingAfter: Cartesian3 | undefined
+    /**
+     * Gets the metadata names.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly names: string[]
+    /**
+     * Gets the metadata types.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly types: MetadataType[]
+    /**
+     * Gets the metadata component types.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly componentTypes: MetadataComponentType[]
+    /**
+     * Gets the metadata minimum values.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly minimumValues: number[][] | undefined
+    /**
+     * Gets the metadata maximum values.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maximumValues: number[][] | undefined
+    /**
+     * The maximum number of tiles that exist for this provider. This value is used as a hint to the voxel renderer to allocate an appropriate amount of GPU memory. If this value is not known it can be undefined.
+     * This should not be called before {@link VoxelProvider#ready} returns true.
+     */
+    readonly maximumTileCount: number | undefined
+    /**
+     * Requests the data for a given tile. The data is a flattened 3D array ordered by X, then Y, then Z.
+     * This function should not be called before {@link VoxelProvider#ready} returns true.
+     * @param [options] - Object with the following properties:
+     * @param [options.tileLevel = 0] - The tile's level.
+     * @param [options.tileX = 0] - The tile's X coordinate.
+     * @param [options.tileY = 0] - The tile's Y coordinate.
+     * @param [options.tileZ = 0] - The tile's Z coordinate.
+     * @returns A promise to an array of typed arrays containing the requested voxel data or undefined if there was a problem loading the data.
+     */
+    requestData(options?: { tileLevel?: number; tileX?: number; tileY?: number; tileZ?: number }): Promise<any[][]> | undefined
+  }
+
+  export const shaderUniforms: {
+    [key: string]: any
+  }
+
+  export const shaderDefines: {
+    [key: string]: any
+  }
+
+  /**
+   * The maximum number of intersections against the shape for any ray direction.
+   */
+  export const shaderMaximumIntersectionsLength: number
+
+  /**
+   * An enum of voxel shapes. The shape controls how the voxel grid is mapped to 3D space.
+   */
+  export enum VoxelShapeType {
+    /**
+     * A box shape.
+     */
+    BOX = 'BOX',
+    /**
+     * An ellipsoid shape.
+     */
+    ELLIPSOID = 'ELLIPSOID',
+    /**
+     * A cylinder shape.
+     */
+    CYLINDER = 'CYLINDER'
+  }
+
+  /**
    * EPSG codes known to include reverse axis orders, but are not within 4000-5000.
    */
   export const includesReverseAxis: number[]
@@ -41698,6 +42723,200 @@ declare namespace Cesium {
   export function createWorldImagery(options?: { style?: IonWorldImageryStyle }): IonImageryProvider
 
   /**
+   * A widget containing a Cesium scene.
+   * @example
+   * // For each example, include a link to CesiumWidget.css stylesheet in HTML head,
+   * // and in the body, include: <div id="cesiumContainer"></div>
+   *
+   * //Widget with no terrain and default Bing Maps imagery provider.
+   * const widget = new Cesium.CesiumWidget('cesiumContainer');
+   *
+   * //Widget with ion imagery and Cesium World Terrain.
+   * const widget2 = new Cesium.CesiumWidget('cesiumContainer', {
+   *     imageryProvider : Cesium.createWorldImagery(),
+   *     terrainProvider : Cesium.createWorldTerrain(),
+   *     skyBox : new Cesium.SkyBox({
+   *         sources : {
+   *           positiveX : 'stars/TychoSkymapII.t3_08192x04096_80_px.jpg',
+   *           negativeX : 'stars/TychoSkymapII.t3_08192x04096_80_mx.jpg',
+   *           positiveY : 'stars/TychoSkymapII.t3_08192x04096_80_py.jpg',
+   *           negativeY : 'stars/TychoSkymapII.t3_08192x04096_80_my.jpg',
+   *           positiveZ : 'stars/TychoSkymapII.t3_08192x04096_80_pz.jpg',
+   *           negativeZ : 'stars/TychoSkymapII.t3_08192x04096_80_mz.jpg'
+   *         }
+   *     }),
+   *     // Show Columbus View map with Web Mercator projection
+   *     sceneMode : Cesium.SceneMode.COLUMBUS_VIEW,
+   *     mapProjection : new Cesium.WebMercatorProjection()
+   * });
+   * @param container - The DOM element or ID that will contain the widget.
+   * @param [options] - Object with the following properties:
+   * @param [options.clock = new Clock()] - The clock to use to control current time.
+   * @param [options.imageryProvider = createWorldImagery()] - The imagery provider to serve as the base layer. If set to <code>false</code>, no imagery provider will be added.
+   * @param [options.terrainProvider = new EllipsoidTerrainProvider] - The terrain provider.
+   * @param [options.skyBox] - The skybox used to render the stars.  When <code>undefined</code>, the default stars are used. If set to <code>false</code>, no skyBox, Sun, or Moon will be added.
+   * @param [options.skyAtmosphere] - Blue sky, and the glow around the Earth's limb.  Set to <code>false</code> to turn it off.
+   * @param [options.sceneMode = SceneMode.SCENE3D] - The initial scene mode.
+   * @param [options.scene3DOnly = false] - When <code>true</code>, each geometry instance will only be rendered in 3D to save GPU memory.
+   * @param [options.orderIndependentTranslucency = true] - If true and the configuration supports it, use order independent translucency.
+   * @param [options.mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
+   * @param [options.globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added.
+   * @param [options.useDefaultRenderLoop = true] - True if this widget should control the render loop, false otherwise.
+   * @param [options.useBrowserRecommendedResolution = true] - If true, render at the browser's recommended resolution and ignore <code>window.devicePixelRatio</code>.
+   * @param [options.targetFrameRate] - The target frame rate when using the default render loop.
+   * @param [options.showRenderLoopErrors = true] - If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.
+   * @param [options.contextOptions] - Context and WebGL creation properties passed to {@link Scene}.
+   * @param [options.creditContainer] - The DOM element or ID that will contain the {@link CreditDisplay}.  If not specified, the credits are added
+   *        to the bottom of the widget itself.
+   * @param [options.creditViewport] - The DOM element or ID that will contain the credit pop up created by the {@link CreditDisplay}.  If not specified, it will appear over the widget itself.
+   * @param [options.shadows = false] - Determines if shadows are cast by light sources.
+   * @param [options.terrainShadows = ShadowMode.RECEIVE_ONLY] - Determines if the terrain casts or receives shadows from light sources.
+   * @param [options.mapMode2D = MapMode2D.INFINITE_SCROLL] - Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.
+   * @param [options.blurActiveElementOnCanvasFocus = true] - If true, the active element will blur when the viewer's canvas is clicked. Setting this to false is useful for cases when the canvas is clicked only for retrieving position or an entity data without actually meaning to set the canvas to be the active element.
+   * @param [options.requestRenderMode = false] - If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling improves performance of the application, but requires using {@link Scene#requestRender} to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
+   * @param [options.maximumRenderTimeChange = 0.0] - If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
+   * @param [options.msaaSamples = 1] - If provided, this value controls the rate of multisample antialiasing. Typical multisampling rates are 2, 4, and sometimes 8 samples per pixel. Higher sampling rates of MSAA may impact performance in exchange for improved visual quality. This value only applies to WebGL2 contexts that support multisample render targets.
+   */
+  export class CesiumWidget {
+    constructor(
+      container: Element | string,
+      options?: {
+        clock?: Clock
+        imageryProvider?: ImageryProvider | false
+        terrainProvider?: TerrainProvider
+        skyBox?: SkyBox | false
+        skyAtmosphere?: SkyAtmosphere | false
+        sceneMode?: SceneMode
+        scene3DOnly?: boolean
+        orderIndependentTranslucency?: boolean
+        mapProjection?: MapProjection
+        globe?: Globe | false
+        useDefaultRenderLoop?: boolean
+        useBrowserRecommendedResolution?: boolean
+        targetFrameRate?: number
+        showRenderLoopErrors?: boolean
+        contextOptions?: ContextOptions
+        creditContainer?: Element | string
+        creditViewport?: Element | string
+        shadows?: boolean
+        terrainShadows?: ShadowMode
+        mapMode2D?: MapMode2D
+        blurActiveElementOnCanvasFocus?: boolean
+        requestRenderMode?: boolean
+        maximumRenderTimeChange?: number
+        msaaSamples?: number
+      }
+    )
+    /**
+     * Gets the parent container.
+     */
+    readonly container: Element
+    /**
+     * Gets the canvas.
+     */
+    readonly canvas: HTMLCanvasElement
+    /**
+     * Gets the credit container.
+     */
+    readonly creditContainer: Element
+    /**
+     * Gets the credit viewport
+     */
+    readonly creditViewport: Element
+    /**
+     * Gets the scene.
+     */
+    readonly scene: Scene
+    /**
+     * Gets the collection of image layers that will be rendered on the globe.
+     */
+    readonly imageryLayers: ImageryLayerCollection
+    /**
+     * The terrain provider providing surface geometry for the globe.
+     */
+    terrainProvider: TerrainProvider
+    /**
+     * Gets the camera.
+     */
+    readonly camera: Camera
+    /**
+     * Gets the clock.
+     */
+    readonly clock: Clock
+    /**
+     * Gets the screen space event handler.
+     */
+    readonly screenSpaceEventHandler: ScreenSpaceEventHandler
+    /**
+     * Gets or sets the target frame rate of the widget when <code>useDefaultRenderLoop</code>
+     * is true. If undefined, the browser's requestAnimationFrame implementation
+     * determines the frame rate.  If defined, this value must be greater than 0.  A value higher
+     * than the underlying requestAnimationFrame implementation will have no effect.
+     */
+    targetFrameRate: number
+    /**
+     * Gets or sets whether or not this widget should control the render loop.
+     * If true the widget will use requestAnimationFrame to
+     * perform rendering and resizing of the widget, as well as drive the
+     * simulation clock. If set to false, you must manually call the
+     * <code>resize</code>, <code>render</code> methods as part of a custom
+     * render loop.  If an error occurs during rendering, {@link Scene}'s
+     * <code>renderError</code> event will be raised and this property
+     * will be set to false.  It must be set back to true to continue rendering
+     * after the error.
+     */
+    useDefaultRenderLoop: boolean
+    /**
+     * Gets or sets a scaling factor for rendering resolution.  Values less than 1.0 can improve
+     * performance on less powerful devices while values greater than 1.0 will render at a higher
+     * resolution and then scale down, resulting in improved visual fidelity.
+     * For example, if the widget is laid out at a size of 640x480, setting this value to 0.5
+     * will cause the scene to be rendered at 320x240 and then scaled up while setting
+     * it to 2.0 will cause the scene to be rendered at 1280x960 and then scaled down.
+     */
+    resolutionScale: number
+    /**
+     * Boolean flag indicating if the browser's recommended resolution is used.
+     * If true, the browser's device pixel ratio is ignored and 1.0 is used instead,
+     * effectively rendering based on CSS pixels instead of device pixels. This can improve
+     * performance on less powerful devices that have high pixel density. When false, rendering
+     * will be in device pixels. {@link CesiumWidget#resolutionScale} will still take effect whether
+     * this flag is true or false.
+     */
+    useBrowserRecommendedResolution: boolean
+    /**
+     * Show an error panel to the user containing a title and a longer error message,
+     * which can be dismissed using an OK button.  This panel is displayed automatically
+     * when a render loop error occurs, if showRenderLoopErrors was not false when the
+     * widget was constructed.
+     * @param title - The title to be displayed on the error panel.  This string is interpreted as text.
+     * @param [message] - A helpful, user-facing message to display prior to the detailed error information.  This string is interpreted as HTML.
+     * @param [error] - The error to be displayed on the error panel.  This string is formatted using {@link formatError} and then displayed as text.
+     */
+    showErrorPanel(title: string, message?: string, error?: string): void
+    /**
+     * @returns true if the object has been destroyed, false otherwise.
+     */
+    isDestroyed(): boolean
+    /**
+     * Destroys the widget.  Should be called if permanently
+     * removing the widget from layout.
+     */
+    destroy(): void
+    /**
+     * Updates the canvas size, camera aspect ratio, and viewport size.
+     * This function is called automatically as needed unless
+     * <code>useDefaultRenderLoop</code> is set to false.
+     */
+    resize(): void
+    /**
+     * Renders the scene.  This function is called automatically
+     * unless <code>useDefaultRenderLoop</code> is set to false;
+     */
+    render(): void
+  }
+
+  /**
    * <span style="display: block; text-align: center;">
    * <img src="Images/AnimationWidget.png" width="211" height="142" alt="" />
    * <br />Animation widget
@@ -42172,6 +43391,10 @@ declare namespace Cesium {
      */
     styleString: string
     /**
+     * Gets or sets the JSON for the tileset enableDebugWireframe attribute.  This property is observable.
+     */
+    hasEnabledWireframe: boolean
+    /**
      * Gets the names of the properties in the tileset.  This property is observable.
      */
     readonly properties: string[]
@@ -42644,200 +43867,6 @@ declare namespace Cesium {
      * removing the widget from layout.
      */
     destroy(): void
-  }
-
-  /**
-   * A widget containing a Cesium scene.
-   * @example
-   * // For each example, include a link to CesiumWidget.css stylesheet in HTML head,
-   * // and in the body, include: <div id="cesiumContainer"></div>
-   *
-   * //Widget with no terrain and default Bing Maps imagery provider.
-   * const widget = new Cesium.CesiumWidget('cesiumContainer');
-   *
-   * //Widget with ion imagery and Cesium World Terrain.
-   * const widget2 = new Cesium.CesiumWidget('cesiumContainer', {
-   *     imageryProvider : Cesium.createWorldImagery(),
-   *     terrainProvider : Cesium.createWorldTerrain(),
-   *     skyBox : new Cesium.SkyBox({
-   *         sources : {
-   *           positiveX : 'stars/TychoSkymapII.t3_08192x04096_80_px.jpg',
-   *           negativeX : 'stars/TychoSkymapII.t3_08192x04096_80_mx.jpg',
-   *           positiveY : 'stars/TychoSkymapII.t3_08192x04096_80_py.jpg',
-   *           negativeY : 'stars/TychoSkymapII.t3_08192x04096_80_my.jpg',
-   *           positiveZ : 'stars/TychoSkymapII.t3_08192x04096_80_pz.jpg',
-   *           negativeZ : 'stars/TychoSkymapII.t3_08192x04096_80_mz.jpg'
-   *         }
-   *     }),
-   *     // Show Columbus View map with Web Mercator projection
-   *     sceneMode : Cesium.SceneMode.COLUMBUS_VIEW,
-   *     mapProjection : new Cesium.WebMercatorProjection()
-   * });
-   * @param container - The DOM element or ID that will contain the widget.
-   * @param [options] - Object with the following properties:
-   * @param [options.clock = new Clock()] - The clock to use to control current time.
-   * @param [options.imageryProvider = createWorldImagery()] - The imagery provider to serve as the base layer. If set to <code>false</code>, no imagery provider will be added.
-   * @param [options.terrainProvider = new EllipsoidTerrainProvider] - The terrain provider.
-   * @param [options.skyBox] - The skybox used to render the stars.  When <code>undefined</code>, the default stars are used. If set to <code>false</code>, no skyBox, Sun, or Moon will be added.
-   * @param [options.skyAtmosphere] - Blue sky, and the glow around the Earth's limb.  Set to <code>false</code> to turn it off.
-   * @param [options.sceneMode = SceneMode.SCENE3D] - The initial scene mode.
-   * @param [options.scene3DOnly = false] - When <code>true</code>, each geometry instance will only be rendered in 3D to save GPU memory.
-   * @param [options.orderIndependentTranslucency = true] - If true and the configuration supports it, use order independent translucency.
-   * @param [options.mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
-   * @param [options.globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added.
-   * @param [options.useDefaultRenderLoop = true] - True if this widget should control the render loop, false otherwise.
-   * @param [options.useBrowserRecommendedResolution = true] - If true, render at the browser's recommended resolution and ignore <code>window.devicePixelRatio</code>.
-   * @param [options.targetFrameRate] - The target frame rate when using the default render loop.
-   * @param [options.showRenderLoopErrors = true] - If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.
-   * @param [options.contextOptions] - Context and WebGL creation properties corresponding to <code>options</code> passed to {@link Scene}.
-   * @param [options.creditContainer] - The DOM element or ID that will contain the {@link CreditDisplay}.  If not specified, the credits are added
-   *        to the bottom of the widget itself.
-   * @param [options.creditViewport] - The DOM element or ID that will contain the credit pop up created by the {@link CreditDisplay}.  If not specified, it will appear over the widget itself.
-   * @param [options.shadows = false] - Determines if shadows are cast by light sources.
-   * @param [options.terrainShadows = ShadowMode.RECEIVE_ONLY] - Determines if the terrain casts or receives shadows from light sources.
-   * @param [options.mapMode2D = MapMode2D.INFINITE_SCROLL] - Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.
-   * @param [options.blurActiveElementOnCanvasFocus = true] - If true, the active element will blur when the viewer's canvas is clicked. Setting this to false is useful for cases when the canvas is clicked only for retrieving position or an entity data without actually meaning to set the canvas to be the active element.
-   * @param [options.requestRenderMode = false] - If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling improves performance of the application, but requires using {@link Scene#requestRender} to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
-   * @param [options.maximumRenderTimeChange = 0.0] - If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
-   * @param [options.msaaSamples = 1] - If provided, this value controls the rate of multisample antialiasing. Typical multisampling rates are 2, 4, and sometimes 8 samples per pixel. Higher sampling rates of MSAA may impact performance in exchange for improved visual quality. This value only applies to WebGL2 contexts that support multisample render targets.
-   */
-  export class CesiumWidget {
-    constructor(
-      container: Element | string,
-      options?: {
-        clock?: Clock
-        imageryProvider?: ImageryProvider | false
-        terrainProvider?: TerrainProvider
-        skyBox?: SkyBox | false
-        skyAtmosphere?: SkyAtmosphere | false
-        sceneMode?: SceneMode
-        scene3DOnly?: boolean
-        orderIndependentTranslucency?: boolean
-        mapProjection?: MapProjection
-        globe?: Globe | false
-        useDefaultRenderLoop?: boolean
-        useBrowserRecommendedResolution?: boolean
-        targetFrameRate?: number
-        showRenderLoopErrors?: boolean
-        contextOptions?: any
-        creditContainer?: Element | string
-        creditViewport?: Element | string
-        shadows?: boolean
-        terrainShadows?: ShadowMode
-        mapMode2D?: MapMode2D
-        blurActiveElementOnCanvasFocus?: boolean
-        requestRenderMode?: boolean
-        maximumRenderTimeChange?: number
-        msaaSamples?: number
-      }
-    )
-    /**
-     * Gets the parent container.
-     */
-    readonly container: Element
-    /**
-     * Gets the canvas.
-     */
-    readonly canvas: HTMLCanvasElement
-    /**
-     * Gets the credit container.
-     */
-    readonly creditContainer: Element
-    /**
-     * Gets the credit viewport
-     */
-    readonly creditViewport: Element
-    /**
-     * Gets the scene.
-     */
-    readonly scene: Scene
-    /**
-     * Gets the collection of image layers that will be rendered on the globe.
-     */
-    readonly imageryLayers: ImageryLayerCollection
-    /**
-     * The terrain provider providing surface geometry for the globe.
-     */
-    terrainProvider: TerrainProvider
-    /**
-     * Gets the camera.
-     */
-    readonly camera: Camera
-    /**
-     * Gets the clock.
-     */
-    readonly clock: Clock
-    /**
-     * Gets the screen space event handler.
-     */
-    readonly screenSpaceEventHandler: ScreenSpaceEventHandler
-    /**
-     * Gets or sets the target frame rate of the widget when <code>useDefaultRenderLoop</code>
-     * is true. If undefined, the browser's requestAnimationFrame implementation
-     * determines the frame rate.  If defined, this value must be greater than 0.  A value higher
-     * than the underlying requestAnimationFrame implementation will have no effect.
-     */
-    targetFrameRate: number
-    /**
-     * Gets or sets whether or not this widget should control the render loop.
-     * If true the widget will use requestAnimationFrame to
-     * perform rendering and resizing of the widget, as well as drive the
-     * simulation clock. If set to false, you must manually call the
-     * <code>resize</code>, <code>render</code> methods as part of a custom
-     * render loop.  If an error occurs during rendering, {@link Scene}'s
-     * <code>renderError</code> event will be raised and this property
-     * will be set to false.  It must be set back to true to continue rendering
-     * after the error.
-     */
-    useDefaultRenderLoop: boolean
-    /**
-     * Gets or sets a scaling factor for rendering resolution.  Values less than 1.0 can improve
-     * performance on less powerful devices while values greater than 1.0 will render at a higher
-     * resolution and then scale down, resulting in improved visual fidelity.
-     * For example, if the widget is laid out at a size of 640x480, setting this value to 0.5
-     * will cause the scene to be rendered at 320x240 and then scaled up while setting
-     * it to 2.0 will cause the scene to be rendered at 1280x960 and then scaled down.
-     */
-    resolutionScale: number
-    /**
-     * Boolean flag indicating if the browser's recommended resolution is used.
-     * If true, the browser's device pixel ratio is ignored and 1.0 is used instead,
-     * effectively rendering based on CSS pixels instead of device pixels. This can improve
-     * performance on less powerful devices that have high pixel density. When false, rendering
-     * will be in device pixels. {@link CesiumWidget#resolutionScale} will still take effect whether
-     * this flag is true or false.
-     */
-    useBrowserRecommendedResolution: boolean
-    /**
-     * Show an error panel to the user containing a title and a longer error message,
-     * which can be dismissed using an OK button.  This panel is displayed automatically
-     * when a render loop error occurs, if showRenderLoopErrors was not false when the
-     * widget was constructed.
-     * @param title - The title to be displayed on the error panel.  This string is interpreted as text.
-     * @param [message] - A helpful, user-facing message to display prior to the detailed error information.  This string is interpreted as HTML.
-     * @param [error] - The error to be displayed on the error panel.  This string is formatted using {@link formatError} and then displayed as text.
-     */
-    showErrorPanel(title: string, message?: string, error?: string): void
-    /**
-     * @returns true if the object has been destroyed, false otherwise.
-     */
-    isDestroyed(): boolean
-    /**
-     * Destroys the widget.  Should be called if permanently
-     * removing the widget from layout.
-     */
-    destroy(): void
-    /**
-     * Updates the canvas size, camera aspect ratio, and viewport size.
-     * This function is called automatically as needed unless
-     * <code>useDefaultRenderLoop</code> is set to false.
-     */
-    resize(): void
-    /**
-     * Renders the scene.  This function is called automatically
-     * unless <code>useDefaultRenderLoop</code> is set to false;
-     */
-    render(): void
   }
 
   /**
@@ -43866,7 +44895,7 @@ declare namespace Cesium {
      * @property [showRenderLoopErrors = true] - If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.
      * @property [useBrowserRecommendedResolution = true] - If true, render at the browser's recommended resolution and ignore <code>window.devicePixelRatio</code>.
      * @property [automaticallyTrackDataSourceClocks = true] - If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes.  Set this to false if you want to configure the clock independently.
-     * @property [contextOptions] - Context and WebGL creation properties corresponding to <code>options</code> passed to {@link Scene}.
+     * @property [contextOptions] - Context and WebGL creation properties passed to {@link Scene}.
      * @property [sceneMode = SceneMode.SCENE3D] - The initial scene mode.
      * @property [mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
      * @property [globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added.
@@ -43915,7 +44944,7 @@ declare namespace Cesium {
       showRenderLoopErrors?: boolean
       useBrowserRecommendedResolution?: boolean
       automaticallyTrackDataSourceClocks?: boolean
-      contextOptions?: any
+      contextOptions?: ContextOptions
       sceneMode?: SceneMode
       mapProjection?: MapProjection
       globe?: Globe | false
@@ -44234,7 +45263,7 @@ declare namespace Cesium {
         | ImageryLayer
         | Cesium3DTileset
         | TimeDynamicPointCloud
-        | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud>,
+        | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud | VoxelPrimitive>,
       offset?: HeadingPitchRange
     ): Promise<boolean>
     /**
@@ -44267,7 +45296,7 @@ declare namespace Cesium {
         | ImageryLayer
         | Cesium3DTileset
         | TimeDynamicPointCloud
-        | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud>,
+        | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud | VoxelPrimitive>,
       options?: {
         duration?: number
         maximumHeight?: number
@@ -44349,6 +45378,100 @@ declare namespace Cesium {
       lowFrameRateMessage?: string
     }
   ): void
+
+  /**
+   * A mixin which adds the {@link VoxelInspector} widget to the {@link Viewer} widget.
+   * Rather than being called directly, this function is normally passed as
+   * a parameter to {@link Viewer#extend}, as shown in the example below.
+   * @example
+   * var viewer = new Cesium.Viewer('cesiumContainer');
+   * viewer.extend(Cesium.viewerVoxelInspectorMixin);
+   * @param viewer - The viewer instance.
+   */
+  export function viewerVoxelInspectorMixin(viewer: Viewer): void
+
+  /**
+   * Inspector widget to aid in debugging voxels
+   * @param container - The DOM element or ID that will contain the widget.
+   * @param scene - the Scene instance to use.
+   */
+  export class VoxelInspector {
+    constructor(container: Element | string, scene: Scene)
+    /**
+     * Gets the parent container.
+     */
+    container: Element
+    /**
+     * Gets the view model.
+     */
+    viewModel: VoxelInspectorViewModel
+    /**
+     * @returns true if the object has been destroyed, false otherwise.
+     */
+    isDestroyed(): boolean
+    /**
+     * Destroys the widget.  Should be called if permanently
+     * removing the widget from layout.
+     */
+    destroy(): void
+  }
+
+  /**
+   * The view model for {@link VoxelInspector}.
+   * @param scene - The scene instance to use.
+   */
+  export class VoxelInspectorViewModel {
+    constructor(scene: Scene)
+    /**
+     * Gets the scene
+     */
+    readonly scene: Scene
+    /**
+     * Gets or sets the primitive of the view model.
+     */
+    voxelPrimitive: VoxelPrimitive
+    /**
+     * Toggles the inspector visibility
+     */
+    toggleInspector(): void
+    /**
+     * Toggles the visibility of the display section
+     */
+    toggleDisplay(): void
+    /**
+     * Toggles the visibility of the transform section
+     */
+    toggleTransform(): void
+    /**
+     * Toggles the visibility of the bounds section
+     */
+    toggleBounds(): void
+    /**
+     * Toggles the visibility of the clipping section
+     */
+    toggleClipping(): void
+    /**
+     * Toggles the visibility of the shader section
+     */
+    toggleShader(): void
+    /**
+     * Compiles the shader in the shader editor.
+     */
+    compileShader(): void
+    /**
+     * Handles key press events on the shader editor.
+     */
+    shaderEditorKeyPress(): void
+    /**
+     * @returns true if the object has been destroyed, false otherwise.
+     */
+    isDestroyed(): boolean
+    /**
+     * Destroys the widget.  Should be called if permanently
+     * removing the widget from layout.
+     */
+    destroy(): void
+  }
 
   /**
    * Create a Command from a given function, for use with ViewModels.

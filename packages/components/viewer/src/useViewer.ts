@@ -632,7 +632,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     let viewer: Cesium.Viewer
 
     if (props.viewerCreator) {
-      viewer = props.viewerCreator(vcInstance, $(viewerRef), options)
+      viewer = props.viewerCreator(vcInstance, $(viewerRef) as HTMLElement, options)
     } else {
       if (globalThis.mars3d) {
         vcInstance.map = new mars3d.Map($(viewerRef).id, {
@@ -647,7 +647,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         vcInstance.earth = new globalThis.XE.Earth($(viewerRef), options)
         viewer = vcInstance.earth?.czm.viewer
       } else {
-        viewer = new Viewer($(viewerRef), options)
+        viewer = new Viewer($(viewerRef) as HTMLElement, options)
       }
     }
 

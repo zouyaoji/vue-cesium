@@ -53,7 +53,7 @@ class Viewshed {
       context: (this._scene as any).context,
       lightCamera: this._spotLightCamera,
       cascadesEnabled: !1
-    } as any)
+    })
     options = options || {}
     this._scene.globe.shadows = ShadowMode.ENABLED
     ;(this._viewshedShadowMap as any)._terrainBias.depthBias = 0
