@@ -1,3 +1,4 @@
+/* packages/widgets/Source/InfoBox/InfoBox.css */
 .cesium-infoBox {
   display: block;
   position: absolute;
@@ -17,14 +18,12 @@
   opacity: 0;
   transition: visibility 0s 0.2s, opacity 0.2s ease-in, transform 0.2s ease-in;
 }
-
 .cesium-infoBox-visible {
   transform: translate(0, 0);
   visibility: visible;
   opacity: 1;
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
-
 .cesium-infoBox-title {
   display: block;
   height: 20px;
@@ -37,11 +36,9 @@
   overflow: hidden;
   box-sizing: content-box;
 }
-
 .cesium-infoBox-bodyless .cesium-infoBox-title {
   border-bottom-left-radius: 7px;
 }
-
 button.cesium-infoBox-camera {
   display: block;
   position: absolute;
@@ -55,7 +52,6 @@ button.cesium-infoBox-camera {
   padding: 0 5px;
   margin: 0;
 }
-
 button.cesium-infoBox-close {
   display: block;
   position: absolute;
@@ -71,28 +67,23 @@ button.cesium-infoBox-close {
   margin: 0;
   color: #edffff;
 }
-
 button.cesium-infoBox-close:focus {
   background: rgba(238, 136, 0, 0.44);
   outline: none;
 }
-
 button.cesium-infoBox-close:hover {
   background: #888;
   color: #000;
 }
-
 button.cesium-infoBox-close:active {
   background: #a00;
   color: #000;
 }
-
 .cesium-infoBox-bodyless .cesium-infoBox-iframe {
   display: none;
 }
-
 .cesium-infoBox-iframe {
   border: none;
-  width: 100%; /* Fallback */
+  width: 100%;
   width: calc(100% - 2px);
 }

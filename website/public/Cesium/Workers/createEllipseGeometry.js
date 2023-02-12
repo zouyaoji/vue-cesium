@@ -1,32 +1,34 @@
 define([
-  './Matrix2-9aa31791',
-  './when-4bbc8319',
-  './EllipseGeometry-47331b4e',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './combine-83860057',
-  './EllipseGeometryLibrary-962723df',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './GeometryInstance-47b34185',
-  './GeometryPipeline-2356afec',
-  './AttributeCompression-af389d04',
-  './EncodedCartesian3-f286cedc',
-  './IndexDatatype-b7d979a6',
-  './IntersectionTests-96a04219',
-  './Plane-318d6937',
-  './VertexFormat-71718faa'
-], function (e, t, r, n, i, a, o, c, s, d, l, m, p, y, b, f, u, G, E, C) {
+  './Matrix3-b6f074fa',
+  './defaultValue-0a909f67',
+  './EllipseGeometry-e21d5877',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './EllipseGeometryLibrary-4fec0674',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryInstance-9b27c40d',
+  './GeometryOffsetAttribute-04332ce7',
+  './GeometryPipeline-b7404acc',
+  './AttributeCompression-e18a879a',
+  './EncodedCartesian3-de837603',
+  './IndexDatatype-2149f06c',
+  './IntersectionTests-1307e0a8',
+  './Plane-1c5a21a3',
+  './VertexFormat-ab2e00e6'
+], function (e, t, a, r, n, i, o, c, s, l, d, m, f, b, p, u, y, G, E, C, x, A) {
   'use strict'
-  return function (n, i) {
+  return function (r, n) {
     return (
-      t.defined(i) && (n = r.EllipseGeometry.unpack(n, i)),
-      (n._center = e.Cartesian3.clone(n._center)),
-      (n._ellipsoid = e.Ellipsoid.clone(n._ellipsoid)),
-      r.EllipseGeometry.createGeometry(n)
+      t.defined(n) && (r = a.EllipseGeometry.unpack(r, n)),
+      (r._center = e.Cartesian3.clone(r._center)),
+      (r._ellipsoid = e.Ellipsoid.clone(r._ellipsoid)),
+      a.EllipseGeometry.createGeometry(r)
     )
   }
 })

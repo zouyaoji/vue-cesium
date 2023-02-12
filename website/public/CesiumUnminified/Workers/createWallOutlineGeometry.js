@@ -1,54 +1,37 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './when-4bbc8319',
-  './Matrix2-91d5b6af',
-  './Transforms-86b6fa28',
-  './ComponentDatatype-f194c48b',
-  './RuntimeError-346a3079',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-ee69f1fd',
-  './WallGeometryLibrary-573ab0f3',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './arrayRemoveDuplicates-cf5c3227',
-  './PolylinePipeline-3cab578f',
-  './EllipsoidGeodesic-6a52e412',
-  './EllipsoidRhumbLine-447d6334',
-  './IntersectionTests-26599c5e',
-  './Plane-4f333bc4'
+  './defaultValue-0a909f67',
+  './Matrix3-315394f6',
+  './Transforms-a05e5e6e',
+  './ComponentDatatype-f7b11d02',
+  './Check-666ab1a0',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './IndexDatatype-a55ceaa1',
+  './Math-2dbd6b93',
+  './WallGeometryLibrary-6db0ebb6',
+  './Matrix2-13178034',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c',
+  './arrayRemoveDuplicates-c2038105',
+  './PolylinePipeline-5e2e1b21',
+  './EllipsoidGeodesic-98c62a56',
+  './EllipsoidRhumbLine-19756602',
+  './IntersectionTests-27d49265',
+  './Plane-900aa728'
 ], function (
-  when,
-  Matrix2,
+  defaultValue,
+  Matrix3,
   Transforms,
   ComponentDatatype,
-  RuntimeError,
+  Check,
   GeometryAttribute,
   GeometryAttributes,
   IndexDatatype,
+  Math,
   WallGeometryLibrary,
+  Matrix2,
+  RuntimeError,
   combine,
   WebGLConstants,
   arrayRemoveDuplicates,
@@ -60,8 +43,8 @@ define([
 ) {
   'use strict'
 
-  var scratchCartesian3Position1 = new Matrix2.Cartesian3()
-  var scratchCartesian3Position2 = new Matrix2.Cartesian3()
+  const scratchCartesian3Position1 = new Matrix3.Cartesian3()
+  const scratchCartesian3Position2 = new Matrix3.Cartesian3()
 
   /**
    * A description of a wall outline. A wall is defined by a series of points,
@@ -88,7 +71,7 @@ define([
    *
    * @example
    * // create a wall outline that spans from ground level to 10000 meters
-   * var wall = new Cesium.WallOutlineGeometry({
+   * const wall = new Cesium.WallOutlineGeometry({
    *   positions : Cesium.Cartesian3.fromDegreesArrayHeights([
    *     19.0, 47.0, 10000.0,
    *     19.0, 48.0, 10000.0,
@@ -97,42 +80,42 @@ define([
    *     19.0, 47.0, 10000.0
    *   ])
    * });
-   * var geometry = Cesium.WallOutlineGeometry.createGeometry(wall);
+   * const geometry = Cesium.WallOutlineGeometry.createGeometry(wall);
    */
   function WallOutlineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
 
-    var wallPositions = options.positions
-    var maximumHeights = options.maximumHeights
-    var minimumHeights = options.minimumHeights
+    const wallPositions = options.positions
+    const maximumHeights = options.maximumHeights
+    const minimumHeights = options.minimumHeights
 
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(wallPositions)) {
-      throw new RuntimeError.DeveloperError('options.positions is required.')
+    if (!defaultValue.defined(wallPositions)) {
+      throw new Check.DeveloperError('options.positions is required.')
     }
-    if (when.defined(maximumHeights) && maximumHeights.length !== wallPositions.length) {
-      throw new RuntimeError.DeveloperError('options.positions and options.maximumHeights must have the same length.')
+    if (defaultValue.defined(maximumHeights) && maximumHeights.length !== wallPositions.length) {
+      throw new Check.DeveloperError('options.positions and options.maximumHeights must have the same length.')
     }
-    if (when.defined(minimumHeights) && minimumHeights.length !== wallPositions.length) {
-      throw new RuntimeError.DeveloperError('options.positions and options.minimumHeights must have the same length.')
+    if (defaultValue.defined(minimumHeights) && minimumHeights.length !== wallPositions.length) {
+      throw new Check.DeveloperError('options.positions and options.minimumHeights must have the same length.')
     }
     //>>includeEnd('debug');
 
-    var granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
-    var ellipsoid = when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84)
+    const granularity = defaultValue.defaultValue(options.granularity, Math.CesiumMath.RADIANS_PER_DEGREE)
+    const ellipsoid = defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84)
 
     this._positions = wallPositions
     this._minimumHeights = minimumHeights
     this._maximumHeights = maximumHeights
     this._granularity = granularity
-    this._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid)
+    this._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid)
     this._workerName = 'createWallOutlineGeometry'
 
-    var numComponents = 1 + wallPositions.length * Matrix2.Cartesian3.packedLength + 2
-    if (when.defined(minimumHeights)) {
+    let numComponents = 1 + wallPositions.length * Matrix3.Cartesian3.packedLength + 2
+    if (defaultValue.defined(minimumHeights)) {
       numComponents += minimumHeights.length
     }
-    if (when.defined(maximumHeights)) {
+    if (defaultValue.defined(maximumHeights)) {
       numComponents += maximumHeights.length
     }
 
@@ -140,7 +123,7 @@ define([
      * The number of elements used to pack the object into an array.
      * @type {Number}
      */
-    this.packedLength = numComponents + Matrix2.Ellipsoid.packedLength + 1
+    this.packedLength = numComponents + Matrix3.Ellipsoid.packedLength + 1
   }
 
   /**
@@ -154,56 +137,56 @@ define([
    */
   WallOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(value)) {
-      throw new RuntimeError.DeveloperError('value is required')
+    if (!defaultValue.defined(value)) {
+      throw new Check.DeveloperError('value is required')
     }
-    if (!when.defined(array)) {
-      throw new RuntimeError.DeveloperError('array is required')
+    if (!defaultValue.defined(array)) {
+      throw new Check.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var i
+    let i
 
-    var positions = value._positions
-    var length = positions.length
+    const positions = value._positions
+    let length = positions.length
     array[startingIndex++] = length
 
-    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
-      Matrix2.Cartesian3.pack(positions[i], array, startingIndex)
+    for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
+      Matrix3.Cartesian3.pack(positions[i], array, startingIndex)
     }
 
-    var minimumHeights = value._minimumHeights
-    length = when.defined(minimumHeights) ? minimumHeights.length : 0
+    const minimumHeights = value._minimumHeights
+    length = defaultValue.defined(minimumHeights) ? minimumHeights.length : 0
     array[startingIndex++] = length
 
-    if (when.defined(minimumHeights)) {
+    if (defaultValue.defined(minimumHeights)) {
       for (i = 0; i < length; ++i) {
         array[startingIndex++] = minimumHeights[i]
       }
     }
 
-    var maximumHeights = value._maximumHeights
-    length = when.defined(maximumHeights) ? maximumHeights.length : 0
+    const maximumHeights = value._maximumHeights
+    length = defaultValue.defined(maximumHeights) ? maximumHeights.length : 0
     array[startingIndex++] = length
 
-    if (when.defined(maximumHeights)) {
+    if (defaultValue.defined(maximumHeights)) {
       for (i = 0; i < length; ++i) {
         array[startingIndex++] = maximumHeights[i]
       }
     }
 
-    Matrix2.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    Matrix3.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
     array[startingIndex] = value._granularity
 
     return array
   }
 
-  var scratchEllipsoid = Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE)
-  var scratchOptions = {
+  const scratchEllipsoid = Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE)
+  const scratchOptions = {
     positions: undefined,
     minimumHeights: undefined,
     maximumHeights: undefined,
@@ -221,24 +204,24 @@ define([
    */
   WallOutlineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(array)) {
-      throw new RuntimeError.DeveloperError('array is required')
+    if (!defaultValue.defined(array)) {
+      throw new Check.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var i
+    let i
 
-    var length = array[startingIndex++]
-    var positions = new Array(length)
+    let length = array[startingIndex++]
+    const positions = new Array(length)
 
-    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
-      positions[i] = Matrix2.Cartesian3.unpack(array, startingIndex)
+    for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
+      positions[i] = Matrix3.Cartesian3.unpack(array, startingIndex)
     }
 
     length = array[startingIndex++]
-    var minimumHeights
+    let minimumHeights
 
     if (length > 0) {
       minimumHeights = new Array(length)
@@ -248,7 +231,7 @@ define([
     }
 
     length = array[startingIndex++]
-    var maximumHeights
+    let maximumHeights
 
     if (length > 0) {
       maximumHeights = new Array(length)
@@ -257,12 +240,12 @@ define([
       }
     }
 
-    var ellipsoid = Matrix2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    const ellipsoid = Matrix3.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
-    var granularity = array[startingIndex]
+    const granularity = array[startingIndex]
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.positions = positions
       scratchOptions.minimumHeights = minimumHeights
       scratchOptions.maximumHeights = maximumHeights
@@ -273,7 +256,7 @@ define([
     result._positions = positions
     result._minimumHeights = minimumHeights
     result._maximumHeights = maximumHeights
-    result._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid, result._ellipsoid)
+    result._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid, result._ellipsoid)
     result._granularity = granularity
 
     return result
@@ -295,7 +278,7 @@ define([
    *
    * @example
    * // create a wall that spans from 10000 meters to 20000 meters
-   * var wall = Cesium.WallOutlineGeometry.fromConstantHeights({
+   * const wall = Cesium.WallOutlineGeometry.fromConstantHeights({
    *   positions : Cesium.Cartesian3.fromDegreesArray([
    *     19.0, 47.0,
    *     19.0, 48.0,
@@ -306,34 +289,34 @@ define([
    *   minimumHeight : 20000.0,
    *   maximumHeight : 10000.0
    * });
-   * var geometry = Cesium.WallOutlineGeometry.createGeometry(wall);
+   * const geometry = Cesium.WallOutlineGeometry.createGeometry(wall);
    *
    * @see WallOutlineGeometry#createGeometry
    */
   WallOutlineGeometry.fromConstantHeights = function (options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
-    var positions = options.positions
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    const positions = options.positions
 
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(positions)) {
-      throw new RuntimeError.DeveloperError('options.positions is required.')
+    if (!defaultValue.defined(positions)) {
+      throw new Check.DeveloperError('options.positions is required.')
     }
     //>>includeEnd('debug');
 
-    var minHeights
-    var maxHeights
+    let minHeights
+    let maxHeights
 
-    var min = options.minimumHeight
-    var max = options.maximumHeight
+    const min = options.minimumHeight
+    const max = options.maximumHeight
 
-    var doMin = when.defined(min)
-    var doMax = when.defined(max)
+    const doMin = defaultValue.defined(min)
+    const doMax = defaultValue.defined(max)
     if (doMin || doMax) {
-      var length = positions.length
+      const length = positions.length
       minHeights = doMin ? new Array(length) : undefined
       maxHeights = doMax ? new Array(length) : undefined
 
-      for (var i = 0; i < length; ++i) {
+      for (let i = 0; i < length; ++i) {
         if (doMin) {
           minHeights[i] = min
         }
@@ -344,7 +327,7 @@ define([
       }
     }
 
-    var newOptions = {
+    const newOptions = {
       positions: positions,
       maximumHeights: maxHeights,
       minimumHeights: minHeights,
@@ -360,34 +343,34 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   WallOutlineGeometry.createGeometry = function (wallGeometry) {
-    var wallPositions = wallGeometry._positions
-    var minimumHeights = wallGeometry._minimumHeights
-    var maximumHeights = wallGeometry._maximumHeights
-    var granularity = wallGeometry._granularity
-    var ellipsoid = wallGeometry._ellipsoid
+    const wallPositions = wallGeometry._positions
+    const minimumHeights = wallGeometry._minimumHeights
+    const maximumHeights = wallGeometry._maximumHeights
+    const granularity = wallGeometry._granularity
+    const ellipsoid = wallGeometry._ellipsoid
 
-    var pos = WallGeometryLibrary.WallGeometryLibrary.computePositions(ellipsoid, wallPositions, maximumHeights, minimumHeights, granularity, false)
-    if (!when.defined(pos)) {
+    const pos = WallGeometryLibrary.WallGeometryLibrary.computePositions(ellipsoid, wallPositions, maximumHeights, minimumHeights, granularity, false)
+    if (!defaultValue.defined(pos)) {
       return
     }
 
-    var bottomPositions = pos.bottomPositions
-    var topPositions = pos.topPositions
+    const bottomPositions = pos.bottomPositions
+    const topPositions = pos.topPositions
 
-    var length = topPositions.length
-    var size = length * 2
+    let length = topPositions.length
+    let size = length * 2
 
-    var positions = new Float64Array(size)
-    var positionIndex = 0
+    const positions = new Float64Array(size)
+    let positionIndex = 0
 
     // add lower and upper points one after the other, lower
     // points being even and upper points being odd
     length /= 3
-    var i
+    let i
     for (i = 0; i < length; ++i) {
-      var i3 = i * 3
-      var topPosition = Matrix2.Cartesian3.fromArray(topPositions, i3, scratchCartesian3Position1)
-      var bottomPosition = Matrix2.Cartesian3.fromArray(bottomPositions, i3, scratchCartesian3Position2)
+      const i3 = i * 3
+      const topPosition = Matrix3.Cartesian3.fromArray(topPositions, i3, scratchCartesian3Position1)
+      const bottomPosition = Matrix3.Cartesian3.fromArray(bottomPositions, i3, scratchCartesian3Position2)
 
       // insert the lower point
       positions[positionIndex++] = bottomPosition.x
@@ -400,7 +383,7 @@ define([
       positions[positionIndex++] = topPosition.z
     }
 
-    var attributes = new GeometryAttributes.GeometryAttributes({
+    const attributes = new GeometryAttributes.GeometryAttributes({
       position: new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
         componentsPerAttribute: 3,
@@ -408,21 +391,21 @@ define([
       })
     })
 
-    var numVertices = size / 3
+    const numVertices = size / 3
     size = 2 * numVertices - 4 + numVertices
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(numVertices, size)
+    const indices = IndexDatatype.IndexDatatype.createTypedArray(numVertices, size)
 
-    var edgeIndex = 0
+    let edgeIndex = 0
     for (i = 0; i < numVertices - 2; i += 2) {
-      var LL = i
-      var LR = i + 2
-      var pl = Matrix2.Cartesian3.fromArray(positions, LL * 3, scratchCartesian3Position1)
-      var pr = Matrix2.Cartesian3.fromArray(positions, LR * 3, scratchCartesian3Position2)
-      if (Matrix2.Cartesian3.equalsEpsilon(pl, pr, ComponentDatatype.CesiumMath.EPSILON10)) {
+      const LL = i
+      const LR = i + 2
+      const pl = Matrix3.Cartesian3.fromArray(positions, LL * 3, scratchCartesian3Position1)
+      const pr = Matrix3.Cartesian3.fromArray(positions, LR * 3, scratchCartesian3Position2)
+      if (Matrix3.Cartesian3.equalsEpsilon(pl, pr, Math.CesiumMath.EPSILON10)) {
         continue
       }
-      var UL = i + 1
-      var UR = i + 3
+      const UL = i + 1
+      const UR = i + 3
 
       indices[edgeIndex++] = UL
       indices[edgeIndex++] = LL
@@ -444,13 +427,12 @@ define([
   }
 
   function createWallOutlineGeometry(wallGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       wallGeometry = WallOutlineGeometry.unpack(wallGeometry, offset)
     }
-    wallGeometry._ellipsoid = Matrix2.Ellipsoid.clone(wallGeometry._ellipsoid)
+    wallGeometry._ellipsoid = Matrix3.Ellipsoid.clone(wallGeometry._ellipsoid)
     return WallOutlineGeometry.createGeometry(wallGeometry)
   }
 
   return createWallOutlineGeometry
 })
-//# sourceMappingURL=createWallOutlineGeometry.js.map

@@ -29,13 +29,13 @@ Use VueCesium to load dc-sdk
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer
     ref="vcViewer"
-    :cesiumPath="cesiumPath"
+    :cesium-path="cesiumPath"
     :animation="animation"
     :timeline="timeline"
     :fullscreenButton="fullscreenButton"
-    :fullscreenElement="fullscreenElement"
+    :fullscreen-element="fullscreenElement"
     @ready="onViewerReady"
-    @leftClick="onLeftClick"
+    @left-click="onLeftClick"
   >
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :otherOpts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">

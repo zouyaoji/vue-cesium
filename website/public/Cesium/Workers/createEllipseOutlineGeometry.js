@@ -1,22 +1,24 @@
 define([
-  './Matrix2-9aa31791',
-  './when-4bbc8319',
-  './EllipseOutlineGeometry-247f65c5',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './combine-83860057',
-  './EllipseGeometryLibrary-962723df',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6'
-], function (e, t, r, i, n, o, c, l, a, s, d, u, m) {
+  './Matrix3-b6f074fa',
+  './defaultValue-0a909f67',
+  './EllipseOutlineGeometry-356bd088',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './EllipseGeometryLibrary-4fec0674',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-2149f06c'
+], function (e, t, r, i, a, n, l, o, c, s, f, u, d, m, p) {
   'use strict'
-  return function (i, n) {
+  return function (i, a) {
     return (
-      t.defined(n) && (i = r.EllipseOutlineGeometry.unpack(i, n)),
+      t.defined(a) && (i = r.EllipseOutlineGeometry.unpack(i, a)),
       (i._center = e.Cartesian3.clone(i._center)),
       (i._ellipsoid = e.Ellipsoid.clone(i._ellipsoid)),
       r.EllipseOutlineGeometry.createGeometry(i)

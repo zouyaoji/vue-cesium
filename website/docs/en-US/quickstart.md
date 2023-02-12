@@ -90,7 +90,7 @@ Import via HTML `head` tag.
 ```html
 <!-- index.html -->
 <head>
-  <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//unpkg.com/vue-cesium/dist/index.css" />
 </head>
 ```
 

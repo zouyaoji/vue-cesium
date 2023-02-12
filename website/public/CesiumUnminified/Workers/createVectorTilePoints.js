@@ -1,45 +1,36 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './AttributeCompression-1f6679e1',
-  './Matrix2-91d5b6af',
-  './ComponentDatatype-f194c48b',
+  './AttributeCompression-b646d393',
+  './Matrix3-315394f6',
+  './Math-2dbd6b93',
+  './Matrix2-13178034',
   './createTaskProcessorWorker',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './WebGLConstants-1c8239cc'
-], function (AttributeCompression, Matrix2, ComponentDatatype, createTaskProcessorWorker, RuntimeError, when, WebGLConstants) {
+  './ComponentDatatype-f7b11d02',
+  './defaultValue-0a909f67',
+  './Check-666ab1a0',
+  './WebGLConstants-a8cc3e8c',
+  './RuntimeError-06c93819'
+], function (
+  AttributeCompression,
+  Matrix3,
+  Math,
+  Matrix2,
+  createTaskProcessorWorker,
+  ComponentDatatype,
+  defaultValue,
+  Check,
+  WebGLConstants,
+  RuntimeError
+) {
   'use strict'
 
-  var maxShort = 32767
+  const maxShort = 32767
 
-  var scratchBVCartographic = new Matrix2.Cartographic()
-  var scratchEncodedPosition = new Matrix2.Cartesian3()
+  const scratchBVCartographic = new Matrix3.Cartographic()
+  const scratchEncodedPosition = new Matrix3.Cartesian3()
 
-  var scratchRectangle = new Matrix2.Rectangle()
-  var scratchEllipsoid = new Matrix2.Ellipsoid()
-  var scratchMinMaxHeights = {
+  const scratchRectangle = new Matrix2.Rectangle()
+  const scratchEllipsoid = new Matrix3.Ellipsoid()
+  const scratchMinMaxHeights = {
     min: undefined,
     max: undefined
   }
@@ -47,44 +38,44 @@ define([
   function unpackBuffer(packedBuffer) {
     packedBuffer = new Float64Array(packedBuffer)
 
-    var offset = 0
+    let offset = 0
     scratchMinMaxHeights.min = packedBuffer[offset++]
     scratchMinMaxHeights.max = packedBuffer[offset++]
 
     Matrix2.Rectangle.unpack(packedBuffer, offset, scratchRectangle)
     offset += Matrix2.Rectangle.packedLength
 
-    Matrix2.Ellipsoid.unpack(packedBuffer, offset, scratchEllipsoid)
+    Matrix3.Ellipsoid.unpack(packedBuffer, offset, scratchEllipsoid)
   }
 
   function createVectorTilePoints(parameters, transferableObjects) {
-    var positions = new Uint16Array(parameters.positions)
+    const positions = new Uint16Array(parameters.positions)
 
     unpackBuffer(parameters.packedBuffer)
-    var rectangle = scratchRectangle
-    var ellipsoid = scratchEllipsoid
-    var minimumHeight = scratchMinMaxHeights.min
-    var maximumHeight = scratchMinMaxHeights.max
+    const rectangle = scratchRectangle
+    const ellipsoid = scratchEllipsoid
+    const minimumHeight = scratchMinMaxHeights.min
+    const maximumHeight = scratchMinMaxHeights.max
 
-    var positionsLength = positions.length / 3
-    var uBuffer = positions.subarray(0, positionsLength)
-    var vBuffer = positions.subarray(positionsLength, 2 * positionsLength)
-    var heightBuffer = positions.subarray(2 * positionsLength, 3 * positionsLength)
+    const positionsLength = positions.length / 3
+    const uBuffer = positions.subarray(0, positionsLength)
+    const vBuffer = positions.subarray(positionsLength, 2 * positionsLength)
+    const heightBuffer = positions.subarray(2 * positionsLength, 3 * positionsLength)
     AttributeCompression.AttributeCompression.zigZagDeltaDecode(uBuffer, vBuffer, heightBuffer)
 
-    var decoded = new Float64Array(positions.length)
-    for (var i = 0; i < positionsLength; ++i) {
-      var u = uBuffer[i]
-      var v = vBuffer[i]
-      var h = heightBuffer[i]
+    const decoded = new Float64Array(positions.length)
+    for (let i = 0; i < positionsLength; ++i) {
+      const u = uBuffer[i]
+      const v = vBuffer[i]
+      const h = heightBuffer[i]
 
-      var lon = ComponentDatatype.CesiumMath.lerp(rectangle.west, rectangle.east, u / maxShort)
-      var lat = ComponentDatatype.CesiumMath.lerp(rectangle.south, rectangle.north, v / maxShort)
-      var alt = ComponentDatatype.CesiumMath.lerp(minimumHeight, maximumHeight, h / maxShort)
+      const lon = Math.CesiumMath.lerp(rectangle.west, rectangle.east, u / maxShort)
+      const lat = Math.CesiumMath.lerp(rectangle.south, rectangle.north, v / maxShort)
+      const alt = Math.CesiumMath.lerp(minimumHeight, maximumHeight, h / maxShort)
 
-      var cartographic = Matrix2.Cartographic.fromRadians(lon, lat, alt, scratchBVCartographic)
-      var decodedPosition = ellipsoid.cartographicToCartesian(cartographic, scratchEncodedPosition)
-      Matrix2.Cartesian3.pack(decodedPosition, decoded, i * 3)
+      const cartographic = Matrix3.Cartographic.fromRadians(lon, lat, alt, scratchBVCartographic)
+      const decodedPosition = ellipsoid.cartographicToCartesian(cartographic, scratchEncodedPosition)
+      Matrix3.Cartesian3.pack(decodedPosition, decoded, i * 3)
     }
 
     transferableObjects.push(decoded.buffer)
@@ -97,4 +88,3 @@ define([
 
   return createVectorTilePoints$1
 })
-//# sourceMappingURL=createVectorTilePoints.js.map

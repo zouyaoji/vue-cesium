@@ -1,123 +1,133 @@
 define([
-  './Matrix2-9aa31791',
-  './combine-83860057',
-  './AttributeCompression-af389d04',
-  './ComponentDatatype-93750d1a',
-  './IndexDatatype-b7d979a6',
+  './Matrix3-b6f074fa',
+  './combine-ca22a614',
+  './AttributeCompression-e18a879a',
+  './Math-e97915da',
+  './IndexDatatype-2149f06c',
+  './Matrix2-163b5a1d',
   './createTaskProcessorWorker',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './WebGLConstants-1c8239cc'
-], function (a, e, r, n, t, i, s, o, u) {
+  './defaultValue-0a909f67',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './RuntimeError-06c93819'
+], function (e, a, t, n, r, s, i, o, c, u, f) {
   'use strict'
-  var c = 32767,
-    f = new a.Cartographic(),
-    p = new a.Cartesian3()
-  var d = new a.Rectangle(),
-    C = new a.Ellipsoid(),
-    b = new a.Cartesian3(),
-    l = { min: void 0, max: void 0 }
-  var w = new a.Cartesian3(),
-    h = new a.Cartesian3(),
-    v = new a.Cartesian3(),
-    y = new a.Cartesian3(),
-    k = new a.Cartesian3()
-  return i(function (i, s) {
-    var o = new Uint16Array(i.positions),
+  const p = 32767,
+    d = new e.Cartographic(),
+    l = new e.Cartesian3()
+  const C = new s.Rectangle(),
+    b = new e.Ellipsoid(),
+    w = new e.Cartesian3(),
+    h = { min: void 0, max: void 0 }
+  const y = new e.Cartesian3(),
+    k = new e.Cartesian3(),
+    m = new e.Cartesian3(),
+    A = new e.Cartesian3(),
+    g = new e.Cartesian3()
+  return i(function (i, o) {
+    const c = new Uint16Array(i.positions),
       u = new Uint16Array(i.widths),
-      m = new Uint32Array(i.counts),
-      A = new Uint16Array(i.batchIds)
-    !(function (e) {
-      e = new Float64Array(e)
-      var r = 0
-      ;(l.min = e[r++]),
-        (l.max = e[r++]),
-        a.Rectangle.unpack(e, r, d),
-        (r += a.Rectangle.packedLength),
-        a.Ellipsoid.unpack(e, r, C),
-        (r += a.Ellipsoid.packedLength),
-        a.Cartesian3.unpack(e, r, b)
+      f = new Uint32Array(i.counts),
+      x = new Uint16Array(i.batchIds)
+    !(function (a) {
+      a = new Float64Array(a)
+      let t = 0
+      ;(h.min = a[t++]),
+        (h.max = a[t++]),
+        s.Rectangle.unpack(a, t, C),
+        (t += s.Rectangle.packedLength),
+        e.Ellipsoid.unpack(a, t, b),
+        (t += e.Ellipsoid.packedLength),
+        e.Cartesian3.unpack(a, t, w)
     })(i.packedBuffer)
-    var g,
-      x = C,
-      D = b,
-      E = (function (e, t, i, s, o) {
-        var u = e.length / 3,
-          d = e.subarray(0, u),
-          C = e.subarray(u, 2 * u),
-          b = e.subarray(2 * u, 3 * u)
-        r.AttributeCompression.zigZagDeltaDecode(d, C, b)
-        for (var l = new Float64Array(e.length), w = 0; w < u; ++w) {
-          var h = d[w],
-            v = C[w],
-            y = b[w],
-            k = n.CesiumMath.lerp(t.west, t.east, h / c),
-            m = n.CesiumMath.lerp(t.south, t.north, v / c),
-            A = n.CesiumMath.lerp(i, s, y / c),
-            g = a.Cartographic.fromRadians(k, m, A, f),
-            x = o.cartographicToCartesian(g, p)
-          a.Cartesian3.pack(x, l, 3 * w)
+    const D = b,
+      E = w,
+      I = (function (a, r, s, i, o) {
+        const c = a.length / 3,
+          u = a.subarray(0, c),
+          f = a.subarray(c, 2 * c),
+          C = a.subarray(2 * c, 3 * c)
+        t.AttributeCompression.zigZagDeltaDecode(u, f, C)
+        const b = new Float64Array(a.length)
+        for (let a = 0; a < c; ++a) {
+          const t = u[a],
+            c = f[a],
+            w = C[a],
+            h = n.CesiumMath.lerp(r.west, r.east, t / p),
+            y = n.CesiumMath.lerp(r.south, r.north, c / p),
+            k = n.CesiumMath.lerp(s, i, w / p),
+            m = e.Cartographic.fromRadians(h, y, k, d),
+            A = o.cartographicToCartesian(m, l)
+          e.Cartesian3.pack(A, b, 3 * a)
         }
-        return l
-      })(o, d, l.min, l.max, x),
-      I = E.length / 3,
-      P = 4 * I - 4,
-      U = new Float32Array(3 * P),
-      R = new Float32Array(3 * P),
-      T = new Float32Array(3 * P),
-      F = new Float32Array(2 * P),
-      N = new Uint16Array(P),
-      M = 0,
-      L = 0,
+        return b
+      })(c, C, h.min, h.max, D),
+      P = I.length / 3,
+      U = 4 * P - 4,
+      M = new Float32Array(3 * U),
+      R = new Float32Array(3 * U),
+      T = new Float32Array(3 * U),
+      F = new Float32Array(2 * U),
+      N = new Uint16Array(U)
+    let L,
       S = 0,
       _ = 0,
-      G = m.length
-    for (g = 0; g < G; ++g) {
-      for (var W = m[g], B = u[g], O = A[g], z = 0; z < W; ++z) {
-        var H
-        if (0 === z) {
-          var Y = a.Cartesian3.unpack(E, 3 * _, w),
-            Z = a.Cartesian3.unpack(E, 3 * (_ + 1), h)
-          ;(H = a.Cartesian3.subtract(Y, Z, v)), a.Cartesian3.add(Y, H, H)
-        } else H = a.Cartesian3.unpack(E, 3 * (_ + z - 1), v)
-        var j,
-          q = a.Cartesian3.unpack(E, 3 * (_ + z), y)
-        if (z === W - 1) {
-          var J = a.Cartesian3.unpack(E, 3 * (_ + W - 1), w),
-            K = a.Cartesian3.unpack(E, 3 * (_ + W - 2), h)
-          ;(j = a.Cartesian3.subtract(J, K, k)), a.Cartesian3.add(J, j, j)
-        } else j = a.Cartesian3.unpack(E, 3 * (_ + z + 1), k)
-        a.Cartesian3.subtract(H, D, H), a.Cartesian3.subtract(q, D, q), a.Cartesian3.subtract(j, D, j)
-        for (var Q = z === W - 1 ? 2 : 4, V = 0 === z ? 2 : 0; V < Q; ++V) {
-          a.Cartesian3.pack(q, U, M), a.Cartesian3.pack(H, R, M), a.Cartesian3.pack(j, T, M), (M += 3)
-          var X = V - 2 < 0 ? -1 : 1
-          ;(F[L++] = (V % 2) * 2 - 1), (F[L++] = X * B), (N[S++] = O)
+      v = 0,
+      G = 0,
+      W = f.length
+    for (L = 0; L < W; ++L) {
+      const a = f[L],
+        t = u[L],
+        n = x[L]
+      for (let r = 0; r < a; ++r) {
+        let s
+        if (0 === r) {
+          const a = e.Cartesian3.unpack(I, 3 * G, y),
+            t = e.Cartesian3.unpack(I, 3 * (G + 1), k)
+          ;(s = e.Cartesian3.subtract(a, t, m)), e.Cartesian3.add(a, s, s)
+        } else s = e.Cartesian3.unpack(I, 3 * (G + r - 1), m)
+        const i = e.Cartesian3.unpack(I, 3 * (G + r), A)
+        let o
+        if (r === a - 1) {
+          const t = e.Cartesian3.unpack(I, 3 * (G + a - 1), y),
+            n = e.Cartesian3.unpack(I, 3 * (G + a - 2), k)
+          ;(o = e.Cartesian3.subtract(t, n, g)), e.Cartesian3.add(t, o, o)
+        } else o = e.Cartesian3.unpack(I, 3 * (G + r + 1), g)
+        e.Cartesian3.subtract(s, E, s), e.Cartesian3.subtract(i, E, i), e.Cartesian3.subtract(o, E, o)
+        const c = r === a - 1 ? 2 : 4
+        for (let a = 0 === r ? 2 : 0; a < c; ++a) {
+          e.Cartesian3.pack(i, M, S), e.Cartesian3.pack(s, R, S), e.Cartesian3.pack(o, T, S), (S += 3)
+          const r = a - 2 < 0 ? -1 : 1
+          ;(F[_++] = (a % 2) * 2 - 1), (F[_++] = r * t), (N[v++] = n)
         }
       }
-      _ += W
+      G += a
     }
-    var $ = t.IndexDatatype.createTypedArray(P, 6 * I - 6),
-      aa = 0,
-      ea = 0
-    for (G = I - 1, g = 0; g < G; ++g)
-      ($[ea++] = aa), ($[ea++] = aa + 2), ($[ea++] = aa + 1), ($[ea++] = aa + 1), ($[ea++] = aa + 2), ($[ea++] = aa + 3), (aa += 4)
-    s.push(U.buffer, R.buffer, T.buffer), s.push(F.buffer, N.buffer, $.buffer)
-    var ra = {
-      indexDatatype: 2 === $.BYTES_PER_ELEMENT ? t.IndexDatatype.UNSIGNED_SHORT : t.IndexDatatype.UNSIGNED_INT,
-      currentPositions: U.buffer,
+    const B = r.IndexDatatype.createTypedArray(U, 6 * P - 6)
+    let O = 0,
+      z = 0
+    for (W = P - 1, L = 0; L < W; ++L)
+      (B[z++] = O), (B[z++] = O + 2), (B[z++] = O + 1), (B[z++] = O + 1), (B[z++] = O + 2), (B[z++] = O + 3), (O += 4)
+    o.push(M.buffer, R.buffer, T.buffer), o.push(F.buffer, N.buffer, B.buffer)
+    let H = {
+      indexDatatype: 2 === B.BYTES_PER_ELEMENT ? r.IndexDatatype.UNSIGNED_SHORT : r.IndexDatatype.UNSIGNED_INT,
+      currentPositions: M.buffer,
       previousPositions: R.buffer,
       nextPositions: T.buffer,
       expandAndWidth: F.buffer,
       batchIds: N.buffer,
-      indices: $.buffer
+      indices: B.buffer
     }
     if (i.keepDecodedPositions) {
-      var na = (function (a) {
-        for (var e = a.length, r = new Uint32Array(e + 1), n = 0, t = 0; t < e; ++t) (r[t] = n), (n += a[t])
-        return (r[e] = n), r
-      })(m)
-      s.push(E.buffer, na.buffer), (ra = e.combine(ra, { decodedPositions: E.buffer, decodedPositionOffsets: na.buffer }))
+      const e = (function (e) {
+        const a = e.length,
+          t = new Uint32Array(a + 1)
+        let n = 0
+        for (let r = 0; r < a; ++r) (t[r] = n), (n += e[r])
+        return (t[a] = n), t
+      })(f)
+      o.push(I.buffer, e.buffer), (H = a.combine(H, { decodedPositions: I.buffer, decodedPositionOffsets: e.buffer }))
     }
-    return ra
+    return H
   })
 })

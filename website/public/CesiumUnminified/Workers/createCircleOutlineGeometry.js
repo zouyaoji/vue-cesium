@@ -1,53 +1,36 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './Matrix2-91d5b6af',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './EllipseOutlineGeometry-412c7c3f',
-  './ComponentDatatype-f194c48b',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-6a692b56',
-  './Transforms-86b6fa28',
-  './combine-83860057',
-  './EllipseGeometryLibrary-c30b4a37',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-ee69f1fd'
+  './Matrix3-315394f6',
+  './Check-666ab1a0',
+  './defaultValue-0a909f67',
+  './EllipseOutlineGeometry-017a5929',
+  './Math-2dbd6b93',
+  './Transforms-a05e5e6e',
+  './Matrix2-13178034',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-f7b11d02',
+  './WebGLConstants-a8cc3e8c',
+  './EllipseGeometryLibrary-855d4681',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-a55ceaa1'
 ], function (
+  Matrix3,
+  Check,
+  defaultValue,
+  EllipseOutlineGeometry,
+  Math,
+  Transforms,
   Matrix2,
   RuntimeError,
-  when,
-  EllipseOutlineGeometry,
+  combine,
   ComponentDatatype,
   WebGLConstants,
-  GeometryOffsetAttribute,
-  Transforms,
-  combine,
   EllipseGeometryLibrary,
   GeometryAttribute,
   GeometryAttributes,
+  GeometryOffsetAttribute,
   IndexDatatype
 ) {
   'use strict'
@@ -75,21 +58,21 @@ define([
    *
    * @example
    * // Create a circle.
-   * var circle = new Cesium.CircleOutlineGeometry({
+   * const circle = new Cesium.CircleOutlineGeometry({
    *   center : Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
    *   radius : 100000.0
    * });
-   * var geometry = Cesium.CircleOutlineGeometry.createGeometry(circle);
+   * const geometry = Cesium.CircleOutlineGeometry.createGeometry(circle);
    */
   function CircleOutlineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
-    var radius = options.radius
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    const radius = options.radius
 
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.number('radius', radius)
+    Check.Check.typeOf.number('radius', radius)
     //>>includeEnd('debug');
 
-    var ellipseGeometryOptions = {
+    const ellipseGeometryOptions = {
       center: options.center,
       semiMajorAxis: radius,
       semiMinorAxis: radius,
@@ -120,20 +103,20 @@ define([
    */
   CircleOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('value', value)
+    Check.Check.typeOf.object('value', value)
     //>>includeEnd('debug');
     return EllipseOutlineGeometry.EllipseOutlineGeometry.pack(value._ellipseGeometry, array, startingIndex)
   }
 
-  var scratchEllipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry({
-    center: new Matrix2.Cartesian3(),
+  const scratchEllipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry({
+    center: new Matrix3.Cartesian3(),
     semiMajorAxis: 1.0,
     semiMinorAxis: 1.0
   })
-  var scratchOptions = {
-    center: new Matrix2.Cartesian3(),
+  const scratchOptions = {
+    center: new Matrix3.Cartesian3(),
     radius: undefined,
-    ellipsoid: Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE),
+    ellipsoid: Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE),
     height: undefined,
     extrudedHeight: undefined,
     granularity: undefined,
@@ -151,15 +134,15 @@ define([
    * @returns {CircleOutlineGeometry} The modified result parameter or a new CircleOutlineGeometry instance if one was not provided.
    */
   CircleOutlineGeometry.unpack = function (array, startingIndex, result) {
-    var ellipseGeometry = EllipseOutlineGeometry.EllipseOutlineGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
-    scratchOptions.center = Matrix2.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
-    scratchOptions.ellipsoid = Matrix2.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
+    const ellipseGeometry = EllipseOutlineGeometry.EllipseOutlineGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
+    scratchOptions.center = Matrix3.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
+    scratchOptions.ellipsoid = Matrix3.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
     scratchOptions.height = ellipseGeometry._height
     scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight
     scratchOptions.granularity = ellipseGeometry._granularity
     scratchOptions.numberOfVerticalLines = ellipseGeometry._numberOfVerticalLines
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.radius = ellipseGeometry._semiMajorAxis
       return new CircleOutlineGeometry(scratchOptions)
     }
@@ -181,14 +164,13 @@ define([
   }
 
   function createCircleOutlineGeometry(circleGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       circleGeometry = CircleOutlineGeometry.unpack(circleGeometry, offset)
     }
-    circleGeometry._ellipseGeometry._center = Matrix2.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
-    circleGeometry._ellipseGeometry._ellipsoid = Matrix2.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
+    circleGeometry._ellipseGeometry._center = Matrix3.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
+    circleGeometry._ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
     return CircleOutlineGeometry.createGeometry(circleGeometry)
   }
 
   return createCircleOutlineGeometry
 })
-//# sourceMappingURL=createCircleOutlineGeometry.js.map

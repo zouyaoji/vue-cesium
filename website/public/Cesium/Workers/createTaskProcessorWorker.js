@@ -1,46 +1,42 @@
-define(['./when-4bbc8319'], function (e) {
+define(['./defaultValue-0a909f67'], function (e) {
   'use strict'
   return function (r) {
-    var n
-    return function (t) {
-      var s = t.data,
+    let t
+    return function (n) {
+      const s = n.data,
         a = [],
         i = { id: s.id, result: void 0, error: void 0 }
-      return e
-        .when(
-          (function (r, n, t) {
-            try {
-              return r(n, t)
-            } catch (r) {
-              return e.when.reject(r)
-            }
-          })(r, s.parameters, a)
-        )
+      return Promise.resolve(
+        (function (e, r, t) {
+          let n
+          try {
+            return (n = e(r, t)), n
+          } catch (e) {
+            return Promise.reject(e)
+          }
+        })(r, s.parameters, a)
+      )
         .then(function (e) {
           i.result = e
         })
-        .otherwise(function (e) {
+        .catch(function (e) {
           e instanceof Error ? (i.error = { name: e.name, message: e.message, stack: e.stack }) : (i.error = e)
         })
-        .always(function () {
-          e.defined(n) || (n = e.defaultValue(self.webkitPostMessage, self.postMessage)), s.canTransferArrayBuffer || (a.length = 0)
+        .finally(function () {
+          e.defined(t) || (t = e.defaultValue(self.webkitPostMessage, self.postMessage)), s.canTransferArrayBuffer || (a.length = 0)
           try {
-            n(i, a)
+            t(i, a)
           } catch (r) {
             ;(i.result = void 0),
-              (i.error =
-                'postMessage failed with error: ' +
-                (function (r) {
-                  var n,
-                    t = r.name,
-                    s = r.message
-                  n = e.defined(t) && e.defined(s) ? t + ': ' + s : r.toString()
-                  var a = r.stack
-                  return e.defined(a) && (n += '\n' + a), n
-                })(r) +
-                '\n  with responseMessage: ' +
-                JSON.stringify(i)),
-              n(i)
+              (i.error = `postMessage failed with error: ${(function (r) {
+                let t
+                const n = r.name,
+                  s = r.message
+                t = e.defined(n) && e.defined(s) ? `${n}: ${s}` : r.toString()
+                const a = r.stack
+                return e.defined(a) && (t += `\n${a}`), t
+              })(r)}\n  with responseMessage: ${JSON.stringify(i)}`),
+              t(i)
           }
         })
     }

@@ -247,13 +247,13 @@ ${this.codepen.style}
       const { script, html, style } = this.codepen
       let resourcesTpl =
         '<scr' +
-        'ipt src="//unpkg.com/vue@next"></scr' +
+        'ipt src="//unpkg.com/vue"></scr' +
         'ipt>' +
         '\n<scr' +
         `ipt src="//unpkg.com/element-plus"></scr` +
         'ipt>' +
         '\n<scr' +
-        `ipt src="//unpkg.com/vue-cesium@next"></scr` +
+        `ipt src="//unpkg.com/vue-cesium"></scr` +
         'ipt>'
       if (this.blockClass.includes('demo-vc-overlay-echarts')) {
         resourcesTpl += '\n<scr' + `ipt src="//unpkg.com/echarts"></scr` + 'ipt>'
@@ -261,7 +261,7 @@ ${this.codepen.style}
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
       let cssTpl = `@import url("//unpkg.com/element-plus/dist/index.css");\n${(
         style || ''
-      ).trim()}\n@import url("//unpkg.com/vue-cesium@next/dist/index.css");\n${(style || '').trim()}\n`
+      ).trim()}\n@import url("//unpkg.com/vue-cesium/dist/index.css");\n${(style || '').trim()}\n`
       cssTpl += `
         .demo-viewer .el-row:last-child {
             margin-bottom: 0;

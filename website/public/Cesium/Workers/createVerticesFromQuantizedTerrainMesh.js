@@ -1,330 +1,332 @@
 define([
-  './AxisAlignedBoundingBox-07c6b7f2',
-  './Matrix2-9aa31791',
-  './when-4bbc8319',
-  './TerrainEncoding-ba779f11',
-  './IndexDatatype-b7d979a6',
-  './ComponentDatatype-93750d1a',
-  './RuntimeError-346a3079',
-  './Transforms-d13cc04e',
-  './WebMercatorProjection-58801a11',
+  './AxisAlignedBoundingBox-e5bb9f92',
+  './Matrix2-163b5a1d',
+  './Matrix3-b6f074fa',
+  './defaultValue-0a909f67',
+  './TerrainEncoding-6a85a8f8',
+  './IndexDatatype-2149f06c',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './WebMercatorProjection-8e29b101',
   './createTaskProcessorWorker',
-  './AttributeCompression-af389d04',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057'
-], function (e, t, r, i, n, o, a, s, d, c, h, u, I) {
+  './RuntimeError-06c93819',
+  './AttributeCompression-e18a879a',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './combine-ca22a614'
+], function (e, t, r, n, o, i, a, s, c, d, h, u, l, I, g) {
   'use strict'
-  function l() {
-    a.DeveloperError.throwInstantiationError()
+  function m() {
+    s.DeveloperError.throwInstantiationError()
   }
-  Object.defineProperties(l.prototype, {
-    errorEvent: { get: a.DeveloperError.throwInstantiationError },
-    credit: { get: a.DeveloperError.throwInstantiationError },
-    tilingScheme: { get: a.DeveloperError.throwInstantiationError },
-    ready: { get: a.DeveloperError.throwInstantiationError },
-    readyPromise: { get: a.DeveloperError.throwInstantiationError },
-    hasWaterMask: { get: a.DeveloperError.throwInstantiationError },
-    hasVertexNormals: { get: a.DeveloperError.throwInstantiationError },
-    availability: { get: a.DeveloperError.throwInstantiationError }
+  Object.defineProperties(m.prototype, {
+    errorEvent: { get: s.DeveloperError.throwInstantiationError },
+    credit: { get: s.DeveloperError.throwInstantiationError },
+    tilingScheme: { get: s.DeveloperError.throwInstantiationError },
+    ready: { get: s.DeveloperError.throwInstantiationError },
+    readyPromise: { get: s.DeveloperError.throwInstantiationError },
+    hasWaterMask: { get: s.DeveloperError.throwInstantiationError },
+    hasVertexNormals: { get: s.DeveloperError.throwInstantiationError },
+    availability: { get: s.DeveloperError.throwInstantiationError }
   })
-  var g = []
-  l.getRegularGridIndices = function (e, t) {
-    var i = g[e]
-    r.defined(i) || (g[e] = i = [])
-    var n = i[t]
+  const T = []
+  m.getRegularGridIndices = function (e, t) {
+    let r = T[e]
+    n.defined(r) || (T[e] = r = [])
+    let o = r[t]
     return (
-      r.defined(n) ||
-        v(
-          e,
-          t,
-          (n =
-            e * t < o.CesiumMath.SIXTY_FOUR_KILOBYTES
-              ? (i[t] = new Uint16Array((e - 1) * (t - 1) * 6))
-              : (i[t] = new Uint32Array((e - 1) * (t - 1) * 6))),
-          0
-        ),
-      n
+      n.defined(o) ||
+        ((o =
+          e * t < a.CesiumMath.SIXTY_FOUR_KILOBYTES
+            ? (r[t] = new Uint16Array((e - 1) * (t - 1) * 6))
+            : (r[t] = new Uint32Array((e - 1) * (t - 1) * 6))),
+        y(e, t, o, 0)),
+      o
     )
   }
-  var m = []
-  l.getRegularGridIndicesAndEdgeIndices = function (e, t) {
-    var i = m[e]
-    r.defined(i) || (m[e] = i = [])
-    var n = i[t]
-    if (!r.defined(n)) {
-      var o = l.getRegularGridIndices(e, t),
-        a = E(e, t),
-        s = a.westIndicesSouthToNorth,
-        d = a.southIndicesEastToWest,
-        c = a.eastIndicesNorthToSouth,
-        h = a.northIndicesWestToEast
-      n = i[t] = { indices: o, westIndicesSouthToNorth: s, southIndicesEastToWest: d, eastIndicesNorthToSouth: c, northIndicesWestToEast: h }
+  const f = []
+  m.getRegularGridIndicesAndEdgeIndices = function (e, t) {
+    let r = f[e]
+    n.defined(r) || (f[e] = r = [])
+    let o = r[t]
+    if (!n.defined(o)) {
+      const n = m.getRegularGridIndices(e, t),
+        i = p(e, t),
+        a = i.westIndicesSouthToNorth,
+        s = i.southIndicesEastToWest,
+        c = i.eastIndicesNorthToSouth,
+        d = i.northIndicesWestToEast
+      o = r[t] = { indices: n, westIndicesSouthToNorth: a, southIndicesEastToWest: s, eastIndicesNorthToSouth: c, northIndicesWestToEast: d }
+    }
+    return o
+  }
+  const E = []
+  function p(e, t) {
+    const r = new Array(t),
+      n = new Array(e),
+      o = new Array(t),
+      i = new Array(e)
+    let a
+    for (a = 0; a < e; ++a) (i[a] = a), (n[a] = e * t - 1 - a)
+    for (a = 0; a < t; ++a) (o[a] = (a + 1) * e - 1), (r[a] = (t - a - 1) * e)
+    return { westIndicesSouthToNorth: r, southIndicesEastToWest: n, eastIndicesNorthToSouth: o, northIndicesWestToEast: i }
+  }
+  function y(e, t, r, n) {
+    let o = 0
+    for (let i = 0; i < t - 1; ++i) {
+      for (let t = 0; t < e - 1; ++t) {
+        const t = o,
+          i = t + e,
+          a = i + 1,
+          s = t + 1
+        ;(r[n++] = t), (r[n++] = i), (r[n++] = s), (r[n++] = s), (r[n++] = i), (r[n++] = a), ++o
+      }
+      ++o
+    }
+  }
+  function N(e, t, r, n) {
+    let o = e[0]
+    const i = e.length
+    for (let a = 1; a < i; ++a) {
+      const i = e[a]
+      ;(r[n++] = o), (r[n++] = i), (r[n++] = t), (r[n++] = t), (r[n++] = i), (r[n++] = t + 1), (o = i), ++t
     }
     return n
   }
-  var T = []
-  function E(e, t) {
-    var r,
-      i = new Array(t),
-      n = new Array(e),
-      o = new Array(t),
-      a = new Array(e)
-    for (r = 0; r < e; ++r) (a[r] = r), (n[r] = e * t - 1 - r)
-    for (r = 0; r < t; ++r) (o[r] = (r + 1) * e - 1), (i[r] = (t - r - 1) * e)
-    return { westIndicesSouthToNorth: i, southIndicesEastToWest: n, eastIndicesNorthToSouth: o, northIndicesWestToEast: a }
-  }
-  function v(e, t, r, i) {
-    for (var n = 0, o = 0; o < t - 1; ++o) {
-      for (var a = 0; a < e - 1; ++a) {
-        var s = n,
-          d = s + e,
-          c = d + 1,
-          h = s + 1
-        ;(r[i++] = s), (r[i++] = d), (r[i++] = h), (r[i++] = h), (r[i++] = d), (r[i++] = c), ++n
-      }
-      ++n
-    }
-  }
-  function p(e, t, r, i) {
-    for (var n = e[0], o = e.length, a = 1; a < o; ++a) {
-      var s = e[a]
-      ;(r[i++] = n), (r[i++] = s), (r[i++] = t), (r[i++] = t), (r[i++] = s), (r[i++] = t + 1), (n = s), ++t
-    }
-    return i
-  }
-  ;(l.getRegularGridAndSkirtIndicesAndEdgeIndices = function (e, t) {
-    var i = T[e]
-    r.defined(i) || (T[e] = i = [])
-    var o = i[t]
-    if (!r.defined(o)) {
-      var a = e * t,
-        s = (e - 1) * (t - 1) * 6,
-        d = 2 * e + 2 * t,
-        c = a + d,
-        h = s + 6 * Math.max(0, d - 4),
-        u = E(e, t),
-        I = u.westIndicesSouthToNorth,
-        g = u.southIndicesEastToWest,
-        m = u.eastIndicesNorthToSouth,
-        p = u.northIndicesWestToEast,
-        f = n.IndexDatatype.createTypedArray(c, h)
-      v(e, t, f, 0),
-        l.addSkirtIndices(I, g, m, p, a, f, s),
-        (o = i[t] =
+  ;(m.getRegularGridAndSkirtIndicesAndEdgeIndices = function (e, t) {
+    let r = E[e]
+    n.defined(r) || (E[e] = r = [])
+    let o = r[t]
+    if (!n.defined(o)) {
+      const n = e * t,
+        a = (e - 1) * (t - 1) * 6,
+        s = 2 * e + 2 * t,
+        c = n + s,
+        d = a + 6 * Math.max(0, s - 4),
+        h = p(e, t),
+        u = h.westIndicesSouthToNorth,
+        l = h.southIndicesEastToWest,
+        I = h.eastIndicesNorthToSouth,
+        g = h.northIndicesWestToEast,
+        T = i.IndexDatatype.createTypedArray(c, d)
+      y(e, t, T, 0),
+        m.addSkirtIndices(u, l, I, g, n, T, a),
+        (o = r[t] =
           {
-            indices: f,
-            westIndicesSouthToNorth: I,
-            southIndicesEastToWest: g,
-            eastIndicesNorthToSouth: m,
-            northIndicesWestToEast: p,
-            indexCountWithoutSkirts: s
+            indices: T,
+            westIndicesSouthToNorth: u,
+            southIndicesEastToWest: l,
+            eastIndicesNorthToSouth: I,
+            northIndicesWestToEast: g,
+            indexCountWithoutSkirts: a
           })
     }
     return o
   }),
-    (l.addSkirtIndices = function (e, t, r, i, n, o, a) {
-      var s = n
-      ;(a = p(e, s, o, a)), (a = p(t, (s += e.length), o, a)), (a = p(r, (s += t.length), o, a)), p(i, (s += r.length), o, a)
+    (m.addSkirtIndices = function (e, t, r, n, o, i, a) {
+      let s = o
+      ;(a = N(e, s, i, a)), (s += e.length), (a = N(t, s, i, a)), (s += t.length), (a = N(r, s, i, a)), (s += r.length), N(n, s, i, a)
     }),
-    (l.heightmapTerrainQuality = 0.25),
-    (l.getEstimatedLevelZeroGeometricErrorForAHeightmap = function (e, t, r) {
-      return (2 * e.maximumRadius * Math.PI * l.heightmapTerrainQuality) / (t * r)
+    (m.heightmapTerrainQuality = 0.25),
+    (m.getEstimatedLevelZeroGeometricErrorForAHeightmap = function (e, t, r) {
+      return (2 * e.maximumRadius * Math.PI * m.heightmapTerrainQuality) / (t * r)
     }),
-    (l.prototype.requestTileGeometry = a.DeveloperError.throwInstantiationError),
-    (l.prototype.getLevelMaximumGeometricError = a.DeveloperError.throwInstantiationError),
-    (l.prototype.getTileDataAvailable = a.DeveloperError.throwInstantiationError),
-    (l.prototype.loadTileDataAvailability = a.DeveloperError.throwInstantiationError)
-  var f = 32767,
-    y = new t.Cartesian3(),
-    N = new t.Cartesian3(),
-    w = new t.Cartesian3(),
-    S = new t.Cartographic(),
-    M = new t.Cartesian2()
-  function x(e, r, i, n, a, s, d, c, h) {
-    var u = Number.POSITIVE_INFINITY,
-      I = a.north,
-      l = a.south,
-      g = a.east,
-      m = a.west
-    g < m && (g += o.CesiumMath.TWO_PI)
-    for (var T = e.length, E = 0; E < T; ++E) {
-      var v = e[E],
-        p = i[v],
-        f = n[v]
-      ;(S.longitude = o.CesiumMath.lerp(m, g, f.x)), (S.latitude = o.CesiumMath.lerp(l, I, f.y)), (S.height = p - r)
-      var N = s.cartographicToCartesian(S, y)
-      t.Matrix4.multiplyByPoint(d, N, N),
-        t.Cartesian3.minimumByComponent(N, c, c),
-        t.Cartesian3.maximumByComponent(N, h, h),
-        (u = Math.min(u, S.height))
+    (m.prototype.requestTileGeometry = s.DeveloperError.throwInstantiationError),
+    (m.prototype.getLevelMaximumGeometricError = s.DeveloperError.throwInstantiationError),
+    (m.prototype.getTileDataAvailable = s.DeveloperError.throwInstantiationError),
+    (m.prototype.loadTileDataAvailability = s.DeveloperError.throwInstantiationError)
+  const w = 32767,
+    M = new r.Cartesian3(),
+    S = new r.Cartesian3(),
+    x = new r.Cartesian3(),
+    b = new r.Cartographic(),
+    A = new t.Cartesian2()
+  function C(e, n, o, i, s, c, d, h, u) {
+    let l = Number.POSITIVE_INFINITY
+    const I = s.north,
+      g = s.south
+    let m = s.east
+    const T = s.west
+    m < T && (m += a.CesiumMath.TWO_PI)
+    const f = e.length
+    for (let s = 0; s < f; ++s) {
+      const f = e[s],
+        E = o[f],
+        p = i[f]
+      ;(b.longitude = a.CesiumMath.lerp(T, m, p.x)), (b.latitude = a.CesiumMath.lerp(g, I, p.y)), (b.height = E - n)
+      const y = c.cartographicToCartesian(b, M)
+      t.Matrix4.multiplyByPoint(d, y, y),
+        r.Cartesian3.minimumByComponent(y, h, h),
+        r.Cartesian3.maximumByComponent(y, u, u),
+        (l = Math.min(l, b.height))
     }
-    return u
+    return l
   }
-  function b(e, t, i, n, a, s, c, h, u, I, l, g, m, T) {
-    var E = r.defined(c),
-      v = u.north,
-      p = u.south,
-      f = u.east,
-      N = u.west
-    f < N && (f += o.CesiumMath.TWO_PI)
-    for (var w = i.length, x = 0; x < w; ++x) {
-      var b = i[x],
-        A = a[b],
-        C = s[b]
-      ;(S.longitude = o.CesiumMath.lerp(N, f, C.x) + m), (S.latitude = o.CesiumMath.lerp(p, v, C.y) + T), (S.height = A - I)
-      var W,
-        P,
-        D = h.cartographicToCartesian(S, y)
-      if (E) {
-        var k = 2 * b
-        ;(M.x = c[k]), (M.y = c[k + 1])
+  function W(e, t, r, o, i, s, d, h, u, l, I, g, m, T) {
+    const f = n.defined(d),
+      E = u.north,
+      p = u.south
+    let y = u.east
+    const N = u.west
+    y < N && (y += a.CesiumMath.TWO_PI)
+    const w = r.length
+    for (let n = 0; n < w; ++n) {
+      const u = r[n],
+        w = i[u],
+        S = s[u]
+      ;(b.longitude = a.CesiumMath.lerp(N, y, S.x) + m), (b.latitude = a.CesiumMath.lerp(p, E, S.y) + T), (b.height = w - l)
+      const x = h.cartographicToCartesian(b, M)
+      if (f) {
+        const e = 2 * u
+        ;(A.x = d[e]), (A.y = d[e + 1])
       }
-      n.hasWebMercatorT && (W = (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(S.latitude) - l) * g),
-        n.hasGeodeticSurfaceNormals && (P = h.geodeticSurfaceNormal(D)),
-        (t = n.encode(e, t, D, C, S.height, M, W, P))
+      let C, W
+      o.hasWebMercatorT && (C = (c.WebMercatorProjection.geodeticLatitudeToMercatorAngle(b.latitude) - I) * g),
+        o.hasGeodeticSurfaceNormals && (W = h.geodeticSurfaceNormal(x)),
+        (t = o.encode(e, t, x, S, b.height, A, C, W))
     }
   }
-  function A(e, t) {
-    var i
+  function v(e, t) {
+    let r
     return (
-      'function' == typeof e.slice && 'function' != typeof (i = e.slice()).sort && (i = void 0),
-      r.defined(i) || (i = Array.prototype.slice.call(e)),
-      i.sort(t),
-      i
+      'function' == typeof e.slice && ((r = e.slice()), 'function' != typeof r.sort && (r = void 0)),
+      n.defined(r) || (r = Array.prototype.slice.call(e)),
+      r.sort(t),
+      r
     )
   }
-  return c(function (a, c) {
-    var h,
-      u,
-      I = a.quantizedVertices,
-      g = I.length / 3,
-      m = a.octEncodedNormals,
-      T = a.westIndices.length + a.eastIndices.length + a.southIndices.length + a.northIndices.length,
-      E = a.includeWebMercatorT,
-      v = a.exaggeration,
-      p = a.exaggerationRelativeHeight,
-      C = 1 !== v,
-      W = t.Rectangle.clone(a.rectangle),
-      P = W.west,
-      D = W.south,
-      k = W.east,
-      F = W.north,
-      H = t.Ellipsoid.clone(a.ellipsoid),
-      _ = a.minimumHeight,
-      G = a.maximumHeight,
-      V = a.relativeToCenter,
-      Y = s.Transforms.eastNorthUpToFixedFrame(V, H),
-      O = t.Matrix4.inverseTransformation(Y, new t.Matrix4())
-    E &&
-      ((h = d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(D)), (u = 1 / (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(F) - h)))
-    var B = I.subarray(0, g),
-      R = I.subarray(g, 2 * g),
-      L = I.subarray(2 * g, 3 * g),
-      j = r.defined(m),
-      U = new Array(g),
-      z = new Array(g),
-      q = new Array(g),
-      Q = E ? new Array(g) : [],
-      K = C ? new Array(g) : [],
-      X = N
-    ;(X.x = Number.POSITIVE_INFINITY), (X.y = Number.POSITIVE_INFINITY), (X.z = Number.POSITIVE_INFINITY)
-    var Z = w
-    ;(Z.x = Number.NEGATIVE_INFINITY), (Z.y = Number.NEGATIVE_INFINITY), (Z.z = Number.NEGATIVE_INFINITY)
-    for (
-      var J = Number.POSITIVE_INFINITY, $ = Number.NEGATIVE_INFINITY, ee = Number.POSITIVE_INFINITY, te = Number.NEGATIVE_INFINITY, re = 0;
-      re < g;
-      ++re
-    ) {
-      var ie = B[re],
-        ne = R[re],
-        oe = ie / f,
-        ae = ne / f,
-        se = o.CesiumMath.lerp(_, G, L[re] / f)
-      ;(S.longitude = o.CesiumMath.lerp(P, k, oe)),
-        (S.latitude = o.CesiumMath.lerp(D, F, ae)),
-        (S.height = se),
-        (J = Math.min(S.longitude, J)),
-        ($ = Math.max(S.longitude, $)),
-        (ee = Math.min(S.latitude, ee)),
-        (te = Math.max(S.latitude, te))
-      var de = H.cartographicToCartesian(S)
-      ;(U[re] = new t.Cartesian2(oe, ae)),
-        (z[re] = se),
-        (q[re] = de),
-        E && (Q[re] = (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(S.latitude) - h) * u),
-        C && (K[re] = H.geodeticSurfaceNormal(de)),
-        t.Matrix4.multiplyByPoint(O, de, y),
-        t.Cartesian3.minimumByComponent(y, X, X),
-        t.Cartesian3.maximumByComponent(y, Z, Z)
+  return d(function (d, h) {
+    const u = d.quantizedVertices,
+      l = u.length / 3,
+      I = d.octEncodedNormals,
+      g = d.westIndices.length + d.eastIndices.length + d.southIndices.length + d.northIndices.length,
+      T = d.includeWebMercatorT,
+      f = d.exaggeration,
+      E = d.exaggerationRelativeHeight,
+      p = 1 !== f,
+      y = t.Rectangle.clone(d.rectangle),
+      N = y.west,
+      P = y.south,
+      D = y.east,
+      k = y.north,
+      F = r.Ellipsoid.clone(d.ellipsoid),
+      H = d.minimumHeight,
+      _ = d.maximumHeight,
+      G = d.relativeToCenter,
+      V = s.Transforms.eastNorthUpToFixedFrame(G, F),
+      Y = t.Matrix4.inverseTransformation(V, new t.Matrix4())
+    let O, B
+    T &&
+      ((O = c.WebMercatorProjection.geodeticLatitudeToMercatorAngle(P)), (B = 1 / (c.WebMercatorProjection.geodeticLatitudeToMercatorAngle(k) - O)))
+    const R = u.subarray(0, l),
+      L = u.subarray(l, 2 * l),
+      j = u.subarray(2 * l, 3 * l),
+      U = n.defined(I),
+      z = new Array(l),
+      q = new Array(l),
+      Q = new Array(l),
+      K = T ? new Array(l) : [],
+      X = p ? new Array(l) : [],
+      Z = S
+    ;(Z.x = Number.POSITIVE_INFINITY), (Z.y = Number.POSITIVE_INFINITY), (Z.z = Number.POSITIVE_INFINITY)
+    const J = x
+    ;(J.x = Number.NEGATIVE_INFINITY), (J.y = Number.NEGATIVE_INFINITY), (J.z = Number.NEGATIVE_INFINITY)
+    let $ = Number.POSITIVE_INFINITY,
+      ee = Number.NEGATIVE_INFINITY,
+      te = Number.POSITIVE_INFINITY,
+      re = Number.NEGATIVE_INFINITY
+    for (let e = 0; e < l; ++e) {
+      const n = R[e],
+        o = L[e],
+        i = n / w,
+        s = o / w,
+        d = a.CesiumMath.lerp(H, _, j[e] / w)
+      ;(b.longitude = a.CesiumMath.lerp(N, D, i)),
+        (b.latitude = a.CesiumMath.lerp(P, k, s)),
+        (b.height = d),
+        ($ = Math.min(b.longitude, $)),
+        (ee = Math.max(b.longitude, ee)),
+        (te = Math.min(b.latitude, te)),
+        (re = Math.max(b.latitude, re))
+      const h = F.cartographicToCartesian(b)
+      ;(z[e] = new t.Cartesian2(i, s)),
+        (q[e] = d),
+        (Q[e] = h),
+        T && (K[e] = (c.WebMercatorProjection.geodeticLatitudeToMercatorAngle(b.latitude) - O) * B),
+        p && (X[e] = F.geodeticSurfaceNormal(h)),
+        t.Matrix4.multiplyByPoint(Y, h, M),
+        r.Cartesian3.minimumByComponent(M, Z, Z),
+        r.Cartesian3.maximumByComponent(M, J, J)
     }
-    var ce,
-      he = A(a.westIndices, function (e, t) {
-        return U[e].y - U[t].y
+    const ne = v(d.westIndices, function (e, t) {
+        return z[e].y - z[t].y
       }),
-      ue = A(a.eastIndices, function (e, t) {
-        return U[t].y - U[e].y
+      oe = v(d.eastIndices, function (e, t) {
+        return z[t].y - z[e].y
       }),
-      Ie = A(a.southIndices, function (e, t) {
-        return U[t].x - U[e].x
+      ie = v(d.southIndices, function (e, t) {
+        return z[t].x - z[e].x
       }),
-      le = A(a.northIndices, function (e, t) {
-        return U[e].x - U[t].x
+      ae = v(d.northIndices, function (e, t) {
+        return z[e].x - z[t].x
       })
-    _ < 0 && (ce = new i.EllipsoidalOccluder(H).computeHorizonCullingPointPossiblyUnderEllipsoid(V, q, _))
-    var ge = _
-    ;(ge = Math.min(ge, x(a.westIndices, a.westSkirtHeight, z, U, W, H, O, X, Z))),
-      (ge = Math.min(ge, x(a.southIndices, a.southSkirtHeight, z, U, W, H, O, X, Z))),
-      (ge = Math.min(ge, x(a.eastIndices, a.eastSkirtHeight, z, U, W, H, O, X, Z))),
-      (ge = Math.min(ge, x(a.northIndices, a.northSkirtHeight, z, U, W, H, O, X, Z)))
-    for (
-      var me = new e.AxisAlignedBoundingBox(X, Z, V),
-        Te = new i.TerrainEncoding(V, me, ge, G, Y, j, E, C, v, p),
-        Ee = Te.stride,
-        ve = new Float32Array(g * Ee + T * Ee),
-        pe = 0,
-        fe = 0;
-      fe < g;
-      ++fe
-    ) {
-      if (j) {
-        var ye = 2 * fe
-        ;(M.x = m[ye]), (M.y = m[ye + 1])
-      }
-      pe = Te.encode(ve, pe, q[fe], U[fe], z[fe], M, Q[fe], K[fe])
+    let se
+    if (H < 0) {
+      se = new o.EllipsoidalOccluder(F).computeHorizonCullingPointPossiblyUnderEllipsoid(G, Q, H)
     }
-    var Ne = Math.max(0, 2 * (T - 4)),
-      we = a.indices.length + 3 * Ne,
-      Se = n.IndexDatatype.createTypedArray(g + T, we)
-    Se.set(a.indices, 0)
-    var Me = 1e-4,
-      xe = ($ - J) * Me,
-      be = (te - ee) * Me,
-      Ae = -xe,
-      Ce = xe,
-      We = be,
-      Pe = -be,
-      De = g * Ee
+    let ce = H
+    ;(ce = Math.min(ce, C(d.westIndices, d.westSkirtHeight, q, z, y, F, Y, Z, J))),
+      (ce = Math.min(ce, C(d.southIndices, d.southSkirtHeight, q, z, y, F, Y, Z, J))),
+      (ce = Math.min(ce, C(d.eastIndices, d.eastSkirtHeight, q, z, y, F, Y, Z, J))),
+      (ce = Math.min(ce, C(d.northIndices, d.northSkirtHeight, q, z, y, F, Y, Z, J)))
+    const de = new e.AxisAlignedBoundingBox(Z, J, G),
+      he = new o.TerrainEncoding(G, de, ce, _, V, U, T, p, f, E),
+      ue = he.stride,
+      le = new Float32Array(l * ue + g * ue)
+    let Ie = 0
+    for (let e = 0; e < l; ++e) {
+      if (U) {
+        const t = 2 * e
+        ;(A.x = I[t]), (A.y = I[t + 1])
+      }
+      Ie = he.encode(le, Ie, Q[e], z[e], q[e], A, K[e], X[e])
+    }
+    const ge = Math.max(0, 2 * (g - 4)),
+      me = d.indices.length + 3 * ge,
+      Te = i.IndexDatatype.createTypedArray(l + g, me)
+    Te.set(d.indices, 0)
+    const fe = 1e-4,
+      Ee = (ee - $) * fe,
+      pe = (re - te) * fe,
+      ye = -Ee,
+      Ne = Ee,
+      we = pe,
+      Me = -pe
+    let Se = l * ue
     return (
-      b(ve, De, he, Te, z, U, m, H, W, a.westSkirtHeight, h, u, Ae, 0),
-      b(ve, (De += a.westIndices.length * Ee), Ie, Te, z, U, m, H, W, a.southSkirtHeight, h, u, 0, Pe),
-      b(ve, (De += a.southIndices.length * Ee), ue, Te, z, U, m, H, W, a.eastSkirtHeight, h, u, Ce, 0),
-      b(ve, (De += a.eastIndices.length * Ee), le, Te, z, U, m, H, W, a.northSkirtHeight, h, u, 0, We),
-      l.addSkirtIndices(he, Ie, ue, le, g, Se, a.indices.length),
-      c.push(ve.buffer, Se.buffer),
+      W(le, Se, ne, he, q, z, I, F, y, d.westSkirtHeight, O, B, ye, 0),
+      (Se += d.westIndices.length * ue),
+      W(le, Se, ie, he, q, z, I, F, y, d.southSkirtHeight, O, B, 0, Me),
+      (Se += d.southIndices.length * ue),
+      W(le, Se, oe, he, q, z, I, F, y, d.eastSkirtHeight, O, B, Ne, 0),
+      (Se += d.eastIndices.length * ue),
+      W(le, Se, ae, he, q, z, I, F, y, d.northSkirtHeight, O, B, 0, we),
+      m.addSkirtIndices(ne, ie, oe, ae, l, Te, d.indices.length),
+      h.push(le.buffer, Te.buffer),
       {
-        vertices: ve.buffer,
-        indices: Se.buffer,
-        westIndicesSouthToNorth: he,
-        southIndicesEastToWest: Ie,
-        eastIndicesNorthToSouth: ue,
-        northIndicesWestToEast: le,
-        vertexStride: Ee,
-        center: V,
-        minimumHeight: _,
-        maximumHeight: G,
-        occludeePointInScaledSpace: ce,
-        encoding: Te,
-        indexCountWithoutSkirts: a.indices.length
+        vertices: le.buffer,
+        indices: Te.buffer,
+        westIndicesSouthToNorth: ne,
+        southIndicesEastToWest: ie,
+        eastIndicesNorthToSouth: oe,
+        northIndicesWestToEast: ae,
+        vertexStride: ue,
+        center: G,
+        minimumHeight: H,
+        maximumHeight: _,
+        occludeePointInScaledSpace: se,
+        encoding: he,
+        indexCountWithoutSkirts: d.indices.length
       }
     )
   })

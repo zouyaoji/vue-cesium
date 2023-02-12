@@ -1,19 +1,21 @@
 define([
-  './when-4bbc8319',
-  './FrustumGeometry-eb154eb0',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './Plane-318d6937',
-  './VertexFormat-71718faa'
-], function (e, t, r, n, a, o, u, c, m, i, s, b) {
+  './defaultValue-0a909f67',
+  './FrustumGeometry-c033d358',
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './Plane-1c5a21a3',
+  './VertexFormat-ab2e00e6'
+], function (e, t, r, a, n, u, o, c, m, f, i, d, s, b) {
   'use strict'
-  return function (r, n) {
-    return e.defined(n) && (r = t.FrustumGeometry.unpack(r, n)), t.FrustumGeometry.createGeometry(r)
+  return function (r, a) {
+    return e.defined(a) && (r = t.FrustumGeometry.unpack(r, a)), t.FrustumGeometry.createGeometry(r)
   }
 })

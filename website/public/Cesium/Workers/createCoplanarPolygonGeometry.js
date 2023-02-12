@@ -1,209 +1,228 @@
 define([
-  './arrayRemoveDuplicates-18786327',
-  './BoundingRectangle-218a9c7b',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './CoplanarPolygonGeometryLibrary-551fa870',
-  './when-4bbc8319',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './GeometryInstance-47b34185',
-  './GeometryPipeline-2356afec',
-  './IndexDatatype-b7d979a6',
-  './PolygonGeometryLibrary-dec9574a',
-  './PolygonPipeline-da7fc5ca',
-  './VertexFormat-71718faa',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './OrientedBoundingBox-4b932f63',
-  './EllipsoidTangentPlane-eecce7e8',
-  './AxisAlignedBoundingBox-07c6b7f2',
-  './IntersectionTests-96a04219',
-  './Plane-318d6937',
-  './AttributeCompression-af389d04',
-  './EncodedCartesian3-f286cedc',
-  './ArcType-98ec98bf',
-  './EllipsoidRhumbLine-30c47ff4'
-], function (e, t, a, n, r, o, i, l, s, p, c, y, m, u, d, g, v, b, h, f, x, C, P, A, w, F, G) {
+  './arrayRemoveDuplicates-e9673044',
+  './BoundingRectangle-826280cd',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './Matrix3-b6f074fa',
+  './ComponentDatatype-77274976',
+  './CoplanarPolygonGeometryLibrary-8933e3c1',
+  './defaultValue-0a909f67',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryInstance-9b27c40d',
+  './GeometryPipeline-b7404acc',
+  './IndexDatatype-2149f06c',
+  './Math-e97915da',
+  './PolygonGeometryLibrary-a917cdd7',
+  './PolygonPipeline-1ccef6d7',
+  './VertexFormat-ab2e00e6',
+  './combine-ca22a614',
+  './RuntimeError-06c93819',
+  './WebGLConstants-a8cc3e8c',
+  './OrientedBoundingBox-83fb8c71',
+  './EllipsoidTangentPlane-f7077c2e',
+  './AxisAlignedBoundingBox-e5bb9f92',
+  './IntersectionTests-1307e0a8',
+  './Plane-1c5a21a3',
+  './AttributeCompression-e18a879a',
+  './EncodedCartesian3-de837603',
+  './ArcType-ce2e50ab',
+  './EllipsoidRhumbLine-7f84cca0'
+], function (e, t, n, o, a, r, i, s, l, c, y, p, u, d, m, g, b, C, f, h, x, P, A, L, w, G, F, v, E) {
   'use strict'
-  var L = new n.Cartesian3(),
-    E = new t.BoundingRectangle(),
-    T = new n.Cartesian2(),
-    D = new n.Cartesian2(),
-    _ = new n.Cartesian3(),
-    V = new n.Cartesian3(),
-    k = new n.Cartesian3(),
-    R = new n.Cartesian3(),
-    I = new n.Cartesian3(),
-    M = new n.Cartesian3(),
-    B = new a.Quaternion(),
-    H = new n.Matrix3(),
-    O = new n.Matrix3(),
-    z = new n.Cartesian3()
-  function S(e, t, r, i, l, c, y, u) {
-    var g = e.positions,
-      v = d.PolygonPipeline.triangulate(e.positions2D, e.holes)
-    v.length < 3 && (v = [0, 1, 2])
-    var b = m.IndexDatatype.createTypedArray(g.length, v.length)
-    b.set(v)
-    var h = H
-    if (0 !== i) {
-      var f = a.Quaternion.fromAxisAngle(c, i, B)
-      if (((h = n.Matrix3.fromQuaternion(f, h)), t.tangent || t.bitangent)) {
-        f = a.Quaternion.fromAxisAngle(c, -i, B)
-        var x = n.Matrix3.fromQuaternion(f, O)
-        ;(y = n.Cartesian3.normalize(n.Matrix3.multiplyByVector(x, y, y), y)),
-          t.bitangent && (u = n.Cartesian3.normalize(n.Cartesian3.cross(c, y, u), u))
+  const _ = new a.Cartesian3(),
+    T = new t.BoundingRectangle(),
+    k = new o.Cartesian2(),
+    D = new o.Cartesian2(),
+    V = new a.Cartesian3(),
+    R = new a.Cartesian3(),
+    H = new a.Cartesian3(),
+    I = new a.Cartesian3(),
+    M = new a.Cartesian3(),
+    B = new a.Cartesian3(),
+    O = new n.Quaternion(),
+    z = new a.Matrix3(),
+    S = new a.Matrix3(),
+    N = new a.Cartesian3()
+  function Q(e, t, i, y, p, m, b, C, f) {
+    const h = e.positions
+    let x = g.PolygonPipeline.triangulate(e.positions2D, e.holes)
+    x.length < 3 && (x = [0, 1, 2])
+    const P = u.IndexDatatype.createTypedArray(h.length, x.length)
+    P.set(x)
+    let A = z
+    if (0 !== y) {
+      let e = n.Quaternion.fromAxisAngle(b, y, O)
+      if (((A = a.Matrix3.fromQuaternion(e, A)), t.tangent || t.bitangent)) {
+        e = n.Quaternion.fromAxisAngle(b, -y, O)
+        const o = a.Matrix3.fromQuaternion(e, S)
+        ;(C = a.Cartesian3.normalize(a.Matrix3.multiplyByVector(o, C, C), C)),
+          t.bitangent && (f = a.Cartesian3.normalize(a.Cartesian3.cross(b, C, f), f))
       }
-    } else h = n.Matrix3.clone(n.Matrix3.IDENTITY, h)
-    var C = D
-    t.st && ((C.x = r.x), (C.y = r.y))
-    for (
-      var P = g.length,
-        A = 3 * P,
-        w = new Float64Array(A),
-        F = t.normal ? new Float32Array(A) : void 0,
-        G = t.tangent ? new Float32Array(A) : void 0,
-        E = t.bitangent ? new Float32Array(A) : void 0,
-        _ = t.st ? new Float32Array(2 * P) : void 0,
-        V = 0,
-        k = 0,
-        R = 0,
-        I = 0,
-        M = 0,
-        z = 0;
-      z < P;
-      z++
-    ) {
-      var S = g[z]
-      if (((w[V++] = S.x), (w[V++] = S.y), (w[V++] = S.z), t.st)) {
-        var N = l(n.Matrix3.multiplyByVector(h, S, L), T)
-        n.Cartesian2.subtract(N, C, N)
-        var Q = o.CesiumMath.clamp(N.x / r.width, 0, 1),
-          j = o.CesiumMath.clamp(N.y / r.height, 0, 1)
-        ;(_[M++] = Q), (_[M++] = j)
-      }
-      t.normal && ((F[k++] = c.x), (F[k++] = c.y), (F[k++] = c.z)),
-        t.tangent && ((G[I++] = y.x), (G[I++] = y.y), (G[I++] = y.z)),
-        t.bitangent && ((E[R++] = u.x), (E[R++] = u.y), (E[R++] = u.z))
+    } else A = a.Matrix3.clone(a.Matrix3.IDENTITY, A)
+    const L = D
+    t.st && ((L.x = i.x), (L.y = i.y))
+    const w = h.length,
+      G = 3 * w,
+      F = new Float64Array(G),
+      v = t.normal ? new Float32Array(G) : void 0,
+      E = t.tangent ? new Float32Array(G) : void 0,
+      T = t.bitangent ? new Float32Array(G) : void 0,
+      V = t.st ? new Float32Array(2 * w) : void 0
+    let R = 0,
+      H = 0,
+      I = 0,
+      M = 0,
+      B = 0
+    for (let e = 0; e < w; e++) {
+      const n = h[e]
+      if (((F[R++] = n.x), (F[R++] = n.y), (F[R++] = n.z), t.st))
+        if (s.defined(p) && p.positions.length === w) (V[B++] = p.positions[e].x), (V[B++] = p.positions[e].y)
+        else {
+          const e = m(a.Matrix3.multiplyByVector(A, n, _), k)
+          o.Cartesian2.subtract(e, L, e)
+          const t = d.CesiumMath.clamp(e.x / i.width, 0, 1),
+            r = d.CesiumMath.clamp(e.y / i.height, 0, 1)
+          ;(V[B++] = t), (V[B++] = r)
+        }
+      t.normal && ((v[H++] = b.x), (v[H++] = b.y), (v[H++] = b.z)),
+        t.tangent && ((E[M++] = C.x), (E[M++] = C.y), (E[M++] = C.z)),
+        t.bitangent && ((T[I++] = f.x), (T[I++] = f.y), (T[I++] = f.z))
     }
-    var U = new p.GeometryAttributes()
+    const N = new c.GeometryAttributes()
     return (
-      t.position && (U.position = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: w })),
-      t.normal && (U.normal = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: F })),
-      t.tangent && (U.tangent = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: G })),
-      t.bitangent && (U.bitangent = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: E })),
-      t.st && (U.st = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: _ })),
-      new s.Geometry({ attributes: U, indices: b, primitiveType: s.PrimitiveType.TRIANGLES })
+      t.position && (N.position = new l.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: F })),
+      t.normal && (N.normal = new l.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: v })),
+      t.tangent && (N.tangent = new l.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: E })),
+      t.bitangent && (N.bitangent = new l.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: T })),
+      t.st && (N.st = new l.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: V })),
+      new l.Geometry({ attributes: N, indices: P, primitiveType: l.PrimitiveType.TRIANGLES })
     )
   }
-  function N(e) {
-    var t = (e = l.defaultValue(e, l.defaultValue.EMPTY_OBJECT)).polygonHierarchy,
-      a = l.defaultValue(e.vertexFormat, g.VertexFormat.DEFAULT)
-    ;(this._vertexFormat = g.VertexFormat.clone(a)),
+  function j(e) {
+    const t = (e = s.defaultValue(e, s.defaultValue.EMPTY_OBJECT)).polygonHierarchy,
+      n = e.textureCoordinates,
+      r = s.defaultValue(e.vertexFormat, b.VertexFormat.DEFAULT)
+    ;(this._vertexFormat = b.VertexFormat.clone(r)),
       (this._polygonHierarchy = t),
-      (this._stRotation = l.defaultValue(e.stRotation, 0)),
-      (this._ellipsoid = n.Ellipsoid.clone(l.defaultValue(e.ellipsoid, n.Ellipsoid.WGS84))),
+      (this._stRotation = s.defaultValue(e.stRotation, 0)),
+      (this._ellipsoid = a.Ellipsoid.clone(s.defaultValue(e.ellipsoid, a.Ellipsoid.WGS84))),
       (this._workerName = 'createCoplanarPolygonGeometry'),
-      (this.packedLength = u.PolygonGeometryLibrary.computeHierarchyPackedLength(t) + g.VertexFormat.packedLength + n.Ellipsoid.packedLength + 2)
+      (this._textureCoordinates = n),
+      (this.packedLength =
+        m.PolygonGeometryLibrary.computeHierarchyPackedLength(t, a.Cartesian3) +
+        b.VertexFormat.packedLength +
+        a.Ellipsoid.packedLength +
+        (s.defined(n) ? m.PolygonGeometryLibrary.computeHierarchyPackedLength(n, o.Cartesian2) : 1) +
+        2)
   }
-  ;(N.fromPositions = function (e) {
-    return new N({
-      polygonHierarchy: { positions: (e = l.defaultValue(e, l.defaultValue.EMPTY_OBJECT)).positions },
+  ;(j.fromPositions = function (e) {
+    return new j({
+      polygonHierarchy: { positions: (e = s.defaultValue(e, s.defaultValue.EMPTY_OBJECT)).positions },
       vertexFormat: e.vertexFormat,
       stRotation: e.stRotation,
-      ellipsoid: e.ellipsoid
+      ellipsoid: e.ellipsoid,
+      textureCoordinates: e.textureCoordinates
     })
   }),
-    (N.pack = function (e, t, a) {
+    (j.pack = function (e, t, n) {
       return (
-        (a = l.defaultValue(a, 0)),
-        (a = u.PolygonGeometryLibrary.packPolygonHierarchy(e._polygonHierarchy, t, a)),
-        n.Ellipsoid.pack(e._ellipsoid, t, a),
-        (a += n.Ellipsoid.packedLength),
-        g.VertexFormat.pack(e._vertexFormat, t, a),
-        (a += g.VertexFormat.packedLength),
-        (t[a++] = e._stRotation),
-        (t[a] = e.packedLength),
+        (n = s.defaultValue(n, 0)),
+        (n = m.PolygonGeometryLibrary.packPolygonHierarchy(e._polygonHierarchy, t, n, a.Cartesian3)),
+        a.Ellipsoid.pack(e._ellipsoid, t, n),
+        (n += a.Ellipsoid.packedLength),
+        b.VertexFormat.pack(e._vertexFormat, t, n),
+        (n += b.VertexFormat.packedLength),
+        (t[n++] = e._stRotation),
+        s.defined(e._textureCoordinates)
+          ? (n = m.PolygonGeometryLibrary.packPolygonHierarchy(e._textureCoordinates, t, n, o.Cartesian2))
+          : (t[n++] = -1),
+        (t[n++] = e.packedLength),
         t
       )
     })
-  var Q = n.Ellipsoid.clone(n.Ellipsoid.UNIT_SPHERE),
-    j = new g.VertexFormat(),
-    U = { polygonHierarchy: {} }
+  const U = a.Ellipsoid.clone(a.Ellipsoid.UNIT_SPHERE),
+    Y = new b.VertexFormat(),
+    q = { polygonHierarchy: {} }
   return (
-    (N.unpack = function (e, t, a) {
-      t = l.defaultValue(t, 0)
-      var r = u.PolygonGeometryLibrary.unpackPolygonHierarchy(e, t)
+    (j.unpack = function (e, t, n) {
+      t = s.defaultValue(t, 0)
+      const r = m.PolygonGeometryLibrary.unpackPolygonHierarchy(e, t, a.Cartesian3)
       ;(t = r.startingIndex), delete r.startingIndex
-      var o = n.Ellipsoid.unpack(e, t, Q)
-      t += n.Ellipsoid.packedLength
-      var i = g.VertexFormat.unpack(e, t, j)
-      t += g.VertexFormat.packedLength
-      var s = e[t++],
-        p = e[t]
+      const i = a.Ellipsoid.unpack(e, t, U)
+      t += a.Ellipsoid.packedLength
+      const l = b.VertexFormat.unpack(e, t, Y)
+      t += b.VertexFormat.packedLength
+      const c = e[t++],
+        y = -1 === e[t] ? void 0 : m.PolygonGeometryLibrary.unpackPolygonHierarchy(e, t, o.Cartesian2)
+      s.defined(y) ? ((t = y.startingIndex), delete y.startingIndex) : t++
+      const p = e[t++]
       return (
-        l.defined(a) || (a = new N(U)),
-        (a._polygonHierarchy = r),
-        (a._ellipsoid = n.Ellipsoid.clone(o, a._ellipsoid)),
-        (a._vertexFormat = g.VertexFormat.clone(i, a._vertexFormat)),
-        (a._stRotation = s),
-        (a.packedLength = p),
-        a
+        s.defined(n) || (n = new j(q)),
+        (n._polygonHierarchy = r),
+        (n._ellipsoid = a.Ellipsoid.clone(i, n._ellipsoid)),
+        (n._vertexFormat = b.VertexFormat.clone(l, n._vertexFormat)),
+        (n._stRotation = c),
+        (n._textureCoordinates = y),
+        (n.packedLength = p),
+        n
       )
     }),
-    (N.createGeometry = function (t) {
-      var r = t._vertexFormat,
-        l = t._polygonHierarchy,
-        p = t._stRotation,
-        d = l.positions
-      if (!((d = e.arrayRemoveDuplicates(d, n.Cartesian3.equalsEpsilon, !0)).length < 3)) {
-        var g = _,
-          v = V,
-          b = k,
-          h = I,
-          f = M
-        if (i.CoplanarPolygonGeometryLibrary.computeProjectTo2DArguments(d, R, h, f)) {
-          if (
-            ((g = n.Cartesian3.cross(h, f, g)),
-            (g = n.Cartesian3.normalize(g, g)),
-            !n.Cartesian3.equalsEpsilon(R, n.Cartesian3.ZERO, o.CesiumMath.EPSILON6))
-          ) {
-            var x = t._ellipsoid.geodeticSurfaceNormal(R, z)
-            n.Cartesian3.dot(g, x) < 0 && ((g = n.Cartesian3.negate(g, g)), (h = n.Cartesian3.negate(h, h)))
-          }
-          var C = i.CoplanarPolygonGeometryLibrary.createProjectPointsTo2DFunction(R, h, f),
-            P = i.CoplanarPolygonGeometryLibrary.createProjectPointTo2DFunction(R, h, f)
-          r.tangent && (v = n.Cartesian3.clone(h, v)), r.bitangent && (b = n.Cartesian3.clone(f, b))
-          var A = u.PolygonGeometryLibrary.polygonsFromHierarchy(l, C, !1),
-            w = A.hierarchy,
-            F = A.polygons
-          if (0 !== w.length) {
-            d = w[0].outerRing
-            for (
-              var G = a.BoundingSphere.fromPoints(d), L = u.PolygonGeometryLibrary.computeBoundingRectangle(g, P, d, p, E), T = [], D = 0;
-              D < F.length;
-              D++
-            ) {
-              var B = new c.GeometryInstance({ geometry: S(F[D], r, L, p, P, g, v, b) })
-              T.push(B)
-            }
-            var H = y.GeometryPipeline.combineInstances(T)[0]
-            ;(H.attributes.position.values = new Float64Array(H.attributes.position.values)),
-              (H.indices = m.IndexDatatype.createTypedArray(H.attributes.position.values.length / 3, H.indices))
-            var O = H.attributes
-            return (
-              r.position || delete O.position,
-              new s.Geometry({ attributes: O, indices: H.indices, primitiveType: H.primitiveType, boundingSphere: G })
-            )
-          }
-        }
+    (j.createGeometry = function (t) {
+      const o = t._vertexFormat,
+        r = t._polygonHierarchy,
+        c = t._stRotation,
+        g = t._textureCoordinates,
+        b = s.defined(g)
+      let C = r.positions
+      if (((C = e.arrayRemoveDuplicates(C, a.Cartesian3.equalsEpsilon, !0)), C.length < 3)) return
+      let f = V,
+        h = R,
+        x = H,
+        P = M
+      const A = B
+      if (!i.CoplanarPolygonGeometryLibrary.computeProjectTo2DArguments(C, I, P, A)) return
+      if (
+        ((f = a.Cartesian3.cross(P, A, f)),
+        (f = a.Cartesian3.normalize(f, f)),
+        !a.Cartesian3.equalsEpsilon(I, a.Cartesian3.ZERO, d.CesiumMath.EPSILON6))
+      ) {
+        const e = t._ellipsoid.geodeticSurfaceNormal(I, N)
+        a.Cartesian3.dot(f, e) < 0 && ((f = a.Cartesian3.negate(f, f)), (P = a.Cartesian3.negate(P, P)))
       }
+      const L = i.CoplanarPolygonGeometryLibrary.createProjectPointsTo2DFunction(I, P, A),
+        w = i.CoplanarPolygonGeometryLibrary.createProjectPointTo2DFunction(I, P, A)
+      o.tangent && (h = a.Cartesian3.clone(P, h)), o.bitangent && (x = a.Cartesian3.clone(A, x))
+      const G = m.PolygonGeometryLibrary.polygonsFromHierarchy(r, b, L, !1),
+        F = G.hierarchy,
+        v = G.polygons,
+        E = b
+          ? m.PolygonGeometryLibrary.polygonsFromHierarchy(
+              g,
+              !0,
+              function (e) {
+                return e
+              },
+              !1
+            ).polygons
+          : void 0
+      if (0 === F.length) return
+      C = F[0].outerRing
+      const _ = n.BoundingSphere.fromPoints(C),
+        k = m.PolygonGeometryLibrary.computeBoundingRectangle(f, w, C, c, T),
+        D = []
+      for (let e = 0; e < v.length; e++) {
+        const t = new y.GeometryInstance({ geometry: Q(v[e], o, k, c, b ? E[e] : void 0, w, f, h, x) })
+        D.push(t)
+      }
+      const O = p.GeometryPipeline.combineInstances(D)[0]
+      ;(O.attributes.position.values = new Float64Array(O.attributes.position.values)),
+        (O.indices = u.IndexDatatype.createTypedArray(O.attributes.position.values.length / 3, O.indices))
+      const z = O.attributes
+      return o.position || delete z.position, new l.Geometry({ attributes: z, indices: O.indices, primitiveType: O.primitiveType, boundingSphere: _ })
     }),
     function (e, t) {
-      return l.defined(t) && (e = N.unpack(e, t)), N.createGeometry(e)
+      return s.defined(t) && (e = j.unpack(e, t)), j.createGeometry(e)
     }
   )
 })

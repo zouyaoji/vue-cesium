@@ -1,19 +1,21 @@
 define([
-  './when-4bbc8319',
-  './EllipsoidOutlineGeometry-44f0c12f',
-  './GeometryOffsetAttribute-1772960d',
-  './RuntimeError-346a3079',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6'
-], function (e, t, r, n, i, o, a, c, u, d, f, m) {
+  './defaultValue-0a909f67',
+  './EllipsoidOutlineGeometry-87fcdae3',
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-2149f06c'
+], function (e, t, r, a, i, n, o, f, u, c, d, l, m, s) {
   'use strict'
-  return function (r, n) {
-    return e.defined(r.buffer) && (r = t.EllipsoidOutlineGeometry.unpack(r, n)), t.EllipsoidOutlineGeometry.createGeometry(r)
+  return function (r, a) {
+    return e.defined(r.buffer) && (r = t.EllipsoidOutlineGeometry.unpack(r, a)), t.EllipsoidOutlineGeometry.createGeometry(r)
   }
 })

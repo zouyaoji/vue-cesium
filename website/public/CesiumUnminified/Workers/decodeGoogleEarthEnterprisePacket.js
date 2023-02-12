@@ -1,31 +1,13 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
-define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWorker'], function (RuntimeError, when, createTaskProcessorWorker) {
+define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProcessorWorker'], function (
+  Check,
+  RuntimeError,
+  defaultValue,
+  createTaskProcessorWorker
+) {
   'use strict'
 
-  var compressedMagic$1 = 0x7468dead
-  var compressedMagicSwap$1 = 0xadde6874
+  const compressedMagic$1 = 0x7468dead
+  const compressedMagicSwap$1 = 0xadde6874
 
   /**
    * Decodes data that is received from the Google Earth Enterprise server.
@@ -41,30 +23,30 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     }
 
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('key', key)
-    RuntimeError.Check.typeOf.object('data', data)
+    Check.Check.typeOf.object('key', key)
+    Check.Check.typeOf.object('data', data)
     //>>includeEnd('debug');
 
-    var keyLength = key.byteLength
+    const keyLength = key.byteLength
     if (keyLength === 0 || keyLength % 4 !== 0) {
       throw new RuntimeError.RuntimeError('The length of key must be greater than 0 and a multiple of 4.')
     }
 
-    var dataView = new DataView(data)
-    var magic = dataView.getUint32(0, true)
+    const dataView = new DataView(data)
+    const magic = dataView.getUint32(0, true)
     if (magic === compressedMagic$1 || magic === compressedMagicSwap$1) {
       // Occasionally packets don't come back encoded, so just return
       return data
     }
 
-    var keyView = new DataView(key)
+    const keyView = new DataView(key)
 
-    var dp = 0
-    var dpend = data.byteLength
-    var dpend64 = dpend - (dpend % 8)
-    var kpend = keyLength
-    var kp
-    var off = 8
+    let dp = 0
+    const dpend = data.byteLength
+    const dpend64 = dpend - (dpend % 8)
+    const kpend = keyLength
+    let kp
+    let off = 8
 
     // This algorithm is intentionally asymmetric to make it more difficult to
     // guess. Security through obscurity. :-(
@@ -112,11 +94,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   }
 
   // Bitmask for checking tile properties
-  var childrenBitmasks = [0x01, 0x02, 0x04, 0x08]
-  var anyChildBitmask = 0x0f
-  var cacheFlagBitmask = 0x10 // True if there is a child subtree
-  var imageBitmask = 0x40
-  var terrainBitmask = 0x80
+  const childrenBitmasks = [0x01, 0x02, 0x04, 0x08]
+  const anyChildBitmask = 0x0f
+  const cacheFlagBitmask = 0x10 // True if there is a child subtree
+  const imageBitmask = 0x40
+  const terrainBitmask = 0x80
 
   /**
    * Contains information about each tile from a Google Earth Enterprise server
@@ -149,7 +131,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    * @returns {GoogleEarthEnterpriseTileInformation} The modified result parameter or a new GoogleEarthEnterpriseTileInformation instance if none was provided.
    */
   GoogleEarthEnterpriseTileInformation.clone = function (info, result) {
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       result = new GoogleEarthEnterpriseTileInformation(
         info._bits,
         info.cnodeVersion,
@@ -237,113 +219,9 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return this._bits & anyChildBitmask
   }
 
-  /* This file is automatically rebuilt by the Cesium build process. */
+  var inflate$3 = {}
 
-  var common = when.createCommonjsModule(function (module, exports) {
-    var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined'
-
-    function _has(obj, key) {
-      return Object.prototype.hasOwnProperty.call(obj, key)
-    }
-
-    exports.assign = function (obj /*from1, from2, from3, ...*/) {
-      var sources = Array.prototype.slice.call(arguments, 1)
-      while (sources.length) {
-        var source = sources.shift()
-        if (!source) {
-          continue
-        }
-
-        if (typeof source !== 'object') {
-          throw new TypeError(source + 'must be non-object')
-        }
-
-        for (var p in source) {
-          if (_has(source, p)) {
-            obj[p] = source[p]
-          }
-        }
-      }
-
-      return obj
-    }
-
-    // reduce buffer size, avoiding mem copy
-    exports.shrinkBuf = function (buf, size) {
-      if (buf.length === size) {
-        return buf
-      }
-      if (buf.subarray) {
-        return buf.subarray(0, size)
-      }
-      buf.length = size
-      return buf
-    }
-
-    var fnTyped = {
-      arraySet: function (dest, src, src_offs, len, dest_offs) {
-        if (src.subarray && dest.subarray) {
-          dest.set(src.subarray(src_offs, src_offs + len), dest_offs)
-          return
-        }
-        // Fallback to ordinary array
-        for (var i = 0; i < len; i++) {
-          dest[dest_offs + i] = src[src_offs + i]
-        }
-      },
-      // Join array of chunks to single array.
-      flattenChunks: function (chunks) {
-        var i, l, len, pos, chunk, result
-
-        // calculate data length
-        len = 0
-        for (i = 0, l = chunks.length; i < l; i++) {
-          len += chunks[i].length
-        }
-
-        // join chunks
-        result = new Uint8Array(len)
-        pos = 0
-        for (i = 0, l = chunks.length; i < l; i++) {
-          chunk = chunks[i]
-          result.set(chunk, pos)
-          pos += chunk.length
-        }
-
-        return result
-      }
-    }
-
-    var fnUntyped = {
-      arraySet: function (dest, src, src_offs, len, dest_offs) {
-        for (var i = 0; i < len; i++) {
-          dest[dest_offs + i] = src[src_offs + i]
-        }
-      },
-      // Join array of chunks to single array.
-      flattenChunks: function (chunks) {
-        return [].concat.apply([], chunks)
-      }
-    }
-
-    // Enable/Disable typed arrays use, for testing
-    //
-    exports.setTyped = function (on) {
-      if (on) {
-        exports.Buf8 = Uint8Array
-        exports.Buf16 = Uint16Array
-        exports.Buf32 = Int32Array
-        exports.assign(exports, fnTyped)
-      } else {
-        exports.Buf8 = Array
-        exports.Buf16 = Array
-        exports.Buf32 = Array
-        exports.assign(exports, fnUntyped)
-      }
-    }
-
-    exports.setTyped(TYPED_OK)
-  })
+  var inflate$2 = {}
 
   // Note: adler32 takes 12% for level 0 and 2% for level 6.
   // It isn't worth it to make additional optimizations as in original.
@@ -368,8 +246,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //   misrepresented as being the original software.
   // 3. This notice may not be removed or altered from any source distribution.
 
-  function adler32(adler, buf, len, pos) {
-    var s1 = (adler & 0xffff) | 0,
+  const adler32$1 = (adler, buf, len, pos) => {
+    let s1 = (adler & 0xffff) | 0,
       s2 = ((adler >>> 16) & 0xffff) | 0,
       n = 0
 
@@ -392,7 +270,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return s1 | (s2 << 16) | 0
   }
 
-  var adler32_1 = adler32
+  var adler32_1 = adler32$1
 
   // Note: we can't get significant speed boost here.
   // So write code to minimize size - no pregenerated tables
@@ -418,8 +296,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   // 3. This notice may not be removed or altered from any source distribution.
 
   // Use ordinary array, since untyped makes no boost here
-  function makeTable() {
-    var c,
+  const makeTable = () => {
+    let c,
       table = []
 
     for (var n = 0; n < 256; n++) {
@@ -434,22 +312,22 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   }
 
   // Create table on load. Just 255 signed longs. Not a problem.
-  var crcTable = makeTable()
+  const crcTable = new Uint32Array(makeTable())
 
-  function crc32(crc, buf, len, pos) {
-    var t = crcTable,
-      end = pos + len
+  const crc32$1 = (crc, buf, len, pos) => {
+    const t = crcTable
+    const end = pos + len
 
     crc ^= -1
 
-    for (var i = pos; i < end; i++) {
+    for (let i = pos; i < end; i++) {
       crc = (crc >>> 8) ^ t[(crc ^ buf[i]) & 0xff]
     }
 
     return crc ^ -1 // >>> 0;
   }
 
-  var crc32_1 = crc32
+  var crc32_1 = crc32$1
 
   // (C) 1995-2013 Jean-loup Gailly and Mark Adler
   // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -471,8 +349,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   // 3. This notice may not be removed or altered from any source distribution.
 
   // See state defs from inflate.js
-  var BAD$1 = 30 /* got a data error -- remain here until reset */
-  var TYPE$1 = 12 /* i: waiting for type bits, including last-flag bit */
+  const BAD$1 = 16209 /* got a data error -- remain here until reset */
+  const TYPE$1 = 16191 /* i: waiting for type bits, including last-flag bit */
 
   /*
      Decode literal, length, and distance codes and write out the resulting
@@ -510,38 +388,37 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
         output space.
    */
   var inffast = function inflate_fast(strm, start) {
-    var state
-    var _in /* local strm.input */
-    var last /* have enough input while in < last */
-    var _out /* local strm.output */
-    var beg /* inflate()'s initial strm.output */
-    var end /* while out < end, enough space available */
+    let _in /* local strm.input */
+    let last /* have enough input while in < last */
+    let _out /* local strm.output */
+    let beg /* inflate()'s initial strm.output */
+    let end /* while out < end, enough space available */
     //#ifdef INFLATE_STRICT
-    var dmax /* maximum distance from zlib header */
+    let dmax /* maximum distance from zlib header */
     //#endif
-    var wsize /* window size or zero if not using window */
-    var whave /* valid bytes in the window */
-    var wnext /* window write index */
+    let wsize /* window size or zero if not using window */
+    let whave /* valid bytes in the window */
+    let wnext /* window write index */
     // Use `s_window` instead `window`, avoid conflict with instrumentation tools
-    var s_window /* allocated sliding window, if wsize != 0 */
-    var hold /* local strm.hold */
-    var bits /* local strm.bits */
-    var lcode /* local strm.lencode */
-    var dcode /* local strm.distcode */
-    var lmask /* mask for first level of length codes */
-    var dmask /* mask for first level of distance codes */
-    var here /* retrieved table entry */
-    var op /* code bits, operation, extra bits, or */
+    let s_window /* allocated sliding window, if wsize != 0 */
+    let hold /* local strm.hold */
+    let bits /* local strm.bits */
+    let lcode /* local strm.lencode */
+    let dcode /* local strm.distcode */
+    let lmask /* mask for first level of length codes */
+    let dmask /* mask for first level of distance codes */
+    let here /* retrieved table entry */
+    let op /* code bits, operation, extra bits, or */
     /*  window position, window bytes to copy */
-    var len /* match length, unused bytes */
-    var dist /* match distance */
-    var from /* where to copy match from */
-    var from_source
+    let len /* match length, unused bytes */
+    let dist /* match distance */
+    let from /* where to copy match from */
+    let from_source
 
-    var input, output // JS specific, because we have no pointers
+    let input, output // JS specific, because we have no pointers
 
     /* copy state to local variables */
-    state = strm.state
+    const state = strm.state
     //here = state.here;
     _in = strm.next_in
     input = strm.input
@@ -817,64 +694,62 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //   misrepresented as being the original software.
   // 3. This notice may not be removed or altered from any source distribution.
 
-  var MAXBITS = 15
-  var ENOUGH_LENS$1 = 852
-  var ENOUGH_DISTS$1 = 592
-  //var ENOUGH = (ENOUGH_LENS+ENOUGH_DISTS);
+  const MAXBITS = 15
+  const ENOUGH_LENS$1 = 852
+  const ENOUGH_DISTS$1 = 592
+  //const ENOUGH = (ENOUGH_LENS+ENOUGH_DISTS);
 
-  var CODES$1 = 0
-  var LENS$1 = 1
-  var DISTS$1 = 2
+  const CODES$1 = 0
+  const LENS$1 = 1
+  const DISTS$1 = 2
 
-  var lbase = [
+  const lbase = new Uint16Array([
     /* Length codes 257..285 base */ 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227,
     258, 0, 0
-  ]
+  ])
 
-  var lext = [
+  const lext = new Uint8Array([
     /* Length codes 257..285 extra */ 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21,
     16, 72, 78
-  ]
+  ])
 
-  var dbase = [
+  const dbase = new Uint16Array([
     /* Distance codes 0..29 base */ 1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
     8193, 12289, 16385, 24577, 0, 0
-  ]
+  ])
 
-  var dext = [
+  const dext = new Uint8Array([
     /* Distance codes 0..29 extra */ 16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28,
     29, 29, 64, 64
-  ]
+  ])
 
-  var inftrees = function inflate_table(type, lens, lens_index, codes, table, table_index, work, opts) {
-    var bits = opts.bits
+  const inflate_table$1 = (type, lens, lens_index, codes, table, table_index, work, opts) => {
+    const bits = opts.bits
     //here = opts.here; /* table entry for duplication */
 
-    var len = 0 /* a code's length in bits */
-    var sym = 0 /* index of code symbols */
-    var min = 0,
+    let len = 0 /* a code's length in bits */
+    let sym = 0 /* index of code symbols */
+    let min = 0,
       max = 0 /* minimum and maximum code lengths */
-    var root = 0 /* number of index bits for root table */
-    var curr = 0 /* number of index bits for current table */
-    var drop = 0 /* code bits to drop for sub-table */
-    var left = 0 /* number of prefix codes available */
-    var used = 0 /* code entries in table used */
-    var huff = 0 /* Huffman code */
-    var incr /* for incrementing code, index */
-    var fill /* index for replicating entries */
-    var low /* low bits for current root entry */
-    var mask /* mask for low root bits */
-    var next /* next available space in table */
-    var base = null /* base value table to use */
-    var base_index = 0
-    //  var shoextra;    /* extra bits table to use */
-    var end /* use base and extra for symbol > end */
-    var count = new common.Buf16(MAXBITS + 1) //[MAXBITS+1];    /* number of codes of each length */
-    var offs = new common.Buf16(MAXBITS + 1) //[MAXBITS+1];     /* offsets in table for each length */
-    var extra = null
-    var extra_index = 0
+    let root = 0 /* number of index bits for root table */
+    let curr = 0 /* number of index bits for current table */
+    let drop = 0 /* code bits to drop for sub-table */
+    let left = 0 /* number of prefix codes available */
+    let used = 0 /* code entries in table used */
+    let huff = 0 /* Huffman code */
+    let incr /* for incrementing code, index */
+    let fill /* index for replicating entries */
+    let low /* low bits for current root entry */
+    let mask /* mask for low root bits */
+    let next /* next available space in table */
+    let base = null /* base value table to use */
+    //  let shoextra;    /* extra bits table to use */
+    let match /* use base and extra for symbol >= match */
+    const count = new Uint16Array(MAXBITS + 1) //[MAXBITS+1];    /* number of codes of each length */
+    const offs = new Uint16Array(MAXBITS + 1) //[MAXBITS+1];     /* offsets in table for each length */
+    let extra = null
 
-    var here_bits, here_op, here_val
+    let here_bits, here_op, here_val
 
     /*
      Process a set of code lengths to create a canonical Huffman code.  The
@@ -1011,18 +886,16 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     // to avoid deopts in old v8
     if (type === CODES$1) {
       base = extra = work /* dummy value--not used */
-      end = 19
+      match = 20
     } else if (type === LENS$1) {
       base = lbase
-      base_index -= 257
       extra = lext
-      extra_index -= 257
-      end = 256
+      match = 257
     } else {
       /* DISTS */
       base = dbase
       extra = dext
-      end = -1
+      match = 0
     }
 
     /* initialize opts for loop */
@@ -1045,12 +918,12 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     for (;;) {
       /* create table entry */
       here_bits = len - drop
-      if (work[sym] < end) {
+      if (work[sym] + 1 < match) {
         here_op = 0
         here_val = work[sym]
-      } else if (work[sym] > end) {
-        here_op = extra[extra_index + work[sym]]
-        here_val = base[base_index + work[sym]]
+      } else if (work[sym] >= match) {
+        here_op = extra[work[sym] - match]
+        here_val = base[work[sym] - match]
       } else {
         here_op = 32 + 64 /* end of block */
         here_val = 0
@@ -1139,6 +1012,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return 0
   }
 
+  var inftrees = inflate_table$1
+
   // (C) 1995-2013 Jean-loup Gailly and Mark Adler
   // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
   //
@@ -1158,94 +1033,156 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //   misrepresented as being the original software.
   // 3. This notice may not be removed or altered from any source distribution.
 
-  var CODES = 0
-  var LENS = 1
-  var DISTS = 2
+  var constants = {
+    /* Allowed flush values; see deflate() and inflate() below for details */
+    Z_NO_FLUSH: 0,
+    Z_PARTIAL_FLUSH: 1,
+    Z_SYNC_FLUSH: 2,
+    Z_FULL_FLUSH: 3,
+    Z_FINISH: 4,
+    Z_BLOCK: 5,
+    Z_TREES: 6,
+
+    /* Return codes for the compression/decompression functions. Negative values
+     * are errors, positive values are used for special but normal events.
+     */
+    Z_OK: 0,
+    Z_STREAM_END: 1,
+    Z_NEED_DICT: 2,
+    Z_ERRNO: -1,
+    Z_STREAM_ERROR: -2,
+    Z_DATA_ERROR: -3,
+    Z_MEM_ERROR: -4,
+    Z_BUF_ERROR: -5,
+    //Z_VERSION_ERROR: -6,
+
+    /* compression levels */
+    Z_NO_COMPRESSION: 0,
+    Z_BEST_SPEED: 1,
+    Z_BEST_COMPRESSION: 9,
+    Z_DEFAULT_COMPRESSION: -1,
+
+    Z_FILTERED: 1,
+    Z_HUFFMAN_ONLY: 2,
+    Z_RLE: 3,
+    Z_FIXED: 4,
+    Z_DEFAULT_STRATEGY: 0,
+
+    /* Possible values of the data_type field (though see inflate()) */
+    Z_BINARY: 0,
+    Z_TEXT: 1,
+    //Z_ASCII:                1, // = Z_TEXT (deprecated)
+    Z_UNKNOWN: 2,
+
+    /* The deflate compression method */
+    Z_DEFLATED: 8
+    //Z_NULL:                 null // Use -1 or null inline, depending on var type
+  }
+
+  // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+  // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+  //
+  // This software is provided 'as-is', without any express or implied
+  // warranty. In no event will the authors be held liable for any damages
+  // arising from the use of this software.
+  //
+  // Permission is granted to anyone to use this software for any purpose,
+  // including commercial applications, and to alter it and redistribute it
+  // freely, subject to the following restrictions:
+  //
+  // 1. The origin of this software must not be misrepresented; you must not
+  //   claim that you wrote the original software. If you use this software
+  //   in a product, an acknowledgment in the product documentation would be
+  //   appreciated but is not required.
+  // 2. Altered source versions must be plainly marked as such, and must not be
+  //   misrepresented as being the original software.
+  // 3. This notice may not be removed or altered from any source distribution.
+
+  const adler32 = adler32_1
+  const crc32 = crc32_1
+  const inflate_fast = inffast
+  const inflate_table = inftrees
+
+  const CODES = 0
+  const LENS = 1
+  const DISTS = 2
 
   /* Public constants ==========================================================*/
   /* ===========================================================================*/
 
-  /* Allowed flush values; see deflate() and inflate() below for details */
-  //var Z_NO_FLUSH      = 0;
-  //var Z_PARTIAL_FLUSH = 1;
-  //var Z_SYNC_FLUSH    = 2;
-  //var Z_FULL_FLUSH    = 3;
-  var Z_FINISH = 4
-  var Z_BLOCK = 5
-  var Z_TREES = 6
-
-  /* Return codes for the compression/decompression functions. Negative values
-   * are errors, positive values are used for special but normal events.
-   */
-  var Z_OK = 0
-  var Z_STREAM_END = 1
-  var Z_NEED_DICT = 2
-  //var Z_ERRNO         = -1;
-  var Z_STREAM_ERROR = -2
-  var Z_DATA_ERROR = -3
-  var Z_MEM_ERROR = -4
-  var Z_BUF_ERROR = -5
-  //var Z_VERSION_ERROR = -6;
-
-  /* The deflate compression method */
-  var Z_DEFLATED = 8
+  const {
+    Z_FINISH: Z_FINISH$1,
+    Z_BLOCK,
+    Z_TREES,
+    Z_OK: Z_OK$1,
+    Z_STREAM_END: Z_STREAM_END$1,
+    Z_NEED_DICT: Z_NEED_DICT$1,
+    Z_STREAM_ERROR: Z_STREAM_ERROR$1,
+    Z_DATA_ERROR: Z_DATA_ERROR$1,
+    Z_MEM_ERROR: Z_MEM_ERROR$1,
+    Z_BUF_ERROR,
+    Z_DEFLATED
+  } = constants
 
   /* STATES ====================================================================*/
   /* ===========================================================================*/
 
-  var HEAD = 1 /* i: waiting for magic header */
-  var FLAGS = 2 /* i: waiting for method and flags (gzip) */
-  var TIME = 3 /* i: waiting for modification time (gzip) */
-  var OS = 4 /* i: waiting for extra flags and operating system (gzip) */
-  var EXLEN = 5 /* i: waiting for extra length (gzip) */
-  var EXTRA = 6 /* i: waiting for extra bytes (gzip) */
-  var NAME = 7 /* i: waiting for end of file name (gzip) */
-  var COMMENT = 8 /* i: waiting for end of comment (gzip) */
-  var HCRC = 9 /* i: waiting for header crc (gzip) */
-  var DICTID = 10 /* i: waiting for dictionary check value */
-  var DICT = 11 /* waiting for inflateSetDictionary() call */
-  var TYPE = 12 /* i: waiting for type bits, including last-flag bit */
-  var TYPEDO = 13 /* i: same, but skip check to exit inflate on new block */
-  var STORED = 14 /* i: waiting for stored size (length and complement) */
-  var COPY_ = 15 /* i/o: same as COPY below, but only first time in */
-  var COPY = 16 /* i/o: waiting for input or output to copy stored block */
-  var TABLE = 17 /* i: waiting for dynamic block table lengths */
-  var LENLENS = 18 /* i: waiting for code length code lengths */
-  var CODELENS = 19 /* i: waiting for length/lit and distance code lengths */
-  var LEN_ = 20 /* i: same as LEN below, but only first time in */
-  var LEN = 21 /* i: waiting for length/lit/eob code */
-  var LENEXT = 22 /* i: waiting for length extra bits */
-  var DIST = 23 /* i: waiting for distance code */
-  var DISTEXT = 24 /* i: waiting for distance extra bits */
-  var MATCH = 25 /* o: waiting for output space to copy string */
-  var LIT = 26 /* o: waiting for output space to write literal */
-  var CHECK = 27 /* i: waiting for 32-bit check value */
-  var LENGTH = 28 /* i: waiting for 32-bit length (gzip) */
-  var DONE = 29 /* finished check, done -- remain here until reset */
-  var BAD = 30 /* got a data error -- remain here until reset */
-  var MEM = 31 /* got an inflate() memory error -- remain here until reset */
-  var SYNC = 32 /* looking for synchronization bytes to restart inflate() */
+  const HEAD = 16180 /* i: waiting for magic header */
+  const FLAGS = 16181 /* i: waiting for method and flags (gzip) */
+  const TIME = 16182 /* i: waiting for modification time (gzip) */
+  const OS = 16183 /* i: waiting for extra flags and operating system (gzip) */
+  const EXLEN = 16184 /* i: waiting for extra length (gzip) */
+  const EXTRA = 16185 /* i: waiting for extra bytes (gzip) */
+  const NAME = 16186 /* i: waiting for end of file name (gzip) */
+  const COMMENT = 16187 /* i: waiting for end of comment (gzip) */
+  const HCRC = 16188 /* i: waiting for header crc (gzip) */
+  const DICTID = 16189 /* i: waiting for dictionary check value */
+  const DICT = 16190 /* waiting for inflateSetDictionary() call */
+  const TYPE = 16191 /* i: waiting for type bits, including last-flag bit */
+  const TYPEDO = 16192 /* i: same, but skip check to exit inflate on new block */
+  const STORED = 16193 /* i: waiting for stored size (length and complement) */
+  const COPY_ = 16194 /* i/o: same as COPY below, but only first time in */
+  const COPY = 16195 /* i/o: waiting for input or output to copy stored block */
+  const TABLE = 16196 /* i: waiting for dynamic block table lengths */
+  const LENLENS = 16197 /* i: waiting for code length code lengths */
+  const CODELENS = 16198 /* i: waiting for length/lit and distance code lengths */
+  const LEN_ = 16199 /* i: same as LEN below, but only first time in */
+  const LEN = 16200 /* i: waiting for length/lit/eob code */
+  const LENEXT = 16201 /* i: waiting for length extra bits */
+  const DIST = 16202 /* i: waiting for distance code */
+  const DISTEXT = 16203 /* i: waiting for distance extra bits */
+  const MATCH = 16204 /* o: waiting for output space to copy string */
+  const LIT = 16205 /* o: waiting for output space to write literal */
+  const CHECK = 16206 /* i: waiting for 32-bit check value */
+  const LENGTH = 16207 /* i: waiting for 32-bit length (gzip) */
+  const DONE = 16208 /* finished check, done -- remain here until reset */
+  const BAD = 16209 /* got a data error -- remain here until reset */
+  const MEM = 16210 /* got an inflate() memory error -- remain here until reset */
+  const SYNC = 16211 /* looking for synchronization bytes to restart inflate() */
 
   /* ===========================================================================*/
 
-  var ENOUGH_LENS = 852
-  var ENOUGH_DISTS = 592
-  //var ENOUGH =  (ENOUGH_LENS+ENOUGH_DISTS);
+  const ENOUGH_LENS = 852
+  const ENOUGH_DISTS = 592
+  //const ENOUGH =  (ENOUGH_LENS+ENOUGH_DISTS);
 
-  var MAX_WBITS = 15
+  const MAX_WBITS = 15
   /* 32K LZ77 window */
-  var DEF_WBITS = MAX_WBITS
+  const DEF_WBITS = MAX_WBITS
 
-  function zswap32(q) {
+  const zswap32 = q => {
     return ((q >>> 24) & 0xff) + ((q >>> 8) & 0xff00) + ((q & 0xff00) << 8) + ((q & 0xff) << 24)
   }
 
   function InflateState() {
+    this.strm = null /* pointer back to this zlib stream */
     this.mode = 0 /* current inflate mode */
     this.last = false /* true if processing last block */
-    this.wrap = 0 /* bit 0 true for zlib, bit 1 true for gzip */
+    this.wrap = 0 /* bit 0 true for zlib, bit 1 true for gzip,
+                                   bit 2 true to validate check value */
     this.havedict = false /* true if dictionary provided */
-    this.flags = 0 /* gzip header method and flags (0 if zlib) */
+    this.flags = 0 /* gzip header method and flags (0 if zlib), or
+                                   -1 if raw or no header yet */
     this.dmax = 0 /* zlib header max distance (INFLATE_STRICT) */
     this.check = 0 /* protected copy of check value */
     this.total = 0 /* protected copy of output count */
@@ -1283,14 +1220,14 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     this.have = 0 /* number of code lengths in lens[] */
     this.next = null /* next available space in codes[] */
 
-    this.lens = new common.Buf16(320) /* temporary storage for code lengths */
-    this.work = new common.Buf16(288) /* work area for code table building */
+    this.lens = new Uint16Array(320) /* temporary storage for code lengths */
+    this.work = new Uint16Array(288) /* work area for code table building */
 
     /*
      because we don't have pointers in js, we use lencode and distcode directly
      as buffers so we don't need codes
     */
-    //this.codes = new utils.Buf32(ENOUGH);       /* space for code tables */
+    //this.codes = new Int32Array(ENOUGH);       /* space for code tables */
     this.lendyn = null /* dynamic table for length/literal codes (JS specific) */
     this.distdyn = null /* dynamic table for distance codes (JS specific) */
     this.sane = 0 /* if false, allow invalid distance too far */
@@ -1298,13 +1235,22 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     this.was = 0 /* initial length of match */
   }
 
-  function inflateResetKeep(strm) {
-    var state
-
-    if (!strm || !strm.state) {
-      return Z_STREAM_ERROR
+  const inflateStateCheck = strm => {
+    if (!strm) {
+      return 1
     }
-    state = strm.state
+    const state = strm.state
+    if (!state || state.strm !== strm || state.mode < HEAD || state.mode > SYNC) {
+      return 1
+    }
+    return 0
+  }
+
+  const inflateResetKeep = strm => {
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
+    }
+    const state = strm.state
     strm.total_in = strm.total_out = state.total = 0
     strm.msg = '' /*Z_NULL*/
     if (state.wrap) {
@@ -1314,49 +1260,47 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     state.mode = HEAD
     state.last = 0
     state.havedict = 0
+    state.flags = -1
     state.dmax = 32768
     state.head = null /*Z_NULL*/
     state.hold = 0
     state.bits = 0
     //state.lencode = state.distcode = state.next = state.codes;
-    state.lencode = state.lendyn = new common.Buf32(ENOUGH_LENS)
-    state.distcode = state.distdyn = new common.Buf32(ENOUGH_DISTS)
+    state.lencode = state.lendyn = new Int32Array(ENOUGH_LENS)
+    state.distcode = state.distdyn = new Int32Array(ENOUGH_DISTS)
 
     state.sane = 1
     state.back = -1
     //Tracev((stderr, "inflate: reset\n"));
-    return Z_OK
+    return Z_OK$1
   }
 
-  function inflateReset(strm) {
-    var state
-
-    if (!strm || !strm.state) {
-      return Z_STREAM_ERROR
+  const inflateReset = strm => {
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
     }
-    state = strm.state
+    const state = strm.state
     state.wsize = 0
     state.whave = 0
     state.wnext = 0
     return inflateResetKeep(strm)
   }
 
-  function inflateReset2(strm, windowBits) {
-    var wrap
-    var state
+  const inflateReset2 = (strm, windowBits) => {
+    let wrap
 
     /* get the state */
-    if (!strm || !strm.state) {
-      return Z_STREAM_ERROR
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
     }
-    state = strm.state
+    const state = strm.state
 
     /* extract wrap request from windowBits parameter */
     if (windowBits < 0) {
       wrap = 0
       windowBits = -windowBits
     } else {
-      wrap = (windowBits >> 4) + 1
+      wrap = (windowBits >> 4) + 5
       if (windowBits < 48) {
         windowBits &= 15
       }
@@ -1364,7 +1308,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
 
     /* set number of window bits, free window if different */
     if (windowBits && (windowBits < 8 || windowBits > 15)) {
-      return Z_STREAM_ERROR
+      return Z_STREAM_ERROR$1
     }
     if (state.window !== null && state.wbits !== windowBits) {
       state.window = null
@@ -1376,29 +1320,28 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return inflateReset(strm)
   }
 
-  function inflateInit2(strm, windowBits) {
-    var ret
-    var state
-
+  const inflateInit2 = (strm, windowBits) => {
     if (!strm) {
-      return Z_STREAM_ERROR
+      return Z_STREAM_ERROR$1
     }
     //strm.msg = Z_NULL;                 /* in case we return an error */
 
-    state = new InflateState()
+    const state = new InflateState()
 
     //if (state === Z_NULL) return Z_MEM_ERROR;
     //Tracev((stderr, "inflate: allocated\n"));
     strm.state = state
+    state.strm = strm
     state.window = null /*Z_NULL*/
-    ret = inflateReset2(strm, windowBits)
-    if (ret !== Z_OK) {
+    state.mode = HEAD /* to pass state test in inflateReset2() */
+    const ret = inflateReset2(strm, windowBits)
+    if (ret !== Z_OK$1) {
       strm.state = null /*Z_NULL*/
     }
     return ret
   }
 
-  function inflateInit(strm) {
+  const inflateInit = strm => {
     return inflateInit2(strm, DEF_WBITS)
   }
 
@@ -1412,20 +1355,18 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    used for threaded applications, since the rewriting of the tables and virgin
    may not be thread-safe.
    */
-  var virgin = true
+  let virgin = true
 
-  var lenfix, distfix // We have no pointers in JS, so keep tables separate
+  let lenfix, distfix // We have no pointers in JS, so keep tables separate
 
-  function fixedtables(state) {
+  const fixedtables = state => {
     /* build fixed huffman tables if first call (may not be thread safe) */
     if (virgin) {
-      var sym
-
-      lenfix = new common.Buf32(512)
-      distfix = new common.Buf32(32)
+      lenfix = new Int32Array(512)
+      distfix = new Int32Array(32)
 
       /* literal/length table */
-      sym = 0
+      let sym = 0
       while (sym < 144) {
         state.lens[sym++] = 8
       }
@@ -1439,7 +1380,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
         state.lens[sym++] = 8
       }
 
-      inftrees(LENS, state.lens, 0, 288, lenfix, 0, state.work, { bits: 9 })
+      inflate_table(LENS, state.lens, 0, 288, lenfix, 0, state.work, { bits: 9 })
 
       /* distance table */
       sym = 0
@@ -1447,7 +1388,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
         state.lens[sym++] = 5
       }
 
-      inftrees(DISTS, state.lens, 0, 32, distfix, 0, state.work, { bits: 5 })
+      inflate_table(DISTS, state.lens, 0, 32, distfix, 0, state.work, { bits: 5 })
 
       /* do this just once */
       virgin = false
@@ -1473,9 +1414,9 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    output will fall in the output data, making match copies simpler and faster.
    The advantage may be dependent on the size of the processor's data caches.
    */
-  function updatewindow(strm, src, end, copy) {
-    var dist
-    var state = strm.state
+  const updatewindow = (strm, src, end, copy) => {
+    let dist
+    const state = strm.state
 
     /* if it hasn't been done already, allocate space for the window */
     if (state.window === null) {
@@ -1483,12 +1424,12 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       state.wnext = 0
       state.whave = 0
 
-      state.window = new common.Buf8(state.wsize)
+      state.window = new Uint8Array(state.wsize)
     }
 
     /* copy state->wsize or less output bytes into the circular window */
     if (copy >= state.wsize) {
-      common.arraySet(state.window, src, end - state.wsize, state.wsize, 0)
+      state.window.set(src.subarray(end - state.wsize, end), 0)
       state.wnext = 0
       state.whave = state.wsize
     } else {
@@ -1497,11 +1438,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
         dist = copy
       }
       //zmemcpy(state->window + state->wnext, end - copy, dist);
-      common.arraySet(state.window, src, end - copy, dist, state.wnext)
+      state.window.set(src.subarray(end - copy, end - copy + dist), state.wnext)
       copy -= dist
       if (copy) {
         //zmemcpy(state->window, end - copy, copy);
-        common.arraySet(state.window, src, end - copy, copy, 0)
+        state.window.set(src.subarray(end - copy, end), 0)
         state.wnext = copy
         state.whave = state.wsize
       } else {
@@ -1517,33 +1458,33 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return 0
   }
 
-  function inflate$1(strm, flush) {
-    var state
-    var input, output // input/output buffers
-    var next /* next input INDEX */
-    var put /* next output INDEX */
-    var have, left /* available input and output */
-    var hold /* bit buffer */
-    var bits /* bits in bit buffer */
-    var _in, _out /* save starting available input and output */
-    var copy /* number of stored or match bytes to copy */
-    var from /* where to copy match bytes from */
-    var from_source
-    var here = 0 /* current decoding table entry */
-    var here_bits, here_op, here_val // paked "here" denormalized (JS specific)
-    //var last;                   /* parent table entry */
-    var last_bits, last_op, last_val // paked "last" denormalized (JS specific)
-    var len /* length to copy for repeats, bits to drop */
-    var ret /* return code */
-    var hbuf = new common.Buf8(4) /* buffer for gzip header crc calculation */
-    var opts
+  const inflate$1 = (strm, flush) => {
+    let state
+    let input, output // input/output buffers
+    let next /* next input INDEX */
+    let put /* next output INDEX */
+    let have, left /* available input and output */
+    let hold /* bit buffer */
+    let bits /* bits in bit buffer */
+    let _in, _out /* save starting available input and output */
+    let copy /* number of stored or match bytes to copy */
+    let from /* where to copy match bytes from */
+    let from_source
+    let here = 0 /* current decoding table entry */
+    let here_bits, here_op, here_val // paked "here" denormalized (JS specific)
+    //let last;                   /* parent table entry */
+    let last_bits, last_op, last_val // paked "last" denormalized (JS specific)
+    let len /* length to copy for repeats, bits to drop */
+    let ret /* return code */
+    const hbuf = new Uint8Array(4) /* buffer for gzip header crc calculation */
+    let opts
 
-    var n // temporary var for NEED_BITS
+    let n // temporary variable for NEED_BITS
 
-    var order = /* permutation of code lengths */ [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]
+    const order = /* permutation of code lengths */ new Uint8Array([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15])
 
-    if (!strm || !strm.state || !strm.output || (!strm.input && strm.avail_in !== 0)) {
-      return Z_STREAM_ERROR
+    if (inflateStateCheck(strm) || !strm.output || (!strm.input && strm.avail_in !== 0)) {
+      return Z_STREAM_ERROR$1
     }
 
     state = strm.state
@@ -1564,7 +1505,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
 
     _in = have
     _out = left
-    ret = Z_OK
+    ret = Z_OK$1
 
     // goto emulation
     inf_leave: for (;;) {
@@ -1586,11 +1527,14 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           //===//
           if (state.wrap & 2 && hold === 0x8b1f) {
             /* gzip header */
+            if (state.wbits === 0) {
+              state.wbits = 15
+            }
             state.check = 0 /*crc32(0L, Z_NULL, 0)*/
             //=== CRC2(state.check, hold);
             hbuf[0] = hold & 0xff
             hbuf[1] = (hold >>> 8) & 0xff
-            state.check = crc32_1(state.check, hbuf, 2, 0)
+            state.check = crc32(state.check, hbuf, 2, 0)
             //===//
 
             //=== INITBITS();
@@ -1600,7 +1544,6 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             state.mode = FLAGS
             break
           }
-          state.flags = 0 /* expect zlib header */
           if (state.head) {
             state.head.done = false
           }
@@ -1621,12 +1564,19 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           len = (hold & 0x0f) /*BITS(4)*/ + 8
           if (state.wbits === 0) {
             state.wbits = len
-          } else if (len > state.wbits) {
+          }
+          if (len > 15 || len > state.wbits) {
             strm.msg = 'invalid window size'
             state.mode = BAD
             break
           }
-          state.dmax = 1 << len
+
+          // !!! pako patch. Force use `options.windowBits` if passed.
+          // Required to always use max window size by default.
+          state.dmax = 1 << state.wbits
+          //state.dmax = 1 << len;
+
+          state.flags = 0 /* indicate zlib header */
           //Tracev((stderr, "inflate:   zlib header ok\n"));
           strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/
           state.mode = hold & 0x200 ? DICTID : TYPE
@@ -1660,11 +1610,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           if (state.head) {
             state.head.text = (hold >> 8) & 1
           }
-          if (state.flags & 0x0200) {
+          if (state.flags & 0x0200 && state.wrap & 4) {
             //=== CRC2(state.check, hold);
             hbuf[0] = hold & 0xff
             hbuf[1] = (hold >>> 8) & 0xff
-            state.check = crc32_1(state.check, hbuf, 2, 0)
+            state.check = crc32(state.check, hbuf, 2, 0)
             //===//
           }
           //=== INITBITS();
@@ -1687,13 +1637,13 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           if (state.head) {
             state.head.time = hold
           }
-          if (state.flags & 0x0200) {
+          if (state.flags & 0x0200 && state.wrap & 4) {
             //=== CRC4(state.check, hold)
             hbuf[0] = hold & 0xff
             hbuf[1] = (hold >>> 8) & 0xff
             hbuf[2] = (hold >>> 16) & 0xff
             hbuf[3] = (hold >>> 24) & 0xff
-            state.check = crc32_1(state.check, hbuf, 4, 0)
+            state.check = crc32(state.check, hbuf, 4, 0)
             //===
           }
           //=== INITBITS();
@@ -1717,11 +1667,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             state.head.xflags = hold & 0xff
             state.head.os = hold >> 8
           }
-          if (state.flags & 0x0200) {
+          if (state.flags & 0x0200 && state.wrap & 4) {
             //=== CRC2(state.check, hold);
             hbuf[0] = hold & 0xff
             hbuf[1] = (hold >>> 8) & 0xff
-            state.check = crc32_1(state.check, hbuf, 2, 0)
+            state.check = crc32(state.check, hbuf, 2, 0)
             //===//
           }
           //=== INITBITS();
@@ -1746,11 +1696,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             if (state.head) {
               state.head.extra_len = hold
             }
-            if (state.flags & 0x0200) {
+            if (state.flags & 0x0200 && state.wrap & 4) {
               //=== CRC2(state.check, hold);
               hbuf[0] = hold & 0xff
               hbuf[1] = (hold >>> 8) & 0xff
-              state.check = crc32_1(state.check, hbuf, 2, 0)
+              state.check = crc32(state.check, hbuf, 2, 0)
               //===//
             }
             //=== INITBITS();
@@ -1773,15 +1723,15 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
                 len = state.head.extra_len - state.length
                 if (!state.head.extra) {
                   // Use untyped array for more convenient processing later
-                  state.head.extra = new Array(state.head.extra_len)
+                  state.head.extra = new Uint8Array(state.head.extra_len)
                 }
-                common.arraySet(
-                  state.head.extra,
-                  input,
-                  next,
-                  // extra field is limited to 65536 bytes
-                  // - no need for additional size check
-                  copy,
+                state.head.extra.set(
+                  input.subarray(
+                    next,
+                    // extra field is limited to 65536 bytes
+                    // - no need for additional size check
+                    next + copy
+                  ),
                   /*len + copy > state.head.extra_max - len ? state.head.extra_max : copy,*/
                   len
                 )
@@ -1789,8 +1739,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
                 //        len + copy > state.head.extra_max ?
                 //        state.head.extra_max - len : copy);
               }
-              if (state.flags & 0x0200) {
-                state.check = crc32_1(state.check, input, copy, next)
+              if (state.flags & 0x0200 && state.wrap & 4) {
+                state.check = crc32(state.check, input, copy, next)
               }
               have -= copy
               next += copy
@@ -1818,8 +1768,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
               }
             } while (len && copy < have)
 
-            if (state.flags & 0x0200) {
-              state.check = crc32_1(state.check, input, copy, next)
+            if (state.flags & 0x0200 && state.wrap & 4) {
+              state.check = crc32(state.check, input, copy, next)
             }
             have -= copy
             next += copy
@@ -1845,8 +1795,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
                 state.head.comment += String.fromCharCode(len)
               }
             } while (len && copy < have)
-            if (state.flags & 0x0200) {
-              state.check = crc32_1(state.check, input, copy, next)
+            if (state.flags & 0x0200 && state.wrap & 4) {
+              state.check = crc32(state.check, input, copy, next)
             }
             have -= copy
             next += copy
@@ -1870,7 +1820,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
               bits += 8
             }
             //===//
-            if (hold !== (state.check & 0xffff)) {
+            if (state.wrap & 4 && hold !== (state.check & 0xffff)) {
               strm.msg = 'header crc mismatch'
               state.mode = BAD
               break
@@ -1915,7 +1865,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             state.hold = hold
             state.bits = bits
             //---
-            return Z_NEED_DICT
+            return Z_NEED_DICT$1
           }
           strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/
           state.mode = TYPE
@@ -2031,7 +1981,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
               break inf_leave
             }
             //--- zmemcpy(put, next, copy); ---
-            common.arraySet(output, input, next, copy, put)
+            output.set(input.subarray(next, next + copy), put)
             //---//
             have -= copy
             next += copy
@@ -2109,7 +2059,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           state.lenbits = 7
 
           opts = { bits: state.lenbits }
-          ret = inftrees(CODES, state.lens, 0, 19, state.lencode, 0, state.work, opts)
+          ret = inflate_table(CODES, state.lens, 0, 19, state.lencode, 0, state.work, opts)
           state.lenbits = opts.bits
 
           if (ret) {
@@ -2249,7 +2199,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           state.lenbits = 9
 
           opts = { bits: state.lenbits }
-          ret = inftrees(LENS, state.lens, 0, state.nlen, state.lencode, 0, state.work, opts)
+          ret = inflate_table(LENS, state.lens, 0, state.nlen, state.lencode, 0, state.work, opts)
           // We have separate tables & no pointers. 2 commented lines below not needed.
           // state.next_index = opts.table_index;
           state.lenbits = opts.bits
@@ -2266,7 +2216,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           // Switch to use dynamic table
           state.distcode = state.distdyn
           opts = { bits: state.distbits }
-          ret = inftrees(DISTS, state.lens, state.nlen, state.ndist, state.distcode, 0, state.work, opts)
+          ret = inflate_table(DISTS, state.lens, state.nlen, state.ndist, state.distcode, 0, state.work, opts)
           // We have separate tables & no pointers. 2 commented lines below not needed.
           // state.next_index = opts.table_index;
           state.distbits = opts.bits
@@ -2296,7 +2246,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             state.hold = hold
             state.bits = bits
             //---
-            inffast(strm, _out)
+            inflate_fast(strm, _out)
             //--- LOAD() ---
             put = strm.next_out
             output = strm.output
@@ -2584,14 +2534,14 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
             _out -= left
             strm.total_out += _out
             state.total += _out
-            if (_out) {
+            if (state.wrap & 4 && _out) {
               strm.adler = state.check =
-                /*UPDATE(state.check, put - _out, _out);*/
-                state.flags ? crc32_1(state.check, output, _out, put - _out) : adler32_1(state.check, output, _out, put - _out)
+                /*UPDATE_CHECK(state.check, put - _out, _out);*/
+                state.flags ? crc32(state.check, output, _out, put - _out) : adler32(state.check, output, _out, put - _out)
             }
             _out = left
             // NB: crc32 stored as signed 32-bit int, zswap32 returns signed too
-            if ((state.flags ? hold : zswap32(hold)) !== state.check) {
+            if (state.wrap & 4 && (state.flags ? hold : zswap32(hold)) !== state.check) {
               strm.msg = 'incorrect data check'
               state.mode = BAD
               break
@@ -2616,7 +2566,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
               bits += 8
             }
             //===//
-            if (hold !== (state.total & 0xffffffff)) {
+            if (state.wrap & 4 && hold !== (state.total & 0xffffffff)) {
               strm.msg = 'incorrect length check'
               state.mode = BAD
               break
@@ -2630,17 +2580,17 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
           state.mode = DONE
         /* falls through */
         case DONE:
-          ret = Z_STREAM_END
+          ret = Z_STREAM_END$1
           break inf_leave
         case BAD:
-          ret = Z_DATA_ERROR
+          ret = Z_DATA_ERROR$1
           break inf_leave
         case MEM:
-          return Z_MEM_ERROR
+          return Z_MEM_ERROR$1
         case SYNC:
         /* falls through */
         default:
-          return Z_STREAM_ERROR
+          return Z_STREAM_ERROR$1
       }
     }
 
@@ -2662,7 +2612,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     state.bits = bits
     //---
 
-    if (state.wsize || (_out !== strm.avail_out && state.mode < BAD && (state.mode < CHECK || flush !== Z_FINISH))) {
+    if (state.wsize || (_out !== strm.avail_out && state.mode < BAD && (state.mode < CHECK || flush !== Z_FINISH$1))) {
       if (updatewindow(strm, strm.output, strm.next_out, _out - strm.avail_out));
     }
     _in -= strm.avail_in
@@ -2670,73 +2620,71 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     strm.total_in += _in
     strm.total_out += _out
     state.total += _out
-    if (state.wrap && _out) {
+    if (state.wrap & 4 && _out) {
       strm.adler = state.check =
-        /*UPDATE(state.check, strm.next_out - _out, _out);*/
-        state.flags ? crc32_1(state.check, output, _out, strm.next_out - _out) : adler32_1(state.check, output, _out, strm.next_out - _out)
+        /*UPDATE_CHECK(state.check, strm.next_out - _out, _out);*/
+        state.flags ? crc32(state.check, output, _out, strm.next_out - _out) : adler32(state.check, output, _out, strm.next_out - _out)
     }
     strm.data_type = state.bits + (state.last ? 64 : 0) + (state.mode === TYPE ? 128 : 0) + (state.mode === LEN_ || state.mode === COPY_ ? 256 : 0)
-    if (((_in === 0 && _out === 0) || flush === Z_FINISH) && ret === Z_OK) {
+    if (((_in === 0 && _out === 0) || flush === Z_FINISH$1) && ret === Z_OK$1) {
       ret = Z_BUF_ERROR
     }
     return ret
   }
 
-  function inflateEnd(strm) {
-    if (!strm || !strm.state /*|| strm->zfree == (free_func)0*/) {
-      return Z_STREAM_ERROR
+  const inflateEnd = strm => {
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
     }
 
-    var state = strm.state
+    let state = strm.state
     if (state.window) {
       state.window = null
     }
     strm.state = null
-    return Z_OK
+    return Z_OK$1
   }
 
-  function inflateGetHeader(strm, head) {
-    var state
-
+  const inflateGetHeader = (strm, head) => {
     /* check state */
-    if (!strm || !strm.state) {
-      return Z_STREAM_ERROR
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
     }
-    state = strm.state
+    const state = strm.state
     if ((state.wrap & 2) === 0) {
-      return Z_STREAM_ERROR
+      return Z_STREAM_ERROR$1
     }
 
     /* save header structure */
     state.head = head
     head.done = false
-    return Z_OK
+    return Z_OK$1
   }
 
-  function inflateSetDictionary(strm, dictionary) {
-    var dictLength = dictionary.length
+  const inflateSetDictionary = (strm, dictionary) => {
+    const dictLength = dictionary.length
 
-    var state
-    var dictid
-    var ret
+    let state
+    let dictid
+    let ret
 
     /* check state */
-    if (!strm /* == Z_NULL */ || !strm.state /* == Z_NULL */) {
-      return Z_STREAM_ERROR
+    if (inflateStateCheck(strm)) {
+      return Z_STREAM_ERROR$1
     }
     state = strm.state
 
     if (state.wrap !== 0 && state.mode !== DICT) {
-      return Z_STREAM_ERROR
+      return Z_STREAM_ERROR$1
     }
 
     /* check for correct dictionary identifier */
     if (state.mode === DICT) {
       dictid = 1 /* adler32(0, null, 0)*/
       /* dictid = adler32(dictid, dictionary, dictLength); */
-      dictid = adler32_1(dictid, dictionary, dictLength, 0)
+      dictid = adler32(dictid, dictionary, dictLength, 0)
       if (dictid !== state.check) {
-        return Z_DATA_ERROR
+        return Z_DATA_ERROR$1
       }
     }
     /* copy dictionary to window using updatewindow(), which will amend the
@@ -2744,60 +2692,82 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     ret = updatewindow(strm, dictionary, dictLength, dictLength)
     if (ret) {
       state.mode = MEM
-      return Z_MEM_ERROR
+      return Z_MEM_ERROR$1
     }
     state.havedict = 1
     // Tracev((stderr, "inflate:   dictionary set\n"));
-    return Z_OK
+    return Z_OK$1
   }
 
-  var inflateReset_1 = inflateReset
-  var inflateReset2_1 = inflateReset2
-  var inflateResetKeep_1 = inflateResetKeep
-  var inflateInit_1 = inflateInit
-  var inflateInit2_1 = inflateInit2
-  var inflate_2$1 = inflate$1
-  var inflateEnd_1 = inflateEnd
-  var inflateGetHeader_1 = inflateGetHeader
-  var inflateSetDictionary_1 = inflateSetDictionary
-  var inflateInfo = 'pako inflate (from Nodeca project)'
+  inflate$2.inflateReset = inflateReset
+  inflate$2.inflateReset2 = inflateReset2
+  inflate$2.inflateResetKeep = inflateResetKeep
+  inflate$2.inflateInit = inflateInit
+  inflate$2.inflateInit2 = inflateInit2
+  inflate$2.inflate = inflate$1
+  inflate$2.inflateEnd = inflateEnd
+  inflate$2.inflateGetHeader = inflateGetHeader
+  inflate$2.inflateSetDictionary = inflateSetDictionary
+  inflate$2.inflateInfo = 'pako inflate (from Nodeca project)'
 
-  /* Not implemented
-  exports.inflateCopy = inflateCopy;
-  exports.inflateGetDictionary = inflateGetDictionary;
-  exports.inflateMark = inflateMark;
-  exports.inflatePrime = inflatePrime;
-  exports.inflateSync = inflateSync;
-  exports.inflateSyncPoint = inflateSyncPoint;
-  exports.inflateUndermine = inflateUndermine;
-  */
+  var common = {}
 
-  var inflate_1$1 = {
-    inflateReset: inflateReset_1,
-    inflateReset2: inflateReset2_1,
-    inflateResetKeep: inflateResetKeep_1,
-    inflateInit: inflateInit_1,
-    inflateInit2: inflateInit2_1,
-    inflate: inflate_2$1,
-    inflateEnd: inflateEnd_1,
-    inflateGetHeader: inflateGetHeader_1,
-    inflateSetDictionary: inflateSetDictionary_1,
-    inflateInfo: inflateInfo
+  const _has = (obj, key) => {
+    return Object.prototype.hasOwnProperty.call(obj, key)
   }
+
+  common.assign = function (obj /*from1, from2, from3, ...*/) {
+    const sources = Array.prototype.slice.call(arguments, 1)
+    while (sources.length) {
+      const source = sources.shift()
+      if (!source) {
+        continue
+      }
+
+      if (typeof source !== 'object') {
+        throw new TypeError(source + 'must be non-object')
+      }
+
+      for (const p in source) {
+        if (_has(source, p)) {
+          obj[p] = source[p]
+        }
+      }
+    }
+
+    return obj
+  }
+
+  // Join array of chunks to single array.
+  common.flattenChunks = chunks => {
+    // calculate data length
+    let len = 0
+
+    for (let i = 0, l = chunks.length; i < l; i++) {
+      len += chunks[i].length
+    }
+
+    // join chunks
+    const result = new Uint8Array(len)
+
+    for (let i = 0, pos = 0, l = chunks.length; i < l; i++) {
+      let chunk = chunks[i]
+      result.set(chunk, pos)
+      pos += chunk.length
+    }
+
+    return result
+  }
+
+  var strings$1 = {}
 
   // Quick check if we can use fast array to bin string conversion
   //
   // - apply(Array) can fail on Android 2.2
   // - apply(Uint8Array) can fail on iOS 5.1 Safari
   //
-  var STR_APPLY_OK = true
-  var STR_APPLY_UIA_OK = true
+  let STR_APPLY_UIA_OK = true
 
-  try {
-    String.fromCharCode.apply(null, [0])
-  } catch (__) {
-    STR_APPLY_OK = false
-  }
   try {
     String.fromCharCode.apply(null, new Uint8Array(1))
   } catch (__) {
@@ -2807,15 +2777,19 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   // Table with utf8 lengths (calculated by first byte of sequence)
   // Note, that 5 & 6-byte values and some 4-byte values can not be represented in JS,
   // because max possible codepoint is 0x10ffff
-  var _utf8len = new common.Buf8(256)
-  for (var q = 0; q < 256; q++) {
+  const _utf8len = new Uint8Array(256)
+  for (let q = 0; q < 256; q++) {
     _utf8len[q] = q >= 252 ? 6 : q >= 248 ? 5 : q >= 240 ? 4 : q >= 224 ? 3 : q >= 192 ? 2 : 1
   }
   _utf8len[254] = _utf8len[254] = 1 // Invalid sequence start
 
   // convert string to array (typed, when possible)
-  var string2buf = function (str) {
-    var buf,
+  strings$1.string2buf = str => {
+    if (typeof TextEncoder === 'function' && TextEncoder.prototype.encode) {
+      return new TextEncoder().encode(str)
+    }
+
+    let buf,
       c,
       c2,
       m_pos,
@@ -2837,7 +2811,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     }
 
     // allocate buffer
-    buf = new common.Buf8(buf_len)
+    buf = new Uint8Array(buf_len)
 
     // convert
     for (i = 0, m_pos = 0; i < buf_len; m_pos++) {
@@ -2873,57 +2847,48 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return buf
   }
 
-  // Helper (used in 2 places)
-  function buf2binstring(buf, len) {
+  // Helper
+  const buf2binstring = (buf, len) => {
     // On Chrome, the arguments in a function call that are allowed is `65534`.
     // If the length of the buffer is smaller than that, we can use this optimization,
     // otherwise we will take a slower path.
     if (len < 65534) {
-      if ((buf.subarray && STR_APPLY_UIA_OK) || (!buf.subarray && STR_APPLY_OK)) {
-        return String.fromCharCode.apply(null, common.shrinkBuf(buf, len))
+      if (buf.subarray && STR_APPLY_UIA_OK) {
+        return String.fromCharCode.apply(null, buf.length === len ? buf : buf.subarray(0, len))
       }
     }
 
-    var result = ''
-    for (var i = 0; i < len; i++) {
+    let result = ''
+    for (let i = 0; i < len; i++) {
       result += String.fromCharCode(buf[i])
     }
     return result
   }
 
-  // Convert byte array to binary string
-  var buf2binstring_1 = function (buf) {
-    return buf2binstring(buf, buf.length)
-  }
-
-  // Convert binary string (typed, when possible)
-  var binstring2buf = function (str) {
-    var buf = new common.Buf8(str.length)
-    for (var i = 0, len = buf.length; i < len; i++) {
-      buf[i] = str.charCodeAt(i)
-    }
-    return buf
-  }
-
   // convert array to string
-  var buf2string = function (buf, max) {
-    var i, out, c, c_len
-    var len = max || buf.length
+  strings$1.buf2string = (buf, max) => {
+    const len = max || buf.length
+
+    if (typeof TextDecoder === 'function' && TextDecoder.prototype.decode) {
+      return new TextDecoder().decode(buf.subarray(0, max))
+    }
+
+    let i, out
 
     // Reserve max possible length (2 words per char)
     // NB: by unknown reasons, Array is significantly faster for
     //     String.fromCharCode.apply than Uint16Array.
-    var utf16buf = new Array(len * 2)
+    const utf16buf = new Array(len * 2)
 
     for (out = 0, i = 0; i < len; ) {
-      c = buf[i++]
+      let c = buf[i++]
       // quick process ascii
       if (c < 0x80) {
         utf16buf[out++] = c
         continue
       }
 
-      c_len = _utf8len[c]
+      let c_len = _utf8len[c]
       // skip 5 & 6 byte codes
       if (c_len > 4) {
         utf16buf[out++] = 0xfffd
@@ -2963,16 +2928,14 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //
   // buf[] - utf8 bytes array
   // max   - length limit (mandatory);
-  var utf8border = function (buf, max) {
-    var pos
-
+  strings$1.utf8border = (buf, max) => {
     max = max || buf.length
     if (max > buf.length) {
       max = buf.length
     }
 
     // go back from last position, until start of sequence found
-    pos = max - 1
+    let pos = max - 1
     while (pos >= 0 && (buf[pos] & 0xc0) === 0x80) {
       pos--
     }
@@ -2990,79 +2953,6 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     }
 
     return pos + _utf8len[buf[pos]] > max ? pos : max
-  }
-
-  var strings = {
-    string2buf: string2buf,
-    buf2binstring: buf2binstring_1,
-    binstring2buf: binstring2buf,
-    buf2string: buf2string,
-    utf8border: utf8border
-  }
-
-  // (C) 1995-2013 Jean-loup Gailly and Mark Adler
-  // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
-  //
-  // This software is provided 'as-is', without any express or implied
-  // warranty. In no event will the authors be held liable for any damages
-  // arising from the use of this software.
-  //
-  // Permission is granted to anyone to use this software for any purpose,
-  // including commercial applications, and to alter it and redistribute it
-  // freely, subject to the following restrictions:
-  //
-  // 1. The origin of this software must not be misrepresented; you must not
-  //   claim that you wrote the original software. If you use this software
-  //   in a product, an acknowledgment in the product documentation would be
-  //   appreciated but is not required.
-  // 2. Altered source versions must be plainly marked as such, and must not be
-  //   misrepresented as being the original software.
-  // 3. This notice may not be removed or altered from any source distribution.
-
-  var constants = {
-    /* Allowed flush values; see deflate() and inflate() below for details */
-    Z_NO_FLUSH: 0,
-    Z_PARTIAL_FLUSH: 1,
-    Z_SYNC_FLUSH: 2,
-    Z_FULL_FLUSH: 3,
-    Z_FINISH: 4,
-    Z_BLOCK: 5,
-    Z_TREES: 6,
-
-    /* Return codes for the compression/decompression functions. Negative values
-     * are errors, positive values are used for special but normal events.
-     */
-    Z_OK: 0,
-    Z_STREAM_END: 1,
-    Z_NEED_DICT: 2,
-    Z_ERRNO: -1,
-    Z_STREAM_ERROR: -2,
-    Z_DATA_ERROR: -3,
-    //Z_MEM_ERROR:     -4,
-    Z_BUF_ERROR: -5,
-    //Z_VERSION_ERROR: -6,
-
-    /* compression levels */
-    Z_NO_COMPRESSION: 0,
-    Z_BEST_SPEED: 1,
-    Z_BEST_COMPRESSION: 9,
-    Z_DEFAULT_COMPRESSION: -1,
-
-    Z_FILTERED: 1,
-    Z_HUFFMAN_ONLY: 2,
-    Z_RLE: 3,
-    Z_FIXED: 4,
-    Z_DEFAULT_STRATEGY: 0,
-
-    /* Possible values of the data_type field (though see inflate()) */
-    Z_BINARY: 0,
-    Z_TEXT: 1,
-    //Z_ASCII:                1, // = Z_TEXT (deprecated)
-    Z_UNKNOWN: 2,
-
-    /* The deflate compression method */
-    Z_DEFLATED: 8
-    //Z_NULL:                 null // Use -1 or null inline, depending on var type
   }
 
   // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -3115,7 +3005,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //   misrepresented as being the original software.
   // 3. This notice may not be removed or altered from any source distribution.
 
-  function ZStream() {
+  function ZStream$1() {
     /* next input byte */
     this.input = null // JS specific, because we have no pointers
     this.next_in = 0
@@ -3140,7 +3030,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     this.adler = 0
   }
 
-  var zstream = ZStream
+  var zstream = ZStream$1
 
   // (C) 1995-2013 Jean-loup Gailly and Mark Adler
   // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -3161,7 +3051,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   //   misrepresented as being the original software.
   // 3. This notice may not be removed or altered from any source distribution.
 
-  function GZheader() {
+  function GZheader$1() {
     /* true if compressed data believed to be text */
     this.text = 0
     /* modification time */
@@ -3197,9 +3087,23 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     this.done = false
   }
 
-  var gzheader = GZheader
+  var gzheader = GZheader$1
 
-  var toString = Object.prototype.toString
+  const zlib_inflate = inflate$2
+  const utils = common
+  const strings = strings$1
+  const msg = messages
+  const ZStream = zstream
+  const GZheader = gzheader
+
+  const toString = Object.prototype.toString
+
+  /* Public constants ==========================================================*/
+  /* ===========================================================================*/
+
+  const { Z_NO_FLUSH, Z_FINISH, Z_OK, Z_STREAM_END, Z_NEED_DICT, Z_STREAM_ERROR, Z_DATA_ERROR, Z_MEM_ERROR } = constants
+
+  /* ===========================================================================*/
 
   /**
    * class Inflate
@@ -3216,13 +3120,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    **/
 
   /**
-   * Inflate.result -> Uint8Array|Array|String
+   * Inflate.result -> Uint8Array|String
    *
    * Uncompressed result, generated by default [[Inflate#onData]]
    * and [[Inflate#onEnd]] handlers. Filled after you push last chunk
-   * (call [[Inflate#push]] with `Z_FINISH` / `true` param) or if you
-   * push a chunk with explicit flush (call [[Inflate#push]] with
-   * `Z_SYNC_FLUSH` param).
+   * (call [[Inflate#push]] with `Z_FINISH` / `true` param).
    **/
 
   /**
@@ -3265,11 +3167,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    * ##### Example:
    *
    * ```javascript
-   * var pako = require('pako')
-   *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
-   *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
+   * const pako = require('pako')
+   * const chunk1 = new Uint8Array([1,2,3,4,5,6,7,8,9])
+   * const chunk2 = new Uint8Array([10,11,12,13,14,15,16,17,18,19]);
    *
-   * var inflate = new pako.Inflate({ level: 3});
+   * const inflate = new pako.Inflate({ level: 3});
    *
    * inflate.push(chunk1, false);
    * inflate.push(chunk2, true);  // true -> last chunk
@@ -3280,18 +3182,16 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    * ```
    **/
   function Inflate(options) {
-    if (!(this instanceof Inflate)) return new Inflate(options)
-
-    this.options = common.assign(
+    this.options = utils.assign(
       {
-        chunkSize: 16384,
-        windowBits: 0,
+        chunkSize: 1024 * 64,
+        windowBits: 15,
         to: ''
       },
       options || {}
     )
 
-    var opt = this.options
+    const opt = this.options
 
     // Force window size for `raw` data, if not set directly,
     // because we have no header for autodetect.
@@ -3322,18 +3222,18 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     this.ended = false // used to avoid multiple onEnd() calls
     this.chunks = [] // chunks of compressed data
 
-    this.strm = new zstream()
+    this.strm = new ZStream()
     this.strm.avail_out = 0
 
-    var status = inflate_1$1.inflateInit2(this.strm, opt.windowBits)
+    let status = zlib_inflate.inflateInit2(this.strm, opt.windowBits)
 
-    if (status !== constants.Z_OK) {
-      throw new Error(messages[status])
+    if (status !== Z_OK) {
+      throw new Error(msg[status])
     }
 
-    this.header = new gzheader()
+    this.header = new GZheader()
 
-    inflate_1$1.inflateGetHeader(this.strm, this.header)
+    zlib_inflate.inflateGetHeader(this.strm, this.header)
 
     // Setup dictionary
     if (opt.dictionary) {
@@ -3345,33 +3245,30 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       }
       if (opt.raw) {
         //In raw mode we need to set the dictionary early
-        status = inflate_1$1.inflateSetDictionary(this.strm, opt.dictionary)
-        if (status !== constants.Z_OK) {
-          throw new Error(messages[status])
+        status = zlib_inflate.inflateSetDictionary(this.strm, opt.dictionary)
+        if (status !== Z_OK) {
+          throw new Error(msg[status])
         }
       }
     }
   }
 
   /**
-   * Inflate#push(data[, mode]) -> Boolean
-   * - data (Uint8Array|Array|ArrayBuffer|String): input data
-   * - mode (Number|Boolean): 0..6 for corresponding Z_NO_FLUSH..Z_TREE modes.
-   *   See constants. Skipped or `false` means Z_NO_FLUSH, `true` means Z_FINISH.
+   * Inflate#push(data[, flush_mode]) -> Boolean
+   * - data (Uint8Array|ArrayBuffer): input data
+   * - flush_mode (Number|Boolean): 0..6 for corresponding Z_NO_FLUSH..Z_TREE
+   *   flush modes. See constants. Skipped or `false` means Z_NO_FLUSH,
+   *   `true` means Z_FINISH.
    *
    * Sends input data to inflate pipe, generating [[Inflate#onData]] calls with
-   * new output chunks. Returns `true` on success. The last data block must have
-   * mode Z_FINISH (or `true`). That will flush internal pending buffers and call
-   * [[Inflate#onEnd]]. For interim explicit flushes (without ending the stream) you
-   * can use mode Z_SYNC_FLUSH, keeping the decompression context.
+   * new output chunks. Returns `true` on success. If end of stream detected,
+   * [[Inflate#onEnd]] will be called.
+   *
+   * `flush_mode` is not needed for normal operation, because end of stream
+   * detected automatically. You may try to use it for advanced things, but
+   * this functionality was not tested.
    *
    * On fail call [[Inflate#onEnd]] with error code and return false.
-   *
-   * We strongly recommend to use `Uint8Array` on input for best speed (output
-   * format is detected automatically). Also, don't skip last param and always
-   * use the same type in your code (boolean or number). That will improve JS speed.
-   *
-   * For regular `Array`-s make sure all elements are [0..255].
    *
    * ##### Example
    *
@@ -3381,27 +3278,19 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    * push(chunk, true);  // push last chunk
    * ```
    **/
-  Inflate.prototype.push = function (data, mode) {
-    var strm = this.strm
-    var chunkSize = this.options.chunkSize
-    var dictionary = this.options.dictionary
-    var status, _mode
-    var next_out_utf8, tail, utf8str
+  Inflate.prototype.push = function (data, flush_mode) {
+    const strm = this.strm
+    const chunkSize = this.options.chunkSize
+    const dictionary = this.options.dictionary
+    let status, _flush_mode, last_avail_out
 
-    // Flag to properly process Z_BUF_ERROR on testing inflate call
-    // when we check that all output data was flushed.
-    var allowBufError = false
+    if (this.ended) return false
 
-    if (this.ended) {
-      return false
-    }
-    _mode = mode === ~~mode ? mode : mode === true ? constants.Z_FINISH : constants.Z_NO_FLUSH
+    if (flush_mode === ~~flush_mode) _flush_mode = flush_mode
+    else _flush_mode = flush_mode === true ? Z_FINISH : Z_NO_FLUSH
 
     // Convert data if needed
-    if (typeof data === 'string') {
-      // Only binary strings can be decompressed on practice
-      strm.input = strings.binstring2buf(data)
-    } else if (toString.call(data) === '[object ArrayBuffer]') {
+    if (toString.call(data) === '[object ArrayBuffer]') {
       strm.input = new Uint8Array(data)
     } else {
       strm.input = data
@@ -3410,85 +3299,78 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     strm.next_in = 0
     strm.avail_in = strm.input.length
 
-    do {
+    for (;;) {
       if (strm.avail_out === 0) {
-        strm.output = new common.Buf8(chunkSize)
+        strm.output = new Uint8Array(chunkSize)
         strm.next_out = 0
         strm.avail_out = chunkSize
       }
 
-      status = inflate_1$1.inflate(strm, constants.Z_NO_FLUSH) /* no bad return value */
+      status = zlib_inflate.inflate(strm, _flush_mode)
 
-      if (status === constants.Z_NEED_DICT && dictionary) {
-        status = inflate_1$1.inflateSetDictionary(this.strm, dictionary)
+      if (status === Z_NEED_DICT && dictionary) {
+        status = zlib_inflate.inflateSetDictionary(strm, dictionary)
+
+        if (status === Z_OK) {
+          status = zlib_inflate.inflate(strm, _flush_mode)
+        } else if (status === Z_DATA_ERROR) {
+          // Replace code with more verbose
+          status = Z_NEED_DICT
+        }
       }
 
-      if (status === constants.Z_BUF_ERROR && allowBufError === true) {
-        status = constants.Z_OK
-        allowBufError = false
+      // Skip snyc markers if more data follows and not raw mode
+      while (strm.avail_in > 0 && status === Z_STREAM_END && strm.state.wrap > 0 && data[strm.next_in] !== 0) {
+        zlib_inflate.inflateReset(strm)
+        status = zlib_inflate.inflate(strm, _flush_mode)
       }
 
-      if (status !== constants.Z_STREAM_END && status !== constants.Z_OK) {
-        this.onEnd(status)
-        this.ended = true
-        return false
+      switch (status) {
+        case Z_STREAM_ERROR:
+        case Z_DATA_ERROR:
+        case Z_NEED_DICT:
+        case Z_MEM_ERROR:
+          this.onEnd(status)
+          this.ended = true
+          return false
       }
+
+      // Remember real `avail_out` value, because we may patch out buffer content
+      // to align utf8 strings boundaries.
+      last_avail_out = strm.avail_out
 
       if (strm.next_out) {
-        if (
-          strm.avail_out === 0 ||
-          status === constants.Z_STREAM_END ||
-          (strm.avail_in === 0 && (_mode === constants.Z_FINISH || _mode === constants.Z_SYNC_FLUSH))
-        ) {
+        if (strm.avail_out === 0 || status === Z_STREAM_END) {
           if (this.options.to === 'string') {
-            next_out_utf8 = strings.utf8border(strm.output, strm.next_out)
+            let next_out_utf8 = strings.utf8border(strm.output, strm.next_out)
 
-            tail = strm.next_out - next_out_utf8
-            utf8str = strings.buf2string(strm.output, next_out_utf8)
+            let tail = strm.next_out - next_out_utf8
+            let utf8str = strings.buf2string(strm.output, next_out_utf8)
 
-            // move tail
+            // move tail & realign counters
             strm.next_out = tail
             strm.avail_out = chunkSize - tail
-            if (tail) {
-              common.arraySet(strm.output, strm.output, next_out_utf8, tail, 0)
-            }
+            if (tail) strm.output.set(strm.output.subarray(next_out_utf8, next_out_utf8 + tail), 0)
 
             this.onData(utf8str)
           } else {
-            this.onData(common.shrinkBuf(strm.output, strm.next_out))
+            this.onData(strm.output.length === strm.next_out ? strm.output : strm.output.subarray(0, strm.next_out))
           }
         }
       }
 
-      // When no more input data, we should check that internal inflate buffers
-      // are flushed. The only way to do it when avail_out = 0 - run one more
-      // inflate pass. But if output data not exists, inflate return Z_BUF_ERROR.
-      // Here we set flag to process this error properly.
-      //
-      // NOTE. Deflate does not return error in this case and does not needs such
-      // logic.
-      if (strm.avail_in === 0 && strm.avail_out === 0) {
-        allowBufError = true
+      // Must repeat iteration if out buffer is full
+      if (status === Z_OK && last_avail_out === 0) continue
+
+      // Finalize if end of stream reached.
+      if (status === Z_STREAM_END) {
+        status = zlib_inflate.inflateEnd(this.strm)
+        this.onEnd(status)
+        this.ended = true
+        return true
       }
-    } while ((strm.avail_in > 0 || strm.avail_out === 0) && status !== constants.Z_STREAM_END)
 
-    if (status === constants.Z_STREAM_END) {
-      _mode = constants.Z_FINISH
-    }
-
-    // Finalize on the last chunk.
-    if (_mode === constants.Z_FINISH) {
-      status = inflate_1$1.inflateEnd(this.strm)
-      this.onEnd(status)
-      this.ended = true
-      return status === constants.Z_OK
-    }
-
-    // callback interim results if Z_SYNC_FLUSH.
-    if (_mode === constants.Z_SYNC_FLUSH) {
-      this.onEnd(constants.Z_OK)
-      strm.avail_out = 0
-      return true
+      if (strm.avail_in === 0) break
     }
 
     return true
@@ -3496,9 +3378,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
 
   /**
    * Inflate#onData(chunk) -> Void
-   * - chunk (Uint8Array|Array|String): output data. Type of array depends
-   *   on js engine support. When string output requested, each chunk
-   *   will be string.
+   * - chunk (Uint8Array|String): output data. When string output requested,
+   *   each chunk will be string.
    *
    * By default, stores data blocks in `chunks[]` property and glue
    * those in `onEnd`. Override this handler, if you need another behaviour.
@@ -3513,19 +3394,16 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    *   other if not.
    *
    * Called either after you tell inflate that the input stream is
-   * complete (Z_FINISH) or should be flushed (Z_SYNC_FLUSH)
-   * or if an error happened. By default - join collected chunks,
+   * complete (Z_FINISH). By default - join collected chunks,
    * free memory and fill `results` / `err` properties.
    **/
   Inflate.prototype.onEnd = function (status) {
     // On success - join
-    if (status === constants.Z_OK) {
+    if (status === Z_OK) {
       if (this.options.to === 'string') {
-        // Glue & convert here, until we teach pako to send
-        // utf8 aligned strings to onData
         this.result = this.chunks.join('')
       } else {
-        this.result = common.flattenChunks(this.chunks)
+        this.result = utils.flattenChunks(this.chunks)
       }
     }
     this.chunks = []
@@ -3534,8 +3412,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   }
 
   /**
-   * inflate(data[, options]) -> Uint8Array|Array|String
-   * - data (Uint8Array|Array|String): input data to decompress.
+   * inflate(data[, options]) -> Uint8Array|String
+   * - data (Uint8Array|ArrayBuffer): input data to decompress.
    * - options (Object): zlib inflate options.
    *
    * Decompress `data` with inflate/ungzip and `options`. Autodetect
@@ -3561,33 +3439,31 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
    * ##### Example:
    *
    * ```javascript
-   * var pako = require('pako')
-   *   , input = pako.deflate([1,2,3,4,5,6,7,8,9])
-   *   , output;
+   * const pako = require('pako');
+   * const input = pako.deflate(new Uint8Array([1,2,3,4,5,6,7,8,9]));
+   * let output;
    *
    * try {
    *   output = pako.inflate(input);
-   * } catch (err)
+   * } catch (err) {
    *   console.log(err);
    * }
    * ```
    **/
   function inflate(input, options) {
-    var inflator = new Inflate(options)
+    const inflator = new Inflate(options)
 
-    inflator.push(input, true)
+    inflator.push(input)
 
     // That will never happens, if you don't cheat with options :)
-    if (inflator.err) {
-      throw inflator.msg || messages[inflator.err]
-    }
+    if (inflator.err) throw inflator.msg || msg[inflator.err]
 
     return inflator.result
   }
 
   /**
-   * inflateRaw(data[, options]) -> Uint8Array|Array|String
-   * - data (Uint8Array|Array|String): input data to decompress.
+   * inflateRaw(data[, options]) -> Uint8Array|String
+   * - data (Uint8Array|ArrayBuffer): input data to decompress.
    * - options (Object): zlib inflate options.
    *
    * The same as [[inflate]], but creates raw data, without wrapper
@@ -3600,32 +3476,26 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   }
 
   /**
-   * ungzip(data[, options]) -> Uint8Array|Array|String
-   * - data (Uint8Array|Array|String): input data to decompress.
+   * ungzip(data[, options]) -> Uint8Array|String
+   * - data (Uint8Array|ArrayBuffer): input data to decompress.
    * - options (Object): zlib inflate options.
    *
    * Just shortcut to [[inflate]], because it autodetects format
    * by header.content. Done for convenience.
    **/
 
-  var Inflate_1 = Inflate
-  var inflate_2 = inflate
-  var inflateRaw_1 = inflateRaw
-  var ungzip = inflate
-
-  var inflate_1 = {
-    Inflate: Inflate_1,
-    inflate: inflate_2,
-    inflateRaw: inflateRaw_1,
-    ungzip: ungzip
-  }
+  inflate$3.Inflate = Inflate
+  inflate$3.inflate = inflate
+  inflate$3.inflateRaw = inflateRaw
+  inflate$3.ungzip = inflate
+  inflate$3.constants = constants
 
   // Datatype sizes
-  var sizeOfUint16 = Uint16Array.BYTES_PER_ELEMENT
-  var sizeOfInt32 = Int32Array.BYTES_PER_ELEMENT
-  var sizeOfUint32 = Uint32Array.BYTES_PER_ELEMENT
+  const sizeOfUint16 = Uint16Array.BYTES_PER_ELEMENT
+  const sizeOfInt32 = Int32Array.BYTES_PER_ELEMENT
+  const sizeOfUint32 = Uint32Array.BYTES_PER_ELEMENT
 
-  var Types = {
+  const Types = {
     METADATA: 0,
     TERRAIN: 1,
     DBROOT: 2
@@ -3642,13 +3512,13 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
   }
 
   function decodeGoogleEarthEnterprisePacket(parameters, transferableObjects) {
-    var type = Types.fromString(parameters.type)
-    var buffer = parameters.buffer
+    const type = Types.fromString(parameters.type)
+    let buffer = parameters.buffer
     decodeGoogleEarthEnterpriseData(parameters.key, buffer)
 
-    var uncompressedTerrain = uncompressPacket(buffer)
+    const uncompressedTerrain = uncompressPacket(buffer)
     buffer = uncompressedTerrain.buffer
-    var length = uncompressedTerrain.length
+    const length = uncompressedTerrain.length
 
     switch (type) {
       case Types.METADATA:
@@ -3663,46 +3533,46 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     }
   }
 
-  var qtMagic = 32301
+  const qtMagic = 32301
 
   function processMetadata(buffer, totalSize, quadKey) {
-    var dv = new DataView(buffer)
-    var offset = 0
-    var magic = dv.getUint32(offset, true)
+    const dv = new DataView(buffer)
+    let offset = 0
+    const magic = dv.getUint32(offset, true)
     offset += sizeOfUint32
     if (magic !== qtMagic) {
       throw new RuntimeError.RuntimeError('Invalid magic')
     }
 
-    var dataTypeId = dv.getUint32(offset, true)
+    const dataTypeId = dv.getUint32(offset, true)
     offset += sizeOfUint32
     if (dataTypeId !== 1) {
       throw new RuntimeError.RuntimeError('Invalid data type. Must be 1 for QuadTreePacket')
     }
 
     // Tile format version
-    var quadVersion = dv.getUint32(offset, true)
+    const quadVersion = dv.getUint32(offset, true)
     offset += sizeOfUint32
     if (quadVersion !== 2) {
       throw new RuntimeError.RuntimeError('Invalid QuadTreePacket version. Only version 2 is supported.')
     }
 
-    var numInstances = dv.getInt32(offset, true)
+    const numInstances = dv.getInt32(offset, true)
     offset += sizeOfInt32
 
-    var dataInstanceSize = dv.getInt32(offset, true)
+    const dataInstanceSize = dv.getInt32(offset, true)
     offset += sizeOfInt32
     if (dataInstanceSize !== 32) {
       throw new RuntimeError.RuntimeError('Invalid instance size.')
     }
 
-    var dataBufferOffset = dv.getInt32(offset, true)
+    const dataBufferOffset = dv.getInt32(offset, true)
     offset += sizeOfInt32
 
-    var dataBufferSize = dv.getInt32(offset, true)
+    const dataBufferSize = dv.getInt32(offset, true)
     offset += sizeOfInt32
 
-    var metaBufferSize = dv.getInt32(offset, true)
+    const metaBufferSize = dv.getInt32(offset, true)
     offset += sizeOfInt32
 
     // Offset from beginning of packet (instances + current offset)
@@ -3716,20 +3586,20 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     }
 
     // Read all the instances
-    var instances = []
-    for (var i = 0; i < numInstances; ++i) {
-      var bitfield = dv.getUint8(offset)
+    const instances = []
+    for (let i = 0; i < numInstances; ++i) {
+      const bitfield = dv.getUint8(offset)
       ++offset
 
       ++offset // 2 byte align
 
-      var cnodeVersion = dv.getUint16(offset, true)
+      const cnodeVersion = dv.getUint16(offset, true)
       offset += sizeOfUint16
 
-      var imageVersion = dv.getUint16(offset, true)
+      const imageVersion = dv.getUint16(offset, true)
       offset += sizeOfUint16
 
-      var terrainVersion = dv.getUint16(offset, true)
+      const terrainVersion = dv.getUint16(offset, true)
       offset += sizeOfUint16
 
       // Number of channels stored in the dataBuffer
@@ -3746,18 +3616,18 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       offset += 8 // Ignore image neighbors for now
 
       // Data providers
-      var imageProvider = dv.getUint8(offset++)
-      var terrainProvider = dv.getUint8(offset++)
+      const imageProvider = dv.getUint8(offset++)
+      const terrainProvider = dv.getUint8(offset++)
       offset += sizeOfUint16 // 4 byte align
 
       instances.push(new GoogleEarthEnterpriseTileInformation(bitfield, cnodeVersion, imageVersion, terrainVersion, imageProvider, terrainProvider))
     }
 
-    var tileInfo = []
-    var index = 0
+    const tileInfo = []
+    let index = 0
 
     function populateTiles(parentKey, parent, level) {
-      var isLeaf = false
+      let isLeaf = false
       if (level === 4) {
         if (parent.hasSubtree()) {
           return // We have a subtree, so just return
@@ -3765,8 +3635,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
 
         isLeaf = true // No subtree, so set all children to null
       }
-      for (var i = 0; i < 4; ++i) {
-        var childKey = parentKey + i.toString()
+      for (let i = 0; i < 4; ++i) {
+        const childKey = parentKey + i.toString()
         if (isLeaf) {
           // No subtree so set all children to null
           tileInfo[childKey] = null
@@ -3781,7 +3651,7 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
               return
             }
 
-            var instance = instances[index++]
+            const instance = instances[index++]
             tileInfo[childKey] = instance
             populateTiles(childKey, instance, level + 1)
           }
@@ -3789,8 +3659,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       }
     }
 
-    var level = 0
-    var root = instances[index++]
+    let level = 0
+    const root = instances[index++]
     if (quadKey === '') {
       // Root tile has data at its root and one less level
       ++level
@@ -3803,20 +3673,20 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return tileInfo
   }
 
-  var numMeshesPerPacket = 5
-  var numSubMeshesPerMesh = 4
+  const numMeshesPerPacket = 5
+  const numSubMeshesPerMesh = 4
 
   // Each terrain packet will have 5 meshes - each containg 4 sub-meshes:
   //    1 even level mesh and its 4 odd level children.
   // Any remaining bytes after the 20 sub-meshes contains water surface meshes,
   // which are ignored.
   function processTerrain(buffer, totalSize, transferableObjects) {
-    var dv = new DataView(buffer)
+    const dv = new DataView(buffer)
 
     // Find the sub-meshes.
-    var advanceMesh = function (pos) {
-      for (var sub = 0; sub < numSubMeshesPerMesh; ++sub) {
-        var size = dv.getUint32(pos, true)
+    const advanceMesh = function (pos) {
+      for (let sub = 0; sub < numSubMeshesPerMesh; ++sub) {
+        const size = dv.getUint32(pos, true)
         pos += sizeOfUint32
         pos += size
         if (pos > totalSize) {
@@ -3826,12 +3696,12 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       return pos
     }
 
-    var offset = 0
-    var terrainMeshes = []
+    let offset = 0
+    const terrainMeshes = []
     while (terrainMeshes.length < numMeshesPerPacket) {
-      var start = offset
+      const start = offset
       offset = advanceMesh(offset)
-      var mesh = buffer.slice(start, offset)
+      const mesh = buffer.slice(start, offset)
       transferableObjects.push(mesh)
       terrainMeshes.push(mesh)
     }
@@ -3839,8 +3709,8 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     return terrainMeshes
   }
 
-  var compressedMagic = 0x7468dead
-  var compressedMagicSwap = 0xadde6874
+  const compressedMagic = 0x7468dead
+  const compressedMagicSwap = 0xadde6874
 
   function uncompressPacket(data) {
     // The layout of this decoded data is
@@ -3849,20 +3719,20 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
     // [GZipped chunk of Size bytes]
 
     // Pullout magic and verify we have the correct data
-    var dv = new DataView(data)
-    var offset = 0
-    var magic = dv.getUint32(offset, true)
+    const dv = new DataView(data)
+    let offset = 0
+    const magic = dv.getUint32(offset, true)
     offset += sizeOfUint32
     if (magic !== compressedMagic && magic !== compressedMagicSwap) {
       throw new RuntimeError.RuntimeError('Invalid magic')
     }
 
     // Get the size of the compressed buffer - the endianness depends on which magic was used
-    var size = dv.getUint32(offset, magic === compressedMagic)
+    const size = dv.getUint32(offset, magic === compressedMagic)
     offset += sizeOfUint32
 
-    var compressedPacket = new Uint8Array(data, offset)
-    var uncompressedPacket = inflate_1.inflate(compressedPacket)
+    const compressedPacket = new Uint8Array(data, offset)
+    const uncompressedPacket = inflate$3.inflate(compressedPacket)
 
     if (uncompressedPacket.length !== size) {
       throw new RuntimeError.RuntimeError("Size of packet doesn't match header")
@@ -3874,4 +3744,3 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
 
   return decodeGoogleEarthEnterprisePacket$1
 })
-//# sourceMappingURL=decodeGoogleEarthEnterprisePacket.js.map

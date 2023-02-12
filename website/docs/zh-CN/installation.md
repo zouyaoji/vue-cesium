@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:03
- * @LastEditTime: 2022-12-08 22:05:37
+ * @LastEditTime: 2023-02-13 01:37:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\installation.md
@@ -27,13 +27,13 @@ Vue for Cesium 可以在支持 [ES2018](https://caniuse.com/?feats=mdn-javascrip
 # 选择一个你喜欢的包管理器
 
 # npm
-$ npm install vue-cesium@next --save
+$ npm install vue-cesium --save
 
 # yarn
-$ yarn add vue-cesium@next
+$ yarn add vue-cesium
 
 # pnpm
-$ pnpm add vue-cesium@next
+$ pnpm add vue-cesium
 ```
 
 如果您的网络环境不好，建议使用 `nrm` 切换所用的包管理器的资源地址，或直接手动更改。
@@ -53,11 +53,11 @@ Vue for Cesium 支持 CDN 方式引入 Vue for Cesium，这样在 window 上下�
 ```html
 <head>
   <!-- 引入样式 -->
-  <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//unpkg.com/vue-cesium/dist/index.css" />
   <!-- 引入 Vue3 -->
   <script src="//unpkg.com/vue"></script>
   <!-- 引入组件库 -->
-  <script src="//unpkg.com/vue-cesium@next"></script>
+  <script src="//unpkg.com/vue-cesium"></script>
 </head>
 ```
 
@@ -66,7 +66,7 @@ Vue for Cesium 支持 CDN 方式引入 Vue for Cesium，这样在 window 上下�
 ```html
 <head>
   <!-- 引入样式 -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium/dist/index.css" />
   <!-- 引入 Vue -->
   <script src="//cdn.jsdelivr.net/npm/vue"></script>
   <!-- 引入组件库 -->

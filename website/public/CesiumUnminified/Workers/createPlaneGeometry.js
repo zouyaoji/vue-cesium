@@ -1,46 +1,29 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './when-4bbc8319',
-  './Transforms-86b6fa28',
-  './Matrix2-91d5b6af',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-f194c48b',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './VertexFormat-f9c1a155',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc'
+  './defaultValue-0a909f67',
+  './Transforms-a05e5e6e',
+  './Matrix3-315394f6',
+  './Check-666ab1a0',
+  './ComponentDatatype-f7b11d02',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './VertexFormat-6b480673',
+  './Math-2dbd6b93',
+  './Matrix2-13178034',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c'
 ], function (
-  when,
+  defaultValue,
   Transforms,
-  Matrix2,
-  RuntimeError,
+  Matrix3,
+  Check,
   ComponentDatatype,
   GeometryAttribute,
   GeometryAttributes,
   VertexFormat,
+  Math$1,
+  Matrix2,
+  RuntimeError,
   combine,
   WebGLConstants
 ) {
@@ -56,14 +39,14 @@ define([
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    *
    * @example
-   * var planeGeometry = new Cesium.PlaneGeometry({
+   * const planeGeometry = new Cesium.PlaneGeometry({
    *   vertexFormat : Cesium.VertexFormat.POSITION_ONLY
    * });
    */
   function PlaneGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
 
-    var vertexFormat = when.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT)
+    const vertexFormat = defaultValue.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT)
 
     this._vertexFormat = vertexFormat
     this._workerName = 'createPlaneGeometry'
@@ -86,19 +69,19 @@ define([
    */
   PlaneGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('value', value)
-    RuntimeError.Check.defined('array', array)
+    Check.Check.typeOf.object('value', value)
+    Check.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
     VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex)
 
     return array
   }
 
-  var scratchVertexFormat = new VertexFormat.VertexFormat()
-  var scratchOptions = {
+  const scratchVertexFormat = new VertexFormat.VertexFormat()
+  const scratchOptions = {
     vertexFormat: scratchVertexFormat
   }
 
@@ -112,14 +95,14 @@ define([
    */
   PlaneGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.defined('array', array)
+    Check.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
+    const vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       return new PlaneGeometry(scratchOptions)
     }
 
@@ -128,8 +111,8 @@ define([
     return result
   }
 
-  var min = new Matrix2.Cartesian3(-0.5, -0.5, 0.0)
-  var max = new Matrix2.Cartesian3(0.5, 0.5, 0.0)
+  const min = new Matrix3.Cartesian3(-0.5, -0.5, 0.0)
+  const max = new Matrix3.Cartesian3(0.5, 0.5, 0.0)
 
   /**
    * Computes the geometric representation of a plane, including its vertices, indices, and a bounding sphere.
@@ -138,11 +121,11 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   PlaneGeometry.createGeometry = function (planeGeometry) {
-    var vertexFormat = planeGeometry._vertexFormat
+    const vertexFormat = planeGeometry._vertexFormat
 
-    var attributes = new GeometryAttributes.GeometryAttributes()
-    var indices
-    var positions
+    const attributes = new GeometryAttributes.GeometryAttributes()
+    let indices
+    let positions
 
     if (vertexFormat.position) {
       // 4 corner points.  Duplicated 3 times each for each incident edge/face.
@@ -169,7 +152,7 @@ define([
       })
 
       if (vertexFormat.normal) {
-        var normals = new Float32Array(4 * 3)
+        const normals = new Float32Array(4 * 3)
 
         // +z face
         normals[0] = 0.0
@@ -193,7 +176,7 @@ define([
       }
 
       if (vertexFormat.st) {
-        var texCoords = new Float32Array(4 * 2)
+        const texCoords = new Float32Array(4 * 2)
 
         // +z face
         texCoords[0] = 0.0
@@ -213,7 +196,7 @@ define([
       }
 
       if (vertexFormat.tangent) {
-        var tangents = new Float32Array(4 * 3)
+        const tangents = new Float32Array(4 * 3)
 
         // +z face
         tangents[0] = 1.0
@@ -237,7 +220,7 @@ define([
       }
 
       if (vertexFormat.bitangent) {
-        var bitangents = new Float32Array(4 * 3)
+        const bitangents = new Float32Array(4 * 3)
 
         // +z face
         bitangents[0] = 0.0
@@ -276,12 +259,12 @@ define([
       attributes: attributes,
       indices: indices,
       primitiveType: GeometryAttribute.PrimitiveType.TRIANGLES,
-      boundingSphere: new Transforms.BoundingSphere(Matrix2.Cartesian3.ZERO, Math.sqrt(2.0))
+      boundingSphere: new Transforms.BoundingSphere(Matrix3.Cartesian3.ZERO, Math.sqrt(2.0))
     })
   }
 
   function createPlaneGeometry(planeGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       planeGeometry = PlaneGeometry.unpack(planeGeometry, offset)
     }
     return PlaneGeometry.createGeometry(planeGeometry)
@@ -289,4 +272,3 @@ define([
 
   return createPlaneGeometry
 })
-//# sourceMappingURL=createPlaneGeometry.js.map

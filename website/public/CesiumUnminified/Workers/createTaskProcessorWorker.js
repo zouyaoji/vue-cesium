@@ -1,27 +1,4 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
-define(['./when-4bbc8319'], function (when) {
+define(['./defaultValue-0a909f67'], function (defaultValue) {
   'use strict'
 
   /**
@@ -34,19 +11,19 @@ define(['./when-4bbc8319'], function (when) {
    * @returns {String} A string containing the formatted error.
    */
   function formatError(object) {
-    var result
+    let result
 
-    var name = object.name
-    var message = object.message
-    if (when.defined(name) && when.defined(message)) {
-      result = name + ': ' + message
+    const name = object.name
+    const message = object.message
+    if (defaultValue.defined(name) && defaultValue.defined(message)) {
+      result = `${name}: ${message}`
     } else {
       result = object.toString()
     }
 
-    var stack = object.stack
-    if (when.defined(stack)) {
-      result += '\n' + stack
+    const stack = object.stack
+    if (defaultValue.defined(stack)) {
+      result += `\n${stack}`
     }
 
     return result
@@ -54,15 +31,15 @@ define(['./when-4bbc8319'], function (when) {
 
   // createXXXGeometry functions may return Geometry or a Promise that resolves to Geometry
   // if the function requires access to ApproximateTerrainHeights.
-  // For fully synchronous functions, just wrapping the function call in a `when` Promise doesn't
+  // For fully synchronous functions, just wrapping the function call in a Promise doesn't
   // handle errors correctly, hence try-catch
   function callAndWrap(workerFunction, parameters, transferableObjects) {
-    var resultOrPromise
+    let resultOrPromise
     try {
       resultOrPromise = workerFunction(parameters, transferableObjects)
       return resultOrPromise // errors handled by Promise
     } catch (e) {
-      return when.when.reject(e)
+      return Promise.reject(e)
     }
   }
 
@@ -92,24 +69,23 @@ define(['./when-4bbc8319'], function (when) {
    * @see {@link http://www.w3.org/TR/html5/common-dom-interfaces.html#transferable-objects|Transferable objects}
    */
   function createTaskProcessorWorker(workerFunction) {
-    var postMessage
+    let postMessage
 
     return function (event) {
-      var data = event.data
+      const data = event.data
 
-      var transferableObjects = []
-      var responseMessage = {
+      const transferableObjects = []
+      const responseMessage = {
         id: data.id,
         result: undefined,
         error: undefined
       }
 
-      return when
-        .when(callAndWrap(workerFunction, data.parameters, transferableObjects))
+      return Promise.resolve(callAndWrap(workerFunction, data.parameters, transferableObjects))
         .then(function (result) {
           responseMessage.result = result
         })
-        .otherwise(function (e) {
+        .catch(function (e) {
           if (e instanceof Error) {
             // Errors can't be posted in a message, copy the properties
             responseMessage.error = {
@@ -121,9 +97,9 @@ define(['./when-4bbc8319'], function (when) {
             responseMessage.error = e
           }
         })
-        .always(function () {
-          if (!when.defined(postMessage)) {
-            postMessage = when.defaultValue(self.webkitPostMessage, self.postMessage)
+        .finally(function () {
+          if (!defaultValue.defined(postMessage)) {
+            postMessage = defaultValue.defaultValue(self.webkitPostMessage, self.postMessage)
           }
 
           if (!data.canTransferArrayBuffer) {
@@ -136,8 +112,7 @@ define(['./when-4bbc8319'], function (when) {
             // something went wrong trying to post the message, post a simpler
             // error that we can be sure will be cloneable
             responseMessage.result = undefined
-            responseMessage.error =
-              'postMessage failed with error: ' + formatError(e) + '\n  with responseMessage: ' + JSON.stringify(responseMessage)
+            responseMessage.error = `postMessage failed with error: ${formatError(e)}\n  with responseMessage: ${JSON.stringify(responseMessage)}`
             postMessage(responseMessage)
           }
         })
@@ -146,4 +121,3 @@ define(['./when-4bbc8319'], function (when) {
 
   return createTaskProcessorWorker
 })
-//# sourceMappingURL=createTaskProcessorWorker.js.map

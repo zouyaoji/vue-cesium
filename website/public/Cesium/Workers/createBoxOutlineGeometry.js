@@ -1,132 +1,132 @@
 define([
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './when-4bbc8319',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc'
-], function (e, t, a, n, i, r, u, m, o, s) {
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './ComponentDatatype-77274976',
+  './defaultValue-0a909f67',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c'
+], function (t, e, n, a, i, r, u, o, s, m, f, c) {
   'use strict'
-  var f = new a.Cartesian3()
-  function c(e) {
-    var t = (e = r.defaultValue(e, r.defaultValue.EMPTY_OBJECT)).minimum,
-      n = e.maximum
-    ;(this._min = a.Cartesian3.clone(t)),
-      (this._max = a.Cartesian3.clone(n)),
-      (this._offsetAttribute = e.offsetAttribute),
+  const d = new e.Cartesian3()
+  function p(t) {
+    const n = (t = a.defaultValue(t, a.defaultValue.EMPTY_OBJECT)).minimum,
+      i = t.maximum
+    ;(this._min = e.Cartesian3.clone(n)),
+      (this._max = e.Cartesian3.clone(i)),
+      (this._offsetAttribute = t.offsetAttribute),
       (this._workerName = 'createBoxOutlineGeometry')
   }
-  ;(c.fromDimensions = function (e) {
-    var t = (e = r.defaultValue(e, r.defaultValue.EMPTY_OBJECT)).dimensions,
-      n = a.Cartesian3.multiplyByScalar(t, 0.5, new a.Cartesian3())
-    return new c({ minimum: a.Cartesian3.negate(n, new a.Cartesian3()), maximum: n, offsetAttribute: e.offsetAttribute })
+  ;(p.fromDimensions = function (t) {
+    const n = (t = a.defaultValue(t, a.defaultValue.EMPTY_OBJECT)).dimensions,
+      i = e.Cartesian3.multiplyByScalar(n, 0.5, new e.Cartesian3())
+    return new p({ minimum: e.Cartesian3.negate(i, new e.Cartesian3()), maximum: i, offsetAttribute: t.offsetAttribute })
   }),
-    (c.fromAxisAlignedBoundingBox = function (e) {
-      return new c({ minimum: e.minimum, maximum: e.maximum })
+    (p.fromAxisAlignedBoundingBox = function (t) {
+      return new p({ minimum: t.minimum, maximum: t.maximum })
     }),
-    (c.packedLength = 2 * a.Cartesian3.packedLength + 1),
-    (c.pack = function (e, t, n) {
+    (p.packedLength = 2 * e.Cartesian3.packedLength + 1),
+    (p.pack = function (t, n, i) {
       return (
-        (n = r.defaultValue(n, 0)),
-        a.Cartesian3.pack(e._min, t, n),
-        a.Cartesian3.pack(e._max, t, n + a.Cartesian3.packedLength),
-        (t[n + 2 * a.Cartesian3.packedLength] = r.defaultValue(e._offsetAttribute, -1)),
-        t
+        (i = a.defaultValue(i, 0)),
+        e.Cartesian3.pack(t._min, n, i),
+        e.Cartesian3.pack(t._max, n, i + e.Cartesian3.packedLength),
+        (n[i + 2 * e.Cartesian3.packedLength] = a.defaultValue(t._offsetAttribute, -1)),
+        n
       )
     })
-  var d = new a.Cartesian3(),
-    p = new a.Cartesian3(),
-    y = { minimum: d, maximum: p, offsetAttribute: void 0 }
+  const l = new e.Cartesian3(),
+    y = new e.Cartesian3(),
+    C = { minimum: l, maximum: y, offsetAttribute: void 0 }
   return (
-    (c.unpack = function (e, t, n) {
-      t = r.defaultValue(t, 0)
-      var i = a.Cartesian3.unpack(e, t, d),
-        u = a.Cartesian3.unpack(e, t + a.Cartesian3.packedLength, p),
-        m = e[t + 2 * a.Cartesian3.packedLength]
-      return r.defined(n)
-        ? ((n._min = a.Cartesian3.clone(i, n._min)), (n._max = a.Cartesian3.clone(u, n._max)), (n._offsetAttribute = -1 === m ? void 0 : m), n)
-        : ((y.offsetAttribute = -1 === m ? void 0 : m), new c(y))
+    (p.unpack = function (t, n, i) {
+      n = a.defaultValue(n, 0)
+      const r = e.Cartesian3.unpack(t, n, l),
+        u = e.Cartesian3.unpack(t, n + e.Cartesian3.packedLength, y),
+        o = t[n + 2 * e.Cartesian3.packedLength]
+      return a.defined(i)
+        ? ((i._min = e.Cartesian3.clone(r, i._min)), (i._max = e.Cartesian3.clone(u, i._max)), (i._offsetAttribute = -1 === o ? void 0 : o), i)
+        : ((C.offsetAttribute = -1 === o ? void 0 : o), new p(C))
     }),
-    (c.createGeometry = function (n) {
-      var o = n._min,
-        s = n._max
-      if (!a.Cartesian3.equals(o, s)) {
-        var c = new m.GeometryAttributes(),
-          d = new Uint16Array(24),
-          p = new Float64Array(24)
-        ;(p[0] = o.x),
-          (p[1] = o.y),
-          (p[2] = o.z),
-          (p[3] = s.x),
-          (p[4] = o.y),
-          (p[5] = o.z),
-          (p[6] = s.x),
-          (p[7] = s.y),
-          (p[8] = o.z),
-          (p[9] = o.x),
-          (p[10] = s.y),
-          (p[11] = o.z),
-          (p[12] = o.x),
-          (p[13] = o.y),
-          (p[14] = s.z),
-          (p[15] = s.x),
-          (p[16] = o.y),
-          (p[17] = s.z),
-          (p[18] = s.x),
-          (p[19] = s.y),
-          (p[20] = s.z),
-          (p[21] = o.x),
-          (p[22] = s.y),
-          (p[23] = s.z),
-          (c.position = new u.GeometryAttribute({ componentDatatype: i.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: p })),
-          (d[0] = 4),
-          (d[1] = 5),
-          (d[2] = 5),
-          (d[3] = 6),
-          (d[4] = 6),
-          (d[5] = 7),
-          (d[6] = 7),
-          (d[7] = 4),
-          (d[8] = 0),
-          (d[9] = 1),
-          (d[10] = 1),
-          (d[11] = 2),
-          (d[12] = 2),
-          (d[13] = 3),
-          (d[14] = 3),
-          (d[15] = 0),
-          (d[16] = 0),
-          (d[17] = 4),
-          (d[18] = 1),
-          (d[19] = 5),
-          (d[20] = 2),
-          (d[21] = 6),
-          (d[22] = 3),
-          (d[23] = 7)
-        var y = a.Cartesian3.subtract(s, o, f),
-          l = 0.5 * a.Cartesian3.magnitude(y)
-        if (r.defined(n._offsetAttribute)) {
-          var C = p.length,
-            b = new Uint8Array(C / 3),
-            A = n._offsetAttribute === e.GeometryOffsetAttribute.NONE ? 0 : 1
-          e.arrayFill(b, A),
-            (c.applyOffset = new u.GeometryAttribute({ componentDatatype: i.ComponentDatatype.UNSIGNED_BYTE, componentsPerAttribute: 1, values: b }))
-        }
-        return new u.Geometry({
-          attributes: c,
-          indices: d,
-          primitiveType: u.PrimitiveType.LINES,
-          boundingSphere: new t.BoundingSphere(a.Cartesian3.ZERO, l),
-          offsetAttribute: n._offsetAttribute
-        })
+    (p.createGeometry = function (o) {
+      const s = o._min,
+        m = o._max
+      if (e.Cartesian3.equals(s, m)) return
+      const f = new r.GeometryAttributes(),
+        c = new Uint16Array(24),
+        p = new Float64Array(24)
+      ;(p[0] = s.x),
+        (p[1] = s.y),
+        (p[2] = s.z),
+        (p[3] = m.x),
+        (p[4] = s.y),
+        (p[5] = s.z),
+        (p[6] = m.x),
+        (p[7] = m.y),
+        (p[8] = s.z),
+        (p[9] = s.x),
+        (p[10] = m.y),
+        (p[11] = s.z),
+        (p[12] = s.x),
+        (p[13] = s.y),
+        (p[14] = m.z),
+        (p[15] = m.x),
+        (p[16] = s.y),
+        (p[17] = m.z),
+        (p[18] = m.x),
+        (p[19] = m.y),
+        (p[20] = m.z),
+        (p[21] = s.x),
+        (p[22] = m.y),
+        (p[23] = m.z),
+        (f.position = new i.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: p })),
+        (c[0] = 4),
+        (c[1] = 5),
+        (c[2] = 5),
+        (c[3] = 6),
+        (c[4] = 6),
+        (c[5] = 7),
+        (c[6] = 7),
+        (c[7] = 4),
+        (c[8] = 0),
+        (c[9] = 1),
+        (c[10] = 1),
+        (c[11] = 2),
+        (c[12] = 2),
+        (c[13] = 3),
+        (c[14] = 3),
+        (c[15] = 0),
+        (c[16] = 0),
+        (c[17] = 4),
+        (c[18] = 1),
+        (c[19] = 5),
+        (c[20] = 2),
+        (c[21] = 6),
+        (c[22] = 3),
+        (c[23] = 7)
+      const l = e.Cartesian3.subtract(m, s, d),
+        y = 0.5 * e.Cartesian3.magnitude(l)
+      if (a.defined(o._offsetAttribute)) {
+        const t = p.length,
+          e = o._offsetAttribute === u.GeometryOffsetAttribute.NONE ? 0 : 1,
+          a = new Uint8Array(t / 3).fill(e)
+        f.applyOffset = new i.GeometryAttribute({ componentDatatype: n.ComponentDatatype.UNSIGNED_BYTE, componentsPerAttribute: 1, values: a })
       }
+      return new i.Geometry({
+        attributes: f,
+        indices: c,
+        primitiveType: i.PrimitiveType.LINES,
+        boundingSphere: new t.BoundingSphere(e.Cartesian3.ZERO, y),
+        offsetAttribute: o._offsetAttribute
+      })
     }),
-    function (e, t) {
-      return r.defined(t) && (e = c.unpack(e, t)), c.createGeometry(e)
+    function (t, e) {
+      return a.defined(e) && (t = p.unpack(t, e)), p.createGeometry(t)
     }
   )
 })

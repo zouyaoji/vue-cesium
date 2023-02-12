@@ -1,46 +1,48 @@
 define([
-  './when-4bbc8319',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './EllipsoidOutlineGeometry-44f0c12f',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6'
-], function (i, e, t, r, n, o, s, a, d, l, c, u) {
+  './defaultValue-0a909f67',
+  './Matrix3-b6f074fa',
+  './EllipsoidOutlineGeometry-87fcdae3',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-2149f06c'
+], function (e, i, t, n, r, o, s, a, d, l, c, u, m, p) {
   'use strict'
-  function m(t) {
-    var n = i.defaultValue(t.radius, 1),
-      o = { radii: new e.Cartesian3(n, n, n), stackPartitions: t.stackPartitions, slicePartitions: t.slicePartitions, subdivisions: t.subdivisions }
-    ;(this._ellipsoidGeometry = new r.EllipsoidOutlineGeometry(o)), (this._workerName = 'createSphereOutlineGeometry')
+  function f(n) {
+    const r = e.defaultValue(n.radius, 1),
+      o = { radii: new i.Cartesian3(r, r, r), stackPartitions: n.stackPartitions, slicePartitions: n.slicePartitions, subdivisions: n.subdivisions }
+    ;(this._ellipsoidGeometry = new t.EllipsoidOutlineGeometry(o)), (this._workerName = 'createSphereOutlineGeometry')
   }
-  ;(m.packedLength = r.EllipsoidOutlineGeometry.packedLength),
-    (m.pack = function (i, e, t) {
-      return r.EllipsoidOutlineGeometry.pack(i._ellipsoidGeometry, e, t)
+  ;(f.packedLength = t.EllipsoidOutlineGeometry.packedLength),
+    (f.pack = function (e, i, n) {
+      return t.EllipsoidOutlineGeometry.pack(e._ellipsoidGeometry, i, n)
     })
-  var p = new r.EllipsoidOutlineGeometry(),
-    y = { radius: void 0, radii: new e.Cartesian3(), stackPartitions: void 0, slicePartitions: void 0, subdivisions: void 0 }
+  const y = new t.EllipsoidOutlineGeometry(),
+    G = { radius: void 0, radii: new i.Cartesian3(), stackPartitions: void 0, slicePartitions: void 0, subdivisions: void 0 }
   return (
-    (m.unpack = function (t, n, o) {
-      var s = r.EllipsoidOutlineGeometry.unpack(t, n, p)
+    (f.unpack = function (n, r, o) {
+      const s = t.EllipsoidOutlineGeometry.unpack(n, r, y)
       return (
-        (y.stackPartitions = s._stackPartitions),
-        (y.slicePartitions = s._slicePartitions),
-        (y.subdivisions = s._subdivisions),
-        i.defined(o)
-          ? (e.Cartesian3.clone(s._radii, y.radii), (o._ellipsoidGeometry = new r.EllipsoidOutlineGeometry(y)), o)
-          : ((y.radius = s._radii.x), new m(y))
+        (G.stackPartitions = s._stackPartitions),
+        (G.slicePartitions = s._slicePartitions),
+        (G.subdivisions = s._subdivisions),
+        e.defined(o)
+          ? (i.Cartesian3.clone(s._radii, G.radii), (o._ellipsoidGeometry = new t.EllipsoidOutlineGeometry(G)), o)
+          : ((G.radius = s._radii.x), new f(G))
       )
     }),
-    (m.createGeometry = function (i) {
-      return r.EllipsoidOutlineGeometry.createGeometry(i._ellipsoidGeometry)
+    (f.createGeometry = function (e) {
+      return t.EllipsoidOutlineGeometry.createGeometry(e._ellipsoidGeometry)
     }),
-    function (e, t) {
-      return i.defined(t) && (e = m.unpack(e, t)), m.createGeometry(e)
+    function (i, t) {
+      return e.defined(t) && (i = f.unpack(i, t)), f.createGeometry(i)
     }
   )
 })

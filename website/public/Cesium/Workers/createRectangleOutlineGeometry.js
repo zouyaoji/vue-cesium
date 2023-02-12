@@ -1,211 +1,213 @@
 define([
-  './when-4bbc8319',
-  './Matrix2-9aa31791',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './ComponentDatatype-93750d1a',
-  './RuntimeError-346a3079',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6',
-  './PolygonPipeline-da7fc5ca',
-  './RectangleGeometryLibrary-d589ac1e',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './EllipsoidRhumbLine-30c47ff4'
-], function (e, t, i, a, r, n, o, l, u, s, c, p, d, f) {
+  './defaultValue-0a909f67',
+  './Matrix3-b6f074fa',
+  './Matrix2-163b5a1d',
+  './Transforms-dadc538f',
+  './ComponentDatatype-77274976',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-2149f06c',
+  './Math-e97915da',
+  './PolygonPipeline-1ccef6d7',
+  './RectangleGeometryLibrary-9bb8a8ec',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c',
+  './EllipsoidRhumbLine-7f84cca0'
+], function (e, t, i, n, o, a, r, l, s, u, c, p, d, f, g, h) {
   'use strict'
-  var g = new a.BoundingSphere(),
-    h = new a.BoundingSphere(),
-    y = new t.Cartesian3(),
-    m = new t.Rectangle()
-  function b(e, t) {
-    var i = e._ellipsoid,
-      a = t.height,
-      n = t.width,
-      s = t.northCap,
-      p = t.southCap,
-      d = a,
+  const y = new n.BoundingSphere(),
+    m = new n.BoundingSphere(),
+    b = new t.Cartesian3(),
+    _ = new i.Rectangle()
+  function E(e, t) {
+    const i = e._ellipsoid,
+      n = t.height,
+      l = t.width,
+      u = t.northCap,
+      c = t.southCap
+    let d = n,
       f = 2,
       g = 0,
       h = 4
-    s && ((f -= 1), (d -= 1), (g += 1), (h -= 2)), p && ((f -= 1), (d -= 1), (g += 1), (h -= 2)), (g += f * n + 2 * d - h)
-    var m,
-      b = new Float64Array(3 * g),
+    u && ((f -= 1), (d -= 1), (g += 1), (h -= 2)), c && ((f -= 1), (d -= 1), (g += 1), (h -= 2)), (g += f * l + 2 * d - h)
+    const y = new Float64Array(3 * g)
+    let m,
       _ = 0,
-      v = 0,
-      E = y
-    if (s) c.RectangleGeometryLibrary.computePosition(t, i, !1, v, 0, E), (b[_++] = E.x), (b[_++] = E.y), (b[_++] = E.z)
-    else for (m = 0; m < n; m++) c.RectangleGeometryLibrary.computePosition(t, i, !1, v, m, E), (b[_++] = E.x), (b[_++] = E.y), (b[_++] = E.z)
-    for (m = n - 1, v = 1; v < a; v++) c.RectangleGeometryLibrary.computePosition(t, i, !1, v, m, E), (b[_++] = E.x), (b[_++] = E.y), (b[_++] = E.z)
-    if (((v = a - 1), !p))
-      for (m = n - 2; m >= 0; m--) c.RectangleGeometryLibrary.computePosition(t, i, !1, v, m, E), (b[_++] = E.x), (b[_++] = E.y), (b[_++] = E.z)
-    for (m = 0, v = a - 2; v > 0; v--) c.RectangleGeometryLibrary.computePosition(t, i, !1, v, m, E), (b[_++] = E.x), (b[_++] = E.y), (b[_++] = E.z)
-    for (var A = (b.length / 3) * 2, G = u.IndexDatatype.createTypedArray(b.length / 3, A), R = 0, P = 0; P < b.length / 3 - 1; P++)
-      (G[R++] = P), (G[R++] = P + 1)
-    ;(G[R++] = b.length / 3 - 1), (G[R++] = 0)
-    var w = new o.Geometry({ attributes: new l.GeometryAttributes(), primitiveType: o.PrimitiveType.LINES })
+      E = 0
+    const A = b
+    if (u) p.RectangleGeometryLibrary.computePosition(t, i, !1, E, 0, A), (y[_++] = A.x), (y[_++] = A.y), (y[_++] = A.z)
+    else for (m = 0; m < l; m++) p.RectangleGeometryLibrary.computePosition(t, i, !1, E, m, A), (y[_++] = A.x), (y[_++] = A.y), (y[_++] = A.z)
+    for (m = l - 1, E = 1; E < n; E++) p.RectangleGeometryLibrary.computePosition(t, i, !1, E, m, A), (y[_++] = A.x), (y[_++] = A.y), (y[_++] = A.z)
+    if (((E = n - 1), !c))
+      for (m = l - 2; m >= 0; m--) p.RectangleGeometryLibrary.computePosition(t, i, !1, E, m, A), (y[_++] = A.x), (y[_++] = A.y), (y[_++] = A.z)
+    for (m = 0, E = n - 2; E > 0; E--) p.RectangleGeometryLibrary.computePosition(t, i, !1, E, m, A), (y[_++] = A.x), (y[_++] = A.y), (y[_++] = A.z)
+    const G = (y.length / 3) * 2,
+      R = s.IndexDatatype.createTypedArray(y.length / 3, G)
+    let P = 0
+    for (let e = 0; e < y.length / 3 - 1; e++) (R[P++] = e), (R[P++] = e + 1)
+    ;(R[P++] = y.length / 3 - 1), (R[P++] = 0)
+    const L = new a.Geometry({ attributes: new r.GeometryAttributes(), primitiveType: a.PrimitiveType.LINES })
     return (
-      (w.attributes.position = new o.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: b })),
-      (w.indices = G),
-      w
+      (L.attributes.position = new a.GeometryAttribute({ componentDatatype: o.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: y })),
+      (L.indices = R),
+      L
     )
   }
-  function _(i) {
-    var a = (i = e.defaultValue(i, e.defaultValue.EMPTY_OBJECT)).rectangle,
-      n = e.defaultValue(i.granularity, r.CesiumMath.RADIANS_PER_DEGREE),
-      o = e.defaultValue(i.ellipsoid, t.Ellipsoid.WGS84),
-      l = e.defaultValue(i.rotation, 0),
-      u = e.defaultValue(i.height, 0),
-      s = e.defaultValue(i.extrudedHeight, u)
-    ;(this._rectangle = t.Rectangle.clone(a)),
-      (this._granularity = n),
-      (this._ellipsoid = o),
-      (this._surfaceHeight = Math.max(u, s)),
+  function A(n) {
+    const o = (n = e.defaultValue(n, e.defaultValue.EMPTY_OBJECT)).rectangle,
+      a = e.defaultValue(n.granularity, u.CesiumMath.RADIANS_PER_DEGREE),
+      r = e.defaultValue(n.ellipsoid, t.Ellipsoid.WGS84),
+      l = e.defaultValue(n.rotation, 0),
+      s = e.defaultValue(n.height, 0),
+      c = e.defaultValue(n.extrudedHeight, s)
+    ;(this._rectangle = i.Rectangle.clone(o)),
+      (this._granularity = a),
+      (this._ellipsoid = r),
+      (this._surfaceHeight = Math.max(s, c)),
       (this._rotation = l),
-      (this._extrudedHeight = Math.min(u, s)),
-      (this._offsetAttribute = i.offsetAttribute),
+      (this._extrudedHeight = Math.min(s, c)),
+      (this._offsetAttribute = n.offsetAttribute),
       (this._workerName = 'createRectangleOutlineGeometry')
   }
-  ;(_.packedLength = t.Rectangle.packedLength + t.Ellipsoid.packedLength + 5),
-    (_.pack = function (i, a, r) {
+  ;(A.packedLength = i.Rectangle.packedLength + t.Ellipsoid.packedLength + 5),
+    (A.pack = function (n, o, a) {
       return (
-        (r = e.defaultValue(r, 0)),
-        t.Rectangle.pack(i._rectangle, a, r),
-        (r += t.Rectangle.packedLength),
-        t.Ellipsoid.pack(i._ellipsoid, a, r),
-        (r += t.Ellipsoid.packedLength),
-        (a[r++] = i._granularity),
-        (a[r++] = i._surfaceHeight),
-        (a[r++] = i._rotation),
-        (a[r++] = i._extrudedHeight),
-        (a[r] = e.defaultValue(i._offsetAttribute, -1)),
-        a
+        (a = e.defaultValue(a, 0)),
+        i.Rectangle.pack(n._rectangle, o, a),
+        (a += i.Rectangle.packedLength),
+        t.Ellipsoid.pack(n._ellipsoid, o, a),
+        (a += t.Ellipsoid.packedLength),
+        (o[a++] = n._granularity),
+        (o[a++] = n._surfaceHeight),
+        (o[a++] = n._rotation),
+        (o[a++] = n._extrudedHeight),
+        (o[a] = e.defaultValue(n._offsetAttribute, -1)),
+        o
       )
     })
-  var v = new t.Rectangle(),
-    E = t.Ellipsoid.clone(t.Ellipsoid.UNIT_SPHERE),
-    A = { rectangle: v, ellipsoid: E, granularity: void 0, height: void 0, rotation: void 0, extrudedHeight: void 0, offsetAttribute: void 0 }
-  _.unpack = function (i, a, r) {
-    a = e.defaultValue(a, 0)
-    var n = t.Rectangle.unpack(i, a, v)
-    a += t.Rectangle.packedLength
-    var o = t.Ellipsoid.unpack(i, a, E)
-    a += t.Ellipsoid.packedLength
-    var l = i[a++],
-      u = i[a++],
-      s = i[a++],
-      c = i[a++],
-      p = i[a]
-    return e.defined(r)
-      ? ((r._rectangle = t.Rectangle.clone(n, r._rectangle)),
-        (r._ellipsoid = t.Ellipsoid.clone(o, r._ellipsoid)),
-        (r._surfaceHeight = u),
-        (r._rotation = s),
-        (r._extrudedHeight = c),
-        (r._offsetAttribute = -1 === p ? void 0 : p),
-        r)
-      : ((A.granularity = l), (A.height = u), (A.rotation = s), (A.extrudedHeight = c), (A.offsetAttribute = -1 === p ? void 0 : p), new _(A))
+  const G = new i.Rectangle(),
+    R = t.Ellipsoid.clone(t.Ellipsoid.UNIT_SPHERE),
+    P = { rectangle: G, ellipsoid: R, granularity: void 0, height: void 0, rotation: void 0, extrudedHeight: void 0, offsetAttribute: void 0 }
+  A.unpack = function (n, o, a) {
+    o = e.defaultValue(o, 0)
+    const r = i.Rectangle.unpack(n, o, G)
+    o += i.Rectangle.packedLength
+    const l = t.Ellipsoid.unpack(n, o, R)
+    o += t.Ellipsoid.packedLength
+    const s = n[o++],
+      u = n[o++],
+      c = n[o++],
+      p = n[o++],
+      d = n[o]
+    return e.defined(a)
+      ? ((a._rectangle = i.Rectangle.clone(r, a._rectangle)),
+        (a._ellipsoid = t.Ellipsoid.clone(l, a._ellipsoid)),
+        (a._surfaceHeight = u),
+        (a._rotation = c),
+        (a._extrudedHeight = p),
+        (a._offsetAttribute = -1 === d ? void 0 : d),
+        a)
+      : ((P.granularity = s), (P.height = u), (P.rotation = c), (P.extrudedHeight = p), (P.offsetAttribute = -1 === d ? void 0 : d), new A(P))
   }
-  var G = new t.Cartographic()
+  const L = new t.Cartographic()
   return (
-    (_.createGeometry = function (t) {
-      var n,
-        l,
-        p = t._rectangle,
-        d = t._ellipsoid,
-        f = c.RectangleGeometryLibrary.computeOptions(p, t._granularity, t._rotation, 0, m, G)
-      if (
-        !r.CesiumMath.equalsEpsilon(p.north, p.south, r.CesiumMath.EPSILON10) &&
-        !r.CesiumMath.equalsEpsilon(p.east, p.west, r.CesiumMath.EPSILON10)
-      ) {
-        var y,
-          _ = t._surfaceHeight,
-          v = t._extrudedHeight
-        if (!r.CesiumMath.equalsEpsilon(_, v, 0, r.CesiumMath.EPSILON2)) {
-          if (
-            ((n = (function (e, t) {
-              var i = e._surfaceHeight,
-                a = e._extrudedHeight,
-                r = e._ellipsoid,
-                n = a,
-                o = i,
-                l = b(e, t),
-                c = t.height,
-                p = t.width,
-                d = s.PolygonPipeline.scaleToGeodeticHeight(l.attributes.position.values, o, r, !1),
-                f = d.length,
-                g = new Float64Array(2 * f)
-              g.set(d)
-              var h = s.PolygonPipeline.scaleToGeodeticHeight(l.attributes.position.values, n, r)
-              g.set(h, f), (l.attributes.position.values = g)
-              var y = t.northCap,
-                m = t.southCap,
-                _ = 4
-              y && (_ -= 1), m && (_ -= 1)
-              var v = 2 * (g.length / 3 + _),
-                E = u.IndexDatatype.createTypedArray(g.length / 3, v)
-              f = g.length / 6
-              for (var A, G = 0, R = 0; R < f - 1; R++) (E[G++] = R), (E[G++] = R + 1), (E[G++] = R + f), (E[G++] = R + f + 1)
-              if (((E[G++] = f - 1), (E[G++] = 0), (E[G++] = f + f - 1), (E[G++] = f), (E[G++] = 0), (E[G++] = f), y)) A = c - 1
-              else {
-                var P = p - 1
-                ;(E[G++] = P), (E[G++] = P + f), (A = p + c - 2)
-              }
-              if (((E[G++] = A), (E[G++] = A + f), !m)) {
-                var w = p + A - 1
-                ;(E[G++] = w), (E[G] = w + f)
-              }
-              return (l.indices = E), l
-            })(t, f)),
-            e.defined(t._offsetAttribute))
-          ) {
-            var E = n.attributes.position.values.length / 3,
-              A = new Uint8Array(E)
-            t._offsetAttribute === i.GeometryOffsetAttribute.TOP
-              ? (A = i.arrayFill(A, 1, 0, E / 2))
-              : ((y = t._offsetAttribute === i.GeometryOffsetAttribute.NONE ? 0 : 1), (A = i.arrayFill(A, y))),
-              (n.attributes.applyOffset = new o.GeometryAttribute({
-                componentDatatype: r.ComponentDatatype.UNSIGNED_BYTE,
-                componentsPerAttribute: 1,
-                values: A
-              }))
-          }
-          var R = a.BoundingSphere.fromRectangle3D(p, d, _, h),
-            P = a.BoundingSphere.fromRectangle3D(p, d, v, g)
-          l = a.BoundingSphere.union(R, P)
-        } else {
-          if (
-            (((n = b(t, f)).attributes.position.values = s.PolygonPipeline.scaleToGeodeticHeight(n.attributes.position.values, _, d, !1)),
-            e.defined(t._offsetAttribute))
-          ) {
-            var w = n.attributes.position.values.length,
-              L = new Uint8Array(w / 3)
-            ;(y = t._offsetAttribute === i.GeometryOffsetAttribute.NONE ? 0 : 1),
-              i.arrayFill(L, y),
-              (n.attributes.applyOffset = new o.GeometryAttribute({
-                componentDatatype: r.ComponentDatatype.UNSIGNED_BYTE,
-                componentsPerAttribute: 1,
-                values: L
-              }))
-          }
-          l = a.BoundingSphere.fromRectangle3D(p, d, _)
+    (A.createGeometry = function (t) {
+      const i = t._rectangle,
+        r = t._ellipsoid,
+        d = p.RectangleGeometryLibrary.computeOptions(i, t._granularity, t._rotation, 0, _, L)
+      let f, g
+      if (u.CesiumMath.equalsEpsilon(i.north, i.south, u.CesiumMath.EPSILON10) || u.CesiumMath.equalsEpsilon(i.east, i.west, u.CesiumMath.EPSILON10))
+        return
+      const h = t._surfaceHeight,
+        b = t._extrudedHeight
+      let A
+      if (!u.CesiumMath.equalsEpsilon(h, b, 0, u.CesiumMath.EPSILON2)) {
+        if (
+          ((f = (function (e, t) {
+            const i = e._surfaceHeight,
+              n = e._extrudedHeight,
+              o = e._ellipsoid,
+              a = n,
+              r = i,
+              l = E(e, t),
+              u = t.height,
+              p = t.width,
+              d = c.PolygonPipeline.scaleToGeodeticHeight(l.attributes.position.values, r, o, !1)
+            let f = d.length
+            const g = new Float64Array(2 * f)
+            g.set(d)
+            const h = c.PolygonPipeline.scaleToGeodeticHeight(l.attributes.position.values, a, o)
+            g.set(h, f), (l.attributes.position.values = g)
+            const y = t.northCap,
+              m = t.southCap
+            let b = 4
+            y && (b -= 1), m && (b -= 1)
+            const _ = 2 * (g.length / 3 + b),
+              A = s.IndexDatatype.createTypedArray(g.length / 3, _)
+            f = g.length / 6
+            let G,
+              R = 0
+            for (let e = 0; e < f - 1; e++) (A[R++] = e), (A[R++] = e + 1), (A[R++] = e + f), (A[R++] = e + f + 1)
+            if (((A[R++] = f - 1), (A[R++] = 0), (A[R++] = f + f - 1), (A[R++] = f), (A[R++] = 0), (A[R++] = f), y)) G = u - 1
+            else {
+              const e = p - 1
+              ;(A[R++] = e), (A[R++] = e + f), (G = p + u - 2)
+            }
+            if (((A[R++] = G), (A[R++] = G + f), !m)) {
+              const e = p + G - 1
+              ;(A[R++] = e), (A[R] = e + f)
+            }
+            return (l.indices = A), l
+          })(t, d)),
+          e.defined(t._offsetAttribute))
+        ) {
+          const e = f.attributes.position.values.length / 3
+          let i = new Uint8Array(e)
+          t._offsetAttribute === l.GeometryOffsetAttribute.TOP
+            ? (i = i.fill(1, 0, e / 2))
+            : ((A = t._offsetAttribute === l.GeometryOffsetAttribute.NONE ? 0 : 1), (i = i.fill(A))),
+            (f.attributes.applyOffset = new a.GeometryAttribute({
+              componentDatatype: o.ComponentDatatype.UNSIGNED_BYTE,
+              componentsPerAttribute: 1,
+              values: i
+            }))
         }
-        return new o.Geometry({
-          attributes: n.attributes,
-          indices: n.indices,
-          primitiveType: o.PrimitiveType.LINES,
-          boundingSphere: l,
-          offsetAttribute: t._offsetAttribute
-        })
+        const u = n.BoundingSphere.fromRectangle3D(i, r, h, m),
+          p = n.BoundingSphere.fromRectangle3D(i, r, b, y)
+        g = n.BoundingSphere.union(u, p)
+      } else {
+        if (
+          ((f = E(t, d)),
+          (f.attributes.position.values = c.PolygonPipeline.scaleToGeodeticHeight(f.attributes.position.values, h, r, !1)),
+          e.defined(t._offsetAttribute))
+        ) {
+          const e = f.attributes.position.values.length
+          A = t._offsetAttribute === l.GeometryOffsetAttribute.NONE ? 0 : 1
+          const i = new Uint8Array(e / 3).fill(A)
+          f.attributes.applyOffset = new a.GeometryAttribute({
+            componentDatatype: o.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 1,
+            values: i
+          })
+        }
+        g = n.BoundingSphere.fromRectangle3D(i, r, h)
       }
+      return new a.Geometry({
+        attributes: f.attributes,
+        indices: f.indices,
+        primitiveType: a.PrimitiveType.LINES,
+        boundingSphere: g,
+        offsetAttribute: t._offsetAttribute
+      })
     }),
-    function (i, a) {
+    function (n, o) {
       return (
-        e.defined(a) && (i = _.unpack(i, a)),
-        (i._ellipsoid = t.Ellipsoid.clone(i._ellipsoid)),
-        (i._rectangle = t.Rectangle.clone(i._rectangle)),
-        _.createGeometry(i)
+        e.defined(o) && (n = A.unpack(n, o)),
+        (n._ellipsoid = t.Ellipsoid.clone(n._ellipsoid)),
+        (n._rectangle = i.Rectangle.clone(n._rectangle)),
+        A.createGeometry(n)
       )
     }
   )

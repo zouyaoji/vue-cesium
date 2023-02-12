@@ -1,201 +1,205 @@
 define([
-  './when-4bbc8319',
-  './Matrix2-9aa31791',
-  './ArcType-98ec98bf',
-  './Transforms-d13cc04e',
-  './Color-1ab5c5c7',
-  './ComponentDatatype-93750d1a',
-  './RuntimeError-346a3079',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6',
-  './PolylinePipeline-64021a2e',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './EllipsoidGeodesic-dd8f2afb',
-  './EllipsoidRhumbLine-30c47ff4',
-  './IntersectionTests-96a04219',
-  './Plane-318d6937'
-], function (e, o, r, t, a, l, i, n, s, p, d, c, y, f, u, h, C) {
+  './defaultValue-0a909f67',
+  './Matrix3-b6f074fa',
+  './ArcType-ce2e50ab',
+  './Transforms-dadc538f',
+  './Color-0a64769f',
+  './ComponentDatatype-77274976',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './IndexDatatype-2149f06c',
+  './Math-e97915da',
+  './PolylinePipeline-2b44aa86',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c',
+  './EllipsoidGeodesic-b00a0416',
+  './EllipsoidRhumbLine-7f84cca0',
+  './IntersectionTests-1307e0a8',
+  './Plane-1c5a21a3'
+], function (e, o, t, l, r, n, a, i, s, c, p, d, f, y, u, h, C, T, g) {
   'use strict'
-  function T(e, o, r, t, l, i, n) {
-    var s,
-      p = d.PolylinePipeline.numberOfPoints(e, o, l),
-      c = r.red,
-      y = r.green,
-      f = r.blue,
-      u = r.alpha,
-      h = t.red,
-      C = t.green,
-      T = t.blue,
-      g = t.alpha
-    if (a.Color.equals(r, t)) {
-      for (s = 0; s < p; s++)
-        (i[n++] = a.Color.floatToByte(c)), (i[n++] = a.Color.floatToByte(y)), (i[n++] = a.Color.floatToByte(f)), (i[n++] = a.Color.floatToByte(u))
-      return n
+  function m(e, o, t, l, n, a, i) {
+    const s = p.PolylinePipeline.numberOfPoints(e, o, n)
+    let c
+    const d = t.red,
+      f = t.green,
+      y = t.blue,
+      u = t.alpha,
+      h = l.red,
+      C = l.green,
+      T = l.blue,
+      g = l.alpha
+    if (r.Color.equals(t, l)) {
+      for (c = 0; c < s; c++)
+        (a[i++] = r.Color.floatToByte(d)), (a[i++] = r.Color.floatToByte(f)), (a[i++] = r.Color.floatToByte(y)), (a[i++] = r.Color.floatToByte(u))
+      return i
     }
-    var m = (h - c) / p,
-      v = (C - y) / p,
-      P = (T - f) / p,
-      _ = (g - u) / p,
-      b = n
-    for (s = 0; s < p; s++)
-      (i[b++] = a.Color.floatToByte(c + s * m)),
-        (i[b++] = a.Color.floatToByte(y + s * v)),
-        (i[b++] = a.Color.floatToByte(f + s * P)),
-        (i[b++] = a.Color.floatToByte(u + s * _))
-    return b
+    const m = (h - d) / s,
+      P = (C - f) / s,
+      _ = (T - y) / s,
+      b = (g - u) / s
+    let B = i
+    for (c = 0; c < s; c++)
+      (a[B++] = r.Color.floatToByte(d + c * m)),
+        (a[B++] = r.Color.floatToByte(f + c * P)),
+        (a[B++] = r.Color.floatToByte(y + c * _)),
+        (a[B++] = r.Color.floatToByte(u + c * b))
+    return B
   }
-  function g(t) {
-    var i = (t = e.defaultValue(t, e.defaultValue.EMPTY_OBJECT)).positions,
-      n = t.colors,
-      s = e.defaultValue(t.colorsPerVertex, !1)
-    ;(this._positions = i),
-      (this._colors = n),
-      (this._colorsPerVertex = s),
-      (this._arcType = e.defaultValue(t.arcType, r.ArcType.GEODESIC)),
-      (this._granularity = e.defaultValue(t.granularity, l.CesiumMath.RADIANS_PER_DEGREE)),
-      (this._ellipsoid = e.defaultValue(t.ellipsoid, o.Ellipsoid.WGS84)),
+  function P(l) {
+    const n = (l = e.defaultValue(l, e.defaultValue.EMPTY_OBJECT)).positions,
+      a = l.colors,
+      i = e.defaultValue(l.colorsPerVertex, !1)
+    ;(this._positions = n),
+      (this._colors = a),
+      (this._colorsPerVertex = i),
+      (this._arcType = e.defaultValue(l.arcType, t.ArcType.GEODESIC)),
+      (this._granularity = e.defaultValue(l.granularity, c.CesiumMath.RADIANS_PER_DEGREE)),
+      (this._ellipsoid = e.defaultValue(l.ellipsoid, o.Ellipsoid.WGS84)),
       (this._workerName = 'createSimplePolylineGeometry')
-    var p = 1 + i.length * o.Cartesian3.packedLength
-    ;(p += e.defined(n) ? 1 + n.length * a.Color.packedLength : 1), (this.packedLength = p + o.Ellipsoid.packedLength + 3)
+    let s = 1 + n.length * o.Cartesian3.packedLength
+    ;(s += e.defined(a) ? 1 + a.length * r.Color.packedLength : 1), (this.packedLength = s + o.Ellipsoid.packedLength + 3)
   }
-  ;(g.pack = function (r, t, l) {
-    var i
-    l = e.defaultValue(l, 0)
-    var n = r._positions,
-      s = n.length
-    for (t[l++] = s, i = 0; i < s; ++i, l += o.Cartesian3.packedLength) o.Cartesian3.pack(n[i], t, l)
-    var p = r._colors
-    for (s = e.defined(p) ? p.length : 0, t[l++] = s, i = 0; i < s; ++i, l += a.Color.packedLength) a.Color.pack(p[i], t, l)
+  ;(P.pack = function (t, l, n) {
+    let a
+    n = e.defaultValue(n, 0)
+    const i = t._positions
+    let s = i.length
+    for (l[n++] = s, a = 0; a < s; ++a, n += o.Cartesian3.packedLength) o.Cartesian3.pack(i[a], l, n)
+    const c = t._colors
+    for (s = e.defined(c) ? c.length : 0, l[n++] = s, a = 0; a < s; ++a, n += r.Color.packedLength) r.Color.pack(c[a], l, n)
     return (
-      o.Ellipsoid.pack(r._ellipsoid, t, l),
-      (l += o.Ellipsoid.packedLength),
-      (t[l++] = r._colorsPerVertex ? 1 : 0),
-      (t[l++] = r._arcType),
-      (t[l] = r._granularity),
-      t
+      o.Ellipsoid.pack(t._ellipsoid, l, n),
+      (n += o.Ellipsoid.packedLength),
+      (l[n++] = t._colorsPerVertex ? 1 : 0),
+      (l[n++] = t._arcType),
+      (l[n] = t._granularity),
+      l
     )
   }),
-    (g.unpack = function (r, t, l) {
-      var i
-      t = e.defaultValue(t, 0)
-      var n = r[t++],
-        s = new Array(n)
-      for (i = 0; i < n; ++i, t += o.Cartesian3.packedLength) s[i] = o.Cartesian3.unpack(r, t)
-      var p = (n = r[t++]) > 0 ? new Array(n) : void 0
-      for (i = 0; i < n; ++i, t += a.Color.packedLength) p[i] = a.Color.unpack(r, t)
-      var d = o.Ellipsoid.unpack(r, t)
-      t += o.Ellipsoid.packedLength
-      var c = 1 === r[t++],
-        y = r[t++],
-        f = r[t]
-      return e.defined(l)
-        ? ((l._positions = s), (l._colors = p), (l._ellipsoid = d), (l._colorsPerVertex = c), (l._arcType = y), (l._granularity = f), l)
-        : new g({ positions: s, colors: p, ellipsoid: d, colorsPerVertex: c, arcType: y, granularity: f })
+    (P.unpack = function (t, l, n) {
+      let a
+      l = e.defaultValue(l, 0)
+      let i = t[l++]
+      const s = new Array(i)
+      for (a = 0; a < i; ++a, l += o.Cartesian3.packedLength) s[a] = o.Cartesian3.unpack(t, l)
+      i = t[l++]
+      const c = i > 0 ? new Array(i) : void 0
+      for (a = 0; a < i; ++a, l += r.Color.packedLength) c[a] = r.Color.unpack(t, l)
+      const p = o.Ellipsoid.unpack(t, l)
+      l += o.Ellipsoid.packedLength
+      const d = 1 === t[l++],
+        f = t[l++],
+        y = t[l]
+      return e.defined(n)
+        ? ((n._positions = s), (n._colors = c), (n._ellipsoid = p), (n._colorsPerVertex = d), (n._arcType = f), (n._granularity = y), n)
+        : new P({ positions: s, colors: c, ellipsoid: p, colorsPerVertex: d, arcType: f, granularity: y })
     })
-  var m = new Array(2),
-    v = new Array(2),
-    P = { positions: m, height: v, ellipsoid: void 0, minDistance: void 0, granularity: void 0 }
+  const _ = new Array(2),
+    b = new Array(2),
+    B = { positions: _, height: b, ellipsoid: void 0, minDistance: void 0, granularity: void 0 }
   return (
-    (g.createGeometry = function (i) {
-      var c,
-        y,
-        f,
-        u,
-        h,
-        C = i._positions,
-        g = i._colors,
-        _ = i._colorsPerVertex,
-        b = i._arcType,
-        B = i._granularity,
-        A = i._ellipsoid,
-        E = l.CesiumMath.chordLength(B, A.maximumRadius),
-        k = e.defined(g) && !_,
-        G = C.length,
+    (P.createGeometry = function (d) {
+      const f = d._positions,
+        y = d._colors,
+        u = d._colorsPerVertex,
+        h = d._arcType,
+        C = d._granularity,
+        T = d._ellipsoid,
+        g = c.CesiumMath.chordLength(C, T.maximumRadius),
+        P = e.defined(y) && !u
+      let A
+      const E = f.length
+      let k,
+        G,
+        D,
+        L,
         w = 0
-      if (b === r.ArcType.GEODESIC || b === r.ArcType.RHUMB) {
-        var D, L, V
-        b === r.ArcType.GEODESIC
-          ? ((D = l.CesiumMath.chordLength(B, A.maximumRadius)), (L = d.PolylinePipeline.numberOfPoints), (V = d.PolylinePipeline.generateArc))
-          : ((D = B), (L = d.PolylinePipeline.numberOfPointsRhumbLine), (V = d.PolylinePipeline.generateRhumbArc))
-        var x = d.PolylinePipeline.extractHeights(C, A),
-          S = P
-        if ((b === r.ArcType.GEODESIC ? (S.minDistance = E) : (S.granularity = B), (S.ellipsoid = A), k)) {
-          var I = 0
-          for (c = 0; c < G - 1; c++) I += L(C[c], C[c + 1], D) + 1
-          ;(y = new Float64Array(3 * I)), (u = new Uint8Array(4 * I)), (S.positions = m), (S.height = v)
-          var R = 0
-          for (c = 0; c < G - 1; ++c) {
-            ;(m[0] = C[c]), (m[1] = C[c + 1]), (v[0] = x[c]), (v[1] = x[c + 1])
-            var O = V(S)
-            if (e.defined(g)) {
-              var M = O.length / 3
-              h = g[c]
-              for (var U = 0; U < M; ++U)
-                (u[R++] = a.Color.floatToByte(h.red)),
-                  (u[R++] = a.Color.floatToByte(h.green)),
-                  (u[R++] = a.Color.floatToByte(h.blue)),
-                  (u[R++] = a.Color.floatToByte(h.alpha))
+      if (h === t.ArcType.GEODESIC || h === t.ArcType.RHUMB) {
+        let o, l, n
+        h === t.ArcType.GEODESIC
+          ? ((o = c.CesiumMath.chordLength(C, T.maximumRadius)), (l = p.PolylinePipeline.numberOfPoints), (n = p.PolylinePipeline.generateArc))
+          : ((o = C), (l = p.PolylinePipeline.numberOfPointsRhumbLine), (n = p.PolylinePipeline.generateRhumbArc))
+        const a = p.PolylinePipeline.extractHeights(f, T),
+          i = B
+        if ((h === t.ArcType.GEODESIC ? (i.minDistance = g) : (i.granularity = C), (i.ellipsoid = T), P)) {
+          let t = 0
+          for (A = 0; A < E - 1; A++) t += l(f[A], f[A + 1], o) + 1
+          ;(k = new Float64Array(3 * t)), (D = new Uint8Array(4 * t)), (i.positions = _), (i.height = b)
+          let s = 0
+          for (A = 0; A < E - 1; ++A) {
+            ;(_[0] = f[A]), (_[1] = f[A + 1]), (b[0] = a[A]), (b[1] = a[A + 1])
+            const o = n(i)
+            if (e.defined(y)) {
+              const e = o.length / 3
+              L = y[A]
+              for (let o = 0; o < e; ++o)
+                (D[s++] = r.Color.floatToByte(L.red)),
+                  (D[s++] = r.Color.floatToByte(L.green)),
+                  (D[s++] = r.Color.floatToByte(L.blue)),
+                  (D[s++] = r.Color.floatToByte(L.alpha))
             }
-            y.set(O, w), (w += O.length)
+            k.set(o, w), (w += o.length)
           }
-        } else if (((S.positions = C), (S.height = x), (y = new Float64Array(V(S))), e.defined(g))) {
-          for (u = new Uint8Array((y.length / 3) * 4), c = 0; c < G - 1; ++c) {
-            w = T(C[c], C[c + 1], g[c], g[c + 1], E, u, w)
+        } else if (((i.positions = f), (i.height = a), (k = new Float64Array(n(i))), e.defined(y))) {
+          for (D = new Uint8Array((k.length / 3) * 4), A = 0; A < E - 1; ++A) {
+            w = m(f[A], f[A + 1], y[A], y[A + 1], g, D, w)
           }
-          var N = g[G - 1]
-          ;(u[w++] = a.Color.floatToByte(N.red)),
-            (u[w++] = a.Color.floatToByte(N.green)),
-            (u[w++] = a.Color.floatToByte(N.blue)),
-            (u[w++] = a.Color.floatToByte(N.alpha))
+          const e = y[E - 1]
+          ;(D[w++] = r.Color.floatToByte(e.red)),
+            (D[w++] = r.Color.floatToByte(e.green)),
+            (D[w++] = r.Color.floatToByte(e.blue)),
+            (D[w++] = r.Color.floatToByte(e.alpha))
         }
       } else {
-        ;(f = k ? 2 * G - 2 : G), (y = new Float64Array(3 * f)), (u = e.defined(g) ? new Uint8Array(4 * f) : void 0)
-        var F = 0,
-          H = 0
-        for (c = 0; c < G; ++c) {
-          var W = C[c]
+        ;(G = P ? 2 * E - 2 : E), (k = new Float64Array(3 * G)), (D = e.defined(y) ? new Uint8Array(4 * G) : void 0)
+        let t = 0,
+          l = 0
+        for (A = 0; A < E; ++A) {
+          const n = f[A]
           if (
-            (k &&
-              c > 0 &&
-              (o.Cartesian3.pack(W, y, F),
-              (F += 3),
-              (h = g[c - 1]),
-              (u[H++] = a.Color.floatToByte(h.red)),
-              (u[H++] = a.Color.floatToByte(h.green)),
-              (u[H++] = a.Color.floatToByte(h.blue)),
-              (u[H++] = a.Color.floatToByte(h.alpha))),
-            k && c === G - 1)
+            (P &&
+              A > 0 &&
+              (o.Cartesian3.pack(n, k, t),
+              (t += 3),
+              (L = y[A - 1]),
+              (D[l++] = r.Color.floatToByte(L.red)),
+              (D[l++] = r.Color.floatToByte(L.green)),
+              (D[l++] = r.Color.floatToByte(L.blue)),
+              (D[l++] = r.Color.floatToByte(L.alpha))),
+            P && A === E - 1)
           )
             break
-          o.Cartesian3.pack(W, y, F),
-            (F += 3),
-            e.defined(g) &&
-              ((h = g[c]),
-              (u[H++] = a.Color.floatToByte(h.red)),
-              (u[H++] = a.Color.floatToByte(h.green)),
-              (u[H++] = a.Color.floatToByte(h.blue)),
-              (u[H++] = a.Color.floatToByte(h.alpha)))
+          o.Cartesian3.pack(n, k, t),
+            (t += 3),
+            e.defined(y) &&
+              ((L = y[A]),
+              (D[l++] = r.Color.floatToByte(L.red)),
+              (D[l++] = r.Color.floatToByte(L.green)),
+              (D[l++] = r.Color.floatToByte(L.blue)),
+              (D[l++] = r.Color.floatToByte(L.alpha)))
         }
       }
-      var Y = new s.GeometryAttributes()
-      ;(Y.position = new n.GeometryAttribute({ componentDatatype: l.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: y })),
-        e.defined(g) &&
-          (Y.color = new n.GeometryAttribute({
-            componentDatatype: l.ComponentDatatype.UNSIGNED_BYTE,
+      const V = new i.GeometryAttributes()
+      ;(V.position = new a.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: k })),
+        e.defined(y) &&
+          (V.color = new a.GeometryAttribute({
+            componentDatatype: n.ComponentDatatype.UNSIGNED_BYTE,
             componentsPerAttribute: 4,
-            values: u,
+            values: D,
             normalize: !0
-          }))
-      var q = 2 * ((f = y.length / 3) - 1),
-        z = p.IndexDatatype.createTypedArray(f, q),
-        J = 0
-      for (c = 0; c < f - 1; ++c) (z[J++] = c), (z[J++] = c + 1)
-      return new n.Geometry({ attributes: Y, indices: z, primitiveType: n.PrimitiveType.LINES, boundingSphere: t.BoundingSphere.fromPoints(C) })
+          })),
+        (G = k.length / 3)
+      const x = 2 * (G - 1),
+        S = s.IndexDatatype.createTypedArray(G, x)
+      let I = 0
+      for (A = 0; A < G - 1; ++A) (S[I++] = A), (S[I++] = A + 1)
+      return new a.Geometry({ attributes: V, indices: S, primitiveType: a.PrimitiveType.LINES, boundingSphere: l.BoundingSphere.fromPoints(f) })
     }),
-    function (r, t) {
-      return e.defined(t) && (r = g.unpack(r, t)), (r._ellipsoid = o.Ellipsoid.clone(r._ellipsoid)), g.createGeometry(r)
+    function (t, l) {
+      return e.defined(l) && (t = P.unpack(t, l)), (t._ellipsoid = o.Ellipsoid.clone(t._ellipsoid)), P.createGeometry(t)
     }
   )
 })

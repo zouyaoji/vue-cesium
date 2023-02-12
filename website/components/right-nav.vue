@@ -18,7 +18,7 @@
       </el-link>
     </div>
     <app-link href="https://xn--4gq62f52gdss.com/#/register?code=hbv1fTgZ" style="position: absolute">
-      <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">jlz6Frzz</el-tag></span>
+      <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">hbv1fTgZ</el-tag></span>
     </app-link>
   </el-scrollbar>
 

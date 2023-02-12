@@ -1,32 +1,34 @@
 define([
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './EllipseGeometry-47331b4e',
-  './VertexFormat-71718faa',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './combine-83860057',
-  './EllipseGeometryLibrary-962723df',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './GeometryInstance-47b34185',
-  './GeometryPipeline-2356afec',
-  './AttributeCompression-af389d04',
-  './EncodedCartesian3-f286cedc',
-  './IndexDatatype-b7d979a6',
-  './IntersectionTests-96a04219',
-  './Plane-318d6937'
-], function (e, t, i, r, o, n, a, l, s, d, m, c, u, p, y, _, G, x, h, g) {
+  './Matrix3-b6f074fa',
+  './defaultValue-0a909f67',
+  './EllipseGeometry-e21d5877',
+  './VertexFormat-ab2e00e6',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './EllipseGeometryLibrary-4fec0674',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryInstance-9b27c40d',
+  './GeometryOffsetAttribute-04332ce7',
+  './GeometryPipeline-b7404acc',
+  './AttributeCompression-e18a879a',
+  './EncodedCartesian3-de837603',
+  './IndexDatatype-2149f06c',
+  './IntersectionTests-1307e0a8',
+  './Plane-1c5a21a3'
+], function (e, t, i, r, o, a, n, s, l, d, m, c, u, p, y, _, x, G, h, f, g, E) {
   'use strict'
-  function f(e) {
-    var t = (e = i.defaultValue(e, i.defaultValue.EMPTY_OBJECT)).radius,
+  function w(e) {
+    const r = (e = t.defaultValue(e, t.defaultValue.EMPTY_OBJECT)).radius,
       o = {
         center: e.center,
-        semiMajorAxis: t,
-        semiMinorAxis: t,
+        semiMajorAxis: r,
+        semiMinorAxis: r,
         ellipsoid: e.ellipsoid,
         height: e.height,
         extrudedHeight: e.extrudedHeight,
@@ -35,64 +37,64 @@ define([
         stRotation: e.stRotation,
         shadowVolume: e.shadowVolume
       }
-    ;(this._ellipseGeometry = new r.EllipseGeometry(o)), (this._workerName = 'createCircleGeometry')
+    ;(this._ellipseGeometry = new i.EllipseGeometry(o)), (this._workerName = 'createCircleGeometry')
   }
-  ;(f.packedLength = r.EllipseGeometry.packedLength),
-    (f.pack = function (e, t, i) {
-      return r.EllipseGeometry.pack(e._ellipseGeometry, t, i)
+  ;(w.packedLength = i.EllipseGeometry.packedLength),
+    (w.pack = function (e, t, r) {
+      return i.EllipseGeometry.pack(e._ellipseGeometry, t, r)
     })
-  var v = new r.EllipseGeometry({ center: new e.Cartesian3(), semiMajorAxis: 1, semiMinorAxis: 1 }),
-    E = {
+  const A = new i.EllipseGeometry({ center: new e.Cartesian3(), semiMajorAxis: 1, semiMinorAxis: 1 }),
+    M = {
       center: new e.Cartesian3(),
       radius: void 0,
       ellipsoid: e.Ellipsoid.clone(e.Ellipsoid.UNIT_SPHERE),
       height: void 0,
       extrudedHeight: void 0,
       granularity: void 0,
-      vertexFormat: new o.VertexFormat(),
+      vertexFormat: new r.VertexFormat(),
       stRotation: void 0,
       semiMajorAxis: void 0,
       semiMinorAxis: void 0,
       shadowVolume: void 0
     }
   return (
-    (f.unpack = function (t, n, a) {
-      var l = r.EllipseGeometry.unpack(t, n, v)
+    (w.unpack = function (o, a, n) {
+      const s = i.EllipseGeometry.unpack(o, a, A)
       return (
-        (E.center = e.Cartesian3.clone(l._center, E.center)),
-        (E.ellipsoid = e.Ellipsoid.clone(l._ellipsoid, E.ellipsoid)),
-        (E.height = l._height),
-        (E.extrudedHeight = l._extrudedHeight),
-        (E.granularity = l._granularity),
-        (E.vertexFormat = o.VertexFormat.clone(l._vertexFormat, E.vertexFormat)),
-        (E.stRotation = l._stRotation),
-        (E.shadowVolume = l._shadowVolume),
-        i.defined(a)
-          ? ((E.semiMajorAxis = l._semiMajorAxis), (E.semiMinorAxis = l._semiMinorAxis), (a._ellipseGeometry = new r.EllipseGeometry(E)), a)
-          : ((E.radius = l._semiMajorAxis), new f(E))
+        (M.center = e.Cartesian3.clone(s._center, M.center)),
+        (M.ellipsoid = e.Ellipsoid.clone(s._ellipsoid, M.ellipsoid)),
+        (M.height = s._height),
+        (M.extrudedHeight = s._extrudedHeight),
+        (M.granularity = s._granularity),
+        (M.vertexFormat = r.VertexFormat.clone(s._vertexFormat, M.vertexFormat)),
+        (M.stRotation = s._stRotation),
+        (M.shadowVolume = s._shadowVolume),
+        t.defined(n)
+          ? ((M.semiMajorAxis = s._semiMajorAxis), (M.semiMinorAxis = s._semiMinorAxis), (n._ellipseGeometry = new i.EllipseGeometry(M)), n)
+          : ((M.radius = s._semiMajorAxis), new w(M))
       )
     }),
-    (f.createGeometry = function (e) {
-      return r.EllipseGeometry.createGeometry(e._ellipseGeometry)
+    (w.createGeometry = function (e) {
+      return i.EllipseGeometry.createGeometry(e._ellipseGeometry)
     }),
-    (f.createShadowVolume = function (e, t, i) {
-      var r = e._ellipseGeometry._granularity,
-        n = e._ellipseGeometry._ellipsoid,
-        a = t(r, n),
-        l = i(r, n)
-      return new f({
+    (w.createShadowVolume = function (e, t, i) {
+      const o = e._ellipseGeometry._granularity,
+        a = e._ellipseGeometry._ellipsoid,
+        n = t(o, a),
+        s = i(o, a)
+      return new w({
         center: e._ellipseGeometry._center,
         radius: e._ellipseGeometry._semiMajorAxis,
-        ellipsoid: n,
+        ellipsoid: a,
         stRotation: e._ellipseGeometry._stRotation,
-        granularity: r,
-        extrudedHeight: a,
-        height: l,
-        vertexFormat: o.VertexFormat.POSITION_ONLY,
+        granularity: o,
+        extrudedHeight: n,
+        height: s,
+        vertexFormat: r.VertexFormat.POSITION_ONLY,
         shadowVolume: !0
       })
     }),
-    Object.defineProperties(f.prototype, {
+    Object.defineProperties(w.prototype, {
       rectangle: {
         get: function () {
           return this._ellipseGeometry.rectangle
@@ -104,12 +106,12 @@ define([
         }
       }
     }),
-    function (t, r) {
+    function (i, r) {
       return (
-        i.defined(r) && (t = f.unpack(t, r)),
-        (t._ellipseGeometry._center = e.Cartesian3.clone(t._ellipseGeometry._center)),
-        (t._ellipseGeometry._ellipsoid = e.Ellipsoid.clone(t._ellipseGeometry._ellipsoid)),
-        f.createGeometry(t)
+        t.defined(r) && (i = w.unpack(i, r)),
+        (i._ellipseGeometry._center = e.Cartesian3.clone(i._ellipseGeometry._center)),
+        (i._ellipseGeometry._ellipsoid = e.Ellipsoid.clone(i._ellipseGeometry._ellipsoid)),
+        w.createGeometry(i)
       )
     }
   )

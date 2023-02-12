@@ -30,13 +30,13 @@ so that you can utilize bundlers like [Vite](https://vitejs.dev) and
 # Choose a package manager you like.
 
 # NPM
-$ npm install vue-cesium@next --save
+$ npm install vue-cesium --save
 
 # Yarn
-$ yarn add vue-cesium@next
+$ yarn add vue-cesium
 
 # pnpm
-$ pnpm install vue-cesium@next
+$ pnpm install vue-cesium
 ```
 
 If your network environment is not good, it is recommended to use a mirror registry [cnpm](https://github.com/cnpm/cnpm) or [Alibaba](https://registry.npmmirror.com/).
@@ -55,11 +55,11 @@ You can also use other **CDN** providers.
 ```html
 <head>
   <!-- Introduce style -->
-  <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//unpkg.com/vue-cesium/dist/index.css" />
   <!-- Introduce Vue -->
-  <script src="//unpkg.com/vue@next"></script>
+  <script src="//unpkg.com/vue"></script>
   <!-- Introduce component library -->
-  <script src="//unpkg.com/vue-cesium@next"></script>
+  <script src="//unpkg.com/vue-cesium"></script>
 </head>
 ```
 
@@ -68,11 +68,11 @@ You can also use other **CDN** providers.
 ```html
 <head>
   <!-- Introduce style -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium/dist/index.css" />
   <!-- Introduce Vue -->
-  <script src="//cdn.jsdelivr.net/npm/vue@next"></script>
+  <script src="//cdn.jsdelivr.net/npm/vue"></script>
   <!-- Introduce component library -->
-  <script src="//cdn.jsdelivr.net/npm/vue-cesium@next"></script>
+  <script src="//cdn.jsdelivr.net/npm/vue-cesium"></script>
 </head>
 ```
 
