@@ -125,7 +125,9 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
     }
 
     vcInstance.children.length = 0
-
+    // ensure custom events can be emitted after unmount.
+    // https://github.com/vuejs/core/issues/5674
+    vcInstance.isUnmounted = false
     return vcInstance.mounted
       ? unmount().then(async () => {
           setPropsWatcher(false)
@@ -406,11 +408,6 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
   logger.debug(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
     logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
-
-    // ensure custom events can be emitted after unmount.
-    // https://github.com/vuejs/core/issues/5674
-    vcInstance.isUnmounted = false
-
     vcInstance.unloadingPromise = new Promise((resolve, reject) => {
       unload().then(() => {
         logger.debug(`${vcInstance.cesiumClass}---unloaded`)
