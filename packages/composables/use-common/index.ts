@@ -134,11 +134,9 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
           vcInstance.removeCallbacks.forEach(removeCallback => {
             removeCallback()
           })
-          // ensure custom events can be emitted after unmount.
-          // https://github.com/vuejs/core/issues/5674
-          vcInstance.isUnmounted = false
+
           emit('destroyed', vcInstance)
-          vcInstance.isUnmounted = true
+
           logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
           // If the component cannot be rendered without the parent component, the parent component needs to be removed.
@@ -409,10 +407,15 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
   onUnmounted(() => {
     logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
 
+    // ensure custom events can be emitted after unmount.
+    // https://github.com/vuejs/core/issues/5674
+    vcInstance.isUnmounted = false
+
     vcInstance.unloadingPromise = new Promise((resolve, reject) => {
       unload().then(() => {
         logger.debug(`${vcInstance.cesiumClass}---unloaded`)
         resolve(true)
+        vcInstance.isUnmounted = true
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()
       })
