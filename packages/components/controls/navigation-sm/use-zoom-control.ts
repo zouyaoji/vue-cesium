@@ -33,6 +33,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // methods
   const handleZoomInMouseDown = e => {
+    console.log('handleZoomInMouseDown')
     const { defined, getTimestamp, SceneMode, ScreenSpaceEventType } = Cesium
     const { viewer } = $services
     $(zoomInTooltipRef)?.hide()
@@ -47,7 +48,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     const scene = viewer.scene
     const camera = scene.camera
     zoominTickFunction = () => {
-      viewer.scene.mode === SceneMode.COLUMBUS_VIEW ? camera.zoomIn() : handlezoom(1)
+      viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D ? camera.zoomIn() : handlezoom(1)
     }
 
     zoominMouseUpFunction = () => {
@@ -77,7 +78,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     const scene = viewer.scene
     const camera = scene.camera
     zoomoutTickFunction = () => {
-      viewer.scene.mode === SceneMode.COLUMBUS_VIEW ? camera.zoomOut() : handlezoom(-1)
+      viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D ? camera.zoomOut() : handlezoom(-1)
     }
 
     zoomoutMouseUpFunction = () => {
@@ -112,13 +113,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     zoombarTickFunction = () => {
       const zoomOffset = zoombarTop.value - 65
       if (zoomOffset > 0) {
-        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomOut()
         } else {
           handlezoom(-1)
         }
       } else if (zoomOffset < 0) {
-        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomIn()
         } else {
           handlezoom(1)
@@ -140,13 +141,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
       const zoomFlag = zoombarTop.value - zoombarTopMove
       if (zoomFlag > 0) {
-        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomOut()
         } else {
           handlezoom(-1)
         }
       } else {
-        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+        if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomIn()
         } else {
           handlezoom(1)
