@@ -80,13 +80,13 @@ export default defineComponent({
       xField: 'x',
       yField: 'y',
       valueField: 'value',
-      container: undefined!
+      container: undefined
     }
     const coordinates = ref<any>(null)
-    const material = ref<MaterialOption>(null!)
+    const material = ref<MaterialOption>(null)
     const image = ref<any>(null)
     const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround>(null)
-    const appearance = ref<AppearanceOption>(null!)
+    const appearance = ref<AppearanceOption>(null)
     const canRender = ref(false)
     const config = ref<any>(null)
 
