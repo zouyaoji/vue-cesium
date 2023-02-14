@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-05-26 22:09:49
+ * @LastEditTime: 2023-02-14 20:03:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
@@ -77,8 +77,12 @@ export const baiduImageryProviderProps = {
     default: 'vtile'
   },
   styles: {
-    type: String as PropType<'sl' | 'pl'>, // sl 背景透明 pl 正常
+    type: String as PropType<'sl' | 'pl' | 'ph'>, // sl 背景透明 pl 正常 ph 大字体
     default: 'pl'
+  },
+  showtext: {
+    type: String as PropType<'0' | '1'>, // 0 不显示， 1 显示
+    default: '1'
   }
 }
 export default defineComponent({

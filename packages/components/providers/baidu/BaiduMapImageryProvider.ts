@@ -20,8 +20,9 @@ class BaiduMapImageryProvider {
   _readyPromise: any
   _labelStyle: any
   _qt: 'tile' | 'vtile'
-  _styles: 'sl' | 'pl'
+  _styles: 'sl' | 'pl' | 'ph'
   _scale: '1' | '2'
+  _showtext: '0' | '1'
   _ak: string
   _mapStyle:
     | 'img'
@@ -48,7 +49,7 @@ class BaiduMapImageryProvider {
       if (options.mapStyle === 'img') {
         this._url = `//maponline{s}.bdimg.com/starpic/u=x={x};y={y};z={z};v=009;type=sate&qt=satepc&app=webearth2&udt={udt}&fm=46&v=009`
       } else if (options.mapStyle === 'vec') {
-        this._url = `//maponline{s}.bdimg.com/tile/?qt={qt}&x={x}&y={y}&z={z}&styles={styles}&scaler={scale}&udt={udt}&from=jsapi2_0`
+        this._url = `//maponline{s}.bdimg.com/tile/?qt={qt}&x={x}&y={y}&z={z}&styles={styles}&scaler={scale}&udt={udt}&from=jsapi2_0&showtext={showtext}`
       } else if (options.mapStyle === 'traffic') {
         this._url = `https://its.map.baidu.com/traffic/TrafficTileService?time={time}&label={labelStyle}&v=016&level={z}&x={x}&y={y}&scaler={scale}`
       } else {
@@ -80,6 +81,7 @@ class BaiduMapImageryProvider {
     this._ready = true
     this._readyPromise.resolve(true)
     this._labelStyle = options.labelStyle || 'web2D'
+    this._showtext = options.showtext || '1'
     this._qt = options.qt
     this._styles = options.styles
     this._scale = options.scale
@@ -204,6 +206,7 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{labelStyle}', this._labelStyle)
     .replace('{time}', String(new Date().getTime()))
     .replace('{udt}', String(new Date().getTime()))
+    .replace('{showtext}', this._showtext)
   const resource = this._resource.getDerivedResource({
     url: url,
     request: request
