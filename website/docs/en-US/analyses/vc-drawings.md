@@ -116,7 +116,10 @@ Basic usage of drawing components.
           preRenderDatas: [
             [108.96018, 34.21948, 50],
             [108.9602, 34.21895, 100]
-          ]
+          ],
+          pointOpts: {
+            color: 'red',
+          }
         },
         polygonDrawingOpts: {
           preRenderDatas: [
@@ -237,6 +240,7 @@ Basic usage of drawing components.
 | editable | boolean | `false` | `optional` Specify whether the drawing result can be edited. |
 | clampToGround | boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the drawing component. |
+| fabActionOpts | VcActionTooltipProps | | `optional` Specifies the common style options for the other parse buttons。 |
 | pinActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the pin drawing action button.|
 | pinDrawingOpts | VcDrawingOpts | | `optional` Specify pin drawing options.|
 | pointActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the poingt drawing action button.|

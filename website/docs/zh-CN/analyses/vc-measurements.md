@@ -140,7 +140,10 @@ ctrl + 右键取消绘制。
           }
         },
         pointMeasurementOpts: {
-          preRenderDatas: [[108.9602, 34.21895, 500]]
+          preRenderDatas: [[108.9602, 34.21895, 500]],
+          pointOpts: {
+            color: 'red',
+          }
         },
         areaMeasurementOpts: {
           preRenderDatas: [
@@ -273,6 +276,7 @@ ctrl + 右键取消绘制。
 | activeColor | string | `'positive'` | `optional` 指定量算实例激活时的颜色。 |
 | editable | boolean | `false` | `optional` 指定量算结果对象是否可编辑。 |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定量算组件浮动按钮的样式风格选项。 |
+| fabActionOpts | VcActionTooltipProps | | `optional` 指定其他量算按钮的公共样式选项。 |
 | distanceActionOpts | VcActionTooltipProps | | `optional` 指定距离量算按钮的样式风格选项。|
 | distanceMeasurementOpts | VcMeasurementOpts | | `optional` 指定距离量算参数。|
 | componentDistanceActionOpts | VcActionTooltipProps | | `optional` 指定三角量算按钮的样式风格选项。|

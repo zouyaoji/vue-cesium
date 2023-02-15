@@ -141,7 +141,10 @@ Basic usage of measurement components.
           }
         },
         pointMeasurementOpts: {
-          preRenderDatas: [[108.9602, 34.21895, 500]]
+          preRenderDatas: [[108.9602, 34.21895, 500]],
+          pointOpts: {
+            color: 'red',
+          }
         },
         areaMeasurementOpts: {
           preRenderDatas: [
@@ -273,6 +276,7 @@ Basic usage of measurement components.
 | activeColor | string | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
 | editable | boolean | `false` | `optional` Specify whether the measurement result can be edited. |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the measuring component. |
+| fabActionOpts | VcActionTooltipProps | | `optional` Specifies the common style options for the other parse buttons。 |
 | distanceActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the distance measurement action button.|
 | distanceMeasurementOpts | VcMeasurementOpts | | `optional` Specify distance measurement options.|
 | componentDistanceActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the component distance measurement action button.|

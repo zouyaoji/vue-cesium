@@ -129,10 +129,7 @@ ctrl + 右键取消绘制。
             [108.9602, 34.21895, 100]
           ],
           pointOpts: {
-            show: true,
             color: 'red',
-            pixelSize: 8,
-            enableMouseEvent: true,
             onClick(e) {
               console.log(e)
             }
@@ -267,6 +264,7 @@ ctrl + 右键取消绘制。
 | editable | boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
 | clampToGround | boolean | `false` | `optional` 指定绘制结果对象是否贴地或模型。仅线、面对象生效。 |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定绘制组件浮动按钮的样式选项。 |
+| fabActionOpts | VcActionTooltipProps | | `optional` 指定其他绘制按钮的公共样式选项。 |
 | pinActionOpts | VcActionTooltipProps | `` | `optional` 指定图标点绘制按钮的样式选项。|
 | pinDrawingOpts | VcDrawingOpts | | `optional` 指定图标点绘制参数。|
 | pointActionOpts | VcActionTooltipProps | `` | `optional` 指定点绘制按钮的样式选项。|

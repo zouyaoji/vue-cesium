@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-05-14 10:31:04
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-02-10 09:38:38
+ * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
 -->
@@ -162,6 +162,7 @@
 | activeColor | string | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
 | editable | boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定分析组件浮动按钮的样式选项。 |
+| fabActionOpts | VcActionTooltipProps | | `optional` 指定其他分析按钮的公共样式选项。 |
 | sightlineActionOpts | VcActionTooltipProps |  | `optional` 指定通视分析绘制按钮的样式选项。|
 | sightlineAnalysisOpts | VcDrawingOpts | | `optional` 指定通视分析绘制参数。|
 | viewshedActionOpts | VcActionTooltipProps |  | `optional` 指定可视域分析按钮的样式选项。|
