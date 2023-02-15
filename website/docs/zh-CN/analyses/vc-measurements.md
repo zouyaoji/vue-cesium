@@ -140,7 +140,10 @@ ctrl + 右键取消绘制。
           }
         },
         pointMeasurementOpts: {
-          preRenderDatas: [[108.9602, 34.21895, 500]]
+          preRenderDatas: [[108.9602, 34.21895, 500]],
+          pointOpts: {
+            color: 'red',
+          }
         },
         areaMeasurementOpts: {
           preRenderDatas: [

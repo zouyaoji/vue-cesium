@@ -129,10 +129,7 @@ ctrl + 右键取消绘制。
             [108.9602, 34.21895, 100]
           ],
           pointOpts: {
-            show: true,
             color: 'red',
-            pixelSize: 8,
-            enableMouseEvent: true,
             onClick(e) {
               console.log(e)
             }
