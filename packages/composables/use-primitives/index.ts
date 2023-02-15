@@ -45,7 +45,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   }
 
   vcInstance.mount = async () => {
-    const primitives = vcInstance.cesiumClass.includes('Ground') ? commonState.$services.groundPrimitives : commonState.$services.primitives
+    const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
     primitive.readyPromise &&
       primitive.readyPromise.then(e => {
@@ -67,7 +67,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   vcInstance.unmount = async () => {
     childCount.value = 0
     instances.value = []
-    const primitives = vcInstance.cesiumClass.includes('Ground') ? commonState.$services.groundPrimitives : commonState.$services.primitives
+    const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
     return primitives && primitives.remove(primitive)
   }
