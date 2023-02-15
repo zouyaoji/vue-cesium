@@ -1,5 +1,20 @@
 ## Changelog
 
+### 3.1.4
+
+_2023-02-XX_
+
+#### Bug fixes
+
+- Fixed the issue that `navigation-sm` component black screen in 2D mode when zoomIn or zoomOut camera.
+- Fixed the issue that the `vc-drawings` component drawing result line rendering is not normal.
+- Fixed the issue that the primitive loaded by VcPrimitiveGround component cannot be managed by VcCollectionPrimitive. [#350](https://github.com/zouyaoji/vue-cesium/issues/350)
+
+#### New feature
+
+- The `vc-imagery-provider-baidu` component adds the `showtext` attribute to control whether the annotation is displayed.
+- Custom drawing parameters of `vc-drawing` and `vc-measurements` are automatically merged with default parameters.
+
 ### 3.1.3
 
 _2023-02-01_

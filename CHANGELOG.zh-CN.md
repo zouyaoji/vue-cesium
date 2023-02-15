@@ -1,5 +1,20 @@
 ## 更新日志
 
+### 3.1.4
+
+_2023-02-XX_
+
+#### Bug 修复
+
+- 修复 2D 模式下 `navigation-sm` 组件缩放黑屏问题。
+- 修复绘制组件 `vc-drawings` 线渲染不正常的问题。
+- 修复 VcPrimitiveGround 组件加载的数据无法被 VcCollectionPrimitive 管理到的问题。 [#350](https://github.com/zouyaoji/vue-cesium/issues/350)
+
+#### 新特性
+
+- `vc-imagery-provider-baidu` 组件增加 `showtext` 属性，用于控制注记是否显示。
+- 量算绘制组件自定义属性支持合并了。
+
 ### 3.1.3
 
 _2023-02-01_
