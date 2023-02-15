@@ -24,7 +24,7 @@ import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPubl
 import { useLocale } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import { isEqual } from 'lodash-es'
+import { isEqual, cloneDeep } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -49,63 +49,65 @@ export default defineComponent({
       Object.assign({}, defaultOptions.distanceActionOpts, mergeActionOpts('distanceActionOpts'))
     )
     const distanceMeasurementOpts = reactive<VcMeasurementOpts>(
-      deepMerge(defaultOptions.distanceMeasurementOpts, props.distanceMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.distanceMeasurementOpts), props.distanceMeasurementOpts)
     )
 
     const componentDistanceActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.componentDistanceActionOpts, mergeActionOpts('componentDistanceActionOpts'))
     )
     const componentDistanceMeasurementOpts = reactive<VcComponentDistanceMeasurementOpts>(
-      deepMerge(defaultOptions.componentDistanceMeasurementOpts, props.componentDistanceMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.componentDistanceMeasurementOpts), props.componentDistanceMeasurementOpts)
     )
 
     const polylineActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.polylineActionOpts, mergeActionOpts('polylineActionOpts'))
     )
     const polylineMeasurementOpts = reactive<VcPolylineMeasurementOpts>(
-      deepMerge(defaultOptions.polylineMeasurementOpts, props.polylineMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.polylineMeasurementOpts), props.polylineMeasurementOpts)
     )
 
     const horizontalActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.horizontalActionOpts, mergeActionOpts('horizontalActionOpts'))
     )
     const horizontalMeasurementOpts = reactive<VcHorizontalMeasurementOpts>(
-      deepMerge(defaultOptions.horizontalMeasurementOpts, props.horizontalMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.horizontalMeasurementOpts), props.horizontalMeasurementOpts)
     )
 
     const verticalActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.verticalActionOpts, mergeActionOpts('verticalActionOpts'))
     )
     const verticalMeasurementOpts = reactive<VcMeasurementOpts>(
-      deepMerge(defaultOptions.verticalMeasurementOpts, props.verticalMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.verticalMeasurementOpts), props.verticalMeasurementOpts)
     )
 
     const heightActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.heightActionOpts, mergeActionOpts('heightActionOpts')))
-    const heightMeasurementOpts = reactive<VcMeasurementOpts>(deepMerge(defaultOptions.heightMeasurementOpts, props.heightMeasurementOpts))
+    const heightMeasurementOpts = reactive<VcMeasurementOpts>(deepMerge(cloneDeep(defaultOptions.heightMeasurementOpts), props.heightMeasurementOpts))
 
     const areaActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.areaActionOpts, mergeActionOpts('areaActionOpts')))
-    const areaMeasurementOpts = reactive<VcPolylineMeasurementOpts>(deepMerge(defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts))
+    const areaMeasurementOpts = reactive<VcPolylineMeasurementOpts>(
+      deepMerge(cloneDeep(defaultOptions.areaMeasurementOpts), props.areaMeasurementOpts)
+    )
 
     const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, mergeActionOpts('pointActionOpts')))
-    const pointMeasurementOpts = reactive<VcMeasurementOpts>(deepMerge(defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts))
+    const pointMeasurementOpts = reactive<VcMeasurementOpts>(deepMerge(cloneDeep(defaultOptions.pointMeasurementOpts), props.pointMeasurementOpts))
 
     const rectangleActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.rectangleActionOpts, mergeActionOpts('rectangleActionOpts'))
     )
     const rectangleMeasurementOpts = reactive<VcRegularMeasurementOpts>(
-      deepMerge(defaultOptions.rectangleMeasurementOpts, props.rectangleMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.rectangleMeasurementOpts), props.rectangleMeasurementOpts)
     )
 
     const regularActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.regularActionOpts, mergeActionOpts('regularActionOpts'))
     )
     const regularMeasurementOpts = reactive<VcRegularMeasurementOpts>(
-      deepMerge(defaultOptions.regularMeasurementOpts, props.regularMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.regularMeasurementOpts), props.regularMeasurementOpts)
     )
 
     const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, mergeActionOpts('circleActionOpts')))
     const circleMeasurementOpts = reactive<VcRegularMeasurementOpts>(
-      deepMerge(defaultOptions.circleMeasurementOpts, props.circleMeasurementOpts)
+      deepMerge(cloneDeep(defaultOptions.circleMeasurementOpts), props.circleMeasurementOpts)
     )
 
     const options: any = {}

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2023-02-15 16:19:01
+ * @LastEditTime: 2023-02-15 17:28:18
  * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
@@ -18,7 +18,7 @@ import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import { isEqual } from 'lodash-es'
+import { cloneDeep, isEqual } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -42,10 +42,10 @@ export default defineComponent({
     const fabActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.fabActionOpts, props.fabActionOpts))
 
     const sightlineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.sightlineActionOpts, mergeActionOpts('sightlineActionOpts')))
-    const sightlineAnalysisOpts = reactive<VcDrawingOpts>(deepMerge(defaultOptions.sightlineAnalysisOpts, props.sightlineAnalysisOpts))
+    const sightlineAnalysisOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.sightlineAnalysisOpts), props.sightlineAnalysisOpts))
 
     const viewshedActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.viewshedActionOpts, mergeActionOpts('viewshedActionOpts')))
-    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(deepMerge(defaultOptions.viewshedAnalysisOpts, props.viewshedAnalysisOpts))
+    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(deepMerge(cloneDeep(defaultOptions.viewshedAnalysisOpts), props.viewshedAnalysisOpts))
 
     options.sightlineActionOpts = sightlineActionOpts
     options.sightlineAnalysisOpts = sightlineAnalysisOpts
