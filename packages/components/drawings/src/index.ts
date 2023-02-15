@@ -14,6 +14,7 @@ import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { useLocale } from '@vue-cesium/composables'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 import { VcDrawingsProps } from '..'
+import { isEqual } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -33,19 +34,20 @@ export default defineComponent({
     // computed
     const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
     const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
-    const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
+    const fabActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.fabActionOpts, props.fabActionOpts))
+    const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, mergeActionOpts('pointActionOpts')))
     const pointDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.pointDrawingOpts, props.pointDrawingOpts))
-    const polylineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts))
+    const polylineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polylineActionOpts, mergeActionOpts('polylineActionOpts')))
     const polylineDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.polylineDrawingOpts, props.polylineDrawingOpts))
-    const polygonActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polygonActionOpts, props.polygonActionOpts))
+    const polygonActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polygonActionOpts, mergeActionOpts('polygonActionOpts')))
     const polygonDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts))
-    const rectangleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts))
+    const rectangleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.rectangleActionOpts, mergeActionOpts('rectangleActionOpts')))
     const rectangleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts))
-    const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, mergeActionOpts('circleActionOpts')))
     const circleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
-    const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts))
+    const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, mergeActionOpts('regularActionOpts')))
     const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.regularDrawingOpts, props.regularDrawingOpts))
-    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pinActionOpts, props.pinActionOpts))
+    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pinActionOpts, mergeActionOpts('pinActionOpts')))
     const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.pinDrawingOpts, props.pinDrawingOpts))
 
     options.pointActionOpts = pointActionOpts
@@ -105,6 +107,10 @@ export default defineComponent({
         default:
           return void 0
       }
+    }
+
+    function mergeActionOpts(actionName) {
+      return isEqual(defaultOptions[actionName], props[actionName]) ? fabActionOpts : Object.assign({}, fabActionOpts, props[actionName])
     }
 
     return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'drawing')?.renderContent

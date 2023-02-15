@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-07-05 11:28:27
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-02-09 18:16:24
+ * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
  */
@@ -113,6 +113,8 @@ const viewshedAnalysisDefault: VcViewshedAnalysisOpts = Object.assign({}, polygo
   }
 })
 
+const fabActionOptsDefault: VcActionTooltipProps = Object.assign({}, {})
+
 const mainFabDefault = Object.assign({}, actionOptions, {
   direction: 'right',
   icon: 'vc-icons-analysis-button',
@@ -148,6 +150,10 @@ const analysesProps = {
   mainFabOpts: {
     type: Object as PropType<VcActionTooltipProps & VcFabProps>,
     default: () => mainFabDefault
+  },
+  fabActionOpts: {
+    type: Object as PropType<VcActionTooltipProps>,
+    default: () => fabActionOptsDefault
   },
   sightlineActionOpts: {
     type: Object as PropType<VcActionTooltipProps>,
@@ -218,6 +224,10 @@ export type VcAnalysesProps = {
    * Specify the style options of the floating action button of the VcAnalyses component.
    */
   mainFabOpts?: VcActionTooltipProps & VcFabProps
+  /**
+   * Style options for other action buttons.
+   */
+  fabActionOpts?: VcActionTooltipProps
   /**
    * Specify the style options of the sightline analysis action button.
    */

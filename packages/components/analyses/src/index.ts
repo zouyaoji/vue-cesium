@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-05-16 00:29:00
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-02-09 18:17:23
+ * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
  */
@@ -18,6 +18,7 @@ import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
 import { drawingEmit } from '@vue-cesium/utils/emits'
+import { isEqual } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -38,10 +39,12 @@ export default defineComponent({
     const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
     const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
 
-    const sightlineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.sightlineActionOpts, props.sightlineActionOpts))
+    const fabActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.fabActionOpts, props.fabActionOpts))
+
+    const sightlineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.sightlineActionOpts, mergeActionOpts('sightlineActionOpts')))
     const sightlineAnalysisOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.sightlineAnalysisOpts, props.sightlineAnalysisOpts))
 
-    const viewshedActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.viewshedActionOpts, props.viewshedActionOpts))
+    const viewshedActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.viewshedActionOpts, mergeActionOpts('viewshedActionOpts')))
     const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(Object.assign({}, defaultOptions.viewshedAnalysisOpts, props.viewshedAnalysisOpts))
 
     options.sightlineActionOpts = sightlineActionOpts
@@ -78,6 +81,10 @@ export default defineComponent({
         default:
           return void 0
       }
+    }
+
+    function mergeActionOpts(actionName) {
+      return isEqual(defaultOptions[actionName], props[actionName]) ? fabActionOpts : Object.assign({}, fabActionOpts, props[actionName])
     }
 
     return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'analysis')?.renderContent

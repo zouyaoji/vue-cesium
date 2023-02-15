@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-06-24 16:56:16
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-02-09 17:59:27
+ * @LastEditors: XIAOLIJUN
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
  */
@@ -295,6 +295,8 @@ const circleMeasurementDefault: VcRegularMeasurementOpts = Object.assign({}, rec
   showAngleLabel: false
 })
 
+const fabActionOptsDefault: VcActionTooltipProps = Object.assign({}, {})
+
 const mainFabDefault = Object.assign({}, actionOptions, {
   direction: 'right',
   icon: 'vc-icons-measurement-button',
@@ -345,6 +347,10 @@ const measurementsProps = {
   mainFabOpts: {
     type: Object as PropType<VcActionTooltipProps & VcFabProps>,
     default: () => mainFabDefault
+  },
+  fabActionOpts: {
+    type: Object as PropType<VcActionTooltipProps>,
+    default: () => fabActionOptsDefault
   },
   distanceActionOpts: {
     type: Object as PropType<VcActionTooltipProps>,
@@ -511,6 +517,10 @@ export type VcMeasurementsProps = {
    * Specify the style options of the floating action button of the VcMeasurements component.
    */
   mainFabOpts?: VcActionTooltipProps & VcFabProps
+  /**
+   * Style options for other action buttons.
+   */
+  fabActionOpts?: VcActionTooltipProps
   /**
    * Specify the style options of the distance measurement action button.
    */
