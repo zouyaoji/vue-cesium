@@ -165,6 +165,7 @@ Basic usage of drawing components.
 | activeColor | string | `'positive'` | `optional` Specify the color when the analysis instance is activated. |
 | editable | boolean | `false` | `optional` Specify whether the analysis result can be edited. |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the VcAnalyses component. |
+| fabActionOpts | VcActionTooltipProps | | `optional` Specifies the common style options for the other parse buttons。 |
 | sightlineActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the sightline analysis action button.|
 | sightlineAnalysisOpts | VcDrawingOpts | | `optional` Specify sightline analysis options.|
 | viewshedActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the viewshed analysis action button.|
