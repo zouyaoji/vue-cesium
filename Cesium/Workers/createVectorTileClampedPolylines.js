@@ -1,209 +1,226 @@
 define([
-  './AttributeCompression-af389d04',
-  './Matrix2-9aa31791',
-  './combine-83860057',
-  './IndexDatatype-b7d979a6',
-  './ComponentDatatype-93750d1a',
+  './AttributeCompression-e18a879a',
+  './Matrix3-b6f074fa',
+  './combine-ca22a614',
+  './IndexDatatype-2149f06c',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
   './createTaskProcessorWorker',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './WebGLConstants-1c8239cc'
-], function (a, e, t, r, s, n, i, o, d) {
+  './ComponentDatatype-77274976',
+  './defaultValue-0a909f67',
+  './WebGLConstants-a8cc3e8c',
+  './RuntimeError-06c93819'
+], function (t, e, a, s, n, r, i, o, c, l, d) {
   'use strict'
-  var f = 32767,
-    l = Math.cos(s.CesiumMath.toRadians(150)),
-    c = new e.Cartographic(),
-    h = new e.Cartesian3()
-  var u = new e.Cartographic(),
-    C = new e.Cartographic()
-  function p(a) {
-    var e = 8 * a,
-      t = 3 * e,
-      s = 4 * e
-    ;(this.startEllipsoidNormals = new Float32Array(t)),
-      (this.endEllipsoidNormals = new Float32Array(t)),
-      (this.startPositionAndHeights = new Float32Array(s)),
-      (this.startFaceNormalAndVertexCornerIds = new Float32Array(s)),
-      (this.endPositionAndHeights = new Float32Array(s)),
-      (this.endFaceNormalAndHalfWidths = new Float32Array(s)),
+  const f = 32767,
+    u = Math.cos(n.CesiumMath.toRadians(150)),
+    h = new e.Cartographic(),
+    C = new e.Cartesian3()
+  const p = new e.Cartographic(),
+    m = new e.Cartographic()
+  function b(t) {
+    const e = 8 * t,
+      a = 3 * e,
+      n = 4 * e
+    ;(this.startEllipsoidNormals = new Float32Array(a)),
+      (this.endEllipsoidNormals = new Float32Array(a)),
+      (this.startPositionAndHeights = new Float32Array(n)),
+      (this.startFaceNormalAndVertexCornerIds = new Float32Array(n)),
+      (this.endPositionAndHeights = new Float32Array(n)),
+      (this.endFaceNormalAndHalfWidths = new Float32Array(n)),
       (this.vertexBatchIds = new Uint16Array(e)),
-      (this.indices = r.IndexDatatype.createTypedArray(e, 36 * a)),
+      (this.indices = s.IndexDatatype.createTypedArray(e, 36 * t)),
       (this.vec3Offset = 0),
       (this.vec4Offset = 0),
       (this.batchIdOffset = 0),
       (this.indexOffset = 0),
       (this.volumeStartIndex = 0)
   }
-  var v = new e.Cartesian3(),
-    m = new e.Cartesian3()
-  function b(a, t, r, s, n) {
-    var i = e.Cartesian3.subtract(r, t, m),
-      o = e.Cartesian3.subtract(t, a, v)
+  const A = new e.Cartesian3(),
+    w = new e.Cartesian3()
+  function g(t, a, s, n, r) {
+    const i = e.Cartesian3.subtract(s, a, w)
+    let o = e.Cartesian3.subtract(a, t, A)
     return (
       e.Cartesian3.normalize(i, i),
       e.Cartesian3.normalize(o, o),
-      e.Cartesian3.dot(i, o) < l && (o = e.Cartesian3.multiplyByScalar(o, -1, v)),
-      e.Cartesian3.add(i, o, n),
-      e.Cartesian3.equals(n, e.Cartesian3.ZERO) && (n = e.Cartesian3.subtract(a, t)),
-      e.Cartesian3.cross(n, s, n),
-      e.Cartesian3.cross(s, n, n),
-      e.Cartesian3.normalize(n, n),
-      n
+      e.Cartesian3.dot(i, o) < u && (o = e.Cartesian3.multiplyByScalar(o, -1, A)),
+      e.Cartesian3.add(i, o, r),
+      e.Cartesian3.equals(r, e.Cartesian3.ZERO) && (r = e.Cartesian3.subtract(t, a)),
+      e.Cartesian3.cross(r, n, r),
+      e.Cartesian3.cross(n, r, r),
+      e.Cartesian3.normalize(r, r),
+      r
     )
   }
-  var A = [0, 2, 6, 0, 6, 4, 0, 1, 3, 0, 3, 2, 0, 4, 5, 0, 5, 1, 5, 3, 1, 5, 7, 3, 7, 5, 4, 7, 4, 6, 7, 6, 2, 7, 2, 3],
-    w = A.length,
-    g = new e.Cartesian3(),
-    y = new e.Cartesian3(),
-    N = new e.Cartesian3(),
+  const y = [0, 2, 6, 0, 6, 4, 0, 1, 3, 0, 3, 2, 0, 4, 5, 0, 5, 1, 5, 3, 1, 5, 7, 3, 7, 5, 4, 7, 4, 6, 7, 6, 2, 7, 2, 3],
+    N = y.length,
     k = new e.Cartesian3(),
-    I = new e.Cartesian3()
-  p.prototype.addVolume = function (a, t, r, s, n, i, o, d, f, l) {
-    var c = e.Cartesian3.add(t, f, g),
-      h = l.geodeticSurfaceNormal(c, y)
-    c = e.Cartesian3.add(r, f, g)
-    var u,
-      C = l.geodeticSurfaceNormal(c, k),
-      p = b(a, t, r, h, N),
-      v = b(s, r, t, C, I),
+    x = new e.Cartesian3(),
+    I = new e.Cartesian3(),
+    E = new e.Cartesian3(),
+    F = new e.Cartesian3()
+  b.prototype.addVolume = function (t, a, s, n, r, i, o, c, l, d) {
+    let f = e.Cartesian3.add(a, l, k)
+    const u = d.geodeticSurfaceNormal(f, x)
+    f = e.Cartesian3.add(s, l, k)
+    const h = d.geodeticSurfaceNormal(f, E),
+      C = g(t, a, s, u, I),
+      p = g(n, s, a, h, F),
       m = this.startEllipsoidNormals,
-      x = this.endEllipsoidNormals,
-      E = this.startPositionAndHeights,
-      F = this.startFaceNormalAndVertexCornerIds,
+      b = this.endEllipsoidNormals,
+      A = this.startPositionAndHeights,
+      w = this.startFaceNormalAndVertexCornerIds,
       H = this.endPositionAndHeights,
       O = this.endFaceNormalAndHalfWidths,
-      P = this.vertexBatchIds,
+      P = this.vertexBatchIds
+    let v,
       D = this.batchIdOffset,
-      S = this.vec3Offset,
-      M = this.vec4Offset
-    for (u = 0; u < 8; u++)
-      e.Cartesian3.pack(h, m, S),
-        e.Cartesian3.pack(C, x, S),
-        e.Cartesian3.pack(t, E, M),
-        (E[M + 3] = n),
-        e.Cartesian3.pack(r, H, M),
-        (H[M + 3] = i),
-        e.Cartesian3.pack(p, F, M),
-        (F[M + 3] = u),
-        e.Cartesian3.pack(v, O, M),
-        (O[M + 3] = o),
-        (P[D++] = d),
-        (S += 3),
-        (M += 4)
-    ;(this.batchIdOffset = D), (this.vec3Offset = S), (this.vec4Offset = M)
-    var R = this.indices,
+      M = this.vec3Offset,
+      S = this.vec4Offset
+    for (v = 0; v < 8; v++)
+      e.Cartesian3.pack(u, m, M),
+        e.Cartesian3.pack(h, b, M),
+        e.Cartesian3.pack(a, A, S),
+        (A[S + 3] = r),
+        e.Cartesian3.pack(s, H, S),
+        (H[S + 3] = i),
+        e.Cartesian3.pack(C, w, S),
+        (w[S + 3] = v),
+        e.Cartesian3.pack(p, O, S),
+        (O[S + 3] = o),
+        (P[D++] = c),
+        (M += 3),
+        (S += 4)
+    ;(this.batchIdOffset = D), (this.vec3Offset = M), (this.vec4Offset = S)
+    const R = this.indices,
       U = this.volumeStartIndex,
       B = this.indexOffset
-    for (u = 0; u < w; u++) R[B + u] = A[u] + U
-    ;(this.volumeStartIndex += 8), (this.indexOffset += w)
+    for (v = 0; v < N; v++) R[B + v] = y[v] + U
+    ;(this.volumeStartIndex += 8), (this.indexOffset += N)
   }
-  var x = new e.Rectangle(),
-    E = new e.Ellipsoid(),
-    F = new e.Cartesian3(),
-    H = new e.Cartesian3(),
-    O = new e.Cartesian3(),
+  const H = new r.Rectangle(),
+    O = new e.Ellipsoid(),
     P = new e.Cartesian3(),
-    D = new e.Cartesian3()
-  return n(function (n, i) {
-    var o,
-      d = new Uint16Array(n.positions),
-      l = new Uint16Array(n.widths),
-      v = new Uint32Array(n.counts),
-      m = new Uint16Array(n.batchIds),
-      b = x,
-      A = E,
-      w = F,
-      g = new Float64Array(n.packedBuffer),
-      y = 0,
-      N = g[y++],
-      k = g[y++]
-    e.Rectangle.unpack(g, y, b),
-      (y += e.Rectangle.packedLength),
-      e.Ellipsoid.unpack(g, y, A),
-      (y += e.Ellipsoid.packedLength),
-      e.Cartesian3.unpack(g, y, w)
-    var I = d.length / 3,
-      S = d.subarray(0, I),
-      M = d.subarray(I, 2 * I),
-      R = d.subarray(2 * I, 3 * I)
-    a.AttributeCompression.zigZagDeltaDecode(S, M, R),
-      (function (a, t, r, s) {
-        for (var n = s.length, i = a.length, o = new Uint8Array(i), d = u, f = C, l = 0, c = 0; c < n; c++) {
-          for (var h = s[c], p = h, v = 1; v < h; v++) {
-            var m = l + v,
-              b = m - 1
-            ;(f.longitude = a[m]), (f.latitude = t[m]), (d.longitude = a[b]), (d.latitude = t[b]), e.Cartographic.equals(f, d) && (p--, (o[b] = 1))
+    v = new e.Cartesian3(),
+    D = new e.Cartesian3(),
+    M = new e.Cartesian3(),
+    S = new e.Cartesian3()
+  return i(function (i, o) {
+    const c = new Uint16Array(i.positions),
+      l = new Uint16Array(i.widths),
+      d = new Uint32Array(i.counts),
+      u = new Uint16Array(i.batchIds),
+      A = H,
+      w = O,
+      g = P,
+      y = new Float64Array(i.packedBuffer)
+    let N = 0
+    const k = y[N++],
+      x = y[N++]
+    let I
+    r.Rectangle.unpack(y, N, A),
+      (N += r.Rectangle.packedLength),
+      e.Ellipsoid.unpack(y, N, w),
+      (N += e.Ellipsoid.packedLength),
+      e.Cartesian3.unpack(y, N, g)
+    let E = c.length / 3
+    const F = c.subarray(0, E),
+      R = c.subarray(E, 2 * E),
+      U = c.subarray(2 * E, 3 * E)
+    t.AttributeCompression.zigZagDeltaDecode(F, R, U),
+      (function (t, a, s, n) {
+        const r = n.length,
+          i = t.length,
+          o = new Uint8Array(i),
+          c = p,
+          l = m
+        let d = 0
+        for (let s = 0; s < r; s++) {
+          const r = n[s]
+          let i = r
+          for (let s = 1; s < r; s++) {
+            const n = d + s,
+              r = n - 1
+            ;(l.longitude = t[n]), (l.latitude = a[n]), (c.longitude = t[r]), (c.latitude = a[r]), e.Cartographic.equals(l, c) && (i--, (o[r] = 1))
           }
-          ;(s[c] = p), (l += h)
+          ;(n[s] = i), (d += r)
         }
-        for (var A = 0, w = 0; w < i; w++) 1 !== o[w] && ((a[A] = a[w]), (t[A] = t[w]), (r[A] = r[w]), A++)
-      })(S, M, R, v)
-    var U = v.length,
-      B = 0
-    for (o = 0; o < U; o++) {
-      B += v[o] - 1
+        let f = 0
+        for (let e = 0; e < i; e++) 1 !== o[e] && ((t[f] = t[e]), (a[f] = a[e]), (s[f] = s[e]), f++)
+      })(F, R, U, d)
+    const B = d.length
+    let V = 0
+    for (I = 0; I < B; I++) {
+      V += d[I] - 1
     }
-    var T = new p(B),
-      V = (function (a, t, r, n, i, o, d) {
-        for (var l = a.length, u = new Float64Array(3 * l), C = 0; C < l; ++C) {
-          var p = a[C],
-            v = t[C],
-            m = r[C],
-            b = s.CesiumMath.lerp(n.west, n.east, p / f),
-            A = s.CesiumMath.lerp(n.south, n.north, v / f),
-            w = s.CesiumMath.lerp(i, o, m / f),
-            g = e.Cartographic.fromRadians(b, A, w, c),
-            y = d.cartographicToCartesian(g, h)
-          e.Cartesian3.pack(y, u, 3 * C)
+    const T = new b(V),
+      W = (function (t, a, s, r, i, o, c) {
+        const l = t.length,
+          d = new Float64Array(3 * l)
+        for (let u = 0; u < l; ++u) {
+          const l = t[u],
+            p = a[u],
+            m = s[u],
+            b = n.CesiumMath.lerp(r.west, r.east, l / f),
+            A = n.CesiumMath.lerp(r.south, r.north, p / f),
+            w = n.CesiumMath.lerp(i, o, m / f),
+            g = e.Cartographic.fromRadians(b, A, w, h),
+            y = c.cartographicToCartesian(g, C)
+          e.Cartesian3.pack(y, d, 3 * u)
         }
-        return u
-      })(S, M, R, b, N, k, A)
-    I = S.length
-    var W = new Float32Array(3 * I)
-    for (o = 0; o < I; ++o) (W[3 * o] = V[3 * o] - w.x), (W[3 * o + 1] = V[3 * o + 1] - w.y), (W[3 * o + 2] = V[3 * o + 2] - w.z)
-    var z = 0,
-      q = 0
-    for (o = 0; o < U; o++) {
-      for (var L = v[o] - 1, _ = 0.5 * l[o], G = m[o], Z = z, Y = 0; Y < L; Y++) {
-        var j = e.Cartesian3.unpack(W, z, O),
-          J = e.Cartesian3.unpack(W, z + 3, P),
-          K = R[q],
-          Q = R[q + 1]
-        ;(K = s.CesiumMath.lerp(N, k, K / f)), (Q = s.CesiumMath.lerp(N, k, Q / f)), q++
-        var X = H,
-          $ = D
-        if (0 === Y) {
-          var aa = Z + 3 * L,
-            ea = e.Cartesian3.unpack(W, aa, H)
-          if (e.Cartesian3.equals(ea, j)) e.Cartesian3.unpack(W, aa - 3, X)
+        return d
+      })(F, R, U, A, k, x, w)
+    E = F.length
+    const z = new Float32Array(3 * E)
+    for (I = 0; I < E; ++I) (z[3 * I] = W[3 * I] - g.x), (z[3 * I + 1] = W[3 * I + 1] - g.y), (z[3 * I + 2] = W[3 * I + 2] - g.z)
+    let q = 0,
+      L = 0
+    for (I = 0; I < B; I++) {
+      const t = d[I] - 1,
+        a = 0.5 * l[I],
+        s = u[I],
+        r = q
+      for (let i = 0; i < t; i++) {
+        const o = e.Cartesian3.unpack(z, q, D),
+          c = e.Cartesian3.unpack(z, q + 3, M)
+        let l = U[L],
+          d = U[L + 1]
+        ;(l = n.CesiumMath.lerp(k, x, l / f)), (d = n.CesiumMath.lerp(k, x, d / f)), L++
+        let u = v,
+          h = S
+        if (0 === i) {
+          const a = r + 3 * t,
+            s = e.Cartesian3.unpack(z, a, v)
+          if (e.Cartesian3.equals(s, o)) e.Cartesian3.unpack(z, a - 3, u)
           else {
-            var ta = e.Cartesian3.subtract(j, J, H)
-            X = e.Cartesian3.add(ta, j, H)
+            const t = e.Cartesian3.subtract(o, c, v)
+            u = e.Cartesian3.add(t, o, v)
           }
-        } else e.Cartesian3.unpack(W, z - 3, X)
-        if (Y === L - 1) {
-          var ra = e.Cartesian3.unpack(W, Z, D)
-          if (e.Cartesian3.equals(ra, J)) e.Cartesian3.unpack(W, Z + 3, $)
+        } else e.Cartesian3.unpack(z, q - 3, u)
+        if (i === t - 1) {
+          const t = e.Cartesian3.unpack(z, r, S)
+          if (e.Cartesian3.equals(t, c)) e.Cartesian3.unpack(z, r + 3, h)
           else {
-            var sa = e.Cartesian3.subtract(J, j, D)
-            $ = e.Cartesian3.add(sa, J, D)
+            const t = e.Cartesian3.subtract(c, o, S)
+            h = e.Cartesian3.add(t, c, S)
           }
-        } else e.Cartesian3.unpack(W, z + 6, $)
-        T.addVolume(X, j, J, $, K, Q, _, G, w, A), (z += 3)
+        } else e.Cartesian3.unpack(z, q + 6, h)
+        T.addVolume(u, o, c, h, l, d, a, s, g, w), (q += 3)
       }
-      ;(z += 3), q++
+      ;(q += 3), L++
     }
-    var na = T.indices
-    i.push(T.startEllipsoidNormals.buffer),
-      i.push(T.endEllipsoidNormals.buffer),
-      i.push(T.startPositionAndHeights.buffer),
-      i.push(T.startFaceNormalAndVertexCornerIds.buffer),
-      i.push(T.endPositionAndHeights.buffer),
-      i.push(T.endFaceNormalAndHalfWidths.buffer),
-      i.push(T.vertexBatchIds.buffer),
-      i.push(na.buffer)
-    var ia = {
-      indexDatatype: 2 === na.BYTES_PER_ELEMENT ? r.IndexDatatype.UNSIGNED_SHORT : r.IndexDatatype.UNSIGNED_INT,
+    const _ = T.indices
+    o.push(T.startEllipsoidNormals.buffer),
+      o.push(T.endEllipsoidNormals.buffer),
+      o.push(T.startPositionAndHeights.buffer),
+      o.push(T.startFaceNormalAndVertexCornerIds.buffer),
+      o.push(T.endPositionAndHeights.buffer),
+      o.push(T.endFaceNormalAndHalfWidths.buffer),
+      o.push(T.vertexBatchIds.buffer),
+      o.push(_.buffer)
+    let G = {
+      indexDatatype: 2 === _.BYTES_PER_ELEMENT ? s.IndexDatatype.UNSIGNED_SHORT : s.IndexDatatype.UNSIGNED_INT,
       startEllipsoidNormals: T.startEllipsoidNormals.buffer,
       endEllipsoidNormals: T.endEllipsoidNormals.buffer,
       startPositionAndHeights: T.startPositionAndHeights.buffer,
@@ -211,15 +228,18 @@ define([
       endPositionAndHeights: T.endPositionAndHeights.buffer,
       endFaceNormalAndHalfWidths: T.endFaceNormalAndHalfWidths.buffer,
       vertexBatchIds: T.vertexBatchIds.buffer,
-      indices: na.buffer
+      indices: _.buffer
     }
-    if (n.keepDecodedPositions) {
-      var oa = (function (a) {
-        for (var e = a.length, t = new Uint32Array(e + 1), r = 0, s = 0; s < e; ++s) (t[s] = r), (r += a[s])
-        return (t[e] = r), t
-      })(v)
-      i.push(V.buffer, oa.buffer), (ia = t.combine(ia, { decodedPositions: V.buffer, decodedPositionOffsets: oa.buffer }))
+    if (i.keepDecodedPositions) {
+      const t = (function (t) {
+        const e = t.length,
+          a = new Uint32Array(e + 1)
+        let s = 0
+        for (let n = 0; n < e; ++n) (a[n] = s), (s += t[n])
+        return (a[e] = s), a
+      })(d)
+      o.push(W.buffer, t.buffer), (G = a.combine(G, { decodedPositions: W.buffer, decodedPositionOffsets: t.buffer }))
     }
-    return ia
+    return G
   })
 })

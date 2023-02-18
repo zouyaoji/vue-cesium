@@ -1,64 +1,66 @@
 define([
-  './when-4bbc8319',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc'
-], function (e, t, n, r, a, i, o, c, u) {
+  './defaultValue-0a909f67',
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './ComponentDatatype-77274976',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c'
+], function (e, t, n, r, a, i, o, u, c, s, y) {
   'use strict'
-  function y() {
+  function m() {
     this._workerName = 'createPlaneOutlineGeometry'
   }
-  ;(y.packedLength = 0),
-    (y.pack = function (e, t) {
+  ;(m.packedLength = 0),
+    (m.pack = function (e, t) {
       return t
     }),
-    (y.unpack = function (t, n, r) {
-      return e.defined(r) ? r : new y()
+    (m.unpack = function (t, n, r) {
+      return e.defined(r) ? r : new m()
     })
-  var m = new n.Cartesian3(-0.5, -0.5, 0),
-    s = new n.Cartesian3(0.5, 0.5, 0)
+  const p = new n.Cartesian3(-0.5, -0.5, 0),
+    f = new n.Cartesian3(0.5, 0.5, 0)
   return (
-    (y.createGeometry = function () {
-      var e = new o.GeometryAttributes(),
-        r = new Uint16Array(8),
-        c = new Float64Array(12)
+    (m.createGeometry = function () {
+      const e = new i.GeometryAttributes(),
+        o = new Uint16Array(8),
+        u = new Float64Array(12)
       return (
-        (c[0] = m.x),
-        (c[1] = m.y),
-        (c[2] = m.z),
-        (c[3] = s.x),
-        (c[4] = m.y),
-        (c[5] = m.z),
-        (c[6] = s.x),
-        (c[7] = s.y),
-        (c[8] = m.z),
-        (c[9] = m.x),
-        (c[10] = s.y),
-        (c[11] = m.z),
-        (e.position = new i.GeometryAttribute({ componentDatatype: a.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: c })),
-        (r[0] = 0),
-        (r[1] = 1),
-        (r[2] = 1),
-        (r[3] = 2),
-        (r[4] = 2),
-        (r[5] = 3),
-        (r[6] = 3),
-        (r[7] = 0),
-        new i.Geometry({
+        (u[0] = p.x),
+        (u[1] = p.y),
+        (u[2] = p.z),
+        (u[3] = f.x),
+        (u[4] = p.y),
+        (u[5] = p.z),
+        (u[6] = f.x),
+        (u[7] = f.y),
+        (u[8] = p.z),
+        (u[9] = p.x),
+        (u[10] = f.y),
+        (u[11] = p.z),
+        (e.position = new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: u })),
+        (o[0] = 0),
+        (o[1] = 1),
+        (o[2] = 1),
+        (o[3] = 2),
+        (o[4] = 2),
+        (o[5] = 3),
+        (o[6] = 3),
+        (o[7] = 0),
+        new a.Geometry({
           attributes: e,
-          indices: r,
-          primitiveType: i.PrimitiveType.LINES,
+          indices: o,
+          primitiveType: a.PrimitiveType.LINES,
           boundingSphere: new t.BoundingSphere(n.Cartesian3.ZERO, Math.sqrt(2))
         })
       )
     }),
     function (t, n) {
-      return e.defined(n) && (t = y.unpack(t, n)), y.createGeometry(t)
+      return e.defined(n) && (t = m.unpack(t, n)), m.createGeometry(t)
     }
   )
 })

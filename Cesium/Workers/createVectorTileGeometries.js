@@ -1,215 +1,217 @@
 define([
-  './Transforms-d13cc04e',
-  './BoxGeometry-bdb0d59d',
-  './Matrix2-9aa31791',
-  './Color-1ab5c5c7',
-  './CylinderGeometry-34e307a4',
-  './when-4bbc8319',
-  './EllipsoidGeometry-9a4ae869',
-  './IndexDatatype-b7d979a6',
+  './Transforms-dadc538f',
+  './BoxGeometry-f5437dce',
+  './Matrix3-b6f074fa',
+  './Color-0a64769f',
+  './CylinderGeometry-244c9dda',
+  './defaultValue-0a909f67',
+  './EllipsoidGeometry-ccc3a2e5',
+  './IndexDatatype-2149f06c',
+  './Matrix2-163b5a1d',
   './createTaskProcessorWorker',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057',
-  './GeometryOffsetAttribute-1772960d',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './VertexFormat-71718faa',
-  './CylinderGeometryLibrary-dc0b434b'
-], function (e, t, n, r, a, i, o, d, s, c, f, l, u, h, b, p, y, x) {
+  './Math-e97915da',
+  './combine-ca22a614',
+  './RuntimeError-06c93819',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './VertexFormat-ab2e00e6',
+  './CylinderGeometryLibrary-20be4f8b'
+], function (e, t, n, r, a, i, o, s, c, d, l, f, u, h, p, b, y, x, g, m) {
   'use strict'
-  function g(e) {
+  function C(e) {
     ;(this.offset = e.offset), (this.count = e.count), (this.color = e.color), (this.batchIds = e.batchIds)
   }
-  var v = new n.Cartesian3(),
-    m = n.Matrix4.packedLength + n.Cartesian3.packedLength,
-    C = n.Matrix4.packedLength + 2,
-    I = n.Matrix4.packedLength + n.Cartesian3.packedLength,
-    k = n.Cartesian3.packedLength + 1,
-    M = { modelMatrix: new n.Matrix4(), boundingVolume: new e.BoundingSphere() }
-  function B(e, t) {
-    var r = t * m,
-      a = n.Cartesian3.unpack(e, r, v)
-    r += n.Cartesian3.packedLength
-    var i = n.Matrix4.unpack(e, r, M.modelMatrix)
-    n.Matrix4.multiplyByScale(i, a, i)
-    var o = M.boundingVolume
-    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = Math.sqrt(3)), M
-  }
-  function w(e, t) {
-    var r = t * C,
-      a = e[r++],
-      i = e[r++],
-      o = n.Cartesian3.fromElements(a, a, i, v),
-      d = n.Matrix4.unpack(e, r, M.modelMatrix)
-    n.Matrix4.multiplyByScale(d, o, d)
-    var s = M.boundingVolume
-    return n.Cartesian3.clone(n.Cartesian3.ZERO, s.center), (s.radius = Math.sqrt(2)), M
-  }
-  function A(e, t) {
-    var r = t * I,
-      a = n.Cartesian3.unpack(e, r, v)
-    r += n.Cartesian3.packedLength
-    var i = n.Matrix4.unpack(e, r, M.modelMatrix)
-    n.Matrix4.multiplyByScale(i, a, i)
-    var o = M.boundingVolume
-    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = 1), M
-  }
+  const I = new n.Cartesian3(),
+    M = c.Matrix4.packedLength + n.Cartesian3.packedLength,
+    k = c.Matrix4.packedLength + 2,
+    B = c.Matrix4.packedLength + n.Cartesian3.packedLength,
+    w = n.Cartesian3.packedLength + 1,
+    A = { modelMatrix: new c.Matrix4(), boundingVolume: new e.BoundingSphere() }
   function O(e, t) {
-    var r = t * k,
-      a = e[r++],
-      i = n.Cartesian3.unpack(e, r, v),
-      o = n.Matrix4.fromTranslation(i, M.modelMatrix)
-    n.Matrix4.multiplyByUniformScale(o, a, o)
-    var d = M.boundingVolume
-    return n.Cartesian3.clone(n.Cartesian3.ZERO, d.center), (d.radius = 1), M
+    let r = t * M
+    const a = n.Cartesian3.unpack(e, r, I)
+    r += n.Cartesian3.packedLength
+    const i = c.Matrix4.unpack(e, r, A.modelMatrix)
+    c.Matrix4.multiplyByScale(i, a, i)
+    const o = A.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = Math.sqrt(3)), A
   }
-  var L = new n.Cartesian3()
-  function E(t, a, o, d, s) {
-    if (i.defined(a)) {
-      for (
-        var c = o.length,
-          f = d.attributes.position.values,
-          l = d.indices,
-          u = t.positions,
-          h = t.vertexBatchIds,
-          b = t.indices,
-          p = t.batchIds,
-          y = t.batchTableColors,
-          x = t.batchedIndices,
-          v = t.indexOffsets,
-          m = t.indexCounts,
-          C = t.boundingVolumes,
-          I = t.modelMatrix,
-          k = t.center,
-          M = t.positionOffset,
-          B = t.batchIdIndex,
-          w = t.indexOffset,
-          A = t.batchedIndicesOffset,
-          O = 0;
-        O < c;
-        ++O
-      ) {
-        var E = s(a, O),
-          U = E.modelMatrix
-        n.Matrix4.multiply(I, U, U)
-        for (var G = o[O], S = f.length, T = 0; T < S; T += 3) {
-          var V = n.Cartesian3.unpack(f, T, L)
-          n.Matrix4.multiplyByPoint(U, V, V), n.Cartesian3.subtract(V, k, V), n.Cartesian3.pack(V, u, 3 * M + T), (h[B++] = G)
-        }
-        for (var F = l.length, R = 0; R < F; ++R) b[w + R] = l[R] + M
-        var Z = O + A
-        ;(x[Z] = new g({ offset: w, count: F, color: r.Color.fromRgba(y[G]), batchIds: [G] })),
-          (p[Z] = G),
-          (v[Z] = w),
-          (m[Z] = F),
-          (C[Z] = e.BoundingSphere.transform(E.boundingVolume, U)),
-          (M += S / 3),
-          (w += F)
+  function L(e, t) {
+    let r = t * k
+    const a = e[r++],
+      i = e[r++],
+      o = n.Cartesian3.fromElements(a, a, i, I),
+      s = c.Matrix4.unpack(e, r, A.modelMatrix)
+    c.Matrix4.multiplyByScale(s, o, s)
+    const d = A.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, d.center), (d.radius = Math.sqrt(2)), A
+  }
+  function v(e, t) {
+    let r = t * B
+    const a = n.Cartesian3.unpack(e, r, I)
+    r += n.Cartesian3.packedLength
+    const i = c.Matrix4.unpack(e, r, A.modelMatrix)
+    c.Matrix4.multiplyByScale(i, a, i)
+    const o = A.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = 1), A
+  }
+  function E(e, t) {
+    let r = t * w
+    const a = e[r++],
+      i = n.Cartesian3.unpack(e, r, I),
+      o = c.Matrix4.fromTranslation(i, A.modelMatrix)
+    c.Matrix4.multiplyByUniformScale(o, a, o)
+    const s = A.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, s.center), (s.radius = 1), A
+  }
+  const U = new n.Cartesian3()
+  function G(t, a, o, s, d) {
+    if (!i.defined(a)) return
+    const l = o.length,
+      f = s.attributes.position.values,
+      u = s.indices,
+      h = t.positions,
+      p = t.vertexBatchIds,
+      b = t.indices,
+      y = t.batchIds,
+      x = t.batchTableColors,
+      g = t.batchedIndices,
+      m = t.indexOffsets,
+      I = t.indexCounts,
+      M = t.boundingVolumes,
+      k = t.modelMatrix,
+      B = t.center
+    let w = t.positionOffset,
+      A = t.batchIdIndex,
+      O = t.indexOffset
+    const L = t.batchedIndicesOffset
+    for (let t = 0; t < l; ++t) {
+      const i = d(a, t),
+        s = i.modelMatrix
+      c.Matrix4.multiply(k, s, s)
+      const l = o[t],
+        v = f.length
+      for (let e = 0; e < v; e += 3) {
+        const t = n.Cartesian3.unpack(f, e, U)
+        c.Matrix4.multiplyByPoint(s, t, t), n.Cartesian3.subtract(t, B, t), n.Cartesian3.pack(t, h, 3 * w + e), (p[A++] = l)
       }
-      ;(t.positionOffset = M), (t.batchIdIndex = B), (t.indexOffset = w), (t.batchedIndicesOffset += c)
+      const E = u.length
+      for (let e = 0; e < E; ++e) b[O + e] = u[e] + w
+      const G = t + L
+      ;(g[G] = new C({ offset: O, count: E, color: r.Color.fromRgba(x[l]), batchIds: [l] })),
+        (y[G] = l),
+        (m[G] = O),
+        (I[G] = E),
+        (M[G] = e.BoundingSphere.transform(i.boundingVolume, s)),
+        (w += v / 3),
+        (O += E)
     }
+    ;(t.positionOffset = w), (t.batchIdIndex = A), (t.indexOffset = O), (t.batchedIndicesOffset += l)
   }
-  var U = new n.Cartesian3(),
-    G = new n.Matrix4()
-  function S(t, n, a) {
-    var i = a.length,
+  const S = new n.Cartesian3(),
+    V = new c.Matrix4()
+  function T(t, n, a) {
+    const i = a.length,
       o =
         2 +
         i * e.BoundingSphere.packedLength +
         1 +
         (function (e) {
-          for (var t = e.length, n = 0, a = 0; a < t; ++a) n += r.Color.packedLength + 3 + e[a].batchIds.length
+          const t = e.length
+          let n = 0
+          for (let a = 0; a < t; ++a) n += r.Color.packedLength + 3 + e[a].batchIds.length
           return n
         })(n),
-      d = new Float64Array(o),
-      s = 0
-    ;(d[s++] = t), (d[s++] = i)
-    for (var c = 0; c < i; ++c) e.BoundingSphere.pack(a[c], d, s), (s += e.BoundingSphere.packedLength)
-    var f = n.length
-    d[s++] = f
-    for (var l = 0; l < f; ++l) {
-      var u = n[l]
-      r.Color.pack(u.color, d, s), (s += r.Color.packedLength), (d[s++] = u.offset), (d[s++] = u.count)
-      var h = u.batchIds,
-        b = h.length
-      d[s++] = b
-      for (var p = 0; p < b; ++p) d[s++] = h[p]
+      s = new Float64Array(o)
+    let c = 0
+    ;(s[c++] = t), (s[c++] = i)
+    for (let t = 0; t < i; ++t) e.BoundingSphere.pack(a[t], s, c), (c += e.BoundingSphere.packedLength)
+    const d = n.length
+    s[c++] = d
+    for (let e = 0; e < d; ++e) {
+      const t = n[e]
+      r.Color.pack(t.color, s, c), (c += r.Color.packedLength), (s[c++] = t.offset), (s[c++] = t.count)
+      const a = t.batchIds,
+        i = a.length
+      s[c++] = i
+      for (let e = 0; e < i; ++e) s[c++] = a[e]
     }
-    return d
+    return s
   }
-  return s(function (e, r) {
-    var s = i.defined(e.boxes) ? new Float32Array(e.boxes) : void 0,
-      c = i.defined(e.boxBatchIds) ? new Uint16Array(e.boxBatchIds) : void 0,
+  return d(function (e, r) {
+    const d = i.defined(e.boxes) ? new Float32Array(e.boxes) : void 0,
+      l = i.defined(e.boxBatchIds) ? new Uint16Array(e.boxBatchIds) : void 0,
       f = i.defined(e.cylinders) ? new Float32Array(e.cylinders) : void 0,
-      l = i.defined(e.cylinderBatchIds) ? new Uint16Array(e.cylinderBatchIds) : void 0,
-      u = i.defined(e.ellipsoids) ? new Float32Array(e.ellipsoids) : void 0,
-      h = i.defined(e.ellipsoidBatchIds) ? new Uint16Array(e.ellipsoidBatchIds) : void 0,
+      u = i.defined(e.cylinderBatchIds) ? new Uint16Array(e.cylinderBatchIds) : void 0,
+      h = i.defined(e.ellipsoids) ? new Float32Array(e.ellipsoids) : void 0,
+      p = i.defined(e.ellipsoidBatchIds) ? new Uint16Array(e.ellipsoidBatchIds) : void 0,
       b = i.defined(e.spheres) ? new Float32Array(e.spheres) : void 0,
-      p = i.defined(e.sphereBatchIds) ? new Uint16Array(e.sphereBatchIds) : void 0,
-      y = i.defined(s) ? c.length : 0,
-      x = i.defined(f) ? l.length : 0,
-      g = i.defined(u) ? h.length : 0,
-      v = i.defined(b) ? p.length : 0,
-      m = t.BoxGeometry.getUnitBox(),
-      C = a.CylinderGeometry.getUnitCylinder(),
-      I = o.EllipsoidGeometry.getUnitEllipsoid(),
-      k = m.attributes.position.values,
-      M = C.attributes.position.values,
-      L = I.attributes.position.values,
-      T = k.length * y
-    ;(T += M.length * x), (T += L.length * (g + v))
-    var V = m.indices,
-      F = C.indices,
-      R = I.indices,
-      Z = V.length * y
-    ;(Z += F.length * x), (Z += R.length * (g + v))
-    var D = new Float32Array(T),
-      P = new Uint16Array(T / 3),
-      q = d.IndexDatatype.createTypedArray(T / 3, Z),
-      W = y + x + g + v,
-      _ = new Uint16Array(W),
-      N = new Array(W),
-      Y = new Uint32Array(W),
-      j = new Uint32Array(W),
-      z = new Array(W)
+      y = i.defined(e.sphereBatchIds) ? new Uint16Array(e.sphereBatchIds) : void 0,
+      x = i.defined(d) ? l.length : 0,
+      g = i.defined(f) ? u.length : 0,
+      m = i.defined(h) ? p.length : 0,
+      C = i.defined(b) ? y.length : 0,
+      I = t.BoxGeometry.getUnitBox(),
+      M = a.CylinderGeometry.getUnitCylinder(),
+      k = o.EllipsoidGeometry.getUnitEllipsoid(),
+      B = I.attributes.position.values,
+      w = M.attributes.position.values,
+      A = k.attributes.position.values
+    let U = B.length * x
+    ;(U += w.length * g), (U += A.length * (m + C))
+    const F = I.indices,
+      R = M.indices,
+      Z = k.indices
+    let D = F.length * x
+    ;(D += R.length * g), (D += Z.length * (m + C))
+    const P = new Float32Array(U),
+      q = new Uint16Array(U / 3),
+      W = s.IndexDatatype.createTypedArray(U / 3, D),
+      _ = x + g + m + C,
+      N = new Uint16Array(_),
+      Y = new Array(_),
+      j = new Uint32Array(_),
+      z = new Uint32Array(_),
+      H = new Array(_)
     !(function (e) {
-      var t = new Float64Array(e),
-        r = 0
-      n.Cartesian3.unpack(t, r, U), (r += n.Cartesian3.packedLength), n.Matrix4.unpack(t, r, G)
+      const t = new Float64Array(e)
+      let r = 0
+      n.Cartesian3.unpack(t, r, S), (r += n.Cartesian3.packedLength), c.Matrix4.unpack(t, r, V)
     })(e.packedBuffer)
-    var H = {
+    const J = {
       batchTableColors: new Uint32Array(e.batchTableColors),
-      positions: D,
-      vertexBatchIds: P,
-      indices: q,
-      batchIds: _,
-      batchedIndices: N,
-      indexOffsets: Y,
-      indexCounts: j,
-      boundingVolumes: z,
+      positions: P,
+      vertexBatchIds: q,
+      indices: W,
+      batchIds: N,
+      batchedIndices: Y,
+      indexOffsets: j,
+      indexCounts: z,
+      boundingVolumes: H,
       positionOffset: 0,
       batchIdIndex: 0,
       indexOffset: 0,
       batchedIndicesOffset: 0,
-      modelMatrix: G,
-      center: U
+      modelMatrix: V,
+      center: S
     }
-    E(H, s, c, m, B), E(H, f, l, C, w), E(H, u, h, I, A), E(H, b, p, I, O)
-    var J = S(q.BYTES_PER_ELEMENT, N, z)
+    G(J, d, l, I, O), G(J, f, u, M, L), G(J, h, p, k, v), G(J, b, y, k, E)
+    const K = T(W.BYTES_PER_ELEMENT, Y, H)
     return (
-      r.push(D.buffer, P.buffer, q.buffer),
-      r.push(_.buffer, Y.buffer, j.buffer),
-      r.push(J.buffer),
+      r.push(P.buffer, q.buffer, W.buffer),
+      r.push(N.buffer, j.buffer, z.buffer),
+      r.push(K.buffer),
       {
-        positions: D.buffer,
-        vertexBatchIds: P.buffer,
-        indices: q.buffer,
-        indexOffsets: Y.buffer,
-        indexCounts: j.buffer,
-        batchIds: _.buffer,
-        packedBuffer: J.buffer
+        positions: P.buffer,
+        vertexBatchIds: q.buffer,
+        indices: W.buffer,
+        indexOffsets: j.buffer,
+        indexCounts: z.buffer,
+        batchIds: N.buffer,
+        packedBuffer: K.buffer
       }
     )
   })

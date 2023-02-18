@@ -1,624 +1,694 @@
 !(function () {
   'use strict'
-  const t = []
-  for (let e = 0; e < 256; e++) {
-    let n = e
-    for (let t = 0; t < 8; t++) 1 & n ? (n = (n >>> 1) ^ 3988292384) : (n >>>= 1)
-    t[e] = n
+  const {
+      Array: t,
+      Object: e,
+      Math: n,
+      Error: s,
+      Uint8Array: r,
+      Uint16Array: a,
+      Uint32Array: i,
+      Int32Array: c,
+      DataView: o,
+      TextEncoder: l,
+      crypto: h,
+      postMessage: p
+    } = globalThis,
+    d = []
+  for (let t2 = 0; 256 > t2; t2++) {
+    let e2 = t2
+    for (let t3 = 0; 8 > t3; t3++) 1 & e2 ? (e2 = (e2 >>> 1) ^ 3988292384) : (e2 >>>= 1)
+    d[t2] = e2
   }
-  class e {
-    constructor(t) {
-      this.crc = t || -1
+  class u {
+    constructor(t2) {
+      this.crc = t2 || -1
     }
-    append(e) {
-      let n = 0 | this.crc
-      for (let s = 0, r = 0 | e.length; s < r; s++) n = (n >>> 8) ^ t[255 & (n ^ e[s])]
-      this.crc = n
+    append(t2) {
+      let e2 = 0 | this.crc
+      for (let n2 = 0, s2 = 0 | t2.length; s2 > n2; n2++) e2 = (e2 >>> 8) ^ d[255 & (e2 ^ t2[n2])]
+      this.crc = e2
     }
     get() {
       return ~this.crc
     }
   }
-  const n = {
-      concat(t, e) {
-        if (0 === t.length || 0 === e.length) return t.concat(e)
-        const s = t[t.length - 1],
-          r = n.getPartial(s)
-        return 32 === r ? t.concat(e) : n._shiftRight(e, r, 0 | s, t.slice(0, t.length - 1))
+  const f = {
+      concat(t2, e2) {
+        if (0 === t2.length || 0 === e2.length) return t2.concat(e2)
+        const n2 = t2[t2.length - 1],
+          s2 = f.getPartial(n2)
+        return 32 === s2 ? t2.concat(e2) : f._shiftRight(e2, s2, 0 | n2, t2.slice(0, t2.length - 1))
       },
-      bitLength(t) {
-        const e = t.length
-        if (0 === e) return 0
-        const s = t[e - 1]
-        return 32 * (e - 1) + n.getPartial(s)
+      bitLength(t2) {
+        const e2 = t2.length
+        if (0 === e2) return 0
+        const n2 = t2[e2 - 1]
+        return 32 * (e2 - 1) + f.getPartial(n2)
       },
-      clamp(t, e) {
-        if (32 * t.length < e) return t
-        const s = (t = t.slice(0, Math.ceil(e / 32))).length
-        return (e &= 31), s > 0 && e && (t[s - 1] = n.partial(e, t[s - 1] & (2147483648 >> (e - 1)), 1)), t
+      clamp(t2, e2) {
+        if (32 * t2.length < e2) return t2
+        const s2 = (t2 = t2.slice(0, n.ceil(e2 / 32))).length
+        return (e2 &= 31), s2 > 0 && e2 && (t2[s2 - 1] = f.partial(e2, t2[s2 - 1] & (2147483648 >> (e2 - 1)), 1)), t2
       },
-      partial: (t, e, n) => (32 === t ? e : (n ? 0 | e : e << (32 - t)) + 1099511627776 * t),
-      getPartial: t => Math.round(t / 1099511627776) || 32,
-      _shiftRight(t, e, s, r) {
-        for (void 0 === r && (r = []); e >= 32; e -= 32) r.push(s), (s = 0)
-        if (0 === e) return r.concat(t)
-        for (let n = 0; n < t.length; n++) r.push(s | (t[n] >>> e)), (s = t[n] << (32 - e))
-        const a = t.length ? t[t.length - 1] : 0,
-          i = n.getPartial(a)
-        return r.push(n.partial((e + i) & 31, e + i > 32 ? s : r.pop(), 1)), r
+      partial: (t2, e2, n2) => (32 === t2 ? e2 : (n2 ? 0 | e2 : e2 << (32 - t2)) + 1099511627776 * t2),
+      getPartial: t2 => n.round(t2 / 1099511627776) || 32,
+      _shiftRight(t2, e2, n2, s2) {
+        for (void 0 === s2 && (s2 = []); e2 >= 32; e2 -= 32) s2.push(n2), (n2 = 0)
+        if (0 === e2) return s2.concat(t2)
+        for (let r3 = 0; r3 < t2.length; r3++) s2.push(n2 | (t2[r3] >>> e2)), (n2 = t2[r3] << (32 - e2))
+        const r2 = t2.length ? t2[t2.length - 1] : 0,
+          a2 = f.getPartial(r2)
+        return s2.push(f.partial((e2 + a2) & 31, e2 + a2 > 32 ? n2 : s2.pop(), 1)), s2
       }
     },
-    s = {
+    g = {
       bytes: {
-        fromBits(t) {
-          const e = n.bitLength(t) / 8,
-            s = new Uint8Array(e)
-          let r
-          for (let n = 0; n < e; n++) 0 == (3 & n) && (r = t[n / 4]), (s[n] = r >>> 24), (r <<= 8)
-          return s
+        fromBits(t2) {
+          const e2 = f.bitLength(t2) / 8,
+            n2 = new r(e2)
+          let s2
+          for (let r2 = 0; e2 > r2; r2++) 0 == (3 & r2) && (s2 = t2[r2 / 4]), (n2[r2] = s2 >>> 24), (s2 <<= 8)
+          return n2
         },
-        toBits(t) {
-          const e = []
-          let s,
-            r = 0
-          for (s = 0; s < t.length; s++) (r = (r << 8) | t[s]), 3 == (3 & s) && (e.push(r), (r = 0))
-          return 3 & s && e.push(n.partial(8 * (3 & s), r)), e
+        toBits(t2) {
+          const e2 = []
+          let n2,
+            s2 = 0
+          for (n2 = 0; n2 < t2.length; n2++) (s2 = (s2 << 8) | t2[n2]), 3 == (3 & n2) && (e2.push(s2), (s2 = 0))
+          return 3 & n2 && e2.push(f.partial(8 * (3 & n2), s2)), e2
         }
       }
     },
-    r = {
-      sha1: function (t) {
-        t ? ((this._h = t._h.slice(0)), (this._buffer = t._buffer.slice(0)), (this._length = t._length)) : this.reset()
+    w = {
+      sha1: function (t2) {
+        t2 ? ((this._h = t2._h.slice(0)), (this._buffer = t2._buffer.slice(0)), (this._length = t2._length)) : this.reset()
       }
     }
-  r.sha1.prototype = {
+  w.sha1.prototype = {
     blockSize: 512,
     reset: function () {
-      const t = this
-      return (t._h = this._init.slice(0)), (t._buffer = []), (t._length = 0), t
+      const t2 = this
+      return (t2._h = this._init.slice(0)), (t2._buffer = []), (t2._length = 0), t2
     },
-    update: function (t) {
-      const e = this
-      'string' == typeof t && (t = s.utf8String.toBits(t))
-      const r = (e._buffer = n.concat(e._buffer, t)),
-        a = e._length,
-        i = (e._length = a + n.bitLength(t))
-      if (i > 9007199254740991) throw new Error('Cannot hash more than 2^53 - 1 bits')
-      const c = new Uint32Array(r)
-      let o = 0
-      for (let t = e.blockSize + a - ((e.blockSize + a) & (e.blockSize - 1)); t <= i; t += e.blockSize)
-        e._block(c.subarray(16 * o, 16 * (o + 1))), (o += 1)
-      return r.splice(0, 16 * o), e
+    update: function (t2) {
+      const e2 = this
+      'string' == typeof t2 && (t2 = g.utf8String.toBits(t2))
+      const n2 = (e2._buffer = f.concat(e2._buffer, t2)),
+        r2 = e2._length,
+        a2 = (e2._length = r2 + f.bitLength(t2))
+      if (a2 > 9007199254740991) throw new s('Cannot hash more than 2^53 - 1 bits')
+      const c2 = new i(n2)
+      let o2 = 0
+      for (let t3 = e2.blockSize + r2 - ((e2.blockSize + r2) & (e2.blockSize - 1)); a2 >= t3; t3 += e2.blockSize)
+        e2._block(c2.subarray(16 * o2, 16 * (o2 + 1))), (o2 += 1)
+      return n2.splice(0, 16 * o2), e2
     },
     finalize: function () {
-      const t = this
-      let e = t._buffer
-      const s = t._h
-      e = n.concat(e, [n.partial(1, 1)])
-      for (let t = e.length + 2; 15 & t; t++) e.push(0)
-      for (e.push(Math.floor(t._length / 4294967296)), e.push(0 | t._length); e.length; ) t._block(e.splice(0, 16))
-      return t.reset(), s
+      const t2 = this
+      let e2 = t2._buffer
+      const s2 = t2._h
+      e2 = f.concat(e2, [f.partial(1, 1)])
+      for (let t3 = e2.length + 2; 15 & t3; t3++) e2.push(0)
+      for (e2.push(n.floor(t2._length / 4294967296)), e2.push(0 | t2._length); e2.length; ) t2._block(e2.splice(0, 16))
+      return t2.reset(), s2
     },
     _init: [1732584193, 4023233417, 2562383102, 271733878, 3285377520],
     _key: [1518500249, 1859775393, 2400959708, 3395469782],
-    _f: function (t, e, n, s) {
-      return t <= 19 ? (e & n) | (~e & s) : t <= 39 ? e ^ n ^ s : t <= 59 ? (e & n) | (e & s) | (n & s) : t <= 79 ? e ^ n ^ s : void 0
-    },
-    _S: function (t, e) {
-      return (e << t) | (e >>> (32 - t))
-    },
-    _block: function (t) {
-      const e = this,
-        n = e._h,
-        s = Array(80)
-      for (let e = 0; e < 16; e++) s[e] = t[e]
-      let r = n[0],
-        a = n[1],
-        i = n[2],
-        c = n[3],
-        o = n[4]
-      for (let t = 0; t <= 79; t++) {
-        t >= 16 && (s[t] = e._S(1, s[t - 3] ^ s[t - 8] ^ s[t - 14] ^ s[t - 16]))
-        const n = (e._S(5, r) + e._f(t, a, i, c) + o + s[t] + e._key[Math.floor(t / 20)]) | 0
-        ;(o = c), (c = i), (i = e._S(30, a)), (a = r), (r = n)
+    _f: (t2, e2, n2, s2) =>
+      t2 > 19 ? (t2 > 39 ? (t2 > 59 ? (t2 > 79 ? void 0 : e2 ^ n2 ^ s2) : (e2 & n2) | (e2 & s2) | (n2 & s2)) : e2 ^ n2 ^ s2) : (e2 & n2) | (~e2 & s2),
+    _S: (t2, e2) => (e2 << t2) | (e2 >>> (32 - t2)),
+    _block: function (e2) {
+      const s2 = this,
+        r2 = s2._h,
+        a2 = t(80)
+      for (let t2 = 0; 16 > t2; t2++) a2[t2] = e2[t2]
+      let i2 = r2[0],
+        c2 = r2[1],
+        o2 = r2[2],
+        l2 = r2[3],
+        h2 = r2[4]
+      for (let t2 = 0; 79 >= t2; t2++) {
+        16 > t2 || (a2[t2] = s2._S(1, a2[t2 - 3] ^ a2[t2 - 8] ^ a2[t2 - 14] ^ a2[t2 - 16]))
+        const e3 = (s2._S(5, i2) + s2._f(t2, c2, o2, l2) + h2 + a2[t2] + s2._key[n.floor(t2 / 20)]) | 0
+        ;(h2 = l2), (l2 = o2), (o2 = s2._S(30, c2)), (c2 = i2), (i2 = e3)
       }
-      ;(n[0] = (n[0] + r) | 0), (n[1] = (n[1] + a) | 0), (n[2] = (n[2] + i) | 0), (n[3] = (n[3] + c) | 0), (n[4] = (n[4] + o) | 0)
+      ;(r2[0] = (r2[0] + i2) | 0), (r2[1] = (r2[1] + c2) | 0), (r2[2] = (r2[2] + o2) | 0), (r2[3] = (r2[3] + l2) | 0), (r2[4] = (r2[4] + h2) | 0)
     }
   }
-  const a = class {
-      constructor(t) {
-        const e = this
-        ;(e._tables = [
+  const y = {
+      getRandomValues(t2) {
+        const e2 = new i(t2.buffer),
+          s2 = t3 => {
+            let e3 = 987654321
+            const s3 = 4294967295
+            return () => (
+              (e3 = (36969 * (65535 & e3) + (e3 >> 16)) & s3),
+              ((((e3 << 16) + (t3 = (18e3 * (65535 & t3) + (t3 >> 16)) & s3)) & s3) / 4294967296 + 0.5) * (n.random() > 0.5 ? 1 : -1)
+            )
+          }
+        for (let r2, a2 = 0; a2 < t2.length; a2 += 4) {
+          const t3 = s2(4294967296 * (r2 || n.random()))
+          ;(r2 = 987654071 * t3()), (e2[a2 / 4] = (4294967296 * t3()) | 0)
+        }
+        return t2
+      }
+    },
+    _ = {
+      importKey: t2 => new _.hmacSha1(g.bytes.toBits(t2)),
+      pbkdf2(t2, e2, n2, r2) {
+        if (((n2 = n2 || 1e4), 0 > r2 || 0 > n2)) throw new s('invalid params to pbkdf2')
+        const a2 = (1 + (r2 >> 5)) << 2
+        let i2, c2, l2, h2, p2
+        const d2 = new ArrayBuffer(a2),
+          u2 = new o(d2)
+        let w2 = 0
+        const y2 = f
+        for (e2 = g.bytes.toBits(e2), p2 = 1; (a2 || 1) > w2; p2++) {
+          for (i2 = c2 = t2.encrypt(y2.concat(e2, [p2])), l2 = 1; n2 > l2; l2++)
+            for (c2 = t2.encrypt(c2), h2 = 0; h2 < c2.length; h2++) i2[h2] ^= c2[h2]
+          for (l2 = 0; (a2 || 1) > w2 && l2 < i2.length; l2++) u2.setInt32(w2, i2[l2]), (w2 += 4)
+        }
+        return d2.slice(0, r2 / 8)
+      },
+      hmacSha1: class {
+        constructor(t2) {
+          const e2 = this,
+            n2 = (e2._hash = w.sha1),
+            s2 = [[], []],
+            r2 = n2.prototype.blockSize / 32
+          ;(e2._baseHash = [new n2(), new n2()]), t2.length > r2 && (t2 = n2.hash(t2))
+          for (let e3 = 0; r2 > e3; e3++) (s2[0][e3] = 909522486 ^ t2[e3]), (s2[1][e3] = 1549556828 ^ t2[e3])
+          e2._baseHash[0].update(s2[0]), e2._baseHash[1].update(s2[1]), (e2._resultHash = new n2(e2._baseHash[0]))
+        }
+        reset() {
+          const t2 = this
+          ;(t2._resultHash = new t2._hash(t2._baseHash[0])), (t2._updated = false)
+        }
+        update(t2) {
+          ;(this._updated = true), this._resultHash.update(t2)
+        }
+        digest() {
+          const t2 = this,
+            e2 = t2._resultHash.finalize(),
+            n2 = new t2._hash(t2._baseHash[1]).update(e2).finalize()
+          return t2.reset(), n2
+        }
+        encrypt(t2) {
+          if (this._updated) throw new s('encrypt on already updated hmac called!')
+          return this.update(t2), this.digest(t2)
+        }
+      }
+    },
+    m = 'Invalid pasword',
+    b = 16,
+    k = { name: 'PBKDF2' },
+    v = e.assign({ hash: { name: 'HMAC' } }, k),
+    z = e.assign({ iterations: 1e3, hash: { name: 'SHA-1' } }, k),
+    C = ['deriveBits'],
+    S = [8, 12, 16],
+    B = [16, 24, 32],
+    I = 10,
+    D = [0, 0, 0, 0],
+    V = void 0 !== h,
+    H = V && void 0 !== h.subtle,
+    K = g.bytes,
+    A = class {
+      constructor(t2) {
+        const e2 = this
+        ;(e2._tables = [
           [[], [], [], [], []],
           [[], [], [], [], []]
         ]),
-          e._tables[0][0][0] || e._precompute()
-        const n = e._tables[0][4],
-          s = e._tables[1],
-          r = t.length
-        let a,
-          i,
-          c,
-          o = 1
-        if (4 !== r && 6 !== r && 8 !== r) throw new Error('invalid aes key size')
-        for (e._key = [(i = t.slice(0)), (c = [])], a = r; a < 4 * r + 28; a++) {
-          let t = i[a - 1]
-          ;(a % r == 0 || (8 === r && a % r == 4)) &&
-            ((t = (n[t >>> 24] << 24) ^ (n[(t >> 16) & 255] << 16) ^ (n[(t >> 8) & 255] << 8) ^ n[255 & t]),
-            a % r == 0 && ((t = (t << 8) ^ (t >>> 24) ^ (o << 24)), (o = (o << 1) ^ (283 * (o >> 7))))),
-            (i[a] = i[a - r] ^ t)
+          e2._tables[0][0][0] || e2._precompute()
+        const n2 = e2._tables[0][4],
+          r2 = e2._tables[1],
+          a2 = t2.length
+        let i2,
+          c2,
+          o2,
+          l2 = 1
+        if (4 !== a2 && 6 !== a2 && 8 !== a2) throw new s('invalid aes key size')
+        for (e2._key = [(c2 = t2.slice(0)), (o2 = [])], i2 = a2; 4 * a2 + 28 > i2; i2++) {
+          let t3 = c2[i2 - 1]
+          ;(i2 % a2 == 0 || (8 === a2 && i2 % a2 == 4)) &&
+            ((t3 = (n2[t3 >>> 24] << 24) ^ (n2[(t3 >> 16) & 255] << 16) ^ (n2[(t3 >> 8) & 255] << 8) ^ n2[255 & t3]),
+            i2 % a2 == 0 && ((t3 = (t3 << 8) ^ (t3 >>> 24) ^ (l2 << 24)), (l2 = (l2 << 1) ^ (283 * (l2 >> 7))))),
+            (c2[i2] = c2[i2 - a2] ^ t3)
         }
-        for (let t = 0; a; t++, a--) {
-          const e = i[3 & t ? a : a - 4]
-          c[t] = a <= 4 || t < 4 ? e : s[0][n[e >>> 24]] ^ s[1][n[(e >> 16) & 255]] ^ s[2][n[(e >> 8) & 255]] ^ s[3][n[255 & e]]
+        for (let t3 = 0; i2; t3++, i2--) {
+          const e3 = c2[3 & t3 ? i2 : i2 - 4]
+          o2[t3] = 4 >= i2 || 4 > t3 ? e3 : r2[0][n2[e3 >>> 24]] ^ r2[1][n2[(e3 >> 16) & 255]] ^ r2[2][n2[(e3 >> 8) & 255]] ^ r2[3][n2[255 & e3]]
         }
       }
-      encrypt(t) {
-        return this._crypt(t, 0)
+      encrypt(t2) {
+        return this._crypt(t2, 0)
       }
-      decrypt(t) {
-        return this._crypt(t, 1)
+      decrypt(t2) {
+        return this._crypt(t2, 1)
       }
       _precompute() {
-        const t = this._tables[0],
-          e = this._tables[1],
-          n = t[4],
-          s = e[4],
-          r = [],
-          a = []
-        let i, c, o, l
-        for (let t = 0; t < 256; t++) a[(r[t] = (t << 1) ^ (283 * (t >> 7))) ^ t] = t
-        for (let h = (i = 0); !n[h]; h ^= c || 1, i = a[i] || 1) {
-          let a = i ^ (i << 1) ^ (i << 2) ^ (i << 3) ^ (i << 4)
-          ;(a = (a >> 8) ^ (255 & a) ^ 99), (n[h] = a), (s[a] = h), (l = r[(o = r[(c = r[h])])])
-          let p = (16843009 * l) ^ (65537 * o) ^ (257 * c) ^ (16843008 * h),
-            u = (257 * r[a]) ^ (16843008 * a)
-          for (let n = 0; n < 4; n++) (t[n][h] = u = (u << 24) ^ (u >>> 8)), (e[n][a] = p = (p << 24) ^ (p >>> 8))
+        const t2 = this._tables[0],
+          e2 = this._tables[1],
+          n2 = t2[4],
+          s2 = e2[4],
+          r2 = [],
+          a2 = []
+        let i2, c2, o2, l2
+        for (let t3 = 0; 256 > t3; t3++) a2[(r2[t3] = (t3 << 1) ^ (283 * (t3 >> 7))) ^ t3] = t3
+        for (let h2 = (i2 = 0); !n2[h2]; h2 ^= c2 || 1, i2 = a2[i2] || 1) {
+          let a3 = i2 ^ (i2 << 1) ^ (i2 << 2) ^ (i2 << 3) ^ (i2 << 4)
+          ;(a3 = (a3 >> 8) ^ (255 & a3) ^ 99), (n2[h2] = a3), (s2[a3] = h2), (l2 = r2[(o2 = r2[(c2 = r2[h2])])])
+          let p2 = (16843009 * l2) ^ (65537 * o2) ^ (257 * c2) ^ (16843008 * h2),
+            d2 = (257 * r2[a3]) ^ (16843008 * a3)
+          for (let n3 = 0; 4 > n3; n3++) (t2[n3][h2] = d2 = (d2 << 24) ^ (d2 >>> 8)), (e2[n3][a3] = p2 = (p2 << 24) ^ (p2 >>> 8))
         }
-        for (let n = 0; n < 5; n++) (t[n] = t[n].slice(0)), (e[n] = e[n].slice(0))
+        for (let n3 = 0; 5 > n3; n3++) (t2[n3] = t2[n3].slice(0)), (e2[n3] = e2[n3].slice(0))
       }
-      _crypt(t, e) {
-        if (4 !== t.length) throw new Error('invalid aes block size')
-        const n = this._key[e],
-          s = n.length / 4 - 2,
-          r = [0, 0, 0, 0],
-          a = this._tables[e],
-          i = a[0],
-          c = a[1],
-          o = a[2],
-          l = a[3],
-          h = a[4]
-        let p,
-          u,
-          d,
-          f = t[0] ^ n[0],
-          g = t[e ? 3 : 1] ^ n[1],
-          y = t[2] ^ n[2],
-          w = t[e ? 1 : 3] ^ n[3],
-          _ = 4
-        for (let t = 0; t < s; t++)
-          (p = i[f >>> 24] ^ c[(g >> 16) & 255] ^ o[(y >> 8) & 255] ^ l[255 & w] ^ n[_]),
-            (u = i[g >>> 24] ^ c[(y >> 16) & 255] ^ o[(w >> 8) & 255] ^ l[255 & f] ^ n[_ + 1]),
-            (d = i[y >>> 24] ^ c[(w >> 16) & 255] ^ o[(f >> 8) & 255] ^ l[255 & g] ^ n[_ + 2]),
-            (w = i[w >>> 24] ^ c[(f >> 16) & 255] ^ o[(g >> 8) & 255] ^ l[255 & y] ^ n[_ + 3]),
-            (_ += 4),
-            (f = p),
-            (g = u),
-            (y = d)
-        for (let t = 0; t < 4; t++)
-          (r[e ? 3 & -t : t] = (h[f >>> 24] << 24) ^ (h[(g >> 16) & 255] << 16) ^ (h[(y >> 8) & 255] << 8) ^ h[255 & w] ^ n[_++]),
-            (p = f),
-            (f = g),
-            (g = y),
-            (y = w),
-            (w = p)
-        return r
+      _crypt(t2, e2) {
+        if (4 !== t2.length) throw new s('invalid aes block size')
+        const n2 = this._key[e2],
+          r2 = n2.length / 4 - 2,
+          a2 = [0, 0, 0, 0],
+          i2 = this._tables[e2],
+          c2 = i2[0],
+          o2 = i2[1],
+          l2 = i2[2],
+          h2 = i2[3],
+          p2 = i2[4]
+        let d2,
+          u2,
+          f2,
+          g2 = t2[0] ^ n2[0],
+          w2 = t2[e2 ? 3 : 1] ^ n2[1],
+          y2 = t2[2] ^ n2[2],
+          _2 = t2[e2 ? 1 : 3] ^ n2[3],
+          m2 = 4
+        for (let t3 = 0; r2 > t3; t3++)
+          (d2 = c2[g2 >>> 24] ^ o2[(w2 >> 16) & 255] ^ l2[(y2 >> 8) & 255] ^ h2[255 & _2] ^ n2[m2]),
+            (u2 = c2[w2 >>> 24] ^ o2[(y2 >> 16) & 255] ^ l2[(_2 >> 8) & 255] ^ h2[255 & g2] ^ n2[m2 + 1]),
+            (f2 = c2[y2 >>> 24] ^ o2[(_2 >> 16) & 255] ^ l2[(g2 >> 8) & 255] ^ h2[255 & w2] ^ n2[m2 + 2]),
+            (_2 = c2[_2 >>> 24] ^ o2[(g2 >> 16) & 255] ^ l2[(w2 >> 8) & 255] ^ h2[255 & y2] ^ n2[m2 + 3]),
+            (m2 += 4),
+            (g2 = d2),
+            (w2 = u2),
+            (y2 = f2)
+        for (let t3 = 0; 4 > t3; t3++)
+          (a2[e2 ? 3 & -t3 : t3] = (p2[g2 >>> 24] << 24) ^ (p2[(w2 >> 16) & 255] << 16) ^ (p2[(y2 >> 8) & 255] << 8) ^ p2[255 & _2] ^ n2[m2++]),
+            (d2 = g2),
+            (g2 = w2),
+            (w2 = y2),
+            (y2 = _2),
+            (_2 = d2)
+        return a2
       }
     },
-    i = class {
-      constructor(t, e) {
-        ;(this._prf = t), (this._initIv = e), (this._iv = e)
+    R = class {
+      constructor(t2, e2) {
+        ;(this._prf = t2), (this._initIv = e2), (this._iv = e2)
       }
       reset() {
         this._iv = this._initIv
       }
-      update(t) {
-        return this.calculate(this._prf, t, this._iv)
+      update(t2) {
+        return this.calculate(this._prf, t2, this._iv)
       }
-      incWord(t) {
-        if (255 == ((t >> 24) & 255)) {
-          let e = (t >> 16) & 255,
-            n = (t >> 8) & 255,
-            s = 255 & t
-          255 === e ? ((e = 0), 255 === n ? ((n = 0), 255 === s ? (s = 0) : ++s) : ++n) : ++e, (t = 0), (t += e << 16), (t += n << 8), (t += s)
-        } else t += 1 << 24
-        return t
+      incWord(t2) {
+        if (255 == ((t2 >> 24) & 255)) {
+          let e2 = (t2 >> 16) & 255,
+            n2 = (t2 >> 8) & 255,
+            s2 = 255 & t2
+          255 === e2 ? ((e2 = 0), 255 === n2 ? ((n2 = 0), 255 === s2 ? (s2 = 0) : ++s2) : ++n2) : ++e2,
+            (t2 = 0),
+            (t2 += e2 << 16),
+            (t2 += n2 << 8),
+            (t2 += s2)
+        } else t2 += 1 << 24
+        return t2
       }
-      incCounter(t) {
-        0 === (t[0] = this.incWord(t[0])) && (t[1] = this.incWord(t[1]))
+      incCounter(t2) {
+        0 === (t2[0] = this.incWord(t2[0])) && (t2[1] = this.incWord(t2[1]))
       }
-      calculate(t, e, s) {
-        let r
-        if (!(r = e.length)) return []
-        const a = n.bitLength(e)
-        for (let n = 0; n < r; n += 4) {
-          this.incCounter(s)
-          const r = t.encrypt(s)
-          ;(e[n] ^= r[0]), (e[n + 1] ^= r[1]), (e[n + 2] ^= r[2]), (e[n + 3] ^= r[3])
+      calculate(t2, e2, n2) {
+        let s2
+        if (!(s2 = e2.length)) return []
+        const r2 = f.bitLength(e2)
+        for (let r3 = 0; s2 > r3; r3 += 4) {
+          this.incCounter(n2)
+          const s3 = t2.encrypt(n2)
+          ;(e2[r3] ^= s3[0]), (e2[r3 + 1] ^= s3[1]), (e2[r3 + 2] ^= s3[2]), (e2[r3 + 3] ^= s3[3])
         }
-        return n.clamp(e, a)
+        return f.clamp(e2, r2)
       }
     },
-    c = class {
-      constructor(t) {
-        const e = this,
-          n = (e._hash = r.sha1),
-          s = [[], []],
-          a = n.prototype.blockSize / 32
-        ;(e._baseHash = [new n(), new n()]), t.length > a && (t = n.hash(t))
-        for (let e = 0; e < a; e++) (s[0][e] = 909522486 ^ t[e]), (s[1][e] = 1549556828 ^ t[e])
-        e._baseHash[0].update(s[0]), e._baseHash[1].update(s[1]), (e._resultHash = new n(e._baseHash[0]))
-      }
-      reset() {
-        const t = this
-        ;(t._resultHash = new t._hash(t._baseHash[0])), (t._updated = !1)
-      }
-      update(t) {
-        ;(this._updated = !0), this._resultHash.update(t)
-      }
-      digest() {
-        const t = this,
-          e = t._resultHash.finalize(),
-          n = new t._hash(t._baseHash[1]).update(e).finalize()
-        return t.reset(), n
-      }
-    },
-    o = 'Invalid pasword',
-    l = 16,
-    h = { name: 'PBKDF2' },
-    p = Object.assign({ hash: { name: 'HMAC' } }, h),
-    u = Object.assign({ iterations: 1e3, hash: { name: 'SHA-1' } }, h),
-    d = ['deriveBits'],
-    f = [8, 12, 16],
-    g = [16, 24, 32],
-    y = 10,
-    w = [0, 0, 0, 0],
-    _ = s.bytes,
-    b = a,
-    m = i,
-    k = c
-  class A {
-    constructor(t, e, n) {
-      Object.assign(this, { password: t, signed: e, strength: n - 1, pendingInput: new Uint8Array(0) })
+    W = _.hmacSha1
+  class T {
+    constructor(t2, n2, s2) {
+      e.assign(this, { password: t2, signed: n2, strength: s2 - 1, pendingInput: new r(0) })
     }
-    async append(t) {
-      const e = this
-      if (e.password) {
-        const n = S(t, 0, f[e.strength] + 2)
-        await (async function (t, e, n) {
-          await v(t, n, S(e, 0, f[t.strength]))
-          const s = S(e, f[t.strength]),
-            r = t.keys.passwordVerification
-          if (r[0] != s[0] || r[1] != s[1]) throw new Error(o)
-        })(e, n, e.password),
-          (e.password = null),
-          (e.aesCtrGladman = new m(new b(e.keys.key), Array.from(w))),
-          (e.hmac = new k(e.keys.authentication)),
-          (t = S(t, f[e.strength] + 2))
+    async append(e2) {
+      const n2 = this
+      if (n2.password) {
+        const r2 = E(e2, 0, S[n2.strength] + 2)
+        await (async (t2, e3, n3) => {
+          await L(t2, n3, E(e3, 0, S[t2.strength]))
+          const r3 = E(e3, S[t2.strength]),
+            a2 = t2.keys.passwordVerification
+          if (a2[0] != r3[0] || a2[1] != r3[1]) throw new s(m)
+        })(n2, r2, n2.password),
+          (n2.password = null),
+          (n2.aesCtrGladman = new R(new A(n2.keys.key), t.from(D))),
+          (n2.hmac = new W(n2.keys.authentication)),
+          (e2 = E(e2, S[n2.strength] + 2))
       }
-      return z(e, t, new Uint8Array(t.length - y - ((t.length - y) % l)), 0, y, !0)
+      return G(n2, e2, new r(e2.length - I - ((e2.length - I) % b)), 0, I, true)
     }
     flush() {
-      const t = this,
-        e = t.pendingInput,
-        n = S(e, 0, e.length - y),
-        s = S(e, e.length - y)
-      let r = new Uint8Array(0)
-      if (n.length) {
-        const e = _.toBits(n)
-        t.hmac.update(e)
-        const s = t.aesCtrGladman.update(e)
-        r = _.fromBits(s)
+      const t2 = this,
+        e2 = t2.pendingInput,
+        n2 = E(e2, 0, e2.length - I),
+        s2 = E(e2, e2.length - I)
+      let a2 = new r(0)
+      if (n2.length) {
+        const e3 = K.toBits(n2)
+        t2.hmac.update(e3)
+        const s3 = t2.aesCtrGladman.update(e3)
+        a2 = K.fromBits(s3)
       }
-      let a = !0
-      if (t.signed) {
-        const e = S(_.fromBits(t.hmac.digest()), 0, y)
-        for (let t = 0; t < y; t++) e[t] != s[t] && (a = !1)
+      let i2 = true
+      if (t2.signed) {
+        const e3 = E(K.fromBits(t2.hmac.digest()), 0, I)
+        for (let t3 = 0; I > t3; t3++) e3[t3] != s2[t3] && (i2 = false)
       }
-      return { valid: a, data: r }
+      return { valid: i2, data: a2 }
     }
   }
   class U {
-    constructor(t, e) {
-      Object.assign(this, { password: t, strength: e - 1, pendingInput: new Uint8Array(0) })
+    constructor(t2, n2) {
+      e.assign(this, { password: t2, strength: n2 - 1, pendingInput: new r(0) })
     }
-    async append(t) {
-      const e = this
-      let n = new Uint8Array(0)
-      e.password &&
-        ((n = await (async function (t, e) {
-          const n = crypto.getRandomValues(new Uint8Array(f[t.strength]))
-          return await v(t, e, n), C(n, t.keys.passwordVerification)
-        })(e, e.password)),
-        (e.password = null),
-        (e.aesCtrGladman = new m(new b(e.keys.key), Array.from(w))),
-        (e.hmac = new k(e.keys.authentication)))
-      const s = new Uint8Array(n.length + t.length - (t.length % l))
-      return s.set(n, 0), z(e, t, s, n.length, 0)
+    async append(e2) {
+      const n2 = this
+      let s2 = new r(0)
+      n2.password &&
+        ((s2 = await (async (t2, e3) => {
+          const n3 = ((s3 = new r(S[t2.strength])), V && 'function' == typeof h.getRandomValues ? h.getRandomValues(s3) : y.getRandomValues(s3))
+          var s3
+          return await L(t2, e3, n3), P(n3, t2.keys.passwordVerification)
+        })(n2, n2.password)),
+        (n2.password = null),
+        (n2.aesCtrGladman = new R(new A(n2.keys.key), t.from(D))),
+        (n2.hmac = new W(n2.keys.authentication)))
+      const a2 = new r(s2.length + e2.length - (e2.length % b))
+      return a2.set(s2, 0), G(n2, e2, a2, s2.length, 0)
     }
     flush() {
-      const t = this
-      let e = new Uint8Array(0)
-      if (t.pendingInput.length) {
-        const n = t.aesCtrGladman.update(_.toBits(t.pendingInput))
-        t.hmac.update(n), (e = _.fromBits(n))
+      const t2 = this
+      let e2 = new r(0)
+      if (t2.pendingInput.length) {
+        const n3 = t2.aesCtrGladman.update(K.toBits(t2.pendingInput))
+        t2.hmac.update(n3), (e2 = K.fromBits(n3))
       }
-      const n = S(_.fromBits(t.hmac.digest()), 0, y)
-      return { data: C(e, n), signature: n }
+      const n2 = E(K.fromBits(t2.hmac.digest()), 0, I)
+      return { data: P(e2, n2), signature: n2 }
     }
   }
-  function z(t, e, n, s, r, a) {
-    const i = e.length - r
-    let c
+  function G(t2, e2, n2, s2, a2, i2) {
+    const c2 = e2.length - a2
+    let o2
     for (
-      t.pendingInput.length &&
-        ((e = C(t.pendingInput, e)),
-        (n = (function (t, e) {
-          if (e && e > t.length) {
-            const n = t
-            ;(t = new Uint8Array(e)).set(n, 0)
+      t2.pendingInput.length &&
+        ((e2 = P(t2.pendingInput, e2)),
+        (n2 = ((t3, e3) => {
+          if (e3 && e3 > t3.length) {
+            const n3 = t3
+            ;(t3 = new r(e3)).set(n3, 0)
           }
-          return t
-        })(n, i - (i % l)))),
-        c = 0;
-      c <= i - l;
-      c += l
+          return t3
+        })(n2, c2 - (c2 % b)))),
+        o2 = 0;
+      c2 - b >= o2;
+      o2 += b
     ) {
-      const r = _.toBits(S(e, c, c + l))
-      a && t.hmac.update(r)
-      const i = t.aesCtrGladman.update(r)
-      a || t.hmac.update(i), n.set(_.fromBits(i), c + s)
+      const r2 = K.toBits(E(e2, o2, o2 + b))
+      i2 && t2.hmac.update(r2)
+      const a3 = t2.aesCtrGladman.update(r2)
+      i2 || t2.hmac.update(a3), n2.set(K.fromBits(a3), o2 + s2)
     }
-    return (t.pendingInput = S(e, c)), n
+    return (t2.pendingInput = E(e2, o2)), n2
   }
-  async function v(t, e, n) {
-    const s = new TextEncoder().encode(e),
-      r = await crypto.subtle.importKey('raw', s, p, !1, d),
-      a = await crypto.subtle.deriveBits(Object.assign({ salt: n }, u), r, 8 * (2 * g[t.strength] + 2)),
-      i = new Uint8Array(a)
-    t.keys = {
-      key: _.toBits(S(i, 0, g[t.strength])),
-      authentication: _.toBits(S(i, g[t.strength], 2 * g[t.strength])),
-      passwordVerification: S(i, 2 * g[t.strength])
+  async function L(t2, n2, s2) {
+    const a2 = (t3 => {
+        if (void 0 === l) {
+          const e2 = new r((t3 = unescape(encodeURIComponent(t3))).length)
+          for (let n3 = 0; n3 < e2.length; n3++) e2[n3] = t3.charCodeAt(n3)
+          return e2
+        }
+        return new l().encode(t3)
+      })(n2),
+      i2 = await ((t3, e2, n3, s3, r2) =>
+        V && H && 'function' == typeof h.subtle.importKey ? h.subtle.importKey('raw', e2, n3, false, r2) : _.importKey(e2))(0, a2, v, 0, C),
+      c2 = await (async (t3, e2, n3) =>
+        V && H && 'function' == typeof h.subtle.deriveBits ? await h.subtle.deriveBits(t3, e2, n3) : _.pbkdf2(e2, t3.salt, z.iterations, n3))(
+        e.assign({ salt: s2 }, z),
+        i2,
+        8 * (2 * B[t2.strength] + 2)
+      ),
+      o2 = new r(c2)
+    t2.keys = {
+      key: K.toBits(E(o2, 0, B[t2.strength])),
+      authentication: K.toBits(E(o2, B[t2.strength], 2 * B[t2.strength])),
+      passwordVerification: E(o2, 2 * B[t2.strength])
     }
   }
-  function C(t, e) {
-    let n = t
-    return t.length + e.length && ((n = new Uint8Array(t.length + e.length)), n.set(t, 0), n.set(e, t.length)), n
+  function P(t2, e2) {
+    let n2 = t2
+    return t2.length + e2.length && ((n2 = new r(t2.length + e2.length)), n2.set(t2, 0), n2.set(e2, t2.length)), n2
   }
-  function S(t, e, n) {
-    return t.subarray(e, n)
+  function E(t2, e2, n2) {
+    return t2.subarray(e2, n2)
   }
-  class B {
-    constructor(t, e) {
-      Object.assign(this, { password: t, passwordVerification: e }), V(this, t)
+  class M {
+    constructor(t2, n2) {
+      e.assign(this, { password: t2, passwordVerification: n2 }), O(this, t2)
     }
-    append(t) {
-      const e = this
-      if (e.password) {
-        const n = I(e, t.subarray(0, 12))
-        if (((e.password = null), n[11] != e.passwordVerification)) throw new Error(o)
-        t = t.subarray(12)
+    append(t2) {
+      const e2 = this
+      if (e2.password) {
+        const n2 = x(e2, t2.subarray(0, 12))
+        if (((e2.password = null), n2[11] != e2.passwordVerification)) throw new s(m)
+        t2 = t2.subarray(12)
       }
-      return I(e, t)
+      return x(e2, t2)
     }
     flush() {
-      return { valid: !0, data: new Uint8Array(0) }
+      return { valid: true, data: new r(0) }
     }
   }
-  class D {
-    constructor(t, e) {
-      Object.assign(this, { password: t, passwordVerification: e }), V(this, t)
+  class j {
+    constructor(t2, n2) {
+      e.assign(this, { password: t2, passwordVerification: n2 }), O(this, t2)
     }
-    append(t) {
-      const e = this
-      let n, s
-      if (e.password) {
-        e.password = null
-        const r = crypto.getRandomValues(new Uint8Array(12))
-        ;(r[11] = e.passwordVerification), (n = new Uint8Array(t.length + r.length)), n.set(H(e, r), 0), (s = 12)
-      } else (n = new Uint8Array(t.length)), (s = 0)
-      return n.set(H(e, t), s), n
+    append(t2) {
+      const e2 = this
+      let n2, s2
+      if (e2.password) {
+        e2.password = null
+        const a2 = h.getRandomValues(new r(12))
+        ;(a2[11] = e2.passwordVerification), (n2 = new r(t2.length + a2.length)), n2.set(F(e2, a2), 0), (s2 = 12)
+      } else (n2 = new r(t2.length)), (s2 = 0)
+      return n2.set(F(e2, t2), s2), n2
     }
     flush() {
-      return { data: new Uint8Array(0) }
+      return { data: new r(0) }
     }
   }
-  function I(t, e) {
-    const n = new Uint8Array(e.length)
-    for (let s = 0; s < e.length; s++) (n[s] = j(t) ^ e[s]), M(t, n[s])
-    return n
+  function x(t2, e2) {
+    const n2 = new r(e2.length)
+    for (let s2 = 0; s2 < e2.length; s2++) (n2[s2] = J(t2) ^ e2[s2]), q(t2, n2[s2])
+    return n2
   }
-  function H(t, e) {
-    const n = new Uint8Array(e.length)
-    for (let s = 0; s < e.length; s++) (n[s] = j(t) ^ e[s]), M(t, e[s])
-    return n
+  function F(t2, e2) {
+    const n2 = new r(e2.length)
+    for (let s2 = 0; s2 < e2.length; s2++) (n2[s2] = J(t2) ^ e2[s2]), q(t2, e2[s2])
+    return n2
   }
-  function V(t, n) {
-    ;(t.keys = [305419896, 591751049, 878082192]), (t.crcKey0 = new e(t.keys[0])), (t.crcKey2 = new e(t.keys[2]))
-    for (let e = 0; e < n.length; e++) M(t, n.charCodeAt(e))
+  function O(t2, e2) {
+    ;(t2.keys = [305419896, 591751049, 878082192]), (t2.crcKey0 = new u(t2.keys[0])), (t2.crcKey2 = new u(t2.keys[2]))
+    for (let n2 = 0; n2 < e2.length; n2++) q(t2, e2.charCodeAt(n2))
   }
-  function M(t, e) {
-    t.crcKey0.append([e]),
-      (t.keys[0] = ~t.crcKey0.get()),
-      (t.keys[1] = E(t.keys[1] + O(t.keys[0]))),
-      (t.keys[1] = E(Math.imul(t.keys[1], 134775813) + 1)),
-      t.crcKey2.append([t.keys[1] >>> 24]),
-      (t.keys[2] = ~t.crcKey2.get())
+  function q(t2, e2) {
+    t2.crcKey0.append([e2]),
+      (t2.keys[0] = ~t2.crcKey0.get()),
+      (t2.keys[1] = Q(t2.keys[1] + N(t2.keys[0]))),
+      (t2.keys[1] = Q(n.imul(t2.keys[1], 134775813) + 1)),
+      t2.crcKey2.append([t2.keys[1] >>> 24]),
+      (t2.keys[2] = ~t2.crcKey2.get())
   }
-  function j(t) {
-    const e = 2 | t.keys[2]
-    return O(Math.imul(e, 1 ^ e) >>> 8)
+  function J(t2) {
+    const e2 = 2 | t2.keys[2]
+    return N(n.imul(e2, 1 ^ e2) >>> 8)
   }
-  function O(t) {
-    return 255 & t
+  function N(t2) {
+    return 255 & t2
   }
-  function E(t) {
-    return 4294967295 & t
+  function Q(t2) {
+    return 4294967295 & t2
   }
-  const K = 'deflate',
-    W = 'inflate',
-    G = 'Invalid signature'
-  class L {
+  const X = 'deflate',
+    Y = 'inflate',
+    Z = 'Invalid signature'
+  class $ {
     constructor(
-      t,
-      { signature: n, password: s, signed: r, compressed: a, zipCrypto: i, passwordVerification: c, encryptionStrength: o },
-      { chunkSize: l }
+      t2,
+      { signature: n2, password: s2, signed: r2, compressed: a2, zipCrypto: i2, passwordVerification: c2, encryptionStrength: o2 },
+      { chunkSize: l2 }
     ) {
-      const h = Boolean(s)
-      Object.assign(this, {
-        signature: n,
-        encrypted: h,
-        signed: r,
-        compressed: a,
-        inflate: a && new t({ chunkSize: l }),
-        crc32: r && new e(),
-        zipCrypto: i,
-        decrypt: h && i ? new B(s, c) : new A(s, r, o)
+      const h2 = !!s2
+      e.assign(this, {
+        signature: n2,
+        encrypted: h2,
+        signed: r2,
+        compressed: a2,
+        inflate: a2 && new t2({ chunkSize: l2 }),
+        crc32: r2 && new u(),
+        zipCrypto: i2,
+        decrypt: h2 && i2 ? new M(s2, c2) : new T(s2, r2, o2)
       })
     }
-    async append(t) {
-      const e = this
+    async append(t2) {
+      const e2 = this
       return (
-        e.encrypted && t.length && (t = await e.decrypt.append(t)),
-        e.compressed && t.length && (t = await e.inflate.append(t)),
-        (!e.encrypted || e.zipCrypto) && e.signed && t.length && e.crc32.append(t),
-        t
+        e2.encrypted && t2.length && (t2 = await e2.decrypt.append(t2)),
+        e2.compressed && t2.length && (t2 = await e2.inflate.append(t2)),
+        (!e2.encrypted || e2.zipCrypto) && e2.signed && t2.length && e2.crc32.append(t2),
+        t2
       )
     }
     async flush() {
-      const t = this
-      let e,
-        n = new Uint8Array(0)
-      if (t.encrypted) {
-        const e = t.decrypt.flush()
-        if (!e.valid) throw new Error(G)
-        n = e.data
+      const t2 = this
+      let e2,
+        n2 = new r(0)
+      if (t2.encrypted) {
+        const e3 = t2.decrypt.flush()
+        if (!e3.valid) throw new s(Z)
+        n2 = e3.data
       }
-      if ((!t.encrypted || t.zipCrypto) && t.signed) {
-        const n = new DataView(new Uint8Array(4).buffer)
-        if (((e = t.crc32.get()), n.setUint32(0, e), t.signature != n.getUint32(0, !1))) throw new Error(G)
+      if ((!t2.encrypted || t2.zipCrypto) && t2.signed) {
+        const n3 = new o(new r(4).buffer)
+        if (((e2 = t2.crc32.get()), n3.setUint32(0, e2), t2.signature != n3.getUint32(0, false))) throw new s(Z)
       }
-      return t.compressed && ((n = (await t.inflate.append(n)) || new Uint8Array(0)), await t.inflate.flush()), { data: n, signature: e }
+      return t2.compressed && ((n2 = (await t2.inflate.append(n2)) || new r(0)), await t2.inflate.flush()), { data: n2, signature: e2 }
     }
   }
-  class P {
+  class tt {
     constructor(
-      t,
-      { encrypted: n, signed: s, compressed: r, level: a, zipCrypto: i, password: c, passwordVerification: o, encryptionStrength: l },
-      { chunkSize: h }
+      t2,
+      { encrypted: n2, signed: s2, compressed: r2, level: a2, zipCrypto: i2, password: c2, passwordVerification: o2, encryptionStrength: l2 },
+      { chunkSize: h2 }
     ) {
-      Object.assign(this, {
-        encrypted: n,
-        signed: s,
-        compressed: r,
-        deflate: r && new t({ level: a || 5, chunkSize: h }),
-        crc32: s && new e(),
-        zipCrypto: i,
-        encrypt: n && i ? new D(c, o) : new U(c, l)
+      e.assign(this, {
+        encrypted: n2,
+        signed: s2,
+        compressed: r2,
+        deflate: r2 && new t2({ level: a2 || 5, chunkSize: h2 }),
+        crc32: s2 && new u(),
+        zipCrypto: i2,
+        encrypt: n2 && i2 ? new j(c2, o2) : new U(c2, l2)
       })
     }
-    async append(t) {
-      const e = this
-      let n = t
+    async append(t2) {
+      const e2 = this
+      let n2 = t2
       return (
-        e.compressed && t.length && (n = await e.deflate.append(t)),
-        e.encrypted && n.length && (n = await e.encrypt.append(n)),
-        (!e.encrypted || e.zipCrypto) && e.signed && t.length && e.crc32.append(t),
-        n
+        e2.compressed && t2.length && (n2 = await e2.deflate.append(t2)),
+        e2.encrypted && n2.length && (n2 = await e2.encrypt.append(n2)),
+        (!e2.encrypted || e2.zipCrypto) && e2.signed && t2.length && e2.crc32.append(t2),
+        n2
       )
     }
     async flush() {
-      const t = this
-      let e,
-        n = new Uint8Array(0)
-      if ((t.compressed && (n = (await t.deflate.flush()) || new Uint8Array(0)), t.encrypted)) {
-        n = await t.encrypt.append(n)
-        const s = t.encrypt.flush()
-        e = s.signature
-        const r = new Uint8Array(n.length + s.data.length)
-        r.set(n, 0), r.set(s.data, n.length), (n = r)
+      const t2 = this
+      let e2,
+        n2 = new r(0)
+      if ((t2.compressed && (n2 = (await t2.deflate.flush()) || new r(0)), t2.encrypted)) {
+        n2 = await t2.encrypt.append(n2)
+        const s2 = t2.encrypt.flush()
+        e2 = s2.signature
+        const a2 = new r(n2.length + s2.data.length)
+        a2.set(n2, 0), a2.set(s2.data, n2.length), (n2 = a2)
       }
-      return (t.encrypted && !t.zipCrypto) || !t.signed || (e = t.crc32.get()), { data: n, signature: e }
+      return (t2.encrypted && !t2.zipCrypto) || !t2.signed || (e2 = t2.crc32.get()), { data: n2, signature: e2 }
     }
   }
-  const T = {
-    init(t) {
-      t.scripts && t.scripts.length && importScripts.apply(void 0, t.scripts)
-      const e = t.options
-      let n
+  const et = {
+    init(t2) {
+      t2.scripts && t2.scripts.length && importScripts.apply(void 0, t2.scripts)
+      const e2 = t2.options
+      let n2
       self.initCodec && self.initCodec(),
-        e.codecType.startsWith(K) ? (n = self.Deflate) : e.codecType.startsWith(W) && (n = self.Inflate),
-        (R = (function (t, e, n) {
-          return e.codecType.startsWith(K) ? new P(t, e, n) : e.codecType.startsWith(W) ? new L(t, e, n) : void 0
-        })(n, e, t.config))
+        e2.codecType.startsWith(X) ? (n2 = self.Deflate) : e2.codecType.startsWith(Y) && (n2 = self.Inflate),
+        (nt = ((t3, e3, n3) => (e3.codecType.startsWith(X) ? new tt(t3, e3, n3) : e3.codecType.startsWith(Y) ? new $(t3, e3, n3) : void 0))(
+          n2,
+          e2,
+          t2.config
+        ))
     },
-    append: async t => ({ data: await R.append(t.data) }),
-    flush: () => R.flush()
+    append: async t2 => ({ data: await nt.append(t2.data) }),
+    flush: () => nt.flush()
   }
-  let R
-  function x(t, e, n) {
+  let nt
+  function st(t2, n2, s2) {
     return class {
-      constructor(s) {
-        const r = this
-        ;(r.codec = new t(Object.assign({}, e, s))),
-          n(r.codec, t => {
-            if (r.pendingData) {
-              const e = r.pendingData
-              ;(r.pendingData = new Uint8Array(e.length + t.length)), r.pendingData.set(e, 0), r.pendingData.set(t, e.length)
-            } else r.pendingData = new Uint8Array(t)
+      constructor(a3) {
+        const i2 = this
+        ;(i2.codec = new t2(e.assign({}, n2, a3))),
+          s2(i2.codec, t3 => {
+            if (i2.pendingData) {
+              const e2 = i2.pendingData
+              ;(i2.pendingData = new r(e2.length + t3.length)), i2.pendingData.set(e2, 0), i2.pendingData.set(t3, e2.length)
+            } else i2.pendingData = new r(t3)
           })
       }
-      async append(t) {
-        return this.codec.push(t), s(this)
+      append(t3) {
+        return this.codec.push(t3), a2(this)
       }
-      async flush() {
-        return this.codec.push(new Uint8Array(0), !0), s(this)
+      flush() {
+        return this.codec.push(new r(0), true), a2(this)
       }
     }
-    function s(t) {
-      if (t.pendingData) {
-        const e = t.pendingData
-        return (t.pendingData = null), e
+    function a2(t3) {
+      if (t3.pendingData) {
+        const e2 = t3.pendingData
+        return (t3.pendingData = null), e2
       }
-      return new Uint8Array(0)
+      return new r(0)
     }
   }
-  addEventListener('message', async t => {
-    const e = t.data,
-      n = e.type,
-      s = T[n]
-    if (s)
+  addEventListener('message', async t2 => {
+    const e2 = t2.data,
+      n2 = e2.type,
+      s2 = et[n2]
+    if (s2)
       try {
-        e.data && (e.data = new Uint8Array(e.data))
-        const t = (await s(e)) || {}
-        if (((t.type = n), t.data))
+        e2.data && (e2.data = new r(e2.data))
+        const t3 = (await s2(e2)) || {}
+        if (((t3.type = n2), t3.data))
           try {
-            ;(t.data = t.data.buffer), postMessage(t, [t.data])
-          } catch (e) {
-            postMessage(t)
+            ;(t3.data = t3.data.buffer), p(t3, [t3.data])
+          } catch (e3) {
+            p(t3)
           }
-        else postMessage(t)
-      } catch (t) {
-        postMessage({ type: n, error: { message: t.message, stack: t.stack } })
+        else p(t3)
+      } catch (t3) {
+        p({ type: n2, error: { message: t3.message, stack: t3.stack } })
       }
   }),
     (self.initCodec = () => {
-      const { Deflate: t, Inflate: e } = ((t, e = {}, n) => ({ Deflate: x(t.Deflate, e.deflate, n), Inflate: x(t.Inflate, e.inflate, n) }))(
-        pako,
-        { deflate: { raw: !0 }, inflate: { raw: !0 } },
-        (t, e) => (t.onData = e)
-      )
-      ;(self.Deflate = t), (self.Inflate = e)
+      const { Deflate: t2, Inflate: e2 } = ((t3, e3 = {}, n2) => ({
+        Deflate: st(t3.Deflate, e3.deflate, n2),
+        Inflate: st(t3.Inflate, e3.inflate, n2)
+      }))(pako, { deflate: { raw: true }, inflate: { raw: true } }, (t3, e3) => (t3.onData = e3))
+      ;(self.Deflate = t2), (self.Inflate = e2)
     })
 })()

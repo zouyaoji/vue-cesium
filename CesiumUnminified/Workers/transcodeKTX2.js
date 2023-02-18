@@ -1,32 +1,10 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
-define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc', './createTaskProcessorWorker'], function (
-  when,
-  RuntimeError,
-  WebGLConstants,
-  createTaskProcessorWorker
-) {
+define([
+  './defaultValue-0a909f67',
+  './Check-666ab1a0',
+  './WebGLConstants-a8cc3e8c',
+  './RuntimeError-06c93819',
+  './createTaskProcessorWorker'
+], function (defaultValue, Check, WebGLConstants, RuntimeError, createTaskProcessorWorker) {
   'use strict'
 
   /**
@@ -35,7 +13,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    * @enum {Number}
    * @see PostProcessStage
    */
-  var PixelDatatype = {
+  const PixelDatatype = {
     UNSIGNED_BYTE: WebGLConstants.WebGLConstants.UNSIGNED_BYTE,
     UNSIGNED_SHORT: WebGLConstants.WebGLConstants.UNSIGNED_SHORT,
     UNSIGNED_INT: WebGLConstants.WebGLConstants.UNSIGNED_INT,
@@ -129,7 +107,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    *
    * @enum {Number}
    */
-  var PixelFormat = {
+  const PixelFormat = {
     /**
      * A pixel format containing a depth value.
      *
@@ -153,6 +131,22 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
      * @constant
      */
     ALPHA: WebGLConstants.WebGLConstants.ALPHA,
+
+    /**
+     * A pixel format containing a red channel
+     *
+     * @type {Number}
+     * @constant
+     */
+    RED: WebGLConstants.WebGLConstants.RED,
+
+    /**
+     * A pixel format containing red and green channels.
+     *
+     * @type {Number}
+     * @constant
+     */
+    RG: WebGLConstants.WebGLConstants.RG,
 
     /**
      * A pixel format containing red, green, and blue channels.
@@ -301,8 +295,10 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       case PixelFormat.RGBA:
         return 4
       case PixelFormat.LUMINANCE_ALPHA:
+      case PixelFormat.RG:
         return 2
       case PixelFormat.ALPHA:
+      case PixelFormat.RED:
       case PixelFormat.LUMINANCE:
         return 1
       default:
@@ -318,6 +314,8 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       pixelFormat === PixelFormat.DEPTH_COMPONENT ||
       pixelFormat === PixelFormat.DEPTH_STENCIL ||
       pixelFormat === PixelFormat.ALPHA ||
+      pixelFormat === PixelFormat.RED ||
+      pixelFormat === PixelFormat.RG ||
       pixelFormat === PixelFormat.RGB ||
       pixelFormat === PixelFormat.RGBA ||
       pixelFormat === PixelFormat.LUMINANCE ||
@@ -468,7 +466,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    * @private
    */
   PixelFormat.textureSizeInBytes = function (pixelFormat, pixelDatatype, width, height) {
-    var componentsLength = PixelFormat.componentsLength(pixelFormat)
+    let componentsLength = PixelFormat.componentsLength(pixelFormat)
     if (PixelDatatype$1.isPacked(pixelDatatype)) {
       componentsLength = 1
     }
@@ -479,7 +477,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    * @private
    */
   PixelFormat.alignmentInBytes = function (pixelFormat, pixelDatatype, width) {
-    var mod = PixelFormat.textureSizeInBytes(pixelFormat, pixelDatatype, width, 1) % 4
+    const mod = PixelFormat.textureSizeInBytes(pixelFormat, pixelDatatype, width, 1) % 4
     return mod === 0 ? 4 : mod === 2 ? 2 : 1
   }
 
@@ -487,8 +485,8 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    * @private
    */
   PixelFormat.createTypedArray = function (pixelFormat, pixelDatatype, width, height) {
-    var constructor
-    var sizeInBytes = PixelDatatype$1.sizeInBytes(pixelDatatype)
+    let constructor
+    const sizeInBytes = PixelDatatype$1.sizeInBytes(pixelDatatype)
     if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
       constructor = Uint8Array
     } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
@@ -499,7 +497,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       constructor = Uint32Array
     }
 
-    var size = PixelFormat.componentsLength(pixelFormat) * width * height
+    const size = PixelFormat.componentsLength(pixelFormat) * width * height
     return new constructor(size)
   }
 
@@ -510,13 +508,13 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
     if (height === 1) {
       return bufferView
     }
-    var flipped = PixelFormat.createTypedArray(pixelFormat, pixelDatatype, width, height)
-    var numberOfComponents = PixelFormat.componentsLength(pixelFormat)
-    var textureWidth = width * numberOfComponents
-    for (var i = 0; i < height; ++i) {
-      var row = i * width * numberOfComponents
-      var flippedRow = (height - i - 1) * width * numberOfComponents
-      for (var j = 0; j < textureWidth; ++j) {
+    const flipped = PixelFormat.createTypedArray(pixelFormat, pixelDatatype, width, height)
+    const numberOfComponents = PixelFormat.componentsLength(pixelFormat)
+    const textureWidth = width * numberOfComponents
+    for (let i = 0; i < height; ++i) {
+      const row = i * width * numberOfComponents
+      const flippedRow = (height - i - 1) * width * numberOfComponents
+      for (let j = 0; j < textureWidth; ++j) {
         flipped[flippedRow + j] = bufferView[row + j]
       }
     }
@@ -553,7 +551,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
           return WebGLConstants.WebGLConstants.RGB32F
         case PixelFormat.RG:
           return WebGLConstants.WebGLConstants.RG32F
-        case PixelFormat.R:
+        case PixelFormat.RED:
           return WebGLConstants.WebGLConstants.R32F
       }
     }
@@ -566,7 +564,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
           return WebGLConstants.WebGLConstants.RGB16F
         case PixelFormat.RG:
           return WebGLConstants.WebGLConstants.RG16F
-        case PixelFormat.R:
+        case PixelFormat.RED:
           return WebGLConstants.WebGLConstants.R16F
       }
     }
@@ -584,7 +582,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
    * @enum {Number}
    * @private
    */
-  var VulkanConstants = {
+  const VulkanConstants = {
     VK_FORMAT_UNDEFINED: 0,
     VK_FORMAT_R4G4_UNORM_PACK8: 1,
     VK_FORMAT_R4G4B4A4_UNORM_PACK16: 2,
@@ -863,222 +861,364 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
   }
   var VulkanConstants$1 = Object.freeze(VulkanConstants)
 
-  /* This file is automatically rebuilt by the Cesium build process. */
-  const e = [171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]
-  var n, i, s, a, r, o, l, f
-  !(function (t) {
-    ;(t[(t.NONE = 0)] = 'NONE'), (t[(t.BASISLZ = 1)] = 'BASISLZ'), (t[(t.ZSTD = 2)] = 'ZSTD'), (t[(t.ZLIB = 3)] = 'ZLIB')
-  })(n || (n = {})),
-    (function (t) {
-      t[(t.BASICFORMAT = 0)] = 'BASICFORMAT'
-    })(i || (i = {})),
-    (function (t) {
-      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'), (t[(t.ETC1S = 163)] = 'ETC1S'), (t[(t.UASTC = 166)] = 'UASTC')
-    })(s || (s = {})),
-    (function (t) {
-      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'), (t[(t.SRGB = 1)] = 'SRGB')
-    })(a || (a = {})),
-    (function (t) {
-      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'),
-        (t[(t.LINEAR = 1)] = 'LINEAR'),
-        (t[(t.SRGB = 2)] = 'SRGB'),
-        (t[(t.ITU = 3)] = 'ITU'),
-        (t[(t.NTSC = 4)] = 'NTSC'),
-        (t[(t.SLOG = 5)] = 'SLOG'),
-        (t[(t.SLOG2 = 6)] = 'SLOG2')
-    })(r || (r = {})),
-    (function (t) {
-      ;(t[(t.ALPHA_STRAIGHT = 0)] = 'ALPHA_STRAIGHT'), (t[(t.ALPHA_PREMULTIPLIED = 1)] = 'ALPHA_PREMULTIPLIED')
-    })(o || (o = {})),
-    (function (t) {
-      ;(t[(t.RGB = 0)] = 'RGB'), (t[(t.RRR = 3)] = 'RRR'), (t[(t.GGG = 4)] = 'GGG'), (t[(t.AAA = 15)] = 'AAA')
-    })(l || (l = {})),
-    (function (t) {
-      ;(t[(t.RGB = 0)] = 'RGB'), (t[(t.RGBA = 3)] = 'RGBA'), (t[(t.RRR = 4)] = 'RRR'), (t[(t.RRRG = 5)] = 'RRRG')
-    })(f || (f = {}))
-  class U {
+  ///////////////////////////////////////////////////
+  // KTX2 Header.
+  ///////////////////////////////////////////////////
+  const KHR_SUPERCOMPRESSION_NONE = 0
+  // Data Format Descriptor (DFD).
+  ///////////////////////////////////////////////////
+
+  const KHR_DF_KHR_DESCRIPTORTYPE_BASICFORMAT = 0
+  const KHR_DF_VENDORID_KHRONOS = 0
+  const KHR_DF_VERSION = 2
+  const KHR_DF_MODEL_UNSPECIFIED = 0
+  const KHR_DF_FLAG_ALPHA_STRAIGHT = 0
+  const KHR_DF_TRANSFER_SRGB = 2
+  const KHR_DF_PRIMARIES_BT709 = 1
+  const KHR_DF_SAMPLE_DATATYPE_SIGNED = 0x40
+  // VK FORMAT.
+  ///////////////////////////////////////////////////
+
+  const VK_FORMAT_UNDEFINED = 0
+
+  /**
+   * Represents an unpacked KTX 2.0 texture container. Data for individual mip levels are stored in
+   * the `.levels` array, typically compressed in Basis Universal formats. Additional properties
+   * provide metadata required to process, transcode, and upload these textures.
+   */
+
+  class KTX2Container {
     constructor() {
-      ;(this.vkFormat = 0),
-        (this.typeSize = 1),
-        (this.pixelWidth = 0),
-        (this.pixelHeight = 0),
-        (this.pixelDepth = 0),
-        (this.layerCount = 0),
-        (this.faceCount = 1),
-        (this.supercompressionScheme = n.NONE),
-        (this.levels = []),
-        (this.dataFormatDescriptor = [
-          {
-            vendorId: 0,
-            descriptorType: i.BASICFORMAT,
-            versionNumber: 2,
-            descriptorBlockSize: 40,
-            colorModel: s.UNSPECIFIED,
-            colorPrimaries: a.SRGB,
-            transferFunction: a.SRGB,
-            flags: o.ALPHA_STRAIGHT,
-            texelBlockDimension: { x: 4, y: 4, z: 1, w: 1 },
-            bytesPlane: [],
-            samples: []
-          }
-        ]),
-        (this.keyValue = {}),
-        (this.globalData = null)
+      this.vkFormat = VK_FORMAT_UNDEFINED
+      this.typeSize = 1
+      this.pixelWidth = 0
+      this.pixelHeight = 0
+      this.pixelDepth = 0
+      this.layerCount = 0
+      this.faceCount = 1
+      this.supercompressionScheme = KHR_SUPERCOMPRESSION_NONE
+      this.levels = []
+      this.dataFormatDescriptor = [
+        {
+          vendorId: KHR_DF_VENDORID_KHRONOS,
+          descriptorType: KHR_DF_KHR_DESCRIPTORTYPE_BASICFORMAT,
+          descriptorBlockSize: 0,
+          versionNumber: KHR_DF_VERSION,
+          colorModel: KHR_DF_MODEL_UNSPECIFIED,
+          colorPrimaries: KHR_DF_PRIMARIES_BT709,
+          transferFunction: KHR_DF_TRANSFER_SRGB,
+          flags: KHR_DF_FLAG_ALPHA_STRAIGHT,
+          texelBlockDimension: [0, 0, 0, 0],
+          bytesPlane: [0, 0, 0, 0, 0, 0, 0, 0],
+          samples: []
+        }
+      ]
+      this.keyValue = {}
+      this.globalData = null
     }
   }
-  class c {
-    constructor(t, e, n, i) {
-      ;(this._dataView = new DataView(t.buffer, t.byteOffset + e, n)), (this._littleEndian = i), (this._offset = 0)
+
+  class BufferReader {
+    constructor(data, byteOffset, byteLength, littleEndian) {
+      this._dataView = void 0
+      this._littleEndian = void 0
+      this._offset = void 0
+      this._dataView = new DataView(data.buffer, data.byteOffset + byteOffset, byteLength)
+      this._littleEndian = littleEndian
+      this._offset = 0
     }
+
     _nextUint8() {
-      const t = this._dataView.getUint8(this._offset)
-      return (this._offset += 1), t
+      const value = this._dataView.getUint8(this._offset)
+
+      this._offset += 1
+      return value
     }
+
     _nextUint16() {
-      const t = this._dataView.getUint16(this._offset, this._littleEndian)
-      return (this._offset += 2), t
+      const value = this._dataView.getUint16(this._offset, this._littleEndian)
+
+      this._offset += 2
+      return value
     }
+
     _nextUint32() {
-      const t = this._dataView.getUint32(this._offset, this._littleEndian)
-      return (this._offset += 4), t
+      const value = this._dataView.getUint32(this._offset, this._littleEndian)
+
+      this._offset += 4
+      return value
     }
+
     _nextUint64() {
-      const t = this._dataView.getUint32(this._offset, this._littleEndian) + 2 ** 32 * this._dataView.getUint32(this._offset + 4, this._littleEndian)
-      return (this._offset += 8), t
+      const left = this._dataView.getUint32(this._offset, this._littleEndian)
+
+      const right = this._dataView.getUint32(this._offset + 4, this._littleEndian) // TODO(cleanup): Just test this...
+      // const value = this._littleEndian ? left + (2 ** 32 * right) : (2 ** 32 * left) + right;
+
+      const value = left + 2 ** 32 * right
+      this._offset += 8
+      return value
     }
-    _skip(t) {
-      return (this._offset += t), this
+
+    _nextInt32() {
+      const value = this._dataView.getInt32(this._offset, this._littleEndian)
+
+      this._offset += 4
+      return value
     }
-    _scan(t, e = 0) {
-      const n = this._offset
-      let i = 0
-      for (; this._dataView.getUint8(this._offset) !== e && i < t; ) i++, this._offset++
-      return i < t && this._offset++, new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + n, i)
+
+    _skip(bytes) {
+      this._offset += bytes
+      return this
     }
-  }
-  function _(t) {
-    return 'undefined' != typeof TextDecoder ? new TextDecoder().decode(t) : Buffer.from(t).toString('utf8')
-  }
-  function p(t) {
-    const n = new Uint8Array(t.buffer, t.byteOffset, e.length)
-    if (
-      n[0] !== e[0] ||
-      n[1] !== e[1] ||
-      n[2] !== e[2] ||
-      n[3] !== e[3] ||
-      n[4] !== e[4] ||
-      n[5] !== e[5] ||
-      n[6] !== e[6] ||
-      n[7] !== e[7] ||
-      n[8] !== e[8] ||
-      n[9] !== e[9] ||
-      n[10] !== e[10] ||
-      n[11] !== e[11]
-    )
-      throw new Error('Missing KTX 2.0 identifier.')
-    const i = new U(),
-      s = 17 * Uint32Array.BYTES_PER_ELEMENT,
-      a = new c(t, e.length, s, !0)
-    ;(i.vkFormat = a._nextUint32()),
-      (i.typeSize = a._nextUint32()),
-      (i.pixelWidth = a._nextUint32()),
-      (i.pixelHeight = a._nextUint32()),
-      (i.pixelDepth = a._nextUint32()),
-      (i.layerCount = a._nextUint32()),
-      (i.faceCount = a._nextUint32())
-    const r = a._nextUint32()
-    i.supercompressionScheme = a._nextUint32()
-    const o = a._nextUint32(),
-      l = a._nextUint32(),
-      f = a._nextUint32(),
-      h = a._nextUint32(),
-      g = a._nextUint64(),
-      p = a._nextUint64(),
-      x = new c(t, e.length + s, 3 * r * 8, !0)
-    for (let e = 0; e < r; e++)
-      i.levels.push({ levelData: new Uint8Array(t.buffer, t.byteOffset + x._nextUint64(), x._nextUint64()), uncompressedByteLength: x._nextUint64() })
-    const u = new c(t, o, l, !0),
-      y = {
-        vendorId: u._skip(4)._nextUint16(),
-        descriptorType: u._nextUint16(),
-        versionNumber: u._nextUint16(),
-        descriptorBlockSize: u._nextUint16(),
-        colorModel: u._nextUint8(),
-        colorPrimaries: u._nextUint8(),
-        transferFunction: u._nextUint8(),
-        flags: u._nextUint8(),
-        texelBlockDimension: { x: u._nextUint8() + 1, y: u._nextUint8() + 1, z: u._nextUint8() + 1, w: u._nextUint8() + 1 },
-        bytesPlane: [u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8()],
-        samples: []
-      },
-      D = (y.descriptorBlockSize / 4 - 6) / 4
-    for (let t = 0; t < D; t++)
-      y.samples[t] = {
-        bitOffset: u._nextUint16(),
-        bitLength: u._nextUint8(),
-        channelID: u._nextUint8(),
-        samplePosition: [u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8()],
-        sampleLower: u._nextUint32(),
-        sampleUpper: u._nextUint32()
+
+    _scan(maxByteLength, term = 0x00) {
+      const byteOffset = this._offset
+      let byteLength = 0
+
+      while (this._dataView.getUint8(this._offset) !== term && byteLength < maxByteLength) {
+        byteLength++
+        this._offset++
       }
-    ;(i.dataFormatDescriptor.length = 0), i.dataFormatDescriptor.push(y)
-    const b = new c(t, f, h, !0)
-    for (; b._offset < h; ) {
-      const t = b._nextUint32(),
-        e = b._scan(t),
-        n = _(e),
-        s = b._scan(t - e.byteLength)
-      ;(i.keyValue[n] = n.match(/^ktx/i) ? _(s) : s), b._offset % 4 && b._skip(4 - (b._offset % 4))
+
+      if (byteLength < maxByteLength) this._offset++
+      return new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + byteOffset, byteLength)
     }
-    if (p <= 0) return i
-    const d = new c(t, g, p, !0),
-      B = d._nextUint16(),
-      w = d._nextUint16(),
-      A = d._nextUint32(),
-      S = d._nextUint32(),
-      m = d._nextUint32(),
-      L = d._nextUint32(),
-      I = []
-    for (let t = 0; t < r; t++)
-      I.push({
-        imageFlags: d._nextUint32(),
-        rgbSliceByteOffset: d._nextUint32(),
-        rgbSliceByteLength: d._nextUint32(),
-        alphaSliceByteOffset: d._nextUint32(),
-        alphaSliceByteLength: d._nextUint32()
+  }
+  // KTX2 Header.
+  ///////////////////////////////////////////////////
+
+  const KTX2_ID = [
+    // '´', 'K', 'T', 'X', '2', '0', 'ª', '\r', '\n', '\x1A', '\n'
+    0xab, 0x4b, 0x54, 0x58, 0x20, 0x32, 0x30, 0xbb, 0x0d, 0x0a, 0x1a, 0x0a
+  ]
+  /** Decodes an ArrayBuffer to text. */
+
+  function decodeText(buffer) {
+    if (typeof TextDecoder !== 'undefined') {
+      return new TextDecoder().decode(buffer)
+    }
+
+    return Buffer.from(buffer).toString('utf8')
+  }
+
+  /**
+   * Parses a KTX 2.0 file, returning an unpacked {@link KTX2Container} instance with all associated
+   * data. The container's mip levels and other binary data are pointers into the original file, not
+   * copies, so the original file should not be overwritten after reading.
+   *
+   * @param data Bytes of KTX 2.0 file, as Uint8Array or Buffer.
+   */
+
+  function read(data) {
+    ///////////////////////////////////////////////////
+    // KTX 2.0 Identifier.
+    ///////////////////////////////////////////////////
+    const id = new Uint8Array(data.buffer, data.byteOffset, KTX2_ID.length)
+
+    if (
+      id[0] !== KTX2_ID[0] || // '´'
+      id[1] !== KTX2_ID[1] || // 'K'
+      id[2] !== KTX2_ID[2] || // 'T'
+      id[3] !== KTX2_ID[3] || // 'X'
+      id[4] !== KTX2_ID[4] || // ' '
+      id[5] !== KTX2_ID[5] || // '2'
+      id[6] !== KTX2_ID[6] || // '0'
+      id[7] !== KTX2_ID[7] || // 'ª'
+      id[8] !== KTX2_ID[8] || // '\r'
+      id[9] !== KTX2_ID[9] || // '\n'
+      id[10] !== KTX2_ID[10] || // '\x1A'
+      id[11] !== KTX2_ID[11] // '\n'
+    ) {
+      throw new Error('Missing KTX 2.0 identifier.')
+    }
+
+    const container = new KTX2Container() ///////////////////////////////////////////////////
+    // Header.
+    ///////////////////////////////////////////////////
+
+    const headerByteLength = 17 * Uint32Array.BYTES_PER_ELEMENT
+    const headerReader = new BufferReader(data, KTX2_ID.length, headerByteLength, true)
+    container.vkFormat = headerReader._nextUint32()
+    container.typeSize = headerReader._nextUint32()
+    container.pixelWidth = headerReader._nextUint32()
+    container.pixelHeight = headerReader._nextUint32()
+    container.pixelDepth = headerReader._nextUint32()
+    container.layerCount = headerReader._nextUint32()
+    container.faceCount = headerReader._nextUint32()
+
+    const levelCount = headerReader._nextUint32()
+
+    container.supercompressionScheme = headerReader._nextUint32()
+
+    const dfdByteOffset = headerReader._nextUint32()
+
+    const dfdByteLength = headerReader._nextUint32()
+
+    const kvdByteOffset = headerReader._nextUint32()
+
+    const kvdByteLength = headerReader._nextUint32()
+
+    const sgdByteOffset = headerReader._nextUint64()
+
+    const sgdByteLength = headerReader._nextUint64() ///////////////////////////////////////////////////
+    // Level Index.
+    ///////////////////////////////////////////////////
+
+    const levelByteLength = levelCount * 3 * 8
+    const levelReader = new BufferReader(data, KTX2_ID.length + headerByteLength, levelByteLength, true)
+
+    for (let i = 0; i < levelCount; i++) {
+      container.levels.push({
+        levelData: new Uint8Array(data.buffer, data.byteOffset + levelReader._nextUint64(), levelReader._nextUint64()),
+        uncompressedByteLength: levelReader._nextUint64()
       })
-    const R = g + d._offset,
-      E = R + A,
-      T = E + S,
-      O = T + m,
-      P = new Uint8Array(t.buffer, t.byteOffset + R, A),
-      C = new Uint8Array(t.buffer, t.byteOffset + E, S),
-      F = new Uint8Array(t.buffer, t.byteOffset + T, m),
-      G = new Uint8Array(t.buffer, t.byteOffset + O, L)
-    return (
-      (i.globalData = { endpointCount: B, selectorCount: w, imageDescs: I, endpointsData: P, selectorsData: C, tablesData: F, extendedData: G }), i
-    )
+    } ///////////////////////////////////////////////////
+    // Data Format Descriptor (DFD).
+    ///////////////////////////////////////////////////
+
+    const dfdReader = new BufferReader(data, dfdByteOffset, dfdByteLength, true)
+    const dfd = {
+      vendorId: dfdReader
+        ._skip(
+          4
+          /* totalSize */
+        )
+        ._nextUint16(),
+      descriptorType: dfdReader._nextUint16(),
+      versionNumber: dfdReader._nextUint16(),
+      descriptorBlockSize: dfdReader._nextUint16(),
+      colorModel: dfdReader._nextUint8(),
+      colorPrimaries: dfdReader._nextUint8(),
+      transferFunction: dfdReader._nextUint8(),
+      flags: dfdReader._nextUint8(),
+      texelBlockDimension: [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()],
+      bytesPlane: [
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8(),
+        dfdReader._nextUint8()
+      ],
+      samples: []
+    }
+    const sampleStart = 6
+    const sampleWords = 4
+    const numSamples = (dfd.descriptorBlockSize / 4 - sampleStart) / sampleWords
+
+    for (let i = 0; i < numSamples; i++) {
+      const sample = {
+        bitOffset: dfdReader._nextUint16(),
+        bitLength: dfdReader._nextUint8(),
+        channelType: dfdReader._nextUint8(),
+        samplePosition: [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()],
+        sampleLower: -Infinity,
+        sampleUpper: Infinity
+      }
+
+      if (sample.channelType & KHR_DF_SAMPLE_DATATYPE_SIGNED) {
+        sample.sampleLower = dfdReader._nextInt32()
+        sample.sampleUpper = dfdReader._nextInt32()
+      } else {
+        sample.sampleLower = dfdReader._nextUint32()
+        sample.sampleUpper = dfdReader._nextUint32()
+      }
+
+      dfd.samples[i] = sample
+    }
+
+    container.dataFormatDescriptor.length = 0
+    container.dataFormatDescriptor.push(dfd) ///////////////////////////////////////////////////
+    // Key/Value Data (KVD).
+    ///////////////////////////////////////////////////
+
+    const kvdReader = new BufferReader(data, kvdByteOffset, kvdByteLength, true)
+
+    while (kvdReader._offset < kvdByteLength) {
+      const keyValueByteLength = kvdReader._nextUint32()
+
+      const keyData = kvdReader._scan(keyValueByteLength)
+
+      const key = decodeText(keyData)
+
+      const valueData = kvdReader._scan(keyValueByteLength - keyData.byteLength)
+
+      container.keyValue[key] = key.match(/^ktx/i) ? decodeText(valueData) : valueData // 4-byte alignment.
+
+      if (kvdReader._offset % 4) kvdReader._skip(4 - (kvdReader._offset % 4))
+    } ///////////////////////////////////////////////////
+    // Supercompression Global Data (SGD).
+    ///////////////////////////////////////////////////
+
+    if (sgdByteLength <= 0) return container
+    const sgdReader = new BufferReader(data, sgdByteOffset, sgdByteLength, true)
+
+    const endpointCount = sgdReader._nextUint16()
+
+    const selectorCount = sgdReader._nextUint16()
+
+    const endpointsByteLength = sgdReader._nextUint32()
+
+    const selectorsByteLength = sgdReader._nextUint32()
+
+    const tablesByteLength = sgdReader._nextUint32()
+
+    const extendedByteLength = sgdReader._nextUint32()
+
+    const imageDescs = []
+
+    for (let i = 0; i < levelCount; i++) {
+      imageDescs.push({
+        imageFlags: sgdReader._nextUint32(),
+        rgbSliceByteOffset: sgdReader._nextUint32(),
+        rgbSliceByteLength: sgdReader._nextUint32(),
+        alphaSliceByteOffset: sgdReader._nextUint32(),
+        alphaSliceByteLength: sgdReader._nextUint32()
+      })
+    }
+
+    const endpointsByteOffset = sgdByteOffset + sgdReader._offset
+    const selectorsByteOffset = endpointsByteOffset + endpointsByteLength
+    const tablesByteOffset = selectorsByteOffset + selectorsByteLength
+    const extendedByteOffset = tablesByteOffset + tablesByteLength
+    const endpointsData = new Uint8Array(data.buffer, data.byteOffset + endpointsByteOffset, endpointsByteLength)
+    const selectorsData = new Uint8Array(data.buffer, data.byteOffset + selectorsByteOffset, selectorsByteLength)
+    const tablesData = new Uint8Array(data.buffer, data.byteOffset + tablesByteOffset, tablesByteLength)
+    const extendedData = new Uint8Array(data.buffer, data.byteOffset + extendedByteOffset, extendedByteLength)
+    container.globalData = {
+      endpointCount,
+      selectorCount,
+      imageDescs,
+      endpointsData,
+      selectorsData,
+      tablesData,
+      extendedData
+    }
+    return container
   }
 
   /* global require */
 
-  var faceOrder = ['positiveX', 'negativeX', 'positiveY', 'negativeY', 'positiveZ', 'negativeZ']
+  const faceOrder = ['positiveX', 'negativeX', 'positiveY', 'negativeY', 'positiveZ', 'negativeZ']
 
   // Flags
-  var colorModelETC1S = 163
-  var colorModelUASTC = 166
+  const colorModelETC1S = 163
+  const colorModelUASTC = 166
 
-  var transcoderModule
+  let transcoderModule
   function transcode(parameters, transferableObjects) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('transcoderModule', transcoderModule)
+    Check.Check.typeOf.object('transcoderModule', transcoderModule)
     //>>includeEnd('debug');
 
-    var data = parameters.ktx2Buffer
-    var supportedTargetFormats = parameters.supportedTargetFormats
-    var header
+    const data = parameters.ktx2Buffer
+    const supportedTargetFormats = parameters.supportedTargetFormats
+    let header
     try {
-      header = p(data)
+      header = read(data)
     } catch (e) {
       throw new RuntimeError.RuntimeError('Invalid KTX2 file.')
     }
@@ -1091,8 +1231,8 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       throw new RuntimeError.RuntimeError('KTX2 3D textures are unsupported.')
     }
 
-    var dfd = header.dataFormatDescriptor[0]
-    var result = new Array(header.levelCount)
+    const dfd = header.dataFormatDescriptor[0]
+    const result = new Array(header.levelCount)
 
     if (header.vkFormat === 0x0 && (dfd.colorModel === colorModelETC1S || dfd.colorModel === colorModelUASTC)) {
       // Compressed, initialize transcoder module
@@ -1107,8 +1247,8 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
 
   // Parser for uncompressed
   function parseUncompressed(header, result) {
-    var internalFormat = header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8_SRGB ? PixelFormat$1.RGB : PixelFormat$1.RGBA
-    var datatype
+    const internalFormat = header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8_SRGB ? PixelFormat$1.RGB : PixelFormat$1.RGBA
+    let datatype
     if (header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8A8_UNORM) {
       datatype = PixelDatatype$1.UNSIGNED_BYTE
     } else if (header.vkFormat === VulkanConstants$1.VK_FORMAT_R16G16B16A16_SFLOAT) {
@@ -1117,20 +1257,20 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       datatype = PixelDatatype$1.FLOAT
     }
 
-    for (var i = 0; i < header.levels.length; ++i) {
-      var level = {}
+    for (let i = 0; i < header.levels.length; ++i) {
+      const level = {}
       result[i] = level
-      var levelBuffer = header.levels[i].levelData
+      const levelBuffer = header.levels[i].levelData
 
-      var width = header.pixelWidth >> i
-      var height = header.pixelHeight >> i
-      var faceLength = width * height * PixelFormat$1.componentsLength(internalFormat)
+      const width = header.pixelWidth >> i
+      const height = header.pixelHeight >> i
+      const faceLength = width * height * PixelFormat$1.componentsLength(internalFormat)
 
-      for (var j = 0; j < header.faceCount; ++j) {
+      for (let j = 0; j < header.faceCount; ++j) {
         // multiply levelBuffer.byteOffset by the size in bytes of the pixel data type
-        var faceByteOffset = levelBuffer.byteOffset + faceLength * header.typeSize * j
-        var faceView
-        if (!when.defined(datatype) || PixelDatatype$1.sizeInBytes(datatype) === 1) {
+        const faceByteOffset = levelBuffer.byteOffset + faceLength * header.typeSize * j
+        let faceView
+        if (!defaultValue.defined(datatype) || PixelDatatype$1.sizeInBytes(datatype) === 1) {
           faceView = new Uint8Array(levelBuffer.buffer, faceByteOffset, faceLength)
         } else if (PixelDatatype$1.sizeInBytes(datatype) === 2) {
           faceView = new Uint16Array(levelBuffer.buffer, faceByteOffset, faceLength)
@@ -1150,11 +1290,11 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
   }
 
   function transcodeCompressed(data, header, supportedTargetFormats, transcoderModule, transferableObjects, result) {
-    var ktx2File = new transcoderModule.KTX2File(data)
-    var width = ktx2File.getWidth()
-    var height = ktx2File.getHeight()
-    var levels = ktx2File.getLevels()
-    var hasAlpha = ktx2File.getHasAlpha()
+    const ktx2File = new transcoderModule.KTX2File(data)
+    let width = ktx2File.getWidth()
+    let height = ktx2File.getHeight()
+    const levels = ktx2File.getLevels()
+    const hasAlpha = ktx2File.getHasAlpha()
 
     if (!(width > 0) || !(height > 0) || !(levels > 0)) {
       ktx2File.close()
@@ -1162,9 +1302,9 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       throw new RuntimeError.RuntimeError('Invalid KTX2 file')
     }
 
-    var internalFormat, transcoderFormat
-    var dfd = header.dataFormatDescriptor[0]
-    var BasisFormat = transcoderModule.transcoder_texture_format
+    let internalFormat, transcoderFormat
+    const dfd = header.dataFormatDescriptor[0]
+    const BasisFormat = transcoderModule.transcoder_texture_format
 
     // Determine target format based on platform support
     if (dfd.colorModel === colorModelETC1S) {
@@ -1219,8 +1359,8 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       throw new RuntimeError.RuntimeError('startTranscoding() failed')
     }
 
-    for (var i = 0; i < header.levels.length; ++i) {
-      var level = {}
+    for (let i = 0; i < header.levels.length; ++i) {
+      const level = {}
       result[i] = level
       width = header.pixelWidth >> i
       height = header.pixelHeight >> i
@@ -1228,15 +1368,15 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
       // Since supercompressed cubemaps are unsupported, this function
       // does not iterate over KTX2 faces and assumes faceCount = 1.
 
-      var dstSize = ktx2File.getImageTranscodedSizeInBytes(
+      const dstSize = ktx2File.getImageTranscodedSizeInBytes(
         i, // level index
         0, // layer index
         0, // face index
         transcoderFormat.value
       )
-      var dst = new Uint8Array(dstSize)
+      const dst = new Uint8Array(dstSize)
 
-      var transcoded = ktx2File.transcodeImage(
+      const transcoded = ktx2File.transcodeImage(
         dst,
         i, // level index
         0, // layer index
@@ -1247,7 +1387,7 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
         -1 // channel1
       )
 
-      if (!when.defined(transcoded)) {
+      if (!defaultValue.defined(transcoded)) {
         throw new RuntimeError.RuntimeError('transcodeImage() failed.')
       }
 
@@ -1275,15 +1415,15 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
   }
 
   function transcodeKTX2(event) {
-    var data = event.data
+    const data = event.data
 
     // Expect the first message to be to load a web assembly module
-    var wasmConfig = data.webAssemblyConfig
-    if (when.defined(wasmConfig)) {
+    const wasmConfig = data.webAssemblyConfig
+    if (defaultValue.defined(wasmConfig)) {
       // Require and compile WebAssembly module, or use fallback if not supported
       return require([wasmConfig.modulePath], function (mscBasisTranscoder) {
-        if (when.defined(wasmConfig.wasmBinaryFile)) {
-          if (!when.defined(mscBasisTranscoder)) {
+        if (defaultValue.defined(wasmConfig.wasmBinaryFile)) {
+          if (!defaultValue.defined(mscBasisTranscoder)) {
             mscBasisTranscoder = self.MSC_TRANSCODER
           }
 
@@ -1301,4 +1441,3 @@ define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc
 
   return transcodeKTX2
 })
-//# sourceMappingURL=transcodeKTX2.js.map

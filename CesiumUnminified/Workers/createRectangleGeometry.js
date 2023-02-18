@@ -1,63 +1,46 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './when-4bbc8319',
-  './Matrix2-91d5b6af',
-  './GeometryOffsetAttribute-6a692b56',
-  './Transforms-86b6fa28',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-f194c48b',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './GeometryInstance-a3cff41c',
-  './GeometryPipeline-4bea2645',
-  './IndexDatatype-ee69f1fd',
-  './PolygonPipeline-d65e2b8f',
-  './RectangleGeometryLibrary-b2e91b9c',
-  './VertexFormat-f9c1a155',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './AttributeCompression-1f6679e1',
-  './EncodedCartesian3-882fbcbd',
-  './IntersectionTests-26599c5e',
-  './Plane-4f333bc4',
-  './EllipsoidRhumbLine-447d6334'
+  './defaultValue-0a909f67',
+  './Matrix3-315394f6',
+  './Matrix2-13178034',
+  './Transforms-a05e5e6e',
+  './Check-666ab1a0',
+  './ComponentDatatype-f7b11d02',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './GeometryInstance-451dc1cd',
+  './GeometryOffsetAttribute-04332ce7',
+  './GeometryPipeline-8fb0db69',
+  './IndexDatatype-a55ceaa1',
+  './Math-2dbd6b93',
+  './PolygonPipeline-21668b3f',
+  './RectangleGeometryLibrary-d5457f7b',
+  './VertexFormat-6b480673',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c',
+  './AttributeCompression-b646d393',
+  './EncodedCartesian3-81f70735',
+  './IntersectionTests-27d49265',
+  './Plane-900aa728',
+  './EllipsoidRhumbLine-19756602'
 ], function (
-  when,
+  defaultValue,
+  Matrix3,
   Matrix2,
-  GeometryOffsetAttribute,
   Transforms,
-  RuntimeError,
+  Check,
   ComponentDatatype,
   GeometryAttribute,
   GeometryAttributes,
   GeometryInstance,
+  GeometryOffsetAttribute,
   GeometryPipeline,
   IndexDatatype,
+  Math$1,
   PolygonPipeline,
   RectangleGeometryLibrary,
   VertexFormat,
+  RuntimeError,
   combine,
   WebGLConstants,
   AttributeCompression,
@@ -68,17 +51,17 @@ define([
 ) {
   'use strict'
 
-  var positionScratch = new Matrix2.Cartesian3()
-  var normalScratch = new Matrix2.Cartesian3()
-  var tangentScratch = new Matrix2.Cartesian3()
-  var bitangentScratch = new Matrix2.Cartesian3()
-  var rectangleScratch = new Matrix2.Rectangle()
-  var stScratch = new Matrix2.Cartesian2()
-  var bottomBoundingSphere = new Transforms.BoundingSphere()
-  var topBoundingSphere = new Transforms.BoundingSphere()
+  const positionScratch = new Matrix3.Cartesian3()
+  const normalScratch = new Matrix3.Cartesian3()
+  const tangentScratch = new Matrix3.Cartesian3()
+  const bitangentScratch = new Matrix3.Cartesian3()
+  const rectangleScratch = new Matrix2.Rectangle()
+  const stScratch = new Matrix2.Cartesian2()
+  const bottomBoundingSphere = new Transforms.BoundingSphere()
+  const topBoundingSphere = new Transforms.BoundingSphere()
 
   function createAttributes(vertexFormat, attributes) {
-    var geo = new GeometryAttribute.Geometry({
+    const geo = new GeometryAttribute.Geometry({
       attributes: new GeometryAttributes.GeometryAttributes(),
       primitiveType: GeometryAttribute.PrimitiveType.TRIANGLES
     })
@@ -113,30 +96,30 @@ define([
   }
 
   function calculateAttributes(positions, vertexFormat, ellipsoid, tangentRotationMatrix) {
-    var length = positions.length
+    const length = positions.length
 
-    var normals = vertexFormat.normal ? new Float32Array(length) : undefined
-    var tangents = vertexFormat.tangent ? new Float32Array(length) : undefined
-    var bitangents = vertexFormat.bitangent ? new Float32Array(length) : undefined
+    const normals = vertexFormat.normal ? new Float32Array(length) : undefined
+    const tangents = vertexFormat.tangent ? new Float32Array(length) : undefined
+    const bitangents = vertexFormat.bitangent ? new Float32Array(length) : undefined
 
-    var attrIndex = 0
-    var bitangent = bitangentScratch
-    var tangent = tangentScratch
-    var normal = normalScratch
+    let attrIndex = 0
+    const bitangent = bitangentScratch
+    const tangent = tangentScratch
+    let normal = normalScratch
     if (vertexFormat.normal || vertexFormat.tangent || vertexFormat.bitangent) {
-      for (var i = 0; i < length; i += 3) {
-        var p = Matrix2.Cartesian3.fromArray(positions, i, positionScratch)
-        var attrIndex1 = attrIndex + 1
-        var attrIndex2 = attrIndex + 2
+      for (let i = 0; i < length; i += 3) {
+        const p = Matrix3.Cartesian3.fromArray(positions, i, positionScratch)
+        const attrIndex1 = attrIndex + 1
+        const attrIndex2 = attrIndex + 2
 
         normal = ellipsoid.geodeticSurfaceNormal(p, normal)
         if (vertexFormat.tangent || vertexFormat.bitangent) {
-          Matrix2.Cartesian3.cross(Matrix2.Cartesian3.UNIT_Z, normal, tangent)
-          Matrix2.Matrix3.multiplyByVector(tangentRotationMatrix, tangent, tangent)
-          Matrix2.Cartesian3.normalize(tangent, tangent)
+          Matrix3.Cartesian3.cross(Matrix3.Cartesian3.UNIT_Z, normal, tangent)
+          Matrix3.Matrix3.multiplyByVector(tangentRotationMatrix, tangent, tangent)
+          Matrix3.Cartesian3.normalize(tangent, tangent)
 
           if (vertexFormat.bitangent) {
-            Matrix2.Cartesian3.normalize(Matrix2.Cartesian3.cross(normal, tangent, bitangent), bitangent)
+            Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.cross(normal, tangent, bitangent), bitangent)
           }
         }
 
@@ -166,37 +149,37 @@ define([
     })
   }
 
-  var v1Scratch = new Matrix2.Cartesian3()
-  var v2Scratch = new Matrix2.Cartesian3()
+  const v1Scratch = new Matrix3.Cartesian3()
+  const v2Scratch = new Matrix3.Cartesian3()
 
   function calculateAttributesWall(positions, vertexFormat, ellipsoid) {
-    var length = positions.length
+    const length = positions.length
 
-    var normals = vertexFormat.normal ? new Float32Array(length) : undefined
-    var tangents = vertexFormat.tangent ? new Float32Array(length) : undefined
-    var bitangents = vertexFormat.bitangent ? new Float32Array(length) : undefined
+    const normals = vertexFormat.normal ? new Float32Array(length) : undefined
+    const tangents = vertexFormat.tangent ? new Float32Array(length) : undefined
+    const bitangents = vertexFormat.bitangent ? new Float32Array(length) : undefined
 
-    var normalIndex = 0
-    var tangentIndex = 0
-    var bitangentIndex = 0
-    var recomputeNormal = true
+    let normalIndex = 0
+    let tangentIndex = 0
+    let bitangentIndex = 0
+    let recomputeNormal = true
 
-    var bitangent = bitangentScratch
-    var tangent = tangentScratch
-    var normal = normalScratch
+    let bitangent = bitangentScratch
+    let tangent = tangentScratch
+    let normal = normalScratch
     if (vertexFormat.normal || vertexFormat.tangent || vertexFormat.bitangent) {
-      for (var i = 0; i < length; i += 6) {
-        var p = Matrix2.Cartesian3.fromArray(positions, i, positionScratch)
-        var p1 = Matrix2.Cartesian3.fromArray(positions, (i + 6) % length, v1Scratch)
+      for (let i = 0; i < length; i += 6) {
+        const p = Matrix3.Cartesian3.fromArray(positions, i, positionScratch)
+        const p1 = Matrix3.Cartesian3.fromArray(positions, (i + 6) % length, v1Scratch)
         if (recomputeNormal) {
-          var p2 = Matrix2.Cartesian3.fromArray(positions, (i + 3) % length, v2Scratch)
-          Matrix2.Cartesian3.subtract(p1, p, p1)
-          Matrix2.Cartesian3.subtract(p2, p, p2)
-          normal = Matrix2.Cartesian3.normalize(Matrix2.Cartesian3.cross(p2, p1, normal), normal)
+          const p2 = Matrix3.Cartesian3.fromArray(positions, (i + 3) % length, v2Scratch)
+          Matrix3.Cartesian3.subtract(p1, p, p1)
+          Matrix3.Cartesian3.subtract(p2, p, p2)
+          normal = Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.cross(p2, p1, normal), normal)
           recomputeNormal = false
         }
 
-        if (Matrix2.Cartesian3.equalsEpsilon(p1, p, ComponentDatatype.CesiumMath.EPSILON10)) {
+        if (Matrix3.Cartesian3.equalsEpsilon(p1, p, Math$1.CesiumMath.EPSILON10)) {
           // if we've reached a corner
           recomputeNormal = true
         }
@@ -204,7 +187,7 @@ define([
         if (vertexFormat.tangent || vertexFormat.bitangent) {
           bitangent = ellipsoid.geodeticSurfaceNormal(p, bitangent)
           if (vertexFormat.tangent) {
-            tangent = Matrix2.Cartesian3.normalize(Matrix2.Cartesian3.cross(bitangent, normal, tangent), tangent)
+            tangent = Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.cross(bitangent, normal, tangent), tangent)
           }
         }
 
@@ -246,17 +229,17 @@ define([
   }
 
   function constructRectangle(rectangleGeometry, computedOptions) {
-    var vertexFormat = rectangleGeometry._vertexFormat
-    var ellipsoid = rectangleGeometry._ellipsoid
-    var height = computedOptions.height
-    var width = computedOptions.width
-    var northCap = computedOptions.northCap
-    var southCap = computedOptions.southCap
+    const vertexFormat = rectangleGeometry._vertexFormat
+    const ellipsoid = rectangleGeometry._ellipsoid
+    const height = computedOptions.height
+    const width = computedOptions.width
+    const northCap = computedOptions.northCap
+    const southCap = computedOptions.southCap
 
-    var rowStart = 0
-    var rowEnd = height
-    var rowHeight = height
-    var size = 0
+    let rowStart = 0
+    let rowEnd = height
+    let rowHeight = height
+    let size = 0
     if (northCap) {
       rowStart = 1
       rowHeight -= 1
@@ -269,22 +252,22 @@ define([
     }
     size += width * rowHeight
 
-    var positions = vertexFormat.position ? new Float64Array(size * 3) : undefined
-    var textureCoordinates = vertexFormat.st ? new Float32Array(size * 2) : undefined
+    const positions = vertexFormat.position ? new Float64Array(size * 3) : undefined
+    const textureCoordinates = vertexFormat.st ? new Float32Array(size * 2) : undefined
 
-    var posIndex = 0
-    var stIndex = 0
+    let posIndex = 0
+    let stIndex = 0
 
-    var position = positionScratch
-    var st = stScratch
+    const position = positionScratch
+    const st = stScratch
 
-    var minX = Number.MAX_VALUE
-    var minY = Number.MAX_VALUE
-    var maxX = -Number.MAX_VALUE
-    var maxY = -Number.MAX_VALUE
+    let minX = Number.MAX_VALUE
+    let minY = Number.MAX_VALUE
+    let maxX = -Number.MAX_VALUE
+    let maxY = -Number.MAX_VALUE
 
-    for (var row = rowStart; row < rowEnd; ++row) {
-      for (var col = 0; col < width; ++col) {
+    for (let row = rowStart; row < rowEnd; ++row) {
+      for (let col = 0; col < width; ++col) {
         RectangleGeometryLibrary.RectangleGeometryLibrary.computePosition(computedOptions, ellipsoid, vertexFormat.st, row, col, position, st)
 
         positions[posIndex++] = position.x
@@ -338,31 +321,31 @@ define([
     }
 
     if (vertexFormat.st && (minX < 0.0 || minY < 0.0 || maxX > 1.0 || maxY > 1.0)) {
-      for (var k = 0; k < textureCoordinates.length; k += 2) {
+      for (let k = 0; k < textureCoordinates.length; k += 2) {
         textureCoordinates[k] = (textureCoordinates[k] - minX) / (maxX - minX)
         textureCoordinates[k + 1] = (textureCoordinates[k + 1] - minY) / (maxY - minY)
       }
     }
 
-    var geo = calculateAttributes(positions, vertexFormat, ellipsoid, computedOptions.tangentRotationMatrix)
+    const geo = calculateAttributes(positions, vertexFormat, ellipsoid, computedOptions.tangentRotationMatrix)
 
-    var indicesSize = 6 * (width - 1) * (rowHeight - 1)
+    let indicesSize = 6 * (width - 1) * (rowHeight - 1)
     if (northCap) {
       indicesSize += 3 * (width - 1)
     }
     if (southCap) {
       indicesSize += 3 * (width - 1)
     }
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(size, indicesSize)
-    var index = 0
-    var indicesIndex = 0
-    var i
+    const indices = IndexDatatype.IndexDatatype.createTypedArray(size, indicesSize)
+    let index = 0
+    let indicesIndex = 0
+    let i
     for (i = 0; i < rowHeight - 1; ++i) {
-      for (var j = 0; j < width - 1; ++j) {
-        var upperLeft = index
-        var lowerLeft = upperLeft + width
-        var lowerRight = lowerLeft + 1
-        var upperRight = upperLeft + 1
+      for (let j = 0; j < width - 1; ++j) {
+        const upperLeft = index
+        const lowerLeft = upperLeft + width
+        const lowerRight = lowerLeft + 1
+        const upperRight = upperLeft + 1
         indices[indicesIndex++] = upperLeft
         indices[indicesIndex++] = lowerLeft
         indices[indicesIndex++] = upperRight
@@ -374,14 +357,14 @@ define([
       ++index
     }
     if (northCap || southCap) {
-      var northIndex = size - 1
-      var southIndex = size - 1
+      let northIndex = size - 1
+      const southIndex = size - 1
       if (northCap && southCap) {
         northIndex = size - 2
       }
 
-      var p1
-      var p2
+      let p1
+      let p2
       index = 0
 
       if (northCap) {
@@ -437,49 +420,49 @@ define([
     return wallTextures
   }
 
-  var scratchVertexFormat = new VertexFormat.VertexFormat()
+  const scratchVertexFormat = new VertexFormat.VertexFormat()
 
   function constructExtrudedRectangle(rectangleGeometry, computedOptions) {
-    var shadowVolume = rectangleGeometry._shadowVolume
-    var offsetAttributeValue = rectangleGeometry._offsetAttribute
-    var vertexFormat = rectangleGeometry._vertexFormat
-    var minHeight = rectangleGeometry._extrudedHeight
-    var maxHeight = rectangleGeometry._surfaceHeight
-    var ellipsoid = rectangleGeometry._ellipsoid
+    const shadowVolume = rectangleGeometry._shadowVolume
+    const offsetAttributeValue = rectangleGeometry._offsetAttribute
+    const vertexFormat = rectangleGeometry._vertexFormat
+    const minHeight = rectangleGeometry._extrudedHeight
+    const maxHeight = rectangleGeometry._surfaceHeight
+    const ellipsoid = rectangleGeometry._ellipsoid
 
-    var height = computedOptions.height
-    var width = computedOptions.width
+    const height = computedOptions.height
+    const width = computedOptions.width
 
-    var i
+    let i
 
     if (shadowVolume) {
-      var newVertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, scratchVertexFormat)
+      const newVertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, scratchVertexFormat)
       newVertexFormat.normal = true
       rectangleGeometry._vertexFormat = newVertexFormat
     }
 
-    var topBottomGeo = constructRectangle(rectangleGeometry, computedOptions)
+    const topBottomGeo = constructRectangle(rectangleGeometry, computedOptions)
 
     if (shadowVolume) {
       rectangleGeometry._vertexFormat = vertexFormat
     }
 
-    var topPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(topBottomGeo.attributes.position.values, maxHeight, ellipsoid, false)
+    let topPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(topBottomGeo.attributes.position.values, maxHeight, ellipsoid, false)
     topPositions = new Float64Array(topPositions)
-    var length = topPositions.length
-    var newLength = length * 2
-    var positions = new Float64Array(newLength)
+    let length = topPositions.length
+    const newLength = length * 2
+    const positions = new Float64Array(newLength)
     positions.set(topPositions)
-    var bottomPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(topBottomGeo.attributes.position.values, minHeight, ellipsoid)
+    const bottomPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(topBottomGeo.attributes.position.values, minHeight, ellipsoid)
     positions.set(bottomPositions, length)
     topBottomGeo.attributes.position.values = positions
 
-    var normals = vertexFormat.normal ? new Float32Array(newLength) : undefined
-    var tangents = vertexFormat.tangent ? new Float32Array(newLength) : undefined
-    var bitangents = vertexFormat.bitangent ? new Float32Array(newLength) : undefined
-    var textures = vertexFormat.st ? new Float32Array((newLength / 3) * 2) : undefined
-    var topSt
-    var topNormals
+    const normals = vertexFormat.normal ? new Float32Array(newLength) : undefined
+    const tangents = vertexFormat.tangent ? new Float32Array(newLength) : undefined
+    const bitangents = vertexFormat.bitangent ? new Float32Array(newLength) : undefined
+    const textures = vertexFormat.st ? new Float32Array((newLength / 3) * 2) : undefined
+    let topSt
+    let topNormals
     if (vertexFormat.normal) {
       topNormals = topBottomGeo.attributes.normal.values
       normals.set(topNormals)
@@ -494,7 +477,7 @@ define([
       if (!vertexFormat.normal) {
         topBottomGeo.attributes.normal = undefined
       }
-      var extrudeNormals = new Float32Array(newLength)
+      const extrudeNormals = new Float32Array(newLength)
       for (i = 0; i < length; i++) {
         topNormals[i] = -topNormals[i]
       }
@@ -506,16 +489,16 @@ define([
       })
     }
 
-    var offsetValue
-    var hasOffsets = when.defined(offsetAttributeValue)
+    let offsetValue
+    const hasOffsets = defaultValue.defined(offsetAttributeValue)
     if (hasOffsets) {
-      var size = (length / 3) * 2
-      var offsetAttribute = new Uint8Array(size)
+      const size = (length / 3) * 2
+      let offsetAttribute = new Uint8Array(size)
       if (offsetAttributeValue === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP) {
-        offsetAttribute = GeometryOffsetAttribute.arrayFill(offsetAttribute, 1, 0, size / 2)
+        offsetAttribute = offsetAttribute.fill(1, 0, size / 2)
       } else {
         offsetValue = offsetAttributeValue === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
-        offsetAttribute = GeometryOffsetAttribute.arrayFill(offsetAttribute, offsetValue)
+        offsetAttribute = offsetAttribute.fill(offsetValue)
       }
 
       topBottomGeo.attributes.applyOffset = new GeometryAttribute.GeometryAttribute({
@@ -526,7 +509,7 @@ define([
     }
 
     if (vertexFormat.tangent) {
-      var topTangents = topBottomGeo.attributes.tangent.values
+      const topTangents = topBottomGeo.attributes.tangent.values
       tangents.set(topTangents)
       for (i = 0; i < length; i++) {
         topTangents[i] = -topTangents[i]
@@ -535,7 +518,7 @@ define([
       topBottomGeo.attributes.tangent.values = tangents
     }
     if (vertexFormat.bitangent) {
-      var topBitangents = topBottomGeo.attributes.bitangent.values
+      const topBitangents = topBottomGeo.attributes.bitangent.values
       bitangents.set(topBitangents)
       bitangents.set(topBitangents, length)
       topBottomGeo.attributes.bitangent.values = bitangents
@@ -547,10 +530,10 @@ define([
       topBottomGeo.attributes.st.values = textures
     }
 
-    var indices = topBottomGeo.indices
-    var indicesLength = indices.length
-    var posLength = length / 3
-    var newIndices = IndexDatatype.IndexDatatype.createTypedArray(newLength / 3, indicesLength * 2)
+    const indices = topBottomGeo.indices
+    const indicesLength = indices.length
+    const posLength = length / 3
+    const newIndices = IndexDatatype.IndexDatatype.createTypedArray(newLength / 3, indicesLength * 2)
     newIndices.set(indices)
     for (i = 0; i < indicesLength; i += 3) {
       newIndices[i + indicesLength] = indices[i + 2] + posLength
@@ -559,14 +542,14 @@ define([
     }
     topBottomGeo.indices = newIndices
 
-    var northCap = computedOptions.northCap
-    var southCap = computedOptions.southCap
+    const northCap = computedOptions.northCap
+    const southCap = computedOptions.southCap
 
-    var rowHeight = height
-    var widthMultiplier = 2
-    var perimeterPositions = 0
-    var corners = 4
-    var dupliateCorners = 4
+    let rowHeight = height
+    let widthMultiplier = 2
+    let perimeterPositions = 0
+    let corners = 4
+    let dupliateCorners = 4
     if (northCap) {
       widthMultiplier -= 1
       rowHeight -= 1
@@ -583,25 +566,25 @@ define([
     }
     perimeterPositions += widthMultiplier * width + 2 * rowHeight - corners
 
-    var wallCount = (perimeterPositions + dupliateCorners) * 2
+    const wallCount = (perimeterPositions + dupliateCorners) * 2
 
-    var wallPositions = new Float64Array(wallCount * 3)
-    var wallExtrudeNormals = shadowVolume ? new Float32Array(wallCount * 3) : undefined
-    var wallOffsetAttribute = hasOffsets ? new Uint8Array(wallCount) : undefined
-    var wallTextures = vertexFormat.st ? new Float32Array(wallCount * 2) : undefined
+    let wallPositions = new Float64Array(wallCount * 3)
+    const wallExtrudeNormals = shadowVolume ? new Float32Array(wallCount * 3) : undefined
+    let wallOffsetAttribute = hasOffsets ? new Uint8Array(wallCount) : undefined
+    let wallTextures = vertexFormat.st ? new Float32Array(wallCount * 2) : undefined
 
-    var computeTopOffsets = offsetAttributeValue === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP
+    const computeTopOffsets = offsetAttributeValue === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP
     if (hasOffsets && !computeTopOffsets) {
       offsetValue = offsetAttributeValue === GeometryOffsetAttribute.GeometryOffsetAttribute.ALL ? 1 : 0
-      wallOffsetAttribute = GeometryOffsetAttribute.arrayFill(wallOffsetAttribute, offsetValue)
+      wallOffsetAttribute = wallOffsetAttribute.fill(offsetValue)
     }
 
-    var posIndex = 0
-    var stIndex = 0
-    var extrudeNormalIndex = 0
-    var wallOffsetIndex = 0
-    var area = width * rowHeight
-    var threeI
+    let posIndex = 0
+    let stIndex = 0
+    let extrudeNormalIndex = 0
+    let wallOffsetIndex = 0
+    const area = width * rowHeight
+    let threeI
     for (i = 0; i < area; i += width) {
       threeI = i * 3
       wallPositions = addWallPositions(wallPositions, posIndex, threeI, topPositions, bottomPositions)
@@ -643,7 +626,7 @@ define([
         }
       }
     } else {
-      var southIndex = northCap ? area + 1 : area
+      const southIndex = northCap ? area + 1 : area
       threeI = southIndex * 3
 
       for (i = 0; i < 2; i++) {
@@ -708,7 +691,7 @@ define([
         }
       }
     } else {
-      var northIndex = area
+      const northIndex = area
       threeI = northIndex * 3
 
       for (i = 0; i < 2; i++) {
@@ -732,7 +715,7 @@ define([
       }
     }
 
-    var geo = calculateAttributesWall(wallPositions, vertexFormat, ellipsoid)
+    let geo = calculateAttributesWall(wallPositions, vertexFormat, ellipsoid)
 
     if (vertexFormat.st) {
       geo.attributes.st = new GeometryAttribute.GeometryAttribute({
@@ -756,20 +739,20 @@ define([
       })
     }
 
-    var wallIndices = IndexDatatype.IndexDatatype.createTypedArray(wallCount, perimeterPositions * 6)
+    const wallIndices = IndexDatatype.IndexDatatype.createTypedArray(wallCount, perimeterPositions * 6)
 
-    var upperLeft
-    var lowerLeft
-    var lowerRight
-    var upperRight
+    let upperLeft
+    let lowerLeft
+    let lowerRight
+    let upperRight
     length = wallPositions.length / 3
-    var index = 0
+    let index = 0
     for (i = 0; i < length - 1; i += 2) {
       upperLeft = i
       upperRight = (upperLeft + 2) % length
-      var p1 = Matrix2.Cartesian3.fromArray(wallPositions, upperLeft * 3, v1Scratch)
-      var p2 = Matrix2.Cartesian3.fromArray(wallPositions, upperRight * 3, v2Scratch)
-      if (Matrix2.Cartesian3.equalsEpsilon(p1, p2, ComponentDatatype.CesiumMath.EPSILON10)) {
+      const p1 = Matrix3.Cartesian3.fromArray(wallPositions, upperLeft * 3, v1Scratch)
+      const p2 = Matrix3.Cartesian3.fromArray(wallPositions, upperRight * 3, v2Scratch)
+      if (Matrix3.Cartesian3.equalsEpsilon(p1, p2, Math$1.CesiumMath.EPSILON10)) {
         continue
       }
       lowerLeft = (upperLeft + 1) % length
@@ -796,15 +779,15 @@ define([
     return geo[0]
   }
 
-  var scratchRectanglePoints = [new Matrix2.Cartesian3(), new Matrix2.Cartesian3(), new Matrix2.Cartesian3(), new Matrix2.Cartesian3()]
-  var nwScratch = new Matrix2.Cartographic()
-  var stNwScratch = new Matrix2.Cartographic()
+  const scratchRectanglePoints = [new Matrix3.Cartesian3(), new Matrix3.Cartesian3(), new Matrix3.Cartesian3(), new Matrix3.Cartesian3()]
+  const nwScratch = new Matrix3.Cartographic()
+  const stNwScratch = new Matrix3.Cartographic()
   function computeRectangle(rectangle, granularity, rotation, ellipsoid, result) {
     if (rotation === 0.0) {
       return Matrix2.Rectangle.clone(rectangle, result)
     }
 
-    var computedOptions = RectangleGeometryLibrary.RectangleGeometryLibrary.computeOptions(
+    const computedOptions = RectangleGeometryLibrary.RectangleGeometryLibrary.computeOptions(
       rectangle,
       granularity,
       rotation,
@@ -813,10 +796,10 @@ define([
       nwScratch
     )
 
-    var height = computedOptions.height
-    var width = computedOptions.width
+    const height = computedOptions.height
+    const width = computedOptions.width
 
-    var positions = scratchRectanglePoints
+    const positions = scratchRectanglePoints
     RectangleGeometryLibrary.RectangleGeometryLibrary.computePosition(computedOptions, ellipsoid, false, 0, 0, positions[0])
     RectangleGeometryLibrary.RectangleGeometryLibrary.computePosition(computedOptions, ellipsoid, false, 0, width - 1, positions[1])
     RectangleGeometryLibrary.RectangleGeometryLibrary.computePosition(computedOptions, ellipsoid, false, height - 1, 0, positions[2])
@@ -853,47 +836,47 @@ define([
    *
    * @example
    * // 1. create a rectangle
-   * var rectangle = new Cesium.RectangleGeometry({
+   * const rectangle = new Cesium.RectangleGeometry({
    *   ellipsoid : Cesium.Ellipsoid.WGS84,
    *   rectangle : Cesium.Rectangle.fromDegrees(-80.0, 39.0, -74.0, 42.0),
    *   height : 10000.0
    * });
-   * var geometry = Cesium.RectangleGeometry.createGeometry(rectangle);
+   * const geometry = Cesium.RectangleGeometry.createGeometry(rectangle);
    *
    * // 2. create an extruded rectangle without a top
-   * var rectangle = new Cesium.RectangleGeometry({
+   * const rectangle = new Cesium.RectangleGeometry({
    *   ellipsoid : Cesium.Ellipsoid.WGS84,
    *   rectangle : Cesium.Rectangle.fromDegrees(-80.0, 39.0, -74.0, 42.0),
    *   height : 10000.0,
    *   extrudedHeight: 300000
    * });
-   * var geometry = Cesium.RectangleGeometry.createGeometry(rectangle);
+   * const geometry = Cesium.RectangleGeometry.createGeometry(rectangle);
    */
   function RectangleGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
 
-    var rectangle = options.rectangle
+    const rectangle = options.rectangle
 
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('rectangle', rectangle)
+    Check.Check.typeOf.object('rectangle', rectangle)
     Matrix2.Rectangle.validate(rectangle)
     if (rectangle.north < rectangle.south) {
-      throw new RuntimeError.DeveloperError('options.rectangle.north must be greater than or equal to options.rectangle.south')
+      throw new Check.DeveloperError('options.rectangle.north must be greater than or equal to options.rectangle.south')
     }
     //>>includeEnd('debug');
 
-    var height = when.defaultValue(options.height, 0.0)
-    var extrudedHeight = when.defaultValue(options.extrudedHeight, height)
+    const height = defaultValue.defaultValue(options.height, 0.0)
+    const extrudedHeight = defaultValue.defaultValue(options.extrudedHeight, height)
 
     this._rectangle = Matrix2.Rectangle.clone(rectangle)
-    this._granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
-    this._ellipsoid = Matrix2.Ellipsoid.clone(when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84))
+    this._granularity = defaultValue.defaultValue(options.granularity, Math$1.CesiumMath.RADIANS_PER_DEGREE)
+    this._ellipsoid = Matrix3.Ellipsoid.clone(defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84))
     this._surfaceHeight = Math.max(height, extrudedHeight)
-    this._rotation = when.defaultValue(options.rotation, 0.0)
-    this._stRotation = when.defaultValue(options.stRotation, 0.0)
-    this._vertexFormat = VertexFormat.VertexFormat.clone(when.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT))
+    this._rotation = defaultValue.defaultValue(options.rotation, 0.0)
+    this._stRotation = defaultValue.defaultValue(options.stRotation, 0.0)
+    this._vertexFormat = VertexFormat.VertexFormat.clone(defaultValue.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT))
     this._extrudedHeight = Math.min(height, extrudedHeight)
-    this._shadowVolume = when.defaultValue(options.shadowVolume, false)
+    this._shadowVolume = defaultValue.defaultValue(options.shadowVolume, false)
     this._workerName = 'createRectangleGeometry'
     this._offsetAttribute = options.offsetAttribute
     this._rotatedRectangle = undefined
@@ -905,7 +888,7 @@ define([
    * The number of elements used to pack the object into an array.
    * @type {Number}
    */
-  RectangleGeometry.packedLength = Matrix2.Rectangle.packedLength + Matrix2.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 7
+  RectangleGeometry.packedLength = Matrix2.Rectangle.packedLength + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 7
 
   /**
    * Stores the provided instance into the provided array.
@@ -918,17 +901,17 @@ define([
    */
   RectangleGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('value', value)
-    RuntimeError.Check.defined('array', array)
+    Check.Check.typeOf.object('value', value)
+    Check.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
     Matrix2.Rectangle.pack(value._rectangle, array, startingIndex)
     startingIndex += Matrix2.Rectangle.packedLength
 
-    Matrix2.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    Matrix3.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
     VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex)
     startingIndex += VertexFormat.VertexFormat.packedLength
@@ -939,14 +922,14 @@ define([
     array[startingIndex++] = value._stRotation
     array[startingIndex++] = value._extrudedHeight
     array[startingIndex++] = value._shadowVolume ? 1.0 : 0.0
-    array[startingIndex] = when.defaultValue(value._offsetAttribute, -1)
+    array[startingIndex] = defaultValue.defaultValue(value._offsetAttribute, -1)
 
     return array
   }
 
-  var scratchRectangle = new Matrix2.Rectangle()
-  var scratchEllipsoid = Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE)
-  var scratchOptions = {
+  const scratchRectangle = new Matrix2.Rectangle()
+  const scratchEllipsoid = Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE)
+  const scratchOptions = {
     rectangle: scratchRectangle,
     ellipsoid: scratchEllipsoid,
     vertexFormat: scratchVertexFormat,
@@ -969,29 +952,29 @@ define([
    */
   RectangleGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.defined('array', array)
+    Check.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var rectangle = Matrix2.Rectangle.unpack(array, startingIndex, scratchRectangle)
+    const rectangle = Matrix2.Rectangle.unpack(array, startingIndex, scratchRectangle)
     startingIndex += Matrix2.Rectangle.packedLength
 
-    var ellipsoid = Matrix2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    const ellipsoid = Matrix3.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
-    var vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
+    const vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
     startingIndex += VertexFormat.VertexFormat.packedLength
 
-    var granularity = array[startingIndex++]
-    var surfaceHeight = array[startingIndex++]
-    var rotation = array[startingIndex++]
-    var stRotation = array[startingIndex++]
-    var extrudedHeight = array[startingIndex++]
-    var shadowVolume = array[startingIndex++] === 1.0
-    var offsetAttribute = array[startingIndex]
+    const granularity = array[startingIndex++]
+    const surfaceHeight = array[startingIndex++]
+    const rotation = array[startingIndex++]
+    const stRotation = array[startingIndex++]
+    const extrudedHeight = array[startingIndex++]
+    const shadowVolume = array[startingIndex++] === 1.0
+    const offsetAttribute = array[startingIndex]
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.granularity = granularity
       scratchOptions.height = surfaceHeight
       scratchOptions.rotation = rotation
@@ -1004,7 +987,7 @@ define([
     }
 
     result._rectangle = Matrix2.Rectangle.clone(rectangle, result._rectangle)
-    result._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid, result._ellipsoid)
+    result._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid, result._ellipsoid)
     result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat)
     result._granularity = granularity
     result._surfaceHeight = surfaceHeight
@@ -1030,28 +1013,28 @@ define([
    * @returns {Rectangle} The result rectangle
    */
   RectangleGeometry.computeRectangle = function (options, result) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
 
-    var rectangle = options.rectangle
+    const rectangle = options.rectangle
 
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('rectangle', rectangle)
+    Check.Check.typeOf.object('rectangle', rectangle)
     Matrix2.Rectangle.validate(rectangle)
     if (rectangle.north < rectangle.south) {
-      throw new RuntimeError.DeveloperError('options.rectangle.north must be greater than or equal to options.rectangle.south')
+      throw new Check.DeveloperError('options.rectangle.north must be greater than or equal to options.rectangle.south')
     }
     //>>includeEnd('debug');
 
-    var granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
-    var ellipsoid = when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84)
-    var rotation = when.defaultValue(options.rotation, 0.0)
+    const granularity = defaultValue.defaultValue(options.granularity, Math$1.CesiumMath.RADIANS_PER_DEGREE)
+    const ellipsoid = defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84)
+    const rotation = defaultValue.defaultValue(options.rotation, 0.0)
 
     return computeRectangle(rectangle, granularity, rotation, ellipsoid, result)
   }
 
-  var tangentRotationMatrixScratch = new Matrix2.Matrix3()
-  var quaternionScratch = new Transforms.Quaternion()
-  var centerScratch = new Matrix2.Cartographic()
+  const tangentRotationMatrixScratch = new Matrix3.Matrix3()
+  const quaternionScratch = new Transforms.Quaternion()
+  const centerScratch = new Matrix3.Cartographic()
   /**
    * Computes the geometric representation of a rectangle, including its vertices, indices, and a bounding sphere.
    *
@@ -1062,27 +1045,19 @@ define([
    */
   RectangleGeometry.createGeometry = function (rectangleGeometry) {
     if (
-      ComponentDatatype.CesiumMath.equalsEpsilon(
-        rectangleGeometry._rectangle.north,
-        rectangleGeometry._rectangle.south,
-        ComponentDatatype.CesiumMath.EPSILON10
-      ) ||
-      ComponentDatatype.CesiumMath.equalsEpsilon(
-        rectangleGeometry._rectangle.east,
-        rectangleGeometry._rectangle.west,
-        ComponentDatatype.CesiumMath.EPSILON10
-      )
+      Math$1.CesiumMath.equalsEpsilon(rectangleGeometry._rectangle.north, rectangleGeometry._rectangle.south, Math$1.CesiumMath.EPSILON10) ||
+      Math$1.CesiumMath.equalsEpsilon(rectangleGeometry._rectangle.east, rectangleGeometry._rectangle.west, Math$1.CesiumMath.EPSILON10)
     ) {
       return undefined
     }
 
-    var rectangle = rectangleGeometry._rectangle
-    var ellipsoid = rectangleGeometry._ellipsoid
-    var rotation = rectangleGeometry._rotation
-    var stRotation = rectangleGeometry._stRotation
-    var vertexFormat = rectangleGeometry._vertexFormat
+    let rectangle = rectangleGeometry._rectangle
+    const ellipsoid = rectangleGeometry._ellipsoid
+    const rotation = rectangleGeometry._rotation
+    const stRotation = rectangleGeometry._stRotation
+    const vertexFormat = rectangleGeometry._vertexFormat
 
-    var computedOptions = RectangleGeometryLibrary.RectangleGeometryLibrary.computeOptions(
+    const computedOptions = RectangleGeometryLibrary.RectangleGeometryLibrary.computeOptions(
       rectangle,
       rectangleGeometry._granularity,
       rotation,
@@ -1092,31 +1067,31 @@ define([
       stNwScratch
     )
 
-    var tangentRotationMatrix = tangentRotationMatrixScratch
+    const tangentRotationMatrix = tangentRotationMatrixScratch
     if (stRotation !== 0 || rotation !== 0) {
-      var center = Matrix2.Rectangle.center(rectangle, centerScratch)
-      var axis = ellipsoid.geodeticSurfaceNormalCartographic(center, v1Scratch)
+      const center = Matrix2.Rectangle.center(rectangle, centerScratch)
+      const axis = ellipsoid.geodeticSurfaceNormalCartographic(center, v1Scratch)
       Transforms.Quaternion.fromAxisAngle(axis, -stRotation, quaternionScratch)
-      Matrix2.Matrix3.fromQuaternion(quaternionScratch, tangentRotationMatrix)
+      Matrix3.Matrix3.fromQuaternion(quaternionScratch, tangentRotationMatrix)
     } else {
-      Matrix2.Matrix3.clone(Matrix2.Matrix3.IDENTITY, tangentRotationMatrix)
+      Matrix3.Matrix3.clone(Matrix3.Matrix3.IDENTITY, tangentRotationMatrix)
     }
 
-    var surfaceHeight = rectangleGeometry._surfaceHeight
-    var extrudedHeight = rectangleGeometry._extrudedHeight
-    var extrude = !ComponentDatatype.CesiumMath.equalsEpsilon(surfaceHeight, extrudedHeight, 0, ComponentDatatype.CesiumMath.EPSILON2)
+    const surfaceHeight = rectangleGeometry._surfaceHeight
+    const extrudedHeight = rectangleGeometry._extrudedHeight
+    const extrude = !Math$1.CesiumMath.equalsEpsilon(surfaceHeight, extrudedHeight, 0, Math$1.CesiumMath.EPSILON2)
 
     computedOptions.lonScalar = 1.0 / rectangleGeometry._rectangle.width
     computedOptions.latScalar = 1.0 / rectangleGeometry._rectangle.height
     computedOptions.tangentRotationMatrix = tangentRotationMatrix
 
-    var geometry
-    var boundingSphere
+    let geometry
+    let boundingSphere
     rectangle = rectangleGeometry._rectangle
     if (extrude) {
       geometry = constructExtrudedRectangle(rectangleGeometry, computedOptions)
-      var topBS = Transforms.BoundingSphere.fromRectangle3D(rectangle, ellipsoid, surfaceHeight, topBoundingSphere)
-      var bottomBS = Transforms.BoundingSphere.fromRectangle3D(rectangle, ellipsoid, extrudedHeight, bottomBoundingSphere)
+      const topBS = Transforms.BoundingSphere.fromRectangle3D(rectangle, ellipsoid, surfaceHeight, topBoundingSphere)
+      const bottomBS = Transforms.BoundingSphere.fromRectangle3D(rectangle, ellipsoid, extrudedHeight, bottomBoundingSphere)
       boundingSphere = Transforms.BoundingSphere.union(topBS, bottomBS)
     } else {
       geometry = constructRectangle(rectangleGeometry, computedOptions)
@@ -1127,11 +1102,10 @@ define([
         false
       )
 
-      if (when.defined(rectangleGeometry._offsetAttribute)) {
-        var length = geometry.attributes.position.values.length
-        var applyOffset = new Uint8Array(length / 3)
-        var offsetValue = rectangleGeometry._offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
-        GeometryOffsetAttribute.arrayFill(applyOffset, offsetValue)
+      if (defaultValue.defined(rectangleGeometry._offsetAttribute)) {
+        const length = geometry.attributes.position.values.length
+        const offsetValue = rectangleGeometry._offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
+        const applyOffset = new Uint8Array(length / 3).fill(offsetValue)
         geometry.attributes.applyOffset = new GeometryAttribute.GeometryAttribute({
           componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
           componentsPerAttribute: 1,
@@ -1159,11 +1133,11 @@ define([
    * @private
    */
   RectangleGeometry.createShadowVolume = function (rectangleGeometry, minHeightFunc, maxHeightFunc) {
-    var granularity = rectangleGeometry._granularity
-    var ellipsoid = rectangleGeometry._ellipsoid
+    const granularity = rectangleGeometry._granularity
+    const ellipsoid = rectangleGeometry._ellipsoid
 
-    var minHeight = minHeightFunc(granularity, ellipsoid)
-    var maxHeight = maxHeightFunc(granularity, ellipsoid)
+    const minHeight = minHeightFunc(granularity, ellipsoid)
+    const maxHeight = maxHeightFunc(granularity, ellipsoid)
 
     return new RectangleGeometry({
       rectangle: rectangleGeometry._rectangle,
@@ -1178,24 +1152,24 @@ define([
     })
   }
 
-  var unrotatedTextureRectangleScratch = new Matrix2.Rectangle()
-  var points2DScratch = [new Matrix2.Cartesian2(), new Matrix2.Cartesian2(), new Matrix2.Cartesian2()]
-  var rotation2DScratch = new Matrix2.Matrix2()
-  var rectangleCenterScratch = new Matrix2.Cartographic()
+  const unrotatedTextureRectangleScratch = new Matrix2.Rectangle()
+  const points2DScratch = [new Matrix2.Cartesian2(), new Matrix2.Cartesian2(), new Matrix2.Cartesian2()]
+  const rotation2DScratch = new Matrix2.Matrix2()
+  const rectangleCenterScratch = new Matrix3.Cartographic()
 
   function textureCoordinateRotationPoints(rectangleGeometry) {
     if (rectangleGeometry._stRotation === 0.0) {
       return [0, 0, 0, 1, 1, 0]
     }
 
-    var rectangle = Matrix2.Rectangle.clone(rectangleGeometry._rectangle, unrotatedTextureRectangleScratch)
-    var granularity = rectangleGeometry._granularity
-    var ellipsoid = rectangleGeometry._ellipsoid
+    const rectangle = Matrix2.Rectangle.clone(rectangleGeometry._rectangle, unrotatedTextureRectangleScratch)
+    const granularity = rectangleGeometry._granularity
+    const ellipsoid = rectangleGeometry._ellipsoid
 
     // Rotate to align the texture coordinates with ENU
-    var rotation = rectangleGeometry._rotation - rectangleGeometry._stRotation
+    const rotation = rectangleGeometry._rotation - rectangleGeometry._stRotation
 
-    var unrotatedTextureRectangle = computeRectangle(rectangle, granularity, rotation, ellipsoid, unrotatedTextureRectangleScratch)
+    const unrotatedTextureRectangle = computeRectangle(rectangle, granularity, rotation, ellipsoid, unrotatedTextureRectangleScratch)
 
     // Assume a computed "east-north" texture coordinate system based on spherical or planar tricks, bounded by `boundingRectangle`.
     // The "desired" texture coordinate system forms an oriented rectangle (un-oriented computed) around the geometry that completely and tightly bounds it.
@@ -1205,7 +1179,7 @@ define([
     // - apply the "east-north" system's normalization formula to the rotated cartographics, even though this is likely to produce values outside [0-1].
     // This gives us a set of points in the "east-north" texture coordinate system that can be used to map "east-north" texture coordinates to "desired."
 
-    var points2D = points2DScratch
+    const points2D = points2DScratch
     points2D[0].x = unrotatedTextureRectangle.west
     points2D[0].y = unrotatedTextureRectangle.south
 
@@ -1215,12 +1189,12 @@ define([
     points2D[2].x = unrotatedTextureRectangle.east
     points2D[2].y = unrotatedTextureRectangle.south
 
-    var boundingRectangle = rectangleGeometry.rectangle
-    var toDesiredInComputed = Matrix2.Matrix2.fromRotation(rectangleGeometry._stRotation, rotation2DScratch)
-    var boundingRectangleCenter = Matrix2.Rectangle.center(boundingRectangle, rectangleCenterScratch)
+    const boundingRectangle = rectangleGeometry.rectangle
+    const toDesiredInComputed = Matrix2.Matrix2.fromRotation(rectangleGeometry._stRotation, rotation2DScratch)
+    const boundingRectangleCenter = Matrix2.Rectangle.center(boundingRectangle, rectangleCenterScratch)
 
-    for (var i = 0; i < 3; ++i) {
-      var point2D = points2D[i]
+    for (let i = 0; i < 3; ++i) {
+      const point2D = points2D[i]
       point2D.x -= boundingRectangleCenter.longitude
       point2D.y -= boundingRectangleCenter.latitude
       Matrix2.Matrix2.multiplyByVector(toDesiredInComputed, point2D, point2D)
@@ -1232,10 +1206,10 @@ define([
       point2D.y = (point2D.y - boundingRectangle.south) / boundingRectangle.height
     }
 
-    var minXYCorner = points2D[0]
-    var maxYCorner = points2D[1]
-    var maxXCorner = points2D[2]
-    var result = new Array(6)
+    const minXYCorner = points2D[0]
+    const maxYCorner = points2D[1]
+    const maxXCorner = points2D[2]
+    const result = new Array(6)
     Matrix2.Cartesian2.pack(minXYCorner, result)
     Matrix2.Cartesian2.pack(maxYCorner, result, 2)
     Matrix2.Cartesian2.pack(maxXCorner, result, 4)
@@ -1248,7 +1222,7 @@ define([
      */
     rectangle: {
       get: function () {
-        if (!when.defined(this._rotatedRectangle)) {
+        if (!defaultValue.defined(this._rotatedRectangle)) {
           this._rotatedRectangle = computeRectangle(this._rectangle, this._granularity, this._rotation, this._ellipsoid)
         }
         return this._rotatedRectangle
@@ -1263,7 +1237,7 @@ define([
      */
     textureCoordinateRotationPoints: {
       get: function () {
-        if (!when.defined(this._textureCoordinateRotationPoints)) {
+        if (!defaultValue.defined(this._textureCoordinateRotationPoints)) {
           this._textureCoordinateRotationPoints = textureCoordinateRotationPoints(this)
         }
         return this._textureCoordinateRotationPoints
@@ -1272,14 +1246,13 @@ define([
   })
 
   function createRectangleGeometry(rectangleGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       rectangleGeometry = RectangleGeometry.unpack(rectangleGeometry, offset)
     }
-    rectangleGeometry._ellipsoid = Matrix2.Ellipsoid.clone(rectangleGeometry._ellipsoid)
+    rectangleGeometry._ellipsoid = Matrix3.Ellipsoid.clone(rectangleGeometry._ellipsoid)
     rectangleGeometry._rectangle = Matrix2.Rectangle.clone(rectangleGeometry._rectangle)
     return RectangleGeometry.createGeometry(rectangleGeometry)
   }
 
   return createRectangleGeometry
 })
-//# sourceMappingURL=createRectangleGeometry.js.map

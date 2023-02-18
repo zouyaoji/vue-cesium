@@ -1,68 +1,51 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './when-4bbc8319',
-  './Matrix2-91d5b6af',
-  './arrayRemoveDuplicates-cf5c3227',
-  './BoundingRectangle-285b0f2f',
-  './Transforms-86b6fa28',
-  './ComponentDatatype-f194c48b',
-  './PolylineVolumeGeometryLibrary-7c5a0257',
-  './RuntimeError-346a3079',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './GeometryPipeline-4bea2645',
-  './IndexDatatype-ee69f1fd',
-  './PolygonPipeline-d65e2b8f',
-  './VertexFormat-f9c1a155',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc',
-  './EllipsoidTangentPlane-164dcfc9',
-  './AxisAlignedBoundingBox-4171efdd',
-  './IntersectionTests-26599c5e',
-  './Plane-4f333bc4',
-  './PolylinePipeline-3cab578f',
-  './EllipsoidGeodesic-6a52e412',
-  './EllipsoidRhumbLine-447d6334',
-  './AttributeCompression-1f6679e1',
-  './EncodedCartesian3-882fbcbd'
+  './defaultValue-0a909f67',
+  './Matrix3-315394f6',
+  './arrayRemoveDuplicates-c2038105',
+  './BoundingRectangle-93b263ac',
+  './Transforms-a05e5e6e',
+  './Matrix2-13178034',
+  './ComponentDatatype-f7b11d02',
+  './PolylineVolumeGeometryLibrary-97f0b94e',
+  './Check-666ab1a0',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './GeometryPipeline-8fb0db69',
+  './IndexDatatype-a55ceaa1',
+  './Math-2dbd6b93',
+  './PolygonPipeline-21668b3f',
+  './VertexFormat-6b480673',
+  './combine-ca22a614',
+  './RuntimeError-06c93819',
+  './WebGLConstants-a8cc3e8c',
+  './EllipsoidTangentPlane-ed9443a1',
+  './AxisAlignedBoundingBox-47525601',
+  './IntersectionTests-27d49265',
+  './Plane-900aa728',
+  './PolylinePipeline-5e2e1b21',
+  './EllipsoidGeodesic-98c62a56',
+  './EllipsoidRhumbLine-19756602',
+  './AttributeCompression-b646d393',
+  './EncodedCartesian3-81f70735'
 ], function (
-  when,
-  Matrix2,
+  defaultValue,
+  Matrix3,
   arrayRemoveDuplicates,
   BoundingRectangle,
   Transforms,
+  Matrix2,
   ComponentDatatype,
   PolylineVolumeGeometryLibrary,
-  RuntimeError,
+  Check,
   GeometryAttribute,
   GeometryAttributes,
   GeometryPipeline,
   IndexDatatype,
+  Math,
   PolygonPipeline,
   VertexFormat,
   combine,
+  RuntimeError,
   WebGLConstants,
   EllipsoidTangentPlane,
   AxisAlignedBoundingBox,
@@ -77,7 +60,7 @@ define([
   'use strict'
 
   function computeAttributes(combinedPositions, shape, boundingRectangle, vertexFormat) {
-    var attributes = new GeometryAttributes.GeometryAttributes()
+    const attributes = new GeometryAttributes.GeometryAttributes()
     if (vertexFormat.position) {
       attributes.position = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
@@ -85,17 +68,17 @@ define([
         values: combinedPositions
       })
     }
-    var shapeLength = shape.length
-    var vertexCount = combinedPositions.length / 3
-    var length = (vertexCount - shapeLength * 2) / (shapeLength * 2)
-    var firstEndIndices = PolygonPipeline.PolygonPipeline.triangulate(shape)
+    const shapeLength = shape.length
+    const vertexCount = combinedPositions.length / 3
+    const length = (vertexCount - shapeLength * 2) / (shapeLength * 2)
+    const firstEndIndices = PolygonPipeline.PolygonPipeline.triangulate(shape)
 
-    var indicesCount = (length - 1) * shapeLength * 6 + firstEndIndices.length * 2
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(vertexCount, indicesCount)
-    var i, j
-    var ll, ul, ur, lr
-    var offset = shapeLength * 2
-    var index = 0
+    const indicesCount = (length - 1) * shapeLength * 6 + firstEndIndices.length * 2
+    const indices = IndexDatatype.IndexDatatype.createTypedArray(vertexCount, indicesCount)
+    let i, j
+    let ll, ul, ur, lr
+    const offset = shapeLength * 2
+    let index = 0
     for (i = 0; i < length - 1; i++) {
       for (j = 0; j < shapeLength - 1; j++) {
         ll = j * 2 + i * shapeLength * 2
@@ -125,12 +108,12 @@ define([
 
     if (vertexFormat.st || vertexFormat.tangent || vertexFormat.bitangent) {
       // st required for tangent/bitangent calculation
-      var st = new Float32Array(vertexCount * 2)
-      var lengthSt = 1 / (length - 1)
-      var heightSt = 1 / boundingRectangle.height
-      var heightOffset = boundingRectangle.height / 2
-      var s, t
-      var stindex = 0
+      const st = new Float32Array(vertexCount * 2)
+      const lengthSt = 1 / (length - 1)
+      const heightSt = 1 / boundingRectangle.height
+      const heightOffset = boundingRectangle.height / 2
+      let s, t
+      let stindex = 0
       for (i = 0; i < length; i++) {
         s = i * lengthSt
         t = heightSt * (shape[0].y + heightOffset)
@@ -167,11 +150,11 @@ define([
       })
     }
 
-    var endOffset = vertexCount - shapeLength * 2
+    const endOffset = vertexCount - shapeLength * 2
     for (i = 0; i < firstEndIndices.length; i += 3) {
-      var v0 = firstEndIndices[i] + endOffset
-      var v1 = firstEndIndices[i + 1] + endOffset
-      var v2 = firstEndIndices[i + 2] + endOffset
+      const v0 = firstEndIndices[i] + endOffset
+      const v1 = firstEndIndices[i + 1] + endOffset
+      const v2 = firstEndIndices[i + 2] + endOffset
 
       indices[index++] = v0
       indices[index++] = v1
@@ -181,7 +164,7 @@ define([
       indices[index++] = v0 + shapeLength
     }
 
-    var geometry = new GeometryAttribute.Geometry({
+    let geometry = new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: indices,
       boundingSphere: Transforms.BoundingSphere.fromVertices(combinedPositions),
@@ -237,15 +220,15 @@ define([
    *
    * @example
    * function computeCircle(radius) {
-   *   var positions = [];
-   *   for (var i = 0; i < 360; i++) {
-   *     var radians = Cesium.Math.toRadians(i);
+   *   const positions = [];
+   *   for (let i = 0; i < 360; i++) {
+   *     const radians = Cesium.Math.toRadians(i);
    *     positions.push(new Cesium.Cartesian2(radius * Math.cos(radians), radius * Math.sin(radians)));
    *   }
    *   return positions;
    * }
    *
-   * var volume = new Cesium.PolylineVolumeGeometry({
+   * const volume = new Cesium.PolylineVolumeGeometry({
    *   vertexFormat : Cesium.VertexFormat.POSITION_ONLY,
    *   polylinePositions : Cesium.Cartesian3.fromDegreesArray([
    *     -72.0, 40.0,
@@ -255,35 +238,35 @@ define([
    * });
    */
   function PolylineVolumeGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
-    var positions = options.polylinePositions
-    var shape = options.shapePositions
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    const positions = options.polylinePositions
+    const shape = options.shapePositions
 
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(positions)) {
-      throw new RuntimeError.DeveloperError('options.polylinePositions is required.')
+    if (!defaultValue.defined(positions)) {
+      throw new Check.DeveloperError('options.polylinePositions is required.')
     }
-    if (!when.defined(shape)) {
-      throw new RuntimeError.DeveloperError('options.shapePositions is required.')
+    if (!defaultValue.defined(shape)) {
+      throw new Check.DeveloperError('options.shapePositions is required.')
     }
     //>>includeEnd('debug');
 
     this._positions = positions
     this._shape = shape
-    this._ellipsoid = Matrix2.Ellipsoid.clone(when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84))
-    this._cornerType = when.defaultValue(options.cornerType, PolylineVolumeGeometryLibrary.CornerType.ROUNDED)
-    this._vertexFormat = VertexFormat.VertexFormat.clone(when.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT))
-    this._granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
+    this._ellipsoid = Matrix3.Ellipsoid.clone(defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84))
+    this._cornerType = defaultValue.defaultValue(options.cornerType, PolylineVolumeGeometryLibrary.CornerType.ROUNDED)
+    this._vertexFormat = VertexFormat.VertexFormat.clone(defaultValue.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT))
+    this._granularity = defaultValue.defaultValue(options.granularity, Math.CesiumMath.RADIANS_PER_DEGREE)
     this._workerName = 'createPolylineVolumeGeometry'
 
-    var numComponents = 1 + positions.length * Matrix2.Cartesian3.packedLength
+    let numComponents = 1 + positions.length * Matrix3.Cartesian3.packedLength
     numComponents += 1 + shape.length * Matrix2.Cartesian2.packedLength
 
     /**
      * The number of elements used to pack the object into an array.
      * @type {Number}
      */
-    this.packedLength = numComponents + Matrix2.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 2
+    this.packedLength = numComponents + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 2
   }
 
   /**
@@ -297,27 +280,27 @@ define([
    */
   PolylineVolumeGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(value)) {
-      throw new RuntimeError.DeveloperError('value is required')
+    if (!defaultValue.defined(value)) {
+      throw new Check.DeveloperError('value is required')
     }
-    if (!when.defined(array)) {
-      throw new RuntimeError.DeveloperError('array is required')
+    if (!defaultValue.defined(array)) {
+      throw new Check.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var i
+    let i
 
-    var positions = value._positions
-    var length = positions.length
+    const positions = value._positions
+    let length = positions.length
     array[startingIndex++] = length
 
-    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
-      Matrix2.Cartesian3.pack(positions[i], array, startingIndex)
+    for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
+      Matrix3.Cartesian3.pack(positions[i], array, startingIndex)
     }
 
-    var shape = value._shape
+    const shape = value._shape
     length = shape.length
     array[startingIndex++] = length
 
@@ -325,8 +308,8 @@ define([
       Matrix2.Cartesian2.pack(shape[i], array, startingIndex)
     }
 
-    Matrix2.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    Matrix3.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
     VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex)
     startingIndex += VertexFormat.VertexFormat.packedLength
@@ -337,9 +320,9 @@ define([
     return array
   }
 
-  var scratchEllipsoid = Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE)
-  var scratchVertexFormat = new VertexFormat.VertexFormat()
-  var scratchOptions = {
+  const scratchEllipsoid = Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE)
+  const scratchVertexFormat = new VertexFormat.VertexFormat()
+  const scratchOptions = {
     polylinePositions: undefined,
     shapePositions: undefined,
     ellipsoid: scratchEllipsoid,
@@ -358,39 +341,39 @@ define([
    */
   PolylineVolumeGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    if (!when.defined(array)) {
-      throw new RuntimeError.DeveloperError('array is required')
+    if (!defaultValue.defined(array)) {
+      throw new Check.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0)
 
-    var i
+    let i
 
-    var length = array[startingIndex++]
-    var positions = new Array(length)
+    let length = array[startingIndex++]
+    const positions = new Array(length)
 
-    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
-      positions[i] = Matrix2.Cartesian3.unpack(array, startingIndex)
+    for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
+      positions[i] = Matrix3.Cartesian3.unpack(array, startingIndex)
     }
 
     length = array[startingIndex++]
-    var shape = new Array(length)
+    const shape = new Array(length)
 
     for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian2.packedLength) {
       shape[i] = Matrix2.Cartesian2.unpack(array, startingIndex)
     }
 
-    var ellipsoid = Matrix2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
-    startingIndex += Matrix2.Ellipsoid.packedLength
+    const ellipsoid = Matrix3.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
+    startingIndex += Matrix3.Ellipsoid.packedLength
 
-    var vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
+    const vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
     startingIndex += VertexFormat.VertexFormat.packedLength
 
-    var cornerType = array[startingIndex++]
-    var granularity = array[startingIndex]
+    const cornerType = array[startingIndex++]
+    const granularity = array[startingIndex]
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.polylinePositions = positions
       scratchOptions.shapePositions = shape
       scratchOptions.cornerType = cornerType
@@ -400,7 +383,7 @@ define([
 
     result._positions = positions
     result._shape = shape
-    result._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid, result._ellipsoid)
+    result._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid, result._ellipsoid)
     result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat)
     result._cornerType = cornerType
     result._granularity = granularity
@@ -408,7 +391,7 @@ define([
     return result
   }
 
-  var brScratch = new BoundingRectangle.BoundingRectangle()
+  const brScratch = new BoundingRectangle.BoundingRectangle()
 
   /**
    * Computes the geometric representation of a polyline with a volume, including its vertices, indices, and a bounding sphere.
@@ -417,9 +400,9 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   PolylineVolumeGeometry.createGeometry = function (polylineVolumeGeometry) {
-    var positions = polylineVolumeGeometry._positions
-    var cleanPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(positions, Matrix2.Cartesian3.equalsEpsilon)
-    var shape2D = polylineVolumeGeometry._shape
+    const positions = polylineVolumeGeometry._positions
+    const cleanPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(positions, Matrix3.Cartesian3.equalsEpsilon)
+    let shape2D = polylineVolumeGeometry._shape
     shape2D = PolylineVolumeGeometryLibrary.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(shape2D)
 
     if (cleanPositions.length < 2 || shape2D.length < 3) {
@@ -429,9 +412,9 @@ define([
     if (PolygonPipeline.PolygonPipeline.computeWindingOrder2D(shape2D) === PolygonPipeline.WindingOrder.CLOCKWISE) {
       shape2D.reverse()
     }
-    var boundingRectangle = BoundingRectangle.BoundingRectangle.fromPoints(shape2D, brScratch)
+    const boundingRectangle = BoundingRectangle.BoundingRectangle.fromPoints(shape2D, brScratch)
 
-    var computedPositions = PolylineVolumeGeometryLibrary.PolylineVolumeGeometryLibrary.computePositions(
+    const computedPositions = PolylineVolumeGeometryLibrary.PolylineVolumeGeometryLibrary.computePositions(
       cleanPositions,
       shape2D,
       boundingRectangle,
@@ -442,13 +425,12 @@ define([
   }
 
   function createPolylineVolumeGeometry(polylineVolumeGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       polylineVolumeGeometry = PolylineVolumeGeometry.unpack(polylineVolumeGeometry, offset)
     }
-    polylineVolumeGeometry._ellipsoid = Matrix2.Ellipsoid.clone(polylineVolumeGeometry._ellipsoid)
+    polylineVolumeGeometry._ellipsoid = Matrix3.Ellipsoid.clone(polylineVolumeGeometry._ellipsoid)
     return PolylineVolumeGeometry.createGeometry(polylineVolumeGeometry)
   }
 
   return createPolylineVolumeGeometry
 })
-//# sourceMappingURL=createPolylineVolumeGeometry.js.map

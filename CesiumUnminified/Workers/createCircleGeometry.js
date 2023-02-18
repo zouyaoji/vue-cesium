@@ -1,62 +1,45 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './Matrix2-91d5b6af',
-  './RuntimeError-346a3079',
-  './when-4bbc8319',
-  './EllipseGeometry-0ca521d0',
-  './VertexFormat-f9c1a155',
-  './ComponentDatatype-f194c48b',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-6a692b56',
-  './Transforms-86b6fa28',
-  './combine-83860057',
-  './EllipseGeometryLibrary-c30b4a37',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './GeometryInstance-a3cff41c',
-  './GeometryPipeline-4bea2645',
-  './AttributeCompression-1f6679e1',
-  './EncodedCartesian3-882fbcbd',
-  './IndexDatatype-ee69f1fd',
-  './IntersectionTests-26599c5e',
-  './Plane-4f333bc4'
+  './Matrix3-315394f6',
+  './Check-666ab1a0',
+  './defaultValue-0a909f67',
+  './EllipseGeometry-a9c9b3be',
+  './VertexFormat-6b480673',
+  './Math-2dbd6b93',
+  './Transforms-a05e5e6e',
+  './Matrix2-13178034',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-f7b11d02',
+  './WebGLConstants-a8cc3e8c',
+  './EllipseGeometryLibrary-855d4681',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './GeometryInstance-451dc1cd',
+  './GeometryOffsetAttribute-04332ce7',
+  './GeometryPipeline-8fb0db69',
+  './AttributeCompression-b646d393',
+  './EncodedCartesian3-81f70735',
+  './IndexDatatype-a55ceaa1',
+  './IntersectionTests-27d49265',
+  './Plane-900aa728'
 ], function (
-  Matrix2,
-  RuntimeError,
-  when,
+  Matrix3,
+  Check,
+  defaultValue,
   EllipseGeometry,
   VertexFormat,
+  Math,
+  Transforms,
+  Matrix2,
+  RuntimeError,
+  combine,
   ComponentDatatype,
   WebGLConstants,
-  GeometryOffsetAttribute,
-  Transforms,
-  combine,
   EllipseGeometryLibrary,
   GeometryAttribute,
   GeometryAttributes,
   GeometryInstance,
+  GeometryOffsetAttribute,
   GeometryPipeline,
   AttributeCompression,
   EncodedCartesian3,
@@ -90,21 +73,21 @@ define([
    *
    * @example
    * // Create a circle.
-   * var circle = new Cesium.CircleGeometry({
+   * const circle = new Cesium.CircleGeometry({
    *   center : Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
    *   radius : 100000.0
    * });
-   * var geometry = Cesium.CircleGeometry.createGeometry(circle);
+   * const geometry = Cesium.CircleGeometry.createGeometry(circle);
    */
   function CircleGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
-    var radius = options.radius
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    const radius = options.radius
 
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.number('radius', radius)
+    Check.Check.typeOf.number('radius', radius)
     //>>includeEnd('debug');
 
-    var ellipseGeometryOptions = {
+    const ellipseGeometryOptions = {
       center: options.center,
       semiMajorAxis: radius,
       semiMinorAxis: radius,
@@ -137,20 +120,20 @@ define([
    */
   CircleGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('value', value)
+    Check.Check.typeOf.object('value', value)
     //>>includeEnd('debug');
     return EllipseGeometry.EllipseGeometry.pack(value._ellipseGeometry, array, startingIndex)
   }
 
-  var scratchEllipseGeometry = new EllipseGeometry.EllipseGeometry({
-    center: new Matrix2.Cartesian3(),
+  const scratchEllipseGeometry = new EllipseGeometry.EllipseGeometry({
+    center: new Matrix3.Cartesian3(),
     semiMajorAxis: 1.0,
     semiMinorAxis: 1.0
   })
-  var scratchOptions = {
-    center: new Matrix2.Cartesian3(),
+  const scratchOptions = {
+    center: new Matrix3.Cartesian3(),
     radius: undefined,
-    ellipsoid: Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE),
+    ellipsoid: Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE),
     height: undefined,
     extrudedHeight: undefined,
     granularity: undefined,
@@ -170,9 +153,9 @@ define([
    * @returns {CircleGeometry} The modified result parameter or a new CircleGeometry instance if one was not provided.
    */
   CircleGeometry.unpack = function (array, startingIndex, result) {
-    var ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
-    scratchOptions.center = Matrix2.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
-    scratchOptions.ellipsoid = Matrix2.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
+    const ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
+    scratchOptions.center = Matrix3.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
+    scratchOptions.ellipsoid = Matrix3.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
     scratchOptions.height = ellipseGeometry._height
     scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight
     scratchOptions.granularity = ellipseGeometry._granularity
@@ -180,7 +163,7 @@ define([
     scratchOptions.stRotation = ellipseGeometry._stRotation
     scratchOptions.shadowVolume = ellipseGeometry._shadowVolume
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.radius = ellipseGeometry._semiMajorAxis
       return new CircleGeometry(scratchOptions)
     }
@@ -205,11 +188,11 @@ define([
    * @private
    */
   CircleGeometry.createShadowVolume = function (circleGeometry, minHeightFunc, maxHeightFunc) {
-    var granularity = circleGeometry._ellipseGeometry._granularity
-    var ellipsoid = circleGeometry._ellipseGeometry._ellipsoid
+    const granularity = circleGeometry._ellipseGeometry._granularity
+    const ellipsoid = circleGeometry._ellipseGeometry._ellipsoid
 
-    var minHeight = minHeightFunc(granularity, ellipsoid)
-    var maxHeight = maxHeightFunc(granularity, ellipsoid)
+    const minHeight = minHeightFunc(granularity, ellipsoid)
+    const maxHeight = maxHeightFunc(granularity, ellipsoid)
 
     return new CircleGeometry({
       center: circleGeometry._ellipseGeometry._center,
@@ -245,14 +228,13 @@ define([
   })
 
   function createCircleGeometry(circleGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       circleGeometry = CircleGeometry.unpack(circleGeometry, offset)
     }
-    circleGeometry._ellipseGeometry._center = Matrix2.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
-    circleGeometry._ellipseGeometry._ellipsoid = Matrix2.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
+    circleGeometry._ellipseGeometry._center = Matrix3.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
+    circleGeometry._ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
     return CircleGeometry.createGeometry(circleGeometry)
   }
 
   return createCircleGeometry
 })
-//# sourceMappingURL=createCircleGeometry.js.map

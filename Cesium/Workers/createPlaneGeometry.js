@@ -1,127 +1,129 @@
 define([
-  './when-4bbc8319',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './VertexFormat-71718faa',
-  './combine-83860057',
-  './WebGLConstants-1c8239cc'
-], function (e, t, r, a, n, o, i, m, u, p) {
+  './defaultValue-0a909f67',
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './ComponentDatatype-77274976',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './VertexFormat-ab2e00e6',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './WebGLConstants-a8cc3e8c'
+], function (t, e, n, a, r, o, i, m, u, c, p, s) {
   'use strict'
-  function c(t) {
-    t = e.defaultValue(t, e.defaultValue.EMPTY_OBJECT)
-    var r = e.defaultValue(t.vertexFormat, m.VertexFormat.DEFAULT)
-    ;(this._vertexFormat = r), (this._workerName = 'createPlaneGeometry')
+  function y(e) {
+    e = t.defaultValue(e, t.defaultValue.EMPTY_OBJECT)
+    const n = t.defaultValue(e.vertexFormat, i.VertexFormat.DEFAULT)
+    ;(this._vertexFormat = n), (this._workerName = 'createPlaneGeometry')
   }
-  ;(c.packedLength = m.VertexFormat.packedLength),
-    (c.pack = function (t, r, a) {
-      return (a = e.defaultValue(a, 0)), m.VertexFormat.pack(t._vertexFormat, r, a), r
+  ;(y.packedLength = i.VertexFormat.packedLength),
+    (y.pack = function (e, n, a) {
+      return (a = t.defaultValue(a, 0)), i.VertexFormat.pack(e._vertexFormat, n, a), n
     })
-  var y = new m.VertexFormat(),
-    s = { vertexFormat: y }
-  c.unpack = function (t, r, a) {
-    r = e.defaultValue(r, 0)
-    var n = m.VertexFormat.unpack(t, r, y)
-    return e.defined(a) ? ((a._vertexFormat = m.VertexFormat.clone(n, a._vertexFormat)), a) : new c(s)
+  const l = new i.VertexFormat(),
+    f = { vertexFormat: l }
+  y.unpack = function (e, n, a) {
+    n = t.defaultValue(n, 0)
+    const r = i.VertexFormat.unpack(e, n, l)
+    return t.defined(a) ? ((a._vertexFormat = i.VertexFormat.clone(r, a._vertexFormat)), a) : new y(f)
   }
-  var A = new r.Cartesian3(-0.5, -0.5, 0),
-    l = new r.Cartesian3(0.5, 0.5, 0)
+  const A = new n.Cartesian3(-0.5, -0.5, 0),
+    F = new n.Cartesian3(0.5, 0.5, 0)
   return (
-    (c.createGeometry = function (e) {
-      var a,
-        m,
-        u = e._vertexFormat,
-        p = new i.GeometryAttributes()
-      if (u.position) {
+    (y.createGeometry = function (t) {
+      const i = t._vertexFormat,
+        m = new o.GeometryAttributes()
+      let u, c
+      if (i.position) {
         if (
-          (((m = new Float64Array(12))[0] = A.x),
-          (m[1] = A.y),
-          (m[2] = 0),
-          (m[3] = l.x),
-          (m[4] = A.y),
-          (m[5] = 0),
-          (m[6] = l.x),
-          (m[7] = l.y),
-          (m[8] = 0),
-          (m[9] = A.x),
-          (m[10] = l.y),
-          (m[11] = 0),
-          (p.position = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: m })),
-          u.normal)
+          ((c = new Float64Array(12)),
+          (c[0] = A.x),
+          (c[1] = A.y),
+          (c[2] = 0),
+          (c[3] = F.x),
+          (c[4] = A.y),
+          (c[5] = 0),
+          (c[6] = F.x),
+          (c[7] = F.y),
+          (c[8] = 0),
+          (c[9] = A.x),
+          (c[10] = F.y),
+          (c[11] = 0),
+          (m.position = new r.GeometryAttribute({ componentDatatype: a.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: c })),
+          i.normal)
         ) {
-          var c = new Float32Array(12)
-          ;(c[0] = 0),
-            (c[1] = 0),
-            (c[2] = 1),
-            (c[3] = 0),
-            (c[4] = 0),
-            (c[5] = 1),
-            (c[6] = 0),
-            (c[7] = 0),
-            (c[8] = 1),
-            (c[9] = 0),
-            (c[10] = 0),
-            (c[11] = 1),
-            (p.normal = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: c }))
+          const t = new Float32Array(12)
+          ;(t[0] = 0),
+            (t[1] = 0),
+            (t[2] = 1),
+            (t[3] = 0),
+            (t[4] = 0),
+            (t[5] = 1),
+            (t[6] = 0),
+            (t[7] = 0),
+            (t[8] = 1),
+            (t[9] = 0),
+            (t[10] = 0),
+            (t[11] = 1),
+            (m.normal = new r.GeometryAttribute({ componentDatatype: a.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: t }))
         }
-        if (u.st) {
-          var y = new Float32Array(8)
-          ;(y[0] = 0),
-            (y[1] = 0),
-            (y[2] = 1),
-            (y[3] = 0),
-            (y[4] = 1),
-            (y[5] = 1),
-            (y[6] = 0),
-            (y[7] = 1),
-            (p.st = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: y }))
+        if (i.st) {
+          const t = new Float32Array(8)
+          ;(t[0] = 0),
+            (t[1] = 0),
+            (t[2] = 1),
+            (t[3] = 0),
+            (t[4] = 1),
+            (t[5] = 1),
+            (t[6] = 0),
+            (t[7] = 1),
+            (m.st = new r.GeometryAttribute({ componentDatatype: a.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: t }))
         }
-        if (u.tangent) {
-          var s = new Float32Array(12)
-          ;(s[0] = 1),
-            (s[1] = 0),
-            (s[2] = 0),
-            (s[3] = 1),
-            (s[4] = 0),
-            (s[5] = 0),
-            (s[6] = 1),
-            (s[7] = 0),
-            (s[8] = 0),
-            (s[9] = 1),
-            (s[10] = 0),
-            (s[11] = 0),
-            (p.tangent = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: s }))
+        if (i.tangent) {
+          const t = new Float32Array(12)
+          ;(t[0] = 1),
+            (t[1] = 0),
+            (t[2] = 0),
+            (t[3] = 1),
+            (t[4] = 0),
+            (t[5] = 0),
+            (t[6] = 1),
+            (t[7] = 0),
+            (t[8] = 0),
+            (t[9] = 1),
+            (t[10] = 0),
+            (t[11] = 0),
+            (m.tangent = new r.GeometryAttribute({ componentDatatype: a.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: t }))
         }
-        if (u.bitangent) {
-          var F = new Float32Array(12)
-          ;(F[0] = 0),
-            (F[1] = 1),
-            (F[2] = 0),
-            (F[3] = 0),
-            (F[4] = 1),
-            (F[5] = 0),
-            (F[6] = 0),
-            (F[7] = 1),
-            (F[8] = 0),
-            (F[9] = 0),
-            (F[10] = 1),
-            (F[11] = 0),
-            (p.bitangent = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: F }))
+        if (i.bitangent) {
+          const t = new Float32Array(12)
+          ;(t[0] = 0),
+            (t[1] = 1),
+            (t[2] = 0),
+            (t[3] = 0),
+            (t[4] = 1),
+            (t[5] = 0),
+            (t[6] = 0),
+            (t[7] = 1),
+            (t[8] = 0),
+            (t[9] = 0),
+            (t[10] = 1),
+            (t[11] = 0),
+            (m.bitangent = new r.GeometryAttribute({ componentDatatype: a.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: t }))
         }
-        ;((a = new Uint16Array(6))[0] = 0), (a[1] = 1), (a[2] = 2), (a[3] = 0), (a[4] = 2), (a[5] = 3)
+        ;(u = new Uint16Array(6)), (u[0] = 0), (u[1] = 1), (u[2] = 2), (u[3] = 0), (u[4] = 2), (u[5] = 3)
       }
-      return new o.Geometry({
-        attributes: p,
-        indices: a,
-        primitiveType: o.PrimitiveType.TRIANGLES,
-        boundingSphere: new t.BoundingSphere(r.Cartesian3.ZERO, Math.sqrt(2))
+      return new r.Geometry({
+        attributes: m,
+        indices: u,
+        primitiveType: r.PrimitiveType.TRIANGLES,
+        boundingSphere: new e.BoundingSphere(n.Cartesian3.ZERO, Math.sqrt(2))
       })
     }),
-    function (t, r) {
-      return e.defined(r) && (t = c.unpack(t, r)), c.createGeometry(t)
+    function (e, n) {
+      return t.defined(n) && (e = y.unpack(e, n)), y.createGeometry(e)
     }
   )
 })

@@ -1,52 +1,35 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './AxisAlignedBoundingBox-4171efdd',
-  './Matrix2-91d5b6af',
-  './when-4bbc8319',
-  './TerrainEncoding-304a796a',
-  './IndexDatatype-ee69f1fd',
-  './ComponentDatatype-f194c48b',
-  './RuntimeError-346a3079',
-  './Transforms-86b6fa28',
-  './WebMercatorProjection-c196164d',
+  './AxisAlignedBoundingBox-47525601',
+  './Matrix2-13178034',
+  './Matrix3-315394f6',
+  './defaultValue-0a909f67',
+  './TerrainEncoding-bfdf2021',
+  './IndexDatatype-a55ceaa1',
+  './Math-2dbd6b93',
+  './Check-666ab1a0',
+  './Transforms-a05e5e6e',
+  './WebMercatorProjection-13a90d41',
   './createTaskProcessorWorker',
-  './AttributeCompression-1f6679e1',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057'
+  './RuntimeError-06c93819',
+  './AttributeCompression-b646d393',
+  './ComponentDatatype-f7b11d02',
+  './WebGLConstants-a8cc3e8c',
+  './combine-ca22a614'
 ], function (
   AxisAlignedBoundingBox,
   Matrix2,
-  when,
+  Matrix3,
+  defaultValue,
   TerrainEncoding,
   IndexDatatype,
-  ComponentDatatype,
-  RuntimeError,
+  Math$1,
+  Check,
   Transforms,
   WebMercatorProjection,
   createTaskProcessorWorker,
+  RuntimeError,
   AttributeCompression,
+  ComponentDatatype,
   WebGLConstants,
   combine
 ) {
@@ -66,7 +49,7 @@ define([
    * @see GoogleEarthEnterpriseTerrainProvider
    */
   function TerrainProvider() {
-    RuntimeError.DeveloperError.throwInstantiationError()
+    Check.DeveloperError.throwInstantiationError()
   }
 
   Object.defineProperties(TerrainProvider.prototype, {
@@ -75,11 +58,11 @@ define([
      * to the event, you will be notified of the error and can potentially recover from it.  Event listeners
      * are passed an instance of {@link TileProviderError}.
      * @memberof TerrainProvider.prototype
-     * @type {Event}
+     * @type {Event<TerrainProvider.ErrorEvent>}
      * @readonly
      */
     errorEvent: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -91,7 +74,7 @@ define([
      * @readonly
      */
     credit: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -102,7 +85,7 @@ define([
      * @readonly
      */
     tilingScheme: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -112,7 +95,7 @@ define([
      * @readonly
      */
     ready: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -122,7 +105,7 @@ define([
      * @readonly
      */
     readyPromise: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -135,7 +118,7 @@ define([
      * @readonly
      */
     hasWaterMask: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -146,7 +129,7 @@ define([
      * @readonly
      */
     hasVertexNormals: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     },
 
     /**
@@ -159,11 +142,11 @@ define([
      * @readonly
      */
     availability: {
-      get: RuntimeError.DeveloperError.throwInstantiationError
+      get: Check.DeveloperError.throwInstantiationError
     }
   })
 
-  var regularGridIndicesCache = []
+  const regularGridIndicesCache = []
 
   /**
    * Gets a list of indices for a triangle mesh representing a regular grid.  Calling
@@ -177,19 +160,19 @@ define([
    */
   TerrainProvider.getRegularGridIndices = function (width, height) {
     //>>includeStart('debug', pragmas.debug);
-    if (width * height >= ComponentDatatype.CesiumMath.FOUR_GIGABYTES) {
-      throw new RuntimeError.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
+    if (width * height >= Math$1.CesiumMath.FOUR_GIGABYTES) {
+      throw new Check.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
     }
     //>>includeEnd('debug');
 
-    var byWidth = regularGridIndicesCache[width]
-    if (!when.defined(byWidth)) {
+    let byWidth = regularGridIndicesCache[width]
+    if (!defaultValue.defined(byWidth)) {
       regularGridIndicesCache[width] = byWidth = []
     }
 
-    var indices = byWidth[height]
-    if (!when.defined(indices)) {
-      if (width * height < ComponentDatatype.CesiumMath.SIXTY_FOUR_KILOBYTES) {
+    let indices = byWidth[height]
+    if (!defaultValue.defined(indices)) {
+      if (width * height < Math$1.CesiumMath.SIXTY_FOUR_KILOBYTES) {
         indices = byWidth[height] = new Uint16Array((width - 1) * (height - 1) * 6)
       } else {
         indices = byWidth[height] = new Uint32Array((width - 1) * (height - 1) * 6)
@@ -200,32 +183,32 @@ define([
     return indices
   }
 
-  var regularGridAndEdgeIndicesCache = []
+  const regularGridAndEdgeIndicesCache = []
 
   /**
    * @private
    */
   TerrainProvider.getRegularGridIndicesAndEdgeIndices = function (width, height) {
     //>>includeStart('debug', pragmas.debug);
-    if (width * height >= ComponentDatatype.CesiumMath.FOUR_GIGABYTES) {
-      throw new RuntimeError.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
+    if (width * height >= Math$1.CesiumMath.FOUR_GIGABYTES) {
+      throw new Check.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
     }
     //>>includeEnd('debug');
 
-    var byWidth = regularGridAndEdgeIndicesCache[width]
-    if (!when.defined(byWidth)) {
+    let byWidth = regularGridAndEdgeIndicesCache[width]
+    if (!defaultValue.defined(byWidth)) {
       regularGridAndEdgeIndicesCache[width] = byWidth = []
     }
 
-    var indicesAndEdges = byWidth[height]
-    if (!when.defined(indicesAndEdges)) {
-      var indices = TerrainProvider.getRegularGridIndices(width, height)
+    let indicesAndEdges = byWidth[height]
+    if (!defaultValue.defined(indicesAndEdges)) {
+      const indices = TerrainProvider.getRegularGridIndices(width, height)
 
-      var edgeIndices = getEdgeIndices(width, height)
-      var westIndicesSouthToNorth = edgeIndices.westIndicesSouthToNorth
-      var southIndicesEastToWest = edgeIndices.southIndicesEastToWest
-      var eastIndicesNorthToSouth = edgeIndices.eastIndicesNorthToSouth
-      var northIndicesWestToEast = edgeIndices.northIndicesWestToEast
+      const edgeIndices = getEdgeIndices(width, height)
+      const westIndicesSouthToNorth = edgeIndices.westIndicesSouthToNorth
+      const southIndicesEastToWest = edgeIndices.southIndicesEastToWest
+      const eastIndicesNorthToSouth = edgeIndices.eastIndicesNorthToSouth
+      const northIndicesWestToEast = edgeIndices.northIndicesWestToEast
 
       indicesAndEdges = byWidth[height] = {
         indices: indices,
@@ -239,39 +222,39 @@ define([
     return indicesAndEdges
   }
 
-  var regularGridAndSkirtAndEdgeIndicesCache = []
+  const regularGridAndSkirtAndEdgeIndicesCache = []
 
   /**
    * @private
    */
   TerrainProvider.getRegularGridAndSkirtIndicesAndEdgeIndices = function (width, height) {
     //>>includeStart('debug', pragmas.debug);
-    if (width * height >= ComponentDatatype.CesiumMath.FOUR_GIGABYTES) {
-      throw new RuntimeError.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
+    if (width * height >= Math$1.CesiumMath.FOUR_GIGABYTES) {
+      throw new Check.DeveloperError('The total number of vertices (width * height) must be less than 4,294,967,296.')
     }
     //>>includeEnd('debug');
 
-    var byWidth = regularGridAndSkirtAndEdgeIndicesCache[width]
-    if (!when.defined(byWidth)) {
+    let byWidth = regularGridAndSkirtAndEdgeIndicesCache[width]
+    if (!defaultValue.defined(byWidth)) {
       regularGridAndSkirtAndEdgeIndicesCache[width] = byWidth = []
     }
 
-    var indicesAndEdges = byWidth[height]
-    if (!when.defined(indicesAndEdges)) {
-      var gridVertexCount = width * height
-      var gridIndexCount = (width - 1) * (height - 1) * 6
-      var edgeVertexCount = width * 2 + height * 2
-      var edgeIndexCount = Math.max(0, edgeVertexCount - 4) * 6
-      var vertexCount = gridVertexCount + edgeVertexCount
-      var indexCount = gridIndexCount + edgeIndexCount
+    let indicesAndEdges = byWidth[height]
+    if (!defaultValue.defined(indicesAndEdges)) {
+      const gridVertexCount = width * height
+      const gridIndexCount = (width - 1) * (height - 1) * 6
+      const edgeVertexCount = width * 2 + height * 2
+      const edgeIndexCount = Math.max(0, edgeVertexCount - 4) * 6
+      const vertexCount = gridVertexCount + edgeVertexCount
+      const indexCount = gridIndexCount + edgeIndexCount
 
-      var edgeIndices = getEdgeIndices(width, height)
-      var westIndicesSouthToNorth = edgeIndices.westIndicesSouthToNorth
-      var southIndicesEastToWest = edgeIndices.southIndicesEastToWest
-      var eastIndicesNorthToSouth = edgeIndices.eastIndicesNorthToSouth
-      var northIndicesWestToEast = edgeIndices.northIndicesWestToEast
+      const edgeIndices = getEdgeIndices(width, height)
+      const westIndicesSouthToNorth = edgeIndices.westIndicesSouthToNorth
+      const southIndicesEastToWest = edgeIndices.southIndicesEastToWest
+      const eastIndicesNorthToSouth = edgeIndices.eastIndicesNorthToSouth
+      const northIndicesWestToEast = edgeIndices.northIndicesWestToEast
 
-      var indices = IndexDatatype.IndexDatatype.createTypedArray(vertexCount, indexCount)
+      const indices = IndexDatatype.IndexDatatype.createTypedArray(vertexCount, indexCount)
       addRegularGridIndices(width, height, indices, 0)
       TerrainProvider.addSkirtIndices(
         westIndicesSouthToNorth,
@@ -308,7 +291,7 @@ define([
     indices,
     offset
   ) {
-    var vertexIndex = vertexCount
+    let vertexIndex = vertexCount
     offset = addSkirtIndices(westIndicesSouthToNorth, vertexIndex, indices, offset)
     vertexIndex += westIndicesSouthToNorth.length
     offset = addSkirtIndices(southIndicesEastToWest, vertexIndex, indices, offset)
@@ -319,12 +302,12 @@ define([
   }
 
   function getEdgeIndices(width, height) {
-    var westIndicesSouthToNorth = new Array(height)
-    var southIndicesEastToWest = new Array(width)
-    var eastIndicesNorthToSouth = new Array(height)
-    var northIndicesWestToEast = new Array(width)
+    const westIndicesSouthToNorth = new Array(height)
+    const southIndicesEastToWest = new Array(width)
+    const eastIndicesNorthToSouth = new Array(height)
+    const northIndicesWestToEast = new Array(width)
 
-    var i
+    let i
     for (i = 0; i < width; ++i) {
       northIndicesWestToEast[i] = i
       southIndicesEastToWest[i] = width * height - 1 - i
@@ -344,13 +327,13 @@ define([
   }
 
   function addRegularGridIndices(width, height, indices, offset) {
-    var index = 0
-    for (var j = 0; j < height - 1; ++j) {
-      for (var i = 0; i < width - 1; ++i) {
-        var upperLeft = index
-        var lowerLeft = upperLeft + width
-        var lowerRight = lowerLeft + 1
-        var upperRight = upperLeft + 1
+    let index = 0
+    for (let j = 0; j < height - 1; ++j) {
+      for (let i = 0; i < width - 1; ++i) {
+        const upperLeft = index
+        const lowerLeft = upperLeft + width
+        const lowerRight = lowerLeft + 1
+        const upperRight = upperLeft + 1
 
         indices[offset++] = upperLeft
         indices[offset++] = lowerLeft
@@ -366,11 +349,11 @@ define([
   }
 
   function addSkirtIndices(edgeIndices, vertexIndex, indices, offset) {
-    var previousIndex = edgeIndices[0]
+    let previousIndex = edgeIndices[0]
 
-    var length = edgeIndices.length
-    for (var i = 1; i < length; ++i) {
-      var index = edgeIndices[i]
+    const length = edgeIndices.length
+    for (let i = 1; i < length; ++i) {
+      const index = edgeIndices[i]
 
       indices[offset++] = previousIndex
       indices[offset++] = index
@@ -424,7 +407,7 @@ define([
    *          returns undefined instead of a promise, it is an indication that too many requests are already
    *          pending and the request will be retried later.
    */
-  TerrainProvider.prototype.requestTileGeometry = RuntimeError.DeveloperError.throwInstantiationError
+  TerrainProvider.prototype.requestTileGeometry = Check.DeveloperError.throwInstantiationError
 
   /**
    * Gets the maximum geometric error allowed in a tile at a given level.  This function should not be
@@ -434,7 +417,7 @@ define([
    * @param {Number} level The tile level for which to get the maximum geometric error.
    * @returns {Number} The maximum geometric error.
    */
-  TerrainProvider.prototype.getLevelMaximumGeometricError = RuntimeError.DeveloperError.throwInstantiationError
+  TerrainProvider.prototype.getLevelMaximumGeometricError = Check.DeveloperError.throwInstantiationError
 
   /**
    * Determines whether data for a tile is available to be loaded.
@@ -445,7 +428,7 @@ define([
    * @param {Number} level The level of the tile for which to request geometry.
    * @returns {Boolean|undefined} Undefined if not supported by the terrain provider, otherwise true or false.
    */
-  TerrainProvider.prototype.getTileDataAvailable = RuntimeError.DeveloperError.throwInstantiationError
+  TerrainProvider.prototype.getTileDataAvailable = Check.DeveloperError.throwInstantiationError
 
   /**
    * Makes sure we load availability data for a tile
@@ -456,87 +439,95 @@ define([
    * @param {Number} level The level of the tile for which to request geometry.
    * @returns {undefined|Promise<void>} Undefined if nothing need to be loaded or a Promise that resolves when all required tiles are loaded
    */
-  TerrainProvider.prototype.loadTileDataAvailability = RuntimeError.DeveloperError.throwInstantiationError
+  TerrainProvider.prototype.loadTileDataAvailability = Check.DeveloperError.throwInstantiationError
 
-  var maxShort = 32767
+  /**
+   * A function that is called when an error occurs.
+   * @callback TerrainProvider.ErrorEvent
+   *
+   * @this TerrainProvider
+   * @param {TileProviderError} err An object holding details about the error that occurred.
+   */
 
-  var cartesian3Scratch = new Matrix2.Cartesian3()
-  var scratchMinimum = new Matrix2.Cartesian3()
-  var scratchMaximum = new Matrix2.Cartesian3()
-  var cartographicScratch = new Matrix2.Cartographic()
-  var toPack = new Matrix2.Cartesian2()
+  const maxShort = 32767
+
+  const cartesian3Scratch = new Matrix3.Cartesian3()
+  const scratchMinimum = new Matrix3.Cartesian3()
+  const scratchMaximum = new Matrix3.Cartesian3()
+  const cartographicScratch = new Matrix3.Cartographic()
+  const toPack = new Matrix2.Cartesian2()
 
   function createVerticesFromQuantizedTerrainMesh(parameters, transferableObjects) {
-    var quantizedVertices = parameters.quantizedVertices
-    var quantizedVertexCount = quantizedVertices.length / 3
-    var octEncodedNormals = parameters.octEncodedNormals
-    var edgeVertexCount =
+    const quantizedVertices = parameters.quantizedVertices
+    const quantizedVertexCount = quantizedVertices.length / 3
+    const octEncodedNormals = parameters.octEncodedNormals
+    const edgeVertexCount =
       parameters.westIndices.length + parameters.eastIndices.length + parameters.southIndices.length + parameters.northIndices.length
-    var includeWebMercatorT = parameters.includeWebMercatorT
+    const includeWebMercatorT = parameters.includeWebMercatorT
 
-    var exaggeration = parameters.exaggeration
-    var exaggerationRelativeHeight = parameters.exaggerationRelativeHeight
-    var hasExaggeration = exaggeration !== 1.0
-    var includeGeodeticSurfaceNormals = hasExaggeration
+    const exaggeration = parameters.exaggeration
+    const exaggerationRelativeHeight = parameters.exaggerationRelativeHeight
+    const hasExaggeration = exaggeration !== 1.0
+    const includeGeodeticSurfaceNormals = hasExaggeration
 
-    var rectangle = Matrix2.Rectangle.clone(parameters.rectangle)
-    var west = rectangle.west
-    var south = rectangle.south
-    var east = rectangle.east
-    var north = rectangle.north
+    const rectangle = Matrix2.Rectangle.clone(parameters.rectangle)
+    const west = rectangle.west
+    const south = rectangle.south
+    const east = rectangle.east
+    const north = rectangle.north
 
-    var ellipsoid = Matrix2.Ellipsoid.clone(parameters.ellipsoid)
+    const ellipsoid = Matrix3.Ellipsoid.clone(parameters.ellipsoid)
 
-    var minimumHeight = parameters.minimumHeight
-    var maximumHeight = parameters.maximumHeight
+    const minimumHeight = parameters.minimumHeight
+    const maximumHeight = parameters.maximumHeight
 
-    var center = parameters.relativeToCenter
-    var fromENU = Transforms.Transforms.eastNorthUpToFixedFrame(center, ellipsoid)
-    var toENU = Matrix2.Matrix4.inverseTransformation(fromENU, new Matrix2.Matrix4())
+    const center = parameters.relativeToCenter
+    const fromENU = Transforms.Transforms.eastNorthUpToFixedFrame(center, ellipsoid)
+    const toENU = Matrix2.Matrix4.inverseTransformation(fromENU, new Matrix2.Matrix4())
 
-    var southMercatorY
-    var oneOverMercatorHeight
+    let southMercatorY
+    let oneOverMercatorHeight
     if (includeWebMercatorT) {
       southMercatorY = WebMercatorProjection.WebMercatorProjection.geodeticLatitudeToMercatorAngle(south)
       oneOverMercatorHeight = 1.0 / (WebMercatorProjection.WebMercatorProjection.geodeticLatitudeToMercatorAngle(north) - southMercatorY)
     }
 
-    var uBuffer = quantizedVertices.subarray(0, quantizedVertexCount)
-    var vBuffer = quantizedVertices.subarray(quantizedVertexCount, 2 * quantizedVertexCount)
-    var heightBuffer = quantizedVertices.subarray(quantizedVertexCount * 2, 3 * quantizedVertexCount)
-    var hasVertexNormals = when.defined(octEncodedNormals)
+    const uBuffer = quantizedVertices.subarray(0, quantizedVertexCount)
+    const vBuffer = quantizedVertices.subarray(quantizedVertexCount, 2 * quantizedVertexCount)
+    const heightBuffer = quantizedVertices.subarray(quantizedVertexCount * 2, 3 * quantizedVertexCount)
+    const hasVertexNormals = defaultValue.defined(octEncodedNormals)
 
-    var uvs = new Array(quantizedVertexCount)
-    var heights = new Array(quantizedVertexCount)
-    var positions = new Array(quantizedVertexCount)
-    var webMercatorTs = includeWebMercatorT ? new Array(quantizedVertexCount) : []
-    var geodeticSurfaceNormals = includeGeodeticSurfaceNormals ? new Array(quantizedVertexCount) : []
+    const uvs = new Array(quantizedVertexCount)
+    const heights = new Array(quantizedVertexCount)
+    const positions = new Array(quantizedVertexCount)
+    const webMercatorTs = includeWebMercatorT ? new Array(quantizedVertexCount) : []
+    const geodeticSurfaceNormals = includeGeodeticSurfaceNormals ? new Array(quantizedVertexCount) : []
 
-    var minimum = scratchMinimum
+    const minimum = scratchMinimum
     minimum.x = Number.POSITIVE_INFINITY
     minimum.y = Number.POSITIVE_INFINITY
     minimum.z = Number.POSITIVE_INFINITY
 
-    var maximum = scratchMaximum
+    const maximum = scratchMaximum
     maximum.x = Number.NEGATIVE_INFINITY
     maximum.y = Number.NEGATIVE_INFINITY
     maximum.z = Number.NEGATIVE_INFINITY
 
-    var minLongitude = Number.POSITIVE_INFINITY
-    var maxLongitude = Number.NEGATIVE_INFINITY
-    var minLatitude = Number.POSITIVE_INFINITY
-    var maxLatitude = Number.NEGATIVE_INFINITY
+    let minLongitude = Number.POSITIVE_INFINITY
+    let maxLongitude = Number.NEGATIVE_INFINITY
+    let minLatitude = Number.POSITIVE_INFINITY
+    let maxLatitude = Number.NEGATIVE_INFINITY
 
-    for (var i = 0; i < quantizedVertexCount; ++i) {
-      var rawU = uBuffer[i]
-      var rawV = vBuffer[i]
+    for (let i = 0; i < quantizedVertexCount; ++i) {
+      const rawU = uBuffer[i]
+      const rawV = vBuffer[i]
 
-      var u = rawU / maxShort
-      var v = rawV / maxShort
-      var height = ComponentDatatype.CesiumMath.lerp(minimumHeight, maximumHeight, heightBuffer[i] / maxShort)
+      const u = rawU / maxShort
+      const v = rawV / maxShort
+      const height = Math$1.CesiumMath.lerp(minimumHeight, maximumHeight, heightBuffer[i] / maxShort)
 
-      cartographicScratch.longitude = ComponentDatatype.CesiumMath.lerp(west, east, u)
-      cartographicScratch.latitude = ComponentDatatype.CesiumMath.lerp(south, north, v)
+      cartographicScratch.longitude = Math$1.CesiumMath.lerp(west, east, u)
+      cartographicScratch.latitude = Math$1.CesiumMath.lerp(south, north, v)
       cartographicScratch.height = height
 
       minLongitude = Math.min(cartographicScratch.longitude, minLongitude)
@@ -544,7 +535,7 @@ define([
       minLatitude = Math.min(cartographicScratch.latitude, minLatitude)
       maxLatitude = Math.max(cartographicScratch.latitude, maxLatitude)
 
-      var position = ellipsoid.cartographicToCartesian(cartographicScratch)
+      const position = ellipsoid.cartographicToCartesian(cartographicScratch)
 
       uvs[i] = new Matrix2.Cartesian2(u, v)
       heights[i] = height
@@ -562,31 +553,31 @@ define([
 
       Matrix2.Matrix4.multiplyByPoint(toENU, position, cartesian3Scratch)
 
-      Matrix2.Cartesian3.minimumByComponent(cartesian3Scratch, minimum, minimum)
-      Matrix2.Cartesian3.maximumByComponent(cartesian3Scratch, maximum, maximum)
+      Matrix3.Cartesian3.minimumByComponent(cartesian3Scratch, minimum, minimum)
+      Matrix3.Cartesian3.maximumByComponent(cartesian3Scratch, maximum, maximum)
     }
 
-    var westIndicesSouthToNorth = copyAndSort(parameters.westIndices, function (a, b) {
+    const westIndicesSouthToNorth = copyAndSort(parameters.westIndices, function (a, b) {
       return uvs[a].y - uvs[b].y
     })
-    var eastIndicesNorthToSouth = copyAndSort(parameters.eastIndices, function (a, b) {
+    const eastIndicesNorthToSouth = copyAndSort(parameters.eastIndices, function (a, b) {
       return uvs[b].y - uvs[a].y
     })
-    var southIndicesEastToWest = copyAndSort(parameters.southIndices, function (a, b) {
+    const southIndicesEastToWest = copyAndSort(parameters.southIndices, function (a, b) {
       return uvs[b].x - uvs[a].x
     })
-    var northIndicesWestToEast = copyAndSort(parameters.northIndices, function (a, b) {
+    const northIndicesWestToEast = copyAndSort(parameters.northIndices, function (a, b) {
       return uvs[a].x - uvs[b].x
     })
 
-    var occludeePointInScaledSpace
+    let occludeePointInScaledSpace
     if (minimumHeight < 0.0) {
       // Horizon culling point needs to be recomputed since the tile is at least partly under the ellipsoid.
-      var occluder = new TerrainEncoding.EllipsoidalOccluder(ellipsoid)
+      const occluder = new TerrainEncoding.EllipsoidalOccluder(ellipsoid)
       occludeePointInScaledSpace = occluder.computeHorizonCullingPointPossiblyUnderEllipsoid(center, positions, minimumHeight)
     }
 
-    var hMin = minimumHeight
+    let hMin = minimumHeight
     hMin = Math.min(
       hMin,
       findMinMaxSkirts(parameters.westIndices, parameters.westSkirtHeight, heights, uvs, rectangle, ellipsoid, toENU, minimum, maximum)
@@ -604,8 +595,8 @@ define([
       findMinMaxSkirts(parameters.northIndices, parameters.northSkirtHeight, heights, uvs, rectangle, ellipsoid, toENU, minimum, maximum)
     )
 
-    var aaBox = new AxisAlignedBoundingBox.AxisAlignedBoundingBox(minimum, maximum, center)
-    var encoding = new TerrainEncoding.TerrainEncoding(
+    const aaBox = new AxisAlignedBoundingBox.AxisAlignedBoundingBox(minimum, maximum, center)
+    const encoding = new TerrainEncoding.TerrainEncoding(
       center,
       aaBox,
       hMin,
@@ -617,14 +608,14 @@ define([
       exaggeration,
       exaggerationRelativeHeight
     )
-    var vertexStride = encoding.stride
-    var size = quantizedVertexCount * vertexStride + edgeVertexCount * vertexStride
-    var vertexBuffer = new Float32Array(size)
+    const vertexStride = encoding.stride
+    const size = quantizedVertexCount * vertexStride + edgeVertexCount * vertexStride
+    const vertexBuffer = new Float32Array(size)
 
-    var bufferIndex = 0
-    for (var j = 0; j < quantizedVertexCount; ++j) {
+    let bufferIndex = 0
+    for (let j = 0; j < quantizedVertexCount; ++j) {
       if (hasVertexNormals) {
-        var n = j * 2.0
+        const n = j * 2.0
         toPack.x = octEncodedNormals[n]
         toPack.y = octEncodedNormals[n + 1]
       }
@@ -632,25 +623,25 @@ define([
       bufferIndex = encoding.encode(vertexBuffer, bufferIndex, positions[j], uvs[j], heights[j], toPack, webMercatorTs[j], geodeticSurfaceNormals[j])
     }
 
-    var edgeTriangleCount = Math.max(0, (edgeVertexCount - 4) * 2)
-    var indexBufferLength = parameters.indices.length + edgeTriangleCount * 3
-    var indexBuffer = IndexDatatype.IndexDatatype.createTypedArray(quantizedVertexCount + edgeVertexCount, indexBufferLength)
+    const edgeTriangleCount = Math.max(0, (edgeVertexCount - 4) * 2)
+    const indexBufferLength = parameters.indices.length + edgeTriangleCount * 3
+    const indexBuffer = IndexDatatype.IndexDatatype.createTypedArray(quantizedVertexCount + edgeVertexCount, indexBufferLength)
     indexBuffer.set(parameters.indices, 0)
 
-    var percentage = 0.0001
-    var lonOffset = (maxLongitude - minLongitude) * percentage
-    var latOffset = (maxLatitude - minLatitude) * percentage
-    var westLongitudeOffset = -lonOffset
-    var westLatitudeOffset = 0.0
-    var eastLongitudeOffset = lonOffset
-    var eastLatitudeOffset = 0.0
-    var northLongitudeOffset = 0.0
-    var northLatitudeOffset = latOffset
-    var southLongitudeOffset = 0.0
-    var southLatitudeOffset = -latOffset
+    const percentage = 0.0001
+    const lonOffset = (maxLongitude - minLongitude) * percentage
+    const latOffset = (maxLatitude - minLatitude) * percentage
+    const westLongitudeOffset = -lonOffset
+    const westLatitudeOffset = 0.0
+    const eastLongitudeOffset = lonOffset
+    const eastLatitudeOffset = 0.0
+    const northLongitudeOffset = 0.0
+    const northLatitudeOffset = latOffset
+    const southLongitudeOffset = 0.0
+    const southLatitudeOffset = -latOffset
 
     // Add skirts.
-    var vertexBufferIndex = quantizedVertexCount * vertexStride
+    let vertexBufferIndex = quantizedVertexCount * vertexStride
     addSkirt(
       vertexBuffer,
       vertexBufferIndex,
@@ -749,32 +740,32 @@ define([
   }
 
   function findMinMaxSkirts(edgeIndices, edgeHeight, heights, uvs, rectangle, ellipsoid, toENU, minimum, maximum) {
-    var hMin = Number.POSITIVE_INFINITY
+    let hMin = Number.POSITIVE_INFINITY
 
-    var north = rectangle.north
-    var south = rectangle.south
-    var east = rectangle.east
-    var west = rectangle.west
+    const north = rectangle.north
+    const south = rectangle.south
+    let east = rectangle.east
+    const west = rectangle.west
 
     if (east < west) {
-      east += ComponentDatatype.CesiumMath.TWO_PI
+      east += Math$1.CesiumMath.TWO_PI
     }
 
-    var length = edgeIndices.length
-    for (var i = 0; i < length; ++i) {
-      var index = edgeIndices[i]
-      var h = heights[index]
-      var uv = uvs[index]
+    const length = edgeIndices.length
+    for (let i = 0; i < length; ++i) {
+      const index = edgeIndices[i]
+      const h = heights[index]
+      const uv = uvs[index]
 
-      cartographicScratch.longitude = ComponentDatatype.CesiumMath.lerp(west, east, uv.x)
-      cartographicScratch.latitude = ComponentDatatype.CesiumMath.lerp(south, north, uv.y)
+      cartographicScratch.longitude = Math$1.CesiumMath.lerp(west, east, uv.x)
+      cartographicScratch.latitude = Math$1.CesiumMath.lerp(south, north, uv.y)
       cartographicScratch.height = h - edgeHeight
 
-      var position = ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch)
+      const position = ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch)
       Matrix2.Matrix4.multiplyByPoint(toENU, position, position)
 
-      Matrix2.Cartesian3.minimumByComponent(position, minimum, minimum)
-      Matrix2.Cartesian3.maximumByComponent(position, maximum, maximum)
+      Matrix3.Cartesian3.minimumByComponent(position, minimum, minimum)
+      Matrix3.Cartesian3.maximumByComponent(position, maximum, maximum)
 
       hMin = Math.min(hMin, cartographicScratch.height)
     }
@@ -797,43 +788,43 @@ define([
     longitudeOffset,
     latitudeOffset
   ) {
-    var hasVertexNormals = when.defined(octEncodedNormals)
+    const hasVertexNormals = defaultValue.defined(octEncodedNormals)
 
-    var north = rectangle.north
-    var south = rectangle.south
-    var east = rectangle.east
-    var west = rectangle.west
+    const north = rectangle.north
+    const south = rectangle.south
+    let east = rectangle.east
+    const west = rectangle.west
 
     if (east < west) {
-      east += ComponentDatatype.CesiumMath.TWO_PI
+      east += Math$1.CesiumMath.TWO_PI
     }
 
-    var length = edgeVertices.length
-    for (var i = 0; i < length; ++i) {
-      var index = edgeVertices[i]
-      var h = heights[index]
-      var uv = uvs[index]
+    const length = edgeVertices.length
+    for (let i = 0; i < length; ++i) {
+      const index = edgeVertices[i]
+      const h = heights[index]
+      const uv = uvs[index]
 
-      cartographicScratch.longitude = ComponentDatatype.CesiumMath.lerp(west, east, uv.x) + longitudeOffset
-      cartographicScratch.latitude = ComponentDatatype.CesiumMath.lerp(south, north, uv.y) + latitudeOffset
+      cartographicScratch.longitude = Math$1.CesiumMath.lerp(west, east, uv.x) + longitudeOffset
+      cartographicScratch.latitude = Math$1.CesiumMath.lerp(south, north, uv.y) + latitudeOffset
       cartographicScratch.height = h - skirtLength
 
-      var position = ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch)
+      const position = ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch)
 
       if (hasVertexNormals) {
-        var n = index * 2.0
+        const n = index * 2.0
         toPack.x = octEncodedNormals[n]
         toPack.y = octEncodedNormals[n + 1]
       }
 
-      var webMercatorT
+      let webMercatorT
       if (encoding.hasWebMercatorT) {
         webMercatorT =
           (WebMercatorProjection.WebMercatorProjection.geodeticLatitudeToMercatorAngle(cartographicScratch.latitude) - southMercatorY) *
           oneOverMercatorHeight
       }
 
-      var geodeticSurfaceNormal
+      let geodeticSurfaceNormal
       if (encoding.hasGeodeticSurfaceNormals) {
         geodeticSurfaceNormal = ellipsoid.geodeticSurfaceNormal(position)
       }
@@ -852,7 +843,7 @@ define([
   }
 
   function copyAndSort(typedArray, comparator) {
-    var copy
+    let copy
     if (typeof typedArray.slice === 'function') {
       copy = typedArray.slice()
       if (typeof copy.sort !== 'function') {
@@ -861,7 +852,7 @@ define([
       }
     }
 
-    if (!when.defined(copy)) {
+    if (!defaultValue.defined(copy)) {
       copy = Array.prototype.slice.call(typedArray)
     }
 
@@ -873,4 +864,3 @@ define([
 
   return createVerticesFromQuantizedTerrainMesh$1
 })
-//# sourceMappingURL=createVerticesFromQuantizedTerrainMesh.js.map

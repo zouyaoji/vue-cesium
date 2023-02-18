@@ -1,880 +1,1429 @@
-function setTimeout(e) {
-  e()
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.102
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
+
+if (typeof self === 'undefined') {
+  self = {}
+}
+self.onmessage = function (event) {
+  var data = event.data
+  require(data.loaderConfig, [data.workerModule], function (workerModule) {
+    self.onmessage = workerModule
+    self.CESIUM_BASE_URL = data.loaderConfig.baseUrl
+  })
+}
+function setTimeout(fn) {
+  fn()
 }
 /** vim: et:ts=4:sw=4:sts=4
  * @license RequireJS 2.1.20 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
- */ var requirejs, require, define
-'undefined' == typeof self && (self = {}),
-  (self.onmessage = function (e) {
-    var t = e.data
-    require(t.loaderConfig, [t.workerModule], function (e) {
-      ;(self.onmessage = e), (CESIUM_BASE_URL = t.loaderConfig.baseUrl)
+ */
+var requirejs, require, define
+;(function (global) {
+  var req,
+    s,
+    head,
+    baseElement,
+    dataMain,
+    src,
+    interactiveScript,
+    currentlyAddingScript,
+    mainScript,
+    subPath,
+    version = '2.1.20',
+    commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/gm,
+    cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
+    jsSuffixRegExp = /\.js$/,
+    currDirRegExp = /^\.\//,
+    op = Object.prototype,
+    ostring = op.toString,
+    hasOwn = op.hasOwnProperty,
+    ap = Array.prototype,
+    isBrowser = !!(typeof window !== 'undefined' && typeof navigator !== 'undefined' && window.document),
+    isWebWorker = !isBrowser && typeof importScripts !== 'undefined',
+    readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ? /^complete$/ : /^(complete|loaded)$/,
+    defContextName = '_',
+    isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
+    contexts = {},
+    cfg = {},
+    globalDefQueue = [],
+    useInteractive = false
+  function isFunction(it) {
+    return ostring.call(it) === '[object Function]'
+  }
+  function isArray(it) {
+    return ostring.call(it) === '[object Array]'
+  }
+  function each(ary, func) {
+    if (ary) {
+      var i
+      for (i = 0; i < ary.length; i += 1) {
+        if (ary[i] && func(ary[i], i, ary)) {
+          break
+        }
+      }
+    }
+  }
+  function eachReverse(ary, func) {
+    if (ary) {
+      var i
+      for (i = ary.length - 1; i > -1; i -= 1) {
+        if (ary[i] && func(ary[i], i, ary)) {
+          break
+        }
+      }
+    }
+  }
+  function hasProp(obj, prop) {
+    return hasOwn.call(obj, prop)
+  }
+  function getOwn(obj, prop) {
+    return hasProp(obj, prop) && obj[prop]
+  }
+  function eachProp(obj, func) {
+    var prop
+    for (prop in obj) {
+      if (hasProp(obj, prop)) {
+        if (func(obj[prop], prop)) {
+          break
+        }
+      }
+    }
+  }
+  function mixin(target, source, force, deepStringMixin) {
+    if (source) {
+      eachProp(source, function (value, prop) {
+        if (force || !hasProp(target, prop)) {
+          if (deepStringMixin && typeof value === 'object' && value && !isArray(value) && !isFunction(value) && !(value instanceof RegExp)) {
+            if (!target[prop]) {
+              target[prop] = {}
+            }
+            mixin(target[prop], value, force, deepStringMixin)
+          } else {
+            target[prop] = value
+          }
+        }
+      })
+    }
+    return target
+  }
+  function bind(obj, fn) {
+    return function () {
+      return fn.apply(obj, arguments)
+    }
+  }
+  function scripts() {
+    return document.getElementsByTagName('script')
+  }
+  function defaultOnError(err) {
+    throw err
+  }
+  function getGlobal(value) {
+    if (!value) {
+      return value
+    }
+    var g = global
+    each(value.split('.'), function (part) {
+      g = g[part]
     })
-  }),
-  (function (global) {
-    var req,
-      s,
-      head,
-      baseElement,
-      dataMain,
-      src,
-      interactiveScript,
-      currentlyAddingScript,
-      mainScript,
-      subPath,
-      version = '2.1.20',
-      commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/gm,
-      cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
-      jsSuffixRegExp = /\.js$/,
-      currDirRegExp = /^\.\//,
-      op = Object.prototype,
-      ostring = op.toString,
-      hasOwn = op.hasOwnProperty,
-      ap = Array.prototype,
-      isBrowser = !('undefined' == typeof window || 'undefined' == typeof navigator || !window.document),
-      isWebWorker = !isBrowser && 'undefined' != typeof importScripts,
-      readyRegExp = isBrowser && 'PLAYSTATION 3' === navigator.platform ? /^complete$/ : /^(complete|loaded)$/,
-      defContextName = '_',
-      isOpera = 'undefined' != typeof opera && '[object Opera]' === opera.toString(),
-      contexts = {},
-      cfg = {},
-      globalDefQueue = [],
-      useInteractive = !1
-    function isFunction(e) {
-      return '[object Function]' === ostring.call(e)
+    return g
+  }
+  function makeError(id, msg, err, requireModules) {
+    var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id)
+    e.requireType = id
+    e.requireModules = requireModules
+    if (err) {
+      e.originalError = err
     }
-    function isArray(e) {
-      return '[object Array]' === ostring.call(e)
+    return e
+  }
+  if (typeof define !== 'undefined') {
+    return
+  }
+  if (typeof requirejs !== 'undefined') {
+    if (isFunction(requirejs)) {
+      return
     }
-    function each(e, t) {
-      var i
-      if (e) for (i = 0; i < e.length && (!e[i] || !t(e[i], i, e)); i += 1);
-    }
-    function eachReverse(e, t) {
-      var i
-      if (e) for (i = e.length - 1; i > -1 && (!e[i] || !t(e[i], i, e)); i -= 1);
-    }
-    function hasProp(e, t) {
-      return hasOwn.call(e, t)
-    }
-    function getOwn(e, t) {
-      return hasProp(e, t) && e[t]
-    }
-    function eachProp(e, t) {
-      var i
-      for (i in e) if (hasProp(e, i) && t(e[i], i)) break
-    }
-    function mixin(e, t, i, r) {
-      return (
-        t &&
-          eachProp(t, function (t, n) {
-            ;(!i && hasProp(e, n)) ||
-              (!r || 'object' != typeof t || !t || isArray(t) || isFunction(t) || t instanceof RegExp
-                ? (e[n] = t)
-                : (e[n] || (e[n] = {}), mixin(e[n], t, i, r)))
-          }),
-        e
-      )
-    }
-    function bind(e, t) {
-      return function () {
-        return t.apply(e, arguments)
-      }
-    }
-    function scripts() {
-      return document.getElementsByTagName('script')
-    }
-    function defaultOnError(e) {
-      throw e
-    }
-    function getGlobal(e) {
-      if (!e) return e
-      var t = global
-      return (
-        each(e.split('.'), function (e) {
-          t = t[e]
-        }),
-        t
-      )
-    }
-    function makeError(e, t, i, r) {
-      var n = new Error(t + '\nhttp://requirejs.org/docs/errors.html#' + e)
-      return (n.requireType = e), (n.requireModules = r), i && (n.originalError = i), n
-    }
-    if (void 0 === define) {
-      if (void 0 !== requirejs) {
-        if (isFunction(requirejs)) return
-        ;(cfg = requirejs), (requirejs = void 0)
-      }
-      void 0 === require || isFunction(require) || ((cfg = require), (require = void 0)),
-        (req = requirejs =
-          function (e, t, i, r) {
-            var n,
-              o,
-              a = defContextName
-            return (
-              isArray(e) || 'string' == typeof e || ((o = e), isArray(t) ? ((e = t), (t = i), (i = r)) : (e = [])),
-              o && o.context && (a = o.context),
-              (n = getOwn(contexts, a)) || (n = contexts[a] = req.s.newContext(a)),
-              o && n.configure(o),
-              n.require(e, t, i)
-            )
-          }),
-        (req.config = function (e) {
-          return req(e)
-        }),
-        (req.nextTick =
-          void 0 !== setTimeout
-            ? function (e) {
-                setTimeout(e, 4)
-              }
-            : function (e) {
-                e()
-              }),
-        require || (require = req),
-        (req.version = version),
-        (req.jsExtRegExp = /^\/|:|\?|\.js$/),
-        (req.isBrowser = isBrowser),
-        (s = req.s = { contexts: contexts, newContext: newContext }),
-        req({}),
-        each(['toUrl', 'undef', 'defined', 'specified'], function (e) {
-          req[e] = function () {
-            var t = contexts[defContextName]
-            return t.require[e].apply(t, arguments)
+    cfg = requirejs
+    requirejs = void 0
+  }
+  if (typeof require !== 'undefined' && !isFunction(require)) {
+    cfg = require
+    require = void 0
+  }
+  function newContext(contextName) {
+    var inCheckLoaded,
+      Module,
+      context,
+      handlers,
+      checkLoadedTimeoutId,
+      config = {
+        //Defaults. Do not set a default for map
+        //config to speed up normalize(), which
+        //will run faster if there is no default.
+        waitSeconds: 7,
+        baseUrl: './',
+        paths: {},
+        bundles: {},
+        pkgs: {},
+        shim: {},
+        config: {}
+      },
+      registry = {},
+      enabledRegistry = {},
+      undefEvents = {},
+      defQueue = [],
+      defined = {},
+      urlFetched = {},
+      bundlesMap = {},
+      requireCounter = 1,
+      unnormalizedCounter = 1
+    function trimDots(ary) {
+      var i, part
+      for (i = 0; i < ary.length; i++) {
+        part = ary[i]
+        if (part === '.') {
+          ary.splice(i, 1)
+          i -= 1
+        } else if (part === '..') {
+          if (i === 0 || (i === 1 && ary[2] === '..') || ary[i - 1] === '..') {
+            continue
+          } else if (i > 0) {
+            ary.splice(i - 1, 2)
+            i -= 2
           }
-        }),
-        isBrowser &&
-          ((head = s.head = document.getElementsByTagName('head')[0]),
-          (baseElement = document.getElementsByTagName('base')[0]),
-          baseElement && (head = s.head = baseElement.parentNode)),
-        (req.onError = defaultOnError),
-        (req.createNode = function (e, t, i) {
-          var r = e.xhtml ? document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') : document.createElement('script')
-          return (r.type = e.scriptType || 'text/javascript'), (r.charset = 'utf-8'), (r.async = !0), r
-        }),
-        (req.load = function (e, t, i) {
-          var r,
-            n = (e && e.config) || {}
-          if (isBrowser)
-            return (
-              (r = req.createNode(n, t, i)),
-              n.onNodeCreated && n.onNodeCreated(r, n, t, i),
-              r.setAttribute('data-requirecontext', e.contextName),
-              r.setAttribute('data-requiremodule', t),
-              !r.attachEvent || (r.attachEvent.toString && r.attachEvent.toString().indexOf('[native code') < 0) || isOpera
-                ? (r.addEventListener('load', e.onScriptLoad, !1), r.addEventListener('error', e.onScriptError, !1))
-                : ((useInteractive = !0), r.attachEvent('onreadystatechange', e.onScriptLoad)),
-              (r.src = i),
-              (currentlyAddingScript = r),
-              baseElement ? head.insertBefore(r, baseElement) : head.appendChild(r),
-              (currentlyAddingScript = null),
-              r
-            )
-          if (isWebWorker)
-            try {
-              importScripts(i), e.completeLoad(t)
-            } catch (r) {
-              e.onError(makeError('importscripts', 'importScripts failed for ' + t + ' at ' + i, r, [t]))
-            }
-        }),
-        isBrowser &&
-          !cfg.skipDataMain &&
-          eachReverse(scripts(), function (e) {
-            if ((head || (head = e.parentNode), (dataMain = e.getAttribute('data-main'))))
-              return (
-                (mainScript = dataMain),
-                cfg.baseUrl ||
-                  ((src = mainScript.split('/')),
-                  (mainScript = src.pop()),
-                  (subPath = src.length ? src.join('/') + '/' : './'),
-                  (cfg.baseUrl = subPath)),
-                (mainScript = mainScript.replace(jsSuffixRegExp, '')),
-                req.jsExtRegExp.test(mainScript) && (mainScript = dataMain),
-                (cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript]),
-                !0
-              )
-          }),
-        (define = function (e, t, i) {
-          var r, n
-          'string' != typeof e && ((i = t), (t = e), (e = null)),
-            isArray(t) || ((i = t), (t = null)),
-            !t &&
-              isFunction(i) &&
-              ((t = []),
-              i.length &&
-                (i
-                  .toString()
-                  .replace(commentRegExp, '')
-                  .replace(cjsRequireRegExp, function (e, i) {
-                    t.push(i)
-                  }),
-                (t = (1 === i.length ? ['require'] : ['require', 'exports', 'module']).concat(t)))),
-            useInteractive &&
-              (r = currentlyAddingScript || getInteractiveScript()) &&
-              (e || (e = r.getAttribute('data-requiremodule')), (n = contexts[r.getAttribute('data-requirecontext')])),
-            n ? (n.defQueue.push([e, t, i]), (n.defQueueMap[e] = !0)) : globalDefQueue.push([e, t, i])
-        }),
-        (define.amd = { jQuery: !0 }),
-        (req.exec = function (text) {
-          return eval(text)
-        }),
-        req(cfg)
+        }
+      }
     }
-    function newContext(e) {
-      var t,
+    function normalize(name, baseName, applyMap) {
+      var pkgMain,
+        mapValue,
+        nameParts,
         i,
-        r,
-        n,
-        o,
-        a = { waitSeconds: 7, baseUrl: './', paths: {}, bundles: {}, pkgs: {}, shim: {}, config: {} },
-        s = {},
-        u = {},
-        c = {},
-        d = [],
-        p = {},
-        f = {},
-        l = {},
-        h = 1,
-        m = 1
-      function g(e, t, i) {
-        var r,
-          n,
-          o,
-          s,
-          u,
-          c,
-          d,
-          p,
-          f,
-          l,
-          h = t && t.split('/'),
-          m = a.map,
-          g = m && m['*']
-        if (
-          (e &&
-            ((c = (e = e.split('/')).length - 1),
-            a.nodeIdCompat && jsSuffixRegExp.test(e[c]) && (e[c] = e[c].replace(jsSuffixRegExp, '')),
-            '.' === e[0].charAt(0) && h && (e = h.slice(0, h.length - 1).concat(e)),
-            (function (e) {
-              var t, i
-              for (t = 0; t < e.length; t++)
-                if ('.' === (i = e[t])) e.splice(t, 1), (t -= 1)
-                else if ('..' === i) {
-                  if (0 === t || (1 === t && '..' === e[2]) || '..' === e[t - 1]) continue
-                  t > 0 && (e.splice(t - 1, 2), (t -= 2))
-                }
-            })(e),
-            (e = e.join('/'))),
-          i && m && (h || g))
-        ) {
-          e: for (o = (n = e.split('/')).length; o > 0; o -= 1) {
-            if (((u = n.slice(0, o).join('/')), h))
-              for (s = h.length; s > 0; s -= 1)
-                if ((r = getOwn(m, h.slice(0, s).join('/'))) && (r = getOwn(r, u))) {
-                  ;(d = r), (p = o)
-                  break e
-                }
-            !f && g && getOwn(g, u) && ((f = getOwn(g, u)), (l = o))
-          }
-          !d && f && ((d = f), (p = l)), d && (n.splice(0, p, d), (e = n.join('/')))
+        j,
+        nameSegment,
+        lastIndex,
+        foundMap,
+        foundI,
+        foundStarMap,
+        starI,
+        normalizedBaseParts,
+        baseParts = baseName && baseName.split('/'),
+        map = config.map,
+        starMap = map && map['*']
+      if (name) {
+        name = name.split('/')
+        lastIndex = name.length - 1
+        if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+          name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '')
         }
-        return getOwn(a.pkgs, e) || e
+        if (name[0].charAt(0) === '.' && baseParts) {
+          normalizedBaseParts = baseParts.slice(0, baseParts.length - 1)
+          name = normalizedBaseParts.concat(name)
+        }
+        trimDots(name)
+        name = name.join('/')
       }
-      function v(e) {
-        isBrowser &&
-          each(scripts(), function (t) {
-            if (t.getAttribute('data-requiremodule') === e && t.getAttribute('data-requirecontext') === r.contextName)
-              return t.parentNode.removeChild(t), !0
+      if (applyMap && map && (baseParts || starMap)) {
+        nameParts = name.split('/')
+        outerLoop: for (i = nameParts.length; i > 0; i -= 1) {
+          nameSegment = nameParts.slice(0, i).join('/')
+          if (baseParts) {
+            for (j = baseParts.length; j > 0; j -= 1) {
+              mapValue = getOwn(map, baseParts.slice(0, j).join('/'))
+              if (mapValue) {
+                mapValue = getOwn(mapValue, nameSegment)
+                if (mapValue) {
+                  foundMap = mapValue
+                  foundI = i
+                  break outerLoop
+                }
+              }
+            }
+          }
+          if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
+            foundStarMap = getOwn(starMap, nameSegment)
+            starI = i
+          }
+        }
+        if (!foundMap && foundStarMap) {
+          foundMap = foundStarMap
+          foundI = starI
+        }
+        if (foundMap) {
+          nameParts.splice(0, foundI, foundMap)
+          name = nameParts.join('/')
+        }
+      }
+      pkgMain = getOwn(config.pkgs, name)
+      return pkgMain ? pkgMain : name
+    }
+    function removeScript(name) {
+      if (isBrowser) {
+        each(scripts(), function (scriptNode) {
+          if (scriptNode.getAttribute('data-requiremodule') === name && scriptNode.getAttribute('data-requirecontext') === context.contextName) {
+            scriptNode.parentNode.removeChild(scriptNode)
+            return true
+          }
+        })
+      }
+    }
+    function hasPathFallback(id) {
+      var pathConfig = getOwn(config.paths, id)
+      if (pathConfig && isArray(pathConfig) && pathConfig.length > 1) {
+        pathConfig.shift()
+        context.require.undef(id)
+        context.makeRequire(null, {
+          skipMap: true
+        })([id])
+        return true
+      }
+    }
+    function splitPrefix(name) {
+      var prefix,
+        index = name ? name.indexOf('!') : -1
+      if (index > -1) {
+        prefix = name.substring(0, index)
+        name = name.substring(index + 1, name.length)
+      }
+      return [prefix, name]
+    }
+    function makeModuleMap(name, parentModuleMap, isNormalized, applyMap) {
+      var url,
+        pluginModule,
+        suffix,
+        nameParts,
+        prefix = null,
+        parentName = parentModuleMap ? parentModuleMap.name : null,
+        originalName = name,
+        isDefine = true,
+        normalizedName = ''
+      if (!name) {
+        isDefine = false
+        name = '_@r' + (requireCounter += 1)
+      }
+      nameParts = splitPrefix(name)
+      prefix = nameParts[0]
+      name = nameParts[1]
+      if (prefix) {
+        prefix = normalize(prefix, parentName, applyMap)
+        pluginModule = getOwn(defined, prefix)
+      }
+      if (name) {
+        if (prefix) {
+          if (pluginModule && pluginModule.normalize) {
+            normalizedName = pluginModule.normalize(name, function (name2) {
+              return normalize(name2, parentName, applyMap)
+            })
+          } else {
+            normalizedName = name.indexOf('!') === -1 ? normalize(name, parentName, applyMap) : name
+          }
+        } else {
+          normalizedName = normalize(name, parentName, applyMap)
+          nameParts = splitPrefix(normalizedName)
+          prefix = nameParts[0]
+          normalizedName = nameParts[1]
+          isNormalized = true
+          url = context.nameToUrl(normalizedName)
+        }
+      }
+      suffix = prefix && !pluginModule && !isNormalized ? '_unnormalized' + (unnormalizedCounter += 1) : ''
+      return {
+        prefix,
+        name: normalizedName,
+        parentMap: parentModuleMap,
+        unnormalized: !!suffix,
+        url,
+        originalName,
+        isDefine,
+        id: (prefix ? prefix + '!' + normalizedName : normalizedName) + suffix
+      }
+    }
+    function getModule(depMap) {
+      var id = depMap.id,
+        mod = getOwn(registry, id)
+      if (!mod) {
+        mod = registry[id] = new context.Module(depMap)
+      }
+      return mod
+    }
+    function on(depMap, name, fn) {
+      var id = depMap.id,
+        mod = getOwn(registry, id)
+      if (hasProp(defined, id) && (!mod || mod.defineEmitComplete)) {
+        if (name === 'defined') {
+          fn(defined[id])
+        }
+      } else {
+        mod = getModule(depMap)
+        if (mod.error && name === 'error') {
+          fn(mod.error)
+        } else {
+          mod.on(name, fn)
+        }
+      }
+    }
+    function onError(err, errback) {
+      var ids = err.requireModules,
+        notified = false
+      if (errback) {
+        errback(err)
+      } else {
+        each(ids, function (id) {
+          var mod = getOwn(registry, id)
+          if (mod) {
+            mod.error = err
+            if (mod.events.error) {
+              notified = true
+              mod.emit('error', err)
+            }
+          }
+        })
+        if (!notified) {
+          req.onError(err)
+        }
+      }
+    }
+    function takeGlobalQueue() {
+      if (globalDefQueue.length) {
+        each(globalDefQueue, function (queueItem) {
+          var id = queueItem[0]
+          if (typeof id === 'string') {
+            context.defQueueMap[id] = true
+          }
+          defQueue.push(queueItem)
+        })
+        globalDefQueue = []
+      }
+    }
+    handlers = {
+      require: function (mod) {
+        if (mod.require) {
+          return mod.require
+        } else {
+          return (mod.require = context.makeRequire(mod.map))
+        }
+      },
+      exports: function (mod) {
+        mod.usingExports = true
+        if (mod.map.isDefine) {
+          if (mod.exports) {
+            return (defined[mod.map.id] = mod.exports)
+          } else {
+            return (mod.exports = defined[mod.map.id] = {})
+          }
+        }
+      },
+      module: function (mod) {
+        if (mod.module) {
+          return mod.module
+        } else {
+          return (mod.module = {
+            id: mod.map.id,
+            uri: mod.map.url,
+            config: function () {
+              return getOwn(config.config, mod.map.id) || {}
+            },
+            exports: mod.exports || (mod.exports = {})
           })
+        }
       }
-      function x(e) {
-        var t = getOwn(a.paths, e)
-        if (t && isArray(t) && t.length > 1) return t.shift(), r.require.undef(e), r.makeRequire(null, { skipMap: !0 })([e]), !0
-      }
-      function b(e) {
-        var t,
-          i = e ? e.indexOf('!') : -1
-        return i > -1 && ((t = e.substring(0, i)), (e = e.substring(i + 1, e.length))), [t, e]
-      }
-      function q(e, t, i, n) {
-        var o,
-          a,
-          s,
-          u,
-          c = null,
-          d = t ? t.name : null,
-          f = e,
-          l = !0,
-          v = ''
-        return (
-          e || ((l = !1), (e = '_@r' + (h += 1))),
-          (c = (u = b(e))[0]),
-          (e = u[1]),
-          c && ((c = g(c, d, n)), (a = getOwn(p, c))),
-          e &&
-            (c
-              ? (v =
-                  a && a.normalize
-                    ? a.normalize(e, function (e) {
-                        return g(e, d, n)
-                      })
-                    : -1 === e.indexOf('!')
-                    ? g(e, d, n)
-                    : e)
-              : ((c = (u = b((v = g(e, d, n))))[0]), (v = u[1]), (i = !0), (o = r.nameToUrl(v)))),
-          {
-            prefix: c,
-            name: v,
-            parentMap: t,
-            unnormalized: !!(s = !c || a || i ? '' : '_unnormalized' + (m += 1)),
-            url: o,
-            originalName: f,
-            isDefine: l,
-            id: (c ? c + '!' + v : v) + s
+    }
+    function cleanRegistry(id) {
+      delete registry[id]
+      delete enabledRegistry[id]
+    }
+    function breakCycle(mod, traced, processed) {
+      var id = mod.map.id
+      if (mod.error) {
+        mod.emit('error', mod.error)
+      } else {
+        traced[id] = true
+        each(mod.depMaps, function (depMap, i) {
+          var depId = depMap.id,
+            dep = getOwn(registry, depId)
+          if (dep && !mod.depMatched[i] && !processed[depId]) {
+            if (getOwn(traced, depId)) {
+              mod.defineDep(i, defined[depId])
+              mod.check()
+            } else {
+              breakCycle(dep, traced, processed)
+            }
           }
-        )
+        })
+        processed[id] = true
       }
-      function E(e) {
-        var t = e.id,
-          i = getOwn(s, t)
-        return i || (i = s[t] = new r.Module(e)), i
+    }
+    function checkLoaded() {
+      var err,
+        usingPathFallback,
+        waitInterval = config.waitSeconds * 1e3,
+        expired = waitInterval && context.startTime + waitInterval < new Date().getTime(),
+        noLoads = [],
+        reqCalls = [],
+        stillLoading = false,
+        needCycleCheck = true
+      if (inCheckLoaded) {
+        return
       }
-      function w(e, t, i) {
-        var r = e.id,
-          n = getOwn(s, r)
-        !hasProp(p, r) || (n && !n.defineEmitComplete) ? ((n = E(e)).error && 'error' === t ? i(n.error) : n.on(t, i)) : 'defined' === t && i(p[r])
+      inCheckLoaded = true
+      eachProp(enabledRegistry, function (mod) {
+        var map = mod.map,
+          modId = map.id
+        if (!mod.enabled) {
+          return
+        }
+        if (!map.isDefine) {
+          reqCalls.push(mod)
+        }
+        if (!mod.error) {
+          if (!mod.inited && expired) {
+            if (hasPathFallback(modId)) {
+              usingPathFallback = true
+              stillLoading = true
+            } else {
+              noLoads.push(modId)
+              removeScript(modId)
+            }
+          } else if (!mod.inited && mod.fetched && map.isDefine) {
+            stillLoading = true
+            if (!map.prefix) {
+              return (needCycleCheck = false)
+            }
+          }
+        }
+      })
+      if (expired && noLoads.length) {
+        err = makeError('timeout', 'Load timeout for modules: ' + noLoads, null, noLoads)
+        err.contextName = context.contextName
+        return onError(err)
       }
-      function y(e, t) {
-        var i = e.requireModules,
-          r = !1
-        t
-          ? t(e)
-          : (each(i, function (t) {
-              var i = getOwn(s, t)
-              i && ((i.error = e), i.events.error && ((r = !0), i.emit('error', e)))
-            }),
-            r || req.onError(e))
+      if (needCycleCheck) {
+        each(reqCalls, function (mod) {
+          breakCycle(mod, {}, {})
+        })
       }
-      function S() {
-        globalDefQueue.length &&
-          (each(globalDefQueue, function (e) {
-            var t = e[0]
-            'string' == typeof t && (r.defQueueMap[t] = !0), d.push(e)
-          }),
-          (globalDefQueue = []))
+      if ((!expired || usingPathFallback) && stillLoading) {
+        if ((isBrowser || isWebWorker) && !checkLoadedTimeoutId) {
+          checkLoadedTimeoutId = setTimeout(function () {
+            checkLoadedTimeoutId = 0
+            checkLoaded()
+          }, 50)
+        }
       }
-      function k(e) {
-        delete s[e], delete u[e]
-      }
-      function M(e, t, i) {
-        var r = e.map.id
-        e.error
-          ? e.emit('error', e.error)
-          : ((t[r] = !0),
-            each(e.depMaps, function (r, n) {
-              var o = r.id,
-                a = getOwn(s, o)
-              !a || e.depMatched[n] || i[o] || (getOwn(t, o) ? (e.defineDep(n, p[o]), e.check()) : M(a, t, i))
-            }),
-            (i[r] = !0))
-      }
-      function O() {
-        var e,
-          i,
-          n = 1e3 * a.waitSeconds,
-          s = n && r.startTime + n < new Date().getTime(),
-          c = [],
-          d = [],
-          p = !1,
-          f = !0
-        if (!t) {
-          if (
-            ((t = !0),
-            eachProp(u, function (e) {
-              var t = e.map,
-                r = t.id
-              if (e.enabled && (t.isDefine || d.push(e), !e.error))
-                if (!e.inited && s) x(r) ? ((i = !0), (p = !0)) : (c.push(r), v(r))
-                else if (!e.inited && e.fetched && t.isDefine && ((p = !0), !t.prefix)) return (f = !1)
-            }),
-            s && c.length)
+      inCheckLoaded = false
+    }
+    Module = function (map) {
+      this.events = getOwn(undefEvents, map.id) || {}
+      this.map = map
+      this.shim = getOwn(config.shim, map.id)
+      this.depExports = []
+      this.depMaps = []
+      this.depMatched = []
+      this.pluginMaps = {}
+      this.depCount = 0
+    }
+    Module.prototype = {
+      init: function (depMaps, factory, errback, options) {
+        options = options || {}
+        if (this.inited) {
+          return
+        }
+        this.factory = factory
+        if (errback) {
+          this.on('error', errback)
+        } else if (this.events.error) {
+          errback = bind(this, function (err) {
+            this.emit('error', err)
+          })
+        }
+        this.depMaps = depMaps && depMaps.slice(0)
+        this.errback = errback
+        this.inited = true
+        this.ignore = options.ignore
+        if (options.enabled || this.enabled) {
+          this.enable()
+        } else {
+          this.check()
+        }
+      },
+      defineDep: function (i, depExports) {
+        if (!this.depMatched[i]) {
+          this.depMatched[i] = true
+          this.depCount -= 1
+          this.depExports[i] = depExports
+        }
+      },
+      fetch: function () {
+        if (this.fetched) {
+          return
+        }
+        this.fetched = true
+        context.startTime = new Date().getTime()
+        var map = this.map
+        if (this.shim) {
+          context.makeRequire(this.map, {
+            enableBuildCallback: true
+          })(
+            this.shim.deps || [],
+            bind(this, function () {
+              return map.prefix ? this.callPlugin() : this.load()
+            })
           )
-            return ((e = makeError('timeout', 'Load timeout for modules: ' + c, null, c)).contextName = r.contextName), y(e)
-          f &&
-            each(d, function (e) {
-              M(e, {}, {})
-            }),
-            (s && !i) ||
-              !p ||
-              (!isBrowser && !isWebWorker) ||
-              o ||
-              (o = setTimeout(function () {
-                ;(o = 0), O()
-              }, 50)),
-            (t = !1)
+        } else {
+          return map.prefix ? this.callPlugin() : this.load()
         }
-      }
-      function j(e) {
-        hasProp(p, e[0]) || E(q(e[0], null, !0)).init(e[1], e[2])
-      }
-      function P(e, t, i, r) {
-        e.detachEvent && !isOpera ? r && e.detachEvent(r, t) : e.removeEventListener(i, t, !1)
-      }
-      function R(e) {
-        var t = e.currentTarget || e.srcElement
-        return (
-          P(t, r.onScriptLoad, 'load', 'onreadystatechange'),
-          P(t, r.onScriptError, 'error'),
-          { node: t, id: t && t.getAttribute('data-requiremodule') }
-        )
-      }
-      function A() {
-        var e
-        for (S(); d.length; ) {
-          if (null === (e = d.shift())[0]) return y(makeError('mismatch', 'Mismatched anonymous define() module: ' + e[e.length - 1]))
-          j(e)
+      },
+      load: function () {
+        var url = this.map.url
+        if (!urlFetched[url]) {
+          urlFetched[url] = true
+          context.load(this.map.id, url)
         }
-        r.defQueueMap = {}
-      }
-      return (
-        (n = {
-          require: function (e) {
-            return e.require ? e.require : (e.require = r.makeRequire(e.map))
-          },
-          exports: function (e) {
-            if (((e.usingExports = !0), e.map.isDefine)) return e.exports ? (p[e.map.id] = e.exports) : (e.exports = p[e.map.id] = {})
-          },
-          module: function (e) {
-            return e.module
-              ? e.module
-              : (e.module = {
-                  id: e.map.id,
-                  uri: e.map.url,
-                  config: function () {
-                    return getOwn(a.config, e.map.id) || {}
-                  },
-                  exports: e.exports || (e.exports = {})
-                })
+      },
+      /**
+       * Checks if the module is ready to define itself, and if so,
+       * define it.
+       * @private
+       */
+      check: function () {
+        if (!this.enabled || this.enabling) {
+          return
+        }
+        var err,
+          cjsModule,
+          id = this.map.id,
+          depExports = this.depExports,
+          exports = this.exports,
+          factory = this.factory
+        if (!this.inited) {
+          if (!hasProp(context.defQueueMap, id)) {
+            this.fetch()
           }
-        }),
-        ((i = function (e) {
-          ;(this.events = getOwn(c, e.id) || {}),
-            (this.map = e),
-            (this.shim = getOwn(a.shim, e.id)),
-            (this.depExports = []),
-            (this.depMaps = []),
-            (this.depMatched = []),
-            (this.pluginMaps = {}),
-            (this.depCount = 0)
-        }).prototype = {
-          init: function (e, t, i, r) {
-            ;(r = r || {}),
-              this.inited ||
-                ((this.factory = t),
-                i
-                  ? this.on('error', i)
-                  : this.events.error &&
-                    (i = bind(this, function (e) {
-                      this.emit('error', e)
-                    })),
-                (this.depMaps = e && e.slice(0)),
-                (this.errback = i),
-                (this.inited = !0),
-                (this.ignore = r.ignore),
-                r.enabled || this.enabled ? this.enable() : this.check())
-          },
-          defineDep: function (e, t) {
-            this.depMatched[e] || ((this.depMatched[e] = !0), (this.depCount -= 1), (this.depExports[e] = t))
-          },
-          fetch: function () {
-            if (!this.fetched) {
-              ;(this.fetched = !0), (r.startTime = new Date().getTime())
-              var e = this.map
-              if (!this.shim) return e.prefix ? this.callPlugin() : this.load()
-              r.makeRequire(this.map, { enableBuildCallback: !0 })(
-                this.shim.deps || [],
-                bind(this, function () {
-                  return e.prefix ? this.callPlugin() : this.load()
-                })
-              )
-            }
-          },
-          load: function () {
-            var e = this.map.url
-            f[e] || ((f[e] = !0), r.load(this.map.id, e))
-          },
-          check: function () {
-            if (this.enabled && !this.enabling) {
-              var e,
-                t,
-                i = this.map.id,
-                n = this.depExports,
-                o = this.exports,
-                a = this.factory
-              if (this.inited) {
-                if (this.error) this.emit('error', this.error)
-                else if (!this.defining) {
-                  if (((this.defining = !0), this.depCount < 1 && !this.defined)) {
-                    if (isFunction(a)) {
-                      if ((this.events.error && this.map.isDefine) || req.onError !== defaultOnError)
-                        try {
-                          o = r.execCb(i, a, n, o)
-                        } catch (t) {
-                          e = t
-                        }
-                      else o = r.execCb(i, a, n, o)
-                      if ((this.map.isDefine && void 0 === o && ((t = this.module) ? (o = t.exports) : this.usingExports && (o = this.exports)), e))
-                        return (
-                          (e.requireMap = this.map),
-                          (e.requireModules = this.map.isDefine ? [this.map.id] : null),
-                          (e.requireType = this.map.isDefine ? 'define' : 'require'),
-                          y((this.error = e))
-                        )
-                    } else o = a
-                    ;(this.exports = o),
-                      this.map.isDefine && !this.ignore && ((p[i] = o), req.onResourceLoad && req.onResourceLoad(r, this.map, this.depMaps)),
-                      k(i),
-                      (this.defined = !0)
-                  }
-                  ;(this.defining = !1),
-                    this.defined &&
-                      !this.defineEmitted &&
-                      ((this.defineEmitted = !0), this.emit('defined', this.exports), (this.defineEmitComplete = !0))
+        } else if (this.error) {
+          this.emit('error', this.error)
+        } else if (!this.defining) {
+          this.defining = true
+          if (this.depCount < 1 && !this.defined) {
+            if (isFunction(factory)) {
+              if ((this.events.error && this.map.isDefine) || req.onError !== defaultOnError) {
+                try {
+                  exports = context.execCb(id, factory, depExports, exports)
+                } catch (e) {
+                  err = e
                 }
-              } else hasProp(r.defQueueMap, i) || this.fetch()
+              } else {
+                exports = context.execCb(id, factory, depExports, exports)
+              }
+              if (this.map.isDefine && exports === void 0) {
+                cjsModule = this.module
+                if (cjsModule) {
+                  exports = cjsModule.exports
+                } else if (this.usingExports) {
+                  exports = this.exports
+                }
+              }
+              if (err) {
+                err.requireMap = this.map
+                err.requireModules = this.map.isDefine ? [this.map.id] : null
+                err.requireType = this.map.isDefine ? 'define' : 'require'
+                return onError((this.error = err))
+              }
+            } else {
+              exports = factory
             }
-          },
-          callPlugin: function () {
-            var e = this.map,
-              t = e.id,
-              i = q(e.prefix)
-            this.depMaps.push(i),
-              w(
-                i,
+            this.exports = exports
+            if (this.map.isDefine && !this.ignore) {
+              defined[id] = exports
+              if (req.onResourceLoad) {
+                req.onResourceLoad(context, this.map, this.depMaps)
+              }
+            }
+            cleanRegistry(id)
+            this.defined = true
+          }
+          this.defining = false
+          if (this.defined && !this.defineEmitted) {
+            this.defineEmitted = true
+            this.emit('defined', this.exports)
+            this.defineEmitComplete = true
+          }
+        }
+      },
+      callPlugin: function () {
+        var map = this.map,
+          id = map.id,
+          pluginMap = makeModuleMap(map.prefix)
+        this.depMaps.push(pluginMap)
+        on(
+          pluginMap,
+          'defined',
+          bind(this, function (plugin) {
+            var load,
+              normalizedMap,
+              normalizedMod,
+              bundleId = getOwn(bundlesMap, this.map.id),
+              name = this.map.name,
+              parentName = this.map.parentMap ? this.map.parentMap.name : null,
+              localRequire = context.makeRequire(map.parentMap, {
+                enableBuildCallback: true
+              })
+            if (this.map.unnormalized) {
+              if (plugin.normalize) {
+                name =
+                  plugin.normalize(name, function (name2) {
+                    return normalize(name2, parentName, true)
+                  }) || ''
+              }
+              normalizedMap = makeModuleMap(map.prefix + '!' + name, this.map.parentMap)
+              on(
+                normalizedMap,
                 'defined',
-                bind(this, function (i) {
-                  var n,
-                    o,
-                    u,
-                    c = getOwn(l, this.map.id),
-                    d = this.map.name,
-                    p = this.map.parentMap ? this.map.parentMap.name : null,
-                    f = r.makeRequire(e.parentMap, { enableBuildCallback: !0 })
-                  return this.map.unnormalized
-                    ? (i.normalize &&
-                        (d =
-                          i.normalize(d, function (e) {
-                            return g(e, p, !0)
-                          }) || ''),
-                      w(
-                        (o = q(e.prefix + '!' + d, this.map.parentMap)),
-                        'defined',
-                        bind(this, function (e) {
-                          this.init(
-                            [],
-                            function () {
-                              return e
-                            },
-                            null,
-                            { enabled: !0, ignore: !0 }
-                          )
-                        })
-                      ),
-                      void (
-                        (u = getOwn(s, o.id)) &&
-                        (this.depMaps.push(o),
-                        this.events.error &&
-                          u.on(
-                            'error',
-                            bind(this, function (e) {
-                              this.emit('error', e)
-                            })
-                          ),
-                        u.enable())
-                      ))
-                    : c
-                    ? ((this.map.url = r.nameToUrl(c)), void this.load())
-                    : (((n = bind(this, function (e) {
-                        this.init(
-                          [],
-                          function () {
-                            return e
-                          },
-                          null,
-                          { enabled: !0 }
-                        )
-                      })).error = bind(this, function (e) {
-                        ;(this.inited = !0),
-                          (this.error = e),
-                          (e.requireModules = [t]),
-                          eachProp(s, function (e) {
-                            0 === e.map.id.indexOf(t + '_unnormalized') && k(e.map.id)
-                          }),
-                          y(e)
-                      })),
-                      (n.fromText = bind(this, function (i, o) {
-                        var s = e.name,
-                          u = q(s),
-                          c = useInteractive
-                        o && (i = o), c && (useInteractive = !1), E(u), hasProp(a.config, t) && (a.config[s] = a.config[t])
-                        try {
-                          req.exec(i)
-                        } catch (e) {
-                          return y(makeError('fromtexteval', 'fromText eval for ' + t + ' failed: ' + e, e, [t]))
-                        }
-                        c && (useInteractive = !0), this.depMaps.push(u), r.completeLoad(s), f([s], n)
-                      })),
-                      void i.load(e.name, f, n, a))
+                bind(this, function (value) {
+                  this.init(
+                    [],
+                    function () {
+                      return value
+                    },
+                    null,
+                    {
+                      enabled: true,
+                      ignore: true
+                    }
+                  )
                 })
-              ),
-              r.enable(i, this),
-              (this.pluginMaps[i.id] = i)
-          },
-          enable: function () {
-            ;(u[this.map.id] = this),
-              (this.enabled = !0),
-              (this.enabling = !0),
-              each(
-                this.depMaps,
-                bind(this, function (e, t) {
-                  var i, o, a
-                  if ('string' == typeof e) {
-                    if (
-                      ((e = q(e, this.map.isDefine ? this.map : this.map.parentMap, !1, !this.skipMap)), (this.depMaps[t] = e), (a = getOwn(n, e.id)))
-                    )
-                      return void (this.depExports[t] = a(this))
-                    ;(this.depCount += 1),
-                      w(
-                        e,
-                        'defined',
-                        bind(this, function (e) {
-                          this.undefed || (this.defineDep(t, e), this.check())
-                        })
-                      ),
-                      this.errback
-                        ? w(e, 'error', bind(this, this.errback))
-                        : this.events.error &&
-                          w(
-                            e,
-                            'error',
-                            bind(this, function (e) {
-                              this.emit('error', e)
-                            })
-                          )
-                  }
-                  ;(i = e.id), (o = s[i]), hasProp(n, i) || !o || o.enabled || r.enable(e, this)
-                })
-              ),
-              eachProp(
-                this.pluginMaps,
-                bind(this, function (e) {
-                  var t = getOwn(s, e.id)
-                  t && !t.enabled && r.enable(e, this)
-                })
-              ),
-              (this.enabling = !1),
-              this.check()
-          },
-          on: function (e, t) {
-            var i = this.events[e]
-            i || (i = this.events[e] = []), i.push(t)
-          },
-          emit: function (e, t) {
-            each(this.events[e], function (e) {
-              e(t)
-            }),
-              'error' === e && delete this.events[e]
-          }
-        }),
-        (r = {
-          config: a,
-          contextName: e,
-          registry: s,
-          defined: p,
-          urlFetched: f,
-          defQueue: d,
-          defQueueMap: {},
-          Module: i,
-          makeModuleMap: q,
-          nextTick: req.nextTick,
-          onError: y,
-          configure: function (e) {
-            e.baseUrl && '/' !== e.baseUrl.charAt(e.baseUrl.length - 1) && (e.baseUrl += '/')
-            var t = a.shim,
-              i = { paths: !0, bundles: !0, config: !0, map: !0 }
-            eachProp(e, function (e, t) {
-              i[t] ? (a[t] || (a[t] = {}), mixin(a[t], e, !0, !0)) : (a[t] = e)
-            }),
-              e.bundles &&
-                eachProp(e.bundles, function (e, t) {
-                  each(e, function (e) {
-                    e !== t && (l[e] = t)
-                  })
-                }),
-              e.shim &&
-                (eachProp(e.shim, function (e, i) {
-                  isArray(e) && (e = { deps: e }), (!e.exports && !e.init) || e.exportsFn || (e.exportsFn = r.makeShimExports(e)), (t[i] = e)
-                }),
-                (a.shim = t)),
-              e.packages &&
-                each(e.packages, function (e) {
-                  var t
-                  ;(t = (e = 'string' == typeof e ? { name: e } : e).name),
-                    e.location && (a.paths[t] = e.location),
-                    (a.pkgs[t] = e.name + '/' + (e.main || 'main').replace(currDirRegExp, '').replace(jsSuffixRegExp, ''))
-                }),
-              eachProp(s, function (e, t) {
-                e.inited || e.map.unnormalized || (e.map = q(t, null, !0))
-              }),
-              (e.deps || e.callback) && r.require(e.deps || [], e.callback)
-          },
-          makeShimExports: function (e) {
-            return function () {
-              var t
-              return e.init && (t = e.init.apply(global, arguments)), t || (e.exports && getGlobal(e.exports))
+              )
+              normalizedMod = getOwn(registry, normalizedMap.id)
+              if (normalizedMod) {
+                this.depMaps.push(normalizedMap)
+                if (this.events.error) {
+                  normalizedMod.on(
+                    'error',
+                    bind(this, function (err) {
+                      this.emit('error', err)
+                    })
+                  )
+                }
+                normalizedMod.enable()
+              }
+              return
             }
-          },
-          makeRequire: function (t, i) {
-            function o(a, u, c) {
-              var d, f
-              return (
-                i.enableBuildCallback && u && isFunction(u) && (u.__requireJsBuild = !0),
-                'string' == typeof a
-                  ? isFunction(u)
-                    ? y(makeError('requireargs', 'Invalid require call'), c)
-                    : t && hasProp(n, a)
-                    ? n[a](s[t.id])
-                    : req.get
-                    ? req.get(r, a, t, o)
-                    : ((d = q(a, t, !1, !0).id),
-                      hasProp(p, d)
-                        ? p[d]
-                        : y(
-                            makeError(
-                              'notloaded',
-                              'Module name "' + d + '" has not been loaded yet for context: ' + e + (t ? '' : '. Use require([])')
-                            )
-                          ))
-                  : (A(),
-                    r.nextTick(function () {
-                      A(), ((f = E(q(null, t))).skipMap = i.skipMap), f.init(a, u, c, { enabled: !0 }), O()
-                    }),
-                    o)
+            if (bundleId) {
+              this.map.url = context.nameToUrl(bundleId)
+              this.load()
+              return
+            }
+            load = bind(this, function (value) {
+              this.init(
+                [],
+                function () {
+                  return value
+                },
+                null,
+                {
+                  enabled: true
+                }
+              )
+            })
+            load.error = bind(this, function (err) {
+              this.inited = true
+              this.error = err
+              err.requireModules = [id]
+              eachProp(registry, function (mod) {
+                if (mod.map.id.indexOf(id + '_unnormalized') === 0) {
+                  cleanRegistry(mod.map.id)
+                }
+              })
+              onError(err)
+            })
+            load.fromText = bind(this, function (text2, textAlt) {
+              var moduleName = map.name,
+                moduleMap = makeModuleMap(moduleName),
+                hasInteractive = useInteractive
+              if (textAlt) {
+                text2 = textAlt
+              }
+              if (hasInteractive) {
+                useInteractive = false
+              }
+              getModule(moduleMap)
+              if (hasProp(config.config, id)) {
+                config.config[moduleName] = config.config[id]
+              }
+              try {
+                req.exec(text2)
+              } catch (e) {
+                return onError(makeError('fromtexteval', 'fromText eval for ' + id + ' failed: ' + e, e, [id]))
+              }
+              if (hasInteractive) {
+                useInteractive = true
+              }
+              this.depMaps.push(moduleMap)
+              context.completeLoad(moduleName)
+              localRequire([moduleName], load)
+            })
+            plugin.load(map.name, localRequire, load, config)
+          })
+        )
+        context.enable(pluginMap, this)
+        this.pluginMaps[pluginMap.id] = pluginMap
+      },
+      enable: function () {
+        enabledRegistry[this.map.id] = this
+        this.enabled = true
+        this.enabling = true
+        each(
+          this.depMaps,
+          bind(this, function (depMap, i) {
+            var id, mod, handler
+            if (typeof depMap === 'string') {
+              depMap = makeModuleMap(depMap, this.map.isDefine ? this.map : this.map.parentMap, false, !this.skipMap)
+              this.depMaps[i] = depMap
+              handler = getOwn(handlers, depMap.id)
+              if (handler) {
+                this.depExports[i] = handler(this)
+                return
+              }
+              this.depCount += 1
+              on(
+                depMap,
+                'defined',
+                bind(this, function (depExports) {
+                  if (this.undefed) {
+                    return
+                  }
+                  this.defineDep(i, depExports)
+                  this.check()
+                })
+              )
+              if (this.errback) {
+                on(depMap, 'error', bind(this, this.errback))
+              } else if (this.events.error) {
+                on(
+                  depMap,
+                  'error',
+                  bind(this, function (err) {
+                    this.emit('error', err)
+                  })
+                )
+              }
+            }
+            id = depMap.id
+            mod = registry[id]
+            if (!hasProp(handlers, id) && mod && !mod.enabled) {
+              context.enable(depMap, this)
+            }
+          })
+        )
+        eachProp(
+          this.pluginMaps,
+          bind(this, function (pluginMap) {
+            var mod = getOwn(registry, pluginMap.id)
+            if (mod && !mod.enabled) {
+              context.enable(pluginMap, this)
+            }
+          })
+        )
+        this.enabling = false
+        this.check()
+      },
+      on: function (name, cb) {
+        var cbs = this.events[name]
+        if (!cbs) {
+          cbs = this.events[name] = []
+        }
+        cbs.push(cb)
+      },
+      emit: function (name, evt) {
+        each(this.events[name], function (cb) {
+          cb(evt)
+        })
+        if (name === 'error') {
+          delete this.events[name]
+        }
+      }
+    }
+    function callGetModule(args) {
+      if (!hasProp(defined, args[0])) {
+        getModule(makeModuleMap(args[0], null, true)).init(args[1], args[2])
+      }
+    }
+    function removeListener(node, func, name, ieName) {
+      if (node.detachEvent && !isOpera) {
+        if (ieName) {
+          node.detachEvent(ieName, func)
+        }
+      } else {
+        node.removeEventListener(name, func, false)
+      }
+    }
+    function getScriptData(evt) {
+      var node = evt.currentTarget || evt.srcElement
+      removeListener(node, context.onScriptLoad, 'load', 'onreadystatechange')
+      removeListener(node, context.onScriptError, 'error')
+      return {
+        node,
+        id: node && node.getAttribute('data-requiremodule')
+      }
+    }
+    function intakeDefines() {
+      var args
+      takeGlobalQueue()
+      while (defQueue.length) {
+        args = defQueue.shift()
+        if (args[0] === null) {
+          return onError(makeError('mismatch', 'Mismatched anonymous define() module: ' + args[args.length - 1]))
+        } else {
+          callGetModule(args)
+        }
+      }
+      context.defQueueMap = {}
+    }
+    context = {
+      config,
+      contextName,
+      registry,
+      defined,
+      urlFetched,
+      defQueue,
+      defQueueMap: {},
+      Module,
+      makeModuleMap,
+      nextTick: req.nextTick,
+      onError,
+      /**
+       * @private
+       * Set a configuration for the context.
+       * @param {Object} cfg config object to integrate.
+       */
+      configure: function (cfg2) {
+        if (cfg2.baseUrl) {
+          if (cfg2.baseUrl.charAt(cfg2.baseUrl.length - 1) !== '/') {
+            cfg2.baseUrl += '/'
+          }
+        }
+        var shim = config.shim,
+          objs = {
+            paths: true,
+            bundles: true,
+            config: true,
+            map: true
+          }
+        eachProp(cfg2, function (value, prop) {
+          if (objs[prop]) {
+            if (!config[prop]) {
+              config[prop] = {}
+            }
+            mixin(config[prop], value, true, true)
+          } else {
+            config[prop] = value
+          }
+        })
+        if (cfg2.bundles) {
+          eachProp(cfg2.bundles, function (value, prop) {
+            each(value, function (v) {
+              if (v !== prop) {
+                bundlesMap[v] = prop
+              }
+            })
+          })
+        }
+        if (cfg2.shim) {
+          eachProp(cfg2.shim, function (value, id) {
+            if (isArray(value)) {
+              value = {
+                deps: value
+              }
+            }
+            if ((value.exports || value.init) && !value.exportsFn) {
+              value.exportsFn = context.makeShimExports(value)
+            }
+            shim[id] = value
+          })
+          config.shim = shim
+        }
+        if (cfg2.packages) {
+          each(cfg2.packages, function (pkgObj) {
+            var location, name
+            pkgObj = typeof pkgObj === 'string' ? { name: pkgObj } : pkgObj
+            name = pkgObj.name
+            location = pkgObj.location
+            if (location) {
+              config.paths[name] = pkgObj.location
+            }
+            config.pkgs[name] = pkgObj.name + '/' + (pkgObj.main || 'main').replace(currDirRegExp, '').replace(jsSuffixRegExp, '')
+          })
+        }
+        eachProp(registry, function (mod, id) {
+          if (!mod.inited && !mod.map.unnormalized) {
+            mod.map = makeModuleMap(id, null, true)
+          }
+        })
+        if (cfg2.deps || cfg2.callback) {
+          context.require(cfg2.deps || [], cfg2.callback)
+        }
+      },
+      makeShimExports: function (value) {
+        function fn() {
+          var ret
+          if (value.init) {
+            ret = value.init.apply(global, arguments)
+          }
+          return ret || (value.exports && getGlobal(value.exports))
+        }
+        return fn
+      },
+      makeRequire: function (relMap, options) {
+        options = options || {}
+        function localRequire(deps, callback, errback) {
+          var id, map, requireMod
+          if (options.enableBuildCallback && callback && isFunction(callback)) {
+            callback.__requireJsBuild = true
+          }
+          if (typeof deps === 'string') {
+            if (isFunction(callback)) {
+              return onError(makeError('requireargs', 'Invalid require call'), errback)
+            }
+            if (relMap && hasProp(handlers, deps)) {
+              return handlers[deps](registry[relMap.id])
+            }
+            if (req.get) {
+              return req.get(context, deps, relMap, localRequire)
+            }
+            map = makeModuleMap(deps, relMap, false, true)
+            id = map.id
+            if (!hasProp(defined, id)) {
+              return onError(
+                makeError(
+                  'notloaded',
+                  'Module name "' + id + '" has not been loaded yet for context: ' + contextName + (relMap ? '' : '. Use require([])')
+                )
               )
             }
-            return (
-              (i = i || {}),
-              mixin(o, {
-                isBrowser: isBrowser,
-                toUrl: function (e) {
-                  var i,
-                    n = e.lastIndexOf('.'),
-                    o = e.split('/')[0]
-                  return (
-                    -1 !== n && (!('.' === o || '..' === o) || n > 1) && ((i = e.substring(n, e.length)), (e = e.substring(0, n))),
-                    r.nameToUrl(g(e, t && t.id, !0), i, !0)
-                  )
-                },
-                defined: function (e) {
-                  return hasProp(p, q(e, t, !1, !0).id)
-                },
-                specified: function (e) {
-                  return (e = q(e, t, !1, !0).id), hasProp(p, e) || hasProp(s, e)
-                }
-              }),
-              t ||
-                (o.undef = function (e) {
-                  S()
-                  var i = q(e, t, !0),
-                    n = getOwn(s, e)
-                  ;(n.undefed = !0),
-                    v(e),
-                    delete p[e],
-                    delete f[i.url],
-                    delete c[e],
-                    eachReverse(d, function (t, i) {
-                      t[0] === e && d.splice(i, 1)
-                    }),
-                    delete r.defQueueMap[e],
-                    n && (n.events.defined && (c[e] = n.events), k(e))
-                }),
-              o
-            )
-          },
-          enable: function (e) {
-            getOwn(s, e.id) && E(e).enable()
-          },
-          completeLoad: function (e) {
-            var t,
-              i,
-              n,
-              o = getOwn(a.shim, e) || {},
-              u = o.exports
-            for (S(); d.length; ) {
-              if (null === (i = d.shift())[0]) {
-                if (((i[0] = e), t)) break
-                t = !0
-              } else i[0] === e && (t = !0)
-              j(i)
-            }
-            if (((r.defQueueMap = {}), (n = getOwn(s, e)), !t && !hasProp(p, e) && n && !n.inited)) {
-              if (!(!a.enforceDefine || (u && getGlobal(u)))) return x(e) ? void 0 : y(makeError('nodefine', 'No define call for ' + e, null, [e]))
-              j([e, o.deps || [], o.exportsFn])
-            }
-            O()
-          },
-          nameToUrl: function (e, t, i) {
-            var n,
-              o,
-              s,
-              u,
-              c,
-              d,
-              p = getOwn(a.pkgs, e)
-            if ((p && (e = p), (d = getOwn(l, e)))) return r.nameToUrl(d, t, i)
-            if (req.jsExtRegExp.test(e)) u = e + (t || '')
-            else {
-              for (n = a.paths, s = (o = e.split('/')).length; s > 0; s -= 1)
-                if ((c = getOwn(n, o.slice(0, s).join('/')))) {
-                  isArray(c) && (c = c[0]), o.splice(0, s, c)
-                  break
-                }
-              ;(u = o.join('/')),
-                (u = ('/' === (u += t || (/^data\:|\?/.test(u) || i ? '' : '.js')).charAt(0) || u.match(/^[\w\+\.\-]+:/) ? '' : a.baseUrl) + u)
-            }
-            return a.urlArgs ? u + (-1 === u.indexOf('?') ? '?' : '&') + a.urlArgs : u
-          },
-          load: function (e, t) {
-            req.load(r, e, t)
-          },
-          execCb: function (e, t, i, r) {
-            return t.apply(r, i)
-          },
-          onScriptLoad: function (e) {
-            if ('load' === e.type || readyRegExp.test((e.currentTarget || e.srcElement).readyState)) {
-              interactiveScript = null
-              var t = R(e)
-              r.completeLoad(t.id)
-            }
-          },
-          onScriptError: function (e) {
-            var t = R(e)
-            if (!x(t.id)) return y(makeError('scripterror', 'Script error for: ' + t.id, e, [t.id]))
+            return defined[id]
           }
-        }),
-        (r.require = r.makeRequire()),
-        r
-      )
+          intakeDefines()
+          context.nextTick(function () {
+            intakeDefines()
+            requireMod = getModule(makeModuleMap(null, relMap))
+            requireMod.skipMap = options.skipMap
+            requireMod.init(deps, callback, errback, {
+              enabled: true
+            })
+            checkLoaded()
+          })
+          return localRequire
+        }
+        mixin(localRequire, {
+          isBrowser,
+          /**
+           * Converts a module name + .extension into an URL path.
+           * *Requires* the use of a module name. It does not support using
+           * plain URLs like nameToUrl.
+           */
+          toUrl: function (moduleNamePlusExt) {
+            var ext,
+              index = moduleNamePlusExt.lastIndexOf('.'),
+              segment = moduleNamePlusExt.split('/')[0],
+              isRelative = segment === '.' || segment === '..'
+            if (index !== -1 && (!isRelative || index > 1)) {
+              ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length)
+              moduleNamePlusExt = moduleNamePlusExt.substring(0, index)
+            }
+            return context.nameToUrl(normalize(moduleNamePlusExt, relMap && relMap.id, true), ext, true)
+          },
+          defined: function (id) {
+            return hasProp(defined, makeModuleMap(id, relMap, false, true).id)
+          },
+          specified: function (id) {
+            id = makeModuleMap(id, relMap, false, true).id
+            return hasProp(defined, id) || hasProp(registry, id)
+          }
+        })
+        if (!relMap) {
+          localRequire.undef = function (id) {
+            takeGlobalQueue()
+            var map = makeModuleMap(id, relMap, true),
+              mod = getOwn(registry, id)
+            mod.undefed = true
+            removeScript(id)
+            delete defined[id]
+            delete urlFetched[map.url]
+            delete undefEvents[id]
+            eachReverse(defQueue, function (args, i) {
+              if (args[0] === id) {
+                defQueue.splice(i, 1)
+              }
+            })
+            delete context.defQueueMap[id]
+            if (mod) {
+              if (mod.events.defined) {
+                undefEvents[id] = mod.events
+              }
+              cleanRegistry(id)
+            }
+          }
+        }
+        return localRequire
+      },
+      /**
+       * @private
+       * Called to enable a module if it is still in the registry
+       * awaiting enablement. A second arg, parent, the parent module,
+       * is passed in for context, when this method is overridden by
+       * the optimizer. Not shown here to keep code compact.
+       */
+      enable: function (depMap) {
+        var mod = getOwn(registry, depMap.id)
+        if (mod) {
+          getModule(depMap).enable()
+        }
+      },
+      /**
+       * Internal method used by environment adapters to complete a load event.
+       * A load event could be a script load or just a load pass from a synchronous
+       * load call.
+       * @param {String} moduleName the name of the module to potentially complete.
+       * @private
+       */
+      completeLoad: function (moduleName) {
+        var found,
+          args,
+          mod,
+          shim = getOwn(config.shim, moduleName) || {},
+          shExports = shim.exports
+        takeGlobalQueue()
+        while (defQueue.length) {
+          args = defQueue.shift()
+          if (args[0] === null) {
+            args[0] = moduleName
+            if (found) {
+              break
+            }
+            found = true
+          } else if (args[0] === moduleName) {
+            found = true
+          }
+          callGetModule(args)
+        }
+        context.defQueueMap = {}
+        mod = getOwn(registry, moduleName)
+        if (!found && !hasProp(defined, moduleName) && mod && !mod.inited) {
+          if (config.enforceDefine && (!shExports || !getGlobal(shExports))) {
+            if (hasPathFallback(moduleName)) {
+              return
+            } else {
+              return onError(makeError('nodefine', 'No define call for ' + moduleName, null, [moduleName]))
+            }
+          } else {
+            callGetModule([moduleName, shim.deps || [], shim.exportsFn])
+          }
+        }
+        checkLoaded()
+      },
+      /**
+       * @private
+       * Converts a module name to a file path. Supports cases where
+       * moduleName may actually be just an URL.
+       * Note that it **does not** call normalize on the moduleName,
+       * it is assumed to have already been normalized. This is an
+       * internal API, not a public one. Use toUrl for the public API.
+       */
+      nameToUrl: function (moduleName, ext, skipExt) {
+        var paths,
+          syms,
+          i,
+          parentModule,
+          url,
+          parentPath,
+          bundleId,
+          pkgMain = getOwn(config.pkgs, moduleName)
+        if (pkgMain) {
+          moduleName = pkgMain
+        }
+        bundleId = getOwn(bundlesMap, moduleName)
+        if (bundleId) {
+          return context.nameToUrl(bundleId, ext, skipExt)
+        }
+        if (req.jsExtRegExp.test(moduleName)) {
+          url = moduleName + (ext || '')
+        } else {
+          paths = config.paths
+          syms = moduleName.split('/')
+          for (i = syms.length; i > 0; i -= 1) {
+            parentModule = syms.slice(0, i).join('/')
+            parentPath = getOwn(paths, parentModule)
+            if (parentPath) {
+              if (isArray(parentPath)) {
+                parentPath = parentPath[0]
+              }
+              syms.splice(0, i, parentPath)
+              break
+            }
+          }
+          url = syms.join('/')
+          url += ext || (/^data\:|\?/.test(url) || skipExt ? '' : '.js')
+          url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url
+        }
+        return config.urlArgs ? url + ((url.indexOf('?') === -1 ? '?' : '&') + config.urlArgs) : url
+      },
+      //Delegates to req.load. Broken out as a separate function to
+      //allow overriding in the optimizer.
+      load: function (id, url) {
+        req.load(context, id, url)
+      },
+      /**
+       * Executes a module callback function. Broken out as a separate function
+       * solely to allow the build system to sequence the files in the built
+       * layer in the right sequence.
+       *
+       * @private
+       */
+      execCb: function (name, callback, args, exports) {
+        return callback.apply(exports, args)
+      },
+      /**
+       * callback for script loads, used to check status of loading.
+       * @private
+       * @param {Event} evt the event from the browser for the script
+       * that was loaded.
+       */
+      onScriptLoad: function (evt) {
+        if (evt.type === 'load' || readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)) {
+          interactiveScript = null
+          var data = getScriptData(evt)
+          context.completeLoad(data.id)
+        }
+      },
+      /**
+       * @private
+       * Callback for script errors.
+       */
+      onScriptError: function (evt) {
+        var data = getScriptData(evt)
+        if (!hasPathFallback(data.id)) {
+          return onError(makeError('scripterror', 'Script error for: ' + data.id, evt, [data.id]))
+        }
+      }
     }
-    function getInteractiveScript() {
-      return (
-        (interactiveScript && 'interactive' === interactiveScript.readyState) ||
-          eachReverse(scripts(), function (e) {
-            if ('interactive' === e.readyState) return (interactiveScript = e)
-          }),
-        interactiveScript
-      )
+    context.require = context.makeRequire()
+    return context
+  }
+  req = requirejs = function (deps, callback, errback, optional) {
+    var context,
+      config,
+      contextName = defContextName
+    if (!isArray(deps) && typeof deps !== 'string') {
+      config = deps
+      if (isArray(callback)) {
+        deps = callback
+        callback = errback
+        errback = optional
+      } else {
+        deps = []
+      }
     }
-  })(this)
+    if (config && config.context) {
+      contextName = config.context
+    }
+    context = getOwn(contexts, contextName)
+    if (!context) {
+      context = contexts[contextName] = req.s.newContext(contextName)
+    }
+    if (config) {
+      context.configure(config)
+    }
+    return context.require(deps, callback, errback)
+  }
+  req.config = function (config) {
+    return req(config)
+  }
+  req.nextTick =
+    typeof setTimeout !== 'undefined'
+      ? function (fn) {
+          setTimeout(fn, 4)
+        }
+      : function (fn) {
+          fn()
+        }
+  if (!require) {
+    require = req
+  }
+  req.version = version
+  req.jsExtRegExp = /^\/|:|\?|\.js$/
+  req.isBrowser = isBrowser
+  s = req.s = {
+    contexts,
+    newContext
+  }
+  req({})
+  each(['toUrl', 'undef', 'defined', 'specified'], function (prop) {
+    req[prop] = function () {
+      var ctx = contexts[defContextName]
+      return ctx.require[prop].apply(ctx, arguments)
+    }
+  })
+  if (isBrowser) {
+    head = s.head = document.getElementsByTagName('head')[0]
+    baseElement = document.getElementsByTagName('base')[0]
+    if (baseElement) {
+      head = s.head = baseElement.parentNode
+    }
+  }
+  req.onError = defaultOnError
+  req.createNode = function (config, moduleName, url) {
+    var node = config.xhtml ? document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') : document.createElement('script')
+    node.type = config.scriptType || 'text/javascript'
+    node.charset = 'utf-8'
+    node.async = true
+    return node
+  }
+  req.load = function (context, moduleName, url) {
+    var config = (context && context.config) || {},
+      node
+    if (isBrowser) {
+      node = req.createNode(config, moduleName, url)
+      if (config.onNodeCreated) {
+        config.onNodeCreated(node, config, moduleName, url)
+      }
+      node.setAttribute('data-requirecontext', context.contextName)
+      node.setAttribute('data-requiremodule', moduleName)
+      if (
+        node.attachEvent && //Check if node.attachEvent is artificially added by custom script or
+        //natively supported by browser
+        //read https://github.com/jrburke/requirejs/issues/187
+        //if we can NOT find [native code] then it must NOT natively supported.
+        //in IE8, node.attachEvent does not have toString()
+        //Note the test for "[native code" with no closing brace, see:
+        //https://github.com/jrburke/requirejs/issues/273
+        !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
+        !isOpera
+      ) {
+        useInteractive = true
+        node.attachEvent('onreadystatechange', context.onScriptLoad)
+      } else {
+        node.addEventListener('load', context.onScriptLoad, false)
+        node.addEventListener('error', context.onScriptError, false)
+      }
+      node.src = url
+      currentlyAddingScript = node
+      if (baseElement) {
+        head.insertBefore(node, baseElement)
+      } else {
+        head.appendChild(node)
+      }
+      currentlyAddingScript = null
+      return node
+    } else if (isWebWorker) {
+      try {
+        importScripts(url)
+        context.completeLoad(moduleName)
+      } catch (e) {
+        context.onError(makeError('importscripts', 'importScripts failed for ' + moduleName + ' at ' + url, e, [moduleName]))
+      }
+    }
+  }
+  function getInteractiveScript() {
+    if (interactiveScript && interactiveScript.readyState === 'interactive') {
+      return interactiveScript
+    }
+    eachReverse(scripts(), function (script) {
+      if (script.readyState === 'interactive') {
+        return (interactiveScript = script)
+      }
+    })
+    return interactiveScript
+  }
+  if (isBrowser && !cfg.skipDataMain) {
+    eachReverse(scripts(), function (script) {
+      if (!head) {
+        head = script.parentNode
+      }
+      dataMain = script.getAttribute('data-main')
+      if (dataMain) {
+        mainScript = dataMain
+        if (!cfg.baseUrl) {
+          src = mainScript.split('/')
+          mainScript = src.pop()
+          subPath = src.length ? src.join('/') + '/' : './'
+          cfg.baseUrl = subPath
+        }
+        mainScript = mainScript.replace(jsSuffixRegExp, '')
+        if (req.jsExtRegExp.test(mainScript)) {
+          mainScript = dataMain
+        }
+        cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript]
+        return true
+      }
+    })
+  }
+  define = function (name, deps, callback) {
+    var node, context
+    if (typeof name !== 'string') {
+      callback = deps
+      deps = name
+      name = null
+    }
+    if (!isArray(deps)) {
+      callback = deps
+      deps = null
+    }
+    if (!deps && isFunction(callback)) {
+      deps = []
+      if (callback.length) {
+        callback
+          .toString()
+          .replace(commentRegExp, '')
+          .replace(cjsRequireRegExp, function (match, dep) {
+            deps.push(dep)
+          })
+        deps = (callback.length === 1 ? ['require'] : ['require', 'exports', 'module']).concat(deps)
+      }
+    }
+    if (useInteractive) {
+      node = currentlyAddingScript || getInteractiveScript()
+      if (node) {
+        if (!name) {
+          name = node.getAttribute('data-requiremodule')
+        }
+        context = contexts[node.getAttribute('data-requirecontext')]
+      }
+    }
+    if (context) {
+      context.defQueue.push([name, deps, callback])
+      context.defQueueMap[name] = true
+    } else {
+      globalDefQueue.push([name, deps, callback])
+    }
+  }
+  define.amd = {
+    jQuery: true
+  }
+  req.exec = function (text) {
+    return eval(text)
+  }
+  req(cfg)
+})(this)

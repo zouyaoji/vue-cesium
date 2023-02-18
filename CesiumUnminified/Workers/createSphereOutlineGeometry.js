@@ -1,51 +1,34 @@
-/**
- * Cesium - https://github.com/CesiumGS/cesium
- *
- * Copyright 2011-2020 Cesium Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Columbus View (Pat. Pend.)
- *
- * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
- */
-
 define([
-  './when-4bbc8319',
-  './Matrix2-91d5b6af',
-  './RuntimeError-346a3079',
-  './EllipsoidOutlineGeometry-ee987302',
-  './ComponentDatatype-f194c48b',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-6a692b56',
-  './Transforms-86b6fa28',
-  './combine-83860057',
-  './GeometryAttribute-e0d0d297',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-ee69f1fd'
+  './defaultValue-0a909f67',
+  './Matrix3-315394f6',
+  './Check-666ab1a0',
+  './EllipsoidOutlineGeometry-784dcdb5',
+  './Math-2dbd6b93',
+  './Transforms-a05e5e6e',
+  './Matrix2-13178034',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-f7b11d02',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-334718f8',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-a55ceaa1'
 ], function (
-  when,
+  defaultValue,
+  Matrix3,
+  Check,
+  EllipsoidOutlineGeometry,
+  Math,
+  Transforms,
   Matrix2,
   RuntimeError,
-  EllipsoidOutlineGeometry,
+  combine,
   ComponentDatatype,
   WebGLConstants,
-  GeometryOffsetAttribute,
-  Transforms,
-  combine,
   GeometryAttribute,
   GeometryAttributes,
+  GeometryOffsetAttribute,
   IndexDatatype
 ) {
   'use strict'
@@ -67,17 +50,17 @@ define([
    * @exception {DeveloperError} options.subdivisions must be greater than or equal to zero.
    *
    * @example
-   * var sphere = new Cesium.SphereOutlineGeometry({
+   * const sphere = new Cesium.SphereOutlineGeometry({
    *   radius : 100.0,
    *   stackPartitions : 6,
    *   slicePartitions: 5
    * });
-   * var geometry = Cesium.SphereOutlineGeometry.createGeometry(sphere);
+   * const geometry = Cesium.SphereOutlineGeometry.createGeometry(sphere);
    */
   function SphereOutlineGeometry(options) {
-    var radius = when.defaultValue(options.radius, 1.0)
-    var radii = new Matrix2.Cartesian3(radius, radius, radius)
-    var ellipsoidOptions = {
+    const radius = defaultValue.defaultValue(options.radius, 1.0)
+    const radii = new Matrix3.Cartesian3(radius, radius, radius)
+    const ellipsoidOptions = {
       radii: radii,
       stackPartitions: options.stackPartitions,
       slicePartitions: options.slicePartitions,
@@ -105,16 +88,16 @@ define([
    */
   SphereOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    RuntimeError.Check.typeOf.object('value', value)
+    Check.Check.typeOf.object('value', value)
     //>>includeEnd('debug');
 
     return EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.pack(value._ellipsoidGeometry, array, startingIndex)
   }
 
-  var scratchEllipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry()
-  var scratchOptions = {
+  const scratchEllipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry()
+  const scratchOptions = {
     radius: undefined,
-    radii: new Matrix2.Cartesian3(),
+    radii: new Matrix3.Cartesian3(),
     stackPartitions: undefined,
     slicePartitions: undefined,
     subdivisions: undefined
@@ -129,17 +112,17 @@ define([
    * @returns {SphereOutlineGeometry} The modified result parameter or a new SphereOutlineGeometry instance if one was not provided.
    */
   SphereOutlineGeometry.unpack = function (array, startingIndex, result) {
-    var ellipsoidGeometry = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.unpack(array, startingIndex, scratchEllipsoidGeometry)
+    const ellipsoidGeometry = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.unpack(array, startingIndex, scratchEllipsoidGeometry)
     scratchOptions.stackPartitions = ellipsoidGeometry._stackPartitions
     scratchOptions.slicePartitions = ellipsoidGeometry._slicePartitions
     scratchOptions.subdivisions = ellipsoidGeometry._subdivisions
 
-    if (!when.defined(result)) {
+    if (!defaultValue.defined(result)) {
       scratchOptions.radius = ellipsoidGeometry._radii.x
       return new SphereOutlineGeometry(scratchOptions)
     }
 
-    Matrix2.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii)
+    Matrix3.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii)
     result._ellipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry(scratchOptions)
     return result
   }
@@ -155,7 +138,7 @@ define([
   }
 
   function createSphereOutlineGeometry(sphereGeometry, offset) {
-    if (when.defined(offset)) {
+    if (defaultValue.defined(offset)) {
       sphereGeometry = SphereOutlineGeometry.unpack(sphereGeometry, offset)
     }
     return SphereOutlineGeometry.createGeometry(sphereGeometry)
@@ -163,4 +146,3 @@ define([
 
   return createSphereOutlineGeometry
 })
-//# sourceMappingURL=createSphereOutlineGeometry.js.map

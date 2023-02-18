@@ -1,19 +1,21 @@
 define([
-  './BoxGeometry-bdb0d59d',
-  './when-4bbc8319',
-  './GeometryOffsetAttribute-1772960d',
-  './RuntimeError-346a3079',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './VertexFormat-71718faa'
-], function (e, t, r, o, n, a, c, m, i, d, u, b) {
+  './BoxGeometry-f5437dce',
+  './defaultValue-0a909f67',
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './VertexFormat-ab2e00e6'
+], function (e, t, r, a, o, n, c, f, i, m, u, d, b, s) {
   'use strict'
-  return function (r, o) {
-    return t.defined(o) && (r = e.BoxGeometry.unpack(r, o)), e.BoxGeometry.createGeometry(r)
+  return function (r, a) {
+    return t.defined(a) && (r = e.BoxGeometry.unpack(r, a)), e.BoxGeometry.createGeometry(r)
   }
 })

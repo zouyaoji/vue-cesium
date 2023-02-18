@@ -1,49 +1,54 @@
 define([
-  './when-4bbc8319',
-  './PrimitivePipeline-fc555140',
+  './defaultValue-0a909f67',
+  './PrimitivePipeline-c5ce0d90',
   './createTaskProcessorWorker',
-  './Transforms-d13cc04e',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './GeometryPipeline-2356afec',
-  './AttributeCompression-af389d04',
-  './EncodedCartesian3-f286cedc',
-  './IndexDatatype-b7d979a6',
-  './IntersectionTests-96a04219',
-  './Plane-318d6937',
-  './WebMercatorProjection-58801a11'
-], function (e, r, t, n, a, i, o, c, s, u, f, d, m, b, l, p, y, P) {
+  './Transforms-dadc538f',
+  './Matrix3-b6f074fa',
+  './Math-e97915da',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryPipeline-b7404acc',
+  './AttributeCompression-e18a879a',
+  './EncodedCartesian3-de837603',
+  './IndexDatatype-2149f06c',
+  './IntersectionTests-1307e0a8',
+  './Plane-1c5a21a3',
+  './WebMercatorProjection-8e29b101'
+], function (e, t, r, n, o, a, i, c, s, f, u, d, m, l, b, p, y, P, k, C) {
   'use strict'
-  var v = {}
-  function k(r) {
-    var t = v[r]
+  const G = {}
+  function W(t) {
+    let r = G[t]
     return (
-      e.defined(t) ||
+      e.defined(r) ||
         ('object' == typeof exports
-          ? (v[t] = t = require('Workers/' + r))
-          : require(['Workers/' + r], function (e) {
-              v[(t = e)] = e
+          ? (G[r] = r = require(`Workers/${t}`))
+          : require([`Workers/${t}`], function (e) {
+              ;(r = e), (G[r] = e)
             })),
-      t
+      r
     )
   }
-  return t(function (t, n) {
-    for (var a = t.subTasks, i = a.length, o = new Array(i), c = 0; c < i; c++) {
-      var s = a[c],
-        u = s.geometry,
-        f = s.moduleName
-      if (e.defined(f)) {
-        var d = k(f)
-        o[c] = d(u, s.offset)
-      } else o[c] = u
+  return r(function (r, n) {
+    const o = r.subTasks,
+      a = o.length,
+      i = new Array(a)
+    for (let t = 0; t < a; t++) {
+      const r = o[t],
+        n = r.geometry,
+        a = r.moduleName
+      if (e.defined(a)) {
+        const e = W(a)
+        i[t] = e(n, r.offset)
+      } else i[t] = n
     }
-    return e.when.all(o, function (e) {
-      return r.PrimitivePipeline.packCreateGeometryResults(e, n)
+    return Promise.all(i).then(function (e) {
+      return t.PrimitivePipeline.packCreateGeometryResults(e, n)
     })
   })
 })

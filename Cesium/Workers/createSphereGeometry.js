@@ -1,47 +1,49 @@
 define([
-  './when-4bbc8319',
-  './Matrix2-9aa31791',
-  './RuntimeError-346a3079',
-  './EllipsoidGeometry-9a4ae869',
-  './VertexFormat-71718faa',
-  './ComponentDatatype-93750d1a',
-  './WebGLConstants-1c8239cc',
-  './GeometryOffsetAttribute-1772960d',
-  './Transforms-d13cc04e',
-  './combine-83860057',
-  './GeometryAttribute-43536dc0',
-  './GeometryAttributes-7827a6c2',
-  './IndexDatatype-b7d979a6'
-], function (e, t, r, i, a, o, n, s, c, d, l, m, u) {
+  './defaultValue-0a909f67',
+  './Matrix3-b6f074fa',
+  './EllipsoidGeometry-ccc3a2e5',
+  './VertexFormat-ab2e00e6',
+  './Math-e97915da',
+  './Transforms-dadc538f',
+  './Matrix2-163b5a1d',
+  './RuntimeError-06c93819',
+  './combine-ca22a614',
+  './ComponentDatatype-77274976',
+  './WebGLConstants-a8cc3e8c',
+  './GeometryAttribute-e2b38d72',
+  './GeometryAttributes-f06a2792',
+  './GeometryOffsetAttribute-04332ce7',
+  './IndexDatatype-2149f06c'
+], function (e, t, i, r, a, o, n, s, c, d, l, m, u, p, y) {
   'use strict'
-  function p(r) {
-    var a = e.defaultValue(r.radius, 1),
+  function f(r) {
+    const a = e.defaultValue(r.radius, 1),
       o = { radii: new t.Cartesian3(a, a, a), stackPartitions: r.stackPartitions, slicePartitions: r.slicePartitions, vertexFormat: r.vertexFormat }
     ;(this._ellipsoidGeometry = new i.EllipsoidGeometry(o)), (this._workerName = 'createSphereGeometry')
   }
-  ;(p.packedLength = i.EllipsoidGeometry.packedLength),
-    (p.pack = function (e, t, r) {
+  ;(f.packedLength = i.EllipsoidGeometry.packedLength),
+    (f.pack = function (e, t, r) {
       return i.EllipsoidGeometry.pack(e._ellipsoidGeometry, t, r)
     })
-  var y = new i.EllipsoidGeometry(),
-    G = { radius: void 0, radii: new t.Cartesian3(), vertexFormat: new a.VertexFormat(), stackPartitions: void 0, slicePartitions: void 0 }
+  const G = new i.EllipsoidGeometry(),
+    k = { radius: void 0, radii: new t.Cartesian3(), vertexFormat: new r.VertexFormat(), stackPartitions: void 0, slicePartitions: void 0 }
   return (
-    (p.unpack = function (r, o, n) {
-      var s = i.EllipsoidGeometry.unpack(r, o, y)
+    (f.unpack = function (a, o, n) {
+      const s = i.EllipsoidGeometry.unpack(a, o, G)
       return (
-        (G.vertexFormat = a.VertexFormat.clone(s._vertexFormat, G.vertexFormat)),
-        (G.stackPartitions = s._stackPartitions),
-        (G.slicePartitions = s._slicePartitions),
+        (k.vertexFormat = r.VertexFormat.clone(s._vertexFormat, k.vertexFormat)),
+        (k.stackPartitions = s._stackPartitions),
+        (k.slicePartitions = s._slicePartitions),
         e.defined(n)
-          ? (t.Cartesian3.clone(s._radii, G.radii), (n._ellipsoidGeometry = new i.EllipsoidGeometry(G)), n)
-          : ((G.radius = s._radii.x), new p(G))
+          ? (t.Cartesian3.clone(s._radii, k.radii), (n._ellipsoidGeometry = new i.EllipsoidGeometry(k)), n)
+          : ((k.radius = s._radii.x), new f(k))
       )
     }),
-    (p.createGeometry = function (e) {
+    (f.createGeometry = function (e) {
       return i.EllipsoidGeometry.createGeometry(e._ellipsoidGeometry)
     }),
-    function (t, r) {
-      return e.defined(r) && (t = p.unpack(t, r)), p.createGeometry(t)
+    function (t, i) {
+      return e.defined(i) && (t = f.unpack(t, i)), f.createGeometry(t)
     }
   )
 })

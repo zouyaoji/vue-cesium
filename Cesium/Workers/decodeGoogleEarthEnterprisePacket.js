@@ -1,344 +1,373 @@
-define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWorker'], function (e, t, i) {
+define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProcessorWorker'], function (e, t, n) {
   'use strict'
-  function r(t, i) {
-    if (r.passThroughDataForTesting) return i
-    var n = t.byteLength
-    if (0 === n || n % 4 != 0) throw new e.RuntimeError('The length of key must be greater than 0 and a multiple of 4.')
-    var a = new DataView(i),
+  function i(t, n) {
+    if (i.passThroughDataForTesting) return n
+    const r = t.byteLength
+    if (0 === r || r % 4 != 0) throw new e.RuntimeError('The length of key must be greater than 0 and a multiple of 4.')
+    const a = new DataView(n),
       o = a.getUint32(0, !0)
-    if (1953029805 === o || 2917034100 === o) return i
-    for (var s, f = new DataView(t), l = 0, d = i.byteLength, h = d - (d % 8), c = n, u = 8; l < h; )
-      for (s = u = (u + 8) % 24; l < h && s < c; )
-        a.setUint32(l, a.getUint32(l, !0) ^ f.getUint32(s, !0), !0),
-          a.setUint32(l + 4, a.getUint32(l + 4, !0) ^ f.getUint32(s + 4, !0), !0),
+    if (1953029805 === o || 2917034100 === o) return n
+    const s = new DataView(t)
+    let l = 0
+    const c = n.byteLength,
+      d = c - (c % 8),
+      f = r
+    let h,
+      u = 8
+    for (; l < d; )
+      for (u = (u + 8) % 24, h = u; l < d && h < f; )
+        a.setUint32(l, a.getUint32(l, !0) ^ s.getUint32(h, !0), !0),
+          a.setUint32(l + 4, a.getUint32(l + 4, !0) ^ s.getUint32(h + 4, !0), !0),
           (l += 8),
-          (s += 24)
-    if (l < d) for (s >= c && (s = u = (u + 8) % 24); l < d; ) a.setUint8(l, a.getUint8(l) ^ f.getUint8(s)), l++, s++
+          (h += 24)
+    if (l < c) for (h >= f && ((u = (u + 8) % 24), (h = u)); l < c; ) a.setUint8(l, a.getUint8(l) ^ s.getUint8(h)), l++, h++
   }
-  function n(e, t) {
+  function r(e, t) {
     return 0 != (e & t)
   }
-  r.passThroughDataForTesting = !1
-  var a = [1, 2, 4, 8]
-  function o(e, t, i, r, n, a) {
+  i.passThroughDataForTesting = !1
+  const a = [1, 2, 4, 8]
+  function o(e, t, n, i, r, a) {
     ;(this._bits = e),
       (this.cnodeVersion = t),
-      (this.imageryVersion = i),
-      (this.terrainVersion = r),
-      (this.imageryProvider = n),
+      (this.imageryVersion = n),
+      (this.terrainVersion = i),
+      (this.imageryProvider = r),
       (this.terrainProvider = a),
       (this.ancestorHasTerrain = !1),
       (this.terrainState = void 0)
   }
-  ;(o.clone = function (e, i) {
+  ;(o.clone = function (e, n) {
     return (
-      t.defined(i)
-        ? ((i._bits = e._bits),
-          (i.cnodeVersion = e.cnodeVersion),
-          (i.imageryVersion = e.imageryVersion),
-          (i.terrainVersion = e.terrainVersion),
-          (i.imageryProvider = e.imageryProvider),
-          (i.terrainProvider = e.terrainProvider))
-        : (i = new o(e._bits, e.cnodeVersion, e.imageryVersion, e.terrainVersion, e.imageryProvider, e.terrainProvider)),
-      (i.ancestorHasTerrain = e.ancestorHasTerrain),
-      (i.terrainState = e.terrainState),
-      i
+      t.defined(n)
+        ? ((n._bits = e._bits),
+          (n.cnodeVersion = e.cnodeVersion),
+          (n.imageryVersion = e.imageryVersion),
+          (n.terrainVersion = e.terrainVersion),
+          (n.imageryProvider = e.imageryProvider),
+          (n.terrainProvider = e.terrainProvider))
+        : (n = new o(e._bits, e.cnodeVersion, e.imageryVersion, e.terrainVersion, e.imageryProvider, e.terrainProvider)),
+      (n.ancestorHasTerrain = e.ancestorHasTerrain),
+      (n.terrainState = e.terrainState),
+      n
     )
   }),
     (o.prototype.setParent = function (e) {
       this.ancestorHasTerrain = e.ancestorHasTerrain || this.hasTerrain()
     }),
     (o.prototype.hasSubtree = function () {
-      return n(this._bits, 16)
+      return r(this._bits, 16)
     }),
     (o.prototype.hasImagery = function () {
-      return n(this._bits, 64)
+      return r(this._bits, 64)
     }),
     (o.prototype.hasTerrain = function () {
-      return n(this._bits, 128)
+      return r(this._bits, 128)
     }),
     (o.prototype.hasChildren = function () {
-      return n(this._bits, 15)
+      return r(this._bits, 15)
     }),
     (o.prototype.hasChild = function (e) {
-      return n(this._bits, a[e])
+      return r(this._bits, a[e])
     }),
     (o.prototype.getChildBitmask = function () {
       return 15 & this._bits
     })
-  var s = t.createCommonjsModule(function (e, t) {
-    var i = 'undefined' != typeof Uint8Array && 'undefined' != typeof Uint16Array && 'undefined' != typeof Int32Array
-    function r(e, t) {
-      return Object.prototype.hasOwnProperty.call(e, t)
-    }
-    ;(t.assign = function (e) {
-      for (var t = Array.prototype.slice.call(arguments, 1); t.length; ) {
-        var i = t.shift()
-        if (i) {
-          if ('object' != typeof i) throw new TypeError(i + 'must be non-object')
-          for (var n in i) r(i, n) && (e[n] = i[n])
-        }
-      }
-      return e
-    }),
-      (t.shrinkBuf = function (e, t) {
-        return e.length === t ? e : e.subarray ? e.subarray(0, t) : ((e.length = t), e)
-      })
-    var n = {
-        arraySet: function (e, t, i, r, n) {
-          if (t.subarray && e.subarray) e.set(t.subarray(i, i + r), n)
-          else for (var a = 0; a < r; a++) e[n + a] = t[i + a]
-        },
-        flattenChunks: function (e) {
-          var t, i, r, n, a, o
-          for (r = 0, t = 0, i = e.length; t < i; t++) r += e[t].length
-          for (o = new Uint8Array(r), n = 0, t = 0, i = e.length; t < i; t++) (a = e[t]), o.set(a, n), (n += a.length)
-          return o
-        }
-      },
-      a = {
-        arraySet: function (e, t, i, r, n) {
-          for (var a = 0; a < r; a++) e[n + a] = t[i + a]
-        },
-        flattenChunks: function (e) {
-          return [].concat.apply([], e)
-        }
-      }
-    ;(t.setTyped = function (e) {
-      e
-        ? ((t.Buf8 = Uint8Array), (t.Buf16 = Uint16Array), (t.Buf32 = Int32Array), t.assign(t, n))
-        : ((t.Buf8 = Array), (t.Buf16 = Array), (t.Buf32 = Array), t.assign(t, a))
-    }),
-      t.setTyped(i)
-  })
-  var f = function (e, t, i, r) {
-    for (var n = (65535 & e) | 0, a = ((e >>> 16) & 65535) | 0, o = 0; 0 !== i; ) {
-      i -= o = i > 2e3 ? 2e3 : i
+  var s = {},
+    l = {}
+  var c = (e, t, n, i) => {
+    let r = (65535 & e) | 0,
+      a = ((e >>> 16) & 65535) | 0,
+      o = 0
+    for (; 0 !== n; ) {
+      ;(o = n > 2e3 ? 2e3 : n), (n -= o)
       do {
-        a = (a + (n = (n + t[r++]) | 0)) | 0
+        ;(r = (r + t[i++]) | 0), (a = (a + r) | 0)
       } while (--o)
-      ;(n %= 65521), (a %= 65521)
+      ;(r %= 65521), (a %= 65521)
     }
-    return n | (a << 16) | 0
+    return r | (a << 16) | 0
   }
-  var l = (function () {
-    for (var e, t = [], i = 0; i < 256; i++) {
-      e = i
-      for (var r = 0; r < 8; r++) e = 1 & e ? 3988292384 ^ (e >>> 1) : e >>> 1
-      t[i] = e
-    }
-    return t
-  })()
-  var d = function (e, t, i, r) {
-      var n = l,
-        a = r + i
-      e ^= -1
-      for (var o = r; o < a; o++) e = (e >>> 8) ^ n[255 & (e ^ t[o])]
-      return -1 ^ e
-    },
-    h = function (e, t) {
-      var i, r, n, a, o, s, f, l, d, h, c, u, w, b, m, v, g, k, p, y, _, x, B, E, A
-      ;(i = e.state),
-        (r = e.next_in),
-        (E = e.input),
-        (n = r + (e.avail_in - 5)),
-        (a = e.next_out),
+  const d = new Uint32Array(
+    (() => {
+      let e,
+        t = []
+      for (var n = 0; n < 256; n++) {
+        e = n
+        for (var i = 0; i < 8; i++) e = 1 & e ? 3988292384 ^ (e >>> 1) : e >>> 1
+        t[n] = e
+      }
+      return t
+    })()
+  )
+  var f = (e, t, n, i) => {
+    const r = d,
+      a = i + n
+    e ^= -1
+    for (let n = i; n < a; n++) e = (e >>> 8) ^ r[255 & (e ^ t[n])]
+    return -1 ^ e
+  }
+  const h = 16209
+  const u = 15,
+    w = new Uint16Array([3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0]),
+    b = new Uint8Array([16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78]),
+    m = new Uint16Array([
+      1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0,
+      0
+    ]),
+    g = new Uint8Array([
+      16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64
+    ])
+  var k = {
+    Z_NO_FLUSH: 0,
+    Z_PARTIAL_FLUSH: 1,
+    Z_SYNC_FLUSH: 2,
+    Z_FULL_FLUSH: 3,
+    Z_FINISH: 4,
+    Z_BLOCK: 5,
+    Z_TREES: 6,
+    Z_OK: 0,
+    Z_STREAM_END: 1,
+    Z_NEED_DICT: 2,
+    Z_ERRNO: -1,
+    Z_STREAM_ERROR: -2,
+    Z_DATA_ERROR: -3,
+    Z_MEM_ERROR: -4,
+    Z_BUF_ERROR: -5,
+    Z_NO_COMPRESSION: 0,
+    Z_BEST_SPEED: 1,
+    Z_BEST_COMPRESSION: 9,
+    Z_DEFAULT_COMPRESSION: -1,
+    Z_FILTERED: 1,
+    Z_HUFFMAN_ONLY: 2,
+    Z_RLE: 3,
+    Z_FIXED: 4,
+    Z_DEFAULT_STRATEGY: 0,
+    Z_BINARY: 0,
+    Z_TEXT: 1,
+    Z_UNKNOWN: 2,
+    Z_DEFLATED: 8
+  }
+  const _ = c,
+    p = f,
+    y = function (e, t) {
+      let n, i, r, a, o, s, l, c, d, f, u, w, b, m, g, k, _, p, y, v, E, x, R, A
+      const T = e.state
+      ;(n = e.next_in),
+        (R = e.input),
+        (i = n + (e.avail_in - 5)),
+        (r = e.next_out),
         (A = e.output),
-        (o = a - (t - e.avail_out)),
-        (s = a + (e.avail_out - 257)),
-        (f = i.dmax),
-        (l = i.wsize),
-        (d = i.whave),
-        (h = i.wnext),
-        (c = i.window),
-        (u = i.hold),
-        (w = i.bits),
-        (b = i.lencode),
-        (m = i.distcode),
-        (v = (1 << i.lenbits) - 1),
-        (g = (1 << i.distbits) - 1)
+        (a = r - (t - e.avail_out)),
+        (o = r + (e.avail_out - 257)),
+        (s = T.dmax),
+        (l = T.wsize),
+        (c = T.whave),
+        (d = T.wnext),
+        (f = T.window),
+        (u = T.hold),
+        (w = T.bits),
+        (b = T.lencode),
+        (m = T.distcode),
+        (g = (1 << T.lenbits) - 1),
+        (k = (1 << T.distbits) - 1)
       e: do {
-        w < 15 && ((u += E[r++] << w), (w += 8), (u += E[r++] << w), (w += 8)), (k = b[u & v])
+        w < 15 && ((u += R[n++] << w), (w += 8), (u += R[n++] << w), (w += 8)), (_ = b[u & g])
         t: for (;;) {
-          if (((u >>>= p = k >>> 24), (w -= p), 0 === (p = (k >>> 16) & 255))) A[a++] = 65535 & k
+          if (((p = _ >>> 24), (u >>>= p), (w -= p), (p = (_ >>> 16) & 255), 0 === p)) A[r++] = 65535 & _
           else {
             if (!(16 & p)) {
               if (0 == (64 & p)) {
-                k = b[(65535 & k) + (u & ((1 << p) - 1))]
+                _ = b[(65535 & _) + (u & ((1 << p) - 1))]
                 continue t
               }
               if (32 & p) {
-                i.mode = 12
+                T.mode = 16191
                 break e
               }
-              ;(e.msg = 'invalid literal/length code'), (i.mode = 30)
+              ;(e.msg = 'invalid literal/length code'), (T.mode = h)
               break e
             }
-            ;(y = 65535 & k),
-              (p &= 15) && (w < p && ((u += E[r++] << w), (w += 8)), (y += u & ((1 << p) - 1)), (u >>>= p), (w -= p)),
-              w < 15 && ((u += E[r++] << w), (w += 8), (u += E[r++] << w), (w += 8)),
-              (k = m[u & g])
-            i: for (;;) {
-              if (((u >>>= p = k >>> 24), (w -= p), !(16 & (p = (k >>> 16) & 255)))) {
+            ;(y = 65535 & _),
+              (p &= 15),
+              p && (w < p && ((u += R[n++] << w), (w += 8)), (y += u & ((1 << p) - 1)), (u >>>= p), (w -= p)),
+              w < 15 && ((u += R[n++] << w), (w += 8), (u += R[n++] << w), (w += 8)),
+              (_ = m[u & k])
+            n: for (;;) {
+              if (((p = _ >>> 24), (u >>>= p), (w -= p), (p = (_ >>> 16) & 255), !(16 & p))) {
                 if (0 == (64 & p)) {
-                  k = m[(65535 & k) + (u & ((1 << p) - 1))]
-                  continue i
+                  _ = m[(65535 & _) + (u & ((1 << p) - 1))]
+                  continue n
                 }
-                ;(e.msg = 'invalid distance code'), (i.mode = 30)
+                ;(e.msg = 'invalid distance code'), (T.mode = h)
                 break e
               }
               if (
-                ((_ = 65535 & k),
-                w < (p &= 15) && ((u += E[r++] << w), (w += 8) < p && ((u += E[r++] << w), (w += 8))),
-                (_ += u & ((1 << p) - 1)) > f)
+                ((v = 65535 & _),
+                (p &= 15),
+                w < p && ((u += R[n++] << w), (w += 8), w < p && ((u += R[n++] << w), (w += 8))),
+                (v += u & ((1 << p) - 1)),
+                v > s)
               ) {
-                ;(e.msg = 'invalid distance too far back'), (i.mode = 30)
+                ;(e.msg = 'invalid distance too far back'), (T.mode = h)
                 break e
               }
-              if (((u >>>= p), (w -= p), _ > (p = a - o))) {
-                if ((p = _ - p) > d && i.sane) {
-                  ;(e.msg = 'invalid distance too far back'), (i.mode = 30)
+              if (((u >>>= p), (w -= p), (p = r - a), v > p)) {
+                if (((p = v - p), p > c && T.sane)) {
+                  ;(e.msg = 'invalid distance too far back'), (T.mode = h)
                   break e
                 }
-                if (((x = 0), (B = c), 0 === h)) {
-                  if (((x += l - p), p < y)) {
+                if (((E = 0), (x = f), 0 === d)) {
+                  if (((E += l - p), p < y)) {
                     y -= p
                     do {
-                      A[a++] = c[x++]
+                      A[r++] = f[E++]
                     } while (--p)
-                    ;(x = a - _), (B = A)
+                    ;(E = r - v), (x = A)
                   }
-                } else if (h < p) {
-                  if (((x += l + h - p), (p -= h) < y)) {
+                } else if (d < p) {
+                  if (((E += l + d - p), (p -= d), p < y)) {
                     y -= p
                     do {
-                      A[a++] = c[x++]
+                      A[r++] = f[E++]
                     } while (--p)
-                    if (((x = 0), h < y)) {
-                      y -= p = h
+                    if (((E = 0), d < y)) {
+                      ;(p = d), (y -= p)
                       do {
-                        A[a++] = c[x++]
+                        A[r++] = f[E++]
                       } while (--p)
-                      ;(x = a - _), (B = A)
+                      ;(E = r - v), (x = A)
                     }
                   }
-                } else if (((x += h - p), p < y)) {
+                } else if (((E += d - p), p < y)) {
                   y -= p
                   do {
-                    A[a++] = c[x++]
+                    A[r++] = f[E++]
                   } while (--p)
-                  ;(x = a - _), (B = A)
+                  ;(E = r - v), (x = A)
                 }
-                for (; y > 2; ) (A[a++] = B[x++]), (A[a++] = B[x++]), (A[a++] = B[x++]), (y -= 3)
-                y && ((A[a++] = B[x++]), y > 1 && (A[a++] = B[x++]))
+                for (; y > 2; ) (A[r++] = x[E++]), (A[r++] = x[E++]), (A[r++] = x[E++]), (y -= 3)
+                y && ((A[r++] = x[E++]), y > 1 && (A[r++] = x[E++]))
               } else {
-                x = a - _
+                E = r - v
                 do {
-                  ;(A[a++] = A[x++]), (A[a++] = A[x++]), (A[a++] = A[x++]), (y -= 3)
+                  ;(A[r++] = A[E++]), (A[r++] = A[E++]), (A[r++] = A[E++]), (y -= 3)
                 } while (y > 2)
-                y && ((A[a++] = A[x++]), y > 1 && (A[a++] = A[x++]))
+                y && ((A[r++] = A[E++]), y > 1 && (A[r++] = A[E++]))
               }
               break
             }
           }
           break
         }
-      } while (r < n && a < s)
-      ;(r -= y = w >> 3),
-        (u &= (1 << (w -= y << 3)) - 1),
-        (e.next_in = r),
-        (e.next_out = a),
-        (e.avail_in = r < n ? n - r + 5 : 5 - (r - n)),
-        (e.avail_out = a < s ? s - a + 257 : 257 - (a - s)),
-        (i.hold = u),
-        (i.bits = w)
+      } while (n < i && r < o)
+      ;(y = w >> 3),
+        (n -= y),
+        (w -= y << 3),
+        (u &= (1 << w) - 1),
+        (e.next_in = n),
+        (e.next_out = r),
+        (e.avail_in = n < i ? i - n + 5 : 5 - (n - i)),
+        (e.avail_out = r < o ? o - r + 257 : 257 - (r - o)),
+        (T.hold = u),
+        (T.bits = w)
     },
-    c = 15,
-    u = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0],
-    w = [16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78],
-    b = [
-      1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0,
-      0
-    ],
-    m = [16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64],
-    v = function (e, t, i, r, n, a, o, f) {
-      var l,
+    v = (e, t, n, i, r, a, o, s) => {
+      const l = s.bits
+      let c,
         d,
+        f,
         h,
-        v,
-        g,
         k,
-        p,
-        y,
         _,
-        x = f.bits,
-        B = 0,
+        p = 0,
+        y = 0,
+        v = 0,
         E = 0,
+        x = 0,
+        R = 0,
         A = 0,
         T = 0,
         U = 0,
         S = 0,
-        R = 0,
-        C = 0,
-        I = 0,
-        z = 0,
-        D = null,
-        V = 0,
-        P = new s.Buf16(16),
-        O = new s.Buf16(16),
-        M = null,
-        j = 0
-      for (B = 0; B <= c; B++) P[B] = 0
-      for (E = 0; E < r; E++) P[t[i + E]]++
-      for (U = x, T = c; T >= 1 && 0 === P[T]; T--);
-      if ((U > T && (U = T), 0 === T)) return (n[a++] = 20971520), (n[a++] = 20971520), (f.bits = 1), 0
-      for (A = 1; A < T && 0 === P[A]; A++);
-      for (U < A && (U = A), C = 1, B = 1; B <= c; B++) if (((C <<= 1), (C -= P[B]) < 0)) return -1
-      if (C > 0 && (0 === e || 1 !== T)) return -1
-      for (O[1] = 0, B = 1; B < c; B++) O[B + 1] = O[B] + P[B]
-      for (E = 0; E < r; E++) 0 !== t[i + E] && (o[O[t[i + E]]++] = E)
+        Z = null
+      const D = new Uint16Array(16),
+        I = new Uint16Array(16)
+      let O,
+        B,
+        N,
+        C = null
+      for (p = 0; p <= u; p++) D[p] = 0
+      for (y = 0; y < i; y++) D[t[n + y]]++
+      for (x = l, E = u; E >= 1 && 0 === D[E]; E--);
+      if ((x > E && (x = E), 0 === E)) return (r[a++] = 20971520), (r[a++] = 20971520), (s.bits = 1), 0
+      for (v = 1; v < E && 0 === D[v]; v++);
+      for (x < v && (x = v), T = 1, p = 1; p <= u; p++) if (((T <<= 1), (T -= D[p]), T < 0)) return -1
+      if (T > 0 && (0 === e || 1 !== E)) return -1
+      for (I[1] = 0, p = 1; p < u; p++) I[p + 1] = I[p] + D[p]
+      for (y = 0; y < i; y++) 0 !== t[n + y] && (o[I[t[n + y]]++] = y)
       if (
-        (0 === e ? ((D = M = o), (k = 19)) : 1 === e ? ((D = u), (V -= 257), (M = w), (j -= 257), (k = 256)) : ((D = b), (M = m), (k = -1)),
-        (z = 0),
-        (E = 0),
-        (B = A),
-        (g = a),
-        (S = U),
-        (R = 0),
-        (h = -1),
-        (v = (I = 1 << U) - 1),
-        (1 === e && I > 852) || (2 === e && I > 592))
+        (0 === e ? ((Z = C = o), (_ = 20)) : 1 === e ? ((Z = w), (C = b), (_ = 257)) : ((Z = m), (C = g), (_ = 0)),
+        (S = 0),
+        (y = 0),
+        (p = v),
+        (k = a),
+        (R = x),
+        (A = 0),
+        (f = -1),
+        (U = 1 << x),
+        (h = U - 1),
+        (1 === e && U > 852) || (2 === e && U > 592))
       )
         return 1
       for (;;) {
-        ;(p = B - R),
-          o[E] < k ? ((y = 0), (_ = o[E])) : o[E] > k ? ((y = M[j + o[E]]), (_ = D[V + o[E]])) : ((y = 96), (_ = 0)),
-          (l = 1 << (B - R)),
-          (A = d = 1 << S)
+        ;(O = p - A),
+          o[y] + 1 < _ ? ((B = 0), (N = o[y])) : o[y] >= _ ? ((B = C[o[y] - _]), (N = Z[o[y] - _])) : ((B = 96), (N = 0)),
+          (c = 1 << (p - A)),
+          (d = 1 << R),
+          (v = d)
         do {
-          n[g + (z >> R) + (d -= l)] = (p << 24) | (y << 16) | _ | 0
+          ;(d -= c), (r[k + (S >> A) + d] = (O << 24) | (B << 16) | N | 0)
         } while (0 !== d)
-        for (l = 1 << (B - 1); z & l; ) l >>= 1
-        if ((0 !== l ? ((z &= l - 1), (z += l)) : (z = 0), E++, 0 == --P[B])) {
-          if (B === T) break
-          B = t[i + o[E]]
+        for (c = 1 << (p - 1); S & c; ) c >>= 1
+        if ((0 !== c ? ((S &= c - 1), (S += c)) : (S = 0), y++, 0 == --D[p])) {
+          if (p === E) break
+          p = t[n + o[y]]
         }
-        if (B > U && (z & v) !== h) {
-          for (0 === R && (R = U), g += A, C = 1 << (S = B - R); S + R < T && !((C -= P[S + R]) <= 0); ) S++, (C <<= 1)
-          if (((I += 1 << S), (1 === e && I > 852) || (2 === e && I > 592))) return 1
-          n[(h = z & v)] = (U << 24) | (S << 16) | (g - a) | 0
+        if (p > x && (S & h) !== f) {
+          for (0 === A && (A = x), k += v, R = p - A, T = 1 << R; R + A < E && ((T -= D[R + A]), !(T <= 0)); ) R++, (T <<= 1)
+          if (((U += 1 << R), (1 === e && U > 852) || (2 === e && U > 592))) return 1
+          ;(f = S & h), (r[f] = (x << 24) | (R << 16) | (k - a) | 0)
         }
       }
-      return 0 !== z && (n[g + z] = ((B - R) << 24) | (64 << 16) | 0), (f.bits = U), 0
+      return 0 !== S && (r[k + S] = ((p - A) << 24) | (64 << 16) | 0), (s.bits = x), 0
     },
-    g = -2,
-    k = 12,
-    p = 30
-  function y(e) {
-    return ((e >>> 24) & 255) + ((e >>> 8) & 65280) + ((65280 & e) << 8) + ((255 & e) << 24)
-  }
-  function _() {
-    ;(this.mode = 0),
+    {
+      Z_FINISH: E,
+      Z_BLOCK: x,
+      Z_TREES: R,
+      Z_OK: A,
+      Z_STREAM_END: T,
+      Z_NEED_DICT: U,
+      Z_STREAM_ERROR: S,
+      Z_DATA_ERROR: Z,
+      Z_MEM_ERROR: D,
+      Z_BUF_ERROR: I,
+      Z_DEFLATED: O
+    } = k,
+    B = 16180,
+    N = 16190,
+    C = 16191,
+    M = 16192,
+    L = 16194,
+    F = 16199,
+    P = 16200,
+    z = 16206,
+    V = 16209,
+    H = e => ((e >>> 24) & 255) + ((e >>> 8) & 65280) + ((65280 & e) << 8) + ((255 & e) << 24)
+  function j() {
+    ;(this.strm = null),
+      (this.mode = 0),
       (this.last = !1),
       (this.wrap = 0),
       (this.havedict = !1),
@@ -366,701 +395,735 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       (this.ndist = 0),
       (this.have = 0),
       (this.next = null),
-      (this.lens = new s.Buf16(320)),
-      (this.work = new s.Buf16(288)),
+      (this.lens = new Uint16Array(320)),
+      (this.work = new Uint16Array(288)),
       (this.lendyn = null),
       (this.distdyn = null),
       (this.sane = 0),
       (this.back = 0),
       (this.was = 0)
   }
-  function x(e) {
-    var t
-    return e && e.state
-      ? ((t = e.state),
+  const K = e => {
+      if (!e) return 1
+      const t = e.state
+      return !t || t.strm !== e || t.mode < B || t.mode > 16211 ? 1 : 0
+    },
+    Y = e => {
+      if (K(e)) return S
+      const t = e.state
+      return (
         (e.total_in = e.total_out = t.total = 0),
         (e.msg = ''),
         t.wrap && (e.adler = 1 & t.wrap),
-        (t.mode = 1),
+        (t.mode = B),
         (t.last = 0),
         (t.havedict = 0),
+        (t.flags = -1),
         (t.dmax = 32768),
         (t.head = null),
         (t.hold = 0),
         (t.bits = 0),
-        (t.lencode = t.lendyn = new s.Buf32(852)),
-        (t.distcode = t.distdyn = new s.Buf32(592)),
+        (t.lencode = t.lendyn = new Int32Array(852)),
+        (t.distcode = t.distdyn = new Int32Array(592)),
         (t.sane = 1),
         (t.back = -1),
-        0)
-      : g
-  }
-  function B(e) {
-    var t
-    return e && e.state ? (((t = e.state).wsize = 0), (t.whave = 0), (t.wnext = 0), x(e)) : g
-  }
-  function E(e, t) {
-    var i, r
-    return e && e.state
-      ? ((r = e.state),
-        t < 0 ? ((i = 0), (t = -t)) : ((i = 1 + (t >> 4)), t < 48 && (t &= 15)),
-        t && (t < 8 || t > 15) ? g : (null !== r.window && r.wbits !== t && (r.window = null), (r.wrap = i), (r.wbits = t), B(e)))
-      : g
-  }
-  function A(e, t) {
-    var i, r
-    return e ? ((r = new _()), (e.state = r), (r.window = null), 0 !== (i = E(e, t)) && (e.state = null), i) : g
-  }
-  var T,
-    U,
-    S = !0
-  function R(e) {
-    if (S) {
-      var t
-      for (T = new s.Buf32(512), U = new s.Buf32(32), t = 0; t < 144; ) e.lens[t++] = 8
-      for (; t < 256; ) e.lens[t++] = 9
-      for (; t < 280; ) e.lens[t++] = 7
-      for (; t < 288; ) e.lens[t++] = 8
-      for (v(1, e.lens, 0, 288, T, 0, e.work, { bits: 9 }), t = 0; t < 32; ) e.lens[t++] = 5
-      v(2, e.lens, 0, 32, U, 0, e.work, { bits: 5 }), (S = !1)
+        A
+      )
+    },
+    G = e => {
+      if (K(e)) return S
+      const t = e.state
+      return (t.wsize = 0), (t.whave = 0), (t.wnext = 0), Y(e)
+    },
+    Q = (e, t) => {
+      let n
+      if (K(e)) return S
+      const i = e.state
+      return (
+        t < 0 ? ((n = 0), (t = -t)) : ((n = 5 + (t >> 4)), t < 48 && (t &= 15)),
+        t && (t < 8 || t > 15) ? S : (null !== i.window && i.wbits !== t && (i.window = null), (i.wrap = n), (i.wbits = t), G(e))
+      )
+    },
+    W = (e, t) => {
+      if (!e) return S
+      const n = new j()
+      ;(e.state = n), (n.strm = e), (n.window = null), (n.mode = B)
+      const i = Q(e, t)
+      return i !== A && (e.state = null), i
     }
-    ;(e.lencode = T), (e.lenbits = 9), (e.distcode = U), (e.distbits = 5)
-  }
-  function C(e, t, i, r) {
-    var n,
-      a = e.state
-    return (
-      null === a.window && ((a.wsize = 1 << a.wbits), (a.wnext = 0), (a.whave = 0), (a.window = new s.Buf8(a.wsize))),
-      r >= a.wsize
-        ? (s.arraySet(a.window, t, i - a.wsize, a.wsize, 0), (a.wnext = 0), (a.whave = a.wsize))
-        : ((n = a.wsize - a.wnext) > r && (n = r),
-          s.arraySet(a.window, t, i - r, n, a.wnext),
-          (r -= n)
-            ? (s.arraySet(a.window, t, i - r, r, 0), (a.wnext = r), (a.whave = a.wsize))
-            : ((a.wnext += n), a.wnext === a.wsize && (a.wnext = 0), a.whave < a.wsize && (a.whave += n))),
-      0
-    )
-  }
-  var I = {
-      inflateReset: B,
-      inflateReset2: E,
-      inflateResetKeep: x,
-      inflateInit: function (e) {
-        return A(e, 15)
-      },
-      inflateInit2: A,
-      inflate: function (e, t) {
-        var i,
-          r,
-          n,
-          a,
-          o,
-          l,
-          c,
-          u,
-          w,
-          b,
-          m,
-          _,
-          x,
-          B,
-          E,
-          A,
-          T,
-          U,
-          S,
-          I,
-          z,
-          D,
-          V,
-          P,
-          O = 0,
-          M = new s.Buf8(4),
-          j = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]
-        if (!e || !e.state || !e.output || (!e.input && 0 !== e.avail_in)) return g
-        ;(i = e.state).mode === k && (i.mode = 13),
-          (o = e.next_out),
-          (n = e.output),
-          (c = e.avail_out),
-          (a = e.next_in),
-          (r = e.input),
-          (l = e.avail_in),
-          (u = i.hold),
-          (w = i.bits),
-          (b = l),
-          (m = c),
-          (D = 0)
-        e: for (;;)
-          switch (i.mode) {
-            case 1:
-              if (0 === i.wrap) {
-                i.mode = 13
-                break
-              }
-              for (; w < 16; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if (2 & i.wrap && 35615 === u) {
-                ;(i.check = 0), (M[0] = 255 & u), (M[1] = (u >>> 8) & 255), (i.check = d(i.check, M, 2, 0)), (u = 0), (w = 0), (i.mode = 2)
-                break
-              }
-              if (((i.flags = 0), i.head && (i.head.done = !1), !(1 & i.wrap) || (((255 & u) << 8) + (u >> 8)) % 31)) {
-                ;(e.msg = 'incorrect header check'), (i.mode = p)
-                break
-              }
-              if (8 != (15 & u)) {
-                ;(e.msg = 'unknown compression method'), (i.mode = p)
-                break
-              }
-              if (((w -= 4), (z = 8 + (15 & (u >>>= 4))), 0 === i.wbits)) i.wbits = z
-              else if (z > i.wbits) {
-                ;(e.msg = 'invalid window size'), (i.mode = p)
-                break
-              }
-              ;(i.dmax = 1 << z), (e.adler = i.check = 1), (i.mode = 512 & u ? 10 : k), (u = 0), (w = 0)
+  let X,
+    q,
+    J = !0
+  const $ = e => {
+      if (J) {
+        ;(X = new Int32Array(512)), (q = new Int32Array(32))
+        let t = 0
+        for (; t < 144; ) e.lens[t++] = 8
+        for (; t < 256; ) e.lens[t++] = 9
+        for (; t < 280; ) e.lens[t++] = 7
+        for (; t < 288; ) e.lens[t++] = 8
+        for (v(1, e.lens, 0, 288, X, 0, e.work, { bits: 9 }), t = 0; t < 32; ) e.lens[t++] = 5
+        v(2, e.lens, 0, 32, q, 0, e.work, { bits: 5 }), (J = !1)
+      }
+      ;(e.lencode = X), (e.lenbits = 9), (e.distcode = q), (e.distbits = 5)
+    },
+    ee = (e, t, n, i) => {
+      let r
+      const a = e.state
+      return (
+        null === a.window && ((a.wsize = 1 << a.wbits), (a.wnext = 0), (a.whave = 0), (a.window = new Uint8Array(a.wsize))),
+        i >= a.wsize
+          ? (a.window.set(t.subarray(n - a.wsize, n), 0), (a.wnext = 0), (a.whave = a.wsize))
+          : ((r = a.wsize - a.wnext),
+            r > i && (r = i),
+            a.window.set(t.subarray(n - i, n - i + r), a.wnext),
+            (i -= r)
+              ? (a.window.set(t.subarray(n - i, n), 0), (a.wnext = i), (a.whave = a.wsize))
+              : ((a.wnext += r), a.wnext === a.wsize && (a.wnext = 0), a.whave < a.wsize && (a.whave += r))),
+        0
+      )
+    }
+  ;(l.inflateReset = G),
+    (l.inflateReset2 = Q),
+    (l.inflateResetKeep = Y),
+    (l.inflateInit = e => W(e, 15)),
+    (l.inflateInit2 = W),
+    (l.inflate = (e, t) => {
+      let n,
+        i,
+        r,
+        a,
+        o,
+        s,
+        l,
+        c,
+        d,
+        f,
+        h,
+        u,
+        w,
+        b,
+        m,
+        g,
+        k,
+        j,
+        Y,
+        G,
+        Q,
+        W,
+        X = 0
+      const q = new Uint8Array(4)
+      let J, te
+      const ne = new Uint8Array([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15])
+      if (K(e) || !e.output || (!e.input && 0 !== e.avail_in)) return S
+      ;(n = e.state),
+        n.mode === C && (n.mode = M),
+        (o = e.next_out),
+        (r = e.output),
+        (l = e.avail_out),
+        (a = e.next_in),
+        (i = e.input),
+        (s = e.avail_in),
+        (c = n.hold),
+        (d = n.bits),
+        (f = s),
+        (h = l),
+        (W = A)
+      e: for (;;)
+        switch (n.mode) {
+          case B:
+            if (0 === n.wrap) {
+              n.mode = M
               break
-            case 2:
-              for (; w < 16; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if (((i.flags = u), 8 != (255 & i.flags))) {
-                ;(e.msg = 'unknown compression method'), (i.mode = p)
-                break
-              }
-              if (57344 & i.flags) {
-                ;(e.msg = 'unknown header flags set'), (i.mode = p)
-                break
-              }
-              i.head && (i.head.text = (u >> 8) & 1),
-                512 & i.flags && ((M[0] = 255 & u), (M[1] = (u >>> 8) & 255), (i.check = d(i.check, M, 2, 0))),
-                (u = 0),
-                (w = 0),
-                (i.mode = 3)
-            case 3:
-              for (; w < 32; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              i.head && (i.head.time = u),
-                512 & i.flags &&
-                  ((M[0] = 255 & u), (M[1] = (u >>> 8) & 255), (M[2] = (u >>> 16) & 255), (M[3] = (u >>> 24) & 255), (i.check = d(i.check, M, 4, 0))),
-                (u = 0),
-                (w = 0),
-                (i.mode = 4)
-            case 4:
-              for (; w < 16; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              i.head && ((i.head.xflags = 255 & u), (i.head.os = u >> 8)),
-                512 & i.flags && ((M[0] = 255 & u), (M[1] = (u >>> 8) & 255), (i.check = d(i.check, M, 2, 0))),
-                (u = 0),
-                (w = 0),
-                (i.mode = 5)
-            case 5:
-              if (1024 & i.flags) {
-                for (; w < 16; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(i.length = u),
-                  i.head && (i.head.extra_len = u),
-                  512 & i.flags && ((M[0] = 255 & u), (M[1] = (u >>> 8) & 255), (i.check = d(i.check, M, 2, 0))),
-                  (u = 0),
-                  (w = 0)
-              } else i.head && (i.head.extra = null)
-              i.mode = 6
-            case 6:
-              if (
-                1024 & i.flags &&
-                ((_ = i.length) > l && (_ = l),
-                _ &&
-                  (i.head &&
-                    ((z = i.head.extra_len - i.length),
-                    i.head.extra || (i.head.extra = new Array(i.head.extra_len)),
-                    s.arraySet(i.head.extra, r, a, _, z)),
-                  512 & i.flags && (i.check = d(i.check, r, _, a)),
-                  (l -= _),
-                  (a += _),
-                  (i.length -= _)),
-                i.length)
-              )
-                break e
-              ;(i.length = 0), (i.mode = 7)
-            case 7:
-              if (2048 & i.flags) {
-                if (0 === l) break e
-                _ = 0
-                do {
-                  ;(z = r[a + _++]), i.head && z && i.length < 65536 && (i.head.name += String.fromCharCode(z))
-                } while (z && _ < l)
-                if ((512 & i.flags && (i.check = d(i.check, r, _, a)), (l -= _), (a += _), z)) break e
-              } else i.head && (i.head.name = null)
-              ;(i.length = 0), (i.mode = 8)
-            case 8:
-              if (4096 & i.flags) {
-                if (0 === l) break e
-                _ = 0
-                do {
-                  ;(z = r[a + _++]), i.head && z && i.length < 65536 && (i.head.comment += String.fromCharCode(z))
-                } while (z && _ < l)
-                if ((512 & i.flags && (i.check = d(i.check, r, _, a)), (l -= _), (a += _), z)) break e
-              } else i.head && (i.head.comment = null)
-              i.mode = 9
-            case 9:
-              if (512 & i.flags) {
-                for (; w < 16; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                if (u !== (65535 & i.check)) {
-                  ;(e.msg = 'header crc mismatch'), (i.mode = p)
-                  break
-                }
-                ;(u = 0), (w = 0)
-              }
-              i.head && ((i.head.hcrc = (i.flags >> 9) & 1), (i.head.done = !0)), (e.adler = i.check = 0), (i.mode = k)
+            }
+            for (; d < 16; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if (2 & n.wrap && 35615 === c) {
+              0 === n.wbits && (n.wbits = 15),
+                (n.check = 0),
+                (q[0] = 255 & c),
+                (q[1] = (c >>> 8) & 255),
+                (n.check = p(n.check, q, 2, 0)),
+                (c = 0),
+                (d = 0),
+                (n.mode = 16181)
               break
-            case 10:
-              for (; w < 32; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
+            }
+            if ((n.head && (n.head.done = !1), !(1 & n.wrap) || (((255 & c) << 8) + (c >> 8)) % 31)) {
+              ;(e.msg = 'incorrect header check'), (n.mode = V)
+              break
+            }
+            if ((15 & c) !== O) {
+              ;(e.msg = 'unknown compression method'), (n.mode = V)
+              break
+            }
+            if (((c >>>= 4), (d -= 4), (Q = 8 + (15 & c)), 0 === n.wbits && (n.wbits = Q), Q > 15 || Q > n.wbits)) {
+              ;(e.msg = 'invalid window size'), (n.mode = V)
+              break
+            }
+            ;(n.dmax = 1 << n.wbits), (n.flags = 0), (e.adler = n.check = 1), (n.mode = 512 & c ? 16189 : C), (c = 0), (d = 0)
+            break
+          case 16181:
+            for (; d < 16; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if (((n.flags = c), (255 & n.flags) !== O)) {
+              ;(e.msg = 'unknown compression method'), (n.mode = V)
+              break
+            }
+            if (57344 & n.flags) {
+              ;(e.msg = 'unknown header flags set'), (n.mode = V)
+              break
+            }
+            n.head && (n.head.text = (c >> 8) & 1),
+              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+              (c = 0),
+              (d = 0),
+              (n.mode = 16182)
+          case 16182:
+            for (; d < 32; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            n.head && (n.head.time = c),
+              512 & n.flags &&
+                4 & n.wrap &&
+                ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (q[2] = (c >>> 16) & 255), (q[3] = (c >>> 24) & 255), (n.check = p(n.check, q, 4, 0))),
+              (c = 0),
+              (d = 0),
+              (n.mode = 16183)
+          case 16183:
+            for (; d < 16; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            n.head && ((n.head.xflags = 255 & c), (n.head.os = c >> 8)),
+              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+              (c = 0),
+              (d = 0),
+              (n.mode = 16184)
+          case 16184:
+            if (1024 & n.flags) {
+              for (; d < 16; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
               }
-              ;(e.adler = i.check = y(u)), (u = 0), (w = 0), (i.mode = 11)
-            case 11:
-              if (0 === i.havedict) return (e.next_out = o), (e.avail_out = c), (e.next_in = a), (e.avail_in = l), (i.hold = u), (i.bits = w), 2
-              ;(e.adler = i.check = 1), (i.mode = k)
-            case k:
-              if (5 === t || 6 === t) break e
-            case 13:
-              if (i.last) {
-                ;(u >>>= 7 & w), (w -= 7 & w), (i.mode = 27)
+              ;(n.length = c),
+                n.head && (n.head.extra_len = c),
+                512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+                (c = 0),
+                (d = 0)
+            } else n.head && (n.head.extra = null)
+            n.mode = 16185
+          case 16185:
+            if (
+              1024 & n.flags &&
+              ((u = n.length),
+              u > s && (u = s),
+              u &&
+                (n.head &&
+                  ((Q = n.head.extra_len - n.length),
+                  n.head.extra || (n.head.extra = new Uint8Array(n.head.extra_len)),
+                  n.head.extra.set(i.subarray(a, a + u), Q)),
+                512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)),
+                (s -= u),
+                (a += u),
+                (n.length -= u)),
+              n.length)
+            )
+              break e
+            ;(n.length = 0), (n.mode = 16186)
+          case 16186:
+            if (2048 & n.flags) {
+              if (0 === s) break e
+              u = 0
+              do {
+                ;(Q = i[a + u++]), n.head && Q && n.length < 65536 && (n.head.name += String.fromCharCode(Q))
+              } while (Q && u < s)
+              if ((512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
+            } else n.head && (n.head.name = null)
+            ;(n.length = 0), (n.mode = 16187)
+          case 16187:
+            if (4096 & n.flags) {
+              if (0 === s) break e
+              u = 0
+              do {
+                ;(Q = i[a + u++]), n.head && Q && n.length < 65536 && (n.head.comment += String.fromCharCode(Q))
+              } while (Q && u < s)
+              if ((512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
+            } else n.head && (n.head.comment = null)
+            n.mode = 16188
+          case 16188:
+            if (512 & n.flags) {
+              for (; d < 16; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              if (4 & n.wrap && c !== (65535 & n.check)) {
+                ;(e.msg = 'header crc mismatch'), (n.mode = V)
                 break
               }
-              for (; w < 3; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
+              ;(c = 0), (d = 0)
+            }
+            n.head && ((n.head.hcrc = (n.flags >> 9) & 1), (n.head.done = !0)), (e.adler = n.check = 0), (n.mode = C)
+            break
+          case 16189:
+            for (; d < 32; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            ;(e.adler = n.check = H(c)), (c = 0), (d = 0), (n.mode = N)
+          case N:
+            if (0 === n.havedict) return (e.next_out = o), (e.avail_out = l), (e.next_in = a), (e.avail_in = s), (n.hold = c), (n.bits = d), U
+            ;(e.adler = n.check = 1), (n.mode = C)
+          case C:
+            if (t === x || t === R) break e
+          case M:
+            if (n.last) {
+              ;(c >>>= 7 & d), (d -= 7 & d), (n.mode = z)
+              break
+            }
+            for (; d < 3; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            switch (((n.last = 1 & c), (c >>>= 1), (d -= 1), 3 & c)) {
+              case 0:
+                n.mode = 16193
+                break
+              case 1:
+                if (($(n), (n.mode = F), t === R)) {
+                  ;(c >>>= 2), (d -= 2)
+                  break e
+                }
+                break
+              case 2:
+                n.mode = 16196
+                break
+              case 3:
+                ;(e.msg = 'invalid block type'), (n.mode = V)
+            }
+            ;(c >>>= 2), (d -= 2)
+            break
+          case 16193:
+            for (c >>>= 7 & d, d -= 7 & d; d < 32; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if ((65535 & c) != ((c >>> 16) ^ 65535)) {
+              ;(e.msg = 'invalid stored block lengths'), (n.mode = V)
+              break
+            }
+            if (((n.length = 65535 & c), (c = 0), (d = 0), (n.mode = L), t === R)) break e
+          case L:
+            n.mode = 16195
+          case 16195:
+            if (((u = n.length), u)) {
+              if ((u > s && (u = s), u > l && (u = l), 0 === u)) break e
+              r.set(i.subarray(a, a + u), o), (s -= u), (a += u), (l -= u), (o += u), (n.length -= u)
+              break
+            }
+            n.mode = C
+            break
+          case 16196:
+            for (; d < 14; ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if (
+              ((n.nlen = 257 + (31 & c)),
+              (c >>>= 5),
+              (d -= 5),
+              (n.ndist = 1 + (31 & c)),
+              (c >>>= 5),
+              (d -= 5),
+              (n.ncode = 4 + (15 & c)),
+              (c >>>= 4),
+              (d -= 4),
+              n.nlen > 286 || n.ndist > 30)
+            ) {
+              ;(e.msg = 'too many length or distance symbols'), (n.mode = V)
+              break
+            }
+            ;(n.have = 0), (n.mode = 16197)
+          case 16197:
+            for (; n.have < n.ncode; ) {
+              for (; d < 3; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
               }
-              switch (((i.last = 1 & u), (w -= 1), 3 & (u >>>= 1))) {
-                case 0:
-                  i.mode = 14
-                  break
-                case 1:
-                  if ((R(i), (i.mode = 20), 6 === t)) {
-                    ;(u >>>= 2), (w -= 2)
-                    break e
+              ;(n.lens[ne[n.have++]] = 7 & c), (c >>>= 3), (d -= 3)
+            }
+            for (; n.have < 19; ) n.lens[ne[n.have++]] = 0
+            if (
+              ((n.lencode = n.lendyn),
+              (n.lenbits = 7),
+              (J = { bits: n.lenbits }),
+              (W = v(0, n.lens, 0, 19, n.lencode, 0, n.work, J)),
+              (n.lenbits = J.bits),
+              W)
+            ) {
+              ;(e.msg = 'invalid code lengths set'), (n.mode = V)
+              break
+            }
+            ;(n.have = 0), (n.mode = 16198)
+          case 16198:
+            for (; n.have < n.nlen + n.ndist; ) {
+              for (; (X = n.lencode[c & ((1 << n.lenbits) - 1)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(m <= d); ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              if (k < 16) (c >>>= m), (d -= m), (n.lens[n.have++] = k)
+              else {
+                if (16 === k) {
+                  for (te = m + 2; d < te; ) {
+                    if (0 === s) break e
+                    s--, (c += i[a++] << d), (d += 8)
                   }
-                  break
-                case 2:
-                  i.mode = 17
-                  break
-                case 3:
-                  ;(e.msg = 'invalid block type'), (i.mode = p)
-              }
-              ;(u >>>= 2), (w -= 2)
-              break
-            case 14:
-              for (u >>>= 7 & w, w -= 7 & w; w < 32; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if ((65535 & u) != ((u >>> 16) ^ 65535)) {
-                ;(e.msg = 'invalid stored block lengths'), (i.mode = p)
-                break
-              }
-              if (((i.length = 65535 & u), (u = 0), (w = 0), (i.mode = 15), 6 === t)) break e
-            case 15:
-              i.mode = 16
-            case 16:
-              if ((_ = i.length)) {
-                if ((_ > l && (_ = l), _ > c && (_ = c), 0 === _)) break e
-                s.arraySet(n, r, a, _, o), (l -= _), (a += _), (c -= _), (o += _), (i.length -= _)
-                break
-              }
-              i.mode = k
-              break
-            case 17:
-              for (; w < 14; ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if (
-                ((i.nlen = 257 + (31 & u)),
-                (u >>>= 5),
-                (w -= 5),
-                (i.ndist = 1 + (31 & u)),
-                (u >>>= 5),
-                (w -= 5),
-                (i.ncode = 4 + (15 & u)),
-                (u >>>= 4),
-                (w -= 4),
-                i.nlen > 286 || i.ndist > 30)
-              ) {
-                ;(e.msg = 'too many length or distance symbols'), (i.mode = p)
-                break
-              }
-              ;(i.have = 0), (i.mode = 18)
-            case 18:
-              for (; i.have < i.ncode; ) {
-                for (; w < 3; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(i.lens[j[i.have++]] = 7 & u), (u >>>= 3), (w -= 3)
-              }
-              for (; i.have < 19; ) i.lens[j[i.have++]] = 0
-              if (
-                ((i.lencode = i.lendyn),
-                (i.lenbits = 7),
-                (V = { bits: i.lenbits }),
-                (D = v(0, i.lens, 0, 19, i.lencode, 0, i.work, V)),
-                (i.lenbits = V.bits),
-                D)
-              ) {
-                ;(e.msg = 'invalid code lengths set'), (i.mode = p)
-                break
-              }
-              ;(i.have = 0), (i.mode = 19)
-            case 19:
-              for (; i.have < i.nlen + i.ndist; ) {
-                for (; (A = ((O = i.lencode[u & ((1 << i.lenbits) - 1)]) >>> 16) & 255), (T = 65535 & O), !((E = O >>> 24) <= w); ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                if (T < 16) (u >>>= E), (w -= E), (i.lens[i.have++] = T)
-                else {
-                  if (16 === T) {
-                    for (P = E + 2; w < P; ) {
-                      if (0 === l) break e
-                      l--, (u += r[a++] << w), (w += 8)
-                    }
-                    if (((u >>>= E), (w -= E), 0 === i.have)) {
-                      ;(e.msg = 'invalid bit length repeat'), (i.mode = p)
-                      break
-                    }
-                    ;(z = i.lens[i.have - 1]), (_ = 3 + (3 & u)), (u >>>= 2), (w -= 2)
-                  } else if (17 === T) {
-                    for (P = E + 3; w < P; ) {
-                      if (0 === l) break e
-                      l--, (u += r[a++] << w), (w += 8)
-                    }
-                    ;(w -= E), (z = 0), (_ = 3 + (7 & (u >>>= E))), (u >>>= 3), (w -= 3)
-                  } else {
-                    for (P = E + 7; w < P; ) {
-                      if (0 === l) break e
-                      l--, (u += r[a++] << w), (w += 8)
-                    }
-                    ;(w -= E), (z = 0), (_ = 11 + (127 & (u >>>= E))), (u >>>= 7), (w -= 7)
-                  }
-                  if (i.have + _ > i.nlen + i.ndist) {
-                    ;(e.msg = 'invalid bit length repeat'), (i.mode = p)
+                  if (((c >>>= m), (d -= m), 0 === n.have)) {
+                    ;(e.msg = 'invalid bit length repeat'), (n.mode = V)
                     break
                   }
-                  for (; _--; ) i.lens[i.have++] = z
+                  ;(Q = n.lens[n.have - 1]), (u = 3 + (3 & c)), (c >>>= 2), (d -= 2)
+                } else if (17 === k) {
+                  for (te = m + 3; d < te; ) {
+                    if (0 === s) break e
+                    s--, (c += i[a++] << d), (d += 8)
+                  }
+                  ;(c >>>= m), (d -= m), (Q = 0), (u = 3 + (7 & c)), (c >>>= 3), (d -= 3)
+                } else {
+                  for (te = m + 7; d < te; ) {
+                    if (0 === s) break e
+                    s--, (c += i[a++] << d), (d += 8)
+                  }
+                  ;(c >>>= m), (d -= m), (Q = 0), (u = 11 + (127 & c)), (c >>>= 7), (d -= 7)
                 }
+                if (n.have + u > n.nlen + n.ndist) {
+                  ;(e.msg = 'invalid bit length repeat'), (n.mode = V)
+                  break
+                }
+                for (; u--; ) n.lens[n.have++] = Q
               }
-              if (i.mode === p) break
-              if (0 === i.lens[256]) {
-                ;(e.msg = 'invalid code -- missing end-of-block'), (i.mode = p)
+            }
+            if (n.mode === V) break
+            if (0 === n.lens[256]) {
+              ;(e.msg = 'invalid code -- missing end-of-block'), (n.mode = V)
+              break
+            }
+            if (((n.lenbits = 9), (J = { bits: n.lenbits }), (W = v(1, n.lens, 0, n.nlen, n.lencode, 0, n.work, J)), (n.lenbits = J.bits), W)) {
+              ;(e.msg = 'invalid literal/lengths set'), (n.mode = V)
+              break
+            }
+            if (
+              ((n.distbits = 6),
+              (n.distcode = n.distdyn),
+              (J = { bits: n.distbits }),
+              (W = v(2, n.lens, n.nlen, n.ndist, n.distcode, 0, n.work, J)),
+              (n.distbits = J.bits),
+              W)
+            ) {
+              ;(e.msg = 'invalid distances set'), (n.mode = V)
+              break
+            }
+            if (((n.mode = F), t === R)) break e
+          case F:
+            n.mode = P
+          case P:
+            if (s >= 6 && l >= 258) {
+              ;(e.next_out = o),
+                (e.avail_out = l),
+                (e.next_in = a),
+                (e.avail_in = s),
+                (n.hold = c),
+                (n.bits = d),
+                y(e, h),
+                (o = e.next_out),
+                (r = e.output),
+                (l = e.avail_out),
+                (a = e.next_in),
+                (i = e.input),
+                (s = e.avail_in),
+                (c = n.hold),
+                (d = n.bits),
+                n.mode === C && (n.back = -1)
+              break
+            }
+            for (n.back = 0; (X = n.lencode[c & ((1 << n.lenbits) - 1)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(m <= d); ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if (g && 0 == (240 & g)) {
+              for (
+                j = m, Y = g, G = k;
+                (X = n.lencode[G + ((c & ((1 << (j + Y)) - 1)) >> j)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(j + m <= d);
+
+              ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              ;(c >>>= j), (d -= j), (n.back += j)
+            }
+            if (((c >>>= m), (d -= m), (n.back += m), (n.length = k), 0 === g)) {
+              n.mode = 16205
+              break
+            }
+            if (32 & g) {
+              ;(n.back = -1), (n.mode = C)
+              break
+            }
+            if (64 & g) {
+              ;(e.msg = 'invalid literal/length code'), (n.mode = V)
+              break
+            }
+            ;(n.extra = 15 & g), (n.mode = 16201)
+          case 16201:
+            if (n.extra) {
+              for (te = n.extra; d < te; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              ;(n.length += c & ((1 << n.extra) - 1)), (c >>>= n.extra), (d -= n.extra), (n.back += n.extra)
+            }
+            ;(n.was = n.length), (n.mode = 16202)
+          case 16202:
+            for (; (X = n.distcode[c & ((1 << n.distbits) - 1)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(m <= d); ) {
+              if (0 === s) break e
+              s--, (c += i[a++] << d), (d += 8)
+            }
+            if (0 == (240 & g)) {
+              for (
+                j = m, Y = g, G = k;
+                (X = n.distcode[G + ((c & ((1 << (j + Y)) - 1)) >> j)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(j + m <= d);
+
+              ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              ;(c >>>= j), (d -= j), (n.back += j)
+            }
+            if (((c >>>= m), (d -= m), (n.back += m), 64 & g)) {
+              ;(e.msg = 'invalid distance code'), (n.mode = V)
+              break
+            }
+            ;(n.offset = k), (n.extra = 15 & g), (n.mode = 16203)
+          case 16203:
+            if (n.extra) {
+              for (te = n.extra; d < te; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              ;(n.offset += c & ((1 << n.extra) - 1)), (c >>>= n.extra), (d -= n.extra), (n.back += n.extra)
+            }
+            if (n.offset > n.dmax) {
+              ;(e.msg = 'invalid distance too far back'), (n.mode = V)
+              break
+            }
+            n.mode = 16204
+          case 16204:
+            if (0 === l) break e
+            if (((u = h - l), n.offset > u)) {
+              if (((u = n.offset - u), u > n.whave && n.sane)) {
+                ;(e.msg = 'invalid distance too far back'), (n.mode = V)
                 break
               }
-              if (((i.lenbits = 9), (V = { bits: i.lenbits }), (D = v(1, i.lens, 0, i.nlen, i.lencode, 0, i.work, V)), (i.lenbits = V.bits), D)) {
-                ;(e.msg = 'invalid literal/lengths set'), (i.mode = p)
-                break
+              u > n.wnext ? ((u -= n.wnext), (w = n.wsize - u)) : (w = n.wnext - u), u > n.length && (u = n.length), (b = n.window)
+            } else (b = r), (w = o - n.offset), (u = n.length)
+            u > l && (u = l), (l -= u), (n.length -= u)
+            do {
+              r[o++] = b[w++]
+            } while (--u)
+            0 === n.length && (n.mode = P)
+            break
+          case 16205:
+            if (0 === l) break e
+            ;(r[o++] = n.length), l--, (n.mode = P)
+            break
+          case z:
+            if (n.wrap) {
+              for (; d < 32; ) {
+                if (0 === s) break e
+                s--, (c |= i[a++] << d), (d += 8)
               }
               if (
-                ((i.distbits = 6),
-                (i.distcode = i.distdyn),
-                (V = { bits: i.distbits }),
-                (D = v(2, i.lens, i.nlen, i.ndist, i.distcode, 0, i.work, V)),
-                (i.distbits = V.bits),
-                D)
+                ((h -= l),
+                (e.total_out += h),
+                (n.total += h),
+                4 & n.wrap && h && (e.adler = n.check = n.flags ? p(n.check, r, h, o - h) : _(n.check, r, h, o - h)),
+                (h = l),
+                4 & n.wrap && (n.flags ? c : H(c)) !== n.check)
               ) {
-                ;(e.msg = 'invalid distances set'), (i.mode = p)
+                ;(e.msg = 'incorrect data check'), (n.mode = V)
                 break
               }
-              if (((i.mode = 20), 6 === t)) break e
-            case 20:
-              i.mode = 21
-            case 21:
-              if (l >= 6 && c >= 258) {
-                ;(e.next_out = o),
-                  (e.avail_out = c),
-                  (e.next_in = a),
-                  (e.avail_in = l),
-                  (i.hold = u),
-                  (i.bits = w),
-                  h(e, m),
-                  (o = e.next_out),
-                  (n = e.output),
-                  (c = e.avail_out),
-                  (a = e.next_in),
-                  (r = e.input),
-                  (l = e.avail_in),
-                  (u = i.hold),
-                  (w = i.bits),
-                  i.mode === k && (i.back = -1)
+              ;(c = 0), (d = 0)
+            }
+            n.mode = 16207
+          case 16207:
+            if (n.wrap && n.flags) {
+              for (; d < 32; ) {
+                if (0 === s) break e
+                s--, (c += i[a++] << d), (d += 8)
+              }
+              if (4 & n.wrap && c !== (4294967295 & n.total)) {
+                ;(e.msg = 'incorrect length check'), (n.mode = V)
                 break
               }
-              for (i.back = 0; (A = ((O = i.lencode[u & ((1 << i.lenbits) - 1)]) >>> 16) & 255), (T = 65535 & O), !((E = O >>> 24) <= w); ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if (A && 0 == (240 & A)) {
-                for (
-                  U = E, S = A, I = T;
-                  (A = ((O = i.lencode[I + ((u & ((1 << (U + S)) - 1)) >> U)]) >>> 16) & 255), (T = 65535 & O), !(U + (E = O >>> 24) <= w);
-
-                ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(u >>>= U), (w -= U), (i.back += U)
-              }
-              if (((u >>>= E), (w -= E), (i.back += E), (i.length = T), 0 === A)) {
-                i.mode = 26
-                break
-              }
-              if (32 & A) {
-                ;(i.back = -1), (i.mode = k)
-                break
-              }
-              if (64 & A) {
-                ;(e.msg = 'invalid literal/length code'), (i.mode = p)
-                break
-              }
-              ;(i.extra = 15 & A), (i.mode = 22)
-            case 22:
-              if (i.extra) {
-                for (P = i.extra; w < P; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(i.length += u & ((1 << i.extra) - 1)), (u >>>= i.extra), (w -= i.extra), (i.back += i.extra)
-              }
-              ;(i.was = i.length), (i.mode = 23)
-            case 23:
-              for (; (A = ((O = i.distcode[u & ((1 << i.distbits) - 1)]) >>> 16) & 255), (T = 65535 & O), !((E = O >>> 24) <= w); ) {
-                if (0 === l) break e
-                l--, (u += r[a++] << w), (w += 8)
-              }
-              if (0 == (240 & A)) {
-                for (
-                  U = E, S = A, I = T;
-                  (A = ((O = i.distcode[I + ((u & ((1 << (U + S)) - 1)) >> U)]) >>> 16) & 255), (T = 65535 & O), !(U + (E = O >>> 24) <= w);
-
-                ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(u >>>= U), (w -= U), (i.back += U)
-              }
-              if (((u >>>= E), (w -= E), (i.back += E), 64 & A)) {
-                ;(e.msg = 'invalid distance code'), (i.mode = p)
-                break
-              }
-              ;(i.offset = T), (i.extra = 15 & A), (i.mode = 24)
-            case 24:
-              if (i.extra) {
-                for (P = i.extra; w < P; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                ;(i.offset += u & ((1 << i.extra) - 1)), (u >>>= i.extra), (w -= i.extra), (i.back += i.extra)
-              }
-              if (i.offset > i.dmax) {
-                ;(e.msg = 'invalid distance too far back'), (i.mode = p)
-                break
-              }
-              i.mode = 25
-            case 25:
-              if (0 === c) break e
-              if (((_ = m - c), i.offset > _)) {
-                if ((_ = i.offset - _) > i.whave && i.sane) {
-                  ;(e.msg = 'invalid distance too far back'), (i.mode = p)
-                  break
-                }
-                _ > i.wnext ? ((_ -= i.wnext), (x = i.wsize - _)) : (x = i.wnext - _), _ > i.length && (_ = i.length), (B = i.window)
-              } else (B = n), (x = o - i.offset), (_ = i.length)
-              _ > c && (_ = c), (c -= _), (i.length -= _)
-              do {
-                n[o++] = B[x++]
-              } while (--_)
-              0 === i.length && (i.mode = 21)
-              break
-            case 26:
-              if (0 === c) break e
-              ;(n[o++] = i.length), c--, (i.mode = 21)
-              break
-            case 27:
-              if (i.wrap) {
-                for (; w < 32; ) {
-                  if (0 === l) break e
-                  l--, (u |= r[a++] << w), (w += 8)
-                }
-                if (
-                  ((m -= c),
-                  (e.total_out += m),
-                  (i.total += m),
-                  m && (e.adler = i.check = i.flags ? d(i.check, n, m, o - m) : f(i.check, n, m, o - m)),
-                  (m = c),
-                  (i.flags ? u : y(u)) !== i.check)
-                ) {
-                  ;(e.msg = 'incorrect data check'), (i.mode = p)
-                  break
-                }
-                ;(u = 0), (w = 0)
-              }
-              i.mode = 28
-            case 28:
-              if (i.wrap && i.flags) {
-                for (; w < 32; ) {
-                  if (0 === l) break e
-                  l--, (u += r[a++] << w), (w += 8)
-                }
-                if (u !== (4294967295 & i.total)) {
-                  ;(e.msg = 'incorrect length check'), (i.mode = p)
-                  break
-                }
-                ;(u = 0), (w = 0)
-              }
-              i.mode = 29
-            case 29:
-              D = 1
-              break e
-            case p:
-              D = -3
-              break e
-            case 31:
-              return -4
-            default:
-              return g
-          }
-        return (
-          (e.next_out = o),
-          (e.avail_out = c),
-          (e.next_in = a),
-          (e.avail_in = l),
-          (i.hold = u),
-          (i.bits = w),
-          (i.wsize || (m !== e.avail_out && i.mode < p && (i.mode < 27 || 4 !== t))) && C(e, e.output, e.next_out, m - e.avail_out),
-          (b -= e.avail_in),
-          (m -= e.avail_out),
-          (e.total_in += b),
-          (e.total_out += m),
-          (i.total += m),
-          i.wrap && m && (e.adler = i.check = i.flags ? d(i.check, n, m, e.next_out - m) : f(i.check, n, m, e.next_out - m)),
-          (e.data_type = i.bits + (i.last ? 64 : 0) + (i.mode === k ? 128 : 0) + (20 === i.mode || 15 === i.mode ? 256 : 0)),
-          ((0 === b && 0 === m) || 4 === t) && 0 === D && (D = -5),
-          D
-        )
-      },
-      inflateEnd: function (e) {
-        if (!e || !e.state) return g
-        var t = e.state
-        return t.window && (t.window = null), (e.state = null), 0
-      },
-      inflateGetHeader: function (e, t) {
-        var i
-        return e && e.state ? (0 == (2 & (i = e.state).wrap) ? g : ((i.head = t), (t.done = !1), 0)) : g
-      },
-      inflateSetDictionary: function (e, t) {
-        var i,
-          r = t.length
-        return e && e.state
-          ? 0 !== (i = e.state).wrap && 11 !== i.mode
-            ? g
-            : 11 === i.mode && f(1, t, r, 0) !== i.check
-            ? -3
-            : C(e, t, r, r)
-            ? ((i.mode = 31), -4)
-            : ((i.havedict = 1), 0)
-          : g
-      },
-      inflateInfo: 'pako inflate (from Nodeca project)'
-    },
-    z = !0,
-    D = !0
-  try {
-    String.fromCharCode.apply(null, [0])
-  } catch (e) {
-    z = !1
-  }
+              ;(c = 0), (d = 0)
+            }
+            n.mode = 16208
+          case 16208:
+            W = T
+            break e
+          case V:
+            W = Z
+            break e
+          case 16210:
+            return D
+          default:
+            return S
+        }
+      return (
+        (e.next_out = o),
+        (e.avail_out = l),
+        (e.next_in = a),
+        (e.avail_in = s),
+        (n.hold = c),
+        (n.bits = d),
+        (n.wsize || (h !== e.avail_out && n.mode < V && (n.mode < z || t !== E))) && ee(e, e.output, e.next_out, h - e.avail_out),
+        (f -= e.avail_in),
+        (h -= e.avail_out),
+        (e.total_in += f),
+        (e.total_out += h),
+        (n.total += h),
+        4 & n.wrap && h && (e.adler = n.check = n.flags ? p(n.check, r, h, e.next_out - h) : _(n.check, r, h, e.next_out - h)),
+        (e.data_type = n.bits + (n.last ? 64 : 0) + (n.mode === C ? 128 : 0) + (n.mode === F || n.mode === L ? 256 : 0)),
+        ((0 === f && 0 === h) || t === E) && W === A && (W = I),
+        W
+      )
+    }),
+    (l.inflateEnd = e => {
+      if (K(e)) return S
+      let t = e.state
+      return t.window && (t.window = null), (e.state = null), A
+    }),
+    (l.inflateGetHeader = (e, t) => {
+      if (K(e)) return S
+      const n = e.state
+      return 0 == (2 & n.wrap) ? S : ((n.head = t), (t.done = !1), A)
+    }),
+    (l.inflateSetDictionary = (e, t) => {
+      const n = t.length
+      let i, r, a
+      return K(e)
+        ? S
+        : ((i = e.state),
+          0 !== i.wrap && i.mode !== N
+            ? S
+            : i.mode === N && ((r = 1), (r = _(r, t, n, 0)), r !== i.check)
+            ? Z
+            : ((a = ee(e, t, n, n)), a ? ((i.mode = 16210), D) : ((i.havedict = 1), A)))
+    }),
+    (l.inflateInfo = 'pako inflate (from Nodeca project)')
+  var te = {}
+  const ne = (e, t) => Object.prototype.hasOwnProperty.call(e, t)
+  ;(te.assign = function (e) {
+    const t = Array.prototype.slice.call(arguments, 1)
+    for (; t.length; ) {
+      const n = t.shift()
+      if (n) {
+        if ('object' != typeof n) throw new TypeError(n + 'must be non-object')
+        for (const t in n) ne(n, t) && (e[t] = n[t])
+      }
+    }
+    return e
+  }),
+    (te.flattenChunks = e => {
+      let t = 0
+      for (let n = 0, i = e.length; n < i; n++) t += e[n].length
+      const n = new Uint8Array(t)
+      for (let t = 0, i = 0, r = e.length; t < r; t++) {
+        let r = e[t]
+        n.set(r, i), (i += r.length)
+      }
+      return n
+    })
+  var ie = {}
+  let re = !0
   try {
     String.fromCharCode.apply(null, new Uint8Array(1))
   } catch (e) {
-    D = !1
+    re = !1
   }
-  for (var V = new s.Buf8(256), P = 0; P < 256; P++) V[P] = P >= 252 ? 6 : P >= 248 ? 5 : P >= 240 ? 4 : P >= 224 ? 3 : P >= 192 ? 2 : 1
-  V[254] = V[254] = 1
-  function O(e, t) {
-    if (t < 65534 && ((e.subarray && D) || (!e.subarray && z))) return String.fromCharCode.apply(null, s.shrinkBuf(e, t))
-    for (var i = '', r = 0; r < t; r++) i += String.fromCharCode(e[r])
-    return i
-  }
-  var M = function (e) {
-      var t,
+  const ae = new Uint8Array(256)
+  for (let e = 0; e < 256; e++) ae[e] = e >= 252 ? 6 : e >= 248 ? 5 : e >= 240 ? 4 : e >= 224 ? 3 : e >= 192 ? 2 : 1
+  ;(ae[254] = ae[254] = 1),
+    (ie.string2buf = e => {
+      if ('function' == typeof TextEncoder && TextEncoder.prototype.encode) return new TextEncoder().encode(e)
+      let t,
+        n,
         i,
         r,
-        n,
         a,
         o = e.length,
-        f = 0
-      for (n = 0; n < o; n++)
-        55296 == (64512 & (i = e.charCodeAt(n))) &&
-          n + 1 < o &&
-          56320 == (64512 & (r = e.charCodeAt(n + 1))) &&
-          ((i = 65536 + ((i - 55296) << 10) + (r - 56320)), n++),
-          (f += i < 128 ? 1 : i < 2048 ? 2 : i < 65536 ? 3 : 4)
-      for (t = new s.Buf8(f), a = 0, n = 0; a < f; n++)
-        55296 == (64512 & (i = e.charCodeAt(n))) &&
-          n + 1 < o &&
-          56320 == (64512 & (r = e.charCodeAt(n + 1))) &&
-          ((i = 65536 + ((i - 55296) << 10) + (r - 56320)), n++),
-          i < 128
-            ? (t[a++] = i)
-            : i < 2048
-            ? ((t[a++] = 192 | (i >>> 6)), (t[a++] = 128 | (63 & i)))
-            : i < 65536
-            ? ((t[a++] = 224 | (i >>> 12)), (t[a++] = 128 | ((i >>> 6) & 63)), (t[a++] = 128 | (63 & i)))
-            : ((t[a++] = 240 | (i >>> 18)), (t[a++] = 128 | ((i >>> 12) & 63)), (t[a++] = 128 | ((i >>> 6) & 63)), (t[a++] = 128 | (63 & i)))
+        s = 0
+      for (r = 0; r < o; r++)
+        (n = e.charCodeAt(r)),
+          55296 == (64512 & n) &&
+            r + 1 < o &&
+            ((i = e.charCodeAt(r + 1)), 56320 == (64512 & i) && ((n = 65536 + ((n - 55296) << 10) + (i - 56320)), r++)),
+          (s += n < 128 ? 1 : n < 2048 ? 2 : n < 65536 ? 3 : 4)
+      for (t = new Uint8Array(s), a = 0, r = 0; a < s; r++)
+        (n = e.charCodeAt(r)),
+          55296 == (64512 & n) &&
+            r + 1 < o &&
+            ((i = e.charCodeAt(r + 1)), 56320 == (64512 & i) && ((n = 65536 + ((n - 55296) << 10) + (i - 56320)), r++)),
+          n < 128
+            ? (t[a++] = n)
+            : n < 2048
+            ? ((t[a++] = 192 | (n >>> 6)), (t[a++] = 128 | (63 & n)))
+            : n < 65536
+            ? ((t[a++] = 224 | (n >>> 12)), (t[a++] = 128 | ((n >>> 6) & 63)), (t[a++] = 128 | (63 & n)))
+            : ((t[a++] = 240 | (n >>> 18)), (t[a++] = 128 | ((n >>> 12) & 63)), (t[a++] = 128 | ((n >>> 6) & 63)), (t[a++] = 128 | (63 & n)))
       return t
-    },
-    j = function (e) {
-      for (var t = new s.Buf8(e.length), i = 0, r = t.length; i < r; i++) t[i] = e.charCodeAt(i)
-      return t
-    },
-    H = function (e, t) {
-      var i,
-        r,
-        n,
-        a,
-        o = t || e.length,
-        s = new Array(2 * o)
-      for (r = 0, i = 0; i < o; )
-        if ((n = e[i++]) < 128) s[r++] = n
-        else if ((a = V[n]) > 4) (s[r++] = 65533), (i += a - 1)
-        else {
-          for (n &= 2 === a ? 31 : 3 === a ? 15 : 7; a > 1 && i < o; ) (n = (n << 6) | (63 & e[i++])), a--
-          a > 1 ? (s[r++] = 65533) : n < 65536 ? (s[r++] = n) : ((n -= 65536), (s[r++] = 55296 | ((n >> 10) & 1023)), (s[r++] = 56320 | (1023 & n)))
-        }
-      return O(s, r)
-    },
-    N = function (e, t) {
-      var i
-      for ((t = t || e.length) > e.length && (t = e.length), i = t - 1; i >= 0 && 128 == (192 & e[i]); ) i--
-      return i < 0 || 0 === i ? t : i + V[e[i]] > t ? i : t
-    },
-    L = 0,
-    Y = 2,
-    F = 4,
-    G = 0,
-    K = 1,
-    Q = 2,
-    q = -5,
-    W = {
+    })
+  ;(ie.buf2string = (e, t) => {
+    const n = t || e.length
+    if ('function' == typeof TextDecoder && TextDecoder.prototype.decode) return new TextDecoder().decode(e.subarray(0, t))
+    let i, r
+    const a = new Array(2 * n)
+    for (r = 0, i = 0; i < n; ) {
+      let t = e[i++]
+      if (t < 128) {
+        a[r++] = t
+        continue
+      }
+      let o = ae[t]
+      if (o > 4) (a[r++] = 65533), (i += o - 1)
+      else {
+        for (t &= 2 === o ? 31 : 3 === o ? 15 : 7; o > 1 && i < n; ) (t = (t << 6) | (63 & e[i++])), o--
+        o > 1 ? (a[r++] = 65533) : t < 65536 ? (a[r++] = t) : ((t -= 65536), (a[r++] = 55296 | ((t >> 10) & 1023)), (a[r++] = 56320 | (1023 & t)))
+      }
+    }
+    return ((e, t) => {
+      if (t < 65534 && e.subarray && re) return String.fromCharCode.apply(null, e.length === t ? e : e.subarray(0, t))
+      let n = ''
+      for (let i = 0; i < t; i++) n += String.fromCharCode(e[i])
+      return n
+    })(a, r)
+  }),
+    (ie.utf8border = (e, t) => {
+      ;(t = t || e.length) > e.length && (t = e.length)
+      let n = t - 1
+      for (; n >= 0 && 128 == (192 & e[n]); ) n--
+      return n < 0 || 0 === n ? t : n + ae[e[n]] > t ? n : t
+    })
+  const oe = l,
+    se = te,
+    le = ie,
+    ce = {
       2: 'need dictionary',
       1: 'stream end',
       0: '',
@@ -1070,22 +1133,22 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       '-4': 'insufficient memory',
       '-5': 'buffer error',
       '-6': 'incompatible version'
-    }
-  var J = function () {
-    ;(this.input = null),
-      (this.next_in = 0),
-      (this.avail_in = 0),
-      (this.total_in = 0),
-      (this.output = null),
-      (this.next_out = 0),
-      (this.avail_out = 0),
-      (this.total_out = 0),
-      (this.msg = ''),
-      (this.state = null),
-      (this.data_type = 2),
-      (this.adler = 0)
-  }
-  var X = function () {
+    },
+    de = function () {
+      ;(this.input = null),
+        (this.next_in = 0),
+        (this.avail_in = 0),
+        (this.total_in = 0),
+        (this.output = null),
+        (this.next_out = 0),
+        (this.avail_out = 0),
+        (this.total_out = 0),
+        (this.msg = ''),
+        (this.state = null),
+        (this.data_type = 2),
+        (this.adler = 0)
+    },
+    fe = function () {
       ;(this.text = 0),
         (this.time = 0),
         (this.xflags = 0),
@@ -1097,11 +1160,11 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
         (this.hcrc = 0),
         (this.done = !1)
     },
-    Z = Object.prototype.toString
-  function $(e) {
-    if (!(this instanceof $)) return new $(e)
-    this.options = s.assign({ chunkSize: 16384, windowBits: 0, to: '' }, e || {})
-    var t = this.options
+    he = Object.prototype.toString,
+    { Z_NO_FLUSH: ue, Z_FINISH: we, Z_OK: be, Z_STREAM_END: me, Z_NEED_DICT: ge, Z_STREAM_ERROR: ke, Z_DATA_ERROR: _e, Z_MEM_ERROR: pe } = k
+  function ye(e) {
+    this.options = se.assign({ chunkSize: 65536, windowBits: 15, to: '' }, e || {})
+    const t = this.options
     t.raw && t.windowBits >= 0 && t.windowBits < 16 && ((t.windowBits = -t.windowBits), 0 === t.windowBits && (t.windowBits = -15)),
       !(t.windowBits >= 0 && t.windowBits < 16) || (e && e.windowBits) || (t.windowBits += 32),
       t.windowBits > 15 && t.windowBits < 48 && 0 == (15 & t.windowBits) && (t.windowBits |= 15),
@@ -1109,192 +1172,194 @@ define(['./RuntimeError-346a3079', './when-4bbc8319', './createTaskProcessorWork
       (this.msg = ''),
       (this.ended = !1),
       (this.chunks = []),
-      (this.strm = new J()),
+      (this.strm = new de()),
       (this.strm.avail_out = 0)
-    var i = I.inflateInit2(this.strm, t.windowBits)
-    if (i !== G) throw new Error(W[i])
+    let n = oe.inflateInit2(this.strm, t.windowBits)
+    if (n !== be) throw new Error(ce[n])
     if (
-      ((this.header = new X()),
-      I.inflateGetHeader(this.strm, this.header),
+      ((this.header = new fe()),
+      oe.inflateGetHeader(this.strm, this.header),
       t.dictionary &&
         ('string' == typeof t.dictionary
-          ? (t.dictionary = M(t.dictionary))
-          : '[object ArrayBuffer]' === Z.call(t.dictionary) && (t.dictionary = new Uint8Array(t.dictionary)),
-        t.raw && (i = I.inflateSetDictionary(this.strm, t.dictionary)) !== G))
+          ? (t.dictionary = le.string2buf(t.dictionary))
+          : '[object ArrayBuffer]' === he.call(t.dictionary) && (t.dictionary = new Uint8Array(t.dictionary)),
+        t.raw && ((n = oe.inflateSetDictionary(this.strm, t.dictionary)), n !== be)))
     )
-      throw new Error(W[i])
+      throw new Error(ce[n])
   }
-  function ee(e, t) {
-    var i = new $(t)
-    if ((i.push(e, !0), i.err)) throw i.msg || W[i.err]
-    return i.result
+  function ve(e, t) {
+    const n = new ye(t)
+    if ((n.push(e), n.err)) throw n.msg || ce[n.err]
+    return n.result
   }
-  ;($.prototype.push = function (e, t) {
-    var i,
-      r,
-      n,
-      a,
-      o,
-      f = this.strm,
-      l = this.options.chunkSize,
-      d = this.options.dictionary,
-      h = !1
+  ;(ye.prototype.push = function (e, t) {
+    const n = this.strm,
+      i = this.options.chunkSize,
+      r = this.options.dictionary
+    let a, o, s
     if (this.ended) return !1
-    ;(r = t === ~~t ? t : !0 === t ? F : L),
-      'string' == typeof e ? (f.input = j(e)) : '[object ArrayBuffer]' === Z.call(e) ? (f.input = new Uint8Array(e)) : (f.input = e),
-      (f.next_in = 0),
-      (f.avail_in = f.input.length)
-    do {
-      if (
-        (0 === f.avail_out && ((f.output = new s.Buf8(l)), (f.next_out = 0), (f.avail_out = l)),
-        (i = I.inflate(f, L)) === Q && d && (i = I.inflateSetDictionary(this.strm, d)),
-        i === q && !0 === h && ((i = G), (h = !1)),
-        i !== K && i !== G)
+    for (
+      o = t === ~~t ? t : !0 === t ? we : ue,
+        '[object ArrayBuffer]' === he.call(e) ? (n.input = new Uint8Array(e)) : (n.input = e),
+        n.next_in = 0,
+        n.avail_in = n.input.length;
+      ;
+
+    ) {
+      for (
+        0 === n.avail_out && ((n.output = new Uint8Array(i)), (n.next_out = 0), (n.avail_out = i)),
+          a = oe.inflate(n, o),
+          a === ge && r && ((a = oe.inflateSetDictionary(n, r)), a === be ? (a = oe.inflate(n, o)) : a === _e && (a = ge));
+        n.avail_in > 0 && a === me && n.state.wrap > 0 && 0 !== e[n.next_in];
+
       )
-        return this.onEnd(i), (this.ended = !0), !1
-      f.next_out &&
-        ((0 !== f.avail_out && i !== K && (0 !== f.avail_in || (r !== F && r !== Y))) ||
-          ('string' === this.options.to
-            ? ((n = N(f.output, f.next_out)),
-              (a = f.next_out - n),
-              (o = H(f.output, n)),
-              (f.next_out = a),
-              (f.avail_out = l - a),
-              a && s.arraySet(f.output, f.output, n, a, 0),
-              this.onData(o))
-            : this.onData(s.shrinkBuf(f.output, f.next_out)))),
-        0 === f.avail_in && 0 === f.avail_out && (h = !0)
-    } while ((f.avail_in > 0 || 0 === f.avail_out) && i !== K)
-    return (
-      i === K && (r = F),
-      r === F ? ((i = I.inflateEnd(this.strm)), this.onEnd(i), (this.ended = !0), i === G) : r !== Y || (this.onEnd(G), (f.avail_out = 0), !0)
-    )
+        oe.inflateReset(n), (a = oe.inflate(n, o))
+      switch (a) {
+        case ke:
+        case _e:
+        case ge:
+        case pe:
+          return this.onEnd(a), (this.ended = !0), !1
+      }
+      if (((s = n.avail_out), n.next_out && (0 === n.avail_out || a === me)))
+        if ('string' === this.options.to) {
+          let e = le.utf8border(n.output, n.next_out),
+            t = n.next_out - e,
+            r = le.buf2string(n.output, e)
+          ;(n.next_out = t), (n.avail_out = i - t), t && n.output.set(n.output.subarray(e, e + t), 0), this.onData(r)
+        } else this.onData(n.output.length === n.next_out ? n.output : n.output.subarray(0, n.next_out))
+      if (a !== be || 0 !== s) {
+        if (a === me) return (a = oe.inflateEnd(this.strm)), this.onEnd(a), (this.ended = !0), !0
+        if (0 === n.avail_in) break
+      }
+    }
+    return !0
   }),
-    ($.prototype.onData = function (e) {
+    (ye.prototype.onData = function (e) {
       this.chunks.push(e)
     }),
-    ($.prototype.onEnd = function (e) {
-      e === G && ('string' === this.options.to ? (this.result = this.chunks.join('')) : (this.result = s.flattenChunks(this.chunks))),
+    (ye.prototype.onEnd = function (e) {
+      e === be && ('string' === this.options.to ? (this.result = this.chunks.join('')) : (this.result = se.flattenChunks(this.chunks))),
         (this.chunks = []),
         (this.err = e),
         (this.msg = this.strm.msg)
-    })
-  var te = {
-      Inflate: $,
-      inflate: ee,
-      inflateRaw: function (e, t) {
-        return ((t = t || {}).raw = !0), ee(e, t)
-      },
-      ungzip: ee
-    },
-    ie = Uint16Array.BYTES_PER_ELEMENT,
-    re = Int32Array.BYTES_PER_ELEMENT,
-    ne = Uint32Array.BYTES_PER_ELEMENT,
-    ae = { METADATA: 0, TERRAIN: 1, DBROOT: 2 }
-  ae.fromString = function (e) {
-    return 'Metadata' === e ? ae.METADATA : 'Terrain' === e ? ae.TERRAIN : 'DbRoot' === e ? ae.DBROOT : void 0
+    }),
+    (s.Inflate = ye),
+    (s.inflate = ve),
+    (s.inflateRaw = function (e, t) {
+      return ((t = t || {}).raw = !0), ve(e, t)
+    }),
+    (s.ungzip = ve),
+    (s.constants = k)
+  const Ee = Uint16Array.BYTES_PER_ELEMENT,
+    xe = Int32Array.BYTES_PER_ELEMENT,
+    Re = Uint32Array.BYTES_PER_ELEMENT,
+    Ae = { METADATA: 0, TERRAIN: 1, DBROOT: 2 }
+  Ae.fromString = function (e) {
+    return 'Metadata' === e ? Ae.METADATA : 'Terrain' === e ? Ae.TERRAIN : 'DbRoot' === e ? Ae.DBROOT : void 0
   }
-  var oe = 1953029805,
-    se = 2917034100
-  return i(function (t, i) {
-    var n = ae.fromString(t.type),
-      a = t.buffer
-    r(t.key, a)
-    var s = (function (t) {
-      var i = new DataView(t),
-        r = 0,
-        n = i.getUint32(r, !0)
-      if (((r += ne), n !== oe && n !== se)) throw new e.RuntimeError('Invalid magic')
-      var a = i.getUint32(r, n === oe)
-      r += ne
-      var o = new Uint8Array(t, r),
-        s = te.inflate(o)
-      if (s.length !== a) throw new e.RuntimeError("Size of packet doesn't match header")
-      return s
+  const Te = 1953029805,
+    Ue = 2917034100
+  return n(function (t, n) {
+    const r = Ae.fromString(t.type)
+    let a = t.buffer
+    i(t.key, a)
+    const l = (function (t) {
+      const n = new DataView(t)
+      let i = 0
+      const r = n.getUint32(i, !0)
+      if (((i += Re), r !== Te && r !== Ue)) throw new e.RuntimeError('Invalid magic')
+      const a = n.getUint32(i, r === Te)
+      i += Re
+      const o = new Uint8Array(t, i),
+        l = s.inflate(o)
+      if (l.length !== a) throw new e.RuntimeError("Size of packet doesn't match header")
+      return l
     })(a)
-    a = s.buffer
-    var f = s.length
-    switch (n) {
-      case ae.METADATA:
-        return (function (t, i, r) {
-          var n = new DataView(t),
-            a = 0,
-            s = n.getUint32(a, !0)
-          if (((a += ne), 32301 !== s)) throw new e.RuntimeError('Invalid magic')
-          var f = n.getUint32(a, !0)
-          if (((a += ne), 1 !== f)) throw new e.RuntimeError('Invalid data type. Must be 1 for QuadTreePacket')
-          var l = n.getUint32(a, !0)
-          if (((a += ne), 2 !== l)) throw new e.RuntimeError('Invalid QuadTreePacket version. Only version 2 is supported.')
-          var d = n.getInt32(a, !0)
-          a += re
-          var h = n.getInt32(a, !0)
-          if (((a += re), 32 !== h)) throw new e.RuntimeError('Invalid instance size.')
-          var c = n.getInt32(a, !0)
-          a += re
-          var u = n.getInt32(a, !0)
-          a += re
-          var w = n.getInt32(a, !0)
-          if (c !== d * h + (a += re)) throw new e.RuntimeError('Invalid dataBufferOffset')
-          if (c + u + w !== i) throw new e.RuntimeError('Invalid packet offsets')
-          for (var b = [], m = 0; m < d; ++m) {
-            var v = n.getUint8(a)
+    a = l.buffer
+    const c = l.length
+    switch (r) {
+      case Ae.METADATA:
+        return (function (t, n, i) {
+          const r = new DataView(t)
+          let a = 0
+          const s = r.getUint32(a, !0)
+          if (((a += Re), 32301 !== s)) throw new e.RuntimeError('Invalid magic')
+          const l = r.getUint32(a, !0)
+          if (((a += Re), 1 !== l)) throw new e.RuntimeError('Invalid data type. Must be 1 for QuadTreePacket')
+          const c = r.getUint32(a, !0)
+          if (((a += Re), 2 !== c)) throw new e.RuntimeError('Invalid QuadTreePacket version. Only version 2 is supported.')
+          const d = r.getInt32(a, !0)
+          a += xe
+          const f = r.getInt32(a, !0)
+          if (((a += xe), 32 !== f)) throw new e.RuntimeError('Invalid instance size.')
+          const h = r.getInt32(a, !0)
+          a += xe
+          const u = r.getInt32(a, !0)
+          a += xe
+          const w = r.getInt32(a, !0)
+          if (((a += xe), h !== d * f + a)) throw new e.RuntimeError('Invalid dataBufferOffset')
+          if (h + u + w !== n) throw new e.RuntimeError('Invalid packet offsets')
+          const b = []
+          for (let e = 0; e < d; ++e) {
+            const e = r.getUint8(a)
             ++a, ++a
-            var g = n.getUint16(a, !0)
-            a += ie
-            var k = n.getUint16(a, !0)
-            a += ie
-            var p = n.getUint16(a, !0)
-            ;(a += ie), (a += ie), (a += ie), (a += re), (a += re), (a += 8)
-            var y = n.getUint8(a++),
-              _ = n.getUint8(a++)
-            ;(a += ie), b.push(new o(v, g, k, p, y, _))
+            const t = r.getUint16(a, !0)
+            a += Ee
+            const n = r.getUint16(a, !0)
+            a += Ee
+            const i = r.getUint16(a, !0)
+            ;(a += Ee), (a += Ee), (a += Ee), (a += xe), (a += xe), (a += 8)
+            const s = r.getUint8(a++),
+              l = r.getUint8(a++)
+            ;(a += Ee), b.push(new o(e, t, n, i, s, l))
           }
-          var x = [],
-            B = 0
-          function E(e, t, i) {
-            var r = !1
-            if (4 === i) {
+          const m = []
+          let g = 0
+          function k(e, t, n) {
+            let i = !1
+            if (4 === n) {
               if (t.hasSubtree()) return
-              r = !0
+              i = !0
             }
-            for (var n = 0; n < 4; ++n) {
-              var a = e + n.toString()
-              if (r) x[a] = null
-              else if (i < 4)
-                if (t.hasChild(n)) {
-                  if (B === d) return void console.log('Incorrect number of instances')
-                  var o = b[B++]
-                  ;(x[a] = o), E(a, o, i + 1)
-                } else x[a] = null
+            for (let r = 0; r < 4; ++r) {
+              const a = e + r.toString()
+              if (i) m[a] = null
+              else if (n < 4)
+                if (t.hasChild(r)) {
+                  if (g === d) return void console.log('Incorrect number of instances')
+                  const e = b[g++]
+                  ;(m[a] = e), k(a, e, n + 1)
+                } else m[a] = null
             }
           }
-          var A = 0,
-            T = b[B++]
-          '' === r ? ++A : (x[r] = T)
-          return E(r, T, A), x
-        })(a, f, t.quadKey)
-      case ae.TERRAIN:
-        return (function (t, i, r) {
-          var n = new DataView(t),
+          let _ = 0
+          const p = b[g++]
+          '' === i ? ++_ : (m[i] = p)
+          return k(i, p, _), m
+        })(a, c, t.quadKey)
+      case Ae.TERRAIN:
+        return (function (t, n, i) {
+          const r = new DataView(t),
             a = function (t) {
-              for (var r = 0; r < 4; ++r) {
-                var a = n.getUint32(t, !0)
-                if (((t += ne), (t += a) > i)) throw new e.RuntimeError('Malformed terrain packet found.')
+              for (let i = 0; i < 4; ++i) {
+                const i = r.getUint32(t, !0)
+                if (((t += Re), (t += i) > n)) throw new e.RuntimeError('Malformed terrain packet found.')
               }
               return t
-            },
-            o = 0,
-            s = []
+            }
+          let o = 0
+          const s = []
           for (; s.length < 5; ) {
-            var f = o
+            const e = o
             o = a(o)
-            var l = t.slice(f, o)
-            r.push(l), s.push(l)
+            const n = t.slice(e, o)
+            i.push(n), s.push(n)
           }
           return s
-        })(a, f, i)
-      case ae.DBROOT:
-        return i.push(a), { buffer: a }
+        })(a, c, n)
+      case Ae.DBROOT:
+        return n.push(a), { buffer: a }
     }
   })
 })
