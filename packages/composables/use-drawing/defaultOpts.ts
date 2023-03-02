@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2022-05-18 22:35:00
+ * @LastEditTime: 2023-02-23 01:36:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
@@ -279,7 +279,7 @@ const polygonDrawingDefault: VcDrawingOpts = {
     })
   },
   loop: true,
-  disableDepthTest: true,
+  disableDepthTest: false,
   showDistanceLabel: false,
   showLabel: false,
   showAngleLabel: false,
