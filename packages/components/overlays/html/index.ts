@@ -103,7 +103,7 @@ export default defineComponent({
           rootStyle.left = canvasPosition.x + offset.value.x + 'px'
           rootStyle.top = canvasPosition.y + offset.value.y + 'px'
 
-          if (props.autoHidden) {
+          if (props.autoHidden && viewer.scene.mode !== Cesium.SceneMode.SCENE2D && viewer.scene.mode !== Cesium.SceneMode.MORPHING) {
             const cameraPosition = viewer.camera.position
             const cartographicPosition = viewer.scene.globe.ellipsoid.cartesianToCartographic(cameraPosition)
             if (Cesium.defined(cartographicPosition)) {
