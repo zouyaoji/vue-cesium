@@ -204,6 +204,7 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{scale}', this._scale)
     .replace('{mapStyle}', this._mapStyle)
     .replace('{labelStyle}', this._labelStyle)
+    .replace('{ak}', this._ak)
     .replace('{time}', String(new Date().getTime()))
     .replace('{udt}', String(new Date().getTime()))
     .replace('{showtext}', this._showtext)

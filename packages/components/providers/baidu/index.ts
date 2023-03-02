@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-02-14 20:03:53
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-02 09:33:04
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
  */
@@ -45,7 +45,7 @@ export const baiduImageryProviderProps = {
   },
   ak: {
     type: String,
-    default: 'E4805d16520de693a3fe707cdc962045'
+    default: '5ieMMexWmzB9jivTq6oCRX9j'
   },
   subdomains: {
     type: Array as PropType<string[]>,
