@@ -1,12 +1,23 @@
 ## Changelog
 
-### 3.1.4
+### 3.1.5
 
-_2023-02-XX_
+_2023-03-09_
 
 #### Bug fixes
 
-- Fixed the issue that `navigation-sm` component black screen in 2D mode when zoomIn or zoomOut camera.
+#### Bug 修复
+
+- Fixed the issue that the Baidu custom map cannot be displayed by `vc-imagery-provider-baidu` component.
+- Fixed the issue that the `vc-overlay-html` component is not displayed properly in 2D SceneMode.
+
+### 3.1.4
+
+_2023-02-19_
+
+#### Bug fixes
+
+- Fixed the issue that the `navigation-sm` component black screen in 2D mode when zoomIn or zoomOut camera.
 - Fixed the issue that the `vc-drawings` component drawing result line rendering is not normal.
 - Fixed the issue that the primitive loaded by VcPrimitiveGround component cannot be managed by VcCollectionPrimitive. [#350](https://github.com/zouyaoji/vue-cesium/issues/350)
 
