@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-04-29 17:32:46
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-09 14:05:49
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\use-radar-scan.ts
  */
@@ -11,6 +11,14 @@ import shaderSource from '@vue-cesium/shared/shaders/RadarScan'
 export default function ($services: VcViewerProvider) {
   const webgl = options => {
     const { viewer } = $services
+
+    const webgl2 = $services.viewer.scene.context?.webgl2
+    let shaderSourceText = shaderSource
+    if (!webgl2) {
+      shaderSourceText = shaderSourceText.replace('in vec2 v_textureCoordinates;', 'varying vec2 v_textureCoordinates;')
+      shaderSourceText = shaderSourceText.replace(/texture\(/g, 'texture2D(')
+      shaderSourceText = shaderSourceText.replace(/out_FragColor/g, 'gl_FragColor')
+    }
     const cartographicCenter = Cesium.Cartographic.fromCartesian(options.position, viewer.scene.globe.ellipsoid)
     const _Cartesian3Center = Cesium.Cartographic.toCartesian(cartographicCenter, viewer.scene.globe.ellipsoid)
     const _Cartesian4Center = new Cesium.Cartesian4(_Cartesian3Center.x, _Cartesian3Center.y, _Cartesian3Center.z, 1)
@@ -67,7 +75,7 @@ export default function ($services: VcViewerProvider) {
       u_scanColor: options.color
     }
     return {
-      shaderSource,
+      shaderSource: shaderSourceText,
       uniforms
     }
   }

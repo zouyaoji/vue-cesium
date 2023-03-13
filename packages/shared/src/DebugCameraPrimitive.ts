@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-17 22:17:16
- * @LastEditTime: 2022-05-14 15:22:31
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-09 18:00:52
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\DebugCameraPrimitive.ts
  */
@@ -162,18 +162,19 @@ class DebugCameraPrimitive {
     const indexTypedArray2 = generateIndices2(this._segmentH, this._segmentV, this._subSegmentH, this._subSegmentV)
     const appearance = Appearance['getDefaultRenderState'](true, false, undefined)
     const renderState = RenderState.fromCache(appearance)
+    const webgl2 = context.webgl2
     const vs = new ShaderSource({
       sources: [
         `
         // 使用double类型的position进行计算
         // attribute vec3 position3DHigh;
         // attribute vec3 position3DLow;
-        attribute vec3 position;
-        attribute vec3 normal;
+        ${webgl2 ? 'in' : 'attribute'} vec3 position;
+        ${webgl2 ? 'in' : 'attribute'} vec3 normal;
         // attribute vec2 st;
         // attribute float batchId;
-        varying vec3 v_positionEC;
-        varying vec3 v_normalEC;
+        ${webgl2 ? 'out' : 'varying'} vec3 v_positionEC;
+        ${webgl2 ? 'out' : 'varying'} vec3 v_normalEC;
         // varying vec2 v_st;
         void main()
           {
@@ -198,8 +199,8 @@ class DebugCameraPrimitive {
     const fs = new ShaderSource({
       sources: [
         `
-        varying vec3 v_positionEC;
-        varying vec3 v_normalEC;
+        ${webgl2 ? 'in' : 'varying'} vec3 v_positionEC;
+        ${webgl2 ? 'in' : 'varying'} vec3 v_normalEC;
         // varying vec2 v_st;
         // uniform sampler2D myImage;
         uniform vec4 vcColor;
@@ -220,9 +221,9 @@ class DebugCameraPrimitive {
           material.diffuse = vcColor.rgb;
           material.alpha = vcColor.a;
           #ifdef FLAT
-          gl_FragColor = vec4(material.diffuse + material.emission, material.alpha);
+          ${webgl2 ? 'out_FragColor' : 'gl_FragColor'} = vec4(material.diffuse + material.emission, material.alpha);
           #else
-          gl_FragColor = czm_phong(normalize(positionToEyeEC), material, czm_lightDirectionEC);
+          ${webgl2 ? 'out_FragColor' : 'gl_FragColor'} = czm_phong(normalize(positionToEyeEC), material, czm_lightDirectionEC);
           #endif
         }
         `

@@ -234,7 +234,7 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'Cesium3DTileset'
     instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
-    usePrimitives(props, ctx, instance)
+    const primitivesStates = usePrimitives(props, ctx, instance)
     ;(instance.proxy as VcComponentPublicInstance).creatingPromise.then(obj => {
       const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
       instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
@@ -263,9 +263,10 @@ export default defineComponent({
             sourceShaders[program.fragmentShader] = props.fragmentShader
           } else {
             const oldFS = sourceShaders[program.fragmentShader]
+            const webgl2 = primitivesStates.$services.viewer.scene.context?.webgl2
             sourceShaders[program.fragmentShader] = oldFS.replace(
-              'gl_FragColor = vec4(color, 1.0);\n}',
-              `gl_FragColor = vec4(color, 1.0);
+              `${webgl2 ? 'out_FragColor' : 'gl_FragColor'} = vec4(color, 1.0);\n}`,
+              `${webgl2 ? 'out_FragColor' : 'gl_FragColor'}  = vec4(color, 1.0);
              ${props.fragmentShader}\n}
             `
             )

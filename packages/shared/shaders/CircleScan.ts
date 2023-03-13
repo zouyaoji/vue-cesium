@@ -1,7 +1,7 @@
 export default `
   uniform sampler2D colorTexture;
   uniform sampler2D depthTexture;
-  varying vec2 v_textureCoordinates;
+  in vec2 v_textureCoordinates;
   uniform vec4 u_scanCenterEC;
   uniform vec3 u_scanPlaneNormalEC;
   uniform float u_radius;
@@ -29,8 +29,8 @@ export default `
   }
   void main()
   {
-    gl_FragColor = texture2D(colorTexture, v_textureCoordinates);
-    float depth = getDepth( texture2D(depthTexture, v_textureCoordinates));
+    out_FragColor = texture(colorTexture, v_textureCoordinates);
+    float depth = getDepth( texture(depthTexture, v_textureCoordinates));
     vec4 viewPos = toEye(v_textureCoordinates, depth);
     vec3 prjOnPlane = pointProjectOnPlane(u_scanPlaneNormalEC.xyz, u_scanCenterEC.xyz, viewPos.xyz);
     float dis = length(prjOnPlane.xyz - u_scanCenterEC.xyz);
@@ -38,7 +38,7 @@ export default `
     {
       float f = 1.0 -abs(u_radius - dis) / u_radius;
       f = pow(f, 4.0);
-      gl_FragColor = mix(gl_FragColor, u_scanColor, f);
+      out_FragColor = mix(out_FragColor, u_scanColor, f);
     }
   }
 `

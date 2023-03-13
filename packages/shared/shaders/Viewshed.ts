@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-29 17:43:24
- * @LastEditTime: 2022-05-13 14:43:03
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-09 16:36:44
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\shaders\Viewshed.ts
  */
@@ -25,7 +25,7 @@ export default `
   uniform vec3 shadowMap_lightUp;
   uniform vec3 shadowMap_lightDir;
   uniform vec3 shadowMap_lightRight;
-  varying vec2 v_textureCoordinates;
+  in vec2 v_textureCoordinates;
   vec4 toEye(in vec2 uv, in float depth){
     vec2 xy = vec2((uv.x * 2.0 - 1.0),(uv.y * 2.0 - 1.0));
     vec4 posInCamera = czm_inverseProjection * vec4(xy, depth, 1.0);
@@ -40,7 +40,7 @@ export default `
     return (2.0 * z_window - n_range - f_range) / (f_range - n_range);
   }
   float _czm_sampleShadowMap(sampler2D shadowMap, vec2 uv){
-    return texture2D(shadowMap, uv).r;
+    return texture(shadowMap, uv).r;
   }
   float _czm_shadowDepthCompare(sampler2D shadowMap, vec2 uv, float depth){
     return step(depth, _czm_sampleShadowMap(shadowMap, uv));
@@ -85,11 +85,11 @@ export default `
   void main()
   {
     const float PI = 3.141592653589793;
-    vec4 color = texture2D(colorTexture, v_textureCoordinates);
-    gl_FragColor = color;
+    vec4 color = texture(colorTexture, v_textureCoordinates);
+    out_FragColor = color;
     if ( u_isShed < 0.5 )
         return;
-    vec4 currD = texture2D(czm_globeDepthTexture, v_textureCoordinates);
+    vec4 currD = texture(czm_globeDepthTexture, v_textureCoordinates);
     if( currD.r >= 1.0 )
         return;
 
@@ -119,13 +119,13 @@ export default `
     shadowParameters.nDotL = nDotL;
     float visibility = _czm_shadowVisibility(shadowMap_depthTexture, shadowParameters);
     if(visibility > 0.3 ){
-      gl_FragColor = mix(color,vec4(u_color1.rgb, 1.0),mixNum);
+      out_FragColor = mix(color,vec4(u_color1.rgb, 1.0),mixNum);
     }
     else{
       if(abs(shadowPosition.z-0.0)<0.01){
         return;
       }
-      gl_FragColor = mix(color,vec4(u_color2.rgb, 1.0),mixNum);
+      out_FragColor = mix(color,vec4(u_color2.rgb, 1.0),mixNum);
     }
   }
 `

@@ -53,8 +53,7 @@ export const viewshedProps = {
     type: Object as PropType<Cesium.Cartesian3>
   },
   fragmentShader: {
-    type: String,
-    default: fragmentShader
+    type: String
   },
   uniforms: Object
 }
@@ -241,9 +240,17 @@ export default defineComponent({
       const viewshed = instance.cesiumObject as Viewshed
       const { Cartesian4, PostProcessStage, Cartesian2 } = Cesium
 
+      const webgl2 = commonState.$services.viewer.scene.context?.webgl2
+      let shaderSourceText = fragmentShader
+      if (!webgl2) {
+        shaderSourceText = shaderSourceText.replace('in vec2 v_textureCoordinates;', 'varying vec2 v_textureCoordinates;')
+        shaderSourceText = shaderSourceText.replace(/texture\(/g, 'texture2D(')
+        shaderSourceText = shaderSourceText.replace(/out_FragColor/g, 'gl_FragColor')
+      }
+
       updateViewshed(props.startPosition, props.endPosition)
       attachedViewshedStage = new PostProcessStage({
-        fragmentShader: props.fragmentShader,
+        fragmentShader: props.fragmentShader || shaderSourceText,
         uniforms: props.uniforms || {
           u_color1: function () {
             return viewshed.visibleColor

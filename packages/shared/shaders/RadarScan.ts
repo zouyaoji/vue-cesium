@@ -1,7 +1,15 @@
+/*
+ * @Author: zouyaoji 370681295@qq.com
+ * @Date: 2023-02-18 13:40:49
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2023-03-09 14:12:24
+ * @FilePath: \vue-cesium@next\packages\shared\shaders\RadarScan.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 export default `
   uniform sampler2D colorTexture;
   uniform sampler2D depthTexture;
-  varying vec2 v_textureCoordinates;
+  in vec2 v_textureCoordinates;
   uniform vec4 u_scanCenterEC;
   uniform vec3 u_scanPlaneNormalEC;
   uniform vec3 u_scanLineNormalEC;
@@ -43,8 +51,8 @@ export default `
   }
   void main()
   {
-    gl_FragColor = texture2D(colorTexture, v_textureCoordinates);
-    float depth = getDepth( texture2D(depthTexture, v_textureCoordinates));
+    out_FragColor = texture(colorTexture, v_textureCoordinates);
+    float depth = getDepth( texture(depthTexture, v_textureCoordinates));
     vec4 viewPos = toEye(v_textureCoordinates, depth);
     vec3 prjOnPlane = pointProjectOnPlane(u_scanPlaneNormalEC.xyz, u_scanCenterEC.xyz, viewPos.xyz);
     float dis = length(prjOnPlane.xyz - u_scanCenterEC.xyz);
@@ -61,7 +69,7 @@ export default `
         f = abs(twou_radius -dis1) / twou_radius;
         f = pow(f, 3.0);
       }
-      gl_FragColor = mix(gl_FragColor, u_scanColor, f + f0);
+      out_FragColor = mix(out_FragColor, u_scanColor, f + f0);
     }
   }
 `
