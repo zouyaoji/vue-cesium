@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2023-02-15 17:28:18
- * @LastEditors: XIAOLIJUN
+ * @LastEditTime: 2023-03-13 17:56:05
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
  */
@@ -22,7 +22,14 @@ import { cloneDeep, isEqual } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
-  fabUpdated: (value: boolean) => true
+  fabUpdated: (value: boolean) => true,
+  clearEvt: (
+    e: {
+      type: 'clear'
+      option: VcActionTooltipProps
+    },
+    viewer: Cesium.Viewer
+  ) => true
 }
 export default defineComponent({
   name: 'VcAnalyses',
@@ -41,11 +48,17 @@ export default defineComponent({
 
     const fabActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.fabActionOpts, props.fabActionOpts))
 
-    const sightlineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.sightlineActionOpts, mergeActionOpts('sightlineActionOpts')))
+    const sightlineActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.sightlineActionOpts, mergeActionOpts('sightlineActionOpts'))
+    )
     const sightlineAnalysisOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.sightlineAnalysisOpts), props.sightlineAnalysisOpts))
 
-    const viewshedActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.viewshedActionOpts, mergeActionOpts('viewshedActionOpts')))
-    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(deepMerge(cloneDeep(defaultOptions.viewshedAnalysisOpts), props.viewshedAnalysisOpts))
+    const viewshedActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.viewshedActionOpts, mergeActionOpts('viewshedActionOpts'))
+    )
+    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(
+      deepMerge(cloneDeep(defaultOptions.viewshedAnalysisOpts), props.viewshedAnalysisOpts)
+    )
 
     options.sightlineActionOpts = sightlineActionOpts
     options.sightlineAnalysisOpts = sightlineAnalysisOpts

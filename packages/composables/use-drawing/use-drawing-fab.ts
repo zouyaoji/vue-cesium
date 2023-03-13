@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-08-12 11:47:07
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-13 17:52:59
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \10_vue-cesium\packages\composables\use-drawing\use-drawing-fab.ts
+ * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
@@ -288,6 +288,16 @@ export default function (
     })
 
     selectedDrawingActionInstance && toggleAction(selectedDrawingActionInstance)
+
+    const { viewer } = $services
+    emit(
+      'clearEvt',
+      {
+        type: 'clear',
+        option: clearActionOpts
+      },
+      viewer
+    )
   }
 
   const getServices = (): VcDrawingProvider => {

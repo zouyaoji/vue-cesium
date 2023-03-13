@@ -328,4 +328,14 @@ export type VcDrawingsProps = {
    * Triggers when the floating button is expanded or collapsed.
    */
   onFabUpdated?: (value: boolean) => void
+  /**
+   * Triggers when the clear button is clicked.
+   */
+  onClearEvt?: (
+    evt: {
+      type: 'clear'
+      option: VcActionTooltipProps
+    },
+    viewer: Cesium.Viewer
+  ) => void
 }

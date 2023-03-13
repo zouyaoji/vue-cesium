@@ -18,7 +18,14 @@ import { cloneDeep, isEqual } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
-  fabUpdated: (value: boolean) => true
+  fabUpdated: (value: boolean) => true,
+  clearEvt: (
+    e: {
+      type: 'clear'
+      option: VcActionTooltipProps
+    },
+    viewer: Cesium.Viewer
+  ) => true
 }
 export default defineComponent({
   name: 'VcDrawings',
@@ -37,15 +44,23 @@ export default defineComponent({
     const fabActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.fabActionOpts, props.fabActionOpts))
     const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, mergeActionOpts('pointActionOpts')))
     const pointDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.pointDrawingOpts), props.pointDrawingOpts))
-    const polylineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polylineActionOpts, mergeActionOpts('polylineActionOpts')))
+    const polylineActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.polylineActionOpts, mergeActionOpts('polylineActionOpts'))
+    )
     const polylineDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.polylineDrawingOpts), props.polylineDrawingOpts))
-    const polygonActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polygonActionOpts, mergeActionOpts('polygonActionOpts')))
+    const polygonActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.polygonActionOpts, mergeActionOpts('polygonActionOpts'))
+    )
     const polygonDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.polygonDrawingOpts), props.polygonDrawingOpts))
-    const rectangleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.rectangleActionOpts, mergeActionOpts('rectangleActionOpts')))
+    const rectangleActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.rectangleActionOpts, mergeActionOpts('rectangleActionOpts'))
+    )
     const rectangleDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.rectangleDrawingOpts), props.rectangleDrawingOpts))
     const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, mergeActionOpts('circleActionOpts')))
     const circleDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.circleDrawingOpts), props.circleDrawingOpts))
-    const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, mergeActionOpts('regularActionOpts')))
+    const regularActionOpts = reactive<VcActionTooltipProps>(
+      Object.assign({}, defaultOptions.regularActionOpts, mergeActionOpts('regularActionOpts'))
+    )
     const regularDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.regularDrawingOpts), props.regularDrawingOpts))
     const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pinActionOpts, mergeActionOpts('pinActionOpts')))
     const pinDrawingOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.pinDrawingOpts), props.pinDrawingOpts))

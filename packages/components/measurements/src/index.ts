@@ -28,7 +28,14 @@ import { isEqual, cloneDeep } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
-  fabUpdated: (value: boolean) => true
+  fabUpdated: (value: boolean) => true,
+  clearEvt: (
+    e: {
+      type: 'clear'
+      option: VcActionTooltipProps
+    },
+    viewer: Cesium.Viewer
+  ) => true
 }
 export default defineComponent({
   name: 'VcMeasurements',
