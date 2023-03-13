@@ -1,12 +1,22 @@
 ## Changelog
 
+### 3.1.6
+
+_2023-03-13_
+
+#### Bug fixes
+
+- Fixed the issue that viewshed analysis throw an exception under the new version of webgl2.
+
+#### Optimization
+
+- `vc-drawings`, `vc-measurements`, `vc-analyses` add clear event.
+
 ### 3.1.5
 
 _2023-03-09_
 
 #### Bug fixes
-
-#### Bug 修复
 
 - Fixed the issue that the Baidu custom map cannot be displayed by `vc-imagery-provider-baidu` component.
 - Fixed the issue that the `vc-overlay-html` component is not displayed properly in 2D SceneMode.

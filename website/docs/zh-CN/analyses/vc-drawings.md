@@ -33,6 +33,7 @@ ctrl + 右键取消绘制。
       @active-evt="activeEvt"
       @editor-evt="editorEvt"
       @mouse-evt="mouseEvt"
+      @clear-evt="clearEvt"
       @ready="drawingsReadyDefault"
       :pin-drawing-opts="pinDrawingOpts"
       :point-drawing-opts="pointDrawingOpts"
@@ -231,6 +232,9 @@ ctrl + 右键取消绘制。
           }
         }
       },
+      clearEvt(e, viewer) {
+        console.log(e)
+      },
       unload() {
         this.$refs.drawingsRef.unload()
       },
@@ -364,6 +368,7 @@ ctrl + 右键取消绘制。
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
 
 ### 方法
 

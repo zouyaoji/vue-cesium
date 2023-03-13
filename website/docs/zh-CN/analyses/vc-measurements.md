@@ -142,7 +142,7 @@ ctrl + 右键取消绘制。
         pointMeasurementOpts: {
           preRenderDatas: [[108.9602, 34.21895, 500]],
           pointOpts: {
-            color: 'red',
+            color: 'red'
           }
         },
         areaMeasurementOpts: {
@@ -371,16 +371,17 @@ ctrl + 右键取消绘制。
 
 ### 事件
 
-| 事件名       | 参数                                             | 描述                         |
-| ------------ | ------------------------------------------------ | ---------------------------- |
-| beforeLoad   | (instance: VcComponentInternalInstance)          | 对象加载前触发。             |
-| ready        | (readyObj: VcReadyObject)                        | 对象加载成功时触发。         |
-| destroyed    | (instance: VcComponentInternalInstance)          | 对象销毁时触发。             |
-| drawEvt      | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 量算绘制时触发。             |
-| activeEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | 切换量算 Action 时触发。     |
-| editorEvt    | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
-| mouseEvt     | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
-| onFabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+| 事件名     | 参数                                             | 描述                         |
+| ---------- | ------------------------------------------------ | ---------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance)          | 对象加载前触发。             |
+| ready      | (readyObj: VcReadyObject)                        | 对象加载成功时触发。         |
+| destroyed  | (instance: VcComponentInternalInstance)          | 对象销毁时触发。             |
+| drawEvt    | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 量算绘制时触发。             |
+| activeEvt  | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | 切换量算 Action 时触发。     |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
+| fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
 
 ### 方法
 

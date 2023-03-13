@@ -143,7 +143,7 @@ Basic usage of measurement components.
         pointMeasurementOpts: {
           preRenderDatas: [[108.9602, 34.21895, 500]],
           pointOpts: {
-            color: 'red',
+            color: 'red'
           }
         },
         areaMeasurementOpts: {
@@ -371,16 +371,17 @@ The parameter configuration of each drawing result is too long to list here. If 
 
 ### Events
 
-| Name         | Parameters                                       | Description                                                              |
-| ------------ | ------------------------------------------------ | ------------------------------------------------------------------------ |
-| beforeLoad   | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                              |
-| ready        | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                   |
-| destroyed    | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                             |
-| drawEvt      | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggers when measuring.                                                 |
-| activeEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggers when the measurement action is switched.                        |
-| editorEvt    | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
-| mouseEvt     | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
-| onFabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+| Name       | Parameters                                       | Description                                                              |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                              |
+| ready      | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                   |
+| destroyed  | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                             |
+| drawEvt    | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggers when measuring.                                                 |
+| activeEvt  | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggers when the measurement action is switched.                        |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
+| fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | Triggers when the clear button is clicked.                               |
 
 ### Methods
 

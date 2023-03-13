@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji 370681295@qq.com
+ * @Date: 2023-02-18 13:40:50
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2023-03-03 17:30:48
+ * @FilePath: \vue-cesium@next\website\docs\en-US\post-processes\vc-post-process-stage.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+
 ## VcPostProcessStage
 
 Loading post-processing effects. It is equivalent to initializing a `Cesium.PostProcessStage` instance.
@@ -29,7 +38,7 @@ Basic usage of VcPostProcessStage component.
       return {
         fragmentShader: `
           uniform sampler2D colorTexture;
-          varying vec2 v_textureCoordinates;
+          in vec2 v_textureCoordinates;
           float hash(float x){
             return fract(sin(x*23.3)*13.13);
           }
@@ -45,7 +54,7 @@ Basic usage of VcPostProcessStage component.
             float v=1.-sin(hash(floor(uv.x*100.))*2.);
             float b=clamp(abs(sin(20.*time*v+uv.y*(5./(2.+v))))-.95,0.,1.)*20.;
             c*=v*b;
-            gl_FragColor = mix(texture2D(colorTexture, v_textureCoordinates), vec4(c,1), 0.5);
+            out_FragColor = mix(texture(colorTexture, v_textureCoordinates), vec4(c,1), 0.5);
           }
          `
       }

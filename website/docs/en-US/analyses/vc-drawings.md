@@ -118,7 +118,7 @@ Basic usage of drawing components.
             [108.9602, 34.21895, 100]
           ],
           pointOpts: {
-            color: 'red',
+            color: 'red'
           }
         },
         polygonDrawingOpts: {
@@ -339,6 +339,7 @@ The parameter configuration of each drawing result is too long to list here. If 
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
 | fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | Triggers when the clear button is clicked.                               |
 
 ### Methods
 

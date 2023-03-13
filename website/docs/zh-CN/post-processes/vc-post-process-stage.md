@@ -33,7 +33,7 @@
       return {
         fragmentShader: `
           uniform sampler2D colorTexture;
-          varying vec2 v_textureCoordinates;
+          in vec2 v_textureCoordinates;
           float hash(float x){
             return fract(sin(x*23.3)*13.13);
           }
@@ -49,7 +49,7 @@
             float v=1.-sin(hash(floor(uv.x*100.))*2.);
             float b=clamp(abs(sin(20.*time*v+uv.y*(5./(2.+v))))-.95,0.,1.)*20.;
             c*=v*b;
-            gl_FragColor = mix(texture2D(colorTexture, v_textureCoordinates), vec4(c,1), 0.5);
+            out_FragColor = mix(texture(colorTexture, v_textureCoordinates), vec4(c,1), 0.5);
           }
          `
       }
@@ -73,18 +73,18 @@
 
 ### 属性
 
-| 属性名           | 类型                  | 默认值  | 描述                                                                                                  |
-| ---------------- | --------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| fragmentShader   | string                |         | `required` 指定着色器代码。                                                                           |
-| uniforms | any                |         | `optional` 指定着色器 uniforms 参数。uniform 变量一般用来表示：变换矩阵，材质，光照参数和颜色等信息。 |
-| textureScale     | number                | `1.0`   | `optional` 指定纹理尺寸缩放比例，取值范围 (0.0, 1.0] 。                                               |
-| forcePowerOfTwo  | boolean               | `false` | `optional` 是否强制将纹理尺寸都等于 2 的幂。 2 的幂将是最小维度中 2 的下一个幂。                      |
-| sampleMode       | number                | `0`     | `optional` 指定输入颜色纹理的采样方式。 **{NEAREST: 0, LINEAR: 1}**                                   |
-| pixelFormat      | number                |         | `optional` 指定输出纹理的像素格式。                                                                   |
-| pixelDatatype    | number                |         | `optional` 指定输出纹理的数据类型。                                                                   |
-| clearColor | VcColor\|Array\|string | `BLACK` | `optional` 指定清除输出纹理的颜色。                                                                   |
-| scissorRectangle | VcBoundingRectangle                |         | `optional` 指定用于测试的矩形。                                                                       |
-| name             | string                |         | `optional` 指定唯一名称，未提供默认生成 GUID。                                                        |
+| 属性名           | 类型                   | 默认值  | 描述                                                                                                  |
+| ---------------- | ---------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| fragmentShader   | string                 |         | `required` 指定着色器代码。                                                                           |
+| uniforms         | any                    |         | `optional` 指定着色器 uniforms 参数。uniform 变量一般用来表示：变换矩阵，材质，光照参数和颜色等信息。 |
+| textureScale     | number                 | `1.0`   | `optional` 指定纹理尺寸缩放比例，取值范围 (0.0, 1.0] 。                                               |
+| forcePowerOfTwo  | boolean                | `false` | `optional` 是否强制将纹理尺寸都等于 2 的幂。 2 的幂将是最小维度中 2 的下一个幂。                      |
+| sampleMode       | number                 | `0`     | `optional` 指定输入颜色纹理的采样方式。 **{NEAREST: 0, LINEAR: 1}**                                   |
+| pixelFormat      | number                 |         | `optional` 指定输出纹理的像素格式。                                                                   |
+| pixelDatatype    | number                 |         | `optional` 指定输出纹理的数据类型。                                                                   |
+| clearColor       | VcColor\|Array\|string | `BLACK` | `optional` 指定清除输出纹理的颜色。                                                                   |
+| scissorRectangle | VcBoundingRectangle    |         | `optional` 指定用于测试的矩形。                                                                       |
+| name             | string                 |         | `optional` 指定唯一名称，未提供默认生成 GUID。                                                        |
 
 ### 事件
 
