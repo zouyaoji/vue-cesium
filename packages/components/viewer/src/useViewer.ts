@@ -954,7 +954,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   const loadScript = src => {
     const $script = document.createElement('script')
-    $script.async = true
+    $script.async = false
     $script.src = src
     document.body.appendChild($script)
     return new Promise((resolve, reject) => {
