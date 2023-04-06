@@ -1,20 +1,20 @@
 define([
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './defaultValue-0a909f67',
-  './EllipseOutlineGeometry-017a5929',
-  './Math-2dbd6b93',
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './ComponentDatatype-f7b11d02',
-  './WebGLConstants-a8cc3e8c',
-  './EllipseGeometryLibrary-855d4681',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-a55ceaa1'
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './defaultValue-fe22d8c0',
+  './EllipseOutlineGeometry-c5251669',
+  './Math-dad82b4d',
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './RuntimeError-ef395448',
+  './combine-d9581036',
+  './ComponentDatatype-cf1fa08e',
+  './WebGLConstants-0b1ce7ba',
+  './EllipseGeometryLibrary-0a1e0170',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryOffsetAttribute-9ad0019c',
+  './IndexDatatype-b8f3e09d'
 ], function (
   Matrix3,
   Check,
@@ -41,14 +41,14 @@ define([
    * @alias CircleOutlineGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3} options.center The circle's center point in the fixed frame.
-   * @param {Number} options.radius The radius in meters.
+   * @param {number} options.radius The radius in meters.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid the circle will be on.
-   * @param {Number} [options.height=0.0] The distance in meters between the circle and the ellipsoid surface.
-   * @param {Number} [options.granularity=0.02] The angular distance between points on the circle in radians.
-   * @param {Number} [options.extrudedHeight=0.0] The distance in meters between the circle's extruded face and the ellipsoid surface.
-   * @param {Number} [options.numberOfVerticalLines=16] Number of lines to draw between the top and bottom of an extruded circle.
+   * @param {number} [options.height=0.0] The distance in meters between the circle and the ellipsoid surface.
+   * @param {number} [options.granularity=0.02] The angular distance between points on the circle in radians.
+   * @param {number} [options.extrudedHeight=0.0] The distance in meters between the circle's extruded face and the ellipsoid surface.
+   * @param {number} [options.numberOfVerticalLines=16] Number of lines to draw between the top and bottom of an extruded circle.
    *
    * @exception {DeveloperError} radius must be greater than zero.
    * @exception {DeveloperError} granularity must be greater than zero.
@@ -88,7 +88,7 @@ define([
 
   /**
    * The number of elements used to pack the object into an array.
-   * @type {Number}
+   * @type {number}
    */
   CircleOutlineGeometry.packedLength = EllipseOutlineGeometry.EllipseOutlineGeometry.packedLength
 
@@ -96,10 +96,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {CircleOutlineGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   CircleOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -128,8 +128,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {CircleOutlineGeometry} [result] The object into which to store the result.
    * @returns {CircleOutlineGeometry} The modified result parameter or a new CircleOutlineGeometry instance if one was not provided.
    */

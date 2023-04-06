@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.102
+ * Version 1.104
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -481,7 +481,7 @@ var requirejs, require, define
       var err,
         usingPathFallback,
         waitInterval = config.waitSeconds * 1e3,
-        expired = waitInterval && context.startTime + waitInterval < new Date().getTime(),
+        expired = waitInterval && context.startTime + waitInterval < /* @__PURE__ */ new Date().getTime(),
         noLoads = [],
         reqCalls = [],
         stillLoading = false,
@@ -582,7 +582,7 @@ var requirejs, require, define
           return
         }
         this.fetched = true
-        context.startTime = new Date().getTime()
+        context.startTime = /* @__PURE__ */ new Date().getTime()
         var map = this.map
         if (this.shim) {
           context.makeRequire(this.map, {
@@ -917,7 +917,7 @@ var requirejs, require, define
       /**
        * @private
        * Set a configuration for the context.
-       * @param {Object} cfg config object to integrate.
+       * @param {object} cfg config object to integrate.
        */
       configure: function (cfg2) {
         if (cfg2.baseUrl) {
@@ -1106,7 +1106,7 @@ var requirejs, require, define
        * Internal method used by environment adapters to complete a load event.
        * A load event could be a script load or just a load pass from a synchronous
        * load call.
-       * @param {String} moduleName the name of the module to potentially complete.
+       * @param {string} moduleName the name of the module to potentially complete.
        * @private
        */
       completeLoad: function (moduleName) {

@@ -1,24 +1,24 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-315394f6',
-  './Transforms-a05e5e6e',
-  './ComponentDatatype-f7b11d02',
-  './Check-666ab1a0',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './WallGeometryLibrary-6db0ebb6',
-  './Matrix2-13178034',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c',
-  './arrayRemoveDuplicates-c2038105',
-  './PolylinePipeline-5e2e1b21',
-  './EllipsoidGeodesic-98c62a56',
-  './EllipsoidRhumbLine-19756602',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728'
+  './defaultValue-fe22d8c0',
+  './Matrix3-fa806b97',
+  './Transforms-9052372a',
+  './ComponentDatatype-cf1fa08e',
+  './Check-6ede7e26',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './WallGeometryLibrary-db7a64fb',
+  './Matrix2-1e403d0e',
+  './RuntimeError-ef395448',
+  './combine-d9581036',
+  './WebGLConstants-0b1ce7ba',
+  './arrayRemoveDuplicates-fac118a8',
+  './PolylinePipeline-6d5c63e5',
+  './EllipsoidGeodesic-dcff5cbd',
+  './EllipsoidRhumbLine-b672d507',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6'
 ], function (
   defaultValue,
   Matrix3,
@@ -53,12 +53,12 @@ define([
    * @alias WallOutlineGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.positions An array of Cartesian objects, which are the points of the wall.
-   * @param {Number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
-   * @param {Number[]} [options.maximumHeights] An array parallel to <code>positions</code> that give the maximum height of the
+   * @param {number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   * @param {number[]} [options.maximumHeights] An array parallel to <code>positions</code> that give the maximum height of the
    *        wall at <code>positions</code>. If undefined, the height of each position in used.
-   * @param {Number[]} [options.minimumHeights] An array parallel to <code>positions</code> that give the minimum height of the
+   * @param {number[]} [options.minimumHeights] An array parallel to <code>positions</code> that give the minimum height of the
    *        wall at <code>positions</code>. If undefined, the height at each position is 0.0.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid for coordinate manipulation
    *
@@ -121,7 +121,7 @@ define([
 
     /**
      * The number of elements used to pack the object into an array.
-     * @type {Number}
+     * @type {number}
      */
     this.packedLength = numComponents + Matrix3.Ellipsoid.packedLength + 1
   }
@@ -130,10 +130,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {WallOutlineGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   WallOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -197,8 +197,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {WallOutlineGeometry} [result] The object into which to store the result.
    * @returns {WallOutlineGeometry} The modified result parameter or a new WallOutlineGeometry instance if one was not provided.
    */
@@ -266,11 +266,11 @@ define([
    * A description of a walloutline. A wall is defined by a series of points,
    * which extrude down to the ground. Optionally, they can extrude downwards to a specified height.
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.positions An array of Cartesian objects, which are the points of the wall.
-   * @param {Number} [options.maximumHeight] A constant that defines the maximum height of the
+   * @param {number} [options.maximumHeight] A constant that defines the maximum height of the
    *        wall at <code>positions</code>. If undefined, the height of each position in used.
-   * @param {Number} [options.minimumHeight] A constant that defines the minimum height of the
+   * @param {number} [options.minimumHeight] A constant that defines the minimum height of the
    *        wall at <code>positions</code>. If undefined, the height at each position is 0.0.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid for coordinate manipulation
    * @returns {WallOutlineGeometry}

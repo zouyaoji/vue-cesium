@@ -1,28 +1,28 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-315394f6',
-  './Matrix2-13178034',
-  './Transforms-a05e5e6e',
-  './Check-666ab1a0',
-  './ComponentDatatype-f7b11d02',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryInstance-451dc1cd',
-  './GeometryOffsetAttribute-04332ce7',
-  './GeometryPipeline-8fb0db69',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './PolygonPipeline-21668b3f',
-  './RectangleGeometryLibrary-d5457f7b',
-  './VertexFormat-6b480673',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c',
-  './AttributeCompression-b646d393',
-  './EncodedCartesian3-81f70735',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728',
-  './EllipsoidRhumbLine-19756602'
+  './defaultValue-fe22d8c0',
+  './Matrix3-fa806b97',
+  './Matrix2-1e403d0e',
+  './Transforms-9052372a',
+  './Check-6ede7e26',
+  './ComponentDatatype-cf1fa08e',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryInstance-3fb607b7',
+  './GeometryOffsetAttribute-9ad0019c',
+  './GeometryPipeline-916636fa',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './PolygonPipeline-32fc92cc',
+  './RectangleGeometryLibrary-2d6f36f3',
+  './VertexFormat-030f11ff',
+  './RuntimeError-ef395448',
+  './combine-d9581036',
+  './WebGLConstants-0b1ce7ba',
+  './AttributeCompression-8a5a065e',
+  './EncodedCartesian3-e8bbca36',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6',
+  './EllipsoidRhumbLine-b672d507'
 ], function (
   defaultValue,
   Matrix3,
@@ -814,15 +814,15 @@ define([
    * @alias RectangleGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Rectangle} options.rectangle A cartographic rectangle with north, south, east and west properties in radians.
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid on which the rectangle lies.
-   * @param {Number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
-   * @param {Number} [options.height=0.0] The distance in meters between the rectangle and the ellipsoid surface.
-   * @param {Number} [options.rotation=0.0] The rotation of the rectangle, in radians. A positive rotation is counter-clockwise.
-   * @param {Number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
-   * @param {Number} [options.extrudedHeight] The distance in meters between the rectangle's extruded face and the ellipsoid surface.
+   * @param {number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   * @param {number} [options.height=0.0] The distance in meters between the rectangle and the ellipsoid surface.
+   * @param {number} [options.rotation=0.0] The rotation of the rectangle, in radians. A positive rotation is counter-clockwise.
+   * @param {number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
+   * @param {number} [options.extrudedHeight] The distance in meters between the rectangle's extruded face and the ellipsoid surface.
    *
    * @exception {DeveloperError} <code>options.rectangle.north</code> must be in the interval [<code>-Pi/2</code>, <code>Pi/2</code>].
    * @exception {DeveloperError} <code>options.rectangle.south</code> must be in the interval [<code>-Pi/2</code>, <code>Pi/2</code>].
@@ -886,7 +886,7 @@ define([
 
   /**
    * The number of elements used to pack the object into an array.
-   * @type {Number}
+   * @type {number}
    */
   RectangleGeometry.packedLength = Matrix2.Rectangle.packedLength + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 7
 
@@ -894,10 +894,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {RectangleGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   RectangleGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -945,8 +945,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {RectangleGeometry} [result] The object into which to store the result.
    * @returns {RectangleGeometry} The modified result parameter or a new RectangleGeometry instance if one was not provided.
    */
@@ -1003,11 +1003,11 @@ define([
   /**
    * Computes the bounding rectangle based on the provided options
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Rectangle} options.rectangle A cartographic rectangle with north, south, east and west properties in radians.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid on which the rectangle lies.
-   * @param {Number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
-   * @param {Number} [options.rotation=0.0] The rotation of the rectangle, in radians. A positive rotation is counter-clockwise.
+   * @param {number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   * @param {number} [options.rotation=0.0] The rotation of the rectangle, in radians. A positive rotation is counter-clockwise.
    * @param {Rectangle} [result] An object in which to store the result.
    *
    * @returns {Rectangle} The result rectangle

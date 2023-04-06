@@ -374,7 +374,7 @@
                   (i.fromObject = function (r) {
                     if (r instanceof n.keyhole.dbroot.PopUpProto) return r
                     var t = new n.keyhole.dbroot.PopUpProto()
-                    if ((r.isBalloonStyle != null && (t.isBalloonStyle = Boolean(r.isBalloonStyle)), r.text != null)) {
+                    if ((r.isBalloonStyle != null && (t.isBalloonStyle = !!r.isBalloonStyle), r.text != null)) {
                       if (typeof r.text != 'object') throw TypeError('.keyhole.dbroot.PopUpProto.text: object expected')
                       t.text = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.text)
                     }
@@ -969,8 +969,8 @@
                     }
                     return (
                       r.preserveTextLevel != null && (t.preserveTextLevel = r.preserveTextLevel | 0),
-                      r.lodBeginTransition != null && (t.lodBeginTransition = Boolean(r.lodBeginTransition)),
-                      r.lodEndTransition != null && (t.lodEndTransition = Boolean(r.lodEndTransition)),
+                      r.lodBeginTransition != null && (t.lodBeginTransition = !!r.lodBeginTransition),
+                      r.lodEndTransition != null && (t.lodEndTransition = !!r.lodEndTransition),
                       t
                     )
                   }),
@@ -1033,7 +1033,7 @@
                   (i.fromObject = function (r) {
                     if (r instanceof n.keyhole.dbroot.FolderProto) return r
                     var t = new n.keyhole.dbroot.FolderProto()
-                    return r.isExpandable != null && (t.isExpandable = Boolean(r.isExpandable)), t
+                    return r.isExpandable != null && (t.isExpandable = !!r.isExpandable), t
                   }),
                   (i.toObject = function (r, t) {
                     t || (t = {})
@@ -1478,9 +1478,9 @@
                       t.displayName = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.displayName)
                     }
                     if (
-                      (r.isVisible != null && (t.isVisible = Boolean(r.isVisible)),
-                      r.isEnabled != null && (t.isEnabled = Boolean(r.isEnabled)),
-                      r.isChecked != null && (t.isChecked = Boolean(r.isChecked)),
+                      (r.isVisible != null && (t.isVisible = !!r.isVisible),
+                      r.isEnabled != null && (t.isEnabled = !!r.isEnabled),
+                      r.isChecked != null && (t.isChecked = !!r.isChecked),
                       r.layerMenuIconPath != null && (t.layerMenuIconPath = String(r.layerMenuIconPath)),
                       r.description != null)
                     ) {
@@ -1493,7 +1493,7 @@
                     }
                     if (
                       (r.assetUuid != null && (t.assetUuid = String(r.assetUuid)),
-                      r.isSaveLocked != null && (t.isSaveLocked = Boolean(r.isSaveLocked)),
+                      r.isSaveLocked != null && (t.isSaveLocked = !!r.isSaveLocked),
                       r.children)
                     ) {
                       if (!Array.isArray(r.children)) throw TypeError('.keyhole.dbroot.NestedFeatureProto.children: array expected')
@@ -1877,13 +1877,13 @@
                     if (r instanceof n.keyhole.dbroot.ClientOptionsProto) return r
                     var t = new n.keyhole.dbroot.ClientOptionsProto()
                     if (
-                      (r.disableDiskCache != null && (t.disableDiskCache = Boolean(r.disableDiskCache)),
-                      r.disableEmbeddedBrowserVista != null && (t.disableEmbeddedBrowserVista = Boolean(r.disableEmbeddedBrowserVista)),
-                      r.drawAtmosphere != null && (t.drawAtmosphere = Boolean(r.drawAtmosphere)),
-                      r.drawStars != null && (t.drawStars = Boolean(r.drawStars)),
+                      (r.disableDiskCache != null && (t.disableDiskCache = !!r.disableDiskCache),
+                      r.disableEmbeddedBrowserVista != null && (t.disableEmbeddedBrowserVista = !!r.disableEmbeddedBrowserVista),
+                      r.drawAtmosphere != null && (t.drawAtmosphere = !!r.drawAtmosphere),
+                      r.drawStars != null && (t.drawStars = !!r.drawStars),
                       r.shaderFilePrefix != null && (t.shaderFilePrefix = String(r.shaderFilePrefix)),
-                      r.useProtobufQuadtreePackets != null && (t.useProtobufQuadtreePackets = Boolean(r.useProtobufQuadtreePackets)),
-                      r.useExtendedCopyrightIds != null && (t.useExtendedCopyrightIds = Boolean(r.useExtendedCopyrightIds)),
+                      r.useProtobufQuadtreePackets != null && (t.useProtobufQuadtreePackets = !!r.useProtobufQuadtreePackets),
+                      r.useExtendedCopyrightIds != null && (t.useExtendedCopyrightIds = !!r.useExtendedCopyrightIds),
                       r.precipitationsOptions != null)
                     ) {
                       if (typeof r.precipitationsOptions != 'object')
@@ -1895,8 +1895,8 @@
                       t.captureOptions = n.keyhole.dbroot.ClientOptionsProto.CaptureOptions.fromObject(r.captureOptions)
                     }
                     if (
-                      (r.show_2dMapsIcon != null && (t.show_2dMapsIcon = Boolean(r.show_2dMapsIcon)),
-                      r.disableInternalBrowser != null && (t.disableInternalBrowser = Boolean(r.disableInternalBrowser)),
+                      (r.show_2dMapsIcon != null && (t.show_2dMapsIcon = !!r.show_2dMapsIcon),
+                      r.disableInternalBrowser != null && (t.disableInternalBrowser = !!r.disableInternalBrowser),
                       r.internalBrowserBlacklist != null && (t.internalBrowserBlacklist = String(r.internalBrowserBlacklist)),
                       r.internalBrowserOriginWhitelist != null && (t.internalBrowserOriginWhitelist = String(r.internalBrowserOriginWhitelist)),
                       r.polarTileMergingLevel != null && (t.polarTileMergingLevel = r.polarTileMergingLevel | 0),
@@ -2363,7 +2363,7 @@
                         if (t instanceof n.keyhole.dbroot.ClientOptionsProto.CaptureOptions) return t
                         var e = new n.keyhole.dbroot.ClientOptionsProto.CaptureOptions()
                         return (
-                          t.allowSaveAsImage != null && (e.allowSaveAsImage = Boolean(t.allowSaveAsImage)),
+                          t.allowSaveAsImage != null && (e.allowSaveAsImage = !!t.allowSaveAsImage),
                           t.maxFreeCaptureRes != null && (e.maxFreeCaptureRes = t.maxFreeCaptureRes | 0),
                           t.maxPremiumCaptureRes != null && (e.maxPremiumCaptureRes = t.maxPremiumCaptureRes | 0),
                           e
@@ -2458,10 +2458,10 @@
                         if (t instanceof n.keyhole.dbroot.ClientOptionsProto.MapsOptions) return t
                         var e = new n.keyhole.dbroot.ClientOptionsProto.MapsOptions()
                         return (
-                          t.enableMaps != null && (e.enableMaps = Boolean(t.enableMaps)),
-                          t.docsAutoDownloadEnabled != null && (e.docsAutoDownloadEnabled = Boolean(t.docsAutoDownloadEnabled)),
+                          t.enableMaps != null && (e.enableMaps = !!t.enableMaps),
+                          t.docsAutoDownloadEnabled != null && (e.docsAutoDownloadEnabled = !!t.docsAutoDownloadEnabled),
                           t.docsAutoDownloadInterval != null && (e.docsAutoDownloadInterval = t.docsAutoDownloadInterval | 0),
-                          t.docsAutoUploadEnabled != null && (e.docsAutoUploadEnabled = Boolean(t.docsAutoUploadEnabled)),
+                          t.docsAutoUploadEnabled != null && (e.docsAutoUploadEnabled = !!t.docsAutoUploadEnabled),
                           t.docsAutoUploadDelay != null && (e.docsAutoUploadDelay = t.docsAutoUploadDelay | 0),
                           e
                         )
@@ -2636,8 +2636,8 @@
                     var t = new n.keyhole.dbroot.FetchingOptionsProto()
                     return (
                       r.maxRequestsPerQuery != null && (t.maxRequestsPerQuery = r.maxRequestsPerQuery | 0),
-                      r.forceMaxRequestsPerQuery != null && (t.forceMaxRequestsPerQuery = Boolean(r.forceMaxRequestsPerQuery)),
-                      r.sortBatches != null && (t.sortBatches = Boolean(r.sortBatches)),
+                      r.forceMaxRequestsPerQuery != null && (t.forceMaxRequestsPerQuery = !!r.forceMaxRequestsPerQuery),
+                      r.sortBatches != null && (t.sortBatches = !!r.sortBatches),
                       r.maxDrawable != null && (t.maxDrawable = r.maxDrawable | 0),
                       r.maxImagery != null && (t.maxImagery = r.maxImagery | 0),
                       r.maxTerrain != null && (t.maxTerrain = r.maxTerrain | 0),
@@ -2768,7 +2768,7 @@
                     var t = new n.keyhole.dbroot.TimeMachineOptionsProto()
                     return (
                       r.serverUrl != null && (t.serverUrl = String(r.serverUrl)),
-                      r.isTimemachine != null && (t.isTimemachine = Boolean(r.isTimemachine)),
+                      r.isTimemachine != null && (t.isTimemachine = !!r.isTimemachine),
                       r.dwellTimeMs != null && (t.dwellTimeMs = r.dwellTimeMs | 0),
                       r.discoverabilityAltitudeMeters != null && (t.discoverabilityAltitudeMeters = r.discoverabilityAltitudeMeters | 0),
                       t
@@ -3037,7 +3037,7 @@
                   (i.fromObject = function (r) {
                     if (r instanceof n.keyhole.dbroot.SearchTabProto) return r
                     var t = new n.keyhole.dbroot.SearchTabProto()
-                    if ((r.isVisible != null && (t.isVisible = Boolean(r.isVisible)), r.tabLabel != null)) {
+                    if ((r.isVisible != null && (t.isVisible = !!r.isVisible), r.tabLabel != null)) {
                       if (typeof r.tabLabel != 'object') throw TypeError('.keyhole.dbroot.SearchTabProto.tabLabel: object expected')
                       t.tabLabel = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.tabLabel)
                     }
@@ -3364,7 +3364,7 @@
                       (l.fromObject = function (t) {
                         if (t instanceof n.keyhole.dbroot.CobrandProto.Coord) return t
                         var e = new n.keyhole.dbroot.CobrandProto.Coord()
-                        return t.value != null && (e.value = Number(t.value)), t.isRelative != null && (e.isRelative = Boolean(t.isRelative)), e
+                        return t.value != null && (e.value = Number(t.value)), t.isRelative != null && (e.isRelative = !!t.isRelative), e
                       }),
                       (l.toObject = function (t, e) {
                         e || (e = {})
@@ -3815,11 +3815,7 @@
                       if (typeof r.url != 'object') throw TypeError('.keyhole.dbroot.LogServerProto.url: object expected')
                       t.url = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.url)
                     }
-                    return (
-                      r.enable != null && (t.enable = Boolean(r.enable)),
-                      r.throttlingFactor != null && (t.throttlingFactor = r.throttlingFactor | 0),
-                      t
-                    )
+                    return r.enable != null && (t.enable = !!r.enable), r.throttlingFactor != null && (t.throttlingFactor = r.throttlingFactor | 0), t
                   }),
                   (i.toObject = function (r, t) {
                     t || (t = {})
@@ -4515,7 +4511,7 @@
                       if (typeof r.authServerUrl != 'object') throw TypeError('.keyhole.dbroot.EndSnippetProto.authServerUrl: object expected')
                       t.authServerUrl = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.authServerUrl)
                     }
-                    if ((r.disableAuthentication != null && (t.disableAuthentication = Boolean(r.disableAuthentication)), r.mfeDomains)) {
+                    if ((r.disableAuthentication != null && (t.disableAuthentication = !!r.disableAuthentication), r.mfeDomains)) {
                       if (!Array.isArray(r.mfeDomains)) throw TypeError('.keyhole.dbroot.EndSnippetProto.mfeDomains: array expected')
                       t.mfeDomains = []
                       for (var e = 0; e < r.mfeDomains.length; ++e) {
@@ -4534,7 +4530,7 @@
                     }
                     if (
                       (r.reverseGeocoderProtocolVersion != null && (t.reverseGeocoderProtocolVersion = r.reverseGeocoderProtocolVersion | 0),
-                      r.skyDatabaseIsAvailable != null && (t.skyDatabaseIsAvailable = Boolean(r.skyDatabaseIsAvailable)),
+                      r.skyDatabaseIsAvailable != null && (t.skyDatabaseIsAvailable = !!r.skyDatabaseIsAvailable),
                       r.skyDatabaseUrl != null)
                     ) {
                       if (typeof r.skyDatabaseUrl != 'object') throw TypeError('.keyhole.dbroot.EndSnippetProto.skyDatabaseUrl: object expected')
@@ -4627,8 +4623,8 @@
                       t.releaseNotesUrl = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.releaseNotesUrl)
                     }
                     if (
-                      (r.hideUserData != null && (t.hideUserData = Boolean(r.hideUserData)),
-                      r.useGeLogo != null && (t.useGeLogo = Boolean(r.useGeLogo)),
+                      (r.hideUserData != null && (t.hideUserData = !!r.hideUserData),
+                      r.useGeLogo != null && (t.useGeLogo = !!r.useGeLogo),
                       r.dioramaDescriptionUrlBase != null)
                     ) {
                       if (typeof r.dioramaDescriptionUrlBase != 'object')
@@ -4756,7 +4752,7 @@
                       if (typeof r.privacyPolicyUrl != 'object') throw TypeError('.keyhole.dbroot.EndSnippetProto.privacyPolicyUrl: object expected')
                       t.privacyPolicyUrl = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.privacyPolicyUrl)
                     }
-                    if ((r.doGplusUserCheck != null && (t.doGplusUserCheck = Boolean(r.doGplusUserCheck)), r.rocktreeDataProto != null)) {
+                    if ((r.doGplusUserCheck != null && (t.doGplusUserCheck = !!r.doGplusUserCheck), r.rocktreeDataProto != null)) {
                       if (typeof r.rocktreeDataProto != 'object')
                         throw TypeError('.keyhole.dbroot.EndSnippetProto.rocktreeDataProto: object expected')
                       t.rocktreeDataProto = n.keyhole.dbroot.EndSnippetProto.RockTreeDataProto.fromObject(r.rocktreeDataProto)
@@ -4770,7 +4766,7 @@
                         t.filmstripConfig[e] = n.keyhole.dbroot.EndSnippetProto.FilmstripConfigProto.fromObject(r.filmstripConfig[e])
                       }
                     }
-                    if ((r.showSigninButton != null && (t.showSigninButton = Boolean(r.showSigninButton)), r.proMeasureUpsellUrl != null)) {
+                    if ((r.showSigninButton != null && (t.showSigninButton = !!r.showSigninButton), r.proMeasureUpsellUrl != null)) {
                       if (typeof r.proMeasureUpsellUrl != 'object')
                         throw TypeError('.keyhole.dbroot.EndSnippetProto.proMeasureUpsellUrl: object expected')
                       t.proMeasureUpsellUrl = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.proMeasureUpsellUrl)
@@ -6098,7 +6094,7 @@
                           e.featuredToursUrl = n.keyhole.dbroot.StringIdOrValueProto.fromObject(t.featuredToursUrl)
                         }
                         if (
-                          (t.enableViewportFallback != null && (e.enableViewportFallback = Boolean(t.enableViewportFallback)),
+                          (t.enableViewportFallback != null && (e.enableViewportFallback = !!t.enableViewportFallback),
                           t.viewportFallbackDistance != null && (e.viewportFallbackDistance = t.viewportFallbackDistance >>> 0),
                           t.imageryType)
                         ) {
@@ -6417,11 +6413,7 @@
                   (i.fromObject = function (r) {
                     if (r instanceof n.keyhole.dbroot.DbRootRefProto) return r
                     var t = new n.keyhole.dbroot.DbRootRefProto()
-                    if (
-                      (r.url != null && (t.url = String(r.url)),
-                      r.isCritical != null && (t.isCritical = Boolean(r.isCritical)),
-                      r.requirements != null)
-                    ) {
+                    if ((r.url != null && (t.url = String(r.url)), r.isCritical != null && (t.isCritical = !!r.isCritical), r.requirements != null)) {
                       if (typeof r.requirements != 'object') throw TypeError('.keyhole.dbroot.DbRootRefProto.requirements: object expected')
                       t.requirements = n.keyhole.dbroot.RequirementProto.fromObject(r.requirements)
                     }
@@ -6685,9 +6677,9 @@
                       t.databaseName = n.keyhole.dbroot.StringIdOrValueProto.fromObject(r.databaseName)
                     }
                     if (
-                      (r.imageryPresent != null && (t.imageryPresent = Boolean(r.imageryPresent)),
-                      r.protoImagery != null && (t.protoImagery = Boolean(r.protoImagery)),
-                      r.terrainPresent != null && (t.terrainPresent = Boolean(r.terrainPresent)),
+                      (r.imageryPresent != null && (t.imageryPresent = !!r.imageryPresent),
+                      r.protoImagery != null && (t.protoImagery = !!r.protoImagery),
+                      r.terrainPresent != null && (t.terrainPresent = !!r.terrainPresent),
                       r.providerInfo)
                     ) {
                       if (!Array.isArray(r.providerInfo)) throw TypeError('.keyhole.dbroot.DbRootProto.providerInfo: array expected')

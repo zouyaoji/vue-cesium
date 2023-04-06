@@ -1,34 +1,34 @@
 define([
-  './arrayRemoveDuplicates-c2038105',
-  './BoundingRectangle-93b263ac',
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './ComponentDatatype-f7b11d02',
-  './CoplanarPolygonGeometryLibrary-33c4c1f8',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryInstance-451dc1cd',
-  './GeometryPipeline-8fb0db69',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './PolygonGeometryLibrary-6b5a29e9',
-  './PolygonPipeline-21668b3f',
-  './VertexFormat-6b480673',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c',
-  './OrientedBoundingBox-79ee7cbb',
-  './EllipsoidTangentPlane-ed9443a1',
-  './AxisAlignedBoundingBox-47525601',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728',
-  './AttributeCompression-b646d393',
-  './EncodedCartesian3-81f70735',
-  './ArcType-ce2e50ab',
-  './EllipsoidRhumbLine-19756602'
+  './arrayRemoveDuplicates-fac118a8',
+  './BoundingRectangle-57f2b24f',
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './ComponentDatatype-cf1fa08e',
+  './CoplanarPolygonGeometryLibrary-048c3c14',
+  './defaultValue-fe22d8c0',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryInstance-3fb607b7',
+  './GeometryPipeline-916636fa',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './PolygonGeometryLibrary-931f1ec6',
+  './PolygonPipeline-32fc92cc',
+  './VertexFormat-030f11ff',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './WebGLConstants-0b1ce7ba',
+  './OrientedBoundingBox-96fe1752',
+  './EllipsoidTangentPlane-857186be',
+  './AxisAlignedBoundingBox-379015ef',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6',
+  './AttributeCompression-8a5a065e',
+  './EncodedCartesian3-e8bbca36',
+  './ArcType-2d9abbbc',
+  './EllipsoidRhumbLine-b672d507'
 ], function (
   arrayRemoveDuplicates,
   BoundingRectangle,
@@ -234,9 +234,9 @@ define([
    * @alias CoplanarPolygonGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {PolygonHierarchy} options.polygonHierarchy A polygon hierarchy that can include holes.
-   * @param {Number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
+   * @param {number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid to be used as a reference.
    * @param {PolygonHierarchy} [options.textureCoordinates] Texture coordinates as a {@link PolygonHierarchy} of {@link Cartesian2} points.
@@ -271,7 +271,7 @@ define([
 
     /**
      * The number of elements used to pack the object into an array.
-     * @type {Number}
+     * @type {number}
      */
     this.packedLength =
       PolygonGeometryLibrary.PolygonGeometryLibrary.computeHierarchyPackedLength(polygonHierarchy, Matrix3.Cartesian3) +
@@ -286,10 +286,10 @@ define([
   /**
    * A description of a coplanar polygon from an array of positions.
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.positions An array of positions that defined the corner points of the polygon.
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
-   * @param {Number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
+   * @param {number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid to be used as a reference.
    * @param {PolygonHierarchy} [options.textureCoordinates] Texture coordinates as a {@link PolygonHierarchy} of {@link Cartesian2} points.
    * @returns {CoplanarPolygonGeometry}
@@ -332,10 +332,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {CoplanarPolygonGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   CoplanarPolygonGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -382,8 +382,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {CoplanarPolygonGeometry} [result] The object into which to store the result.
    * @returns {CoplanarPolygonGeometry} The modified result parameter or a new CoplanarPolygonGeometry instance if one was not provided.
    */

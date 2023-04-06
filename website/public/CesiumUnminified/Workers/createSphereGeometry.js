@@ -1,20 +1,20 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './EllipsoidGeometry-826e7bce',
-  './VertexFormat-6b480673',
-  './Math-2dbd6b93',
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './ComponentDatatype-f7b11d02',
-  './WebGLConstants-a8cc3e8c',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-a55ceaa1'
+  './defaultValue-fe22d8c0',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './EllipsoidGeometry-d10a5221',
+  './VertexFormat-030f11ff',
+  './Math-dad82b4d',
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './RuntimeError-ef395448',
+  './combine-d9581036',
+  './ComponentDatatype-cf1fa08e',
+  './WebGLConstants-0b1ce7ba',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryOffsetAttribute-9ad0019c',
+  './IndexDatatype-b8f3e09d'
 ], function (
   defaultValue,
   Matrix3,
@@ -41,10 +41,10 @@ define([
    * @alias SphereGeometry
    * @constructor
    *
-   * @param {Object} [options] Object with the following properties:
-   * @param {Number} [options.radius=1.0] The radius of the sphere.
-   * @param {Number} [options.stackPartitions=64] The number of times to partition the ellipsoid into stacks.
-   * @param {Number} [options.slicePartitions=64] The number of times to partition the ellipsoid into radial slices.
+   * @param {object} [options] Object with the following properties:
+   * @param {number} [options.radius=1.0] The radius of the sphere.
+   * @param {number} [options.stackPartitions=64] The number of times to partition the ellipsoid into stacks.
+   * @param {number} [options.slicePartitions=64] The number of times to partition the ellipsoid into radial slices.
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    *
    * @exception {DeveloperError} options.slicePartitions cannot be less than three.
@@ -75,7 +75,7 @@ define([
 
   /**
    * The number of elements used to pack the object into an array.
-   * @type {Number}
+   * @type {number}
    */
   SphereGeometry.packedLength = EllipsoidGeometry.EllipsoidGeometry.packedLength
 
@@ -83,10 +83,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {SphereGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   SphereGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -108,8 +108,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {SphereGeometry} [result] The object into which to store the result.
    * @returns {SphereGeometry} The modified result parameter or a new SphereGeometry instance if one was not provided.
    */

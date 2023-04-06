@@ -1,4 +1,4 @@
-define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProcessorWorker'], function (
+define(['./Check-6ede7e26', './RuntimeError-ef395448', './defaultValue-fe22d8c0', './createTaskProcessorWorker'], function (
   Check,
   RuntimeError,
   defaultValue,
@@ -103,12 +103,12 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Contains information about each tile from a Google Earth Enterprise server
    *
-   * @param {Number} bits Bitmask that contains the type of data and available children for each tile.
-   * @param {Number} cnodeVersion Version of the request for subtree metadata.
-   * @param {Number} imageryVersion Version of the request for imagery tile.
-   * @param {Number} terrainVersion Version of the request for terrain tile.
-   * @param {Number} imageryProvider Id of imagery provider.
-   * @param {Number} terrainProvider Id of terrain provider.
+   * @param {number} bits Bitmask that contains the type of data and available children for each tile.
+   * @param {number} cnodeVersion Version of the request for subtree metadata.
+   * @param {number} imageryVersion Version of the request for imagery tile.
+   * @param {number} terrainVersion Version of the request for terrain tile.
+   * @param {number} imageryProvider Id of imagery provider.
+   * @param {number} terrainProvider Id of terrain provider.
    *
    * @private
    */
@@ -126,7 +126,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Creates GoogleEarthEnterpriseTileInformation from an object
    *
-   * @param {Object} info Object to be cloned
+   * @param {object} info Object to be cloned
    * @param {GoogleEarthEnterpriseTileInformation} [result] The object onto which to store the result.
    * @returns {GoogleEarthEnterpriseTileInformation} The modified result parameter or a new GoogleEarthEnterpriseTileInformation instance if none was provided.
    */
@@ -166,7 +166,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets whether a subtree is available
    *
-   * @returns {Boolean} true if subtree is available, false otherwise.
+   * @returns {boolean} true if subtree is available, false otherwise.
    */
   GoogleEarthEnterpriseTileInformation.prototype.hasSubtree = function () {
     return isBitSet(this._bits, cacheFlagBitmask)
@@ -175,7 +175,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets whether imagery is available
    *
-   * @returns {Boolean} true if imagery is available, false otherwise.
+   * @returns {boolean} true if imagery is available, false otherwise.
    */
   GoogleEarthEnterpriseTileInformation.prototype.hasImagery = function () {
     return isBitSet(this._bits, imageBitmask)
@@ -184,7 +184,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets whether terrain is available
    *
-   * @returns {Boolean} true if terrain is available, false otherwise.
+   * @returns {boolean} true if terrain is available, false otherwise.
    */
   GoogleEarthEnterpriseTileInformation.prototype.hasTerrain = function () {
     return isBitSet(this._bits, terrainBitmask)
@@ -193,7 +193,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets whether any children are present
    *
-   * @returns {Boolean} true if any children are available, false otherwise.
+   * @returns {boolean} true if any children are available, false otherwise.
    */
   GoogleEarthEnterpriseTileInformation.prototype.hasChildren = function () {
     return isBitSet(this._bits, anyChildBitmask)
@@ -202,9 +202,9 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets whether a specified child is available
    *
-   * @param {Number} index Index of child tile
+   * @param {number} index Index of child tile
    *
-   * @returns {Boolean} true if child is available, false otherwise
+   * @returns {boolean} true if child is available, false otherwise
    */
   GoogleEarthEnterpriseTileInformation.prototype.hasChild = function (index) {
     return isBitSet(this._bits, childrenBitmasks[index])
@@ -213,7 +213,7 @@ define(['./Check-666ab1a0', './RuntimeError-06c93819', './defaultValue-0a909f67'
   /**
    * Gets bitmask containing children
    *
-   * @returns {Number} Children bitmask
+   * @returns {number} Children bitmask
    */
   GoogleEarthEnterpriseTileInformation.prototype.getChildBitmask = function () {
     return this._bits & anyChildBitmask

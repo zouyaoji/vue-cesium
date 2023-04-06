@@ -1,19 +1,19 @@
 define([
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './ComponentDatatype-f7b11d02',
-  './CylinderGeometryLibrary-372c07d8',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c'
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './ComponentDatatype-cf1fa08e',
+  './CylinderGeometryLibrary-135b0858',
+  './defaultValue-fe22d8c0',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryOffsetAttribute-9ad0019c',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './WebGLConstants-0b1ce7ba'
 ], function (
   Transforms,
   Matrix2,
@@ -41,12 +41,12 @@ define([
    * @alias CylinderOutlineGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
-   * @param {Number} options.length The length of the cylinder.
-   * @param {Number} options.topRadius The radius of the top of the cylinder.
-   * @param {Number} options.bottomRadius The radius of the bottom of the cylinder.
-   * @param {Number} [options.slices=128] The number of edges around the perimeter of the cylinder.
-   * @param {Number} [options.numberOfVerticalLines=16] Number of lines to draw between the top and bottom surfaces of the cylinder.
+   * @param {object} options Object with the following properties:
+   * @param {number} options.length The length of the cylinder.
+   * @param {number} options.topRadius The radius of the top of the cylinder.
+   * @param {number} options.bottomRadius The radius of the bottom of the cylinder.
+   * @param {number} [options.slices=128] The number of edges around the perimeter of the cylinder.
+   * @param {number} [options.numberOfVerticalLines=16] Number of lines to draw between the top and bottom surfaces of the cylinder.
    *
    * @exception {DeveloperError} options.length must be greater than 0.
    * @exception {DeveloperError} options.topRadius must be greater than 0.
@@ -95,7 +95,7 @@ define([
 
   /**
    * The number of elements used to pack the object into an array.
-   * @type {Number}
+   * @type {number}
    */
   CylinderOutlineGeometry.packedLength = 6
 
@@ -103,10 +103,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {CylinderOutlineGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   CylinderOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -138,8 +138,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {CylinderOutlineGeometry} [result] The object into which to store the result.
    * @returns {CylinderOutlineGeometry} The modified result parameter or a new CylinderOutlineGeometry instance if one was not provided.
    */

@@ -1,22 +1,22 @@
 define([
-  './Matrix3-b6f074fa',
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './defaultValue-0a909f67',
-  './TerrainEncoding-6a85a8f8',
-  './Math-e97915da',
-  './OrientedBoundingBox-83fb8c71',
-  './WebMercatorProjection-8e29b101',
-  './RuntimeError-06c93819',
+  './Matrix3-81054f0f',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './defaultValue-f6d5e6da',
+  './TerrainEncoding-7a03fd29',
+  './Math-2ce22ee9',
+  './OrientedBoundingBox-fc7f7ca4',
+  './WebMercatorProjection-943e2226',
+  './RuntimeError-9b4ce3fb',
   './createTaskProcessorWorker',
-  './combine-ca22a614',
-  './AttributeCompression-e18a879a',
-  './ComponentDatatype-77274976',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-f7077c2e',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3'
+  './combine-0c102d93',
+  './AttributeCompression-48e336db',
+  './ComponentDatatype-ab629b88',
+  './WebGLConstants-7f557f93',
+  './EllipsoidTangentPlane-d430e7d5',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1'
 ], function (e, t, i, a, n, r, s, l, o, f, u, c, d, h, m, g, p, x) {
   'use strict'
   var w = Object.freeze({ NONE: 0, LERC: 1 })
@@ -24,8 +24,8 @@ define([
   k.DEFAULT_STRUCTURE = Object.freeze({ heightScale: 1, heightOffset: 0, elementsPerHeight: 1, stride: 1, elementMultiplier: 256, isBigEndian: !1 })
   const y = new e.Cartesian3(),
     I = new a.Matrix4(),
-    b = new e.Cartesian3(),
-    U = new e.Cartesian3()
+    U = new e.Cartesian3(),
+    b = new e.Cartesian3()
   k.computeVertices = function (f) {
     const u = Math.cos,
       c = Math.sin,
@@ -81,9 +81,9 @@ define([
     R &&
       ((le = o.WebMercatorProjection.geodeticLatitudeToMercatorAngle(E)),
       (oe = 1 / (o.WebMercatorProjection.geodeticLatitudeToMercatorAngle(F) - le)))
-    const fe = b
+    const fe = U
     ;(fe.x = Number.POSITIVE_INFINITY), (fe.y = Number.POSITIVE_INFINITY), (fe.z = Number.POSITIVE_INFINITY)
-    const ue = U
+    const ue = b
     ;(ue.x = Number.NEGATIVE_INFINITY), (ue.y = Number.NEGATIVE_INFINITY), (ue.z = Number.NEGATIVE_INFINITY)
     let ce = Number.POSITIVE_INFINITY
     const de = w * M,
@@ -96,9 +96,9 @@ define([
     let ke = 0,
       ye = M,
       Ie = 0,
-      be = w
-    V && (--ke, ++ye, --Ie, ++be)
-    const Ue = 1e-5
+      Ue = w
+    V && (--ke, ++ye, --Ie, ++Ue)
+    const be = 1e-5
     for (let t = ke; t < ye; ++t) {
       let i = t
       i < 0 && (i = 0), i >= M && (i = M - 1)
@@ -108,13 +108,13 @@ define([
       r = s.CesiumMath.clamp(r, 0, 1)
       const l = t === ke,
         f = t === ye - 1
-      T > 0 && (l ? (n += Ue * Q) : f && (n -= Ue * Q))
+      T > 0 && (l ? (n += be * Q) : f && (n -= be * Q))
       const k = u(n),
         I = c(n),
-        b = ie * I
-      let U
-      R && (U = (o.WebMercatorProjection.geodeticLatitudeToMercatorAngle(n) - le) * oe)
-      for (let t = Ie; t < be; ++t) {
+        U = ie * I
+      let b
+      R && (b = (o.WebMercatorProjection.geodeticLatitudeToMercatorAngle(n) - le) * oe)
+      for (let t = Ie; t < Ue; ++t) {
         let n = t
         n < 0 && (n = 0), n >= w && (n = w - 1)
         const o = i * (w * Z) + n * Z
@@ -133,27 +133,27 @@ define([
         let V = i * w + n
         if (T > 0) {
           const e = t === Ie,
-            a = t === be - 1,
+            a = t === Ue - 1,
             r = l || f || e || a
           if ((l || f) && (e || a)) continue
           r &&
             ((h -= T),
             e
-              ? ((V = de + (M - i - 1)), (m -= Ue * q))
+              ? ((V = de + (M - i - 1)), (m -= be * q))
               : f
               ? (V = de + M + (w - n - 1))
               : a
-              ? ((V = de + M + w + i), (m += Ue * q))
+              ? ((V = de + M + w + i), (m += be * q))
               : l && (V = de + M + w + M + n))
         }
         const S = k * u(m),
           E = k * c(m),
           F = ee * S,
           N = te * E,
-          O = 1 / d(F * S + N * E + b * I),
+          O = 1 / d(F * S + N * E + U * I),
           L = F * O,
           z = N * O,
-          _ = b * O,
+          _ = U * O,
           Q = new e.Cartesian3()
         ;(Q.x = L + S * h),
           (Q.y = z + E * h),
@@ -165,7 +165,7 @@ define([
           (me[V] = Q),
           (pe[V] = new a.Cartesian2(g, r)),
           (ge[V] = h),
-          R && (xe[V] = U),
+          R && (xe[V] = b),
           H && (we[V] = A.geodeticSurfaceNormal(Q))
       }
     }
@@ -251,41 +251,41 @@ define([
               var y = k !== c ? h : e.height % c
               if (0 !== y)
                 for (var I = 0; I <= u; I++) {
-                  var b = I !== u ? d : e.width % u
-                  if (0 !== b) {
-                    var U,
+                  var U = I !== u ? d : e.width % u
+                  if (0 !== U) {
+                    var b,
                       M,
                       T,
                       V,
                       v = k * e.width * h + I * d,
-                      A = e.width - b,
+                      A = e.width - U,
                       B = e.pixels.blocks[f]
                     if (
                       (B.encoding < 2
                         ? (0 === B.encoding
-                            ? (U = B.rawData)
-                            : (r(B.stuffedData, B.bitsPerPixel, B.numValidPixels, B.offset, m, w, e.pixels.maxValue), (U = w)),
+                            ? (b = B.rawData)
+                            : (r(B.stuffedData, B.bitsPerPixel, B.numValidPixels, B.offset, m, w, e.pixels.maxValue), (b = w)),
                           (M = 0))
                         : (T = 2 === B.encoding ? 0 : B.offset),
                       i)
                     )
                       for (x = 0; x < y; x++) {
-                        for (7 & v && ((V = i[v >> 3]), (V <<= 7 & v)), p = 0; p < b; p++)
+                        for (7 & v && ((V = i[v >> 3]), (V <<= 7 & v)), p = 0; p < U; p++)
                           7 & v || (V = i[v >> 3]),
                             128 & V
-                              ? (o && (o[v] = 1), (g = g > (s = B.encoding < 2 ? U[M++] : T) ? s : g), (l[v++] = s))
+                              ? (o && (o[v] = 1), (g = g > (s = B.encoding < 2 ? b[M++] : T) ? s : g), (l[v++] = s))
                               : (o && (o[v] = 0), (l[v++] = a)),
                             (V <<= 1)
                         v += A
                       }
                     else if (B.encoding < 2)
                       for (x = 0; x < y; x++) {
-                        for (p = 0; p < b; p++) (g = g > (s = U[M++]) ? s : g), (l[v++] = s)
+                        for (p = 0; p < U; p++) (g = g > (s = b[M++]) ? s : g), (l[v++] = s)
                         v += A
                       }
                     else
                       for (g = g > T ? T : g, x = 0; x < y; x++) {
-                        for (p = 0; p < b; p++) l[v++] = T
+                        for (p = 0; p < U; p++) l[v++] = T
                         v += A
                       }
                     if (1 === B.encoding && M !== B.numValidPixels) throw 'Block and Mask do not match'
@@ -403,18 +403,18 @@ define([
                         ;(y.numValidPixels = r.getUint32(w, !0)), (w += 4)
                       }
                   }
-                  var b
+                  var U
                   if (((t += w), 3 !== y.encoding))
                     if (0 === y.encoding) {
-                      var U = (a.pixels.numBytes - 1) / 4
-                      if (U !== Math.floor(U)) throw 'uncompressed block has invalid length'
-                      ;(b = new ArrayBuffer(4 * U)), new Uint8Array(b).set(new Uint8Array(e, t, 4 * U))
-                      var M = new Float32Array(b)
-                      ;(y.rawData = M), (t += 4 * U)
+                      var b = (a.pixels.numBytes - 1) / 4
+                      if (b !== Math.floor(b)) throw 'uncompressed block has invalid length'
+                      ;(U = new ArrayBuffer(4 * b)), new Uint8Array(U).set(new Uint8Array(e, t, 4 * b))
+                      var M = new Float32Array(U)
+                      ;(y.rawData = M), (t += 4 * b)
                     } else if (1 === y.encoding) {
                       var T = Math.ceil((y.numValidPixels * y.bitsPerPixel) / 8),
                         V = Math.ceil(T / 4)
-                      ;(b = new ArrayBuffer(4 * V)), new Uint8Array(b).set(new Uint8Array(e, t, T)), (y.stuffedData = new Uint32Array(b)), (t += T)
+                      ;(U = new ArrayBuffer(4 * V)), new Uint8Array(U).set(new Uint8Array(e, t, T)), (y.stuffedData = new Uint32Array(U)), (t += T)
                     }
                 } else t++
               }
@@ -717,11 +717,11 @@ define([
                 (c = m[(f = o - (o < n ? 0 : n))].first) > 0 &&
                   ((m[f].second = (w << y) >>> (32 - c)),
                   32 - y >= c ? 32 === (y += c) && ((y = 0), (w = k[++I])) : ((y += c - 32), (w = k[++I]), (m[f].second |= w >>> (32 - y))))
-              var b = 0,
-                U = 0,
+              var U = 0,
+                b = 0,
                 M = new h()
-              for (o = 0; o < m.length; o++) void 0 !== m[o] && (b = Math.max(b, m[o].first))
-              ;(U = b >= i ? i : b), b >= 30 && console.log('WARning, large NUM LUT BITS IS ' + b)
+              for (o = 0; o < m.length; o++) void 0 !== m[o] && (U = Math.max(U, m[o].first))
+              ;(b = U >= i ? i : U), U >= 30 && console.log('WARning, large NUM LUT BITS IS ' + U)
               var T,
                 V,
                 v,
@@ -730,12 +730,12 @@ define([
                 D = []
               for (o = r; o < s; o++)
                 if ((c = m[(f = o - (o < n ? 0 : n))].first) > 0)
-                  if (((T = [c, f]), c <= U)) for (V = m[f].second << (U - c), v = 1 << (U - c), u = 0; u < v; u++) D[V | u] = T
+                  if (((T = [c, f]), c <= b)) for (V = m[f].second << (b - c), v = 1 << (b - c), u = 0; u < v; u++) D[V | u] = T
                   else
                     for (V = m[f].second, B = M, A = c - 1; A >= 0; A--)
                       (V >>> A) & 1 ? (B.right || (B.right = new h()), (B = B.right)) : (B.left || (B.left = new h()), (B = B.left)),
                         0 !== A || B.val || (B.val = T[1])
-              return { decodeLut: D, numBitsLUTQick: U, numBitsLUT: b, tree: M, stuffedData: k, srcPtr: I, bitPos: y }
+              return { decodeLut: D, numBitsLUTQick: b, numBitsLUT: U, tree: M, stuffedData: k, srcPtr: I, bitPos: y }
             },
             readHuffman: function (e, t, i) {
               var a,
@@ -757,13 +757,13 @@ define([
                 k = x.tree,
                 y = x.stuffedData,
                 I = x.srcPtr,
-                b = x.bitPos,
-                U = x.numBitsLUTQick,
+                U = x.bitPos,
+                b = x.numBitsLUTQick,
                 M = x.numBitsLUT,
                 T = 0 === t.headerInfo.imageType ? 128 : 0,
                 V = t.pixels.resultMask,
                 v = 0
-              b > 0 && (I++, (b = 0))
+              U > 0 && (I++, (U = 0))
               var A,
                 B = y[I],
                 D = 1 === t.encodeMode,
@@ -773,15 +773,15 @@ define([
                 if ((h > 1 && ((P = new i(S.buffer, p * A, p)), (v = 0)), t.headerInfo.numValidPixel === g * m))
                   for (u = 0, o = 0; o < m; o++)
                     for (f = 0; f < g; f++, u++) {
-                      if (((n = 0), (l = s = (B << b) >>> (32 - U)), 32 - b < U && (l = s |= y[I + 1] >>> (64 - b - U)), w[l]))
-                        (n = w[l][1]), (b += w[l][0])
+                      if (((n = 0), (l = s = (B << U) >>> (32 - b)), 32 - U < b && (l = s |= y[I + 1] >>> (64 - U - b)), w[l]))
+                        (n = w[l][1]), (U += w[l][0])
                       else
-                        for (l = s = (B << b) >>> (32 - M), 32 - b < M && (l = s |= y[I + 1] >>> (64 - b - M)), a = k, c = 0; c < M; c++)
+                        for (l = s = (B << U) >>> (32 - M), 32 - U < M && (l = s |= y[I + 1] >>> (64 - U - M)), a = k, c = 0; c < M; c++)
                           if (!(a = (s >>> (M - c - 1)) & 1 ? a.right : a.left).left && !a.right) {
-                            ;(n = a.val), (b = b + c + 1)
+                            ;(n = a.val), (U = U + c + 1)
                             break
                           }
-                      b >= 32 && ((b -= 32), (B = y[++I])),
+                      U >= 32 && ((U -= 32), (B = y[++I])),
                         (r = n - T),
                         D ? ((r += f > 0 ? v : o > 0 ? P[u - g] : v), (r &= 255), (P[u] = r), (v = r)) : (P[u] = r)
                     }
@@ -789,21 +789,21 @@ define([
                   for (u = 0, o = 0; o < m; o++)
                     for (f = 0; f < g; f++, u++)
                       if (V[u]) {
-                        if (((n = 0), (l = s = (B << b) >>> (32 - U)), 32 - b < U && (l = s |= y[I + 1] >>> (64 - b - U)), w[l]))
-                          (n = w[l][1]), (b += w[l][0])
+                        if (((n = 0), (l = s = (B << U) >>> (32 - b)), 32 - U < b && (l = s |= y[I + 1] >>> (64 - U - b)), w[l]))
+                          (n = w[l][1]), (U += w[l][0])
                         else
-                          for (l = s = (B << b) >>> (32 - M), 32 - b < M && (l = s |= y[I + 1] >>> (64 - b - M)), a = k, c = 0; c < M; c++)
+                          for (l = s = (B << U) >>> (32 - M), 32 - U < M && (l = s |= y[I + 1] >>> (64 - U - M)), a = k, c = 0; c < M; c++)
                             if (!(a = (s >>> (M - c - 1)) & 1 ? a.right : a.left).left && !a.right) {
-                              ;(n = a.val), (b = b + c + 1)
+                              ;(n = a.val), (U = U + c + 1)
                               break
                             }
-                        b >= 32 && ((b -= 32), (B = y[++I])),
+                        U >= 32 && ((U -= 32), (B = y[++I])),
                           (r = n - T),
                           D
                             ? (f > 0 && V[u - 1] ? (r += v) : o > 0 && V[u - g] ? (r += P[u - g]) : (r += v), (r &= 255), (P[u] = r), (v = r))
                             : (P[u] = r)
                       }
-                t.ptr = t.ptr + 4 * (I + 1) + (b > 0 ? 4 : 0)
+                t.ptr = t.ptr + 4 * (I + 1) + (U > 0 ? 4 : 0)
               }
               t.pixels.resultPixels = S
             },
@@ -826,8 +826,8 @@ define([
                 ;(y = m.getUint32(h, !0)), (h += 4)
               }
               var I,
-                b,
                 U,
+                b,
                 M,
                 T,
                 V,
@@ -843,11 +843,11 @@ define([
                     h++,
                     M = Math.ceil(((A - 1) * k) / 8),
                     T = Math.ceil(M / 4),
-                    b = new ArrayBuffer(4 * T),
-                    U = new Uint8Array(b),
+                    U = new ArrayBuffer(4 * T),
+                    b = new Uint8Array(U),
                     t.ptr += h,
-                    U.set(new Uint8Array(e, t.ptr, M)),
-                    v = new Uint32Array(b),
+                    b.set(new Uint8Array(e, t.ptr, M)),
+                    v = new Uint32Array(U),
                     t.ptr += M,
                     B = 0;
                   (A - 1) >>> B;
@@ -856,9 +856,9 @@ define([
                   B++
                 ;(M = Math.ceil((y * B) / 8)),
                   (T = Math.ceil(M / 4)),
-                  (b = new ArrayBuffer(4 * T)),
-                  (U = new Uint8Array(b)).set(new Uint8Array(e, t.ptr, M)),
-                  (I = new Uint32Array(b)),
+                  (U = new ArrayBuffer(4 * T)),
+                  (b = new Uint8Array(U)).set(new Uint8Array(e, t.ptr, M)),
+                  (I = new Uint32Array(U)),
                   (t.ptr += M),
                   (V = d >= 3 ? f(v, k, A - 1, a, D, S) : l(v, k, A - 1, a, D, S)),
                   d >= 3 ? o(I, i, B, y, V) : s(I, i, B, y, V)
@@ -869,9 +869,9 @@ define([
                   B > 0 &&
                     ((M = Math.ceil((y * B) / 8)),
                     (T = Math.ceil(M / 4)),
-                    (b = new ArrayBuffer(4 * T)),
-                    (U = new Uint8Array(b)).set(new Uint8Array(e, t.ptr, M)),
-                    (I = new Uint32Array(b)),
+                    (U = new ArrayBuffer(4 * T)),
+                    (b = new Uint8Array(U)).set(new Uint8Array(e, t.ptr, M)),
+                    (I = new Uint32Array(U)),
                     (t.ptr += M),
                     d >= 3 ? (null == a ? c(I, i, B, y) : o(I, i, B, y, !1, a, D, S)) : null == a ? u(I, i, B, y) : s(I, i, B, y, !1, a, D, S))
             },
@@ -895,8 +895,8 @@ define([
                 k,
                 y = 0,
                 I = 0,
-                b = 0,
                 U = 0,
+                b = 0,
                 M = 0,
                 T = 0,
                 V = 0,
@@ -914,9 +914,9 @@ define([
                 R = a.numDims,
                 L = t.pixels.resultMask,
                 z = t.pixels.resultPixels
-              for (b = 0; b < u; b++)
-                for (M = b !== u - 1 ? s : N, U = 0; U < f; U++)
-                  for (B = b * n * s + U * s, D = n - (T = U !== f - 1 ? s : O), k = 0; k < R; k++) {
+              for (U = 0; U < u; U++)
+                for (M = U !== u - 1 ? s : N, b = 0; b < f; b++)
+                  for (B = U * n * s + b * s, D = n - (T = b !== f - 1 ? s : O), k = 0; k < R; k++) {
                     if (
                       (R > 1 && (z = new i(t.pixels.resultPixels.buffer, n * r * k * o, n * r)),
                       (V = e.byteLength - t.ptr),
@@ -924,7 +924,7 @@ define([
                       (C = 0),
                       C++,
                       (A = ((v = (c = new DataView(e, t.ptr, Math.min(10, V))).getUint8(0)) >> 6) & 255),
-                      ((v >> 2) & 15) != (((U * s) >> 3) & 15))
+                      ((v >> 2) & 15) != (((b * s) >> 3) & 15))
                     )
                       throw 'integrity issue'
                     if ((p = 3 & v) > 3) throw ((t.ptr += C), 'Invalid block encoding (' + p + ')')
@@ -1192,51 +1192,52 @@ define([
               var i = (t = t || {}).noDataValue,
                 a = 0,
                 n = {}
-              ;(n.ptr = t.inputOffset || 0), (n.pixels = {}), d.readHeaderInfo(e, n)
-              var r = n.headerInfo,
-                s = r.fileVersion,
-                l = d.getDataTypeArray(r.imageType)
-              d.readMask(e, n), r.numValidPixel === r.width * r.height || n.pixels.resultMask || (n.pixels.resultMask = t.maskData)
-              var o,
-                f = r.width * r.height
-              if (
-                ((n.pixels.resultPixels = new l(f * r.numDims)),
-                (n.counter = { onesweep: 0, uncompressed: 0, lut: 0, bitstuffer: 0, constant: 0, constantoffset: 0 }),
-                0 !== r.numValidPixel)
-              )
-                if (r.zMax === r.zMin) d.constructConstantSurface(n)
-                else if (s >= 4 && d.checkMinMaxRanges(e, n)) d.constructConstantSurface(n)
-                else {
-                  var u = new DataView(e, n.ptr, 2),
-                    c = u.getUint8(0)
-                  if ((n.ptr++, c)) d.readDataOneSweep(e, n, l)
-                  else if (s > 1 && r.imageType <= 1 && Math.abs(r.maxZError - 0.5) < 1e-5) {
-                    var h = u.getUint8(1)
-                    if ((n.ptr++, (n.encodeMode = h), h > 2 || (s < 4 && h > 1))) throw 'Invalid Huffman flag ' + h
-                    h ? d.readHuffman(e, n, l) : d.readTiles(e, n, l)
-                  } else d.readTiles(e, n, l)
+              if (((n.ptr = t.inputOffset || 0), (n.pixels = {}), d.readHeaderInfo(e, n))) {
+                var r = n.headerInfo,
+                  s = r.fileVersion,
+                  l = d.getDataTypeArray(r.imageType)
+                d.readMask(e, n), r.numValidPixel === r.width * r.height || n.pixels.resultMask || (n.pixels.resultMask = t.maskData)
+                var o,
+                  f = r.width * r.height
+                if (
+                  ((n.pixels.resultPixels = new l(f * r.numDims)),
+                  (n.counter = { onesweep: 0, uncompressed: 0, lut: 0, bitstuffer: 0, constant: 0, constantoffset: 0 }),
+                  0 !== r.numValidPixel)
+                )
+                  if (r.zMax === r.zMin) d.constructConstantSurface(n)
+                  else if (s >= 4 && d.checkMinMaxRanges(e, n)) d.constructConstantSurface(n)
+                  else {
+                    var u = new DataView(e, n.ptr, 2),
+                      c = u.getUint8(0)
+                    if ((n.ptr++, c)) d.readDataOneSweep(e, n, l)
+                    else if (s > 1 && r.imageType <= 1 && Math.abs(r.maxZError - 0.5) < 1e-5) {
+                      var h = u.getUint8(1)
+                      if ((n.ptr++, (n.encodeMode = h), h > 2 || (s < 4 && h > 1))) throw 'Invalid Huffman flag ' + h
+                      h ? d.readHuffman(e, n, l) : d.readTiles(e, n, l)
+                    } else d.readTiles(e, n, l)
+                  }
+                ;(n.eofOffset = n.ptr),
+                  t.inputOffset
+                    ? ((o = n.headerInfo.blobSize + t.inputOffset - n.ptr), Math.abs(o) >= 1 && (n.eofOffset = t.inputOffset + n.headerInfo.blobSize))
+                    : ((o = n.headerInfo.blobSize - n.ptr), Math.abs(o) >= 1 && (n.eofOffset = n.headerInfo.blobSize))
+                var m = {
+                  width: r.width,
+                  height: r.height,
+                  pixelData: n.pixels.resultPixels,
+                  minValue: r.zMin,
+                  maxValue: r.zMax,
+                  validPixelCount: r.numValidPixel,
+                  dimCount: r.numDims,
+                  dimStats: { minValues: r.minValues, maxValues: r.maxValues },
+                  maskData: n.pixels.resultMask
                 }
-              ;(n.eofOffset = n.ptr),
-                t.inputOffset
-                  ? ((o = n.headerInfo.blobSize + t.inputOffset - n.ptr), Math.abs(o) >= 1 && (n.eofOffset = t.inputOffset + n.headerInfo.blobSize))
-                  : ((o = n.headerInfo.blobSize - n.ptr), Math.abs(o) >= 1 && (n.eofOffset = n.headerInfo.blobSize))
-              var m = {
-                width: r.width,
-                height: r.height,
-                pixelData: n.pixels.resultPixels,
-                minValue: r.zMin,
-                maxValue: r.zMax,
-                validPixelCount: r.numValidPixel,
-                dimCount: r.numDims,
-                dimStats: { minValues: r.minValues, maxValues: r.maxValues },
-                maskData: n.pixels.resultMask
+                if (n.pixels.resultMask && d.isValidPixelValue(r.imageType, i)) {
+                  var g = n.pixels.resultMask
+                  for (a = 0; a < f; a++) g[a] || (m.pixelData[a] = i)
+                  m.noDataValue = i
+                }
+                return (n.noDataValue = i), t.returnFileInfo && (m.fileInfo = d.formatFileInfo(n)), m
               }
-              if (n.pixels.resultMask && d.isValidPixelValue(r.imageType, i)) {
-                var g = n.pixels.resultMask
-                for (a = 0; a < f; a++) g[a] || (m.pixelData[a] = i)
-                m.noDataValue = i
-              }
-              return (n.noDataValue = i), t.returnFileInfo && (m.fileInfo = d.formatFileInfo(n)), m
             },
             getBandCount: function (e) {
               for (var t = 0, i = 0, a = { ptr: 0, pixels: {} }; i < e.byteLength - 58; )

@@ -1,19 +1,19 @@
 define([
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './Matrix3-b6f074fa',
-  './ComponentDatatype-77274976',
-  './CylinderGeometryLibrary-20be4f8b',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c'
-], function (t, e, i, n, o, r, a, s, u, f, c, d, l, m) {
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './Matrix3-81054f0f',
+  './ComponentDatatype-ab629b88',
+  './CylinderGeometryLibrary-f49f33a8',
+  './defaultValue-f6d5e6da',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryOffsetAttribute-2579b8d2',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './combine-0c102d93',
+  './RuntimeError-9b4ce3fb',
+  './WebGLConstants-7f557f93'
+], function (t, e, i, n, o, r, a, s, u, f, l, d, c, m) {
   'use strict'
   const b = new e.Cartesian2()
   function p(t) {
@@ -69,43 +69,43 @@ define([
           (y.offsetAttribute = -1 === f ? void 0 : f),
           new p(y))
     }),
-    (p.createGeometry = function (c) {
-      let d = c._length
-      const l = c._topRadius,
-        m = c._bottomRadius,
-        p = c._slices,
-        y = c._numberOfVerticalLines
-      if (d <= 0 || l < 0 || m < 0 || (0 === l && 0 === m)) return
+    (p.createGeometry = function (l) {
+      let d = l._length
+      const c = l._topRadius,
+        m = l._bottomRadius,
+        p = l._slices,
+        y = l._numberOfVerticalLines
+      if (d <= 0 || c < 0 || m < 0 || (0 === c && 0 === m)) return
       const _ = 2 * p,
-        h = o.CylinderGeometryLibrary.computePositions(d, l, m, p, !1)
+        h = o.CylinderGeometryLibrary.computePositions(d, c, m, p, !1)
       let A,
-        R = 2 * p
+        G = 2 * p
       if (y > 0) {
         const t = Math.min(y, p)
-        ;(A = Math.round(p / t)), (R += t)
+        ;(A = Math.round(p / t)), (G += t)
       }
-      const G = f.IndexDatatype.createTypedArray(_, 2 * R)
+      const R = f.IndexDatatype.createTypedArray(_, 2 * G)
       let O,
         V = 0
-      for (O = 0; O < p - 1; O++) (G[V++] = O), (G[V++] = O + 1), (G[V++] = O + p), (G[V++] = O + 1 + p)
-      if (((G[V++] = p - 1), (G[V++] = 0), (G[V++] = p + p - 1), (G[V++] = p), y > 0)) for (O = 0; O < p; O += A) (G[V++] = O), (G[V++] = O + p)
-      const L = new s.GeometryAttributes()
-      ;(L.position = new a.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: h })),
+      for (O = 0; O < p - 1; O++) (R[V++] = O), (R[V++] = O + 1), (R[V++] = O + p), (R[V++] = O + 1 + p)
+      if (((R[V++] = p - 1), (R[V++] = 0), (R[V++] = p + p - 1), (R[V++] = p), y > 0)) for (O = 0; O < p; O += A) (R[V++] = O), (R[V++] = O + p)
+      const g = new s.GeometryAttributes()
+      ;(g.position = new a.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: h })),
         (b.x = 0.5 * d),
-        (b.y = Math.max(m, l))
-      const g = new t.BoundingSphere(i.Cartesian3.ZERO, e.Cartesian2.magnitude(b))
-      if (r.defined(c._offsetAttribute)) {
+        (b.y = Math.max(m, c))
+      const L = new t.BoundingSphere(i.Cartesian3.ZERO, e.Cartesian2.magnitude(b))
+      if (r.defined(l._offsetAttribute)) {
         d = h.length
-        const t = c._offsetAttribute === u.GeometryOffsetAttribute.NONE ? 0 : 1,
+        const t = l._offsetAttribute === u.GeometryOffsetAttribute.NONE ? 0 : 1,
           e = new Uint8Array(d / 3).fill(t)
-        L.applyOffset = new a.GeometryAttribute({ componentDatatype: n.ComponentDatatype.UNSIGNED_BYTE, componentsPerAttribute: 1, values: e })
+        g.applyOffset = new a.GeometryAttribute({ componentDatatype: n.ComponentDatatype.UNSIGNED_BYTE, componentsPerAttribute: 1, values: e })
       }
       return new a.Geometry({
-        attributes: L,
-        indices: G,
+        attributes: g,
+        indices: R,
         primitiveType: a.PrimitiveType.LINES,
-        boundingSphere: g,
-        offsetAttribute: c._offsetAttribute
+        boundingSphere: L,
+        offsetAttribute: l._offsetAttribute
       })
     }),
     function (t, e) {

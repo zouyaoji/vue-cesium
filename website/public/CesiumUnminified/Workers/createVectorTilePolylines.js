@@ -1,16 +1,16 @@
 define([
-  './Matrix3-315394f6',
-  './combine-ca22a614',
-  './AttributeCompression-b646d393',
-  './Math-2dbd6b93',
-  './IndexDatatype-a55ceaa1',
-  './Matrix2-13178034',
+  './Matrix3-fa806b97',
+  './combine-d9581036',
+  './AttributeCompression-8a5a065e',
+  './Math-dad82b4d',
+  './IndexDatatype-b8f3e09d',
+  './Matrix2-1e403d0e',
   './createTaskProcessorWorker',
-  './Check-666ab1a0',
-  './defaultValue-0a909f67',
-  './ComponentDatatype-f7b11d02',
-  './WebGLConstants-a8cc3e8c',
-  './RuntimeError-06c93819'
+  './Check-6ede7e26',
+  './defaultValue-fe22d8c0',
+  './ComponentDatatype-cf1fa08e',
+  './WebGLConstants-0b1ce7ba',
+  './RuntimeError-ef395448'
 ], function (
   Matrix3,
   combine,

@@ -1,16 +1,16 @@
 define([
-  './defaultValue-0a909f67',
-  './Transforms-dadc538f',
-  './Matrix3-b6f074fa',
-  './ComponentDatatype-77274976',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './Math-e97915da',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c'
-], function (e, t, n, r, a, i, o, u, c, s, y) {
+  './defaultValue-f6d5e6da',
+  './Transforms-20461479',
+  './Matrix3-81054f0f',
+  './ComponentDatatype-ab629b88',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './Math-2ce22ee9',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './WebGLConstants-7f557f93'
+], function (e, t, n, r, i, a, o, u, c, s, y) {
   'use strict'
   function m() {
     this._workerName = 'createPlaneOutlineGeometry'
@@ -26,7 +26,7 @@ define([
     f = new n.Cartesian3(0.5, 0.5, 0)
   return (
     (m.createGeometry = function () {
-      const e = new i.GeometryAttributes(),
+      const e = new a.GeometryAttributes(),
         o = new Uint16Array(8),
         u = new Float64Array(12)
       return (
@@ -42,7 +42,7 @@ define([
         (u[9] = p.x),
         (u[10] = f.y),
         (u[11] = p.z),
-        (e.position = new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: u })),
+        (e.position = new i.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: u })),
         (o[0] = 0),
         (o[1] = 1),
         (o[2] = 1),
@@ -51,10 +51,10 @@ define([
         (o[5] = 3),
         (o[6] = 3),
         (o[7] = 0),
-        new a.Geometry({
+        new i.Geometry({
           attributes: e,
           indices: o,
-          primitiveType: a.PrimitiveType.LINES,
+          primitiveType: i.PrimitiveType.LINES,
           boundingSphere: new t.BoundingSphere(n.Cartesian3.ZERO, Math.sqrt(2))
         })
       )

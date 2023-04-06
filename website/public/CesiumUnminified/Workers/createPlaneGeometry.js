@@ -1,17 +1,17 @@
 define([
-  './defaultValue-0a909f67',
-  './Transforms-a05e5e6e',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './ComponentDatatype-f7b11d02',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './VertexFormat-6b480673',
-  './Math-2dbd6b93',
-  './Matrix2-13178034',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c'
+  './defaultValue-fe22d8c0',
+  './Transforms-9052372a',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './ComponentDatatype-cf1fa08e',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './VertexFormat-030f11ff',
+  './Math-dad82b4d',
+  './Matrix2-1e403d0e',
+  './RuntimeError-ef395448',
+  './combine-d9581036',
+  './WebGLConstants-0b1ce7ba'
 ], function (
   defaultValue,
   Transforms,
@@ -35,7 +35,7 @@ define([
    * @alias PlaneGeometry
    * @constructor
    *
-   * @param {Object} [options] Object with the following properties:
+   * @param {object} [options] Object with the following properties:
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    *
    * @example
@@ -54,7 +54,7 @@ define([
 
   /**
    * The number of elements used to pack the object into an array.
-   * @type {Number}
+   * @type {number}
    */
   PlaneGeometry.packedLength = VertexFormat.VertexFormat.packedLength
 
@@ -62,10 +62,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {PlaneGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   PlaneGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -88,8 +88,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {PlaneGeometry} [result] The object into which to store the result.
    * @returns {PlaneGeometry} The modified result parameter or a new PlaneGeometry instance if one was not provided.
    */

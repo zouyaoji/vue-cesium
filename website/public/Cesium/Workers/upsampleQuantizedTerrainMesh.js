@@ -1,46 +1,46 @@
 define([
-  './AttributeCompression-e18a879a',
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './Matrix3-b6f074fa',
-  './defaultValue-0a909f67',
-  './TerrainEncoding-6a85a8f8',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './OrientedBoundingBox-83fb8c71',
+  './AttributeCompression-48e336db',
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './Matrix3-81054f0f',
+  './defaultValue-f6d5e6da',
+  './TerrainEncoding-7a03fd29',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './OrientedBoundingBox-fc7f7ca4',
   './createTaskProcessorWorker',
-  './ComponentDatatype-77274976',
-  './WebGLConstants-a8cc3e8c',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './EllipsoidTangentPlane-f7077c2e',
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3'
-], function (e, t, n, i, s, r, h, o, u, p, d, a, l, c, f, g, m, x) {
+  './ComponentDatatype-ab629b88',
+  './WebGLConstants-7f557f93',
+  './combine-0c102d93',
+  './RuntimeError-9b4ce3fb',
+  './EllipsoidTangentPlane-d430e7d5',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1'
+], function (e, t, n, i, s, r, h, o, u, p, d, l, a, f, c, g, m, x) {
   'use strict'
   const w = {
     clipTriangleAtAxisAlignedThreshold: function (e, t, n, i, r, h) {
       let o, u, p
       s.defined(h) ? (h.length = 0) : (h = []), t ? ((o = n < e), (u = i < e), (p = r < e)) : ((o = n > e), (u = i > e), (p = r > e))
       const d = o + u + p
-      let a, l, c, f, g, m
+      let l, a, f, c, g, m
       return (
         1 === d
           ? o
-            ? ((a = (e - n) / (i - n)),
-              (l = (e - n) / (r - n)),
+            ? ((l = (e - n) / (i - n)),
+              (a = (e - n) / (r - n)),
               h.push(1),
               h.push(2),
-              1 !== l && (h.push(-1), h.push(0), h.push(2), h.push(l)),
-              1 !== a && (h.push(-1), h.push(0), h.push(1), h.push(a)))
+              1 !== a && (h.push(-1), h.push(0), h.push(2), h.push(a)),
+              1 !== l && (h.push(-1), h.push(0), h.push(1), h.push(l)))
             : u
-            ? ((c = (e - i) / (r - i)),
-              (f = (e - i) / (n - i)),
+            ? ((f = (e - i) / (r - i)),
+              (c = (e - i) / (n - i)),
               h.push(2),
               h.push(0),
-              1 !== f && (h.push(-1), h.push(1), h.push(0), h.push(f)),
-              1 !== c && (h.push(-1), h.push(1), h.push(2), h.push(c)))
+              1 !== c && (h.push(-1), h.push(1), h.push(0), h.push(c)),
+              1 !== f && (h.push(-1), h.push(1), h.push(2), h.push(f)))
             : p &&
               ((g = (e - r) / (n - r)),
               (m = (e - r) / (i - r)),
@@ -53,19 +53,19 @@ define([
             ? u || i === e
               ? p ||
                 r === e ||
-                ((l = (e - n) / (r - n)),
-                (c = (e - i) / (r - i)),
+                ((a = (e - n) / (r - n)),
+                (f = (e - i) / (r - i)),
                 h.push(2),
                 h.push(-1),
                 h.push(0),
                 h.push(2),
-                h.push(l),
+                h.push(a),
                 h.push(-1),
                 h.push(1),
                 h.push(2),
-                h.push(c))
+                h.push(f))
               : ((m = (e - r) / (i - r)),
-                (a = (e - n) / (i - n)),
+                (l = (e - n) / (i - n)),
                 h.push(1),
                 h.push(-1),
                 h.push(2),
@@ -74,14 +74,14 @@ define([
                 h.push(-1),
                 h.push(0),
                 h.push(1),
-                h.push(a))
-            : ((f = (e - i) / (n - i)),
+                h.push(l))
+            : ((c = (e - i) / (n - i)),
               (g = (e - r) / (n - r)),
               h.push(0),
               h.push(-1),
               h.push(1),
               h.push(0),
-              h.push(f),
+              h.push(c),
               h.push(-1),
               h.push(2),
               h.push(0),
@@ -91,35 +91,35 @@ define([
       )
     },
     computeBarycentricCoordinates: function (e, t, n, r, h, o, u, p, d) {
-      const a = n - u,
-        l = u - h,
-        c = o - p,
-        f = r - p,
-        g = 1 / (c * a + l * f),
+      const l = n - u,
+        a = u - h,
+        f = o - p,
+        c = r - p,
+        g = 1 / (f * l + a * c),
         m = t - p,
         x = e - u,
-        w = (c * x + l * m) * g,
-        C = (-f * x + a * m) * g,
-        B = 1 - w - C
-      return s.defined(d) ? ((d.x = w), (d.y = C), (d.z = B), d) : new i.Cartesian3(w, C, B)
+        w = (f * x + a * m) * g,
+        C = (-c * x + l * m) * g,
+        y = 1 - w - C
+      return s.defined(d) ? ((d.x = w), (d.y = C), (d.z = y), d) : new i.Cartesian3(w, C, y)
     },
     computeLineSegmentLineSegmentIntersection: function (e, t, i, r, h, o, u, p, d) {
-      const a = (p - o) * (i - e) - (u - h) * (r - t)
-      if (0 === a) return
-      const l = ((u - h) * (t - o) - (p - o) * (e - h)) / a,
-        c = ((i - e) * (t - o) - (r - t) * (e - h)) / a
-      return l >= 0 && l <= 1 && c >= 0 && c <= 1
-        ? (s.defined(d) || (d = new n.Cartesian2()), (d.x = e + l * (i - e)), (d.y = t + l * (r - t)), d)
+      const l = (p - o) * (i - e) - (u - h) * (r - t)
+      if (0 === l) return
+      const a = ((u - h) * (t - o) - (p - o) * (e - h)) / l,
+        f = ((i - e) * (t - o) - (r - t) * (e - h)) / l
+      return a >= 0 && a <= 1 && f >= 0 && f <= 1
+        ? (s.defined(d) || (d = new n.Cartesian2()), (d.x = e + a * (i - e)), (d.y = t + a * (r - t)), d)
         : void 0
     }
   }
   var C = w
-  const B = 32767,
-    y = 16383,
+  const y = 32767,
+    B = 16383,
     I = [],
     A = [],
-    b = [],
-    v = new i.Cartographic()
+    v = [],
+    b = new i.Cartographic()
   let T = new i.Cartesian3()
   const M = [],
     z = [],
@@ -217,8 +217,8 @@ define([
   function L(e, t, n, i, r, h, o, u, p) {
     if (0 === o.length) return
     let d = 0,
-      a = 0
-    for (; a < o.length; ) a = K[d++].initializeFromClipResult(o, a, u)
+      l = 0
+    for (; l < o.length; ) l = K[d++].initializeFromClipResult(o, l, u)
     for (let r = 0; r < d; ++r) {
       const o = K[r]
       if (o.isIndexed()) (o.newIndex = h[o.index]), (o.uBuffer = e), (o.vBuffer = t), (o.heightBuffer = n), p && (o.normalBuffer = i)
@@ -244,10 +244,10 @@ define([
     p(function (e, s) {
       const p = e.isEastChild,
         d = e.isNorthChild,
-        a = p ? y : 0,
-        l = p ? B : y,
-        c = d ? y : 0,
-        f = d ? B : y,
+        l = p ? B : 0,
+        a = p ? y : B,
+        f = d ? B : 0,
+        c = d ? y : B,
         g = M,
         m = z,
         x = V,
@@ -274,13 +274,13 @@ define([
         const e = k.decodeTextureCoordinates(W, ee, S)
         if (
           (($ = k.decodeHeight(W, ee)),
-          (ne = o.CesiumMath.clamp((e.x * B) | 0, 0, B)),
-          (ie = o.CesiumMath.clamp((e.y * B) | 0, 0, B)),
-          (q[ee] = o.CesiumMath.clamp(((($ - G) / (J - G)) * B) | 0, 0, B)),
+          (ne = o.CesiumMath.clamp((e.x * y) | 0, 0, y)),
+          (ie = o.CesiumMath.clamp((e.y * y) | 0, 0, y)),
+          (q[ee] = o.CesiumMath.clamp(((($ - G) / (J - G)) * y) | 0, 0, y)),
           ne < 20 && (ne = 0),
           ie < 20 && (ie = 0),
-          B - ne < 20 && (ne = B),
-          B - ie < 20 && (ie = B),
+          y - ne < 20 && (ne = y),
+          y - ie < 20 && (ie = y),
           (Z[ee] = ne),
           (j[ee] = ie),
           K)
@@ -288,8 +288,8 @@ define([
           const e = k.getOctEncodedNormal(W, ee, U)
           ;(Q[te] = e.x), (Q[te + 1] = e.y)
         }
-        ;((p && ne >= y) || (!p && ne <= y)) &&
-          ((d && ie >= y) || (!d && ie <= y)) &&
+        ;((p && ne >= B) || (!p && ne <= B)) &&
+          ((d && ie >= B) || (!d && ie <= B)) &&
           ((D[ee] = Y), g.push(ne), m.push(ie), x.push(q[ee]), K && (w.push(Q[te]), w.push(Q[te + 1])), ++Y)
       }
       const se = []
@@ -304,7 +304,7 @@ define([
           s = Z[t],
           r = Z[n]
         se[0].initializeIndexed(Z, j, q, Q, e), se[1].initializeIndexed(Z, j, q, Q, t), se[2].initializeIndexed(Z, j, q, Q, n)
-        const h = C.clipTriangleAtAxisAlignedThreshold(y, p, i, s, r, I)
+        const h = C.clipTriangleAtAxisAlignedThreshold(B, p, i, s, r, I)
         ;(he = 0),
           he >= h.length ||
             ((he = re[0].initializeFromClipResult(h, he, se)),
@@ -312,57 +312,57 @@ define([
               ((he = re[1].initializeFromClipResult(h, he, se)),
               he >= h.length ||
                 ((he = re[2].initializeFromClipResult(h, he, se)),
-                (oe = C.clipTriangleAtAxisAlignedThreshold(y, d, re[0].getV(), re[1].getV(), re[2].getV(), A)),
+                (oe = C.clipTriangleAtAxisAlignedThreshold(B, d, re[0].getV(), re[1].getV(), re[2].getV(), A)),
                 L(g, m, x, w, P, D, oe, re, K),
                 he < h.length &&
                   (re[2].clone(re[1]),
                   re[2].initializeFromClipResult(h, he, se),
-                  (oe = C.clipTriangleAtAxisAlignedThreshold(y, d, re[0].getV(), re[1].getV(), re[2].getV(), A)),
+                  (oe = C.clipTriangleAtAxisAlignedThreshold(B, d, re[0].getV(), re[1].getV(), re[2].getV(), A)),
                   L(g, m, x, w, P, D, oe, re, K)))))
       }
       const ue = p ? -32767 : 0,
         pe = d ? -32767 : 0,
         de = [],
-        ae = [],
         le = [],
-        ce = []
-      let fe = Number.MAX_VALUE,
-        ge = -fe
-      const me = b
+        ae = [],
+        fe = []
+      let ce = Number.MAX_VALUE,
+        ge = -ce
+      const me = v
       me.length = 0
       const xe = i.Ellipsoid.clone(e.ellipsoid),
         we = n.Rectangle.clone(e.childRectangle),
         Ce = we.north,
-        Be = we.south
-      let ye = we.east
+        ye = we.south
+      let Be = we.east
       const Ie = we.west
-      for (ye < Ie && (ye += o.CesiumMath.TWO_PI), ee = 0; ee < g.length; ++ee)
+      for (Be < Ie && (Be += o.CesiumMath.TWO_PI), ee = 0; ee < g.length; ++ee)
         (ne = Math.round(g[ee])),
-          ne <= a ? (de.push(ee), (ne = 0)) : ne >= l ? (le.push(ee), (ne = B)) : (ne = 2 * ne + ue),
+          ne <= l ? (de.push(ee), (ne = 0)) : ne >= a ? (ae.push(ee), (ne = y)) : (ne = 2 * ne + ue),
           (g[ee] = ne),
           (ie = Math.round(m[ee])),
-          ie <= c ? (ae.push(ee), (ie = 0)) : ie >= f ? (ce.push(ee), (ie = B)) : (ie = 2 * ie + pe),
+          ie <= f ? (le.push(ee), (ie = 0)) : ie >= c ? (fe.push(ee), (ie = y)) : (ie = 2 * ie + pe),
           (m[ee] = ie),
-          ($ = o.CesiumMath.lerp(G, J, x[ee] / B)),
-          $ < fe && (fe = $),
+          ($ = o.CesiumMath.lerp(G, J, x[ee] / y)),
+          $ < ce && (ce = $),
           $ > ge && (ge = $),
           (x[ee] = $),
-          (v.longitude = o.CesiumMath.lerp(Ie, ye, ne / B)),
-          (v.latitude = o.CesiumMath.lerp(Be, Ce, ie / B)),
-          (v.height = $),
-          xe.cartographicToCartesian(v, T),
+          (b.longitude = o.CesiumMath.lerp(Ie, Be, ne / y)),
+          (b.latitude = o.CesiumMath.lerp(ye, Ce, ie / y)),
+          (b.height = $),
+          xe.cartographicToCartesian(b, T),
           me.push(T.x),
           me.push(T.y),
           me.push(T.z)
       const Ae = t.BoundingSphere.fromVertices(me, i.Cartesian3.ZERO, 3, H),
-        be = u.OrientedBoundingBox.fromRectangle(we, fe, ge, xe, O),
-        ve = new r.EllipsoidalOccluder(xe).computeHorizonCullingPointFromVerticesPossiblyUnderEllipsoid(Ae.center, me, 3, Ae.center, fe, R),
-        Te = ge - fe,
+        ve = u.OrientedBoundingBox.fromRectangle(we, ce, ge, xe, O),
+        be = new r.EllipsoidalOccluder(xe).computeHorizonCullingPointFromVerticesPossiblyUnderEllipsoid(Ae.center, me, 3, Ae.center, ce, R),
+        Te = ge - ce,
         Me = new Uint16Array(g.length + m.length + x.length)
       for (ee = 0; ee < g.length; ++ee) Me[ee] = g[ee]
       let ze = g.length
       for (ee = 0; ee < m.length; ++ee) Me[ze + ee] = m[ee]
-      for (ze += m.length, ee = 0; ee < x.length; ++ee) Me[ze + ee] = (B * (x[ee] - fe)) / Te
+      for (ze += m.length, ee = 0; ee < x.length; ++ee) Me[ze + ee] = (y * (x[ee] - ce)) / Te
       const Ve = h.IndexDatatype.createTypedArray(g.length, P)
       let Ne
       if (K) {
@@ -373,15 +373,15 @@ define([
         vertices: Me.buffer,
         encodedNormals: Ne,
         indices: Ve.buffer,
-        minimumHeight: fe,
+        minimumHeight: ce,
         maximumHeight: ge,
         westIndices: de,
-        southIndices: ae,
-        eastIndices: le,
-        northIndices: ce,
+        southIndices: le,
+        eastIndices: ae,
+        northIndices: fe,
         boundingSphere: Ae,
-        orientedBoundingBox: be,
-        horizonOcclusionPoint: ve
+        orientedBoundingBox: ve,
+        horizonOcclusionPoint: be
       }
     })
   )

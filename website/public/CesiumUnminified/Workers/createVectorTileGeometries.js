@@ -1,25 +1,25 @@
 define([
-  './Transforms-a05e5e6e',
-  './BoxGeometry-8c4b4125',
-  './Matrix3-315394f6',
-  './Color-52c60ed7',
-  './CylinderGeometry-3ac44974',
-  './defaultValue-0a909f67',
-  './EllipsoidGeometry-826e7bce',
-  './IndexDatatype-a55ceaa1',
-  './Matrix2-13178034',
+  './Transforms-9052372a',
+  './BoxGeometry-ecabfc78',
+  './Matrix3-fa806b97',
+  './Color-14d1a36d',
+  './CylinderGeometry-119068b8',
+  './defaultValue-fe22d8c0',
+  './EllipsoidGeometry-d10a5221',
+  './IndexDatatype-b8f3e09d',
+  './Matrix2-1e403d0e',
   './createTaskProcessorWorker',
-  './Check-666ab1a0',
-  './Math-2dbd6b93',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './ComponentDatatype-f7b11d02',
-  './WebGLConstants-a8cc3e8c',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './VertexFormat-6b480673',
-  './CylinderGeometryLibrary-372c07d8'
+  './Check-6ede7e26',
+  './Math-dad82b4d',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './ComponentDatatype-cf1fa08e',
+  './WebGLConstants-0b1ce7ba',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryOffsetAttribute-9ad0019c',
+  './VertexFormat-030f11ff',
+  './CylinderGeometryLibrary-135b0858'
 ], function (
   Transforms,
   BoxGeometry,
@@ -51,23 +51,23 @@ define([
    * @alias Vector3DTileBatch
    * @constructor
    *
-   * @param {Object} options An object with the following properties:
-   * @param {Number} options.offset The offset of the batch into the indices buffer.
-   * @param {Number} options.count The number of indices in the batch.
+   * @param {object} options An object with the following properties:
+   * @param {number} options.offset The offset of the batch into the indices buffer.
+   * @param {number} options.count The number of indices in the batch.
    * @param {Color} options.color The color of the geometry in the batch.
-   * @param {Number[]} options.batchIds An array where each element is the batch id of the geometry in the batch.
+   * @param {number[]} options.batchIds An array where each element is the batch id of the geometry in the batch.
    *
    * @private
    */
   function Vector3DTileBatch(options) {
     /**
      * The offset of the batch into the indices buffer.
-     * @type {Number}
+     * @type {number}
      */
     this.offset = options.offset
     /**
      * The number of indices in the batch.
-     * @type {Number}
+     * @type {number}
      */
     this.count = options.count
     /**
@@ -77,7 +77,7 @@ define([
     this.color = options.color
     /**
      * An array where each element is the batch id of the geometry in the batch.
-     * @type {Number[]}
+     * @type {number[]}
      */
     this.batchIds = options.batchIds
   }

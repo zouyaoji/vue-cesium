@@ -1,30 +1,30 @@
 define([
-  './arrayRemoveDuplicates-e9673044',
-  './Transforms-dadc538f',
-  './Matrix3-b6f074fa',
-  './ComponentDatatype-77274976',
-  './PolylineVolumeGeometryLibrary-64eaf307',
-  './CorridorGeometryLibrary-9146e758',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './PolygonPipeline-1ccef6d7',
-  './Matrix2-163b5a1d',
-  './VertexFormat-ab2e00e6',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-f7077c2e',
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './PolylinePipeline-2b44aa86',
-  './EllipsoidGeodesic-b00a0416',
-  './EllipsoidRhumbLine-7f84cca0'
-], function (t, e, r, a, i, o, n, s, l, d, u, c, m, f, y, p, g, h, C, b, A, _, w, v, T) {
+  './arrayRemoveDuplicates-9b636830',
+  './Transforms-20461479',
+  './Matrix3-81054f0f',
+  './ComponentDatatype-ab629b88',
+  './PolylineVolumeGeometryLibrary-664193d8',
+  './CorridorGeometryLibrary-99cbed9f',
+  './defaultValue-f6d5e6da',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryOffsetAttribute-2579b8d2',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './PolygonPipeline-621b1cb0',
+  './Matrix2-413c4048',
+  './VertexFormat-fbdec922',
+  './combine-0c102d93',
+  './RuntimeError-9b4ce3fb',
+  './WebGLConstants-7f557f93',
+  './EllipsoidTangentPlane-d430e7d5',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './PolylinePipeline-5ae670bc',
+  './EllipsoidGeodesic-2723ab86',
+  './EllipsoidRhumbLine-77eff028'
+], function (t, e, r, a, i, o, n, s, l, d, u, m, c, y, f, p, g, h, C, b, A, _, w, v, T) {
   'use strict'
   const G = new r.Cartesian3(),
     E = new r.Cartesian3(),
@@ -34,24 +34,24 @@ define([
     P = new r.Cartesian3(),
     F = new r.Cartesian3(),
     N = new r.Cartesian3()
-  function M(t, e) {
+  function D(t, e) {
     for (let r = 0; r < t.length; r++) t[r] = e.scaleToGeodeticSurface(t[r], t[r])
     return t
   }
-  function D(t, e, a, i, n, s) {
+  function M(t, e, a, i, n, s) {
     const l = t.normals,
       d = t.tangents,
       u = t.bitangents,
-      c = r.Cartesian3.normalize(r.Cartesian3.cross(a, e, F), F)
+      m = r.Cartesian3.normalize(r.Cartesian3.cross(a, e, F), F)
     s.normal && o.CorridorGeometryLibrary.addAttribute(l, e, i, n),
-      s.tangent && o.CorridorGeometryLibrary.addAttribute(d, c, i, n),
+      s.tangent && o.CorridorGeometryLibrary.addAttribute(d, m, i, n),
       s.bitangent && o.CorridorGeometryLibrary.addAttribute(u, a, i, n)
   }
   function O(t, e, i) {
     const d = t.positions,
-      m = t.corners,
-      f = t.endPositions,
-      y = t.lefts,
+      c = t.corners,
+      y = t.endPositions,
+      f = t.lefts,
       p = t.normals,
       g = new l.GeometryAttributes()
     let h,
@@ -61,16 +61,16 @@ define([
       _ = 0,
       w = 0
     for (C = 0; C < d.length; C += 2) (b = d[C].length - 3), (A += b), (w += 2 * b), (_ += d[C + 1].length - 3)
-    for (A += 3, _ += 3, C = 0; C < m.length; C++) {
-      h = m[C]
-      const t = m[C].leftPositions
-      n.defined(t) ? ((b = t.length), (A += b), (w += b)) : ((b = m[C].rightPositions.length), (_ += b), (w += b))
+    for (A += 3, _ += 3, C = 0; C < c.length; C++) {
+      h = c[C]
+      const t = c[C].leftPositions
+      n.defined(t) ? ((b = t.length), (A += b), (w += b)) : ((b = c[C].rightPositions.length), (_ += b), (w += b))
     }
-    const v = n.defined(f)
+    const v = n.defined(y)
     let T
-    v && ((T = f[0].length - 3), (A += T), (_ += T), (T /= 3), (w += 6 * T))
+    v && ((T = y[0].length - 3), (A += T), (_ += T), (T /= 3), (w += 6 * T))
     const L = A + _,
-      M = new Float64Array(L),
+      D = new Float64Array(L),
       O = {
         normals: e.normal ? new Float32Array(L) : void 0,
         tangents: e.tangent ? new Float32Array(L) : void 0,
@@ -91,13 +91,13 @@ define([
     let j = 0
     if (v) {
       ;(z = V), (H = x)
-      const t = f[0]
-      for (Y = r.Cartesian3.fromArray(p, 0, Y), W = r.Cartesian3.fromArray(y, 0, W), C = 0; C < q; C++)
+      const t = y[0]
+      for (Y = r.Cartesian3.fromArray(p, 0, Y), W = r.Cartesian3.fromArray(f, 0, W), C = 0; C < q; C++)
         (z = r.Cartesian3.fromArray(t, 3 * (q - 1 - C), z)),
           (H = r.Cartesian3.fromArray(t, 3 * (q + C), H)),
-          o.CorridorGeometryLibrary.addAttribute(M, H, B),
-          o.CorridorGeometryLibrary.addAttribute(M, z, void 0, U),
-          D(O, Y, W, B, U, e),
+          o.CorridorGeometryLibrary.addAttribute(D, H, B),
+          o.CorridorGeometryLibrary.addAttribute(D, z, void 0, U),
+          M(O, Y, W, B, U, e),
           (S = B / 3),
           (k = S + 1),
           (I = (U - 2) / 3),
@@ -117,11 +117,11 @@ define([
       Z = 0,
       $ = d[X++],
       tt = d[X++]
-    for (M.set($, B), M.set(tt, U - tt.length + 1), W = r.Cartesian3.fromArray(y, Z, W), b = tt.length - 3, C = 0; C < b; C += 3)
+    for (D.set($, B), D.set(tt, U - tt.length + 1), W = r.Cartesian3.fromArray(f, Z, W), b = tt.length - 3, C = 0; C < b; C += 3)
       (K = i.geodeticSurfaceNormal(r.Cartesian3.fromArray($, C, F), F)),
         (Q = i.geodeticSurfaceNormal(r.Cartesian3.fromArray(tt, b - C, N), N)),
         (Y = r.Cartesian3.normalize(r.Cartesian3.add(K, Q, Y), Y)),
-        D(O, Y, W, B, U, e),
+        M(O, Y, W, B, U, e),
         (S = B / 3),
         (k = S + 1),
         (I = (U - 2) / 3),
@@ -140,53 +140,53 @@ define([
         Y = r.Cartesian3.normalize(r.Cartesian3.add(K, Q, Y), Y),
         Z += 3,
         C = 0;
-      C < m.length;
+      C < c.length;
       C++
     ) {
       let t
-      h = m[C]
+      h = c[C]
       const a = h.leftPositions,
         s = h.rightPositions
       let l,
         u,
-        c = P,
-        f = V,
+        m = P,
+        y = V,
         g = x
       if (((Y = r.Cartesian3.fromArray(p, Z, Y)), n.defined(a))) {
-        for (D(O, Y, W, void 0, U, e), U -= 3, l = k, u = R, t = 0; t < a.length / 3; t++)
-          (c = r.Cartesian3.fromArray(a, 3 * t, c)),
+        for (M(O, Y, W, void 0, U, e), U -= 3, l = k, u = R, t = 0; t < a.length / 3; t++)
+          (m = r.Cartesian3.fromArray(a, 3 * t, m)),
             (J[j++] = l),
             (J[j++] = u - t - 1),
             (J[j++] = u - t),
-            o.CorridorGeometryLibrary.addAttribute(M, c, void 0, U),
-            (f = r.Cartesian3.fromArray(M, 3 * (u - t - 1), f)),
-            (g = r.Cartesian3.fromArray(M, 3 * l, g)),
-            (W = r.Cartesian3.normalize(r.Cartesian3.subtract(f, g, W), W)),
-            D(O, Y, W, void 0, U, e),
+            o.CorridorGeometryLibrary.addAttribute(D, m, void 0, U),
+            (y = r.Cartesian3.fromArray(D, 3 * (u - t - 1), y)),
+            (g = r.Cartesian3.fromArray(D, 3 * l, g)),
+            (W = r.Cartesian3.normalize(r.Cartesian3.subtract(y, g, W), W)),
+            M(O, Y, W, void 0, U, e),
             (U -= 3)
-        ;(c = r.Cartesian3.fromArray(M, 3 * l, c)),
-          (f = r.Cartesian3.subtract(r.Cartesian3.fromArray(M, 3 * u, f), c, f)),
-          (g = r.Cartesian3.subtract(r.Cartesian3.fromArray(M, 3 * (u - t), g), c, g)),
-          (W = r.Cartesian3.normalize(r.Cartesian3.add(f, g, W), W)),
-          D(O, Y, W, B, void 0, e),
+        ;(m = r.Cartesian3.fromArray(D, 3 * l, m)),
+          (y = r.Cartesian3.subtract(r.Cartesian3.fromArray(D, 3 * u, y), m, y)),
+          (g = r.Cartesian3.subtract(r.Cartesian3.fromArray(D, 3 * (u - t), g), m, g)),
+          (W = r.Cartesian3.normalize(r.Cartesian3.add(y, g, W), W)),
+          M(O, Y, W, B, void 0, e),
           (B += 3)
       } else {
-        for (D(O, Y, W, B, void 0, e), B += 3, l = R, u = k, t = 0; t < s.length / 3; t++)
-          (c = r.Cartesian3.fromArray(s, 3 * t, c)),
+        for (M(O, Y, W, B, void 0, e), B += 3, l = R, u = k, t = 0; t < s.length / 3; t++)
+          (m = r.Cartesian3.fromArray(s, 3 * t, m)),
             (J[j++] = l),
             (J[j++] = u + t),
             (J[j++] = u + t + 1),
-            o.CorridorGeometryLibrary.addAttribute(M, c, B),
-            (f = r.Cartesian3.fromArray(M, 3 * l, f)),
-            (g = r.Cartesian3.fromArray(M, 3 * (u + t), g)),
-            (W = r.Cartesian3.normalize(r.Cartesian3.subtract(f, g, W), W)),
-            D(O, Y, W, B, void 0, e),
+            o.CorridorGeometryLibrary.addAttribute(D, m, B),
+            (y = r.Cartesian3.fromArray(D, 3 * l, y)),
+            (g = r.Cartesian3.fromArray(D, 3 * (u + t), g)),
+            (W = r.Cartesian3.normalize(r.Cartesian3.subtract(y, g, W), W)),
+            M(O, Y, W, B, void 0, e),
             (B += 3)
-        ;(c = r.Cartesian3.fromArray(M, 3 * l, c)),
-          (f = r.Cartesian3.subtract(r.Cartesian3.fromArray(M, 3 * (u + t), f), c, f)),
-          (g = r.Cartesian3.subtract(r.Cartesian3.fromArray(M, 3 * u, g), c, g)),
-          (W = r.Cartesian3.normalize(r.Cartesian3.negate(r.Cartesian3.add(g, f, W), W), W)),
-          D(O, Y, W, void 0, U, e),
+        ;(m = r.Cartesian3.fromArray(D, 3 * l, m)),
+          (y = r.Cartesian3.subtract(r.Cartesian3.fromArray(D, 3 * (u + t), y), m, y)),
+          (g = r.Cartesian3.subtract(r.Cartesian3.fromArray(D, 3 * u, g), m, g)),
+          (W = r.Cartesian3.normalize(r.Cartesian3.negate(r.Cartesian3.add(g, y, W), W), W)),
+          M(O, Y, W, void 0, U, e),
           (U -= 3)
       }
       for (
@@ -194,11 +194,11 @@ define([
           tt = d[X++],
           $.splice(0, 3),
           tt.splice(tt.length - 3, 3),
-          M.set($, B),
-          M.set(tt, U - tt.length + 1),
+          D.set($, B),
+          D.set(tt, U - tt.length + 1),
           b = tt.length - 3,
           Z += 3,
-          W = r.Cartesian3.fromArray(y, Z, W),
+          W = r.Cartesian3.fromArray(f, Z, W),
           t = 0;
         t < tt.length;
         t += 3
@@ -206,7 +206,7 @@ define([
         (K = i.geodeticSurfaceNormal(r.Cartesian3.fromArray($, t, F), F)),
           (Q = i.geodeticSurfaceNormal(r.Cartesian3.fromArray(tt, b - t, N), N)),
           (Y = r.Cartesian3.normalize(r.Cartesian3.add(K, Q, Y), Y)),
-          D(O, Y, W, B, U, e),
+          M(O, Y, W, B, U, e),
           (k = B / 3),
           (S = k - 1),
           (R = (U - 2) / 3),
@@ -221,15 +221,15 @@ define([
           (U -= 3)
       ;(B -= 3), (U += 3)
     }
-    if (((Y = r.Cartesian3.fromArray(p, p.length - 3, Y)), D(O, Y, W, B, U, e), v)) {
+    if (((Y = r.Cartesian3.fromArray(p, p.length - 3, Y)), M(O, Y, W, B, U, e), v)) {
       ;(B += 3), (U -= 3), (z = V), (H = x)
-      const t = f[1]
+      const t = y[1]
       for (C = 0; C < q; C++)
         (z = r.Cartesian3.fromArray(t, 3 * (T - C - 1), z)),
           (H = r.Cartesian3.fromArray(t, 3 * C, H)),
-          o.CorridorGeometryLibrary.addAttribute(M, z, void 0, U),
-          o.CorridorGeometryLibrary.addAttribute(M, H, B),
-          D(O, Y, W, B, U, e),
+          o.CorridorGeometryLibrary.addAttribute(D, z, void 0, U),
+          o.CorridorGeometryLibrary.addAttribute(D, H, B),
+          M(O, Y, W, B, U, e),
           (k = B / 3),
           (S = k - 1),
           (R = (U - 2) / 3),
@@ -243,7 +243,7 @@ define([
           (B += 3),
           (U -= 3)
     }
-    if (((g.position = new s.GeometryAttribute({ componentDatatype: a.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: M })), e.st)) {
+    if (((g.position = new s.GeometryAttribute({ componentDatatype: a.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: D })), e.st)) {
       const t = new Float32Array((L / 3) * 2)
       let e,
         r,
@@ -254,12 +254,12 @@ define([
         let o
         ;(r = 1 / (A - T + 1)), (e = 1 / (_ - T + 1))
         const n = T / 2
-        for (C = n + 1; C < T + 1; C++) (o = c.CesiumMath.PI_OVER_TWO + a * C), (t[i++] = e * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
+        for (C = n + 1; C < T + 1; C++) (o = m.CesiumMath.PI_OVER_TWO + a * C), (t[i++] = e * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
         for (C = 1; C < _ - T + 1; C++) (t[i++] = C * e), (t[i++] = 0)
-        for (C = T; C > n; C--) (o = c.CesiumMath.PI_OVER_TWO - C * a), (t[i++] = 1 - e * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
-        for (C = n; C > 0; C--) (o = c.CesiumMath.PI_OVER_TWO - a * C), (t[i++] = 1 - r * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
+        for (C = T; C > n; C--) (o = m.CesiumMath.PI_OVER_TWO - C * a), (t[i++] = 1 - e * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
+        for (C = n; C > 0; C--) (o = m.CesiumMath.PI_OVER_TWO - a * C), (t[i++] = 1 - r * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
         for (C = A - T; C > 0; C--) (t[i++] = C * r), (t[i++] = 1)
-        for (C = 1; C < n + 1; C++) (o = c.CesiumMath.PI_OVER_TWO + a * C), (t[i++] = r * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
+        for (C = 1; C < n + 1; C++) (o = m.CesiumMath.PI_OVER_TWO + a * C), (t[i++] = r * (1 + Math.cos(o))), (t[i++] = 0.5 * (1 + Math.sin(o)))
       } else {
         for (A /= 3, _ /= 3, r = 1 / (A - 1), e = 1 / (_ - 1), C = 0; C < _; C++) (t[i++] = C * e), (t[i++] = 0)
         for (C = A; C > 0; C--) (t[i++] = (C - 1) * r), (t[i++] = 1)
@@ -287,7 +287,7 @@ define([
     return (r[e++] = t[0]), (r[e++] = t[1]), (r[e++] = t[2]), r
   }
   function S(t, e) {
-    const i = new y.VertexFormat({
+    const i = new f.VertexFormat({
         position: e.position,
         normal: e.normal || e.bitangent || t.shadowVolume,
         tangent: e.tangent,
@@ -295,11 +295,11 @@ define([
         st: e.st
       }),
       l = t.ellipsoid,
-      c = O(o.CorridorGeometryLibrary.computePositions(t), i, l),
-      f = t.height,
+      m = O(o.CorridorGeometryLibrary.computePositions(t), i, l),
+      y = t.height,
       p = t.extrudedHeight
-    let g = c.attributes
-    const h = c.indices
+    let g = m.attributes
+    const h = m.indices
     let C = g.position.values,
       b = C.length
     const A = new Float64Array(6 * b)
@@ -307,9 +307,9 @@ define([
     _.set(C)
     let w,
       v = new Float64Array(4 * b)
-    ;(C = m.PolygonPipeline.scaleToGeodeticHeight(C, f, l)),
+    ;(C = c.PolygonPipeline.scaleToGeodeticHeight(C, y, l)),
       (v = I(C, 0, v)),
-      (_ = m.PolygonPipeline.scaleToGeodeticHeight(_, p, l)),
+      (_ = c.PolygonPipeline.scaleToGeodeticHeight(_, p, l)),
       (v = I(_, 2 * b, v)),
       A.set(C),
       A.set(_, b),
@@ -324,38 +324,38 @@ define([
           l = 3 * s,
           d = 2 * s,
           u = 2 * l
-        let c
+        let m
         if (e.normal || e.bitangent || e.tangent) {
           const s = e.normal ? new Float32Array(6 * l) : void 0,
             d = e.tangent ? new Float32Array(6 * l) : void 0,
-            m = e.bitangent ? new Float32Array(6 * l) : void 0
-          let f = G,
-            y = E,
+            c = e.bitangent ? new Float32Array(6 * l) : void 0
+          let y = G,
+            f = E,
             p = V,
             g = x,
             h = L,
             C = P,
             b = u
-          for (c = 0; c < l; c += 3) {
+          for (m = 0; m < l; m += 3) {
             const t = b + u
-            ;(f = r.Cartesian3.fromArray(a, c, f)),
-              (y = r.Cartesian3.fromArray(a, c + l, y)),
-              (p = r.Cartesian3.fromArray(a, (c + 3) % l, p)),
-              (y = r.Cartesian3.subtract(y, f, y)),
-              (p = r.Cartesian3.subtract(p, f, p)),
-              (g = r.Cartesian3.normalize(r.Cartesian3.cross(y, p, g), g)),
+            ;(y = r.Cartesian3.fromArray(a, m, y)),
+              (f = r.Cartesian3.fromArray(a, m + l, f)),
+              (p = r.Cartesian3.fromArray(a, (m + 3) % l, p)),
+              (f = r.Cartesian3.subtract(f, y, f)),
+              (p = r.Cartesian3.subtract(p, y, p)),
+              (g = r.Cartesian3.normalize(r.Cartesian3.cross(f, p, g), g)),
               e.normal &&
                 (o.CorridorGeometryLibrary.addAttribute(s, g, t),
                 o.CorridorGeometryLibrary.addAttribute(s, g, t + 3),
                 o.CorridorGeometryLibrary.addAttribute(s, g, b),
                 o.CorridorGeometryLibrary.addAttribute(s, g, b + 3)),
               (e.tangent || e.bitangent) &&
-                ((C = r.Cartesian3.fromArray(i, c, C)),
+                ((C = r.Cartesian3.fromArray(i, m, C)),
                 e.bitangent &&
-                  (o.CorridorGeometryLibrary.addAttribute(m, C, t),
-                  o.CorridorGeometryLibrary.addAttribute(m, C, t + 3),
-                  o.CorridorGeometryLibrary.addAttribute(m, C, b),
-                  o.CorridorGeometryLibrary.addAttribute(m, C, b + 3)),
+                  (o.CorridorGeometryLibrary.addAttribute(c, C, t),
+                  o.CorridorGeometryLibrary.addAttribute(c, C, t + 3),
+                  o.CorridorGeometryLibrary.addAttribute(c, C, b),
+                  o.CorridorGeometryLibrary.addAttribute(c, C, b + 3)),
                 e.tangent &&
                   ((h = r.Cartesian3.normalize(r.Cartesian3.cross(C, g, h), h)),
                   o.CorridorGeometryLibrary.addAttribute(d, h, t),
@@ -365,10 +365,10 @@ define([
               (b += 6)
           }
           if (e.normal) {
-            for (s.set(i), c = 0; c < l; c += 3) (s[c + l] = -i[c]), (s[c + l + 1] = -i[c + 1]), (s[c + l + 2] = -i[c + 2])
+            for (s.set(i), m = 0; m < l; m += 3) (s[m + l] = -i[m]), (s[m + l + 1] = -i[m + 1]), (s[m + l + 2] = -i[m + 2])
             t.normal.values = s
           } else t.normal = void 0
-          if ((e.bitangent ? (m.set(n), m.set(n, l), (t.bitangent.values = m)) : (t.bitangent = void 0), e.tangent)) {
+          if ((e.bitangent ? (c.set(n), c.set(n, l), (t.bitangent.values = c)) : (t.bitangent = void 0), e.tangent)) {
             const e = t.tangent.values
             d.set(e), d.set(e, l), (t.tangent.values = d)
           }
@@ -379,9 +379,9 @@ define([
           r.set(e), r.set(e, d)
           let a = 2 * d
           for (let t = 0; t < 2; t++) {
-            for (r[a++] = e[0], r[a++] = e[1], c = 2; c < d; c += 2) {
-              const t = e[c],
-                i = e[c + 1]
+            for (r[a++] = e[0], r[a++] = e[1], m = 2; m < d; m += 2) {
+              const t = e[m],
+                i = e[m + 1]
               ;(r[a++] = t), (r[a++] = i), (r[a++] = t), (r[a++] = i)
             }
             ;(r[a++] = e[0]), (r[a++] = e[1])
@@ -412,9 +412,9 @@ define([
     }
     const F = h.length,
       N = T + T,
-      M = u.IndexDatatype.createTypedArray(A.length / 3, 2 * F + 3 * N)
-    M.set(h)
-    let D,
+      D = u.IndexDatatype.createTypedArray(A.length / 3, 2 * F + 3 * N)
+    D.set(h)
+    let M,
       S,
       R,
       k,
@@ -423,11 +423,11 @@ define([
       const t = h[w],
         e = h[w + 1],
         r = h[w + 2]
-      ;(M[H++] = r + T), (M[H++] = e + T), (M[H++] = t + T)
+      ;(D[H++] = r + T), (D[H++] = e + T), (D[H++] = t + T)
     }
     for (w = 0; w < N; w += 2)
-      (D = w + N), (S = D + N), (R = D + 1), (k = S + 1), (M[H++] = D), (M[H++] = S), (M[H++] = R), (M[H++] = R), (M[H++] = S), (M[H++] = k)
-    return { attributes: g, indices: M }
+      (M = w + N), (S = M + N), (R = M + 1), (k = S + 1), (D[H++] = M), (D[H++] = S), (D[H++] = R), (D[H++] = R), (D[H++] = S), (D[H++] = k)
+    return { attributes: g, indices: D }
   }
   const R = new r.Cartesian3(),
     k = new r.Cartesian3(),
@@ -439,40 +439,40 @@ define([
       d = r.Cartesian3.cross(s, l, R)
     r.Cartesian3.multiplyByScalar(d, i, d)
     let u = o.latitude,
-      c = o.longitude,
-      m = n.latitude,
-      f = n.longitude
+      m = o.longitude,
+      c = n.latitude,
+      y = n.longitude
     r.Cartesian3.add(t, d, k), a.cartesianToCartographic(k, H)
-    let y = H.latitude,
+    let f = H.latitude,
       p = H.longitude
-    ;(u = Math.min(u, y)),
-      (c = Math.min(c, p)),
-      (m = Math.max(m, y)),
-      (f = Math.max(f, p)),
+    ;(u = Math.min(u, f)),
+      (m = Math.min(m, p)),
+      (c = Math.max(c, f)),
+      (y = Math.max(y, p)),
       r.Cartesian3.subtract(t, d, k),
       a.cartesianToCartographic(k, H),
-      (y = H.latitude),
+      (f = H.latitude),
       (p = H.longitude),
-      (u = Math.min(u, y)),
-      (c = Math.min(c, p)),
-      (m = Math.max(m, y)),
-      (f = Math.max(f, p)),
+      (u = Math.min(u, f)),
+      (m = Math.min(m, p)),
+      (c = Math.max(c, f)),
+      (y = Math.max(y, p)),
       (o.latitude = u),
-      (o.longitude = c),
-      (n.latitude = m),
-      (n.longitude = f)
+      (o.longitude = m),
+      (n.latitude = c),
+      (n.longitude = y)
   }
   const B = new r.Cartesian3(),
     U = new r.Cartesian3(),
     Y = new r.Cartographic(),
     W = new r.Cartographic()
   function q(e, a, o, s, l) {
-    e = M(e, a)
+    e = D(e, a)
     const d = t.arrayRemoveDuplicates(e, r.Cartesian3.equalsEpsilon),
       u = d.length
-    if (u < 2 || o <= 0) return new f.Rectangle()
-    const c = 0.5 * o
-    let m, y
+    if (u < 2 || o <= 0) return new y.Rectangle()
+    const m = 0.5 * o
+    let c, f
     if (
       ((Y.latitude = Number.POSITIVE_INFINITY),
       (Y.longitude = Number.POSITIVE_INFINITY),
@@ -483,32 +483,32 @@ define([
       const t = d[0]
       r.Cartesian3.subtract(t, d[1], B),
         r.Cartesian3.normalize(B, B),
-        r.Cartesian3.multiplyByScalar(B, c, B),
+        r.Cartesian3.multiplyByScalar(B, m, B),
         r.Cartesian3.add(t, B, U),
         a.cartesianToCartographic(U, H),
-        (m = H.latitude),
-        (y = H.longitude),
-        (Y.latitude = Math.min(Y.latitude, m)),
-        (Y.longitude = Math.min(Y.longitude, y)),
-        (W.latitude = Math.max(W.latitude, m)),
-        (W.longitude = Math.max(W.longitude, y))
+        (c = H.latitude),
+        (f = H.longitude),
+        (Y.latitude = Math.min(Y.latitude, c)),
+        (Y.longitude = Math.min(Y.longitude, f)),
+        (W.latitude = Math.max(W.latitude, c)),
+        (W.longitude = Math.max(W.longitude, f))
     }
-    for (let t = 0; t < u - 1; ++t) z(d[t], d[t + 1], a, c, Y, W)
+    for (let t = 0; t < u - 1; ++t) z(d[t], d[t + 1], a, m, Y, W)
     const p = d[u - 1]
     r.Cartesian3.subtract(p, d[u - 2], B),
       r.Cartesian3.normalize(B, B),
-      r.Cartesian3.multiplyByScalar(B, c, B),
+      r.Cartesian3.multiplyByScalar(B, m, B),
       r.Cartesian3.add(p, B, U),
-      z(p, U, a, c, Y, W),
+      z(p, U, a, m, Y, W),
       s === i.CornerType.ROUNDED &&
         (a.cartesianToCartographic(U, H),
-        (m = H.latitude),
-        (y = H.longitude),
-        (Y.latitude = Math.min(Y.latitude, m)),
-        (Y.longitude = Math.min(Y.longitude, y)),
-        (W.latitude = Math.max(W.latitude, m)),
-        (W.longitude = Math.max(W.longitude, y)))
-    const g = n.defined(l) ? l : new f.Rectangle()
+        (c = H.latitude),
+        (f = H.longitude),
+        (Y.latitude = Math.min(Y.latitude, c)),
+        (Y.longitude = Math.min(Y.longitude, f)),
+        (W.latitude = Math.max(W.latitude, c)),
+        (W.longitude = Math.max(W.longitude, f)))
+    const g = n.defined(l) ? l : new y.Rectangle()
     return (g.north = W.latitude), (g.south = Y.latitude), (g.east = W.longitude), (g.west = Y.longitude), g
   }
   function J(t) {
@@ -518,17 +518,17 @@ define([
       s = n.defaultValue(t.extrudedHeight, o)
     ;(this._positions = e),
       (this._ellipsoid = r.Ellipsoid.clone(n.defaultValue(t.ellipsoid, r.Ellipsoid.WGS84))),
-      (this._vertexFormat = y.VertexFormat.clone(n.defaultValue(t.vertexFormat, y.VertexFormat.DEFAULT))),
+      (this._vertexFormat = f.VertexFormat.clone(n.defaultValue(t.vertexFormat, f.VertexFormat.DEFAULT))),
       (this._width = a),
       (this._height = Math.max(o, s)),
       (this._extrudedHeight = Math.min(o, s)),
       (this._cornerType = n.defaultValue(t.cornerType, i.CornerType.ROUNDED)),
-      (this._granularity = n.defaultValue(t.granularity, c.CesiumMath.RADIANS_PER_DEGREE)),
+      (this._granularity = n.defaultValue(t.granularity, m.CesiumMath.RADIANS_PER_DEGREE)),
       (this._shadowVolume = n.defaultValue(t.shadowVolume, !1)),
       (this._workerName = 'createCorridorGeometry'),
       (this._offsetAttribute = t.offsetAttribute),
       (this._rectangle = void 0),
-      (this.packedLength = 1 + e.length * r.Cartesian3.packedLength + r.Ellipsoid.packedLength + y.VertexFormat.packedLength + 7)
+      (this.packedLength = 1 + e.length * r.Cartesian3.packedLength + r.Ellipsoid.packedLength + f.VertexFormat.packedLength + 7)
   }
   J.pack = function (t, e, a) {
     a = n.defaultValue(a, 0)
@@ -539,8 +539,8 @@ define([
     return (
       r.Ellipsoid.pack(t._ellipsoid, e, a),
       (a += r.Ellipsoid.packedLength),
-      y.VertexFormat.pack(t._vertexFormat, e, a),
-      (a += y.VertexFormat.packedLength),
+      f.VertexFormat.pack(t._vertexFormat, e, a),
+      (a += f.VertexFormat.packedLength),
       (e[a++] = t._width),
       (e[a++] = t._height),
       (e[a++] = t._extrudedHeight),
@@ -552,7 +552,7 @@ define([
     )
   }
   const j = r.Ellipsoid.clone(r.Ellipsoid.UNIT_SPHERE),
-    K = new y.VertexFormat(),
+    K = new f.VertexFormat(),
     Q = {
       positions: void 0,
       ellipsoid: j,
@@ -573,33 +573,33 @@ define([
       for (let a = 0; a < i; ++a, e += r.Cartesian3.packedLength) o[a] = r.Cartesian3.unpack(t, e)
       const s = r.Ellipsoid.unpack(t, e, j)
       e += r.Ellipsoid.packedLength
-      const l = y.VertexFormat.unpack(t, e, K)
-      e += y.VertexFormat.packedLength
+      const l = f.VertexFormat.unpack(t, e, K)
+      e += f.VertexFormat.packedLength
       const d = t[e++],
         u = t[e++],
-        c = t[e++],
         m = t[e++],
-        f = t[e++],
+        c = t[e++],
+        y = t[e++],
         p = 1 === t[e++],
         g = t[e]
       return n.defined(a)
         ? ((a._positions = o),
           (a._ellipsoid = r.Ellipsoid.clone(s, a._ellipsoid)),
-          (a._vertexFormat = y.VertexFormat.clone(l, a._vertexFormat)),
+          (a._vertexFormat = f.VertexFormat.clone(l, a._vertexFormat)),
           (a._width = d),
           (a._height = u),
-          (a._extrudedHeight = c),
-          (a._cornerType = m),
-          (a._granularity = f),
+          (a._extrudedHeight = m),
+          (a._cornerType = c),
+          (a._granularity = y),
           (a._shadowVolume = p),
           (a._offsetAttribute = -1 === g ? void 0 : g),
           a)
         : ((Q.positions = o),
           (Q.width = d),
           (Q.height = u),
-          (Q.extrudedHeight = c),
-          (Q.cornerType = m),
-          (Q.granularity = f),
+          (Q.extrudedHeight = m),
+          (Q.cornerType = c),
+          (Q.granularity = y),
           (Q.shadowVolume = p),
           (Q.offsetAttribute = -1 === g ? void 0 : g),
           new J(Q))
@@ -612,21 +612,21 @@ define([
     (J.createGeometry = function (i) {
       let l = i._positions
       const u = i._width,
-        f = i._ellipsoid
-      l = M(l, f)
-      const y = t.arrayRemoveDuplicates(l, r.Cartesian3.equalsEpsilon)
-      if (y.length < 2 || u <= 0) return
+        y = i._ellipsoid
+      l = D(l, y)
+      const f = t.arrayRemoveDuplicates(l, r.Cartesian3.equalsEpsilon)
+      if (f.length < 2 || u <= 0) return
       const p = i._height,
         g = i._extrudedHeight,
-        h = !c.CesiumMath.equalsEpsilon(p, g, 0, c.CesiumMath.EPSILON2),
+        h = !m.CesiumMath.equalsEpsilon(p, g, 0, m.CesiumMath.EPSILON2),
         C = i._vertexFormat,
-        b = { ellipsoid: f, positions: y, width: u, cornerType: i._cornerType, granularity: i._granularity, saveAttributes: !0 }
+        b = { ellipsoid: y, positions: f, width: u, cornerType: i._cornerType, granularity: i._granularity, saveAttributes: !0 }
       let A
       if (h) (b.height = p), (b.extrudedHeight = g), (b.shadowVolume = i._shadowVolume), (b.offsetAttribute = i._offsetAttribute), (A = S(b, C))
       else {
         if (
-          ((A = O(o.CorridorGeometryLibrary.computePositions(b), C, f)),
-          (A.attributes.position.values = m.PolygonPipeline.scaleToGeodeticHeight(A.attributes.position.values, p, f)),
+          ((A = O(o.CorridorGeometryLibrary.computePositions(b), C, y)),
+          (A.attributes.position.values = c.PolygonPipeline.scaleToGeodeticHeight(A.attributes.position.values, p, y)),
           n.defined(i._offsetAttribute))
         ) {
           const t = i._offsetAttribute === d.GeometryOffsetAttribute.NONE ? 0 : 1,
@@ -665,7 +665,7 @@ define([
         granularity: a,
         extrudedHeight: o,
         height: n,
-        vertexFormat: y.VertexFormat.POSITION_ONLY,
+        vertexFormat: f.VertexFormat.POSITION_ONLY,
         shadowVolume: !0
       })
     }),
