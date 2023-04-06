@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 09:25:03
- * @LastEditTime: 2021-10-28 23:48:08
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-10 13:37:38
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\glsl\calculateSpeed.frag.ts
  */
@@ -23,7 +23,7 @@ uniform vec2 vSpeedRange;
 uniform float pixelSize;
 uniform float speedFactor;
 
-float speedScaleFactor = speedFactor * pixelSize;
+// float speedScaleFactor = speedFactor * pixelSize;
 
 varying vec2 v_textureCoordinates;
 
@@ -122,6 +122,7 @@ vec3 calculateSpeedByRungeKutta2(vec3 lonLatLev) {
   // see https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Second-order_methods_with_two_stages for detail
   const float h = 0.5;
 
+  float speedScaleFactor = speedFactor * pixelSize;
   vec3 y_n = lonLatLev;
   vec3 f_n = linearInterpolation(lonLatLev);
   vec3 midpoint = y_n + 0.5 * h * convertSpeedUnitToLonLat(y_n, f_n) * speedScaleFactor;
@@ -144,7 +145,7 @@ void main() {
   vec3 lonLatLev = texture2D(currentParticlesPosition, v_textureCoordinates).rgb;
   vec3 speed = calculateSpeedByRungeKutta2(lonLatLev);
   vec3 speedInLonLat = convertSpeedUnitToLonLat(lonLatLev, speed);
-
+  float speedScaleFactor = speedFactor * pixelSize;
   vec4 particleSpeed = vec4(speedInLonLat, calculateWindNorm(speed / speedScaleFactor));
   gl_FragColor = particleSpeed;
 }
