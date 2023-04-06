@@ -22,6 +22,7 @@ export function platform() {
     isPhone: isPhone,
     isAndroid: isAndroid,
     isPc: isPc,
+    isFireFox: isFireFox,
     isChrome: isChrome,
     isIOS,
     hasTouch: 'ontouchstart' in window || window.navigator.maxTouchPoints > 0

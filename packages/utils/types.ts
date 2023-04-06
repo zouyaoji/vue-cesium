@@ -709,6 +709,13 @@ export type Mars3dConfig = {
 export type Arrayable<T> = T | T[]
 export type Awaitable<T> = Promise<T> | T
 
+export type VueClassObjectProp = {
+  [value: string]: any
+}
+export type VueClassProp = string | Array<VueClassProp> | VueClassObjectProp
+
+export type VueStyleObjectProp = Partial<CSSStyleDeclaration>
+
 export {
   AnyObject,
   VcCamera,

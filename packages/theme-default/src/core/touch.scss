@@ -1,0 +1,14 @@
+.vc-touch {
+  user-select: none;
+  user-drag: none;
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+}
+
+.vc-touch-x {
+  touch-action: pan-x;
+}
+
+.vc-touch-y {
+  touch-action: pan-y;
+}

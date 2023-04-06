@@ -205,6 +205,9 @@ export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
   return src
 }
 
+export function isNumber(v) {
+  return typeof v === 'number' && isFinite(v)
+}
 // reexport from lodash & vue shared
 export {
   hasOwn,

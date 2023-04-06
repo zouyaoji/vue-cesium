@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-03-05 11:08:12
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-03-29 14:51:40
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\index.ts
  */
@@ -28,6 +28,8 @@ import AjaxBar from './ajax-bar'
 import Skeleton from './skeleton'
 import Fab from './fab/fab'
 import FabAction from './fab/fab-action'
+import Slider from './slider'
+
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
@@ -49,7 +51,8 @@ const components = [
   AjaxBar,
   Skeleton,
   Fab,
-  FabAction
+  FabAction,
+  Slider
 ]
 
 const install = (app: App): void => {
@@ -87,6 +90,7 @@ export const VcAjaxBar = AjaxBar as SFCWithInstall<typeof AjaxBar>
 export const VcSkeleton = Skeleton as SFCWithInstall<typeof Skeleton>
 export const VcFab = Fab as SFCWithInstall<typeof Fab>
 export const VcFabAction = FabAction as SFCWithInstall<typeof FabAction>
+export const VcSlider = Slider as SFCWithInstall<typeof Slider>
 
 export * from './ajax-bar'
 export * from './btn'
@@ -96,3 +100,4 @@ export * from './icon'
 export * from './skeleton'
 export * from './spinner'
 export * from './tooltip'
+export * from './slider'

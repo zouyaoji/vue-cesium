@@ -2,6 +2,67 @@ $space-base: 16px !default;
 $space-x-base: $space-base !default;
 $space-y-base: $space-base !default;
 
+$space-none: (
+  x: 0,
+  y: 0
+) !default;
+$space-xs: (
+  x: (
+    $space-x-base * 0.25
+  ),
+  y: (
+    $space-y-base * 0.25
+  )
+) !default;
+$space-sm: (
+  x: (
+    $space-x-base * 0.5
+  ),
+  y: (
+    $space-y-base * 0.5
+  )
+) !default;
+$space-md: (
+  x: $space-x-base,
+  y: $space-y-base
+) !default;
+$space-lg: (
+  x: (
+    $space-x-base * 1.5
+  ),
+  y: (
+    $space-y-base * 1.5
+  )
+) !default;
+$space-xl: (
+  x: (
+    $space-x-base * 3
+  ),
+  y: (
+    $space-y-base * 3
+  )
+) !default;
+
+// sorry for long line; we need .sass and it doesn't support multi-line list
+$spaces: (
+  'none': $space-none,
+  'xs': $space-xs,
+  'sm': $space-sm,
+  'md': $space-md,
+  'lg': $space-lg,
+  'xl': $space-xl
+) !default;
+
+$animate-duration: 0.3s !default;
+$animate-delay: 0.3s !default;
+$animate-repeat: 1 !default;
+
+$space-base: 16px !default;
+$space-x-base: $space-base !default;
+$space-y-base: $space-base !default;
+
+// Max width at which point
+// current size ends
 $breakpoint-xs: 599px !default;
 $breakpoint-sm: 1023px !default;
 $breakpoint-md: 1439px !default;

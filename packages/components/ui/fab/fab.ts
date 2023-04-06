@@ -50,7 +50,7 @@ export default defineComponent({
 
     function getIcon(kebab, camel) {
       const slotFn = slots[kebab]
-      const classes = `q-fab__${kebab} absolute-full`
+      const classes = `vc-fab__${kebab} absolute-full`
 
       return slotFn === void 0 ? h(VcIcon, { class: classes, name: props[kebab] as any }) : h('div', { class: classes }, slotFn(slotScope.value))
     }

@@ -163,7 +163,8 @@ import {
   VcSpinnerTail,
   VcSpinner,
   VcFab,
-  VcFabAction
+  VcFabAction,
+  VcSlider
 } from '@vue-cesium/components/ui'
 
 // config
@@ -328,6 +329,7 @@ export default [
   VcSpinner,
   VcFab,
   VcFabAction,
+  VcSlider,
 
   VcConfigProvider,
   VcAnalysisFlood,
