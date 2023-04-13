@@ -6,12 +6,9 @@
     "packages/*",
     "website"
   ],
-  "engines": {
-    "node": ">= 16"
-  },
   "description": "Vue 3.x components for CesiumJS.",
   "scripts": {
-    "cz": "git-cz",
+    "cz": "czg",
     "test": "jest --coverage && coveralls < coverage/lcov.info",
     "gen": "bash ./scripts/gc.sh",
     "gen:version": "sucrase-node scripts/gen-version.ts",
@@ -38,9 +35,6 @@
     "url": "git+https://github.com/zouyaoji/vue-cesium.git"
   },
   "homepage": "https://zouyaoji.top/vue-cesium",
-  "lint-staged": {
-    "*.{vue,js,ts,jsx,tsx}": "eslint --fix"
-  },
   "browserslist": [
     "> 1%",
     "not ie 11",
@@ -79,9 +73,8 @@
     "@babel/preset-typescript": "^7.15.0",
     "@babel/runtime": "^7.16.5",
     "@changesets/cli": "^2.18.1",
-    "@commitlint/cli": "16.1.0",
-    "@commitlint/config-conventional": "16.0.0",
-    "@commitlint/cz-commitlint": "^15.0.0",
+    "@commitlint/cli": "^17.5.1",
+    "@commitlint/config-conventional": "^17.4.4",
     "@element-plus/icons-vue": "^1.1.1",
     "@pnpm/find-workspace-packages": "3.1.37",
     "@pnpm/logger": "4.0.0",
@@ -115,24 +108,25 @@
     "babel-preset-vue": "^2.0.2",
     "chalk": "^4.1.2",
     "clipboard-copy": "^4.0.1",
-    "commitizen": "^4.2.4",
+    "commitizen": "^4.3.0",
     "components-helper": "^2.0.0",
     "copy-webpack-plugin": "6.4.1",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.3",
     "css-loader": "^4.2.2",
     "css-minimizer-webpack-plugin": "1.1.5",
-    "cz-conventional-changelog": "^3.3.0",
+    "cz-git": "^1.6.1",
+    "czg": "^1.6.1",
     "echarts": "^5.2.1",
     "element-plus": "^2.0.5",
     "element-theme-chalk": "^2.15.6",
     "esbuild": "0.14.20",
-    "eslint": "8.8.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-define-config": "1.2.4",
-    "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "8.4.1",
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-define-config": "1.17.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.5.1",
     "fast-glob": "3.2.11",
     "file-loader": "^6.2.0",
     "fs-extra": "10.0.0",
@@ -175,16 +169,19 @@
     "vue-jest": "5.0.0-alpha.10",
     "vue-loader": "16.5.0",
     "vue-router": "^4.0.12",
-    "vue-tsc": "0.31.2",
+    "vue-tsc": "^1.2.0",
     "webpack": "4.44.1",
     "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0",
     "zrender": "^5.3.0"
   },
+  "engines": {
+    "node": ">= 16"
+  },
   "config": {
     "commitizen": {
-      "path": "cz-conventional-changelog"
+      "path": "./node_modules/cz-git"
     }
   }
 }
