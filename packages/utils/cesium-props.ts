@@ -1248,6 +1248,36 @@ const projectionTransforms = {
   }
 }
 // primitive 相关
+const customShader = {
+  customShader: {
+    type: Object as PropType<Cesium.CustomShader>
+  }
+}
+
+const maximumMemoryUsage = {
+  maximumMemoryUsage: {
+    type: Number,
+    default: 256
+  }
+}
+
+/**
+ * @const {Object, String, Array} startColor mixin
+ */
+const defaultColor = {
+  defaultColor: {
+    type: [Object, String, Array] as PropType<VcColor>,
+    watcherOptions: {
+      cesiumObjectBuilder: makeColor
+    }
+  }
+}
+
+const tileStyle = {
+  tileStyle: {
+    type: Object as PropType<Cesium.Cesium3DTileStyle>
+  }
+}
 
 /**
  * @const {Boolean}
@@ -1702,6 +1732,10 @@ const enableMouseEvent = {
   }
 }
 export {
+  customShader,
+  maximumMemoryUsage,
+  tileStyle,
+  defaultColor,
   viewFrom,
   projectionTransforms,
   sourceUri,

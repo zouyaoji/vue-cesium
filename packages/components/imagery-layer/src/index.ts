@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-09-23 13:50:56
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-07 02:17:24
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \vue-cesium\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -22,6 +22,7 @@ import defaultProps from './defaultProps'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isUndefined, kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 const emits = {
   ...commonEmits,
@@ -47,8 +48,13 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       const options = commonState.transformProps(props)
       const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider
-      return new Cesium.ImageryLayer(imageryProvider, options as any)
+      if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
+        return Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
+      } else {
+        return new Cesium.ImageryLayer(imageryProvider, options as any)
+      }
     }
+
     instance.mount = async () => {
       const { viewer } = $services
       const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
@@ -57,6 +63,7 @@ export default defineComponent({
       viewer.imageryLayers.add(imageryLayer)
       return !viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     }
+
     instance.unmount = async () => {
       const { viewer } = $services
       const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer

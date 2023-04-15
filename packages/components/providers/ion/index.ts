@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:43:11
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-13 22:33:41
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\ion\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\ion\index.ts
  */
 import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
@@ -13,6 +13,7 @@ import { useProviders } from '@vue-cesium/composables'
 import { accessToken } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export const ionImageryProviderProps = {}
 export default defineComponent({
@@ -27,7 +28,21 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'IonImageryProvider'
-    useProviders(props, ctx, instance)
+    const providersState = useProviders(props, ctx, instance)
+
+    if (undefined === providersState) {
+      return
+    }
+    // methods
+    instance.createCesiumObject = async () => {
+      const options = providersState.transformProps(props)
+      if (compareCesiumVersion(Cesium.VERSION, '1.104') && typeof Cesium[instance.cesiumClass].fromAssetId === 'function') {
+        return await Cesium.IonImageryProvider.fromAssetId(options.assetId, options)
+      } else {
+        return new Cesium.IonImageryProvider(options)
+      }
+    }
+
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

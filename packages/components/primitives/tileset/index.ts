@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCartesian2,
@@ -25,6 +25,7 @@ import {
   backFaceCulling,
   debugWireframe,
   debugShowBoundingVolume,
+  customShader,
   enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -209,9 +210,7 @@ export const tilesetPrimitiveProps = {
     type: Boolean,
     default: false
   },
-  customShader: {
-    type: Object as PropType<Cesium.CustomShader>
-  },
+  ...customShader,
   properties: {
     type: Array as PropType<
       Array<{
@@ -223,7 +222,8 @@ export const tilesetPrimitiveProps = {
     >
   },
   fragmentShader: String,
-  replaceFS: Boolean
+  replaceFS: Boolean,
+  assetId: Number
 }
 export default defineComponent({
   name: 'VcPrimitiveTileset',
@@ -578,6 +578,10 @@ export type VcPrimitiveTilesetProps = {
    * Whether fragmentShader is directly replaced.
    */
   replaceFS?: boolean
+  /**
+   * The assetId to a tileset from a Cesium ion asset ID.
+   */
+  assetId?: number
   /**
    * Triggers before the component is loaded.
    */

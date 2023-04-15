@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-28 09:45:36
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-15 14:34:02
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\primitives\model\index.ts
+ * @FilePath: \vue-cesium\packages\components\primitives\model\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType, VNode } from 'vue'
 import type {
@@ -53,6 +53,7 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export const modelPrimitiveProps = {
   ...url,
@@ -99,16 +100,23 @@ export const modelPrimitiveProps = {
 export default defineComponent({
   name: 'VcPrimitiveModel',
   props: modelPrimitiveProps,
-  emits: primitiveEmits,
+  emits: {
+    ...primitiveEmits,
+    readyEvent: (evt: Cesium.Model) => true,
+    texturesReadyEvent: (evt: Cesium.Model) => true,
+    errorEvent: (evt: Error) => true
+  },
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'Model'
+    instance.cesiumEvents = ['readyEvent', 'texturesReadyEvent', 'errorEvent']
     const primitivesState = usePrimitives(props, ctx, instance)
     // methods
     instance.createCesiumObject = async () => {
       const options: any = primitivesState?.transformProps(props)
-      return Cesium.Model.fromGltf(options)
+
+      return compareCesiumVersion(Cesium.VERSION, '1.104') ? await Cesium.Model.fromGltfAsync(options) : Cesium.Model.fromGltf(options)
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
@@ -321,6 +329,18 @@ export type VcPrimitiveModelProps = {
    * Triggers when the primitive is ready to render.
    */
   onReadyPromise?: (primitive: Cesium.ClassificationPrimitive, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+  /**
+   * Triggers when the model is loaded and ready for rendering.
+   */
+  onReadyEvent?: (evt: Cesium.Model) => void
+  /**
+   * Triggers when the model textures are loaded and ready for rendering.
+   */
+  onTexturesReadyEvent?: (evt: Cesium.Model) => void
+  /**
+   * Triggers when the model encounters an asynchronous rendering error.
+   */
+  onErrorEvent?: (evt: Error) => void
 }
 
 export type VcPrimitiveModelRef = VcComponentPublicInstance<VcPrimitiveModelProps>

@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:54:02
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-08 14:09:32
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
+ * @FilePath: \vue-cesium\packages\components\providers\tianditu\terrain.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
@@ -82,7 +82,7 @@ export default defineComponent({
     }
     instance.unmount = async () => {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
-      terrainProvider.readyPromise.then(() => {
+      terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(instance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, vc?.viewer, instance.proxy as VcComponentPublicInstance)
       })

@@ -37,7 +37,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     reject = _reject
   })
 
-  const viewerRef = ref<HTMLElement>(null)
+  const viewerRef = ref<HTMLElement>()
   const isReady = ref(false)
   const vcMitt: Emitter<VcMittEvents> = mitt()
   const { emit } = ctx
@@ -608,7 +608,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       return false
     }
 
-    const { Ion, buildModuleUrl, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
+    const { Ion, buildModuleUrl, ImageryLayer, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
     const accessToken = props.accessToken ? props.accessToken : globalConfig.value.accessToken
     Ion.defaultAccessToken = accessToken
 
@@ -622,17 +622,20 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         options[vueProp] = props[vueProp]
       })
 
-    options.imageryProvider = isEmptyObj(options.imageryProvider) ? new TileMapServiceImageryProvider({ url }) : options.imageryProvider
     options.fullscreenElement = isEmptyObj(options.fullscreenElement) ? $(viewerRef) : options.fullscreenElement
 
-    // if (Cesium.VERSION >= '1.83') {
-    //   delete options.terrainExaggeration
-    // }
+    if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
+      options.baseLayer = isEmptyObj(options.baseLayer)
+        ? ImageryLayer.fromProviderAsync(TileMapServiceImageryProvider.fromUrl(url), {})
+        : options.baseLayer
+    } else {
+      options.imageryProvider = isEmptyObj(options.imageryProvider) ? new TileMapServiceImageryProvider({ url }) : options.imageryProvider
+    }
 
     let viewer: Cesium.Viewer
 
     if (props.viewerCreator) {
-      viewer = props.viewerCreator(vcInstance, $(viewerRef) as HTMLElement, options)
+      viewer = props.viewerCreator(vcInstance, $(viewerRef), options)
     } else {
       if (globalThis.mars3d) {
         vcInstance.map = new mars3d.Map($(viewerRef).id, {
@@ -1386,6 +1389,10 @@ export interface VcViewerProps {
    * The imagery provider to use. This value is only valid if `baseLayerPicker` is set to false.
    */
   imageryProvider?: Cesium.ImageryProvider
+  /**
+   * The bottommost imagery layer applied to the globe. If set to false, no imagery provider will be added. This value is only valid if `baseLayerPicker` is set to false.
+   */
+  baseLayer?: Cesium.ImageryLayer | false
   /**
    * The terrain provider to use
    */

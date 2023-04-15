@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:38:10
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-08 14:07:22
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\cesium-terrain\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { PropType } from 'vue'
@@ -28,6 +28,7 @@ export const cesiumTerrainProviderProps = {
     type: Boolean,
     default: true
   },
+  assetId: Number,
   ...ellipsoid,
   ...credit
 }
@@ -51,9 +52,20 @@ export default defineComponent({
         providersState.setPropsWatcher(true)
       }
       const options = providersState.transformProps(props)
-      return Cesium.defined(options.url)
-        ? new Cesium.CesiumTerrainProvider(options as any)
-        : Cesium.createWorldTerrain({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
+
+      if (Cesium.defined(props.assetId) && typeof Cesium[instance.cesiumClass].fromIonAssetId === 'function') {
+        return await Cesium.CesiumTerrainProvider.fromIonAssetId(props.assetId, options)
+      } else {
+        if (typeof Cesium[instance.cesiumClass].fromUrl === 'function') {
+          return Cesium.defined(options.url)
+            ? Cesium.CesiumTerrainProvider.fromUrl(options.url, options)
+            : Cesium.createWorldTerrainAsync({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
+        } else {
+          return Cesium.defined(options.url)
+            ? new Cesium.CesiumTerrainProvider(options as any)
+            : Cesium.createWorldTerrain({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
+        }
+      }
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
@@ -87,6 +99,10 @@ export type VcTerrainProviderCesiumProps = {
    * A credit for the data source, which is displayed on the canvas.
    */
   credit?: string
+  /**
+   * The assetId to a terrain from a Cesium ion asset ID.
+   */
+  assetId?: number
   /**
    * Triggers before the VcTerrainProviderCesium is loaded.
    */

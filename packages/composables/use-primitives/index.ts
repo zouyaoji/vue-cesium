@@ -15,6 +15,7 @@ import { provide, ref } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isArray } from '@vue-cesium/utils/util'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -41,17 +42,33 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
         instances.value.push(props.geometryInstances)
       }
     }
-    return new Cesium[vcInstance.cesiumClass](options)
+
+    if (
+      (vcInstance.cesiumClass === 'Cesium3DTileset' || vcInstance.cesiumClass === 'I3SDataProvider') &&
+      compareCesiumVersion(Cesium.VERSION, '1.104')
+    ) {
+      try {
+        if (Cesium.defined(props.assetId) && vcInstance.cesiumClass === 'Cesium3DTileset') {
+          return await Cesium[vcInstance.cesiumClass].fromIonAssetId(props.assetId, options)
+        } else {
+          return await Cesium[vcInstance.cesiumClass].fromUrl(props.url, options)
+        }
+      } catch (error) {
+        commonState.logger.error(`Failed to load tileset: ${error}`)
+      }
+    } else {
+      return new Cesium[vcInstance.cesiumClass](options)
+    }
   }
 
   vcInstance.mount = async () => {
     const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
-    primitive.readyPromise &&
-      primitive.readyPromise.then(e => {
-        const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy as VcComponentPublicInstance)
-      })
+    // // TODO: 1.104+ 版本废弃了 readyPromise
+    primitive?.readyPromise?.then(e => {
+      const listener = getInstanceListener(vcInstance, 'readyPromise')
+      listener && emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy as VcComponentPublicInstance)
+    })
     ;(primitive as any)._vcParent = primitives
     const object = primitives && primitives.add(primitive)
     if (vcInstance.cesiumClass === 'ParticleSystem') {

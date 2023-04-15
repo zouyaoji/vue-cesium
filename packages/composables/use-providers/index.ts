@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
- * @LastEditTime: 2022-03-11 11:36:37
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-13 22:34:01
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-providers\index.ts
+ * @FilePath: \vue-cesium\packages\composables\use-providers\index.ts
  */
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
@@ -13,6 +13,7 @@ import useCommon from '../use-common'
 import type { SetupContext } from 'vue'
 import type { ProviderEmits } from '@vue-cesium/utils/emits'
 import { VcLayerImageryRef } from '@vue-cesium/components'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: VcComponentInternalInstance) {
   // state
@@ -25,11 +26,24 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
   const { emit } = ctx
 
   // methods
+  vcInstance.createCesiumObject = async () => {
+    const options = commonState.transformProps(props)
+
+    if (compareCesiumVersion(Cesium.VERSION, '1.104') && typeof Cesium[vcInstance.cesiumClass].fromUrl === 'function') {
+      console.log(options)
+      return await Cesium[vcInstance.cesiumClass].fromUrl(options.url, options)
+    } else {
+      return new Cesium[vcInstance.cesiumClass](options)
+    }
+  }
+
   vcInstance.mount = async () => {
     const { viewer } = commonState.$services
     if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
       vcInstance.renderByParent = true
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
+
+      // TODO: 1.104+ 版本废弃了 readyPromise
       imageryProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', imageryProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
