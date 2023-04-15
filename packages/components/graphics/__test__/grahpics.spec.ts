@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
+import { describe, expect, test } from 'vitest'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcEntity from '@vue-cesium/components/entity'
 import {
@@ -424,13 +426,16 @@ const pathApp = {
       viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP //Loop at the end
       viewer.clock.multiplier = 10
       // viewer.timeline.zoomTo(start, stop)
+      // @ts-ignore
       this.position = this.computeCirclularFlight(-112.110693, 36.0994841, 0.03, start)
+      // @ts-ignore
       this.availability = new Cesium.TimeIntervalCollection([
         new Cesium.TimeInterval({
           start: start,
           stop: stop
         })
       ])
+      // @ts-ignore
       this.orientation = new Cesium.VelocityOrientationProperty(this.position)
     },
     computeCirclularFlight(lon, lat, radius, start) {
@@ -444,6 +449,7 @@ const pathApp = {
           Cesium.Math.nextRandomNumber() * 500 + 1750
         )
         property.addSample(time, position)
+        // @ts-ignore
         this.positions.push(position)
       }
       return property

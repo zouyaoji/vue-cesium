@@ -1,15 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
- * @LastEditTime: 2022-03-11 13:27:23
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-15 14:05:13
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\overlays\echarts\index.ts
+ * @FilePath: \vue-cesium\packages\components\overlays\echarts\index.ts
  */
 import type { CSSProperties, WatchStopHandle, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, nextTick } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import * as echarts from 'echarts'
@@ -52,7 +51,7 @@ export default defineComponent({
     }
     const { $services } = commonState
     const canRender = ref(false)
-    const rootRef = ref<HTMLElement>(null!)
+    const rootRef = ref<HTMLElement>()
     const rootStyle = reactive<CSSProperties>({
       left: '0px',
       top: '0px',
@@ -74,7 +73,7 @@ export default defineComponent({
 
     // methods
     instance.createCesiumObject = async () => {
-      return $(rootRef)
+      return rootRef.value
     }
     instance.mount = async () => {
       const { viewer } = $services
@@ -82,9 +81,12 @@ export default defineComponent({
 
       nextTick(() => {
         echarts.registerCoordinateSystem(props.coordinateSystem, getE3CoordinateSystem(viewer))
-        chart = echarts.init($(rootRef))
-        setCharts()
-        viewer.scene.postRender.addEventListener(onPreRender)
+        if (rootRef.value) {
+          chart = echarts.init(rootRef.value)
+
+          setCharts()
+          viewer.scene.postRender.addEventListener(onPreRender)
+        }
       })
 
       return true

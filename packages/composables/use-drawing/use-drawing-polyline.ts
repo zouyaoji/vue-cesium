@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-12-12 00:48:15
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-15 14:00:29
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-polyline.ts
  */
 import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
@@ -144,7 +144,7 @@ export default function (props, ctx, cmpName: string) {
               positions: positionsNew,
               distance,
               distances
-            })
+            } as VcPolylineDrawing)
           })
       } else {
         props.loop && positions.length > 2 && positions.push(positions[0])
@@ -234,7 +234,7 @@ export default function (props, ctx, cmpName: string) {
           area,
           angles,
           dashedLines
-        })
+        } as VcPolylineDrawing)
       }
     })
     return polylines
@@ -350,7 +350,7 @@ export default function (props, ctx, cmpName: string) {
       renderDatas.value.pop()
     }
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
-    const polyline: VcPolylineDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcPolylineDrawing
     if (polyline) {
       polyline.positions = polyline.tempPositions
       polyline.drawStatus = DrawStatus.AfterDraw
@@ -388,7 +388,7 @@ export default function (props, ctx, cmpName: string) {
 
     const { defined, Cartesian2, Plane, Cartesian3 } = Cesium
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
-    const polyline: VcPolylineDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcPolylineDrawing
     const tempPositions = polyline.tempPositions
 
     if (options.button === 2 && editingPoint.value) {
@@ -546,7 +546,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
-    const polyline: VcPolylineDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcPolylineDrawing
     let type = 'new'
     if (cmpName === 'VcMeasurementHorizontal') {
       const { SceneMode, IntersectionTests, Cartesian3 } = Cesium
@@ -633,7 +633,7 @@ export default function (props, ctx, cmpName: string) {
     const { drawingFabInstance, selectedDrawingActionInstance, viewer } = $services
     if (drawStatus.value === DrawStatus.Drawing) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
-      const polyline: VcPolylineDrawing = renderDatas.value[index]
+      const polyline = renderDatas.value[index] as VcPolylineDrawing
 
       stop(false)
       drawTip.value = drawTipOpts.value.drawingTipStart

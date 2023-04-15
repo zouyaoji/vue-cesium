@@ -41,10 +41,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcZoomControlSm'
     instance.cesiumEvents = []
-    const rootRef = ref<HTMLElement>(null)
-    const zoomInRef = ref<HTMLElement>(null)
-    const zoomBarRef = ref<HTMLElement>(null)
-    const zoomOutRef = ref<HTMLElement>(null)
+    const rootRef = ref<HTMLElement>()
+    const zoomInRef = ref<HTMLElement>()
+    const zoomBarRef = ref<HTMLElement>()
+    const zoomOutRef = ref<HTMLElement>()
     const parentInstance = getVcParentInstance(instance)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)

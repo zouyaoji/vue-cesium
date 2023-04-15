@@ -1,15 +1,15 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:44:24
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-14 00:10:02
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\single-tile\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\single-tile\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { url, rectangle, credit, ellipsoid } from '@vue-cesium/utils/cesium-props'
+import { url, rectangle, credit, ellipsoid, tileWidth, tileHeight } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
 
@@ -17,7 +17,9 @@ export const singletileImageryProviderProps = {
   ...url,
   ...rectangle,
   ...credit,
-  ...ellipsoid
+  ...ellipsoid,
+  ...tileWidth,
+  ...tileHeight
 }
 export default defineComponent({
   name: 'VcImageryProviderSingletile',
@@ -49,6 +51,14 @@ export type VcImageryProviderSingletileProps = {
    * The ellipsoid. If not specified, the WGS84 ellipsoid is used.
    */
   ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The width of the tile, in pixels.
+   */
+  tileWidth?: number
+  /**
+   * The height of the tile, in pixels.
+   */
+  tileHeight?: number
   /**
    * Triggers before the VcImageryProviderSingletile is loaded.
    */

@@ -34,8 +34,8 @@ export default defineComponent({
 
     const { classes, style, innerClasses, attributes, isActionable } = useBtn(props)
 
-    const rootRef = ref<HTMLElement>(null)
-    const blurTargetRef = ref<HTMLElement>(null)
+    const rootRef = ref<HTMLElement>()
+    const blurTargetRef = ref<HTMLElement>()
 
     let localTouchTargetEl: HTMLElement = null,
       avoidMouseRipple,

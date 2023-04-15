@@ -2,6 +2,8 @@ import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/type
 import { mount } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
+import { describe, expect, test } from 'vitest'
+
 import {
   VcImageryProviderArcgis,
   VcImageryProviderBaidu,

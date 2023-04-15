@@ -82,13 +82,13 @@ export default defineComponent({
       valueField: 'value',
       container: undefined
     }
-    const coordinates = ref<any>(null)
-    const material = ref<MaterialOption>(null)
-    const image = ref<any>(null)
-    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround>(null)
-    const appearance = ref<AppearanceOption>(null)
+    const coordinates = ref<any>()
+    const material = ref<MaterialOption>()
+    const image = ref<any>()
+    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround>()
+    const appearance = ref<AppearanceOption>()
     const canRender = ref(false)
-    const config = ref<any>(null)
+    const config = ref<any>()
 
     const vcParent = getVcParentInstance(instance)
     ;(vcParent.proxy as VcComponentPublicInstance).creatingPromise?.then(() => {

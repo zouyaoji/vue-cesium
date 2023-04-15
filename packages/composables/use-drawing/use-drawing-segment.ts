@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-12-11 23:40:39
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-15 14:01:51
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
  */
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
@@ -130,12 +130,12 @@ export default function (props, ctx, cmpName: string) {
         }
       })
 
-      const polyline: VcSegmentDrawing = {
+      const polyline = {
         ...polylineSegment,
         distance,
         heading,
         pitch
-      }
+      } as VcSegmentDrawing
 
       const labelOpts = Object.assign({}, props.labelOpts, polyline.labelOpts)
 
@@ -657,7 +657,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: VcSegmentDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcSegmentDrawing
     if (polyline) {
       polyline.drawStatus = DrawStatus.AfterDraw
     }
@@ -694,7 +694,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: VcSegmentDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcSegmentDrawing
     const positions = polyline.positions
 
     if (options.button === 2 && editingPoint.value) {
@@ -863,7 +863,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: VcSegmentDrawing = renderDatas.value[index]
+    const polyline = renderDatas.value[index] as VcSegmentDrawing
 
     if (cmpName === 'VcMeasurementVertical') {
       const heightPostion = getHeightPosition(polyline, movement)

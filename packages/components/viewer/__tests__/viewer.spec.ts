@@ -4,6 +4,7 @@ import { mount, config } from '@vue/test-utils'
 import VcViewer from '../src'
 import { VcConfigProvider } from '../../config-provider'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
+import { describe, expect, test } from 'vitest'
 
 const viewerApp = {
   components: {

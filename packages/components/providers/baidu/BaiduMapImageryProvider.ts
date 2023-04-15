@@ -4,21 +4,21 @@ import BaiduMapMercatorTilingScheme from './BaiduMapTilingScheme'
 class BaiduMapImageryProvider {
   _url: string
   _ready: boolean
-  _resource: any
+  _resource: Cesium.Resource
   _tileDiscardPolicy: any
   _tileWidth: number
   _tileHeight: number
-  _minimumLevel: any
-  _maximumLevel: any
+  _minimumLevel: number
+  _maximumLevel: number
   _tilingScheme: BaiduMapMercatorTilingScheme
-  _rectangle: any
-  _credit: any
-  enablePickFeatures: any
+  _rectangle: Cesium.Rectangle
+  _credit: Cesium.Credit
+  enablePickFeatures: boolean
   _hasAlphaChannel: boolean
-  _subdomains: any
-  _errorEvent: any
-  _readyPromise: any
-  _labelStyle: any
+  _subdomains: string[]
+  _errorEvent: Cesium.Event
+  // _readyPromise: any
+  _labelStyle: string
   _qt: 'tile' | 'vtile'
   _styles: 'sl' | 'pl' | 'ph'
   _scale: '1' | '2'
@@ -77,9 +77,8 @@ class BaiduMapImageryProvider {
     this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
     this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
     this._errorEvent = new Event()
-    this._readyPromise = defer()
+    // this._readyPromise = defer()
     this._ready = true
-    this._readyPromise.resolve(true)
     this._labelStyle = options.labelStyle || 'web2D'
     this._showtext = options.showtext || '1'
     this._qt = options.qt
@@ -90,7 +89,7 @@ class BaiduMapImageryProvider {
   }
 
   get url() {
-    return this._resource._url
+    return this._resource.url
   }
 
   get proxy() {
@@ -154,9 +153,9 @@ class BaiduMapImageryProvider {
     return this._ready
   }
 
-  get readyPromise() {
-    return this._readyPromise.promise
-  }
+  // get readyPromise() {
+  //   return this._readyPromise.promise
+  // }
 
   get credit() {
     if (!this.ready) {

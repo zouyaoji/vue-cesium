@@ -4,6 +4,7 @@ import VcViewer from '@vue-cesium/components/viewer'
 import VcEntity from '@vue-cesium/components/entity'
 import { VcDatasourceCustom, VcDatasourceCzml, VcDatasourceGeojson, VcDatasourceKml } from '../index'
 import { VcConfigProvider } from '../../config-provider'
+import { describe, expect, test } from 'vitest'
 
 const customApp = {
   components: {

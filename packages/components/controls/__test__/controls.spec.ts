@@ -1,6 +1,8 @@
 import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
+import { describe, expect, test } from 'vitest'
+
 import {
   VcCompass,
   VcCompassSm,
