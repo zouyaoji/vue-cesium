@@ -1,28 +1,28 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-b6f074fa',
-  './Matrix2-163b5a1d',
-  './Transforms-dadc538f',
-  './ComponentDatatype-77274976',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryInstance-9b27c40d',
-  './GeometryOffsetAttribute-04332ce7',
-  './GeometryPipeline-b7404acc',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './PolygonPipeline-1ccef6d7',
-  './RectangleGeometryLibrary-9bb8a8ec',
-  './VertexFormat-ab2e00e6',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c',
-  './AttributeCompression-e18a879a',
-  './EncodedCartesian3-de837603',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './EllipsoidRhumbLine-7f84cca0'
-], function (t, e, n, a, o, r, i, s, l, u, c, m, p, d, g, y, f, h, b, _, A, x, w) {
+  './defaultValue-f6d5e6da',
+  './Matrix3-81054f0f',
+  './Matrix2-413c4048',
+  './Transforms-20461479',
+  './ComponentDatatype-ab629b88',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryInstance-0318e0cd',
+  './GeometryOffsetAttribute-2579b8d2',
+  './GeometryPipeline-fcaf4d4d',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './PolygonPipeline-621b1cb0',
+  './RectangleGeometryLibrary-990f9a1a',
+  './VertexFormat-fbdec922',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './WebGLConstants-7f557f93',
+  './AttributeCompression-48e336db',
+  './EncodedCartesian3-5e2017ab',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './EllipsoidRhumbLine-77eff028'
+], function (t, e, n, a, o, r, i, s, l, u, c, m, p, g, d, y, f, h, b, _, A, x, w) {
   'use strict'
   const C = new e.Cartesian3(),
     v = new e.Cartesian3(),
@@ -71,10 +71,10 @@ define([
       u = n.northCap,
       m = n.southCap
     let p = 0,
-      g = s,
+      d = s,
       y = s,
       f = 0
-    u && ((p = 1), (y -= 1), (f += 1)), m && ((g -= 1), (y -= 1), (f += 1)), (f += l * y)
+    u && ((p = 1), (y -= 1), (f += 1)), m && ((d -= 1), (y -= 1), (f += 1)), (f += l * y)
     const h = a.position ? new Float64Array(3 * f) : void 0,
       b = a.st ? new Float32Array(2 * f) : void 0
     let _ = 0,
@@ -85,22 +85,22 @@ define([
       P = Number.MAX_VALUE,
       V = -Number.MAX_VALUE,
       D = -Number.MAX_VALUE
-    for (let t = p; t < g; ++t)
+    for (let t = p; t < d; ++t)
       for (let e = 0; e < l; ++e)
-        d.RectangleGeometryLibrary.computePosition(n, i, a.st, t, e, x, w),
+        g.RectangleGeometryLibrary.computePosition(n, i, a.st, t, e, x, w),
           (h[_++] = x.x),
           (h[_++] = x.y),
           (h[_++] = x.z),
           a.st && ((b[A++] = w.x), (b[A++] = w.y), (G = Math.min(G, w.x)), (P = Math.min(P, w.y)), (V = Math.max(V, w.x)), (D = Math.max(D, w.y)))
     if (
       (u &&
-        (d.RectangleGeometryLibrary.computePosition(n, i, a.st, 0, 0, x, w),
+        (g.RectangleGeometryLibrary.computePosition(n, i, a.st, 0, 0, x, w),
         (h[_++] = x.x),
         (h[_++] = x.y),
         (h[_++] = x.z),
         a.st && ((b[A++] = w.x), (b[A++] = w.y), (G = w.x), (P = w.y), (V = w.x), (D = w.y))),
       m &&
-        (d.RectangleGeometryLibrary.computePosition(n, i, a.st, s - 1, 0, x, w),
+        (g.RectangleGeometryLibrary.computePosition(n, i, a.st, s - 1, 0, x, w),
         (h[_++] = x.x),
         (h[_++] = x.y),
         (h[_] = x.z),
@@ -118,9 +118,9 @@ define([
         m = R
       let p = v
       if (n.normal || n.tangent || n.bitangent)
-        for (let d = 0; d < r; d += 3) {
-          const r = e.Cartesian3.fromArray(t, d, C),
-            g = u + 1,
+        for (let g = 0; g < r; g += 3) {
+          const r = e.Cartesian3.fromArray(t, g, C),
+            d = u + 1,
             y = u + 2
           ;(p = a.geodeticSurfaceNormal(r, p)),
             (n.tangent || n.bitangent) &&
@@ -128,9 +128,9 @@ define([
               e.Matrix3.multiplyByVector(o, m, m),
               e.Cartesian3.normalize(m, m),
               n.bitangent && e.Cartesian3.normalize(e.Cartesian3.cross(p, m, c), c)),
-            n.normal && ((i[u] = p.x), (i[g] = p.y), (i[y] = p.z)),
-            n.tangent && ((s[u] = m.x), (s[g] = m.y), (s[y] = m.z)),
-            n.bitangent && ((l[u] = c.x), (l[g] = c.y), (l[y] = c.z)),
+            n.normal && ((i[u] = p.x), (i[d] = p.y), (i[y] = p.z)),
+            n.tangent && ((s[u] = m.x), (s[d] = m.y), (s[y] = m.z)),
+            n.bitangent && ((l[u] = c.x), (l[d] = c.y), (l[y] = c.z)),
             (u += 3)
         }
       return L(n, { positions: t, normals: i, tangents: s, bitangents: l })
@@ -170,10 +170,10 @@ define([
   function N(t, e, n, a) {
     return (t[e++] = a[n]), (t[e++] = a[n + 1]), (t[e++] = a[n]), (t[e] = a[n + 1]), t
   }
-  const S = new g.VertexFormat()
+  const S = new d.VertexFormat()
   function I(n, a) {
     const i = n._shadowVolume,
-      d = n._offsetAttribute,
+      g = n._offsetAttribute,
       y = n._vertexFormat,
       f = n._extrudedHeight,
       h = n._surfaceHeight,
@@ -182,7 +182,7 @@ define([
       A = a.width
     let x
     if (i) {
-      const t = g.VertexFormat.clone(y, S)
+      const t = d.VertexFormat.clone(y, S)
       ;(t.normal = !0), (n._vertexFormat = t)
     }
     const w = T(n, a)
@@ -215,11 +215,11 @@ define([
           values: t
         }))
     }
-    const X = t.defined(d)
+    const X = t.defined(g)
     if (X) {
       const t = (F / 3) * 2
       let e = new Uint8Array(t)
-      d === l.GeometryOffsetAttribute.TOP ? (e = e.fill(1, 0, t / 2)) : ((q = d === l.GeometryOffsetAttribute.NONE ? 0 : 1), (e = e.fill(q))),
+      g === l.GeometryOffsetAttribute.TOP ? (e = e.fill(1, 0, t / 2)) : ((q = g === l.GeometryOffsetAttribute.NONE ? 0 : 1), (e = e.fill(q))),
         (w.attributes.applyOffset = new r.GeometryAttribute({
           componentDatatype: o.ComponentDatatype.UNSIGNED_BYTE,
           componentsPerAttribute: 1,
@@ -257,52 +257,52 @@ define([
     const it = i ? new Float32Array(3 * ot) : void 0
     let st = X ? new Uint8Array(ot) : void 0,
       lt = y.st ? new Float32Array(2 * ot) : void 0
-    const ut = d === l.GeometryOffsetAttribute.TOP
-    X && !ut && ((q = d === l.GeometryOffsetAttribute.ALL ? 1 : 0), (st = st.fill(q)))
+    const ut = g === l.GeometryOffsetAttribute.TOP
+    X && !ut && ((q = g === l.GeometryOffsetAttribute.ALL ? 1 : 0), (st = st.fill(q)))
     let ct = 0,
       mt = 0,
       pt = 0,
-      dt = 0
-    const gt = A * $
+      gt = 0
+    const dt = A * $
     let yt
-    for (x = 0; x < gt; x += A)
+    for (x = 0; x < dt; x += A)
       (yt = 3 * x),
         (rt = O(rt, ct, yt, G, I)),
         (ct += 6),
         y.st && ((lt = N(lt, mt, 2 * x, U)), (mt += 4)),
         i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-        ut && ((st[dt++] = 1), (dt += 1))
+        ut && ((st[gt++] = 1), (gt += 1))
     if (K) {
-      const t = Z ? gt + 1 : gt
+      const t = Z ? dt + 1 : dt
       for (yt = 3 * t, x = 0; x < 2; x++)
         (rt = O(rt, ct, yt, G, I)),
           (ct += 6),
           y.st && ((lt = N(lt, mt, 2 * t, U)), (mt += 4)),
           i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-          ut && ((st[dt++] = 1), (dt += 1))
+          ut && ((st[gt++] = 1), (gt += 1))
     } else
-      for (x = gt - A; x < gt; x++)
+      for (x = dt - A; x < dt; x++)
         (yt = 3 * x),
           (rt = O(rt, ct, yt, G, I)),
           (ct += 6),
           y.st && ((lt = N(lt, mt, 2 * x, U)), (mt += 4)),
           i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-          ut && ((st[dt++] = 1), (dt += 1))
-    for (x = gt - 1; x > 0; x -= A)
+          ut && ((st[gt++] = 1), (gt += 1))
+    for (x = dt - 1; x > 0; x -= A)
       (yt = 3 * x),
         (rt = O(rt, ct, yt, G, I)),
         (ct += 6),
         y.st && ((lt = N(lt, mt, 2 * x, U)), (mt += 4)),
         i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-        ut && ((st[dt++] = 1), (dt += 1))
+        ut && ((st[gt++] = 1), (gt += 1))
     if (Z) {
-      const t = gt
+      const t = dt
       for (yt = 3 * t, x = 0; x < 2; x++)
         (rt = O(rt, ct, yt, G, I)),
           (ct += 6),
           y.st && ((lt = N(lt, mt, 2 * t, U)), (mt += 4)),
           i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-          ut && ((st[dt++] = 1), (dt += 1))
+          ut && ((st[gt++] = 1), (gt += 1))
     } else
       for (x = A - 1; x >= 0; x--)
         (yt = 3 * x),
@@ -310,7 +310,7 @@ define([
           (ct += 6),
           y.st && ((lt = N(lt, mt, 2 * x, U)), (mt += 4)),
           i && ((pt += 3), (it[pt++] = Y[yt]), (it[pt++] = Y[yt + 1]), (it[pt++] = Y[yt + 2])),
-          ut && ((st[dt++] = 1), (dt += 1))
+          ut && ((st[gt++] = 1), (gt += 1))
     let ft = (function (t, n, a) {
       const o = t.length,
         r = n.normal ? new Float32Array(o) : void 0,
@@ -320,8 +320,8 @@ define([
         u = 0,
         c = 0,
         p = !0,
-        d = E,
-        g = R,
+        g = E,
+        d = R,
         y = v
       if (n.normal || n.tangent || n.bitangent)
         for (let f = 0; f < o; f += 6) {
@@ -333,10 +333,10 @@ define([
           }
           e.Cartesian3.equalsEpsilon(b, h, m.CesiumMath.EPSILON10) && (p = !0),
             (n.tangent || n.bitangent) &&
-              ((d = a.geodeticSurfaceNormal(h, d)), n.tangent && (g = e.Cartesian3.normalize(e.Cartesian3.cross(d, y, g), g))),
+              ((g = a.geodeticSurfaceNormal(h, g)), n.tangent && (d = e.Cartesian3.normalize(e.Cartesian3.cross(g, y, d), d))),
             n.normal && ((r[l++] = y.x), (r[l++] = y.y), (r[l++] = y.z), (r[l++] = y.x), (r[l++] = y.y), (r[l++] = y.z)),
-            n.tangent && ((i[u++] = g.x), (i[u++] = g.y), (i[u++] = g.z), (i[u++] = g.x), (i[u++] = g.y), (i[u++] = g.z)),
-            n.bitangent && ((s[c++] = d.x), (s[c++] = d.y), (s[c++] = d.z), (s[c++] = d.x), (s[c++] = d.y), (s[c++] = d.z))
+            n.tangent && ((i[u++] = d.x), (i[u++] = d.y), (i[u++] = d.z), (i[u++] = d.x), (i[u++] = d.y), (i[u++] = d.z)),
+            n.bitangent && ((s[c++] = g.x), (s[c++] = g.y), (s[c++] = g.z), (s[c++] = g.x), (s[c++] = g.y), (s[c++] = g.z))
         }
       return L(n, { positions: t, normals: r, tangents: i, bitangents: s })
     })(rt, y, b)
@@ -382,15 +382,15 @@ define([
     z = new e.Cartographic()
   function B(t, e, a, o, r) {
     if (0 === a) return n.Rectangle.clone(t, r)
-    const i = d.RectangleGeometryLibrary.computeOptions(t, e, a, 0, G, H),
+    const i = g.RectangleGeometryLibrary.computeOptions(t, e, a, 0, G, H),
       s = i.height,
       l = i.width,
       u = k
     return (
-      d.RectangleGeometryLibrary.computePosition(i, o, !1, 0, 0, u[0]),
-      d.RectangleGeometryLibrary.computePosition(i, o, !1, 0, l - 1, u[1]),
-      d.RectangleGeometryLibrary.computePosition(i, o, !1, s - 1, 0, u[2]),
-      d.RectangleGeometryLibrary.computePosition(i, o, !1, s - 1, l - 1, u[3]),
+      g.RectangleGeometryLibrary.computePosition(i, o, !1, 0, 0, u[0]),
+      g.RectangleGeometryLibrary.computePosition(i, o, !1, 0, l - 1, u[1]),
+      g.RectangleGeometryLibrary.computePosition(i, o, !1, s - 1, 0, u[2]),
+      g.RectangleGeometryLibrary.computePosition(i, o, !1, s - 1, l - 1, u[3]),
       n.Rectangle.fromCartesianArray(u, o, r)
     )
   }
@@ -404,7 +404,7 @@ define([
       (this._surfaceHeight = Math.max(r, i)),
       (this._rotation = t.defaultValue(a.rotation, 0)),
       (this._stRotation = t.defaultValue(a.stRotation, 0)),
-      (this._vertexFormat = g.VertexFormat.clone(t.defaultValue(a.vertexFormat, g.VertexFormat.DEFAULT))),
+      (this._vertexFormat = d.VertexFormat.clone(t.defaultValue(a.vertexFormat, d.VertexFormat.DEFAULT))),
       (this._extrudedHeight = Math.min(r, i)),
       (this._shadowVolume = t.defaultValue(a.shadowVolume, !1)),
       (this._workerName = 'createRectangleGeometry'),
@@ -412,7 +412,7 @@ define([
       (this._rotatedRectangle = void 0),
       (this._textureCoordinateRotationPoints = void 0)
   }
-  ;(U.packedLength = n.Rectangle.packedLength + e.Ellipsoid.packedLength + g.VertexFormat.packedLength + 7),
+  ;(U.packedLength = n.Rectangle.packedLength + e.Ellipsoid.packedLength + d.VertexFormat.packedLength + 7),
     (U.pack = function (a, o, r) {
       return (
         (r = t.defaultValue(r, 0)),
@@ -420,8 +420,8 @@ define([
         (r += n.Rectangle.packedLength),
         e.Ellipsoid.pack(a._ellipsoid, o, r),
         (r += e.Ellipsoid.packedLength),
-        g.VertexFormat.pack(a._vertexFormat, o, r),
-        (r += g.VertexFormat.packedLength),
+        d.VertexFormat.pack(a._vertexFormat, o, r),
+        (r += d.VertexFormat.packedLength),
         (o[r++] = a._granularity),
         (o[r++] = a._surfaceHeight),
         (o[r++] = a._rotation),
@@ -452,24 +452,24 @@ define([
     o += n.Rectangle.packedLength
     const s = e.Ellipsoid.unpack(a, o, q)
     o += e.Ellipsoid.packedLength
-    const l = g.VertexFormat.unpack(a, o, S)
-    o += g.VertexFormat.packedLength
+    const l = d.VertexFormat.unpack(a, o, S)
+    o += d.VertexFormat.packedLength
     const u = a[o++],
       c = a[o++],
       m = a[o++],
       p = a[o++],
-      d = a[o++],
+      g = a[o++],
       y = 1 === a[o++],
       f = a[o]
     return t.defined(r)
       ? ((r._rectangle = n.Rectangle.clone(i, r._rectangle)),
         (r._ellipsoid = e.Ellipsoid.clone(s, r._ellipsoid)),
-        (r._vertexFormat = g.VertexFormat.clone(l, r._vertexFormat)),
+        (r._vertexFormat = d.VertexFormat.clone(l, r._vertexFormat)),
         (r._granularity = u),
         (r._surfaceHeight = c),
         (r._rotation = m),
         (r._stRotation = p),
-        (r._extrudedHeight = d),
+        (r._extrudedHeight = g),
         (r._shadowVolume = y),
         (r._offsetAttribute = -1 === f ? void 0 : f),
         r)
@@ -477,7 +477,7 @@ define([
         (X.height = c),
         (X.rotation = m),
         (X.stRotation = p),
-        (X.extrudedHeight = d),
+        (X.extrudedHeight = g),
         (X.shadowVolume = y),
         (X.offsetAttribute = -1 === f ? void 0 : f),
         new U(X))
@@ -500,14 +500,14 @@ define([
     let s = i._rectangle
     const u = i._ellipsoid,
       c = i._rotation,
-      g = i._stRotation,
+      d = i._stRotation,
       y = i._vertexFormat,
-      f = d.RectangleGeometryLibrary.computeOptions(s, i._granularity, c, g, G, H, z),
+      f = g.RectangleGeometryLibrary.computeOptions(s, i._granularity, c, d, G, H, z),
       h = Q
-    if (0 !== g || 0 !== c) {
+    if (0 !== d || 0 !== c) {
       const t = n.Rectangle.center(s, J),
         o = u.geodeticSurfaceNormalCartographic(t, D)
-      a.Quaternion.fromAxisAngle(o, -g, W), e.Matrix3.fromQuaternion(W, h)
+      a.Quaternion.fromAxisAngle(o, -d, W), e.Matrix3.fromQuaternion(W, h)
     } else e.Matrix3.clone(e.Matrix3.IDENTITY, h)
     const b = i._surfaceHeight,
       _ = i._extrudedHeight,
@@ -559,7 +559,7 @@ define([
         granularity: a,
         extrudedHeight: i,
         height: r,
-        vertexFormat: g.VertexFormat.POSITION_ONLY,
+        vertexFormat: d.VertexFormat.POSITION_ONLY,
         shadowVolume: !0
       })
     })
@@ -605,8 +605,8 @@ define([
                 const c = i[0],
                   m = i[1],
                   p = i[2],
-                  d = new Array(6)
-                return n.Cartesian2.pack(c, d), n.Cartesian2.pack(m, d, 2), n.Cartesian2.pack(p, d, 4), d
+                  g = new Array(6)
+                return n.Cartesian2.pack(c, g), n.Cartesian2.pack(m, g, 2), n.Cartesian2.pack(p, g, 4), g
               })(this)),
             this._textureCoordinateRotationPoints
           )

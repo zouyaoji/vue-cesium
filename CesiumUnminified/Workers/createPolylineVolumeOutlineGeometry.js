@@ -1,28 +1,28 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-315394f6',
-  './arrayRemoveDuplicates-c2038105',
-  './BoundingRectangle-93b263ac',
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './ComponentDatatype-f7b11d02',
-  './PolylineVolumeGeometryLibrary-97f0b94e',
-  './Check-666ab1a0',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './PolygonPipeline-21668b3f',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-ed9443a1',
-  './AxisAlignedBoundingBox-47525601',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728',
-  './PolylinePipeline-5e2e1b21',
-  './EllipsoidGeodesic-98c62a56',
-  './EllipsoidRhumbLine-19756602'
+  './defaultValue-fe22d8c0',
+  './Matrix3-fa806b97',
+  './arrayRemoveDuplicates-fac118a8',
+  './BoundingRectangle-57f2b24f',
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './ComponentDatatype-cf1fa08e',
+  './PolylineVolumeGeometryLibrary-f068c1fb',
+  './Check-6ede7e26',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './PolygonPipeline-32fc92cc',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './WebGLConstants-0b1ce7ba',
+  './EllipsoidTangentPlane-857186be',
+  './AxisAlignedBoundingBox-379015ef',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6',
+  './PolylinePipeline-6d5c63e5',
+  './EllipsoidGeodesic-dcff5cbd',
+  './EllipsoidRhumbLine-b672d507'
 ], function (
   defaultValue,
   Matrix3,
@@ -109,11 +109,11 @@ define([
    * @alias PolylineVolumeOutlineGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.polylinePositions An array of positions that define the center of the polyline volume.
    * @param {Cartesian2[]} options.shapePositions An array of positions that define the shape to be extruded along the polyline
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid to be used as a reference.
-   * @param {Number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   * @param {number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
    * @param {CornerType} [options.cornerType=CornerType.ROUNDED] Determines the style of the corners.
    *
    * @see PolylineVolumeOutlineGeometry#createGeometry
@@ -162,7 +162,7 @@ define([
 
     /**
      * The number of elements used to pack the object into an array.
-     * @type {Number}
+     * @type {number}
      */
     this.packedLength = numComponents + Matrix3.Ellipsoid.packedLength + 2
   }
@@ -171,10 +171,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {PolylineVolumeOutlineGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   PolylineVolumeOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -228,8 +228,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {PolylineVolumeOutlineGeometry} [result] The object into which to store the result.
    * @returns {PolylineVolumeOutlineGeometry} The modified result parameter or a new PolylineVolumeOutlineGeometry instance if one was not provided.
    */

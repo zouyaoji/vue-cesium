@@ -1,16 +1,16 @@
 define([
-  './AttributeCompression-e18a879a',
-  './Matrix3-b6f074fa',
-  './combine-ca22a614',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './Matrix2-163b5a1d',
+  './AttributeCompression-48e336db',
+  './Matrix3-81054f0f',
+  './combine-0c102d93',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './Matrix2-413c4048',
   './createTaskProcessorWorker',
-  './ComponentDatatype-77274976',
-  './defaultValue-0a909f67',
-  './WebGLConstants-a8cc3e8c',
-  './RuntimeError-06c93819'
-], function (t, e, a, s, n, r, i, o, c, l, d) {
+  './ComponentDatatype-ab629b88',
+  './defaultValue-f6d5e6da',
+  './WebGLConstants-7f557f93',
+  './RuntimeError-9b4ce3fb'
+], function (t, e, a, s, n, r, i, o, l, c, d) {
   'use strict'
   const f = 32767,
     u = Math.cos(n.CesiumMath.toRadians(150)),
@@ -18,7 +18,7 @@ define([
     C = new e.Cartesian3()
   const p = new e.Cartographic(),
     m = new e.Cartographic()
-  function b(t) {
+  function A(t) {
     const e = 8 * t,
       a = 3 * e,
       n = 4 * e
@@ -36,15 +36,15 @@ define([
       (this.indexOffset = 0),
       (this.volumeStartIndex = 0)
   }
-  const A = new e.Cartesian3(),
+  const b = new e.Cartesian3(),
     w = new e.Cartesian3()
   function g(t, a, s, n, r) {
     const i = e.Cartesian3.subtract(s, a, w)
-    let o = e.Cartesian3.subtract(a, t, A)
+    let o = e.Cartesian3.subtract(a, t, b)
     return (
       e.Cartesian3.normalize(i, i),
       e.Cartesian3.normalize(o, o),
-      e.Cartesian3.dot(i, o) < u && (o = e.Cartesian3.multiplyByScalar(o, -1, A)),
+      e.Cartesian3.dot(i, o) < u && (o = e.Cartesian3.multiplyByScalar(o, -1, b)),
       e.Cartesian3.add(i, o, r),
       e.Cartesian3.equals(r, e.Cartesian3.ZERO) && (r = e.Cartesian3.subtract(t, a)),
       e.Cartesian3.cross(r, n, r),
@@ -60,16 +60,16 @@ define([
     I = new e.Cartesian3(),
     E = new e.Cartesian3(),
     F = new e.Cartesian3()
-  b.prototype.addVolume = function (t, a, s, n, r, i, o, c, l, d) {
-    let f = e.Cartesian3.add(a, l, k)
+  A.prototype.addVolume = function (t, a, s, n, r, i, o, l, c, d) {
+    let f = e.Cartesian3.add(a, c, k)
     const u = d.geodeticSurfaceNormal(f, x)
-    f = e.Cartesian3.add(s, l, k)
+    f = e.Cartesian3.add(s, c, k)
     const h = d.geodeticSurfaceNormal(f, E),
       C = g(t, a, s, u, I),
       p = g(n, s, a, h, F),
       m = this.startEllipsoidNormals,
-      b = this.endEllipsoidNormals,
-      A = this.startPositionAndHeights,
+      A = this.endEllipsoidNormals,
+      b = this.startPositionAndHeights,
       w = this.startFaceNormalAndVertexCornerIds,
       H = this.endPositionAndHeights,
       O = this.endFaceNormalAndHalfWidths,
@@ -80,16 +80,16 @@ define([
       S = this.vec4Offset
     for (v = 0; v < 8; v++)
       e.Cartesian3.pack(u, m, M),
-        e.Cartesian3.pack(h, b, M),
-        e.Cartesian3.pack(a, A, S),
-        (A[S + 3] = r),
+        e.Cartesian3.pack(h, A, M),
+        e.Cartesian3.pack(a, b, S),
+        (b[S + 3] = r),
         e.Cartesian3.pack(s, H, S),
         (H[S + 3] = i),
         e.Cartesian3.pack(C, w, S),
         (w[S + 3] = v),
         e.Cartesian3.pack(p, O, S),
         (O[S + 3] = o),
-        (P[D++] = c),
+        (P[D++] = l),
         (M += 3),
         (S += 4)
     ;(this.batchIdOffset = D), (this.vec3Offset = M), (this.vec4Offset = S)
@@ -107,11 +107,11 @@ define([
     M = new e.Cartesian3(),
     S = new e.Cartesian3()
   return i(function (i, o) {
-    const c = new Uint16Array(i.positions),
-      l = new Uint16Array(i.widths),
+    const l = new Uint16Array(i.positions),
+      c = new Uint16Array(i.widths),
       d = new Uint32Array(i.counts),
       u = new Uint16Array(i.batchIds),
-      A = H,
+      b = H,
       w = O,
       g = P,
       y = new Float64Array(i.packedBuffer)
@@ -119,22 +119,22 @@ define([
     const k = y[N++],
       x = y[N++]
     let I
-    r.Rectangle.unpack(y, N, A),
+    r.Rectangle.unpack(y, N, b),
       (N += r.Rectangle.packedLength),
       e.Ellipsoid.unpack(y, N, w),
       (N += e.Ellipsoid.packedLength),
       e.Cartesian3.unpack(y, N, g)
-    let E = c.length / 3
-    const F = c.subarray(0, E),
-      R = c.subarray(E, 2 * E),
-      U = c.subarray(2 * E, 3 * E)
+    let E = l.length / 3
+    const F = l.subarray(0, E),
+      R = l.subarray(E, 2 * E),
+      U = l.subarray(2 * E, 3 * E)
     t.AttributeCompression.zigZagDeltaDecode(F, R, U),
       (function (t, a, s, n) {
         const r = n.length,
           i = t.length,
           o = new Uint8Array(i),
-          c = p,
-          l = m
+          l = p,
+          c = m
         let d = 0
         for (let s = 0; s < r; s++) {
           const r = n[s]
@@ -142,7 +142,7 @@ define([
           for (let s = 1; s < r; s++) {
             const n = d + s,
               r = n - 1
-            ;(l.longitude = t[n]), (l.latitude = a[n]), (c.longitude = t[r]), (c.latitude = a[r]), e.Cartographic.equals(l, c) && (i--, (o[r] = 1))
+            ;(c.longitude = t[n]), (c.latitude = a[n]), (l.longitude = t[r]), (l.latitude = a[r]), e.Cartographic.equals(c, l) && (i--, (o[r] = 1))
           }
           ;(n[s] = i), (d += r)
         }
@@ -154,23 +154,23 @@ define([
     for (I = 0; I < B; I++) {
       V += d[I] - 1
     }
-    const T = new b(V),
-      W = (function (t, a, s, r, i, o, c) {
-        const l = t.length,
-          d = new Float64Array(3 * l)
-        for (let u = 0; u < l; ++u) {
-          const l = t[u],
+    const T = new A(V),
+      W = (function (t, a, s, r, i, o, l) {
+        const c = t.length,
+          d = new Float64Array(3 * c)
+        for (let u = 0; u < c; ++u) {
+          const c = t[u],
             p = a[u],
             m = s[u],
-            b = n.CesiumMath.lerp(r.west, r.east, l / f),
-            A = n.CesiumMath.lerp(r.south, r.north, p / f),
+            A = n.CesiumMath.lerp(r.west, r.east, c / f),
+            b = n.CesiumMath.lerp(r.south, r.north, p / f),
             w = n.CesiumMath.lerp(i, o, m / f),
-            g = e.Cartographic.fromRadians(b, A, w, h),
-            y = c.cartographicToCartesian(g, C)
+            g = e.Cartographic.fromRadians(A, b, w, h),
+            y = l.cartographicToCartesian(g, C)
           e.Cartesian3.pack(y, d, 3 * u)
         }
         return d
-      })(F, R, U, A, k, x, w)
+      })(F, R, U, b, k, x, w)
     E = F.length
     const z = new Float32Array(3 * E)
     for (I = 0; I < E; ++I) (z[3 * I] = W[3 * I] - g.x), (z[3 * I + 1] = W[3 * I + 1] - g.y), (z[3 * I + 2] = W[3 * I + 2] - g.z)
@@ -178,15 +178,15 @@ define([
       L = 0
     for (I = 0; I < B; I++) {
       const t = d[I] - 1,
-        a = 0.5 * l[I],
+        a = 0.5 * c[I],
         s = u[I],
         r = q
       for (let i = 0; i < t; i++) {
         const o = e.Cartesian3.unpack(z, q, D),
-          c = e.Cartesian3.unpack(z, q + 3, M)
-        let l = U[L],
+          l = e.Cartesian3.unpack(z, q + 3, M)
+        let c = U[L],
           d = U[L + 1]
-        ;(l = n.CesiumMath.lerp(k, x, l / f)), (d = n.CesiumMath.lerp(k, x, d / f)), L++
+        ;(c = n.CesiumMath.lerp(k, x, c / f)), (d = n.CesiumMath.lerp(k, x, d / f)), L++
         let u = v,
           h = S
         if (0 === i) {
@@ -194,19 +194,19 @@ define([
             s = e.Cartesian3.unpack(z, a, v)
           if (e.Cartesian3.equals(s, o)) e.Cartesian3.unpack(z, a - 3, u)
           else {
-            const t = e.Cartesian3.subtract(o, c, v)
+            const t = e.Cartesian3.subtract(o, l, v)
             u = e.Cartesian3.add(t, o, v)
           }
         } else e.Cartesian3.unpack(z, q - 3, u)
         if (i === t - 1) {
           const t = e.Cartesian3.unpack(z, r, S)
-          if (e.Cartesian3.equals(t, c)) e.Cartesian3.unpack(z, r + 3, h)
+          if (e.Cartesian3.equals(t, l)) e.Cartesian3.unpack(z, r + 3, h)
           else {
-            const t = e.Cartesian3.subtract(c, o, S)
-            h = e.Cartesian3.add(t, c, S)
+            const t = e.Cartesian3.subtract(l, o, S)
+            h = e.Cartesian3.add(t, l, S)
           }
         } else e.Cartesian3.unpack(z, q + 6, h)
-        T.addVolume(u, o, c, h, l, d, a, s, g, w), (q += 3)
+        T.addVolume(u, o, l, h, c, d, a, s, g, w), (q += 3)
       }
       ;(q += 3), L++
     }

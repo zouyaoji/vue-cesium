@@ -1,30 +1,30 @@
 define([
-  './arrayRemoveDuplicates-c2038105',
-  './Transforms-a05e5e6e',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './ComponentDatatype-f7b11d02',
-  './PolylineVolumeGeometryLibrary-97f0b94e',
-  './CorridorGeometryLibrary-5039cd8e',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-334718f8',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './IndexDatatype-a55ceaa1',
-  './Math-2dbd6b93',
-  './PolygonPipeline-21668b3f',
-  './Matrix2-13178034',
-  './VertexFormat-6b480673',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-ed9443a1',
-  './AxisAlignedBoundingBox-47525601',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728',
-  './PolylinePipeline-5e2e1b21',
-  './EllipsoidGeodesic-98c62a56',
-  './EllipsoidRhumbLine-19756602'
+  './arrayRemoveDuplicates-fac118a8',
+  './Transforms-9052372a',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './ComponentDatatype-cf1fa08e',
+  './PolylineVolumeGeometryLibrary-f068c1fb',
+  './CorridorGeometryLibrary-520c8619',
+  './defaultValue-fe22d8c0',
+  './GeometryAttribute-7a2de5c6',
+  './GeometryAttributes-ad136444',
+  './GeometryOffsetAttribute-9ad0019c',
+  './IndexDatatype-b8f3e09d',
+  './Math-dad82b4d',
+  './PolygonPipeline-32fc92cc',
+  './Matrix2-1e403d0e',
+  './VertexFormat-030f11ff',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './WebGLConstants-0b1ce7ba',
+  './EllipsoidTangentPlane-857186be',
+  './AxisAlignedBoundingBox-379015ef',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6',
+  './PolylinePipeline-6d5c63e5',
+  './EllipsoidGeodesic-dcff5cbd',
+  './EllipsoidRhumbLine-b672d507'
 ], function (
   arrayRemoveDuplicates,
   Transforms,
@@ -823,13 +823,13 @@ define([
    * @alias CorridorGeometry
    * @constructor
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.positions An array of positions that define the center of the corridor.
-   * @param {Number} options.width The distance between the edges of the corridor in meters.
+   * @param {number} options.width The distance between the edges of the corridor in meters.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid to be used as a reference.
-   * @param {Number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
-   * @param {Number} [options.height=0] The distance in meters between the ellipsoid surface and the positions.
-   * @param {Number} [options.extrudedHeight] The distance in meters between the ellipsoid surface and the extruded face.
+   * @param {number} [options.granularity=CesiumMath.RADIANS_PER_DEGREE] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   * @param {number} [options.height=0] The distance in meters between the ellipsoid surface and the positions.
+   * @param {number} [options.extrudedHeight] The distance in meters between the ellipsoid surface and the extruded face.
    * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
    * @param {CornerType} [options.cornerType=CornerType.ROUNDED] Determines the style of the corners.
    *
@@ -873,7 +873,7 @@ define([
 
     /**
      * The number of elements used to pack the object into an array.
-     * @type {Number}
+     * @type {number}
      */
     this.packedLength =
       1 + positions.length * Matrix3.Cartesian3.packedLength + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 7
@@ -883,10 +883,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {CorridorGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   CorridorGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -939,8 +939,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {CorridorGeometry} [result] The object into which to store the result.
    * @returns {CorridorGeometry} The modified result parameter or a new CorridorGeometry instance if one was not provided.
    */
@@ -1002,9 +1002,9 @@ define([
   /**
    * Computes the bounding rectangle given the provided options
    *
-   * @param {Object} options Object with the following properties:
+   * @param {object} options Object with the following properties:
    * @param {Cartesian3[]} options.positions An array of positions that define the center of the corridor.
-   * @param {Number} options.width The distance between the edges of the corridor in meters.
+   * @param {number} options.width The distance between the edges of the corridor in meters.
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid to be used as a reference.
    * @param {CornerType} [options.cornerType=CornerType.ROUNDED] Determines the style of the corners.
    * @param {Rectangle} [result] An object in which to store the result.

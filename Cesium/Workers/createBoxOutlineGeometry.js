@@ -1,19 +1,19 @@
 define([
-  './Transforms-dadc538f',
-  './Matrix3-b6f074fa',
-  './ComponentDatatype-77274976',
-  './defaultValue-0a909f67',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryOffsetAttribute-04332ce7',
-  './Math-e97915da',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c'
+  './Transforms-20461479',
+  './Matrix3-81054f0f',
+  './ComponentDatatype-ab629b88',
+  './defaultValue-f6d5e6da',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryOffsetAttribute-2579b8d2',
+  './Math-2ce22ee9',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './WebGLConstants-7f557f93'
 ], function (t, e, n, a, i, r, u, o, s, m, f, c) {
   'use strict'
-  const d = new e.Cartesian3()
+  const l = new e.Cartesian3()
   function p(t) {
     const n = (t = a.defaultValue(t, a.defaultValue.EMPTY_OBJECT)).minimum,
       i = t.maximum
@@ -40,14 +40,14 @@ define([
         n
       )
     })
-  const l = new e.Cartesian3(),
-    y = new e.Cartesian3(),
-    C = { minimum: l, maximum: y, offsetAttribute: void 0 }
+  const y = new e.Cartesian3(),
+    d = new e.Cartesian3(),
+    C = { minimum: y, maximum: d, offsetAttribute: void 0 }
   return (
     (p.unpack = function (t, n, i) {
       n = a.defaultValue(n, 0)
-      const r = e.Cartesian3.unpack(t, n, l),
-        u = e.Cartesian3.unpack(t, n + e.Cartesian3.packedLength, y),
+      const r = e.Cartesian3.unpack(t, n, y),
+        u = e.Cartesian3.unpack(t, n + e.Cartesian3.packedLength, d),
         o = t[n + 2 * e.Cartesian3.packedLength]
       return a.defined(i)
         ? ((i._min = e.Cartesian3.clone(r, i._min)), (i._max = e.Cartesian3.clone(u, i._max)), (i._offsetAttribute = -1 === o ? void 0 : o), i)
@@ -109,8 +109,8 @@ define([
         (c[21] = 6),
         (c[22] = 3),
         (c[23] = 7)
-      const l = e.Cartesian3.subtract(m, s, d),
-        y = 0.5 * e.Cartesian3.magnitude(l)
+      const y = e.Cartesian3.subtract(m, s, l),
+        d = 0.5 * e.Cartesian3.magnitude(y)
       if (a.defined(o._offsetAttribute)) {
         const t = p.length,
           e = o._offsetAttribute === u.GeometryOffsetAttribute.NONE ? 0 : 1,
@@ -121,7 +121,7 @@ define([
         attributes: f,
         indices: c,
         primitiveType: i.PrimitiveType.LINES,
-        boundingSphere: new t.BoundingSphere(e.Cartesian3.ZERO, y),
+        boundingSphere: new t.BoundingSphere(e.Cartesian3.ZERO, d),
         offsetAttribute: o._offsetAttribute
       })
     }),

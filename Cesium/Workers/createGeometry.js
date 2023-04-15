@@ -1,25 +1,25 @@
 define([
-  './defaultValue-0a909f67',
-  './PrimitivePipeline-c5ce0d90',
+  './defaultValue-f6d5e6da',
+  './PrimitivePipeline-d5ba52bd',
   './createTaskProcessorWorker',
-  './Transforms-dadc538f',
-  './Matrix3-b6f074fa',
-  './Math-e97915da',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './ComponentDatatype-77274976',
-  './WebGLConstants-a8cc3e8c',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryPipeline-b7404acc',
-  './AttributeCompression-e18a879a',
-  './EncodedCartesian3-de837603',
-  './IndexDatatype-2149f06c',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './WebMercatorProjection-8e29b101'
-], function (e, t, r, n, o, a, i, c, s, f, u, d, m, l, b, p, y, P, k, C) {
+  './Transforms-20461479',
+  './Matrix3-81054f0f',
+  './Math-2ce22ee9',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './ComponentDatatype-ab629b88',
+  './WebGLConstants-7f557f93',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryPipeline-fcaf4d4d',
+  './AttributeCompression-48e336db',
+  './EncodedCartesian3-5e2017ab',
+  './IndexDatatype-d3db4e7d',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './WebMercatorProjection-943e2226'
+], function (e, t, r, n, o, i, s, a, u, c, f, m, l, d, p, b, y, P, k, C) {
   'use strict'
   const G = {}
   function W(t) {
@@ -36,18 +36,18 @@ define([
   }
   return r(function (r, n) {
     const o = r.subTasks,
-      a = o.length,
-      i = new Array(a)
-    for (let t = 0; t < a; t++) {
+      i = o.length,
+      s = new Array(i)
+    for (let t = 0; t < i; t++) {
       const r = o[t],
         n = r.geometry,
-        a = r.moduleName
-      if (e.defined(a)) {
-        const e = W(a)
-        i[t] = e(n, r.offset)
-      } else i[t] = n
+        i = r.moduleName
+      if (e.defined(i)) {
+        const e = W(i)
+        s[t] = e(n, r.offset)
+      } else s[t] = n
     }
-    return Promise.all(i).then(function (e) {
+    return Promise.all(s).then(function (e) {
       return t.PrimitivePipeline.packCreateGeometryResults(e, n)
     })
   })

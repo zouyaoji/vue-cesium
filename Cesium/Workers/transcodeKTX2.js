@@ -1,4 +1,4 @@
-define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-06c93819', './createTaskProcessorWorker'], function (_, R, t, e) {
+define(['./defaultValue-f6d5e6da', './WebGLConstants-7f557f93', './RuntimeError-9b4ce3fb', './createTaskProcessorWorker'], function (_, R, t, e) {
   'use strict'
   const A = {
     UNSIGNED_BYTE: R.WebGLConstants.UNSIGNED_BYTE,
@@ -539,7 +539,8 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
     VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR: 1000156032,
     VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR: 1000156033
   })
-  class G {
+  const G = 64
+  class M {
     constructor() {
       ;(this.vkFormat = 0),
         (this.typeSize = 1),
@@ -569,7 +570,7 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
         (this.globalData = null)
     }
   }
-  class M {
+  class K {
     constructor(_, R, t, e) {
       ;(this._dataView = void 0),
         (this._littleEndian = void 0),
@@ -608,37 +609,39 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
       return e < _ && this._offset++, new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + t, e)
     }
   }
-  const K = [171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]
-  function C(_) {
+  const C = [171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]
+  function s(_) {
     return 'undefined' != typeof TextDecoder ? new TextDecoder().decode(_) : Buffer.from(_).toString('utf8')
   }
-  const s = ['positiveX', 'negativeX', 'positiveY', 'negativeY', 'positiveZ', 'negativeZ']
-  let r
-  function F(R, e) {
+  const r = ['positiveX', 'negativeX', 'positiveY', 'negativeY', 'positiveZ', 'negativeZ'],
+    F = 163,
+    N = 166
+  let i
+  function V(R, e) {
     const A = R.ktx2Buffer,
       O = R.supportedTargetFormats
-    let F
+    let V
     try {
-      F = (function (_) {
-        const R = new Uint8Array(_.buffer, _.byteOffset, K.length)
+      V = (function (_) {
+        const R = new Uint8Array(_.buffer, _.byteOffset, C.length)
         if (
-          R[0] !== K[0] ||
-          R[1] !== K[1] ||
-          R[2] !== K[2] ||
-          R[3] !== K[3] ||
-          R[4] !== K[4] ||
-          R[5] !== K[5] ||
-          R[6] !== K[6] ||
-          R[7] !== K[7] ||
-          R[8] !== K[8] ||
-          R[9] !== K[9] ||
-          R[10] !== K[10] ||
-          R[11] !== K[11]
+          R[0] !== C[0] ||
+          R[1] !== C[1] ||
+          R[2] !== C[2] ||
+          R[3] !== C[3] ||
+          R[4] !== C[4] ||
+          R[5] !== C[5] ||
+          R[6] !== C[6] ||
+          R[7] !== C[7] ||
+          R[8] !== C[8] ||
+          R[9] !== C[9] ||
+          R[10] !== C[10] ||
+          R[11] !== C[11]
         )
           throw new Error('Missing KTX 2.0 identifier.')
-        const t = new G(),
+        const t = new M(),
           e = 17 * Uint32Array.BYTES_PER_ELEMENT,
-          A = new M(_, K.length, e, !0)
+          A = new K(_, C.length, e, !0)
         ;(t.vkFormat = A._nextUint32()),
           (t.typeSize = A._nextUint32()),
           (t.pixelWidth = A._nextUint32()),
@@ -651,101 +654,102 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
         const O = A._nextUint32(),
           n = A._nextUint32(),
           B = A._nextUint32(),
-          s = A._nextUint32(),
-          r = A._nextUint64(),
+          r = A._nextUint32(),
           F = A._nextUint64(),
-          N = new M(_, K.length + e, 3 * T * 8, !0)
+          N = A._nextUint64(),
+          i = 3 * T * 8,
+          V = new K(_, C.length + e, i, !0)
         for (let R = 0; R < T; R++)
           t.levels.push({
-            levelData: new Uint8Array(_.buffer, _.byteOffset + N._nextUint64(), N._nextUint64()),
-            uncompressedByteLength: N._nextUint64()
+            levelData: new Uint8Array(_.buffer, _.byteOffset + V._nextUint64(), V._nextUint64()),
+            uncompressedByteLength: V._nextUint64()
           })
-        const i = new M(_, O, n, !0),
-          V = {
-            vendorId: i._skip(4)._nextUint16(),
-            descriptorType: i._nextUint16(),
-            versionNumber: i._nextUint16(),
-            descriptorBlockSize: i._nextUint16(),
-            colorModel: i._nextUint8(),
-            colorPrimaries: i._nextUint8(),
-            transferFunction: i._nextUint8(),
-            flags: i._nextUint8(),
-            texelBlockDimension: [i._nextUint8(), i._nextUint8(), i._nextUint8(), i._nextUint8()],
+        const o = new K(_, O, n, !0),
+          a = {
+            vendorId: o._skip(4)._nextUint16(),
+            descriptorType: o._nextUint16(),
+            versionNumber: o._nextUint16(),
+            descriptorBlockSize: o._nextUint16(),
+            colorModel: o._nextUint8(),
+            colorPrimaries: o._nextUint8(),
+            transferFunction: o._nextUint8(),
+            flags: o._nextUint8(),
+            texelBlockDimension: [o._nextUint8(), o._nextUint8(), o._nextUint8(), o._nextUint8()],
             bytesPlane: [
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8(),
-              i._nextUint8()
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8(),
+              o._nextUint8()
             ],
             samples: []
           },
-          o = (V.descriptorBlockSize / 4 - 6) / 4
-        for (let _ = 0; _ < o; _++) {
+          S = (a.descriptorBlockSize / 4 - 6) / 4
+        for (let _ = 0; _ < S; _++) {
           const R = {
-            bitOffset: i._nextUint16(),
-            bitLength: i._nextUint8(),
-            channelType: i._nextUint8(),
-            samplePosition: [i._nextUint8(), i._nextUint8(), i._nextUint8(), i._nextUint8()],
+            bitOffset: o._nextUint16(),
+            bitLength: o._nextUint8(),
+            channelType: o._nextUint8(),
+            samplePosition: [o._nextUint8(), o._nextUint8(), o._nextUint8(), o._nextUint8()],
             sampleLower: -1 / 0,
             sampleUpper: 1 / 0
           }
-          64 & R.channelType
-            ? ((R.sampleLower = i._nextInt32()), (R.sampleUpper = i._nextInt32()))
-            : ((R.sampleLower = i._nextUint32()), (R.sampleUpper = i._nextUint32())),
-            (V.samples[_] = R)
+          R.channelType & G
+            ? ((R.sampleLower = o._nextInt32()), (R.sampleUpper = o._nextInt32()))
+            : ((R.sampleLower = o._nextUint32()), (R.sampleUpper = o._nextUint32())),
+            (a.samples[_] = R)
         }
-        ;(t.dataFormatDescriptor.length = 0), t.dataFormatDescriptor.push(V)
-        const a = new M(_, B, s, !0)
-        for (; a._offset < s; ) {
-          const _ = a._nextUint32(),
-            R = a._scan(_),
-            e = C(R),
-            A = a._scan(_ - R.byteLength)
-          ;(t.keyValue[e] = e.match(/^ktx/i) ? C(A) : A), a._offset % 4 && a._skip(4 - (a._offset % 4))
+        ;(t.dataFormatDescriptor.length = 0), t.dataFormatDescriptor.push(a)
+        const U = new K(_, B, r, !0)
+        for (; U._offset < r; ) {
+          const _ = U._nextUint32(),
+            R = U._scan(_),
+            e = s(R),
+            A = U._scan(_ - R.byteLength)
+          ;(t.keyValue[e] = e.match(/^ktx/i) ? s(A) : A), U._offset % 4 && U._skip(4 - (U._offset % 4))
         }
-        if (F <= 0) return t
-        const S = new M(_, r, F, !0),
-          U = S._nextUint16(),
-          E = S._nextUint16(),
-          L = S._nextUint32(),
-          P = S._nextUint32(),
-          c = S._nextUint32(),
-          f = S._nextUint32(),
-          l = []
+        if (N <= 0) return t
+        const E = new K(_, F, N, !0),
+          L = E._nextUint16(),
+          P = E._nextUint16(),
+          c = E._nextUint32(),
+          f = E._nextUint32(),
+          l = E._nextUint32(),
+          X = E._nextUint32(),
+          u = []
         for (let _ = 0; _ < T; _++)
-          l.push({
-            imageFlags: S._nextUint32(),
-            rgbSliceByteOffset: S._nextUint32(),
-            rgbSliceByteLength: S._nextUint32(),
-            alphaSliceByteOffset: S._nextUint32(),
-            alphaSliceByteLength: S._nextUint32()
+          u.push({
+            imageFlags: E._nextUint32(),
+            rgbSliceByteOffset: E._nextUint32(),
+            rgbSliceByteLength: E._nextUint32(),
+            alphaSliceByteOffset: E._nextUint32(),
+            alphaSliceByteLength: E._nextUint32()
           })
-        const X = r + S._offset,
-          u = X + L,
-          D = u + P,
+        const D = F + E._offset,
           I = D + c,
-          x = new Uint8Array(_.buffer, _.byteOffset + X, L),
-          h = new Uint8Array(_.buffer, _.byteOffset + u, P),
+          x = I + f,
+          h = x + l,
           d = new Uint8Array(_.buffer, _.byteOffset + D, c),
-          H = new Uint8Array(_.buffer, _.byteOffset + I, f)
+          H = new Uint8Array(_.buffer, _.byteOffset + I, f),
+          b = new Uint8Array(_.buffer, _.byteOffset + x, l),
+          p = new Uint8Array(_.buffer, _.byteOffset + h, X)
         return (
-          (t.globalData = { endpointCount: U, selectorCount: E, imageDescs: l, endpointsData: x, selectorsData: h, tablesData: d, extendedData: H }),
+          (t.globalData = { endpointCount: L, selectorCount: P, imageDescs: u, endpointsData: d, selectorsData: H, tablesData: b, extendedData: p }),
           t
         )
       })(A)
     } catch (_) {
       throw new t.RuntimeError('Invalid KTX2 file.')
     }
-    if (0 !== F.layerCount) throw new t.RuntimeError('KTX2 texture arrays are not supported.')
-    if (0 !== F.pixelDepth) throw new t.RuntimeError('KTX2 3D textures are unsupported.')
-    const N = F.dataFormatDescriptor[0],
-      i = new Array(F.levelCount)
+    if (0 !== V.layerCount) throw new t.RuntimeError('KTX2 texture arrays are not supported.')
+    if (0 !== V.pixelDepth) throw new t.RuntimeError('KTX2 3D textures are unsupported.')
+    const o = V.dataFormatDescriptor[0],
+      a = new Array(V.levelCount)
     return (
-      0 !== F.vkFormat || (163 !== N.colorModel && 166 !== N.colorModel)
+      0 !== V.vkFormat || (o.colorModel !== F && o.colorModel !== N)
         ? (e.push(A.buffer),
           (function (R, t) {
             const e = R.vkFormat === B.VK_FORMAT_R8G8B8_SRGB ? n.RGB : n.RGBA
@@ -771,57 +775,57 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
                       ? new Uint16Array(G.buffer, O, C)
                       : new Float32Array(G.buffer, O, C)
                     : new Uint8Array(G.buffer, O, C)),
-                  (B[s[t]] = { internalFormat: e, datatype: A, width: M, height: K, levelBuffer: n })
+                  (B[r[t]] = { internalFormat: e, datatype: A, width: M, height: K, levelBuffer: n })
               }
             }
-          })(F, i))
+          })(V, a))
         : (function (R, e, A, T, O, B) {
             const G = new T.KTX2File(R)
             let M = G.getWidth(),
               K = G.getHeight()
             const C = G.getLevels(),
-              r = G.getHasAlpha()
+              s = G.getHasAlpha()
             if (!(M > 0 && K > 0 && C > 0)) throw (G.close(), G.delete(), new t.RuntimeError('Invalid KTX2 file'))
-            let F, N
-            const i = e.dataFormatDescriptor[0],
-              V = T.transcoder_texture_format
-            if (163 === i.colorModel)
-              if (A.etc) (F = r ? n.RGBA8_ETC2_EAC : n.RGB8_ETC2), (N = r ? V.cTFETC2_RGBA : V.cTFETC1_RGB)
-              else if (A.etc1 && !r) (F = n.RGB_ETC1), (N = V.cTFETC1_RGB)
-              else if (A.s3tc) (F = r ? n.RGBA_DXT5 : n.RGB_DXT1), (N = r ? V.cTFBC3_RGBA : V.cTFBC1_RGB)
-              else if (A.pvrtc) (F = r ? n.RGBA_PVRTC_4BPPV1 : n.RGB_PVRTC_4BPPV1), (N = r ? V.cTFPVRTC1_4_RGBA : V.cTFPVRTC1_4_RGB)
-              else if (A.astc) (F = n.RGBA_ASTC), (N = V.cTFASTC_4x4_RGBA)
+            let i, V
+            const o = e.dataFormatDescriptor[0],
+              a = T.transcoder_texture_format
+            if (o.colorModel === F)
+              if (A.etc) (i = s ? n.RGBA8_ETC2_EAC : n.RGB8_ETC2), (V = s ? a.cTFETC2_RGBA : a.cTFETC1_RGB)
+              else if (A.etc1 && !s) (i = n.RGB_ETC1), (V = a.cTFETC1_RGB)
+              else if (A.s3tc) (i = s ? n.RGBA_DXT5 : n.RGB_DXT1), (V = s ? a.cTFBC3_RGBA : a.cTFBC1_RGB)
+              else if (A.pvrtc) (i = s ? n.RGBA_PVRTC_4BPPV1 : n.RGB_PVRTC_4BPPV1), (V = s ? a.cTFPVRTC1_4_RGBA : a.cTFPVRTC1_4_RGB)
+              else if (A.astc) (i = n.RGBA_ASTC), (V = a.cTFASTC_4x4_RGBA)
               else {
                 if (!A.bc7) throw new t.RuntimeError('No transcoding format target available for ETC1S compressed ktx2.')
-                ;(F = n.RGBA_BC7), (N = V.cTFBC7_RGBA)
+                ;(i = n.RGBA_BC7), (V = a.cTFBC7_RGBA)
               }
-            else if (166 === i.colorModel)
-              if (A.astc) (F = n.RGBA_ASTC), (N = V.cTFASTC_4x4_RGBA)
-              else if (A.bc7) (F = n.RGBA_BC7), (N = V.cTFBC7_RGBA)
-              else if (A.s3tc) (F = r ? n.RGBA_DXT5 : n.RGB_DXT1), (N = r ? V.cTFBC3_RGBA : V.cTFBC1_RGB)
-              else if (A.etc) (F = r ? n.RGBA8_ETC2_EAC : n.RGB8_ETC2), (N = r ? V.cTFETC2_RGBA : V.cTFETC1_RGB)
-              else if (A.etc1 && !r) (F = n.RGB_ETC1), (N = V.cTFETC1_RGB)
+            else if (o.colorModel === N)
+              if (A.astc) (i = n.RGBA_ASTC), (V = a.cTFASTC_4x4_RGBA)
+              else if (A.bc7) (i = n.RGBA_BC7), (V = a.cTFBC7_RGBA)
+              else if (A.s3tc) (i = s ? n.RGBA_DXT5 : n.RGB_DXT1), (V = s ? a.cTFBC3_RGBA : a.cTFBC1_RGB)
+              else if (A.etc) (i = s ? n.RGBA8_ETC2_EAC : n.RGB8_ETC2), (V = s ? a.cTFETC2_RGBA : a.cTFETC1_RGB)
+              else if (A.etc1 && !s) (i = n.RGB_ETC1), (V = a.cTFETC1_RGB)
               else {
                 if (!A.pvrtc) throw new t.RuntimeError('No transcoding format target available for UASTC compressed ktx2.')
-                ;(F = r ? n.RGBA_PVRTC_4BPPV1 : n.RGB_PVRTC_4BPPV1), (N = r ? V.cTFPVRTC1_4_RGBA : V.cTFPVRTC1_4_RGB)
+                ;(i = s ? n.RGBA_PVRTC_4BPPV1 : n.RGB_PVRTC_4BPPV1), (V = s ? a.cTFPVRTC1_4_RGBA : a.cTFPVRTC1_4_RGB)
               }
             if (!G.startTranscoding()) throw (G.close(), G.delete(), new t.RuntimeError('startTranscoding() failed'))
             for (let R = 0; R < e.levels.length; ++R) {
               const A = {}
               ;(B[R] = A), (M = e.pixelWidth >> R), (K = e.pixelHeight >> R)
-              const T = G.getImageTranscodedSizeInBytes(R, 0, 0, N.value),
+              const T = G.getImageTranscodedSizeInBytes(R, 0, 0, V.value),
                 n = new Uint8Array(T),
-                C = G.transcodeImage(n, R, 0, 0, N.value, 0, -1, -1)
+                C = G.transcodeImage(n, R, 0, 0, V.value, 0, -1, -1)
               if (!_.defined(C)) throw new t.RuntimeError('transcodeImage() failed.')
-              O.push(n.buffer), (A[s[0]] = { internalFormat: F, width: M, height: K, levelBuffer: n })
+              O.push(n.buffer), (A[r[0]] = { internalFormat: i, width: M, height: K, levelBuffer: n })
             }
             G.close(), G.delete()
-          })(A, F, O, r, e, i),
-      i
+          })(A, V, O, i, e, a),
+      a
     )
   }
-  function N(_) {
-    ;(r = _), r.initializeBasis(), (self.onmessage = e(F)), self.postMessage(!0)
+  function o(_) {
+    ;(i = _), i.initializeBasis(), (self.onmessage = e(V)), self.postMessage(!0)
   }
   return function (R) {
     const t = R.data.webAssemblyConfig
@@ -829,11 +833,11 @@ define(['./defaultValue-0a909f67', './WebGLConstants-a8cc3e8c', './RuntimeError-
       return require([t.modulePath], function (R) {
         if (!_.defined(t.wasmBinaryFile))
           return R().then(function (_) {
-            N(_)
+            o(_)
           })
         _.defined(R) || (R = self.MSC_TRANSCODER),
           R(t).then(function (_) {
-            N(_)
+            o(_)
           })
       })
   }

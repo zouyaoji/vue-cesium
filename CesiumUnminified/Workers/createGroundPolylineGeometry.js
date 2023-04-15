@@ -1,23 +1,23 @@
 define([
-  './Transforms-a05e5e6e',
-  './Matrix2-13178034',
-  './Matrix3-315394f6',
-  './Check-666ab1a0',
-  './defaultValue-0a909f67',
-  './Math-2dbd6b93',
-  './ArcType-ce2e50ab',
-  './arrayRemoveDuplicates-c2038105',
-  './ComponentDatatype-f7b11d02',
-  './EllipsoidGeodesic-98c62a56',
-  './EllipsoidRhumbLine-19756602',
-  './EncodedCartesian3-81f70735',
-  './GeometryAttribute-334718f8',
-  './IntersectionTests-27d49265',
-  './Plane-900aa728',
-  './WebMercatorProjection-13a90d41',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c'
+  './Transforms-9052372a',
+  './Matrix2-1e403d0e',
+  './Matrix3-fa806b97',
+  './Check-6ede7e26',
+  './defaultValue-fe22d8c0',
+  './Math-dad82b4d',
+  './ArcType-2d9abbbc',
+  './arrayRemoveDuplicates-fac118a8',
+  './ComponentDatatype-cf1fa08e',
+  './EllipsoidGeodesic-dcff5cbd',
+  './EllipsoidRhumbLine-b672d507',
+  './EncodedCartesian3-e8bbca36',
+  './GeometryAttribute-7a2de5c6',
+  './IntersectionTests-b4d02d4d',
+  './Plane-c27e1ac6',
+  './WebMercatorProjection-76a3fcc0',
+  './combine-d9581036',
+  './RuntimeError-ef395448',
+  './WebGLConstants-0b1ce7ba'
 ], function (
   Transforms,
   Matrix2,
@@ -49,13 +49,13 @@ define([
    * @alias GeographicTilingScheme
    * @constructor
    *
-   * @param {Object} [options] Object with the following properties:
+   * @param {object} [options] Object with the following properties:
    * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid whose surface is being tiled. Defaults to
    * the WGS84 ellipsoid.
    * @param {Rectangle} [options.rectangle=Rectangle.MAX_VALUE] The rectangle, in radians, covered by the tiling scheme.
-   * @param {Number} [options.numberOfLevelZeroTilesX=2] The number of tiles in the X direction at level zero of
+   * @param {number} [options.numberOfLevelZeroTilesX=2] The number of tiles in the X direction at level zero of
    * the tile tree.
-   * @param {Number} [options.numberOfLevelZeroTilesY=1] The number of tiles in the Y direction at level zero of
+   * @param {number} [options.numberOfLevelZeroTilesY=1] The number of tiles in the Y direction at level zero of
    * the tile tree.
    */
   function GeographicTilingScheme(options) {
@@ -106,8 +106,8 @@ define([
   /**
    * Gets the total number of tiles in the X direction at a specified level-of-detail.
    *
-   * @param {Number} level The level-of-detail.
-   * @returns {Number} The number of tiles in the X direction at the given level.
+   * @param {number} level The level-of-detail.
+   * @returns {number} The number of tiles in the X direction at the given level.
    */
   GeographicTilingScheme.prototype.getNumberOfXTilesAtLevel = function (level) {
     return this._numberOfLevelZeroTilesX << level
@@ -116,8 +116,8 @@ define([
   /**
    * Gets the total number of tiles in the Y direction at a specified level-of-detail.
    *
-   * @param {Number} level The level-of-detail.
-   * @returns {Number} The number of tiles in the Y direction at the given level.
+   * @param {number} level The level-of-detail.
+   * @returns {number} The number of tiles in the Y direction at the given level.
    */
   GeographicTilingScheme.prototype.getNumberOfYTilesAtLevel = function (level) {
     return this._numberOfLevelZeroTilesY << level
@@ -158,10 +158,10 @@ define([
    * Converts tile x, y coordinates and level to a rectangle expressed in the native coordinates
    * of the tiling scheme.
    *
-   * @param {Number} x The integer x coordinate of the tile.
-   * @param {Number} y The integer y coordinate of the tile.
-   * @param {Number} level The tile level-of-detail.  Zero is the least detailed.
-   * @param {Object} [result] The instance to which to copy the result, or undefined if a new instance
+   * @param {number} x The integer x coordinate of the tile.
+   * @param {number} y The integer y coordinate of the tile.
+   * @param {number} level The tile level-of-detail.  Zero is the least detailed.
+   * @param {object} [result] The instance to which to copy the result, or undefined if a new instance
    *        should be created.
    * @returns {Rectangle} The specified 'result', or a new object containing the rectangle
    *          if 'result' is undefined.
@@ -178,10 +178,10 @@ define([
   /**
    * Converts tile x, y coordinates and level to a cartographic rectangle in radians.
    *
-   * @param {Number} x The integer x coordinate of the tile.
-   * @param {Number} y The integer y coordinate of the tile.
-   * @param {Number} level The tile level-of-detail.  Zero is the least detailed.
-   * @param {Object} [result] The instance to which to copy the result, or undefined if a new instance
+   * @param {number} x The integer x coordinate of the tile.
+   * @param {number} y The integer y coordinate of the tile.
+   * @param {number} level The tile level-of-detail.  Zero is the least detailed.
+   * @param {object} [result] The instance to which to copy the result, or undefined if a new instance
    *        should be created.
    * @returns {Rectangle} The specified 'result', or a new object containing the rectangle
    *          if 'result' is undefined.
@@ -216,7 +216,7 @@ define([
    * a given cartographic position.
    *
    * @param {Cartographic} position The position.
-   * @param {Number} level The tile level-of-detail.  Zero is the least detailed.
+   * @param {number} level The tile level-of-detail.  Zero is the least detailed.
    * @param {Cartesian2} [result] The instance to which to copy the result, or undefined if a new instance
    *        should be created.
    * @returns {Cartesian2} The specified 'result', or a new object containing the tile x, y coordinates
@@ -278,7 +278,7 @@ define([
 
   /**
    * Initializes the minimum and maximum terrain heights
-   * @return {Promise.<void>}
+   * @return {Promise<void>}
    */
   ApproximateTerrainHeights.initialize = function () {
     let initPromise = ApproximateTerrainHeights._initPromise
@@ -297,7 +297,7 @@ define([
    * Computes the minimum and maximum terrain heights for a given rectangle
    * @param {Rectangle} rectangle The bounding rectangle
    * @param {Ellipsoid} [ellipsoid=Ellipsoid.WGS84] The ellipsoid
-   * @return {{minimumTerrainHeight: Number, maximumTerrainHeight: Number}}
+   * @return {{minimumTerrainHeight: number, maximumTerrainHeight: number}}
    */
   ApproximateTerrainHeights.getMinimumMaximumHeights = function (rectangle, ellipsoid) {
     //>>includeStart('debug', pragmas.debug);
@@ -436,7 +436,7 @@ define([
     /**
      * Determines if the terrain heights are initialized and ready to use. To initialize the terrain heights,
      * call {@link ApproximateTerrainHeights#initialize} and wait for the returned promise to resolve.
-     * @type {Boolean}
+     * @type {boolean}
      * @readonly
      * @memberof ApproximateTerrainHeights
      */
@@ -473,11 +473,11 @@ define([
    * @alias GroundPolylineGeometry
    * @constructor
    *
-   * @param {Object} options Options with the following properties:
+   * @param {object} options Options with the following properties:
    * @param {Cartesian3[]} options.positions An array of {@link Cartesian3} defining the polyline's points. Heights above the ellipsoid will be ignored.
-   * @param {Number} [options.width=1.0] The screen space width in pixels.
-   * @param {Number} [options.granularity=9999.0] The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation.
-   * @param {Boolean} [options.loop=false] Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop.
+   * @param {number} [options.width=1.0] The screen space width in pixels.
+   * @param {number} [options.granularity=9999.0] The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation.
+   * @param {boolean} [options.loop=false] Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop.
    * @param {ArcType} [options.arcType=ArcType.GEODESIC] The type of line the polyline segments must follow. Valid options are {@link ArcType.GEODESIC} and {@link ArcType.RHUMB}.
    *
    * @exception {DeveloperError} At least two positions are required.
@@ -510,7 +510,7 @@ define([
 
     /**
      * The screen space width in pixels.
-     * @type {Number}
+     * @type {number}
      */
     this.width = defaultValue.defaultValue(options.width, 1.0) // Doesn't get packed, not necessary for computing geometry.
 
@@ -519,7 +519,7 @@ define([
     /**
      * The distance interval used for interpolating options.points. Zero indicates no interpolation.
      * Default of 9999.0 allows centimeter accuracy with 32 bit floating point.
-     * @type {Boolean}
+     * @type {boolean}
      * @default 9999.0
      */
     this.granularity = defaultValue.defaultValue(options.granularity, 9999.0)
@@ -527,7 +527,7 @@ define([
     /**
      * Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop.
      * If the geometry has two positions this parameter will be ignored.
-     * @type {Boolean}
+     * @type {boolean}
      * @default false
      */
     this.loop = defaultValue.defaultValue(options.loop, false)
@@ -553,7 +553,7 @@ define([
     /**
      * The number of elements used to pack the object into an array.
      * @memberof GroundPolylineGeometry.prototype
-     * @type {Number}
+     * @type {number}
      * @readonly
      * @private
      */
@@ -668,10 +668,10 @@ define([
    * Stores the provided instance into the provided array.
    *
    * @param {PolygonGeometry} value The value to pack.
-   * @param {Number[]} array The array to pack into.
-   * @param {Number} [startingIndex=0] The index into the array at which to start packing the elements.
+   * @param {number[]} array The array to pack into.
+   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
    *
-   * @returns {Number[]} The array that was packed into
+   * @returns {number[]} The array that was packed into
    */
   GroundPolylineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
@@ -708,8 +708,8 @@ define([
   /**
    * Retrieves an instance from a packed array.
    *
-   * @param {Number[]} array The packed array.
-   * @param {Number} [startingIndex=0] The starting index of the element to be unpacked.
+   * @param {number[]} array The packed array.
+   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
    * @param {PolygonGeometry} [result] The object into which to store the result.
    */
   GroundPolylineGeometry.unpack = function (array, startingIndex, result) {

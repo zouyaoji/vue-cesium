@@ -1,34 +1,34 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-b6f074fa',
-  './arrayRemoveDuplicates-e9673044',
-  './BoundingRectangle-826280cd',
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './ComponentDatatype-77274976',
-  './PolylineVolumeGeometryLibrary-64eaf307',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryPipeline-b7404acc',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './PolygonPipeline-1ccef6d7',
-  './VertexFormat-ab2e00e6',
-  './combine-ca22a614',
-  './RuntimeError-06c93819',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-f7077c2e',
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './PolylinePipeline-2b44aa86',
-  './EllipsoidGeodesic-b00a0416',
-  './EllipsoidRhumbLine-7f84cca0',
-  './AttributeCompression-e18a879a',
-  './EncodedCartesian3-de837603'
-], function (e, t, n, o, i, a, r, l, s, p, c, d, u, m, y, g, h, f, b, P, E, _, k, v, V, x, L) {
+  './defaultValue-f6d5e6da',
+  './Matrix3-81054f0f',
+  './arrayRemoveDuplicates-9b636830',
+  './BoundingRectangle-1d581417',
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './ComponentDatatype-ab629b88',
+  './PolylineVolumeGeometryLibrary-664193d8',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryPipeline-fcaf4d4d',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './PolygonPipeline-621b1cb0',
+  './VertexFormat-fbdec922',
+  './combine-0c102d93',
+  './RuntimeError-9b4ce3fb',
+  './WebGLConstants-7f557f93',
+  './EllipsoidTangentPlane-d430e7d5',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './PolylinePipeline-5ae670bc',
+  './EllipsoidGeodesic-2723ab86',
+  './EllipsoidRhumbLine-77eff028',
+  './AttributeCompression-48e336db',
+  './EncodedCartesian3-5e2017ab'
+], function (e, t, n, o, i, r, a, l, s, p, c, u, d, m, y, g, h, f, E, P, _, b, k, v, x, V, L) {
   'use strict'
-  function C(n) {
+  function A(n) {
     const o = (n = e.defaultValue(n, e.defaultValue.EMPTY_OBJECT)).polylinePositions,
       i = n.shapePositions
     ;(this._positions = o),
@@ -36,19 +36,19 @@ define([
       (this._ellipsoid = t.Ellipsoid.clone(e.defaultValue(n.ellipsoid, t.Ellipsoid.WGS84))),
       (this._cornerType = e.defaultValue(n.cornerType, l.CornerType.ROUNDED)),
       (this._vertexFormat = y.VertexFormat.clone(e.defaultValue(n.vertexFormat, y.VertexFormat.DEFAULT))),
-      (this._granularity = e.defaultValue(n.granularity, u.CesiumMath.RADIANS_PER_DEGREE)),
+      (this._granularity = e.defaultValue(n.granularity, d.CesiumMath.RADIANS_PER_DEGREE)),
       (this._workerName = 'createPolylineVolumeGeometry')
-    let r = 1 + o.length * t.Cartesian3.packedLength
-    ;(r += 1 + i.length * a.Cartesian2.packedLength), (this.packedLength = r + t.Ellipsoid.packedLength + y.VertexFormat.packedLength + 2)
+    let a = 1 + o.length * t.Cartesian3.packedLength
+    ;(a += 1 + i.length * r.Cartesian2.packedLength), (this.packedLength = a + t.Ellipsoid.packedLength + y.VertexFormat.packedLength + 2)
   }
-  C.pack = function (n, o, i) {
-    let r
+  A.pack = function (n, o, i) {
+    let a
     i = e.defaultValue(i, 0)
     const l = n._positions
     let s = l.length
-    for (o[i++] = s, r = 0; r < s; ++r, i += t.Cartesian3.packedLength) t.Cartesian3.pack(l[r], o, i)
+    for (o[i++] = s, a = 0; a < s; ++a, i += t.Cartesian3.packedLength) t.Cartesian3.pack(l[a], o, i)
     const p = n._shape
-    for (s = p.length, o[i++] = s, r = 0; r < s; ++r, i += a.Cartesian2.packedLength) a.Cartesian2.pack(p[r], o, i)
+    for (s = p.length, o[i++] = s, a = 0; a < s; ++a, i += r.Cartesian2.packedLength) r.Cartesian2.pack(p[a], o, i)
     return (
       t.Ellipsoid.pack(n._ellipsoid, o, i),
       (i += t.Ellipsoid.packedLength),
@@ -59,77 +59,77 @@ define([
       o
     )
   }
-  const F = t.Ellipsoid.clone(t.Ellipsoid.UNIT_SPHERE),
-    A = new y.VertexFormat(),
-    T = { polylinePositions: void 0, shapePositions: void 0, ellipsoid: F, vertexFormat: A, cornerType: void 0, granularity: void 0 }
-  C.unpack = function (n, o, i) {
-    let r
+  const C = t.Ellipsoid.clone(t.Ellipsoid.UNIT_SPHERE),
+    F = new y.VertexFormat(),
+    T = { polylinePositions: void 0, shapePositions: void 0, ellipsoid: C, vertexFormat: F, cornerType: void 0, granularity: void 0 }
+  A.unpack = function (n, o, i) {
+    let a
     o = e.defaultValue(o, 0)
     let l = n[o++]
     const s = new Array(l)
-    for (r = 0; r < l; ++r, o += t.Cartesian3.packedLength) s[r] = t.Cartesian3.unpack(n, o)
+    for (a = 0; a < l; ++a, o += t.Cartesian3.packedLength) s[a] = t.Cartesian3.unpack(n, o)
     l = n[o++]
     const p = new Array(l)
-    for (r = 0; r < l; ++r, o += a.Cartesian2.packedLength) p[r] = a.Cartesian2.unpack(n, o)
-    const c = t.Ellipsoid.unpack(n, o, F)
+    for (a = 0; a < l; ++a, o += r.Cartesian2.packedLength) p[a] = r.Cartesian2.unpack(n, o)
+    const c = t.Ellipsoid.unpack(n, o, C)
     o += t.Ellipsoid.packedLength
-    const d = y.VertexFormat.unpack(n, o, A)
+    const u = y.VertexFormat.unpack(n, o, F)
     o += y.VertexFormat.packedLength
-    const u = n[o++],
+    const d = n[o++],
       m = n[o]
     return e.defined(i)
       ? ((i._positions = s),
         (i._shape = p),
         (i._ellipsoid = t.Ellipsoid.clone(c, i._ellipsoid)),
-        (i._vertexFormat = y.VertexFormat.clone(d, i._vertexFormat)),
-        (i._cornerType = u),
+        (i._vertexFormat = y.VertexFormat.clone(u, i._vertexFormat)),
+        (i._cornerType = d),
         (i._granularity = m),
         i)
-      : ((T.polylinePositions = s), (T.shapePositions = p), (T.cornerType = u), (T.granularity = m), new C(T))
+      : ((T.polylinePositions = s), (T.shapePositions = p), (T.cornerType = d), (T.granularity = m), new A(T))
   }
   const G = new o.BoundingRectangle()
   return (
-    (C.createGeometry = function (e) {
-      const a = e._positions,
-        u = n.arrayRemoveDuplicates(a, t.Cartesian3.equalsEpsilon)
+    (A.createGeometry = function (e) {
+      const r = e._positions,
+        d = n.arrayRemoveDuplicates(r, t.Cartesian3.equalsEpsilon)
       let y = e._shape
-      if (((y = l.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(y)), u.length < 2 || y.length < 3)) return
+      if (((y = l.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(y)), d.length < 2 || y.length < 3)) return
       m.PolygonPipeline.computeWindingOrder2D(y) === m.WindingOrder.CLOCKWISE && y.reverse()
       const g = o.BoundingRectangle.fromPoints(y, G)
       return (function (e, t, n, o) {
-        const a = new p.GeometryAttributes()
-        o.position && (a.position = new s.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: e }))
-        const u = t.length,
+        const r = new p.GeometryAttributes()
+        o.position && (r.position = new s.GeometryAttribute({ componentDatatype: a.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: e }))
+        const d = t.length,
           y = e.length / 3,
-          g = (y - 2 * u) / (2 * u),
+          g = (y - 2 * d) / (2 * d),
           h = m.PolygonPipeline.triangulate(t),
-          f = (g - 1) * u * 6 + 2 * h.length,
-          b = d.IndexDatatype.createTypedArray(y, f)
-        let P, E, _, k, v, V
-        const x = 2 * u
+          f = (g - 1) * d * 6 + 2 * h.length,
+          E = u.IndexDatatype.createTypedArray(y, f)
+        let P, _, b, k, v, x
+        const V = 2 * d
         let L = 0
         for (P = 0; P < g - 1; P++) {
-          for (E = 0; E < u - 1; E++)
-            (_ = 2 * E + P * u * 2),
-              (V = _ + x),
-              (k = _ + 1),
-              (v = k + x),
-              (b[L++] = k),
-              (b[L++] = _),
-              (b[L++] = v),
-              (b[L++] = v),
-              (b[L++] = _),
-              (b[L++] = V)
-          ;(_ = 2 * u - 2 + P * u * 2),
-            (k = _ + 1),
-            (v = k + x),
-            (V = _ + x),
-            (b[L++] = k),
-            (b[L++] = _),
-            (b[L++] = v),
-            (b[L++] = v),
-            (b[L++] = _),
-            (b[L++] = V)
+          for (_ = 0; _ < d - 1; _++)
+            (b = 2 * _ + P * d * 2),
+              (x = b + V),
+              (k = b + 1),
+              (v = k + V),
+              (E[L++] = k),
+              (E[L++] = b),
+              (E[L++] = v),
+              (E[L++] = v),
+              (E[L++] = b),
+              (E[L++] = x)
+          ;(b = 2 * d - 2 + P * d * 2),
+            (k = b + 1),
+            (v = k + V),
+            (x = b + V),
+            (E[L++] = k),
+            (E[L++] = b),
+            (E[L++] = v),
+            (E[L++] = v),
+            (E[L++] = b),
+            (E[L++] = x)
         }
         if (o.st || o.tangent || o.bitangent) {
           const e = new Float32Array(2 * y),
@@ -138,42 +138,42 @@ define([
             l = n.height / 2
           let p,
             c,
-            d = 0
+            u = 0
           for (P = 0; P < g; P++) {
-            for (p = P * o, c = i * (t[0].y + l), e[d++] = p, e[d++] = c, E = 1; E < u; E++)
-              (c = i * (t[E].y + l)), (e[d++] = p), (e[d++] = c), (e[d++] = p), (e[d++] = c)
-            ;(c = i * (t[0].y + l)), (e[d++] = p), (e[d++] = c)
+            for (p = P * o, c = i * (t[0].y + l), e[u++] = p, e[u++] = c, _ = 1; _ < d; _++)
+              (c = i * (t[_].y + l)), (e[u++] = p), (e[u++] = c), (e[u++] = p), (e[u++] = c)
+            ;(c = i * (t[0].y + l)), (e[u++] = p), (e[u++] = c)
           }
-          for (E = 0; E < u; E++) (p = 0), (c = i * (t[E].y + l)), (e[d++] = p), (e[d++] = c)
-          for (E = 0; E < u; E++) (p = (g - 1) * o), (c = i * (t[E].y + l)), (e[d++] = p), (e[d++] = c)
-          a.st = new s.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: new Float32Array(e) })
+          for (_ = 0; _ < d; _++) (p = 0), (c = i * (t[_].y + l)), (e[u++] = p), (e[u++] = c)
+          for (_ = 0; _ < d; _++) (p = (g - 1) * o), (c = i * (t[_].y + l)), (e[u++] = p), (e[u++] = c)
+          r.st = new s.GeometryAttribute({ componentDatatype: a.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: new Float32Array(e) })
         }
-        const C = y - 2 * u
+        const A = y - 2 * d
         for (P = 0; P < h.length; P += 3) {
-          const e = h[P] + C,
-            t = h[P + 1] + C,
-            n = h[P + 2] + C
-          ;(b[L++] = e), (b[L++] = t), (b[L++] = n), (b[L++] = n + u), (b[L++] = t + u), (b[L++] = e + u)
+          const e = h[P] + A,
+            t = h[P + 1] + A,
+            n = h[P + 2] + A
+          ;(E[L++] = e), (E[L++] = t), (E[L++] = n), (E[L++] = n + d), (E[L++] = t + d), (E[L++] = e + d)
         }
-        let F = new s.Geometry({
-          attributes: a,
-          indices: b,
+        let C = new s.Geometry({
+          attributes: r,
+          indices: E,
           boundingSphere: i.BoundingSphere.fromVertices(e),
           primitiveType: s.PrimitiveType.TRIANGLES
         })
-        if ((o.normal && (F = c.GeometryPipeline.computeNormal(F)), o.tangent || o.bitangent)) {
+        if ((o.normal && (C = c.GeometryPipeline.computeNormal(C)), o.tangent || o.bitangent)) {
           try {
-            F = c.GeometryPipeline.computeTangentAndBitangent(F)
+            C = c.GeometryPipeline.computeTangentAndBitangent(C)
           } catch (e) {
             l.oneTimeWarning('polyline-volume-tangent-bitangent', 'Unable to compute tangents and bitangents for polyline volume geometry')
           }
-          o.tangent || (F.attributes.tangent = void 0), o.bitangent || (F.attributes.bitangent = void 0), o.st || (F.attributes.st = void 0)
+          o.tangent || (C.attributes.tangent = void 0), o.bitangent || (C.attributes.bitangent = void 0), o.st || (C.attributes.st = void 0)
         }
-        return F
-      })(l.PolylineVolumeGeometryLibrary.computePositions(u, y, g, e, !0), y, g, e._vertexFormat)
+        return C
+      })(l.PolylineVolumeGeometryLibrary.computePositions(d, y, g, e, !0), y, g, e._vertexFormat)
     }),
     function (n, o) {
-      return e.defined(o) && (n = C.unpack(n, o)), (n._ellipsoid = t.Ellipsoid.clone(n._ellipsoid)), C.createGeometry(n)
+      return e.defined(o) && (n = A.unpack(n, o)), (n._ellipsoid = t.Ellipsoid.clone(n._ellipsoid)), A.createGeometry(n)
     }
   )
 })

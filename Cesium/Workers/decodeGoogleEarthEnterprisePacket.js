@@ -1,33 +1,35 @@
-define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProcessorWorker'], function (e, t, n) {
+define(['./RuntimeError-9b4ce3fb', './defaultValue-f6d5e6da', './createTaskProcessorWorker'], function (e, t, n) {
   'use strict'
-  function i(t, n) {
-    if (i.passThroughDataForTesting) return n
-    const r = t.byteLength
-    if (0 === r || r % 4 != 0) throw new e.RuntimeError('The length of key must be greater than 0 and a multiple of 4.')
-    const a = new DataView(n),
-      o = a.getUint32(0, !0)
-    if (1953029805 === o || 2917034100 === o) return n
-    const s = new DataView(t)
-    let l = 0
-    const c = n.byteLength,
-      d = c - (c % 8),
-      f = r
-    let h,
-      u = 8
-    for (; l < d; )
-      for (u = (u + 8) % 24, h = u; l < d && h < f; )
-        a.setUint32(l, a.getUint32(l, !0) ^ s.getUint32(h, !0), !0),
-          a.setUint32(l + 4, a.getUint32(l + 4, !0) ^ s.getUint32(h + 4, !0), !0),
-          (l += 8),
-          (h += 24)
-    if (l < c) for (h >= f && ((u = (u + 8) % 24), (h = u)); l < c; ) a.setUint8(l, a.getUint8(l) ^ s.getUint8(h)), l++, h++
+  const i = 1953029805,
+    r = 2917034100
+  function a(t, n) {
+    if (a.passThroughDataForTesting) return n
+    const o = t.byteLength
+    if (0 === o || o % 4 != 0) throw new e.RuntimeError('The length of key must be greater than 0 and a multiple of 4.')
+    const s = new DataView(n),
+      l = s.getUint32(0, !0)
+    if (l === i || l === r) return n
+    const c = new DataView(t)
+    let d = 0
+    const f = n.byteLength,
+      h = f - (f % 8),
+      u = o
+    let w,
+      b = 8
+    for (; d < h; )
+      for (b = (b + 8) % 24, w = b; d < h && w < u; )
+        s.setUint32(d, s.getUint32(d, !0) ^ c.getUint32(w, !0), !0),
+          s.setUint32(d + 4, s.getUint32(d + 4, !0) ^ c.getUint32(w + 4, !0), !0),
+          (d += 8),
+          (w += 24)
+    if (d < f) for (w >= u && ((b = (b + 8) % 24), (w = b)); d < f; ) s.setUint8(d, s.getUint8(d) ^ c.getUint8(w)), d++, w++
   }
-  function r(e, t) {
+  function o(e, t) {
     return 0 != (e & t)
   }
-  i.passThroughDataForTesting = !1
-  const a = [1, 2, 4, 8]
-  function o(e, t, n, i, r, a) {
+  a.passThroughDataForTesting = !1
+  const s = [1, 2, 4, 8]
+  function l(e, t, n, i, r, a) {
     ;(this._bits = e),
       (this.cnodeVersion = t),
       (this.imageryVersion = n),
@@ -37,7 +39,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       (this.ancestorHasTerrain = !1),
       (this.terrainState = void 0)
   }
-  ;(o.clone = function (e, n) {
+  ;(l.clone = function (e, n) {
     return (
       t.defined(n)
         ? ((n._bits = e._bits),
@@ -46,36 +48,36 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
           (n.terrainVersion = e.terrainVersion),
           (n.imageryProvider = e.imageryProvider),
           (n.terrainProvider = e.terrainProvider))
-        : (n = new o(e._bits, e.cnodeVersion, e.imageryVersion, e.terrainVersion, e.imageryProvider, e.terrainProvider)),
+        : (n = new l(e._bits, e.cnodeVersion, e.imageryVersion, e.terrainVersion, e.imageryProvider, e.terrainProvider)),
       (n.ancestorHasTerrain = e.ancestorHasTerrain),
       (n.terrainState = e.terrainState),
       n
     )
   }),
-    (o.prototype.setParent = function (e) {
+    (l.prototype.setParent = function (e) {
       this.ancestorHasTerrain = e.ancestorHasTerrain || this.hasTerrain()
     }),
-    (o.prototype.hasSubtree = function () {
-      return r(this._bits, 16)
+    (l.prototype.hasSubtree = function () {
+      return o(this._bits, 16)
     }),
-    (o.prototype.hasImagery = function () {
-      return r(this._bits, 64)
+    (l.prototype.hasImagery = function () {
+      return o(this._bits, 64)
     }),
-    (o.prototype.hasTerrain = function () {
-      return r(this._bits, 128)
+    (l.prototype.hasTerrain = function () {
+      return o(this._bits, 128)
     }),
-    (o.prototype.hasChildren = function () {
-      return r(this._bits, 15)
+    (l.prototype.hasChildren = function () {
+      return o(this._bits, 15)
     }),
-    (o.prototype.hasChild = function (e) {
-      return r(this._bits, a[e])
+    (l.prototype.hasChild = function (e) {
+      return o(this._bits, s[e])
     }),
-    (o.prototype.getChildBitmask = function () {
+    (l.prototype.getChildBitmask = function () {
       return 15 & this._bits
     })
-  var s = {},
-    l = {}
-  var c = (e, t, n, i) => {
+  var c = {},
+    d = {}
+  var f = (e, t, n, i) => {
     let r = (65535 & e) | 0,
       a = ((e >>> 16) & 65535) | 0,
       o = 0
@@ -88,7 +90,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
     }
     return r | (a << 16) | 0
   }
-  const d = new Uint32Array(
+  const h = new Uint32Array(
     (() => {
       let e,
         t = []
@@ -100,25 +102,25 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       return t
     })()
   )
-  var f = (e, t, n, i) => {
-    const r = d,
+  var u = (e, t, n, i) => {
+    const r = h,
       a = i + n
     e ^= -1
     for (let n = i; n < a; n++) e = (e >>> 8) ^ r[255 & (e ^ t[n])]
     return -1 ^ e
   }
-  const h = 16209
-  const u = 15,
-    w = new Uint16Array([3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0]),
-    b = new Uint8Array([16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78]),
-    m = new Uint16Array([
+  const w = 16209
+  const b = 15,
+    m = new Uint16Array([3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0]),
+    g = new Uint8Array([16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78]),
+    k = new Uint16Array([
       1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0,
       0
     ]),
-    g = new Uint8Array([
+    _ = new Uint8Array([
       16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64
     ])
-  var k = {
+  var p = {
     Z_NO_FLUSH: 0,
     Z_PARTIAL_FLUSH: 1,
     Z_SYNC_FLUSH: 2,
@@ -148,10 +150,10 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
     Z_UNKNOWN: 2,
     Z_DEFLATED: 8
   }
-  const _ = c,
-    p = f,
-    y = function (e, t) {
-      let n, i, r, a, o, s, l, c, d, f, u, w, b, m, g, k, _, p, y, v, E, x, R, A
+  const y = f,
+    v = u,
+    E = function (e, t) {
+      let n, i, r, a, o, s, l, c, d, f, h, u, b, m, g, k, _, p, y, v, E, x, R, A
       const T = e.state
       ;(n = e.next_in),
         (R = e.input),
@@ -165,56 +167,56 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (c = T.whave),
         (d = T.wnext),
         (f = T.window),
-        (u = T.hold),
-        (w = T.bits),
+        (h = T.hold),
+        (u = T.bits),
         (b = T.lencode),
         (m = T.distcode),
         (g = (1 << T.lenbits) - 1),
         (k = (1 << T.distbits) - 1)
       e: do {
-        w < 15 && ((u += R[n++] << w), (w += 8), (u += R[n++] << w), (w += 8)), (_ = b[u & g])
+        u < 15 && ((h += R[n++] << u), (u += 8), (h += R[n++] << u), (u += 8)), (_ = b[h & g])
         t: for (;;) {
-          if (((p = _ >>> 24), (u >>>= p), (w -= p), (p = (_ >>> 16) & 255), 0 === p)) A[r++] = 65535 & _
+          if (((p = _ >>> 24), (h >>>= p), (u -= p), (p = (_ >>> 16) & 255), 0 === p)) A[r++] = 65535 & _
           else {
             if (!(16 & p)) {
               if (0 == (64 & p)) {
-                _ = b[(65535 & _) + (u & ((1 << p) - 1))]
+                _ = b[(65535 & _) + (h & ((1 << p) - 1))]
                 continue t
               }
               if (32 & p) {
                 T.mode = 16191
                 break e
               }
-              ;(e.msg = 'invalid literal/length code'), (T.mode = h)
+              ;(e.msg = 'invalid literal/length code'), (T.mode = w)
               break e
             }
             ;(y = 65535 & _),
               (p &= 15),
-              p && (w < p && ((u += R[n++] << w), (w += 8)), (y += u & ((1 << p) - 1)), (u >>>= p), (w -= p)),
-              w < 15 && ((u += R[n++] << w), (w += 8), (u += R[n++] << w), (w += 8)),
-              (_ = m[u & k])
+              p && (u < p && ((h += R[n++] << u), (u += 8)), (y += h & ((1 << p) - 1)), (h >>>= p), (u -= p)),
+              u < 15 && ((h += R[n++] << u), (u += 8), (h += R[n++] << u), (u += 8)),
+              (_ = m[h & k])
             n: for (;;) {
-              if (((p = _ >>> 24), (u >>>= p), (w -= p), (p = (_ >>> 16) & 255), !(16 & p))) {
+              if (((p = _ >>> 24), (h >>>= p), (u -= p), (p = (_ >>> 16) & 255), !(16 & p))) {
                 if (0 == (64 & p)) {
-                  _ = m[(65535 & _) + (u & ((1 << p) - 1))]
+                  _ = m[(65535 & _) + (h & ((1 << p) - 1))]
                   continue n
                 }
-                ;(e.msg = 'invalid distance code'), (T.mode = h)
+                ;(e.msg = 'invalid distance code'), (T.mode = w)
                 break e
               }
               if (
                 ((v = 65535 & _),
                 (p &= 15),
-                w < p && ((u += R[n++] << w), (w += 8), w < p && ((u += R[n++] << w), (w += 8))),
-                (v += u & ((1 << p) - 1)),
+                u < p && ((h += R[n++] << u), (u += 8), u < p && ((h += R[n++] << u), (u += 8))),
+                (v += h & ((1 << p) - 1)),
                 v > s)
               ) {
-                ;(e.msg = 'invalid distance too far back'), (T.mode = h)
+                ;(e.msg = 'invalid distance too far back'), (T.mode = w)
                 break e
               }
-              if (((u >>>= p), (w -= p), (p = r - a), v > p)) {
+              if (((h >>>= p), (u -= p), (p = r - a), v > p)) {
                 if (((p = v - p), p > c && T.sane)) {
-                  ;(e.msg = 'invalid distance too far back'), (T.mode = h)
+                  ;(e.msg = 'invalid distance too far back'), (T.mode = w)
                   break e
                 }
                 if (((E = 0), (x = f), 0 === d)) {
@@ -261,25 +263,25 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
           break
         }
       } while (n < i && r < o)
-      ;(y = w >> 3),
+      ;(y = u >> 3),
         (n -= y),
-        (w -= y << 3),
-        (u &= (1 << w) - 1),
+        (u -= y << 3),
+        (h &= (1 << u) - 1),
         (e.next_in = n),
         (e.next_out = r),
         (e.avail_in = n < i ? i - n + 5 : 5 - (n - i)),
         (e.avail_out = r < o ? o - r + 257 : 257 - (r - o)),
-        (T.hold = u),
-        (T.bits = w)
+        (T.hold = h),
+        (T.bits = u)
     },
-    v = (e, t, n, i, r, a, o, s) => {
+    x = (e, t, n, i, r, a, o, s) => {
       const l = s.bits
       let c,
         d,
         f,
         h,
-        k,
-        _,
+        u,
+        w,
         p = 0,
         y = 0,
         v = 0,
@@ -297,21 +299,21 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         B,
         N,
         C = null
-      for (p = 0; p <= u; p++) D[p] = 0
+      for (p = 0; p <= b; p++) D[p] = 0
       for (y = 0; y < i; y++) D[t[n + y]]++
-      for (x = l, E = u; E >= 1 && 0 === D[E]; E--);
+      for (x = l, E = b; E >= 1 && 0 === D[E]; E--);
       if ((x > E && (x = E), 0 === E)) return (r[a++] = 20971520), (r[a++] = 20971520), (s.bits = 1), 0
       for (v = 1; v < E && 0 === D[v]; v++);
-      for (x < v && (x = v), T = 1, p = 1; p <= u; p++) if (((T <<= 1), (T -= D[p]), T < 0)) return -1
+      for (x < v && (x = v), T = 1, p = 1; p <= b; p++) if (((T <<= 1), (T -= D[p]), T < 0)) return -1
       if (T > 0 && (0 === e || 1 !== E)) return -1
-      for (I[1] = 0, p = 1; p < u; p++) I[p + 1] = I[p] + D[p]
+      for (I[1] = 0, p = 1; p < b; p++) I[p + 1] = I[p] + D[p]
       for (y = 0; y < i; y++) 0 !== t[n + y] && (o[I[t[n + y]]++] = y)
       if (
-        (0 === e ? ((Z = C = o), (_ = 20)) : 1 === e ? ((Z = w), (C = b), (_ = 257)) : ((Z = m), (C = g), (_ = 0)),
+        (0 === e ? ((Z = C = o), (w = 20)) : 1 === e ? ((Z = m), (C = g), (w = 257)) : ((Z = k), (C = _), (w = 0)),
         (S = 0),
         (y = 0),
         (p = v),
-        (k = a),
+        (u = a),
         (R = x),
         (A = 0),
         (f = -1),
@@ -322,12 +324,12 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         return 1
       for (;;) {
         ;(O = p - A),
-          o[y] + 1 < _ ? ((B = 0), (N = o[y])) : o[y] >= _ ? ((B = C[o[y] - _]), (N = Z[o[y] - _])) : ((B = 96), (N = 0)),
+          o[y] + 1 < w ? ((B = 0), (N = o[y])) : o[y] >= w ? ((B = C[o[y] - w]), (N = Z[o[y] - w])) : ((B = 96), (N = 0)),
           (c = 1 << (p - A)),
           (d = 1 << R),
           (v = d)
         do {
-          ;(d -= c), (r[k + (S >> A) + d] = (O << 24) | (B << 16) | N | 0)
+          ;(d -= c), (r[u + (S >> A) + d] = (O << 24) | (B << 16) | N | 0)
         } while (0 !== d)
         for (c = 1 << (p - 1); S & c; ) c >>= 1
         if ((0 !== c ? ((S &= c - 1), (S += c)) : (S = 0), y++, 0 == --D[p])) {
@@ -335,37 +337,37 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
           p = t[n + o[y]]
         }
         if (p > x && (S & h) !== f) {
-          for (0 === A && (A = x), k += v, R = p - A, T = 1 << R; R + A < E && ((T -= D[R + A]), !(T <= 0)); ) R++, (T <<= 1)
+          for (0 === A && (A = x), u += v, R = p - A, T = 1 << R; R + A < E && ((T -= D[R + A]), !(T <= 0)); ) R++, (T <<= 1)
           if (((U += 1 << R), (1 === e && U > 852) || (2 === e && U > 592))) return 1
-          ;(f = S & h), (r[f] = (x << 24) | (R << 16) | (k - a) | 0)
+          ;(f = S & h), (r[f] = (x << 24) | (R << 16) | (u - a) | 0)
         }
       }
-      return 0 !== S && (r[k + S] = ((p - A) << 24) | (64 << 16) | 0), (s.bits = x), 0
+      return 0 !== S && (r[u + S] = ((p - A) << 24) | (64 << 16) | 0), (s.bits = x), 0
     },
     {
-      Z_FINISH: E,
-      Z_BLOCK: x,
-      Z_TREES: R,
-      Z_OK: A,
-      Z_STREAM_END: T,
-      Z_NEED_DICT: U,
-      Z_STREAM_ERROR: S,
-      Z_DATA_ERROR: Z,
-      Z_MEM_ERROR: D,
-      Z_BUF_ERROR: I,
-      Z_DEFLATED: O
-    } = k,
-    B = 16180,
-    N = 16190,
-    C = 16191,
-    M = 16192,
-    L = 16194,
-    F = 16199,
-    P = 16200,
-    z = 16206,
-    V = 16209,
-    H = e => ((e >>> 24) & 255) + ((e >>> 8) & 65280) + ((65280 & e) << 8) + ((255 & e) << 24)
-  function j() {
+      Z_FINISH: R,
+      Z_BLOCK: A,
+      Z_TREES: T,
+      Z_OK: U,
+      Z_STREAM_END: S,
+      Z_NEED_DICT: Z,
+      Z_STREAM_ERROR: D,
+      Z_DATA_ERROR: I,
+      Z_MEM_ERROR: O,
+      Z_BUF_ERROR: B,
+      Z_DEFLATED: N
+    } = p,
+    C = 16180,
+    M = 16190,
+    L = 16191,
+    F = 16192,
+    P = 16194,
+    z = 16199,
+    V = 16200,
+    H = 16206,
+    j = 16209,
+    K = e => ((e >>> 24) & 255) + ((e >>> 8) & 65280) + ((65280 & e) << 8) + ((255 & e) << 24)
+  function Y() {
     ;(this.strm = null),
       (this.mode = 0),
       (this.last = !1),
@@ -403,19 +405,19 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       (this.back = 0),
       (this.was = 0)
   }
-  const K = e => {
+  const G = e => {
       if (!e) return 1
       const t = e.state
-      return !t || t.strm !== e || t.mode < B || t.mode > 16211 ? 1 : 0
+      return !t || t.strm !== e || t.mode < C || t.mode > 16211 ? 1 : 0
     },
-    Y = e => {
-      if (K(e)) return S
+    Q = e => {
+      if (G(e)) return D
       const t = e.state
       return (
         (e.total_in = e.total_out = t.total = 0),
         (e.msg = ''),
         t.wrap && (e.adler = 1 & t.wrap),
-        (t.mode = B),
+        (t.mode = C),
         (t.last = 0),
         (t.havedict = 0),
         (t.flags = -1),
@@ -427,47 +429,47 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (t.distcode = t.distdyn = new Int32Array(592)),
         (t.sane = 1),
         (t.back = -1),
-        A
+        U
       )
     },
-    G = e => {
-      if (K(e)) return S
+    W = e => {
+      if (G(e)) return D
       const t = e.state
-      return (t.wsize = 0), (t.whave = 0), (t.wnext = 0), Y(e)
+      return (t.wsize = 0), (t.whave = 0), (t.wnext = 0), Q(e)
     },
-    Q = (e, t) => {
+    X = (e, t) => {
       let n
-      if (K(e)) return S
+      if (G(e)) return D
       const i = e.state
       return (
         t < 0 ? ((n = 0), (t = -t)) : ((n = 5 + (t >> 4)), t < 48 && (t &= 15)),
-        t && (t < 8 || t > 15) ? S : (null !== i.window && i.wbits !== t && (i.window = null), (i.wrap = n), (i.wbits = t), G(e))
+        t && (t < 8 || t > 15) ? D : (null !== i.window && i.wbits !== t && (i.window = null), (i.wrap = n), (i.wbits = t), W(e))
       )
     },
-    W = (e, t) => {
-      if (!e) return S
-      const n = new j()
-      ;(e.state = n), (n.strm = e), (n.window = null), (n.mode = B)
-      const i = Q(e, t)
-      return i !== A && (e.state = null), i
+    q = (e, t) => {
+      if (!e) return D
+      const n = new Y()
+      ;(e.state = n), (n.strm = e), (n.window = null), (n.mode = C)
+      const i = X(e, t)
+      return i !== U && (e.state = null), i
     }
-  let X,
-    q,
-    J = !0
-  const $ = e => {
-      if (J) {
-        ;(X = new Int32Array(512)), (q = new Int32Array(32))
+  let J,
+    $,
+    ee = !0
+  const te = e => {
+      if (ee) {
+        ;(J = new Int32Array(512)), ($ = new Int32Array(32))
         let t = 0
         for (; t < 144; ) e.lens[t++] = 8
         for (; t < 256; ) e.lens[t++] = 9
         for (; t < 280; ) e.lens[t++] = 7
         for (; t < 288; ) e.lens[t++] = 8
-        for (v(1, e.lens, 0, 288, X, 0, e.work, { bits: 9 }), t = 0; t < 32; ) e.lens[t++] = 5
-        v(2, e.lens, 0, 32, q, 0, e.work, { bits: 5 }), (J = !1)
+        for (x(1, e.lens, 0, 288, J, 0, e.work, { bits: 9 }), t = 0; t < 32; ) e.lens[t++] = 5
+        x(2, e.lens, 0, 32, $, 0, e.work, { bits: 5 }), (ee = !1)
       }
-      ;(e.lencode = X), (e.lenbits = 9), (e.distcode = q), (e.distbits = 5)
+      ;(e.lencode = J), (e.lenbits = 9), (e.distcode = $), (e.distbits = 5)
     },
-    ee = (e, t, n, i) => {
+    ne = (e, t, n, i) => {
       let r
       const a = e.state
       return (
@@ -483,12 +485,12 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         0
       )
     }
-  ;(l.inflateReset = G),
-    (l.inflateReset2 = Q),
-    (l.inflateResetKeep = Y),
-    (l.inflateInit = e => W(e, 15)),
-    (l.inflateInit2 = W),
-    (l.inflate = (e, t) => {
+  ;(d.inflateReset = W),
+    (d.inflateReset2 = X),
+    (d.inflateResetKeep = Q),
+    (d.inflateInit = e => q(e, 15)),
+    (d.inflateInit2 = q),
+    (d.inflate = (e, t) => {
       let n,
         i,
         r,
@@ -506,18 +508,18 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         m,
         g,
         k,
-        j,
+        _,
+        p,
         Y,
-        G,
         Q,
         W,
         X = 0
       const q = new Uint8Array(4)
-      let J, te
-      const ne = new Uint8Array([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15])
-      if (K(e) || !e.output || (!e.input && 0 !== e.avail_in)) return S
+      let J, $
+      const ee = new Uint8Array([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15])
+      if (G(e) || !e.output || (!e.input && 0 !== e.avail_in)) return D
       ;(n = e.state),
-        n.mode === C && (n.mode = M),
+        n.mode === L && (n.mode = F),
         (o = e.next_out),
         (r = e.output),
         (l = e.avail_out),
@@ -528,12 +530,12 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (d = n.bits),
         (f = s),
         (h = l),
-        (W = A)
+        (W = U)
       e: for (;;)
         switch (n.mode) {
-          case B:
+          case C:
             if (0 === n.wrap) {
-              n.mode = M
+              n.mode = F
               break
             }
             for (; d < 16; ) {
@@ -545,41 +547,41 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 (n.check = 0),
                 (q[0] = 255 & c),
                 (q[1] = (c >>> 8) & 255),
-                (n.check = p(n.check, q, 2, 0)),
+                (n.check = v(n.check, q, 2, 0)),
                 (c = 0),
                 (d = 0),
                 (n.mode = 16181)
               break
             }
             if ((n.head && (n.head.done = !1), !(1 & n.wrap) || (((255 & c) << 8) + (c >> 8)) % 31)) {
-              ;(e.msg = 'incorrect header check'), (n.mode = V)
+              ;(e.msg = 'incorrect header check'), (n.mode = j)
               break
             }
-            if ((15 & c) !== O) {
-              ;(e.msg = 'unknown compression method'), (n.mode = V)
+            if ((15 & c) !== N) {
+              ;(e.msg = 'unknown compression method'), (n.mode = j)
               break
             }
             if (((c >>>= 4), (d -= 4), (Q = 8 + (15 & c)), 0 === n.wbits && (n.wbits = Q), Q > 15 || Q > n.wbits)) {
-              ;(e.msg = 'invalid window size'), (n.mode = V)
+              ;(e.msg = 'invalid window size'), (n.mode = j)
               break
             }
-            ;(n.dmax = 1 << n.wbits), (n.flags = 0), (e.adler = n.check = 1), (n.mode = 512 & c ? 16189 : C), (c = 0), (d = 0)
+            ;(n.dmax = 1 << n.wbits), (n.flags = 0), (e.adler = n.check = 1), (n.mode = 512 & c ? 16189 : L), (c = 0), (d = 0)
             break
           case 16181:
             for (; d < 16; ) {
               if (0 === s) break e
               s--, (c += i[a++] << d), (d += 8)
             }
-            if (((n.flags = c), (255 & n.flags) !== O)) {
-              ;(e.msg = 'unknown compression method'), (n.mode = V)
+            if (((n.flags = c), (255 & n.flags) !== N)) {
+              ;(e.msg = 'unknown compression method'), (n.mode = j)
               break
             }
             if (57344 & n.flags) {
-              ;(e.msg = 'unknown header flags set'), (n.mode = V)
+              ;(e.msg = 'unknown header flags set'), (n.mode = j)
               break
             }
             n.head && (n.head.text = (c >> 8) & 1),
-              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = v(n.check, q, 2, 0))),
               (c = 0),
               (d = 0),
               (n.mode = 16182)
@@ -591,7 +593,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             n.head && (n.head.time = c),
               512 & n.flags &&
                 4 & n.wrap &&
-                ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (q[2] = (c >>> 16) & 255), (q[3] = (c >>> 24) & 255), (n.check = p(n.check, q, 4, 0))),
+                ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (q[2] = (c >>> 16) & 255), (q[3] = (c >>> 24) & 255), (n.check = v(n.check, q, 4, 0))),
               (c = 0),
               (d = 0),
               (n.mode = 16183)
@@ -601,7 +603,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               s--, (c += i[a++] << d), (d += 8)
             }
             n.head && ((n.head.xflags = 255 & c), (n.head.os = c >> 8)),
-              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+              512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = v(n.check, q, 2, 0))),
               (c = 0),
               (d = 0),
               (n.mode = 16184)
@@ -613,7 +615,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               }
               ;(n.length = c),
                 n.head && (n.head.extra_len = c),
-                512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = p(n.check, q, 2, 0))),
+                512 & n.flags && 4 & n.wrap && ((q[0] = 255 & c), (q[1] = (c >>> 8) & 255), (n.check = v(n.check, q, 2, 0))),
                 (c = 0),
                 (d = 0)
             } else n.head && (n.head.extra = null)
@@ -628,7 +630,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                   ((Q = n.head.extra_len - n.length),
                   n.head.extra || (n.head.extra = new Uint8Array(n.head.extra_len)),
                   n.head.extra.set(i.subarray(a, a + u), Q)),
-                512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)),
+                512 & n.flags && 4 & n.wrap && (n.check = v(n.check, i, u, a)),
                 (s -= u),
                 (a += u),
                 (n.length -= u)),
@@ -643,7 +645,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               do {
                 ;(Q = i[a + u++]), n.head && Q && n.length < 65536 && (n.head.name += String.fromCharCode(Q))
               } while (Q && u < s)
-              if ((512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
+              if ((512 & n.flags && 4 & n.wrap && (n.check = v(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
             } else n.head && (n.head.name = null)
             ;(n.length = 0), (n.mode = 16187)
           case 16187:
@@ -653,7 +655,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               do {
                 ;(Q = i[a + u++]), n.head && Q && n.length < 65536 && (n.head.comment += String.fromCharCode(Q))
               } while (Q && u < s)
-              if ((512 & n.flags && 4 & n.wrap && (n.check = p(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
+              if ((512 & n.flags && 4 & n.wrap && (n.check = v(n.check, i, u, a)), (s -= u), (a += u), Q)) break e
             } else n.head && (n.head.comment = null)
             n.mode = 16188
           case 16188:
@@ -663,27 +665,27 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 s--, (c += i[a++] << d), (d += 8)
               }
               if (4 & n.wrap && c !== (65535 & n.check)) {
-                ;(e.msg = 'header crc mismatch'), (n.mode = V)
+                ;(e.msg = 'header crc mismatch'), (n.mode = j)
                 break
               }
               ;(c = 0), (d = 0)
             }
-            n.head && ((n.head.hcrc = (n.flags >> 9) & 1), (n.head.done = !0)), (e.adler = n.check = 0), (n.mode = C)
+            n.head && ((n.head.hcrc = (n.flags >> 9) & 1), (n.head.done = !0)), (e.adler = n.check = 0), (n.mode = L)
             break
           case 16189:
             for (; d < 32; ) {
               if (0 === s) break e
               s--, (c += i[a++] << d), (d += 8)
             }
-            ;(e.adler = n.check = H(c)), (c = 0), (d = 0), (n.mode = N)
-          case N:
-            if (0 === n.havedict) return (e.next_out = o), (e.avail_out = l), (e.next_in = a), (e.avail_in = s), (n.hold = c), (n.bits = d), U
-            ;(e.adler = n.check = 1), (n.mode = C)
-          case C:
-            if (t === x || t === R) break e
+            ;(e.adler = n.check = K(c)), (c = 0), (d = 0), (n.mode = M)
           case M:
+            if (0 === n.havedict) return (e.next_out = o), (e.avail_out = l), (e.next_in = a), (e.avail_in = s), (n.hold = c), (n.bits = d), Z
+            ;(e.adler = n.check = 1), (n.mode = L)
+          case L:
+            if (t === A || t === T) break e
+          case F:
             if (n.last) {
-              ;(c >>>= 7 & d), (d -= 7 & d), (n.mode = z)
+              ;(c >>>= 7 & d), (d -= 7 & d), (n.mode = H)
               break
             }
             for (; d < 3; ) {
@@ -695,7 +697,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 n.mode = 16193
                 break
               case 1:
-                if (($(n), (n.mode = F), t === R)) {
+                if ((te(n), (n.mode = z), t === T)) {
                   ;(c >>>= 2), (d -= 2)
                   break e
                 }
@@ -704,7 +706,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 n.mode = 16196
                 break
               case 3:
-                ;(e.msg = 'invalid block type'), (n.mode = V)
+                ;(e.msg = 'invalid block type'), (n.mode = j)
             }
             ;(c >>>= 2), (d -= 2)
             break
@@ -714,11 +716,11 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               s--, (c += i[a++] << d), (d += 8)
             }
             if ((65535 & c) != ((c >>> 16) ^ 65535)) {
-              ;(e.msg = 'invalid stored block lengths'), (n.mode = V)
+              ;(e.msg = 'invalid stored block lengths'), (n.mode = j)
               break
             }
-            if (((n.length = 65535 & c), (c = 0), (d = 0), (n.mode = L), t === R)) break e
-          case L:
+            if (((n.length = 65535 & c), (c = 0), (d = 0), (n.mode = P), t === T)) break e
+          case P:
             n.mode = 16195
           case 16195:
             if (((u = n.length), u)) {
@@ -726,7 +728,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               r.set(i.subarray(a, a + u), o), (s -= u), (a += u), (l -= u), (o += u), (n.length -= u)
               break
             }
-            n.mode = C
+            n.mode = L
             break
           case 16196:
             for (; d < 14; ) {
@@ -745,7 +747,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               (d -= 4),
               n.nlen > 286 || n.ndist > 30)
             ) {
-              ;(e.msg = 'too many length or distance symbols'), (n.mode = V)
+              ;(e.msg = 'too many length or distance symbols'), (n.mode = j)
               break
             }
             ;(n.have = 0), (n.mode = 16197)
@@ -755,18 +757,18 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 if (0 === s) break e
                 s--, (c += i[a++] << d), (d += 8)
               }
-              ;(n.lens[ne[n.have++]] = 7 & c), (c >>>= 3), (d -= 3)
+              ;(n.lens[ee[n.have++]] = 7 & c), (c >>>= 3), (d -= 3)
             }
-            for (; n.have < 19; ) n.lens[ne[n.have++]] = 0
+            for (; n.have < 19; ) n.lens[ee[n.have++]] = 0
             if (
               ((n.lencode = n.lendyn),
               (n.lenbits = 7),
               (J = { bits: n.lenbits }),
-              (W = v(0, n.lens, 0, 19, n.lencode, 0, n.work, J)),
+              (W = x(0, n.lens, 0, 19, n.lencode, 0, n.work, J)),
               (n.lenbits = J.bits),
               W)
             ) {
-              ;(e.msg = 'invalid code lengths set'), (n.mode = V)
+              ;(e.msg = 'invalid code lengths set'), (n.mode = j)
               break
             }
             ;(n.have = 0), (n.mode = 16198)
@@ -779,59 +781,59 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
               if (k < 16) (c >>>= m), (d -= m), (n.lens[n.have++] = k)
               else {
                 if (16 === k) {
-                  for (te = m + 2; d < te; ) {
+                  for ($ = m + 2; d < $; ) {
                     if (0 === s) break e
                     s--, (c += i[a++] << d), (d += 8)
                   }
                   if (((c >>>= m), (d -= m), 0 === n.have)) {
-                    ;(e.msg = 'invalid bit length repeat'), (n.mode = V)
+                    ;(e.msg = 'invalid bit length repeat'), (n.mode = j)
                     break
                   }
                   ;(Q = n.lens[n.have - 1]), (u = 3 + (3 & c)), (c >>>= 2), (d -= 2)
                 } else if (17 === k) {
-                  for (te = m + 3; d < te; ) {
+                  for ($ = m + 3; d < $; ) {
                     if (0 === s) break e
                     s--, (c += i[a++] << d), (d += 8)
                   }
                   ;(c >>>= m), (d -= m), (Q = 0), (u = 3 + (7 & c)), (c >>>= 3), (d -= 3)
                 } else {
-                  for (te = m + 7; d < te; ) {
+                  for ($ = m + 7; d < $; ) {
                     if (0 === s) break e
                     s--, (c += i[a++] << d), (d += 8)
                   }
                   ;(c >>>= m), (d -= m), (Q = 0), (u = 11 + (127 & c)), (c >>>= 7), (d -= 7)
                 }
                 if (n.have + u > n.nlen + n.ndist) {
-                  ;(e.msg = 'invalid bit length repeat'), (n.mode = V)
+                  ;(e.msg = 'invalid bit length repeat'), (n.mode = j)
                   break
                 }
                 for (; u--; ) n.lens[n.have++] = Q
               }
             }
-            if (n.mode === V) break
+            if (n.mode === j) break
             if (0 === n.lens[256]) {
-              ;(e.msg = 'invalid code -- missing end-of-block'), (n.mode = V)
+              ;(e.msg = 'invalid code -- missing end-of-block'), (n.mode = j)
               break
             }
-            if (((n.lenbits = 9), (J = { bits: n.lenbits }), (W = v(1, n.lens, 0, n.nlen, n.lencode, 0, n.work, J)), (n.lenbits = J.bits), W)) {
-              ;(e.msg = 'invalid literal/lengths set'), (n.mode = V)
+            if (((n.lenbits = 9), (J = { bits: n.lenbits }), (W = x(1, n.lens, 0, n.nlen, n.lencode, 0, n.work, J)), (n.lenbits = J.bits), W)) {
+              ;(e.msg = 'invalid literal/lengths set'), (n.mode = j)
               break
             }
             if (
               ((n.distbits = 6),
               (n.distcode = n.distdyn),
               (J = { bits: n.distbits }),
-              (W = v(2, n.lens, n.nlen, n.ndist, n.distcode, 0, n.work, J)),
+              (W = x(2, n.lens, n.nlen, n.ndist, n.distcode, 0, n.work, J)),
               (n.distbits = J.bits),
               W)
             ) {
-              ;(e.msg = 'invalid distances set'), (n.mode = V)
+              ;(e.msg = 'invalid distances set'), (n.mode = j)
               break
             }
-            if (((n.mode = F), t === R)) break e
-          case F:
-            n.mode = P
-          case P:
+            if (((n.mode = z), t === T)) break e
+          case z:
+            n.mode = V
+          case V:
             if (s >= 6 && l >= 258) {
               ;(e.next_out = o),
                 (e.avail_out = l),
@@ -839,7 +841,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 (e.avail_in = s),
                 (n.hold = c),
                 (n.bits = d),
-                y(e, h),
+                E(e, h),
                 (o = e.next_out),
                 (r = e.output),
                 (l = e.avail_out),
@@ -848,7 +850,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 (s = e.avail_in),
                 (c = n.hold),
                 (d = n.bits),
-                n.mode === C && (n.back = -1)
+                n.mode === L && (n.back = -1)
               break
             }
             for (n.back = 0; (X = n.lencode[c & ((1 << n.lenbits) - 1)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(m <= d); ) {
@@ -857,31 +859,31 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             }
             if (g && 0 == (240 & g)) {
               for (
-                j = m, Y = g, G = k;
-                (X = n.lencode[G + ((c & ((1 << (j + Y)) - 1)) >> j)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(j + m <= d);
+                _ = m, p = g, Y = k;
+                (X = n.lencode[Y + ((c & ((1 << (_ + p)) - 1)) >> _)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(_ + m <= d);
 
               ) {
                 if (0 === s) break e
                 s--, (c += i[a++] << d), (d += 8)
               }
-              ;(c >>>= j), (d -= j), (n.back += j)
+              ;(c >>>= _), (d -= _), (n.back += _)
             }
             if (((c >>>= m), (d -= m), (n.back += m), (n.length = k), 0 === g)) {
               n.mode = 16205
               break
             }
             if (32 & g) {
-              ;(n.back = -1), (n.mode = C)
+              ;(n.back = -1), (n.mode = L)
               break
             }
             if (64 & g) {
-              ;(e.msg = 'invalid literal/length code'), (n.mode = V)
+              ;(e.msg = 'invalid literal/length code'), (n.mode = j)
               break
             }
             ;(n.extra = 15 & g), (n.mode = 16201)
           case 16201:
             if (n.extra) {
-              for (te = n.extra; d < te; ) {
+              for ($ = n.extra; d < $; ) {
                 if (0 === s) break e
                 s--, (c += i[a++] << d), (d += 8)
               }
@@ -895,30 +897,30 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             }
             if (0 == (240 & g)) {
               for (
-                j = m, Y = g, G = k;
-                (X = n.distcode[G + ((c & ((1 << (j + Y)) - 1)) >> j)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(j + m <= d);
+                _ = m, p = g, Y = k;
+                (X = n.distcode[Y + ((c & ((1 << (_ + p)) - 1)) >> _)]), (m = X >>> 24), (g = (X >>> 16) & 255), (k = 65535 & X), !(_ + m <= d);
 
               ) {
                 if (0 === s) break e
                 s--, (c += i[a++] << d), (d += 8)
               }
-              ;(c >>>= j), (d -= j), (n.back += j)
+              ;(c >>>= _), (d -= _), (n.back += _)
             }
             if (((c >>>= m), (d -= m), (n.back += m), 64 & g)) {
-              ;(e.msg = 'invalid distance code'), (n.mode = V)
+              ;(e.msg = 'invalid distance code'), (n.mode = j)
               break
             }
             ;(n.offset = k), (n.extra = 15 & g), (n.mode = 16203)
           case 16203:
             if (n.extra) {
-              for (te = n.extra; d < te; ) {
+              for ($ = n.extra; d < $; ) {
                 if (0 === s) break e
                 s--, (c += i[a++] << d), (d += 8)
               }
               ;(n.offset += c & ((1 << n.extra) - 1)), (c >>>= n.extra), (d -= n.extra), (n.back += n.extra)
             }
             if (n.offset > n.dmax) {
-              ;(e.msg = 'invalid distance too far back'), (n.mode = V)
+              ;(e.msg = 'invalid distance too far back'), (n.mode = j)
               break
             }
             n.mode = 16204
@@ -926,7 +928,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             if (0 === l) break e
             if (((u = h - l), n.offset > u)) {
               if (((u = n.offset - u), u > n.whave && n.sane)) {
-                ;(e.msg = 'invalid distance too far back'), (n.mode = V)
+                ;(e.msg = 'invalid distance too far back'), (n.mode = j)
                 break
               }
               u > n.wnext ? ((u -= n.wnext), (w = n.wsize - u)) : (w = n.wnext - u), u > n.length && (u = n.length), (b = n.window)
@@ -935,13 +937,13 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             do {
               r[o++] = b[w++]
             } while (--u)
-            0 === n.length && (n.mode = P)
+            0 === n.length && (n.mode = V)
             break
           case 16205:
             if (0 === l) break e
-            ;(r[o++] = n.length), l--, (n.mode = P)
+            ;(r[o++] = n.length), l--, (n.mode = V)
             break
-          case z:
+          case H:
             if (n.wrap) {
               for (; d < 32; ) {
                 if (0 === s) break e
@@ -951,11 +953,11 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 ((h -= l),
                 (e.total_out += h),
                 (n.total += h),
-                4 & n.wrap && h && (e.adler = n.check = n.flags ? p(n.check, r, h, o - h) : _(n.check, r, h, o - h)),
+                4 & n.wrap && h && (e.adler = n.check = n.flags ? v(n.check, r, h, o - h) : y(n.check, r, h, o - h)),
                 (h = l),
-                4 & n.wrap && (n.flags ? c : H(c)) !== n.check)
+                4 & n.wrap && (n.flags ? c : K(c)) !== n.check)
               ) {
-                ;(e.msg = 'incorrect data check'), (n.mode = V)
+                ;(e.msg = 'incorrect data check'), (n.mode = j)
                 break
               }
               ;(c = 0), (d = 0)
@@ -968,22 +970,22 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
                 s--, (c += i[a++] << d), (d += 8)
               }
               if (4 & n.wrap && c !== (4294967295 & n.total)) {
-                ;(e.msg = 'incorrect length check'), (n.mode = V)
+                ;(e.msg = 'incorrect length check'), (n.mode = j)
                 break
               }
               ;(c = 0), (d = 0)
             }
             n.mode = 16208
           case 16208:
-            W = T
+            W = S
             break e
-          case V:
-            W = Z
+          case j:
+            W = I
             break e
           case 16210:
-            return D
+            return O
           default:
-            return S
+            return D
         }
       return (
         (e.next_out = o),
@@ -992,55 +994,55 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (e.avail_in = s),
         (n.hold = c),
         (n.bits = d),
-        (n.wsize || (h !== e.avail_out && n.mode < V && (n.mode < z || t !== E))) && ee(e, e.output, e.next_out, h - e.avail_out),
+        (n.wsize || (h !== e.avail_out && n.mode < j && (n.mode < H || t !== R))) && ne(e, e.output, e.next_out, h - e.avail_out),
         (f -= e.avail_in),
         (h -= e.avail_out),
         (e.total_in += f),
         (e.total_out += h),
         (n.total += h),
-        4 & n.wrap && h && (e.adler = n.check = n.flags ? p(n.check, r, h, e.next_out - h) : _(n.check, r, h, e.next_out - h)),
-        (e.data_type = n.bits + (n.last ? 64 : 0) + (n.mode === C ? 128 : 0) + (n.mode === F || n.mode === L ? 256 : 0)),
-        ((0 === f && 0 === h) || t === E) && W === A && (W = I),
+        4 & n.wrap && h && (e.adler = n.check = n.flags ? v(n.check, r, h, e.next_out - h) : y(n.check, r, h, e.next_out - h)),
+        (e.data_type = n.bits + (n.last ? 64 : 0) + (n.mode === L ? 128 : 0) + (n.mode === z || n.mode === P ? 256 : 0)),
+        ((0 === f && 0 === h) || t === R) && W === U && (W = B),
         W
       )
     }),
-    (l.inflateEnd = e => {
-      if (K(e)) return S
+    (d.inflateEnd = e => {
+      if (G(e)) return D
       let t = e.state
-      return t.window && (t.window = null), (e.state = null), A
+      return t.window && (t.window = null), (e.state = null), U
     }),
-    (l.inflateGetHeader = (e, t) => {
-      if (K(e)) return S
+    (d.inflateGetHeader = (e, t) => {
+      if (G(e)) return D
       const n = e.state
-      return 0 == (2 & n.wrap) ? S : ((n.head = t), (t.done = !1), A)
+      return 0 == (2 & n.wrap) ? D : ((n.head = t), (t.done = !1), U)
     }),
-    (l.inflateSetDictionary = (e, t) => {
+    (d.inflateSetDictionary = (e, t) => {
       const n = t.length
       let i, r, a
-      return K(e)
-        ? S
+      return G(e)
+        ? D
         : ((i = e.state),
-          0 !== i.wrap && i.mode !== N
-            ? S
-            : i.mode === N && ((r = 1), (r = _(r, t, n, 0)), r !== i.check)
-            ? Z
-            : ((a = ee(e, t, n, n)), a ? ((i.mode = 16210), D) : ((i.havedict = 1), A)))
+          0 !== i.wrap && i.mode !== M
+            ? D
+            : i.mode === M && ((r = 1), (r = y(r, t, n, 0)), r !== i.check)
+            ? I
+            : ((a = ne(e, t, n, n)), a ? ((i.mode = 16210), O) : ((i.havedict = 1), U)))
     }),
-    (l.inflateInfo = 'pako inflate (from Nodeca project)')
-  var te = {}
-  const ne = (e, t) => Object.prototype.hasOwnProperty.call(e, t)
-  ;(te.assign = function (e) {
+    (d.inflateInfo = 'pako inflate (from Nodeca project)')
+  var ie = {}
+  const re = (e, t) => Object.prototype.hasOwnProperty.call(e, t)
+  ;(ie.assign = function (e) {
     const t = Array.prototype.slice.call(arguments, 1)
     for (; t.length; ) {
       const n = t.shift()
       if (n) {
         if ('object' != typeof n) throw new TypeError(n + 'must be non-object')
-        for (const t in n) ne(n, t) && (e[t] = n[t])
+        for (const t in n) re(n, t) && (e[t] = n[t])
       }
     }
     return e
   }),
-    (te.flattenChunks = e => {
+    (ie.flattenChunks = e => {
       let t = 0
       for (let n = 0, i = e.length; n < i; n++) t += e[n].length
       const n = new Uint8Array(t)
@@ -1050,17 +1052,17 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       }
       return n
     })
-  var ie = {}
-  let re = !0
+  var ae = {}
+  let oe = !0
   try {
     String.fromCharCode.apply(null, new Uint8Array(1))
   } catch (e) {
-    re = !1
+    oe = !1
   }
-  const ae = new Uint8Array(256)
-  for (let e = 0; e < 256; e++) ae[e] = e >= 252 ? 6 : e >= 248 ? 5 : e >= 240 ? 4 : e >= 224 ? 3 : e >= 192 ? 2 : 1
-  ;(ae[254] = ae[254] = 1),
-    (ie.string2buf = e => {
+  const se = new Uint8Array(256)
+  for (let e = 0; e < 256; e++) se[e] = e >= 252 ? 6 : e >= 248 ? 5 : e >= 240 ? 4 : e >= 224 ? 3 : e >= 192 ? 2 : 1
+  ;(se[254] = se[254] = 1),
+    (ae.string2buf = e => {
       if ('function' == typeof TextEncoder && TextEncoder.prototype.encode) return new TextEncoder().encode(e)
       let t,
         n,
@@ -1089,7 +1091,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
             : ((t[a++] = 240 | (n >>> 18)), (t[a++] = 128 | ((n >>> 12) & 63)), (t[a++] = 128 | ((n >>> 6) & 63)), (t[a++] = 128 | (63 & n)))
       return t
     })
-  ;(ie.buf2string = (e, t) => {
+  ;(ae.buf2string = (e, t) => {
     const n = t || e.length
     if ('function' == typeof TextDecoder && TextDecoder.prototype.decode) return new TextDecoder().decode(e.subarray(0, t))
     let i, r
@@ -1100,7 +1102,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         a[r++] = t
         continue
       }
-      let o = ae[t]
+      let o = se[t]
       if (o > 4) (a[r++] = 65533), (i += o - 1)
       else {
         for (t &= 2 === o ? 31 : 3 === o ? 15 : 7; o > 1 && i < n; ) (t = (t << 6) | (63 & e[i++])), o--
@@ -1108,22 +1110,22 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       }
     }
     return ((e, t) => {
-      if (t < 65534 && e.subarray && re) return String.fromCharCode.apply(null, e.length === t ? e : e.subarray(0, t))
+      if (t < 65534 && e.subarray && oe) return String.fromCharCode.apply(null, e.length === t ? e : e.subarray(0, t))
       let n = ''
       for (let i = 0; i < t; i++) n += String.fromCharCode(e[i])
       return n
     })(a, r)
   }),
-    (ie.utf8border = (e, t) => {
+    (ae.utf8border = (e, t) => {
       ;(t = t || e.length) > e.length && (t = e.length)
       let n = t - 1
       for (; n >= 0 && 128 == (192 & e[n]); ) n--
-      return n < 0 || 0 === n ? t : n + ae[e[n]] > t ? n : t
+      return n < 0 || 0 === n ? t : n + se[e[n]] > t ? n : t
     })
-  const oe = l,
-    se = te,
-    le = ie,
-    ce = {
+  const le = d,
+    ce = ie,
+    de = ae,
+    fe = {
       2: 'need dictionary',
       1: 'stream end',
       0: '',
@@ -1134,7 +1136,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       '-5': 'buffer error',
       '-6': 'incompatible version'
     },
-    de = function () {
+    he = function () {
       ;(this.input = null),
         (this.next_in = 0),
         (this.avail_in = 0),
@@ -1148,7 +1150,7 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (this.data_type = 2),
         (this.adler = 0)
     },
-    fe = function () {
+    ue = function () {
       ;(this.text = 0),
         (this.time = 0),
         (this.xflags = 0),
@@ -1160,10 +1162,10 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
         (this.hcrc = 0),
         (this.done = !1)
     },
-    he = Object.prototype.toString,
-    { Z_NO_FLUSH: ue, Z_FINISH: we, Z_OK: be, Z_STREAM_END: me, Z_NEED_DICT: ge, Z_STREAM_ERROR: ke, Z_DATA_ERROR: _e, Z_MEM_ERROR: pe } = k
-  function ye(e) {
-    this.options = se.assign({ chunkSize: 65536, windowBits: 15, to: '' }, e || {})
+    we = Object.prototype.toString,
+    { Z_NO_FLUSH: be, Z_FINISH: me, Z_OK: ge, Z_STREAM_END: ke, Z_NEED_DICT: _e, Z_STREAM_ERROR: pe, Z_DATA_ERROR: ye, Z_MEM_ERROR: ve } = p
+  function Ee(e) {
+    this.options = ce.assign({ chunkSize: 65536, windowBits: 15, to: '' }, e || {})
     const t = this.options
     t.raw && t.windowBits >= 0 && t.windowBits < 16 && ((t.windowBits = -t.windowBits), 0 === t.windowBits && (t.windowBits = -15)),
       !(t.windowBits >= 0 && t.windowBits < 16) || (e && e.windowBits) || (t.windowBits += 32),
@@ -1172,35 +1174,35 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
       (this.msg = ''),
       (this.ended = !1),
       (this.chunks = []),
-      (this.strm = new de()),
+      (this.strm = new he()),
       (this.strm.avail_out = 0)
-    let n = oe.inflateInit2(this.strm, t.windowBits)
-    if (n !== be) throw new Error(ce[n])
+    let n = le.inflateInit2(this.strm, t.windowBits)
+    if (n !== ge) throw new Error(fe[n])
     if (
-      ((this.header = new fe()),
-      oe.inflateGetHeader(this.strm, this.header),
+      ((this.header = new ue()),
+      le.inflateGetHeader(this.strm, this.header),
       t.dictionary &&
         ('string' == typeof t.dictionary
-          ? (t.dictionary = le.string2buf(t.dictionary))
-          : '[object ArrayBuffer]' === he.call(t.dictionary) && (t.dictionary = new Uint8Array(t.dictionary)),
-        t.raw && ((n = oe.inflateSetDictionary(this.strm, t.dictionary)), n !== be)))
+          ? (t.dictionary = de.string2buf(t.dictionary))
+          : '[object ArrayBuffer]' === we.call(t.dictionary) && (t.dictionary = new Uint8Array(t.dictionary)),
+        t.raw && ((n = le.inflateSetDictionary(this.strm, t.dictionary)), n !== ge)))
     )
-      throw new Error(ce[n])
+      throw new Error(fe[n])
   }
-  function ve(e, t) {
-    const n = new ye(t)
-    if ((n.push(e), n.err)) throw n.msg || ce[n.err]
+  function xe(e, t) {
+    const n = new Ee(t)
+    if ((n.push(e), n.err)) throw n.msg || fe[n.err]
     return n.result
   }
-  ;(ye.prototype.push = function (e, t) {
+  ;(Ee.prototype.push = function (e, t) {
     const n = this.strm,
       i = this.options.chunkSize,
       r = this.options.dictionary
     let a, o, s
     if (this.ended) return !1
     for (
-      o = t === ~~t ? t : !0 === t ? we : ue,
-        '[object ArrayBuffer]' === he.call(e) ? (n.input = new Uint8Array(e)) : (n.input = e),
+      o = t === ~~t ? t : !0 === t ? me : be,
+        '[object ArrayBuffer]' === we.call(e) ? (n.input = new Uint8Array(e)) : (n.input = e),
         n.next_in = 0,
         n.avail_in = n.input.length;
       ;
@@ -1208,111 +1210,114 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
     ) {
       for (
         0 === n.avail_out && ((n.output = new Uint8Array(i)), (n.next_out = 0), (n.avail_out = i)),
-          a = oe.inflate(n, o),
-          a === ge && r && ((a = oe.inflateSetDictionary(n, r)), a === be ? (a = oe.inflate(n, o)) : a === _e && (a = ge));
-        n.avail_in > 0 && a === me && n.state.wrap > 0 && 0 !== e[n.next_in];
+          a = le.inflate(n, o),
+          a === _e && r && ((a = le.inflateSetDictionary(n, r)), a === ge ? (a = le.inflate(n, o)) : a === ye && (a = _e));
+        n.avail_in > 0 && a === ke && n.state.wrap > 0 && 0 !== e[n.next_in];
 
       )
-        oe.inflateReset(n), (a = oe.inflate(n, o))
+        le.inflateReset(n), (a = le.inflate(n, o))
       switch (a) {
-        case ke:
-        case _e:
-        case ge:
         case pe:
+        case ye:
+        case _e:
+        case ve:
           return this.onEnd(a), (this.ended = !0), !1
       }
-      if (((s = n.avail_out), n.next_out && (0 === n.avail_out || a === me)))
+      if (((s = n.avail_out), n.next_out && (0 === n.avail_out || a === ke)))
         if ('string' === this.options.to) {
-          let e = le.utf8border(n.output, n.next_out),
+          let e = de.utf8border(n.output, n.next_out),
             t = n.next_out - e,
-            r = le.buf2string(n.output, e)
+            r = de.buf2string(n.output, e)
           ;(n.next_out = t), (n.avail_out = i - t), t && n.output.set(n.output.subarray(e, e + t), 0), this.onData(r)
         } else this.onData(n.output.length === n.next_out ? n.output : n.output.subarray(0, n.next_out))
-      if (a !== be || 0 !== s) {
-        if (a === me) return (a = oe.inflateEnd(this.strm)), this.onEnd(a), (this.ended = !0), !0
+      if (a !== ge || 0 !== s) {
+        if (a === ke) return (a = le.inflateEnd(this.strm)), this.onEnd(a), (this.ended = !0), !0
         if (0 === n.avail_in) break
       }
     }
     return !0
   }),
-    (ye.prototype.onData = function (e) {
+    (Ee.prototype.onData = function (e) {
       this.chunks.push(e)
     }),
-    (ye.prototype.onEnd = function (e) {
-      e === be && ('string' === this.options.to ? (this.result = this.chunks.join('')) : (this.result = se.flattenChunks(this.chunks))),
+    (Ee.prototype.onEnd = function (e) {
+      e === ge && ('string' === this.options.to ? (this.result = this.chunks.join('')) : (this.result = ce.flattenChunks(this.chunks))),
         (this.chunks = []),
         (this.err = e),
         (this.msg = this.strm.msg)
     }),
-    (s.Inflate = ye),
-    (s.inflate = ve),
-    (s.inflateRaw = function (e, t) {
-      return ((t = t || {}).raw = !0), ve(e, t)
+    (c.Inflate = Ee),
+    (c.inflate = xe),
+    (c.inflateRaw = function (e, t) {
+      return ((t = t || {}).raw = !0), xe(e, t)
     }),
-    (s.ungzip = ve),
-    (s.constants = k)
-  const Ee = Uint16Array.BYTES_PER_ELEMENT,
-    xe = Int32Array.BYTES_PER_ELEMENT,
-    Re = Uint32Array.BYTES_PER_ELEMENT,
-    Ae = { METADATA: 0, TERRAIN: 1, DBROOT: 2 }
-  Ae.fromString = function (e) {
-    return 'Metadata' === e ? Ae.METADATA : 'Terrain' === e ? Ae.TERRAIN : 'DbRoot' === e ? Ae.DBROOT : void 0
+    (c.ungzip = xe),
+    (c.constants = p)
+  const Re = Uint16Array.BYTES_PER_ELEMENT,
+    Ae = Int32Array.BYTES_PER_ELEMENT,
+    Te = Uint32Array.BYTES_PER_ELEMENT,
+    Ue = { METADATA: 0, TERRAIN: 1, DBROOT: 2 }
+  Ue.fromString = function (e) {
+    return 'Metadata' === e ? Ue.METADATA : 'Terrain' === e ? Ue.TERRAIN : 'DbRoot' === e ? Ue.DBROOT : void 0
   }
-  const Te = 1953029805,
-    Ue = 2917034100
+  const Se = 32301
+  const Ze = 5,
+    De = 4
+  const Ie = 1953029805,
+    Oe = 2917034100
   return n(function (t, n) {
-    const r = Ae.fromString(t.type)
-    let a = t.buffer
-    i(t.key, a)
-    const l = (function (t) {
+    const i = Ue.fromString(t.type)
+    let r = t.buffer
+    a(t.key, r)
+    const o = (function (t) {
       const n = new DataView(t)
       let i = 0
       const r = n.getUint32(i, !0)
-      if (((i += Re), r !== Te && r !== Ue)) throw new e.RuntimeError('Invalid magic')
-      const a = n.getUint32(i, r === Te)
-      i += Re
+      if (((i += Te), r !== Ie && r !== Oe)) throw new e.RuntimeError('Invalid magic')
+      const a = n.getUint32(i, r === Ie)
+      i += Te
       const o = new Uint8Array(t, i),
-        l = s.inflate(o)
-      if (l.length !== a) throw new e.RuntimeError("Size of packet doesn't match header")
-      return l
-    })(a)
-    a = l.buffer
-    const c = l.length
-    switch (r) {
-      case Ae.METADATA:
+        s = c.inflate(o)
+      if (s.length !== a) throw new e.RuntimeError("Size of packet doesn't match header")
+      return s
+    })(r)
+    r = o.buffer
+    const s = o.length
+    switch (i) {
+      case Ue.METADATA:
         return (function (t, n, i) {
           const r = new DataView(t)
           let a = 0
+          const o = r.getUint32(a, !0)
+          if (((a += Te), o !== Se)) throw new e.RuntimeError('Invalid magic')
           const s = r.getUint32(a, !0)
-          if (((a += Re), 32301 !== s)) throw new e.RuntimeError('Invalid magic')
-          const l = r.getUint32(a, !0)
-          if (((a += Re), 1 !== l)) throw new e.RuntimeError('Invalid data type. Must be 1 for QuadTreePacket')
+          if (((a += Te), 1 !== s)) throw new e.RuntimeError('Invalid data type. Must be 1 for QuadTreePacket')
           const c = r.getUint32(a, !0)
-          if (((a += Re), 2 !== c)) throw new e.RuntimeError('Invalid QuadTreePacket version. Only version 2 is supported.')
+          if (((a += Te), 2 !== c)) throw new e.RuntimeError('Invalid QuadTreePacket version. Only version 2 is supported.')
           const d = r.getInt32(a, !0)
-          a += xe
+          a += Ae
           const f = r.getInt32(a, !0)
-          if (((a += xe), 32 !== f)) throw new e.RuntimeError('Invalid instance size.')
+          if (((a += Ae), 32 !== f)) throw new e.RuntimeError('Invalid instance size.')
           const h = r.getInt32(a, !0)
-          a += xe
+          a += Ae
           const u = r.getInt32(a, !0)
-          a += xe
+          a += Ae
           const w = r.getInt32(a, !0)
-          if (((a += xe), h !== d * f + a)) throw new e.RuntimeError('Invalid dataBufferOffset')
+          if (((a += Ae), h !== d * f + a)) throw new e.RuntimeError('Invalid dataBufferOffset')
           if (h + u + w !== n) throw new e.RuntimeError('Invalid packet offsets')
           const b = []
           for (let e = 0; e < d; ++e) {
             const e = r.getUint8(a)
             ++a, ++a
             const t = r.getUint16(a, !0)
-            a += Ee
+            a += Re
             const n = r.getUint16(a, !0)
-            a += Ee
+            a += Re
             const i = r.getUint16(a, !0)
-            ;(a += Ee), (a += Ee), (a += Ee), (a += xe), (a += xe), (a += 8)
-            const s = r.getUint8(a++),
-              l = r.getUint8(a++)
-            ;(a += Ee), b.push(new o(e, t, n, i, s, l))
+            ;(a += Re), (a += Re), (a += Re), (a += Ae), (a += Ae), (a += 8)
+            const o = r.getUint8(a++),
+              s = r.getUint8(a++)
+            ;(a += Re), b.push(new l(e, t, n, i, o, s))
           }
           const m = []
           let g = 0
@@ -1337,29 +1342,29 @@ define(['./RuntimeError-06c93819', './defaultValue-0a909f67', './createTaskProce
           const p = b[g++]
           '' === i ? ++_ : (m[i] = p)
           return k(i, p, _), m
-        })(a, c, t.quadKey)
-      case Ae.TERRAIN:
+        })(r, s, t.quadKey)
+      case Ue.TERRAIN:
         return (function (t, n, i) {
           const r = new DataView(t),
             a = function (t) {
-              for (let i = 0; i < 4; ++i) {
+              for (let i = 0; i < De; ++i) {
                 const i = r.getUint32(t, !0)
-                if (((t += Re), (t += i) > n)) throw new e.RuntimeError('Malformed terrain packet found.')
+                if (((t += Te), (t += i) > n)) throw new e.RuntimeError('Malformed terrain packet found.')
               }
               return t
             }
           let o = 0
           const s = []
-          for (; s.length < 5; ) {
+          for (; s.length < Ze; ) {
             const e = o
             o = a(o)
             const n = t.slice(e, o)
             i.push(n), s.push(n)
           }
           return s
-        })(a, c, n)
-      case Ae.DBROOT:
-        return n.push(a), { buffer: a }
+        })(r, s, n)
+      case Ue.DBROOT:
+        return n.push(r), { buffer: r }
     }
   })
 })

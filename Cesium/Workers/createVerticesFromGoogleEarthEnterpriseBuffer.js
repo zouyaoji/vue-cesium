@@ -1,94 +1,94 @@
 define([
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './Matrix3-b6f074fa',
-  './defaultValue-0a909f67',
-  './TerrainEncoding-6a85a8f8',
-  './Math-e97915da',
-  './OrientedBoundingBox-83fb8c71',
-  './RuntimeError-06c93819',
-  './WebMercatorProjection-8e29b101',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './Matrix3-81054f0f',
+  './defaultValue-f6d5e6da',
+  './TerrainEncoding-7a03fd29',
+  './Math-2ce22ee9',
+  './OrientedBoundingBox-fc7f7ca4',
+  './RuntimeError-9b4ce3fb',
+  './WebMercatorProjection-943e2226',
   './createTaskProcessorWorker',
-  './combine-ca22a614',
-  './AttributeCompression-e18a879a',
-  './ComponentDatatype-77274976',
-  './WebGLConstants-a8cc3e8c',
-  './EllipsoidTangentPlane-f7077c2e',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3'
-], function (t, e, n, i, o, a, r, s, c, u, h, l, d, g, m, p, f, I) {
+  './combine-0c102d93',
+  './AttributeCompression-48e336db',
+  './ComponentDatatype-ab629b88',
+  './WebGLConstants-7f557f93',
+  './EllipsoidTangentPlane-d430e7d5',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1'
+], function (t, e, n, i, o, r, a, s, c, u, h, l, d, g, m, p, I, E) {
   'use strict'
-  const E = Uint16Array.BYTES_PER_ELEMENT,
-    T = Int32Array.BYTES_PER_ELEMENT,
+  const T = Uint16Array.BYTES_PER_ELEMENT,
+    f = Int32Array.BYTES_PER_ELEMENT,
     C = Uint32Array.BYTES_PER_ELEMENT,
     M = Float32Array.BYTES_PER_ELEMENT,
     x = Float64Array.BYTES_PER_ELEMENT
   function N(t, e, n) {
-    n = o.defaultValue(n, r.CesiumMath)
+    n = o.defaultValue(n, a.CesiumMath)
     const i = t.length
-    for (let o = 0; o < i; ++o) if (n.equalsEpsilon(t[o], e, r.CesiumMath.EPSILON12)) return o
+    for (let o = 0; o < i; ++o) if (n.equalsEpsilon(t[o], e, a.CesiumMath.EPSILON12)) return o
     return -1
   }
-  const b = new i.Cartographic(),
-    S = new i.Cartesian3(),
+  const S = new i.Cartographic(),
+    b = new i.Cartesian3(),
     w = new i.Cartesian3(),
     B = new i.Cartesian3(),
     P = new n.Matrix4()
-  function A(t, e, a, s, c, u, h, l, d, g, m) {
+  function A(t, e, r, s, c, u, h, l, d, g, m) {
     const p = l.length
-    for (let f = 0; f < p; ++f) {
-      const I = l[f],
-        E = I.cartographic,
-        T = I.index,
+    for (let I = 0; I < p; ++I) {
+      const E = l[I],
+        T = E.cartographic,
+        f = E.index,
         C = t.length,
-        M = E.longitude
-      let x = E.latitude
-      x = r.CesiumMath.clamp(x, -r.CesiumMath.PI_OVER_TWO, r.CesiumMath.PI_OVER_TWO)
-      const N = E.height - h.skirtHeight
+        M = T.longitude
+      let x = T.latitude
+      x = a.CesiumMath.clamp(x, -a.CesiumMath.PI_OVER_TWO, a.CesiumMath.PI_OVER_TWO)
+      const N = T.height - h.skirtHeight
       ;(h.hMin = Math.min(h.hMin, N)),
-        i.Cartographic.fromRadians(M, x, N, b),
-        g && (b.longitude += d),
-        g ? (f === p - 1 ? (b.latitude += m) : 0 === f && (b.latitude -= m)) : (b.latitude += d)
-      const w = h.ellipsoid.cartographicToCartesian(b)
+        i.Cartographic.fromRadians(M, x, N, S),
+        g && (S.longitude += d),
+        g ? (I === p - 1 ? (S.latitude += m) : 0 === I && (S.latitude -= m)) : (S.latitude += d)
+      const w = h.ellipsoid.cartographicToCartesian(S)
       t.push(w),
         e.push(N),
-        a.push(n.Cartesian2.clone(a[T])),
-        s.length > 0 && s.push(s[T]),
-        c.length > 0 && c.push(c[T]),
-        n.Matrix4.multiplyByPoint(h.toENU, w, S)
+        r.push(n.Cartesian2.clone(r[f])),
+        s.length > 0 && s.push(s[f]),
+        c.length > 0 && c.push(c[f]),
+        n.Matrix4.multiplyByPoint(h.toENU, w, b)
       const B = h.minimum,
         P = h.maximum
-      i.Cartesian3.minimumByComponent(S, B, B), i.Cartesian3.maximumByComponent(S, P, P)
+      i.Cartesian3.minimumByComponent(b, B, B), i.Cartesian3.maximumByComponent(b, P, P)
       const A = h.lastBorderPoint
       if (o.defined(A)) {
         const t = A.index
-        u.push(t, C - 1, C, C, T, t)
+        u.push(t, C - 1, C, C, f, t)
       }
-      h.lastBorderPoint = I
+      h.lastBorderPoint = E
     }
   }
   return h(function (h, l) {
     ;(h.ellipsoid = i.Ellipsoid.clone(h.ellipsoid)), (h.rectangle = n.Rectangle.clone(h.rectangle))
-    const d = (function (h, l, d, g, m, p, f, I, y, R, _) {
+    const d = (function (h, l, d, g, m, p, I, E, y, R, _) {
         let W, v, F, O, V, Y
         o.defined(g)
           ? ((W = g.west), (v = g.south), (F = g.east), (O = g.north), (V = g.width), (Y = g.height))
-          : ((W = r.CesiumMath.toRadians(m.west)),
-            (v = r.CesiumMath.toRadians(m.south)),
-            (F = r.CesiumMath.toRadians(m.east)),
-            (O = r.CesiumMath.toRadians(m.north)),
-            (V = r.CesiumMath.toRadians(g.width)),
-            (Y = r.CesiumMath.toRadians(g.height)))
+          : ((W = a.CesiumMath.toRadians(m.west)),
+            (v = a.CesiumMath.toRadians(m.south)),
+            (F = a.CesiumMath.toRadians(m.east)),
+            (O = a.CesiumMath.toRadians(m.north)),
+            (V = a.CesiumMath.toRadians(g.width)),
+            (Y = a.CesiumMath.toRadians(g.height)))
         const U = [v, O],
           k = [W, F],
           H = e.Transforms.eastNorthUpToFixedFrame(l, d),
           L = n.Matrix4.inverseTransformation(H, P)
-        let D, G
+        let j, D
         y &&
-          ((D = u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(v)),
-          (G = 1 / (u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(O) - D)))
-        const j = 1 !== p,
+          ((j = u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(v)),
+          (D = 1 / (u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(O) - j)))
+        const G = 1 !== p,
           z = new DataView(h)
         let q = Number.POSITIVE_INFINITY,
           J = Number.NEGATIVE_INFINITY
@@ -104,20 +104,20 @@ define([
         for (Z = 0; Z < 4; ++Z) {
           let t = $
           ;(X = z.getUint32(t, !0)), (t += C)
-          const e = r.CesiumMath.toRadians(180 * z.getFloat64(t, !0))
+          const e = a.CesiumMath.toRadians(180 * z.getFloat64(t, !0))
           ;(t += x), -1 === N(k, e) && k.push(e)
-          const n = r.CesiumMath.toRadians(180 * z.getFloat64(t, !0))
+          const n = a.CesiumMath.toRadians(180 * z.getFloat64(t, !0))
           ;(t += x), -1 === N(U, n) && U.push(n), (t += 2 * x)
           let i = z.getInt32(t, !0)
-          ;(t += T), (tt += i), (i = z.getInt32(t, !0)), (et += 3 * i), ($ += X + C)
+          ;(t += f), (tt += i), (i = z.getInt32(t, !0)), (et += 3 * i), ($ += X + C)
         }
         const nt = [],
           it = [],
           ot = new Array(tt),
-          at = new Array(tt),
           rt = new Array(tt),
+          at = new Array(tt),
           st = y ? new Array(tt) : [],
-          ct = j ? new Array(tt) : [],
+          ct = G ? new Array(tt) : [],
           ut = new Array(et),
           ht = [],
           lt = [],
@@ -128,66 +128,66 @@ define([
         for ($ = 0, Z = 0; Z < 4; ++Z) {
           ;(X = z.getUint32($, !0)), ($ += C)
           const t = $,
-            e = r.CesiumMath.toRadians(180 * z.getFloat64($, !0))
+            e = a.CesiumMath.toRadians(180 * z.getFloat64($, !0))
           $ += x
-          const o = r.CesiumMath.toRadians(180 * z.getFloat64($, !0))
+          const o = a.CesiumMath.toRadians(180 * z.getFloat64($, !0))
           $ += x
-          const a = r.CesiumMath.toRadians(180 * z.getFloat64($, !0)),
-            s = 0.5 * a
+          const r = a.CesiumMath.toRadians(180 * z.getFloat64($, !0)),
+            s = 0.5 * r
           $ += x
-          const h = r.CesiumMath.toRadians(180 * z.getFloat64($, !0)),
+          const h = a.CesiumMath.toRadians(180 * z.getFloat64($, !0)),
             l = 0.5 * h
           $ += x
           const g = z.getInt32($, !0)
-          $ += T
+          $ += f
           const m = z.getInt32($, !0)
-          ;($ += T), ($ += T)
+          ;($ += f), ($ += f)
           const p = new Array(g)
           for (let t = 0; t < g; ++t) {
-            const c = e + z.getUint8($++) * a
-            b.longitude = c
+            const c = e + z.getUint8($++) * r
+            S.longitude = c
             const g = o + z.getUint8($++) * h
-            b.latitude = g
+            S.latitude = g
             let m = z.getFloat32($, !0)
-            if ((($ += M), 0 !== m && m < _ && (m *= -Math.pow(2, R)), (m *= 6371010), (b.height = m), -1 !== N(k, c) || -1 !== N(U, g))) {
-              const e = N(nt, b, i.Cartographic)
+            if ((($ += M), 0 !== m && m < _ && (m *= -Math.pow(2, R)), (m *= 6371010), (S.height = m), -1 !== N(k, c) || -1 !== N(U, g))) {
+              const e = N(nt, S, i.Cartographic)
               if (-1 !== e) {
                 p[t] = it[e]
                 continue
               }
-              nt.push(i.Cartographic.clone(b)), it.push(mt)
+              nt.push(i.Cartographic.clone(S)), it.push(mt)
             }
             ;(p[t] = mt),
               Math.abs(c - W) < s
-                ? ht.push({ index: mt, cartographic: i.Cartographic.clone(b) })
+                ? ht.push({ index: mt, cartographic: i.Cartographic.clone(S) })
                 : Math.abs(c - F) < s
-                ? dt.push({ index: mt, cartographic: i.Cartographic.clone(b) })
+                ? dt.push({ index: mt, cartographic: i.Cartographic.clone(S) })
                 : Math.abs(g - v) < l
-                ? lt.push({ index: mt, cartographic: i.Cartographic.clone(b) })
-                : Math.abs(g - O) < l && gt.push({ index: mt, cartographic: i.Cartographic.clone(b) }),
+                ? lt.push({ index: mt, cartographic: i.Cartographic.clone(S) })
+                : Math.abs(g - O) < l && gt.push({ index: mt, cartographic: i.Cartographic.clone(S) }),
               (q = Math.min(m, q)),
               (J = Math.max(m, J)),
-              (rt[mt] = m)
-            const f = d.cartographicToCartesian(b)
-            if (((ot[mt] = f), y && (st[mt] = (u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(g) - D) * G), j)) {
-              const t = d.geodeticSurfaceNormal(f)
+              (at[mt] = m)
+            const I = d.cartographicToCartesian(S)
+            if (((ot[mt] = I), y && (st[mt] = (u.WebMercatorProjection.geodeticLatitudeToMercatorAngle(g) - j) * D), G)) {
+              const t = d.geodeticSurfaceNormal(I)
               ct[mt] = t
             }
-            n.Matrix4.multiplyByPoint(L, f, S), i.Cartesian3.minimumByComponent(S, K, K), i.Cartesian3.maximumByComponent(S, Q, Q)
-            let I = (c - W) / (F - W)
-            I = r.CesiumMath.clamp(I, 0, 1)
-            let E = (g - v) / (O - v)
-            ;(E = r.CesiumMath.clamp(E, 0, 1)), (at[mt] = new n.Cartesian2(I, E)), ++mt
+            n.Matrix4.multiplyByPoint(L, I, b), i.Cartesian3.minimumByComponent(b, K, K), i.Cartesian3.maximumByComponent(b, Q, Q)
+            let E = (c - W) / (F - W)
+            E = a.CesiumMath.clamp(E, 0, 1)
+            let T = (g - v) / (O - v)
+            ;(T = a.CesiumMath.clamp(T, 0, 1)), (rt[mt] = new n.Cartesian2(E, T)), ++mt
           }
-          const f = 3 * m
-          for (let t = 0; t < f; ++t, ++pt) (ut[pt] = p[z.getUint16($, !0)]), ($ += E)
+          const I = 3 * m
+          for (let t = 0; t < I; ++t, ++pt) (ut[pt] = p[z.getUint16($, !0)]), ($ += T)
           if (X !== $ - t) throw new c.RuntimeError('Invalid terrain tile.')
         }
-        ;(ot.length = mt), (at.length = mt), (rt.length = mt), y && (st.length = mt)
-        j && (ct.length = mt)
-        const ft = mt,
-          It = pt,
-          Et = { hMin: q, lastBorderPoint: void 0, skirtHeight: I, toENU: L, ellipsoid: d, minimum: K, maximum: Q }
+        ;(ot.length = mt), (rt.length = mt), (at.length = mt), y && (st.length = mt)
+        G && (ct.length = mt)
+        const It = mt,
+          Et = pt,
+          Tt = { hMin: q, lastBorderPoint: void 0, skirtHeight: E, toENU: L, ellipsoid: d, minimum: K, maximum: Q }
         ht.sort(function (t, e) {
           return e.cartographic.latitude - t.cartographic.latitude
         }),
@@ -200,16 +200,16 @@ define([
           gt.sort(function (t, e) {
             return e.cartographic.longitude - t.cartographic.longitude
           })
-        const Tt = 1e-5
+        const ft = 1e-5
         if (
-          (A(ot, rt, at, st, ct, ut, Et, ht, -Tt * V, !0, -Tt * Y),
-          A(ot, rt, at, st, ct, ut, Et, lt, -Tt * Y, !1),
-          A(ot, rt, at, st, ct, ut, Et, dt, Tt * V, !0, Tt * Y),
-          A(ot, rt, at, st, ct, ut, Et, gt, Tt * Y, !1),
+          (A(ot, at, rt, st, ct, ut, Tt, ht, -ft * V, !0, -ft * Y),
+          A(ot, at, rt, st, ct, ut, Tt, lt, -ft * Y, !1),
+          A(ot, at, rt, st, ct, ut, Tt, dt, ft * V, !0, ft * Y),
+          A(ot, at, rt, st, ct, ut, Tt, gt, ft * Y, !1),
           ht.length > 0 && gt.length > 0)
         ) {
           const t = ht[0].index,
-            e = ft,
+            e = It,
             n = gt[gt.length - 1].index,
             i = ot.length - 1
           ut.push(n, i, e, e, t, n)
@@ -218,12 +218,12 @@ define([
         const Ct = e.BoundingSphere.fromPoints(ot)
         let Mt
         o.defined(g) && (Mt = s.OrientedBoundingBox.fromRectangle(g, q, J, d))
-        const xt = new a.EllipsoidalOccluder(d).computeHorizonCullingPointPossiblyUnderEllipsoid(l, ot, q),
+        const xt = new r.EllipsoidalOccluder(d).computeHorizonCullingPointPossiblyUnderEllipsoid(l, ot, q),
           Nt = new t.AxisAlignedBoundingBox(K, Q, l),
-          bt = new a.TerrainEncoding(l, Nt, Et.hMin, J, H, !1, y, j, p, f),
-          St = new Float32Array(tt * bt.stride)
+          St = new r.TerrainEncoding(l, Nt, Tt.hMin, J, H, !1, y, G, p, I),
+          bt = new Float32Array(tt * St.stride)
         let wt = 0
-        for (let t = 0; t < tt; ++t) wt = bt.encode(St, wt, ot[t], at[t], rt[t], void 0, st[t], ct[t])
+        for (let t = 0; t < tt; ++t) wt = St.encode(bt, wt, ot[t], rt[t], at[t], void 0, st[t], ct[t])
         const Bt = ht
             .map(function (t) {
               return t.index
@@ -250,16 +250,16 @@ define([
           yt.unshift(Bt[Bt.length - 1]),
           yt.push(At[0]),
           {
-            vertices: St,
+            vertices: bt,
             indices: new Uint16Array(ut),
             maximumHeight: J,
             minimumHeight: q,
-            encoding: bt,
+            encoding: St,
             boundingSphere3D: Ct,
             orientedBoundingBox: Mt,
             occludeePointInScaledSpace: xt,
-            vertexCountWithoutSkirts: ft,
-            indexCountWithoutSkirts: It,
+            vertexCountWithoutSkirts: It,
+            indexCountWithoutSkirts: Et,
             westIndicesSouthToNorth: Bt,
             southIndicesEastToWest: Pt,
             eastIndicesNorthToSouth: At,

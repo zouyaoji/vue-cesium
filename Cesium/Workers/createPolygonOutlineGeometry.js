@@ -1,118 +1,118 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-b6f074fa',
-  './ArcType-ce2e50ab',
-  './Transforms-dadc538f',
-  './ComponentDatatype-77274976',
-  './EllipsoidTangentPlane-f7077c2e',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryInstance-9b27c40d',
-  './GeometryOffsetAttribute-04332ce7',
-  './GeometryPipeline-b7404acc',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './PolygonGeometryLibrary-a917cdd7',
-  './PolygonPipeline-1ccef6d7',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c',
-  './AxisAlignedBoundingBox-e5bb9f92',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './AttributeCompression-e18a879a',
-  './EncodedCartesian3-de837603',
-  './arrayRemoveDuplicates-e9673044',
-  './EllipsoidRhumbLine-7f84cca0'
-], function (e, t, i, o, r, n, a, s, l, y, u, p, c, d, f, g, m, h, b, P, E, A, _, G, L, T) {
+  './defaultValue-f6d5e6da',
+  './Matrix3-81054f0f',
+  './ArcType-26a3f38d',
+  './Transforms-20461479',
+  './ComponentDatatype-ab629b88',
+  './EllipsoidTangentPlane-d430e7d5',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryInstance-0318e0cd',
+  './GeometryOffsetAttribute-2579b8d2',
+  './GeometryPipeline-fcaf4d4d',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './PolygonGeometryLibrary-d7e504f0',
+  './PolygonPipeline-621b1cb0',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './WebGLConstants-7f557f93',
+  './AxisAlignedBoundingBox-2c0751ca',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './AttributeCompression-48e336db',
+  './EncodedCartesian3-5e2017ab',
+  './arrayRemoveDuplicates-9b636830',
+  './EllipsoidRhumbLine-77eff028'
+], function (e, t, i, o, r, n, a, s, l, y, u, p, d, c, g, f, h, m, b, P, A, E, _, G, L, T) {
   'use strict'
   const H = [],
     v = []
-  function C(e, t, o, y, u) {
-    const c = n.EllipsoidTangentPlane.fromPoints(t, e).projectPointsOntoPlane(t, H)
-    let g, m
-    f.PolygonPipeline.computeWindingOrder2D(c) === f.WindingOrder.CLOCKWISE && (c.reverse(), (t = t.slice().reverse()))
-    let h = t.length,
+  function x(e, t, o, y, u) {
+    const d = n.EllipsoidTangentPlane.fromPoints(t, e).projectPointsOntoPlane(t, H)
+    let f, h
+    g.PolygonPipeline.computeWindingOrder2D(d) === g.WindingOrder.CLOCKWISE && (d.reverse(), (t = t.slice().reverse()))
+    let m = t.length,
       b = 0
     if (y)
-      for (g = new Float64Array(2 * h * 3), m = 0; m < h; m++) {
-        const e = t[m],
-          i = t[(m + 1) % h]
-        ;(g[b++] = e.x), (g[b++] = e.y), (g[b++] = e.z), (g[b++] = i.x), (g[b++] = i.y), (g[b++] = i.z)
+      for (f = new Float64Array(2 * m * 3), h = 0; h < m; h++) {
+        const e = t[h],
+          i = t[(h + 1) % m]
+        ;(f[b++] = e.x), (f[b++] = e.y), (f[b++] = e.z), (f[b++] = i.x), (f[b++] = i.y), (f[b++] = i.z)
       }
     else {
       let r = 0
-      if (u === i.ArcType.GEODESIC) for (m = 0; m < h; m++) r += d.PolygonGeometryLibrary.subdivideLineCount(t[m], t[(m + 1) % h], o)
-      else if (u === i.ArcType.RHUMB) for (m = 0; m < h; m++) r += d.PolygonGeometryLibrary.subdivideRhumbLineCount(e, t[m], t[(m + 1) % h], o)
-      for (g = new Float64Array(3 * r), m = 0; m < h; m++) {
+      if (u === i.ArcType.GEODESIC) for (h = 0; h < m; h++) r += c.PolygonGeometryLibrary.subdivideLineCount(t[h], t[(h + 1) % m], o)
+      else if (u === i.ArcType.RHUMB) for (h = 0; h < m; h++) r += c.PolygonGeometryLibrary.subdivideRhumbLineCount(e, t[h], t[(h + 1) % m], o)
+      for (f = new Float64Array(3 * r), h = 0; h < m; h++) {
         let r
         u === i.ArcType.GEODESIC
-          ? (r = d.PolygonGeometryLibrary.subdivideLine(t[m], t[(m + 1) % h], o, v))
-          : u === i.ArcType.RHUMB && (r = d.PolygonGeometryLibrary.subdivideRhumbLine(e, t[m], t[(m + 1) % h], o, v))
+          ? (r = c.PolygonGeometryLibrary.subdivideLine(t[h], t[(h + 1) % m], o, v))
+          : u === i.ArcType.RHUMB && (r = c.PolygonGeometryLibrary.subdivideRhumbLine(e, t[h], t[(h + 1) % m], o, v))
         const n = r.length
-        for (let e = 0; e < n; ++e) g[b++] = r[e]
+        for (let e = 0; e < n; ++e) f[b++] = r[e]
       }
     }
-    h = g.length / 3
-    const P = 2 * h,
-      E = p.IndexDatatype.createTypedArray(h, P)
-    for (b = 0, m = 0; m < h - 1; m++) (E[b++] = m), (E[b++] = m + 1)
+    m = f.length / 3
+    const P = 2 * m,
+      A = p.IndexDatatype.createTypedArray(m, P)
+    for (b = 0, h = 0; h < m - 1; h++) (A[b++] = h), (A[b++] = h + 1)
     return (
-      (E[b++] = h - 1),
-      (E[b++] = 0),
+      (A[b++] = m - 1),
+      (A[b++] = 0),
       new l.GeometryInstance({
         geometry: new a.Geometry({
           attributes: new s.GeometryAttributes({
-            position: new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: g })
+            position: new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: f })
           }),
-          indices: E,
+          indices: A,
           primitiveType: a.PrimitiveType.LINES
         })
       })
     )
   }
-  function x(e, t, o, y, u) {
-    const c = n.EllipsoidTangentPlane.fromPoints(t, e).projectPointsOntoPlane(t, H)
-    let g, m
-    f.PolygonPipeline.computeWindingOrder2D(c) === f.WindingOrder.CLOCKWISE && (c.reverse(), (t = t.slice().reverse()))
-    let h = t.length
-    const b = new Array(h)
+  function C(e, t, o, y, u) {
+    const d = n.EllipsoidTangentPlane.fromPoints(t, e).projectPointsOntoPlane(t, H)
+    let f, h
+    g.PolygonPipeline.computeWindingOrder2D(d) === g.WindingOrder.CLOCKWISE && (d.reverse(), (t = t.slice().reverse()))
+    let m = t.length
+    const b = new Array(m)
     let P = 0
     if (y)
-      for (g = new Float64Array(2 * h * 3 * 2), m = 0; m < h; ++m) {
-        b[m] = P / 3
-        const e = t[m],
-          i = t[(m + 1) % h]
-        ;(g[P++] = e.x), (g[P++] = e.y), (g[P++] = e.z), (g[P++] = i.x), (g[P++] = i.y), (g[P++] = i.z)
+      for (f = new Float64Array(2 * m * 3 * 2), h = 0; h < m; ++h) {
+        b[h] = P / 3
+        const e = t[h],
+          i = t[(h + 1) % m]
+        ;(f[P++] = e.x), (f[P++] = e.y), (f[P++] = e.z), (f[P++] = i.x), (f[P++] = i.y), (f[P++] = i.z)
       }
     else {
       let r = 0
-      if (u === i.ArcType.GEODESIC) for (m = 0; m < h; m++) r += d.PolygonGeometryLibrary.subdivideLineCount(t[m], t[(m + 1) % h], o)
-      else if (u === i.ArcType.RHUMB) for (m = 0; m < h; m++) r += d.PolygonGeometryLibrary.subdivideRhumbLineCount(e, t[m], t[(m + 1) % h], o)
-      for (g = new Float64Array(3 * r * 2), m = 0; m < h; ++m) {
+      if (u === i.ArcType.GEODESIC) for (h = 0; h < m; h++) r += c.PolygonGeometryLibrary.subdivideLineCount(t[h], t[(h + 1) % m], o)
+      else if (u === i.ArcType.RHUMB) for (h = 0; h < m; h++) r += c.PolygonGeometryLibrary.subdivideRhumbLineCount(e, t[h], t[(h + 1) % m], o)
+      for (f = new Float64Array(3 * r * 2), h = 0; h < m; ++h) {
         let r
-        ;(b[m] = P / 3),
+        ;(b[h] = P / 3),
           u === i.ArcType.GEODESIC
-            ? (r = d.PolygonGeometryLibrary.subdivideLine(t[m], t[(m + 1) % h], o, v))
-            : u === i.ArcType.RHUMB && (r = d.PolygonGeometryLibrary.subdivideRhumbLine(e, t[m], t[(m + 1) % h], o, v))
+            ? (r = c.PolygonGeometryLibrary.subdivideLine(t[h], t[(h + 1) % m], o, v))
+            : u === i.ArcType.RHUMB && (r = c.PolygonGeometryLibrary.subdivideRhumbLine(e, t[h], t[(h + 1) % m], o, v))
         const n = r.length
-        for (let e = 0; e < n; ++e) g[P++] = r[e]
+        for (let e = 0; e < n; ++e) f[P++] = r[e]
       }
     }
-    h = g.length / 6
-    const E = b.length,
-      A = 2 * (2 * h + E),
-      _ = p.IndexDatatype.createTypedArray(h + E, A)
-    for (P = 0, m = 0; m < h; ++m) (_[P++] = m), (_[P++] = (m + 1) % h), (_[P++] = m + h), (_[P++] = ((m + 1) % h) + h)
-    for (m = 0; m < E; m++) {
-      const e = b[m]
-      ;(_[P++] = e), (_[P++] = e + h)
+    m = f.length / 6
+    const A = b.length,
+      E = 2 * (2 * m + A),
+      _ = p.IndexDatatype.createTypedArray(m + A, E)
+    for (P = 0, h = 0; h < m; ++h) (_[P++] = h), (_[P++] = (h + 1) % m), (_[P++] = h + m), (_[P++] = ((h + 1) % m) + m)
+    for (h = 0; h < A; h++) {
+      const e = b[h]
+      ;(_[P++] = e), (_[P++] = e + m)
     }
     return new l.GeometryInstance({
       geometry: new a.Geometry({
         attributes: new s.GeometryAttributes({
-          position: new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: g })
+          position: new a.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: f })
         }),
         indices: _,
         primitiveType: a.PrimitiveType.LINES
@@ -122,7 +122,7 @@ define([
   function O(o) {
     const r = o.polygonHierarchy,
       n = e.defaultValue(o.ellipsoid, t.Ellipsoid.WGS84),
-      a = e.defaultValue(o.granularity, c.CesiumMath.RADIANS_PER_DEGREE),
+      a = e.defaultValue(o.granularity, d.CesiumMath.RADIANS_PER_DEGREE),
       s = e.defaultValue(o.perPositionHeight, !1),
       l = s && e.defined(o.extrudedHeight),
       y = e.defaultValue(o.arcType, i.ArcType.GEODESIC)
@@ -142,12 +142,12 @@ define([
       (this._perPositionHeightExtrude = l),
       (this._offsetAttribute = o.offsetAttribute),
       (this._workerName = 'createPolygonOutlineGeometry'),
-      (this.packedLength = d.PolygonGeometryLibrary.computeHierarchyPackedLength(r, t.Cartesian3) + t.Ellipsoid.packedLength + 8)
+      (this.packedLength = c.PolygonGeometryLibrary.computeHierarchyPackedLength(r, t.Cartesian3) + t.Ellipsoid.packedLength + 8)
   }
   O.pack = function (i, o, r) {
     return (
       (r = e.defaultValue(r, 0)),
-      (r = d.PolygonGeometryLibrary.packPolygonHierarchy(i._polygonHierarchy, o, r, t.Cartesian3)),
+      (r = c.PolygonGeometryLibrary.packPolygonHierarchy(i._polygonHierarchy, o, r, t.Cartesian3)),
       t.Ellipsoid.pack(i._ellipsoid, o, r),
       (r += t.Ellipsoid.packedLength),
       (o[r++] = i._height),
@@ -166,7 +166,7 @@ define([
   return (
     (O.unpack = function (i, o, r) {
       o = e.defaultValue(o, 0)
-      const n = d.PolygonGeometryLibrary.unpackPolygonHierarchy(i, o, t.Cartesian3)
+      const n = c.PolygonGeometryLibrary.unpackPolygonHierarchy(i, o, t.Cartesian3)
       ;(o = n.startingIndex), delete n.startingIndex
       const a = t.Ellipsoid.unpack(i, o, D)
       o += t.Ellipsoid.packedLength
@@ -175,9 +175,9 @@ define([
         y = i[o++],
         u = 1 === i[o++],
         p = 1 === i[o++],
-        c = i[o++],
-        f = i[o++],
-        g = i[o]
+        d = i[o++],
+        g = i[o++],
+        f = i[o]
       return (
         e.defined(r) || (r = new O(I)),
         (r._polygonHierarchy = n),
@@ -187,9 +187,9 @@ define([
         (r._granularity = y),
         (r._perPositionHeight = p),
         (r._perPositionHeightExtrude = u),
-        (r._arcType = c),
-        (r._offsetAttribute = -1 === f ? void 0 : f),
-        (r.packedLength = g),
+        (r._arcType = d),
+        (r._offsetAttribute = -1 === g ? void 0 : g),
+        (r.packedLength = f),
         r
       )
     }),
@@ -211,53 +211,53 @@ define([
         s = t._polygonHierarchy,
         l = t._perPositionHeight,
         p = t._arcType,
-        g = d.PolygonGeometryLibrary.polygonOutlinesFromHierarchy(s, !l, i)
-      if (0 === g.length) return
-      let m
-      const h = [],
-        b = c.CesiumMath.chordLength(n, i.maximumRadius),
+        f = c.PolygonGeometryLibrary.polygonOutlinesFromHierarchy(s, !l, i)
+      if (0 === f.length) return
+      let h
+      const m = [],
+        b = d.CesiumMath.chordLength(n, i.maximumRadius),
         P = t._height,
-        E = t._extrudedHeight
-      let A, _
-      if (t._perPositionHeightExtrude || !c.CesiumMath.equalsEpsilon(P, E, 0, c.CesiumMath.EPSILON2))
-        for (_ = 0; _ < g.length; _++) {
+        A = t._extrudedHeight
+      let E, _
+      if (t._perPositionHeightExtrude || !d.CesiumMath.equalsEpsilon(P, A, 0, d.CesiumMath.EPSILON2))
+        for (_ = 0; _ < f.length; _++) {
           if (
-            ((m = x(i, g[_], b, l, p)),
-            (m.geometry = d.PolygonGeometryLibrary.scaleToGeodeticHeightExtruded(m.geometry, P, E, i, l)),
+            ((h = C(i, f[_], b, l, p)),
+            (h.geometry = c.PolygonGeometryLibrary.scaleToGeodeticHeightExtruded(h.geometry, P, A, i, l)),
             e.defined(t._offsetAttribute))
           ) {
-            const e = m.geometry.attributes.position.values.length / 3
+            const e = h.geometry.attributes.position.values.length / 3
             let i = new Uint8Array(e)
             t._offsetAttribute === y.GeometryOffsetAttribute.TOP
               ? (i = i.fill(1, 0, e / 2))
-              : ((A = t._offsetAttribute === y.GeometryOffsetAttribute.NONE ? 0 : 1), (i = i.fill(A))),
-              (m.geometry.attributes.applyOffset = new a.GeometryAttribute({
+              : ((E = t._offsetAttribute === y.GeometryOffsetAttribute.NONE ? 0 : 1), (i = i.fill(E))),
+              (h.geometry.attributes.applyOffset = new a.GeometryAttribute({
                 componentDatatype: r.ComponentDatatype.UNSIGNED_BYTE,
                 componentsPerAttribute: 1,
                 values: i
               }))
           }
-          h.push(m)
+          m.push(h)
         }
       else
-        for (_ = 0; _ < g.length; _++) {
+        for (_ = 0; _ < f.length; _++) {
           if (
-            ((m = C(i, g[_], b, l, p)),
-            (m.geometry.attributes.position.values = f.PolygonPipeline.scaleToGeodeticHeight(m.geometry.attributes.position.values, P, i, !l)),
+            ((h = x(i, f[_], b, l, p)),
+            (h.geometry.attributes.position.values = g.PolygonPipeline.scaleToGeodeticHeight(h.geometry.attributes.position.values, P, i, !l)),
             e.defined(t._offsetAttribute))
           ) {
-            const e = m.geometry.attributes.position.values.length
-            A = t._offsetAttribute === y.GeometryOffsetAttribute.NONE ? 0 : 1
-            const i = new Uint8Array(e / 3).fill(A)
-            m.geometry.attributes.applyOffset = new a.GeometryAttribute({
+            const e = h.geometry.attributes.position.values.length
+            E = t._offsetAttribute === y.GeometryOffsetAttribute.NONE ? 0 : 1
+            const i = new Uint8Array(e / 3).fill(E)
+            h.geometry.attributes.applyOffset = new a.GeometryAttribute({
               componentDatatype: r.ComponentDatatype.UNSIGNED_BYTE,
               componentsPerAttribute: 1,
               values: i
             })
           }
-          h.push(m)
+          m.push(h)
         }
-      const G = u.GeometryPipeline.combineInstances(h)[0],
+      const G = u.GeometryPipeline.combineInstances(m)[0],
         L = o.BoundingSphere.fromVertices(G.attributes.position.values)
       return new a.Geometry({
         attributes: G.attributes,

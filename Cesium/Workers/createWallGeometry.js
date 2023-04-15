@@ -1,30 +1,30 @@
 define([
-  './defaultValue-0a909f67',
-  './Matrix3-b6f074fa',
-  './Transforms-dadc538f',
-  './ComponentDatatype-77274976',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './IndexDatatype-2149f06c',
-  './Math-e97915da',
-  './VertexFormat-ab2e00e6',
-  './WallGeometryLibrary-6eb1da53',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './WebGLConstants-a8cc3e8c',
-  './arrayRemoveDuplicates-e9673044',
-  './PolylinePipeline-2b44aa86',
-  './EllipsoidGeodesic-b00a0416',
-  './EllipsoidRhumbLine-7f84cca0',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3'
-], function (e, t, n, i, a, o, r, s, l, m, u, c, p, d, y, f, g, h, C, x) {
+  './defaultValue-f6d5e6da',
+  './Matrix3-81054f0f',
+  './Transforms-20461479',
+  './ComponentDatatype-ab629b88',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './IndexDatatype-d3db4e7d',
+  './Math-2ce22ee9',
+  './VertexFormat-fbdec922',
+  './WallGeometryLibrary-55d2dc1a',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './WebGLConstants-7f557f93',
+  './arrayRemoveDuplicates-9b636830',
+  './PolylinePipeline-5ae670bc',
+  './EllipsoidGeodesic-2723ab86',
+  './EllipsoidRhumbLine-77eff028',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1'
+], function (e, t, n, i, a, o, r, s, l, m, u, p, c, d, y, g, f, h, C, x) {
   'use strict'
-  const b = new t.Cartesian3(),
-    A = new t.Cartesian3(),
+  const A = new t.Cartesian3(),
     _ = new t.Cartesian3(),
     E = new t.Cartesian3(),
+    b = new t.Cartesian3(),
     w = new t.Cartesian3(),
     F = new t.Cartesian3(),
     v = new t.Cartesian3()
@@ -42,10 +42,10 @@ define([
       (this._granularity = m),
       (this._ellipsoid = t.Ellipsoid.clone(u)),
       (this._workerName = 'createWallGeometry')
-    let c = 1 + i.length * t.Cartesian3.packedLength + 2
-    e.defined(o) && (c += o.length),
-      e.defined(a) && (c += a.length),
-      (this.packedLength = c + t.Ellipsoid.packedLength + l.VertexFormat.packedLength + 1)
+    let p = 1 + i.length * t.Cartesian3.packedLength + 2
+    e.defined(o) && (p += o.length),
+      e.defined(a) && (p += a.length),
+      (this.packedLength = p + t.Ellipsoid.packedLength + l.VertexFormat.packedLength + 1)
   }
   L.pack = function (n, i, a) {
     let o
@@ -78,16 +78,16 @@ define([
       let m, u
       if (((r = n[i++]), r > 0)) for (m = new Array(r), o = 0; o < r; ++o) m[o] = n[i++]
       if (((r = n[i++]), r > 0)) for (u = new Array(r), o = 0; o < r; ++o) u[o] = n[i++]
-      const c = t.Ellipsoid.unpack(n, i, V)
+      const p = t.Ellipsoid.unpack(n, i, V)
       i += t.Ellipsoid.packedLength
-      const p = l.VertexFormat.unpack(n, i, k),
+      const c = l.VertexFormat.unpack(n, i, k),
         d = n[(i += l.VertexFormat.packedLength)]
       return e.defined(a)
         ? ((a._positions = s),
           (a._minimumHeights = m),
           (a._maximumHeights = u),
-          (a._ellipsoid = t.Ellipsoid.clone(c, a._ellipsoid)),
-          (a._vertexFormat = l.VertexFormat.clone(p, a._vertexFormat)),
+          (a._ellipsoid = t.Ellipsoid.clone(p, a._ellipsoid)),
+          (a._vertexFormat = l.VertexFormat.clone(c, a._vertexFormat)),
           (a._granularity = d),
           a)
         : ((H.positions = s), (H.minimumHeights = m), (H.maximumHeights = u), (H.granularity = d), new L(H))
@@ -108,22 +108,22 @@ define([
     }),
     (L.createGeometry = function (l) {
       const u = l._positions,
-        c = l._minimumHeights,
-        p = l._maximumHeights,
+        p = l._minimumHeights,
+        c = l._maximumHeights,
         d = l._vertexFormat,
         y = l._granularity,
-        f = l._ellipsoid,
-        g = m.WallGeometryLibrary.computePositions(f, u, p, c, y, !0)
-      if (!e.defined(g)) return
-      const h = g.bottomPositions,
-        C = g.topPositions,
-        x = g.numCorners
+        g = l._ellipsoid,
+        f = m.WallGeometryLibrary.computePositions(g, u, c, p, y, !0)
+      if (!e.defined(f)) return
+      const h = f.bottomPositions,
+        C = f.topPositions,
+        x = f.numCorners
       let L = C.length,
         V = 2 * L
       const k = d.position ? new Float64Array(V) : void 0,
         H = d.normal ? new Float32Array(V) : void 0,
-        G = d.tangent ? new Float32Array(V) : void 0,
-        D = d.bitangent ? new Float32Array(V) : void 0,
+        D = d.tangent ? new Float32Array(V) : void 0,
+        G = d.bitangent ? new Float32Array(V) : void 0,
         P = d.st ? new Float32Array((V / 3) * 2) : void 0
       let T,
         z = 0,
@@ -140,18 +140,18 @@ define([
       const q = 1 / (L - x - 1)
       for (T = 0; T < L; ++T) {
         const e = 3 * T,
-          n = t.Cartesian3.fromArray(C, e, b),
-          i = t.Cartesian3.fromArray(h, e, A)
+          n = t.Cartesian3.fromArray(C, e, A),
+          i = t.Cartesian3.fromArray(h, e, _)
         if (
           (d.position && ((k[z++] = i.x), (k[z++] = i.y), (k[z++] = i.z), (k[z++] = n.x), (k[z++] = n.y), (k[z++] = n.z)),
           d.st && ((P[I++] = U), (P[I++] = 0), (P[I++] = U), (P[I++] = 1)),
           d.normal || d.tangent || d.bitangent)
         ) {
-          let i = t.Cartesian3.clone(t.Cartesian3.ZERO, E)
-          const a = t.Cartesian3.subtract(n, f.geodeticSurfaceNormal(n, A), A)
-          if ((T + 1 < L && (i = t.Cartesian3.fromArray(C, e + 3, E)), B)) {
-            const e = t.Cartesian3.subtract(i, n, _),
-              o = t.Cartesian3.subtract(a, n, b)
+          let i = t.Cartesian3.clone(t.Cartesian3.ZERO, b)
+          const a = t.Cartesian3.subtract(n, g.geodeticSurfaceNormal(n, _), _)
+          if ((T + 1 < L && (i = t.Cartesian3.fromArray(C, e + 3, b)), B)) {
+            const e = t.Cartesian3.subtract(i, n, E),
+              o = t.Cartesian3.subtract(a, n, A)
             ;(M = t.Cartesian3.normalize(t.Cartesian3.cross(o, e, M), M)), (B = !1)
           }
           t.Cartesian3.equalsEpsilon(n, i, s.CesiumMath.EPSILON10)
@@ -160,16 +160,16 @@ define([
               d.tangent && (N = t.Cartesian3.normalize(t.Cartesian3.subtract(i, n, N), N)),
               d.bitangent && (W = t.Cartesian3.normalize(t.Cartesian3.cross(M, N, W), W))),
             d.normal && ((H[O++] = M.x), (H[O++] = M.y), (H[O++] = M.z), (H[O++] = M.x), (H[O++] = M.y), (H[O++] = M.z)),
-            d.tangent && ((G[S++] = N.x), (G[S++] = N.y), (G[S++] = N.z), (G[S++] = N.x), (G[S++] = N.y), (G[S++] = N.z)),
-            d.bitangent && ((D[R++] = W.x), (D[R++] = W.y), (D[R++] = W.z), (D[R++] = W.x), (D[R++] = W.y), (D[R++] = W.z))
+            d.tangent && ((D[S++] = N.x), (D[S++] = N.y), (D[S++] = N.z), (D[S++] = N.x), (D[S++] = N.y), (D[S++] = N.z)),
+            d.bitangent && ((G[R++] = W.x), (G[R++] = W.y), (G[R++] = W.z), (G[R++] = W.x), (G[R++] = W.y), (G[R++] = W.z))
         }
       }
       const J = new o.GeometryAttributes()
       d.position && (J.position = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: k })),
         d.normal && (J.normal = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: H })),
-        d.tangent && (J.tangent = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: G })),
+        d.tangent && (J.tangent = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: D })),
         d.bitangent &&
-          (J.bitangent = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: D })),
+          (J.bitangent = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: G })),
         d.st && (J.st = new a.GeometryAttribute({ componentDatatype: i.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: P }))
       const Y = V / 3
       V -= 6 * (x + 1)
@@ -178,8 +178,8 @@ define([
       for (T = 0; T < Y - 2; T += 2) {
         const e = T,
           n = T + 2,
-          i = t.Cartesian3.fromArray(k, 3 * e, b),
-          a = t.Cartesian3.fromArray(k, 3 * n, A)
+          i = t.Cartesian3.fromArray(k, 3 * e, A),
+          a = t.Cartesian3.fromArray(k, 3 * n, _)
         if (t.Cartesian3.equalsEpsilon(i, a, s.CesiumMath.EPSILON10)) continue
         const o = T + 1,
           r = T + 3

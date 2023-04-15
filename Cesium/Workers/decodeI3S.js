@@ -1,74 +1,74 @@
 define([
   './createTaskProcessorWorker',
-  './defaultValue-0a909f67',
-  './WebMercatorProjection-8e29b101',
-  './Matrix3-b6f074fa',
-  './Math-e97915da'
+  './defaultValue-f6d5e6da',
+  './WebMercatorProjection-943e2226',
+  './Matrix3-81054f0f',
+  './Math-2ce22ee9'
 ], function (e, t, n, r, o) {
   'use strict'
-  let a
-  function i(e, t, n, r) {
+  let i
+  function a(e, t, n, r) {
     return r[e + t * n]
   }
   function s(e, t, n) {
     const r = n.nativeExtent
     let o = ((e - r.west) / (r.east - r.west)) * (n.width - 1),
-      a = ((t - r.south) / (r.north - r.south)) * (n.height - 1)
+      i = ((t - r.south) / (r.north - r.south)) * (n.height - 1)
     const s = Math.floor(o)
-    let u = Math.floor(a)
-    ;(o -= s), (a -= u)
+    let u = Math.floor(i)
+    ;(o -= s), (i -= u)
     const c = s < n.width ? s + 1 : s
     let f = u < n.height ? u + 1 : u
     ;(u = n.height - 1 - u), (f = n.height - 1 - f)
-    let l = (function (e, t, n, r, o, a) {
-      return (n * (1 - e) + r * e) * (1 - t) + (o * (1 - e) + a * e) * t
-    })(o, a, i(s, u, n.width, n.buffer), i(c, u, n.width, n.buffer), i(s, f, n.width, n.buffer), i(c, f, n.width, n.buffer))
+    let l = (function (e, t, n, r, o, i) {
+      return (n * (1 - e) + r * e) * (1 - t) + (o * (1 - e) + i * e) * t
+    })(o, i, a(s, u, n.width, n.buffer), a(c, u, n.width, n.buffer), a(s, f, n.width, n.buffer), a(c, f, n.width, n.buffer))
     return (l = l * n.scale + n.offset), l
   }
   function u(e, t, o) {
-    for (let a = 0; a < o.length; a++) {
-      const i = o[a].nativeExtent
+    for (let i = 0; i < o.length; i++) {
+      const a = o[i].nativeExtent
       let u = new r.Cartesian3()
-      if ('WebMercator' === o[a].projectionType) {
-        const i = o[a].projection._ellipsoid._radii
-        u = new n.WebMercatorProjection(new r.Ellipsoid(i.x, i.y, i.z)).project(new r.Cartographic(e, t, 0))
+      if ('WebMercator' === o[i].projectionType) {
+        const a = o[i].projection._ellipsoid._radii
+        u = new n.WebMercatorProjection(new r.Ellipsoid(a.x, a.y, a.z)).project(new r.Cartographic(e, t, 0))
       } else (u.x = e), (u.y = t)
-      if (u.x > i.west && u.x < i.east && u.y > i.south && u.y < i.north) return s(u.x, u.y, o[a])
+      if (u.x > a.west && u.x < a.east && u.y > a.south && u.y < a.north) return s(u.x, u.y, o[i])
     }
     return 0
   }
   function c(e, n, r, o) {
-    const i = new Uint8Array(e, 0, 5)
-    return i[0] === 'D'.charCodeAt() &&
-      i[1] === 'R'.charCodeAt() &&
-      i[2] === 'A'.charCodeAt() &&
-      i[3] === 'C'.charCodeAt() &&
-      i[4] === 'O'.charCodeAt()
+    const a = new Uint8Array(e, 0, 5)
+    return a[0] === 'D'.charCodeAt() &&
+      a[1] === 'R'.charCodeAt() &&
+      a[2] === 'A'.charCodeAt() &&
+      a[3] === 'C'.charCodeAt() &&
+      a[4] === 'O'.charCodeAt()
       ? (function (e) {
-          const n = a,
+          const n = i,
             r = new n.DecoderBuffer(),
             o = new Uint8Array(e)
           r.Init(o, o.length)
-          const i = new n.Decoder(),
-            s = i.GetEncodedGeometryType(r),
+          const a = new n.Decoder(),
+            s = a.GetEncodedGeometryType(r),
             u = new n.MetadataQuerier()
           let c, l
-          s === n.TRIANGULAR_MESH && ((c = new n.Mesh()), (l = i.DecodeBufferToMesh(r, c)))
+          s === n.TRIANGULAR_MESH && ((c = new n.Mesh()), (l = a.DecodeBufferToMesh(r, c)))
           const d = { vertexCount: [0], featureCount: 0 }
           if (t.defined(l) && l.ok() && 0 !== c.ptr) {
             const e = c.num_faces(),
               r = c.num_attributes(),
               o = c.num_points()
             d.indices = new Uint32Array(3 * e)
-            const a = d.indices
+            const i = d.indices
             ;(d.vertexCount[0] = o), (d.scale_x = 1), (d.scale_y = 1)
             const s = new n.DracoInt32Array(3)
             for (let t = 0; t < e; ++t)
-              i.GetFaceFromMesh(c, t, s), (a[3 * t] = s.GetValue(0)), (a[3 * t + 1] = s.GetValue(1)), (a[3 * t + 2] = s.GetValue(2))
+              a.GetFaceFromMesh(c, t, s), (i[3 * t] = s.GetValue(0)), (i[3 * t + 1] = s.GetValue(1)), (i[3 * t + 2] = s.GetValue(2))
             n.destroy(s)
             for (let e = 0; e < r; ++e) {
-              const r = i.GetAttribute(c, e),
-                a = f(n, i, c, r, o),
+              const r = a.GetAttribute(c, e),
+                i = f(n, a, c, r, o),
                 s = r.attribute_type()
               let l = 'unknown'
               s === n.POSITION
@@ -78,7 +78,7 @@ define([
                 : s === n.COLOR
                 ? (l = 'colors')
                 : s === n.TEX_COORD && (l = 'uv0s')
-              const y = i.GetAttributeMetadata(c, e)
+              const y = a.GetAttributeMetadata(c, e)
               if (0 !== y.ptr) {
                 const e = u.NumEntries(y)
                 for (let t = 0; t < e; ++t) {
@@ -90,105 +90,105 @@ define([
                     : 'i3s-attribute-type' === e && (l = u.GetStringEntry(y, 'i3s-attribute-type'))
                 }
               }
-              t.defined(d[l]) && console.log('Attribute already exists', l), (d[l] = a), 'feature-index' === l && d.featureCount++
+              t.defined(d[l]) && console.log('Attribute already exists', l), (d[l] = i), 'feature-index' === l && d.featureCount++
             }
             n.destroy(c)
           }
-          return n.destroy(u), n.destroy(i), d
+          return n.destroy(u), n.destroy(a), d
         })(e)
       : (function (e, n, r, o) {
-          const a = { vertexCount: 0 },
-            i = new DataView(e)
+          const i = { vertexCount: 0 },
+            a = new DataView(e)
           try {
             let s = 0
-            if (((a.vertexCount = i.getUint32(s, 1)), (s += 4), (a.featureCount = i.getUint32(s, 1)), (s += 4), t.defined(r)))
+            if (((i.vertexCount = a.getUint32(s, 1)), (s += 4), (i.featureCount = a.getUint32(s, 1)), (s += 4), t.defined(r)))
               for (let n = 0; n < r.attributes.length; n++)
-                t.defined(l[r.attributes[n]]) ? (s = l[r.attributes[n]](a, e, s)) : console.error('Unknown decoder for', r.attributes[n])
+                t.defined(l[r.attributes[n]]) ? (s = l[r.attributes[n]](i, e, s)) : console.error('Unknown decoder for', r.attributes[n])
             else {
               let r = n.ordering,
-                i = n.featureAttributeOrder
+                a = n.featureAttributeOrder
               t.defined(o) &&
                 t.defined(o.geometryData) &&
                 t.defined(o.geometryData[0]) &&
                 t.defined(o.geometryData[0].params) &&
-                ((r = Object.keys(o.geometryData[0].params.vertexAttributes)), (i = Object.keys(o.geometryData[0].params.featureAttributes)))
+                ((r = Object.keys(o.geometryData[0].params.vertexAttributes)), (a = Object.keys(o.geometryData[0].params.featureAttributes)))
               for (let n = 0; n < r.length; n++) {
                 const o = l[r[n]]
-                t.defined(o) || console.log(r[n]), (s = o(a, e, s))
+                t.defined(o) || console.log(r[n]), (s = o(i, e, s))
               }
-              for (let n = 0; n < i.length; n++) {
-                const r = l[i[n]]
-                t.defined(r) || console.log(i[n]), (s = r(a, e, s))
+              for (let n = 0; n < a.length; n++) {
+                const r = l[a[n]]
+                t.defined(r) || console.log(a[n]), (s = r(i, e, s))
               }
             }
           } catch (e) {
             console.error(e)
           }
-          return (a.scale_x = 1), (a.scale_y = 1), a
+          return (i.scale_x = 1), (i.scale_y = 1), i
         })(e, n, r, o)
   }
-  function f(e, n, r, o, a) {
-    const i = o.num_components() * a
+  function f(e, n, r, o, i) {
+    const a = o.num_components() * i
     let s
     const u = [
         function () {},
         function () {
-          s = new e.DracoInt8Array(i)
+          s = new e.DracoInt8Array(a)
           n.GetAttributeInt8ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Int8Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Int8Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {
-          s = new e.DracoInt8Array(i)
+          s = new e.DracoInt8Array(a)
           n.GetAttributeUInt8ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Uint8Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Uint8Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {
-          s = new e.DracoInt16Array(i)
+          s = new e.DracoInt16Array(a)
           n.GetAttributeInt16ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Int16Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Int16Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {
-          s = new e.DracoInt16Array(i)
+          s = new e.DracoInt16Array(a)
           n.GetAttributeUInt16ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Uint16Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Uint16Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {
-          s = new e.DracoInt32Array(i)
+          s = new e.DracoInt32Array(a)
           n.GetAttributeInt32ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Int32Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Int32Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {
-          s = new e.DracoInt32Array(i)
+          s = new e.DracoInt32Array(a)
           n.GetAttributeUInt32ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Uint32Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Uint32Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {},
         function () {},
         function () {
-          s = new e.DracoFloat32Array(i)
+          s = new e.DracoFloat32Array(a)
           n.GetAttributeFloatForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Float32Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Float32Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         },
         function () {},
         function () {
-          s = new e.DracoUInt8Array(i)
+          s = new e.DracoUInt8Array(a)
           n.GetAttributeUInt8ForAllPoints(r, o, s) || console.error('Bad stream')
-          const t = new Uint8Array(i)
-          for (let e = 0; e < i; ++e) t[e] = s.GetValue(e)
+          const t = new Uint8Array(a)
+          for (let e = 0; e < a; ++e) t[e] = s.GetValue(e)
           return t
         }
       ],
@@ -235,32 +235,32 @@ define([
     const n = c(e.binaryData, e.schema, e.bufferInfo, e.featureData)
     t.defined(e.geoidDataList) &&
       e.geoidDataList.length > 0 &&
-      (function (e, t, n, r, a, i, s) {
+      (function (e, t, n, r, i, a, s) {
         if (s) return
-        const c = u(a.longitude, a.latitude, i)
+        const c = u(i.longitude, i.latitude, a)
         for (let s = 0; s < e; ++s) {
-          const e = u(a.longitude + o.CesiumMath.toRadians(n * t[3 * s]), a.latitude + o.CesiumMath.toRadians(r * t[3 * s + 1]), i)
+          const e = u(i.longitude + o.CesiumMath.toRadians(n * t[3 * s]), i.latitude + o.CesiumMath.toRadians(r * t[3 * s + 1]), a)
           t[3 * s + 2] += e - c
         }
       })(n.vertexCount, n.positions, n.scale_x, n.scale_y, e.cartographicCenter, e.geoidDataList, !1),
-      (function (e, n, a, i, s, u, c, f, l) {
+      (function (e, n, i, a, s, u, c, f, l) {
         if (0 === e || !t.defined(n) || 0 === n.length) return
         const d = new r.Ellipsoid(Math.sqrt(c.x), Math.sqrt(c.y), Math.sqrt(c.z))
         for (let c = 0; c < e; ++c) {
           const e = 3 * c,
             y = e + 1,
-            b = e + 2,
-            h = new r.Cartographic()
-          ;(h.longitude = i.longitude + o.CesiumMath.toRadians(f * n[e])),
-            (h.latitude = i.latitude + o.CesiumMath.toRadians(l * n[y])),
-            (h.height = i.height + n[b])
+            h = e + 2,
+            b = new r.Cartographic()
+          ;(b.longitude = a.longitude + o.CesiumMath.toRadians(f * n[e])),
+            (b.latitude = a.latitude + o.CesiumMath.toRadians(l * n[y])),
+            (b.height = a.height + n[h])
           const p = {}
-          d.cartographicToCartesian(h, p), (p.x -= s.x), (p.y -= s.y), (p.z -= s.z)
+          d.cartographicToCartesian(b, p), (p.x -= s.x), (p.y -= s.y), (p.z -= s.z)
           const g = {}
-          if ((r.Matrix3.multiplyByVector(u, p, g), (n[e] = g.x), (n[y] = g.y), (n[b] = g.z), t.defined(a))) {
-            const t = new r.Cartesian3(a[e], a[y], a[b]),
+          if ((r.Matrix3.multiplyByVector(u, p, g), (n[e] = g.x), (n[y] = g.y), (n[h] = g.z), t.defined(i))) {
+            const t = new r.Cartesian3(i[e], i[y], i[h]),
               n = {}
-            r.Matrix3.multiplyByVector(u, t, n), (a[e] = n.x), (a[y] = n.y), (a[b] = n.z)
+            r.Matrix3.multiplyByVector(u, t, n), (i[e] = n.x), (i[y] = n.y), (i[h] = n.z)
           }
         }
       })(
@@ -280,12 +280,12 @@ define([
           for (let r = 0; r < e; ++r) {
             const e = n[4 * r] / 65535,
               o = n[4 * r + 1] / 65535,
-              a = (n[4 * r + 2] - n[4 * r]) / 65535,
-              i = (n[4 * r + 3] - n[4 * r + 1]) / 65535
-            ;(t[2 * r] *= a), (t[2 * r] += e), (t[2 * r + 1] *= i), (t[2 * r + 1] += o)
+              i = (n[4 * r + 2] - n[4 * r]) / 65535,
+              a = (n[4 * r + 3] - n[4 * r + 1]) / 65535
+            ;(t[2 * r] *= i), (t[2 * r] += e), (t[2 * r + 1] *= a), (t[2 * r + 1] += o)
           }
         })(n.vertexCount, n.uv0s, n['uv-region'])
-    const a = (function (e, n, r, o, a, i) {
+    const i = (function (e, n, r, o, i, a) {
         if (0 === e || !t.defined(r) || 0 === r.length)
           return { buffers: [], bufferViews: [], accessors: [], meshes: [], nodes: [], nodesInScene: [] }
         const s = [],
@@ -298,8 +298,8 @@ define([
         const y = new Uint32Array(e)
         if (t.defined(n)) for (let t = 0; t < e; ++t) y[t] = n[t]
         else for (let t = 0; t < e; ++t) y[t] = t
-        const b = new Blob([y], { type: 'application/binary' }),
-          h = URL.createObjectURL(b),
+        const h = new Blob([y], { type: 'application/binary' }),
+          b = URL.createObjectURL(h),
           p = e,
           g = r.subarray(0, 3 * p),
           m = new Blob([g], { type: 'application/binary' }),
@@ -323,13 +323,13 @@ define([
           const e = new Blob([O], { type: 'application/binary' })
           _ = URL.createObjectURL(e)
         }
-        const v = a ? a.subarray(0, 2 * p) : void 0
+        const v = i ? i.subarray(0, 2 * p) : void 0
         let G
         if (t.defined(v)) {
           const e = new Blob([v], { type: 'application/binary' })
           G = URL.createObjectURL(e)
         }
-        const M = t.defined(i) ? i.subarray(0, 4 * p) : void 0
+        const M = t.defined(a) ? a.subarray(0, 4 * p) : void 0
         let U
         if (t.defined(M)) {
           const e = new Blob([M], { type: 'application/binary' })
@@ -368,7 +368,7 @@ define([
             c.push({ bufferView: N, byteOffset: 0, componentType: 5121, normalized: !0, count: e, type: 'VEC4' })),
           ++E,
           (T = E),
-          s.push({ uri: h, byteLength: y.byteLength }),
+          s.push({ uri: b, byteLength: y.byteLength }),
           u.push({ buffer: T, byteOffset: 0, byteLength: y.byteLength, target: 34963 }),
           c.push({ bufferView: T, byteOffset: 0, componentType: 5125, count: e, type: 'SCALAR' }),
           f.push({ primitives: [{ attributes: F, indices: T, material: 0 }] }),
@@ -377,32 +377,32 @@ define([
           { buffers: s, bufferViews: u, accessors: c, meshes: f, nodes: l, nodesInScene: d }
         )
       })(n.vertexCount, n.indices, n.positions, n.normals, n.uv0s, n.colors),
-      i = {}
+      a = {}
     if (t.defined(n['feature-index']))
-      (i.positions = n.positions),
-        (i.indices = n.indices),
-        (i.featureIndex = n['feature-index']),
-        (i.cartesianCenter = e.cartesianCenter),
-        (i.parentRotation = e.parentRotation)
+      (a.positions = n.positions),
+        (a.indices = n.indices),
+        (a.featureIndex = n['feature-index']),
+        (a.cartesianCenter = e.cartesianCenter),
+        (a.parentRotation = e.parentRotation)
     else if (t.defined(n.faceRange)) {
-      ;(i.positions = n.positions),
-        (i.indices = n.indices),
-        (i.sourceURL = e.url),
-        (i.cartesianCenter = e.cartesianCenter),
-        (i.parentRotation = e.parentRotation),
-        (i.featureIndex = new Array(n.positions.length))
+      ;(a.positions = n.positions),
+        (a.indices = n.indices),
+        (a.sourceURL = e.url),
+        (a.cartesianCenter = e.cartesianCenter),
+        (a.parentRotation = e.parentRotation),
+        (a.featureIndex = new Array(n.positions.length))
       for (let e = 0; e < n.faceRange.length - 1; e += 2) {
         const t = e / 2,
           r = n.faceRange[e],
           o = n.faceRange[e + 1]
-        for (let e = r; e <= o; e++) (i.featureIndex[3 * e] = t), (i.featureIndex[3 * e + 1] = t), (i.featureIndex[3 * e + 2] = t)
+        for (let e = r; e <= o; e++) (a.featureIndex[3 * e] = t), (a.featureIndex[3 * e + 1] = t), (a.featureIndex[3 * e + 2] = t)
       }
     }
-    a._customAttributes = i
-    return { meshData: a }
+    i._customAttributes = a
+    return { meshData: i }
   }
   function y(t) {
-    ;(a = t), (self.onmessage = e(d)), self.postMessage(!0)
+    ;(i = t), (self.onmessage = e(d)), self.postMessage(!0)
   }
   return function (e) {
     const n = e.data.webAssemblyConfig

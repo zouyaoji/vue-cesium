@@ -1,34 +1,34 @@
 define([
-  './Matrix3-b6f074fa',
-  './defaultValue-0a909f67',
-  './EllipseGeometry-e21d5877',
-  './Math-e97915da',
-  './Transforms-dadc538f',
-  './Matrix2-163b5a1d',
-  './RuntimeError-06c93819',
-  './combine-ca22a614',
-  './ComponentDatatype-77274976',
-  './WebGLConstants-a8cc3e8c',
-  './EllipseGeometryLibrary-4fec0674',
-  './GeometryAttribute-e2b38d72',
-  './GeometryAttributes-f06a2792',
-  './GeometryInstance-9b27c40d',
-  './GeometryOffsetAttribute-04332ce7',
-  './GeometryPipeline-b7404acc',
-  './AttributeCompression-e18a879a',
-  './EncodedCartesian3-de837603',
-  './IndexDatatype-2149f06c',
-  './IntersectionTests-1307e0a8',
-  './Plane-1c5a21a3',
-  './VertexFormat-ab2e00e6'
-], function (e, t, a, r, n, i, o, c, s, l, d, m, f, b, p, u, y, G, E, C, x, A) {
+  './Matrix3-81054f0f',
+  './defaultValue-f6d5e6da',
+  './EllipseGeometry-109eeb71',
+  './Math-2ce22ee9',
+  './Transforms-20461479',
+  './Matrix2-413c4048',
+  './RuntimeError-9b4ce3fb',
+  './combine-0c102d93',
+  './ComponentDatatype-ab629b88',
+  './WebGLConstants-7f557f93',
+  './EllipseGeometryLibrary-46203226',
+  './GeometryAttribute-b8117bde',
+  './GeometryAttributes-1e4ddcd2',
+  './GeometryInstance-0318e0cd',
+  './GeometryOffsetAttribute-2579b8d2',
+  './GeometryPipeline-fcaf4d4d',
+  './AttributeCompression-48e336db',
+  './EncodedCartesian3-5e2017ab',
+  './IndexDatatype-d3db4e7d',
+  './IntersectionTests-a57eed59',
+  './Plane-6add0ae1',
+  './VertexFormat-fbdec922'
+], function (e, t, r, n, i, o, s, a, l, m, c, p, u, y, d, G, f, b, E, C, x, A) {
   'use strict'
-  return function (r, n) {
+  return function (n, i) {
     return (
-      t.defined(n) && (r = a.EllipseGeometry.unpack(r, n)),
-      (r._center = e.Cartesian3.clone(r._center)),
-      (r._ellipsoid = e.Ellipsoid.clone(r._ellipsoid)),
-      a.EllipseGeometry.createGeometry(r)
+      t.defined(i) && (n = r.EllipseGeometry.unpack(n, i)),
+      (n._center = e.Cartesian3.clone(n._center)),
+      (n._ellipsoid = e.Ellipsoid.clone(n._ellipsoid)),
+      r.EllipseGeometry.createGeometry(n)
     )
   }
 })
