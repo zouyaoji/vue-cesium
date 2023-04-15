@@ -33,7 +33,10 @@ jobs:
     # needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
       - uses: actions/checkout@v3
+
+      - name: Setup node
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -44,10 +47,13 @@ jobs:
 
       - name: Get version
         run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: Get git head
         run: echo "GIT_HEAD=${GITHUB_SHA}" >> $GITHUB_ENV
+
       - name: Gen npmrc
         run: echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ./.npmrc
+
       - name: Build&publish
         run: sh ./scripts/publish.sh
         env:
