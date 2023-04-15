@@ -1,5 +1,6 @@
 import TiandituMapsStyle from './TiandituMapsStyle'
 import Uri from 'urijs'
+import defer from '@vue-cesium/utils/defer'
 
 const TiandituMapsStyleUrl = {}
 const TiandituMapsStyleLayer = {}
@@ -18,17 +19,19 @@ class TiandituImageryProvider {
   _tileMatrixLabels: string
   _format: string
   _epsgCode: string
-  _tilingScheme: any
+  _tilingScheme: Cesium.GeographicTilingScheme | Cesium.WebMercatorTilingScheme
   _tileWidth: number
   _tileHeight: number
   _minimumLevel: number
   _maximumLevel: number
-  _rectangle: any
-  _readyPromise: any
-  _errorEvent: any
-  _credit: any
-  _subdomains: []
+  _rectangle: Cesium.Rectangle
+  // _readyPromise?: Promise<boolean>
+  _errorEvent: Cesium.Event
+  _credit: Cesium.Credit
+  _subdomains: string[]
   _tileDiscardPolicy: any
+  _ready: boolean
+  _resource: Cesium.Resource
   constructor(options) {
     Object.keys(TiandituMapsStyle).forEach(key => {
       TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://{s}.tianditu.gov.cn/' + TiandituMapsStyle[key] + '/wmts'
@@ -109,10 +112,16 @@ class TiandituImageryProvider {
           break
       }
     })
-    const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme } = Cesium
+    const { Credit, Resource, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme } = Cesium
     options = defaultValue(options, {})
     this._mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
     this._url = options.url || defaultValue(options.url, TiandituMapsStyleUrl[this._mapStyle])
+
+    const resource = (Resource as any).createIfNeeded(this._url)
+    resource.appendForwardSlash()
+
+    this._ready = false
+    this._resource = resource
     this._token = options.token
     this._layer = defaultValue(options.layer, TiandituMapsStyleLayer[this._mapStyle])
     this._style = defaultValue(options.style, 'default')
@@ -125,17 +134,29 @@ class TiandituImageryProvider {
     this._tileHeight = defaultValue(options.tileHeight, 256)
     this._minimumLevel = defaultValue(options.minimumLevel, 0)
     this._maximumLevel = defaultValue(options.maximumLevel, TiandituMapsStyleLabels[this._mapStyle].length)
-    this._rectangle = defaultValue(options.rectangle, this.tilingScheme.rectangle)
-    this._readyPromise = Promise.resolve(true)
+    this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)
+    // this._readyPromise = defer()
     this._errorEvent = new Event()
     const credit = defaultValue(options.credit, '天地图全球影像服务')
     this._credit = typeof credit === 'string' ? new Credit(credit) : credit
     this._subdomains = defaultValue(options.subdomains, ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'])
     this._tileDiscardPolicy = options.tileDiscardPolicy
+    this._ready = true
   }
 
-  requestImage(x, y, level) {
-    const url = buildImageResource.call(this, x, y, level)
+  getTileCredits(x, y, level) {
+    if (!this.ready) {
+      throw new Cesium.DeveloperError('getTileCredits must not be called before the imagery provider is ready.')
+    }
+    return undefined
+  }
+
+  requestImage(x, y, level, request) {
+    if (!this.ready) {
+      throw new Cesium.DeveloperError('requestImage must not be called before the imagery provider is ready.')
+    }
+
+    const url = buildImageResource.call(this, x, y, level, request)
     return Cesium.ImageryProvider.loadImage(this as any, url)
   }
 
@@ -144,7 +165,11 @@ class TiandituImageryProvider {
   }
 
   get url() {
-    return this._url
+    return this._resource.url
+  }
+
+  get proxy() {
+    return this._resource.proxy
   }
 
   get mapStyle() {
@@ -183,9 +208,9 @@ class TiandituImageryProvider {
     return true
   }
 
-  get readyPromise() {
-    return this._readyPromise
-  }
+  // get readyPromise() {
+  //   // return this._readyPromise
+  // }
 
   get credit() {
     return this._credit
@@ -207,7 +232,7 @@ class TiandituImageryProvider {
  * @param {number} level
  * @private
  */
-function buildImageResource(this, x, y, level) {
+function buildImageResource(this, x, y, level, request) {
   const { combine, defined, defaultValue, queryToObject, objectToQuery } = Cesium
   const freezeObject = Object.freeze
   const options = freezeObject({
@@ -234,7 +259,12 @@ function buildImageResource(this, x, y, level) {
   url = uri.toString() + '?' + query
   defined(this._proxy) && (url = this._proxy.getURL(url))
   defined(this._token) && (url += '&tk=' + this._token)
-  return url
+
+  const resource = this._resource.getDerivedResource({
+    url: url,
+    request: request
+  })
+  return resource
 }
 
 export default TiandituImageryProvider
