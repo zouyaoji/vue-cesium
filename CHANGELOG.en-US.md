@@ -1,5 +1,22 @@
 ## Changelog
 
+### 3.1.7
+
+_2023-04-15_
+
+#### Bug fixes
+
+- Fixed the issue that some functions of mars3d could not be used normally due to the script import order.
+- Fixed the issue that `vc-imagery-provider-tianditu` component displaying abnormally in 1.104.0.
+
+#### Optimization
+
+- Compatible with Cesium `1.104` version changes.
+
+#### New feature
+
+- Add `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `PrimitiveOsmBuildings` components.
+
 ### 3.1.6
 
 _2023-03-13_

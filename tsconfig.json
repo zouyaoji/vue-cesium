@@ -2,8 +2,9 @@
   "compilerOptions": {
     "allowJs": true,
     "strict": true,
-    "module": "ES6",
-    "target": "ES2018",
+    "module": "esnext",
+    "target": "es2018",
+    "baseUrl": ".",
     "noImplicitAny": false,
     "declaration": true,
     "moduleResolution": "Node",
@@ -13,8 +14,11 @@
     "lib": ["ES2018", "DOM", "DOM.Iterable"],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": false,
     "resolveJsonModule": true,
     "strictNullChecks": false,
+    "removeComments": false,
+    "rootDir": ".",
     "types": ["node"]
   },
   "include": ["packages", "typings"],

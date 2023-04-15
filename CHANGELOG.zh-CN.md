@@ -1,5 +1,22 @@
 ## 更新日志
 
+### 3.1.7
+
+_2023-04-15_
+
+#### Bug 修复
+
+- 修复 mars3d 部分功能因 script 引入顺序无法正常使用问题。
+- 修复 `vc-imagery-provider-tianditu` 组件在 1.104.0 中不正常显示问题。
+
+#### 优化
+
+- 兼容处理 Cesium `1.104` 版本变化。
+
+#### 新特性
+
+- 增加 `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `PrimitiveOsmBuildings` 组件。
+
 ### 3.1.6
 
 _2023-03-13_

@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2022-01-18 13:25:46
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-06 23:56:56
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\build\utils\pkg.ts
+ * @FilePath: \vue-cesium\build\utils\pkg.ts
  */
 import findWorkspacePackages from '@pnpm/find-workspace-packages'
 import { buildConfig } from '../build-info'
@@ -28,10 +28,14 @@ export const getPackageManifest = (pkgPath: string) => {
   return require(pkgPath) as ProjectManifest
 }
 
-export const getPackageDependencies = (pkgPath: string): string[] => {
+export const getPackageDependencies = (pkgPath: string): Record<'dependencies' | 'peerDependencies', string[]> => {
   const manifest = getPackageManifest(pkgPath)
-  const { dependencies } = manifest
-  return Object.keys(dependencies ?? {})
+  const { dependencies = {}, peerDependencies = {} } = manifest
+
+  return {
+    dependencies: Object.keys(dependencies),
+    peerDependencies: Object.keys(peerDependencies)
+  }
 }
 
 /** used for type generator */

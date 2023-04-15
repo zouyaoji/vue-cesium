@@ -15,11 +15,16 @@
   "license": "MIT",
   "exports": {
     ".": {
+      "types": "./es/index.d.ts",
       "require": "./lib/index.js",
       "import": "./es/index.mjs"
     },
     "./es": "./es/index.mjs",
     "./lib": "./lib/index.js",
+    "./es/*.mjs": "./es/*.mjs",
+    "./es/*": "./es/*.mjs",
+    "./lib/*.js": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
     "./*": "./*"
   },
   "main": "lib/index.js",
@@ -32,9 +37,7 @@
     "theme-default/*.css",
     "theme-default/src/*.scss",
     "es/components/*/style/*",
-    "lib/components/*/style/*",
-    "lib/components/**/*",
-    "es/components/**/*"
+    "lib/components/*/style/*"
   ],
   "repository": {
     "type": "git",
@@ -44,12 +47,13 @@
     "url": "https://github.com/zouyaoji/vue-cesium/issues"
   },
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.2.47"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@zouyaoji/heatmap.js": "^2.0.8",
     "@vue/shared": "^3.2.26",
+    "compare-versions": "^5.0.3",
     "echarts": "^5.3.2",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
