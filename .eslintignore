@@ -7,3 +7,4 @@ packages/*/lib
 .github
 coverage
 packages/theme-default/src/fonts
+pnpm-lock.yaml

@@ -1,5 +1,5 @@
 import { warn } from 'vue'
-import { isObject } from '@vue/shared'
+import { isObject } from './util'
 import { fromPairs } from 'lodash-unified'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { Mutable } from './types'
