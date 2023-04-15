@@ -14,14 +14,9 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <div ref="sliderRef" class="slider"></div>
   <vc-viewer @ready="onViewerReady">
-    <vc-layer-imagery
-      @ready="onImageryLayerReady"
-      ref="layer"
-      :imagery-provider="imageryProvider"
-      :alpha="alpha"
-      :brightness="brightness"
-      :contrast="contrast"
-    ></vc-layer-imagery>
+    <vc-layer-imagery @ready="onImageryLayerReady" ref="layer" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
+    </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
@@ -50,7 +45,6 @@
     setup() {
       // state
       const instance = getCurrentInstance()
-      const imageryProvider = ref(null)
       const layer = ref(null)
       const alpha = ref(1)
       const brightness = ref(1)
@@ -61,9 +55,6 @@
       let handler = null
       // methods
       const onViewerReady = ({ Cesium, viewer }) => {
-        imageryProvider.value = new Cesium.OpenStreetMapImageryProvider({
-          url: 'https://a.tile.openstreetmap.org/'
-        })
         myViewer = viewer
         const slider = sliderRef.value
         handler = new Cesium.ScreenSpaceEventHandler(slider)
@@ -108,7 +99,6 @@
         layer.value.load()
       }
       return {
-        imageryProvider,
         layer,
         onViewerReady,
         unload,

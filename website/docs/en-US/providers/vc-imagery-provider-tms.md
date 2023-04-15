@@ -65,7 +65,7 @@ Basic usage of the `vc-imagery-provider-tms` component.
       const load = () => {
         provider.value.load()
       }
-      const onImageryProviderReady = imageryProvider => {
+      const onImageryProviderReady = ({ cesiumObject: imageryProvider, viewer }) => {
         viewer.camera.flyTo({ destination: imageryProvider.rectangle })
       }
       const onViewerReady = cesiumInstance => {

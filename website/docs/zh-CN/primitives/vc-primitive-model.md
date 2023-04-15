@@ -14,7 +14,9 @@
     <vc-primitive-model
       ref="primitive"
       :url="url"
-      @ready-promise="onReadyPromise"
+      id="test"
+      @textures-ready-event="onTexturesReadyEvent"
+      @ready-event="onReadyEvent"
       :modelMatrix="modelMatrix"
       :scale="10000"
       :minimumPixelSize="128"
@@ -45,6 +47,7 @@
 </el-row>
 
 <script>
+  let _viewer = undefined
   const coefficients = [
     [-0.066550267689383, -0.022088055746048, 0.078835009246127],
     [0.038364097478591, 0.045714300098753, 0.063498904606215],
@@ -81,10 +84,8 @@
     methods: {
       onViewerReady({ Cesium, viewer }) {
         this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
-      },
-      onReadyPromise(model, viewer) {
-        const boundingSphere = Cesium.BoundingSphere.transform(model.boundingSphere, model.modelMatrix)
-        viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+        _viewer = viewer
+        window.viewer = viewer
       },
       onClicked(e) {
         console.log(e)
@@ -97,6 +98,12 @@
       },
       reload() {
         this.$refs.primitive.reload()
+      },
+      onTexturesReadyEvent(model) {
+        console.log(model)
+      },
+      onReadyEvent(model) {
+        _viewer.scene.camera.flyToBoundingSphere(model.boundingSphere)
       }
     }
   }

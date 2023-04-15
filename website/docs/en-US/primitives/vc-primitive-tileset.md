@@ -14,7 +14,7 @@ Basic usage of VcPrimitiveTileset component.
     <vc-primitive-tileset
       ref="primitive"
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @ready-promise="onReadyPromise"
+      @ready="onReady"
       @click="onClicked"
     >
     </vc-primitive-tileset>
@@ -29,7 +29,7 @@ Basic usage of VcPrimitiveTileset component.
 <script>
   export default {
     methods: {
-      onReadyPromise(tileset, viewer) {
+      onReady({ cesiumObject: tileset, viewer }) {
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
         const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
         const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0)
@@ -61,7 +61,8 @@ Basic usage of VcPrimitiveTileset component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| url | string | | `required` The url to a tileset JSON file. |
+| url | string | | `optional` The url to a tileset JSON file. |
+| assetId | number | | `optional` The assetId to a tileset from a Cesium ion asset ID. |
 | show | boolean | `true` | `optional` Determines if the tileset will be shown. |
 | modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` A 4x4 transformation matrix that transforms the tileset's root tile. |
 | shadows | number | `1` | `optional` Determines whether the tileset casts or receives shadows from light sources. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|

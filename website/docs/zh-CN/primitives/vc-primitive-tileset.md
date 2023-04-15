@@ -14,7 +14,7 @@
     <vc-primitive-tileset
       ref="primitive"
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @ready-promise="onReadyPromise"
+      @ready="onReady"
       @click="onClicked"
       @all-tiles-loaded="allTilesLoaded"
     >
@@ -30,7 +30,7 @@
 <script>
   export default {
     methods: {
-      onReadyPromise(tileset, viewer) {
+      onReady({ cesiumObject: tileset, viewer }) {
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
         const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
         const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0)
@@ -65,7 +65,8 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------ | ---- | ------ | ---- |---|
-| url | string | | `required` 指定 tileset JSON 文件地址。 |
+| url | string | | `optional` 指定 tileset JSON 文件地址。 |
+| assetId | number | | `optional` 指定 Cesium ion 上模型的 assetId 。|
 | show | boolean | `true` | `optional` 是否显示 tileset 模型。 |
 | modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
 | shadows | number | `1` | `optional` 确定 tileset 是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|

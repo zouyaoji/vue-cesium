@@ -19,7 +19,7 @@
         url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
         :rectangle="[-120, 20, -60, 40]"
         :maximumLevel="4"
-        @ready-promise="onImageryProviderReady"
+        @ready="onImageryProviderReady"
       ></vc-imagery-provider-tms>
     </vc-layer-imagery>
   </vc-viewer>
@@ -65,7 +65,7 @@
       const load = () => {
         provider.value.load()
       }
-      const onImageryProviderReady = imageryProvider => {
+      const onImageryProviderReady = ({ cesiumObject: imageryProvider, viewer }) => {
         viewer.camera.flyTo({ destination: imageryProvider.rectangle })
       }
       const onViewerReady = cesiumInstance => {
@@ -91,20 +91,20 @@
 
 ### 属性
 
-| 属性名               | 类型            | 默认值  | 描述                                           |
-| -------------------- | --------------- | ------- | ---------------------------------------------- |
-| url                  | string\|Cesium.Resource  | `'.'`   | `optional` 指定图片服务地址。                  |
-| fileExtension        | string          | `'png'` | `optional` 指定图片服务影像扩展名。            |
-| credit               | string\|projectionTransforms  | `''`    | `optional` 指定服务版权描述信息。              |
-| minimumLevel         | number          | `0`     | `optional` 指定服务最小层级。                  |
-| maximumLevel         | number          |         | `optional` 指定服务最大层级。                  |
-| rectangle | VcRectangle\|Array   |         | `optional` 指定影像加载的矩形范围。            |
-| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme          |         | `optional` 指定服务坐标系参数。                |
-| ellipsoid      | Cesium.Ellipsoid          |         | `optional` 指定参考椭球体。默认 WGS84 椭球体。 |
-| tileWidth            | number          | `256`   | `optional` 指定图像瓦片宽度。                  |
-| tileHeight           | number          | `256`   | `optional` 指定图像瓦片高度。                  |
-| flipXY               | boolean         |         | `optional` 指定是否翻转 XY                     |
-| projectionTransforms | ProjectionTransforms | `false` | `optional` 指定投影变换参数。                  |
+| 属性名               | 类型                                                            | 默认值  | 描述                                           |
+| -------------------- | --------------------------------------------------------------- | ------- | ---------------------------------------------- |
+| url                  | string\|Cesium.Resource                                         | `'.'`   | `optional` 指定图片服务地址。                  |
+| fileExtension        | string                                                          | `'png'` | `optional` 指定图片服务影像扩展名。            |
+| credit               | string\|projectionTransforms                                    | `''`    | `optional` 指定服务版权描述信息。              |
+| minimumLevel         | number                                                          | `0`     | `optional` 指定服务最小层级。                  |
+| maximumLevel         | number                                                          |         | `optional` 指定服务最大层级。                  |
+| rectangle            | VcRectangle\|Array                                              |         | `optional` 指定影像加载的矩形范围。            |
+| tilingScheme         | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme |         | `optional` 指定服务坐标系参数。                |
+| ellipsoid            | Cesium.Ellipsoid                                                |         | `optional` 指定参考椭球体。默认 WGS84 椭球体。 |
+| tileWidth            | number                                                          | `256`   | `optional` 指定图像瓦片宽度。                  |
+| tileHeight           | number                                                          | `256`   | `optional` 指定图像瓦片高度。                  |
+| flipXY               | boolean                                                         |         | `optional` 指定是否翻转 XY                     |
+| projectionTransforms | ProjectionTransforms                                            | `false` | `optional` 指定投影变换参数。                  |
 
 ### 事件
 
