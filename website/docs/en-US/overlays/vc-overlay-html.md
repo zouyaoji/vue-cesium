@@ -11,7 +11,7 @@
 
 Load HTML element overlays by geographic location.
 
-**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
+**Note:** Style file need to be imported: `import 'vue-cesium/dist/index.css';`
 
 ### Basic usage
 

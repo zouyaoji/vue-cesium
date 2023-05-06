@@ -11,7 +11,7 @@
 
 Load the analysis tool components. Including sightline analysis, viewshed analysis (3DTiles).
 
-**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
+**Note:** Style file need to be imported: `import 'vue-cesium/dist/index.css';`
 
 ### Base usage
 

@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-12-11 23:33:48
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-05-06 01:08:46
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
+ * @FilePath: \vue-cesium\website\docs\en-US\donations.md
 -->
 
 ## Donation
@@ -26,6 +26,9 @@
 
   | amount   | channel | sponsor                                         | message                           | date       |
   | -------- | ------- | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 66.66  | WeChat  | \*                                              | 感谢开源                          | 2023-05-05 |
+  | ¥ 20.0   | WeChat  | \*强                                            | vue-cesium 文档很赞               | 2023-04-24 |
+  | ¥ 88.0   | WeChat  | \*易                                            | -                                 | 2023-02-10 |
   | ¥ 88.0   | WeChat  | \*浩                                            | -                                 | 2023-01-05 |
   | ¥ 20.0   | WeChat  | k\*r                                            | vue-cesium 是个好东西             | 2022-12-01 |
   | ¥ 110.0  | AliPay  | \*勇                                            | -                                 | 2022-09-21 |

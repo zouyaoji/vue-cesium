@@ -1,5 +1,23 @@
 ## Changelog
 
+### 3.1.8
+
+_2023-05-06_
+
+#### Bug fixes
+
+- Fixed the issue that types definition is missing.
+
+#### New feature
+
+- Add typhoon component `VcOverlayTyphoon`.
+- Improved documentation.
+
+#### Breaking changes
+
+- `vc-overlay-dynamic` component `stopArrived` event parameter passed changed into an object.
+- `vm` in the `ready` event parameter of all components becomes instance.
+
 ### 3.1.7
 
 _2023-04-15_
@@ -15,7 +33,7 @@ _2023-04-15_
 
 #### New feature
 
-- Add `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `PrimitiveOsmBuildings` components.
+- Add `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `VcPrimitiveOsmBuildings` components.
 
 ### 3.1.6
 
@@ -143,7 +161,7 @@ _2022-08-03_
 - Fixed a bug that some css was wrong.
 - Fixed a bug that drawing circles and regular polygons is incorrect in 2D mode.
 
-#### Breaking changes:
+#### Breaking changes
 
 - Changed the access method of mars3d, configured via `mars3dConfig`. For details, see [vc-demo-mars3d](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-mars3d)
 

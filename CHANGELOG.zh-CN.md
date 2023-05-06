@@ -1,5 +1,23 @@
 ## 更新日志
 
+### 3.1.8
+
+_2023-05-06_
+
+#### Bug 修复
+
+- types 缺失问题修复。
+
+#### 新特性
+
+- 增加台风组件 `VcOverlayTyphoon` 。
+- 完善文档。
+
+#### 破坏性更新
+
+- `vc-overlay-dynamic` 组件 `stopArrived` 事件参数传递改变成一个对象。
+- `vc-viewer` 组件 `ready` 事件参数中的 `vm` 变为 instance。
+
 ### 3.1.7
 
 _2023-04-15_
@@ -15,7 +33,7 @@ _2023-04-15_
 
 #### 新特性
 
-- 增加 `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `PrimitiveOsmBuildings` 组件。
+- 增加 `VcPrimitiveTimeDynamicPointCloud`, `VcPrimitiveI3sDataProvider`, `VcPrimitiveOsmBuildings` 组件。
 
 ### 3.1.6
 

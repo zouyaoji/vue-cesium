@@ -2,7 +2,7 @@
 
 Load the drawing tool components. Supports drawing points, polylines, polygons, rectangles, regular polygons, and circles.
 
-**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
+**Note:** Style file need to be imported: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 
