@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2023-02-23 01:36:41
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-04-28 00:34:03
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\defaultOpts.ts
  */
 
 import type { VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
@@ -316,8 +316,7 @@ const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingD
     scale: 0.8,
     horizontalOrigin: 1, // left
     verticalOrigin: -1, // top,
-    pixelOffset: [5, 5],
-    text: '1dsa'
+    pixelOffset: [5, 5]
   })
 })
 

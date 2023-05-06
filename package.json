@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
+    "@turf/circle": "^6.5.0",
     "@vue-cesium/components": "workspace:*",
     "@vue-cesium/composables": "workspace:*",
     "@vue-cesium/directives": "workspace:*",

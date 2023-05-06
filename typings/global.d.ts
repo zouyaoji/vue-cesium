@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2022-04-08 14:58:03
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-05-04 01:14:20
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\typings\global.d.ts
+ * @FilePath: \vue-cesium\typings\global.d.ts
  */
 
 import {
@@ -141,6 +141,7 @@ import {
   VcOverlayHeatmapProps,
   VcOverlayHtmlProps,
   VcOverlayHtmlSlots,
+  VcOverlayTyphoonProps,
   VcOverlayWindmapProps,
   VcOverviewMapProps,
   VcOverviewMapSlots,
@@ -155,12 +156,15 @@ import {
   VcPrimitiveClassificationSlots,
   VcPrimitiveGroundProps,
   VcPrimitiveGroundSlots,
+  VcPrimitiveI3sDataProviderProps,
   VcPrimitiveModelProps,
   VcPrimitiveModelSlots,
+  VcPrimitiveOsmBuildingsProps,
   VcPrimitiveParticleProps,
   VcPrimitiveProps,
   VcPrimitiveSlots,
   VcPrimitiveTilesetProps,
+  VcPrimitiveTimeDynamicPointCloudProps,
   VcSelectionIndicatorProps,
   VcSpinnerBallProps,
   VcSpinnerBarsProps,
@@ -312,6 +316,9 @@ declare module 'vue' {
     VcPrimitive: GlobalComponentConstructor<VcPrimitiveProps, VcPrimitiveSlots>
     VcPrimitiveTileset: GlobalComponentConstructor<VcPrimitiveTilesetProps>
     VcPrimitiveParticle: GlobalComponentConstructor<VcPrimitiveParticleProps>
+    VcPrimitiveTimeDynamicPointCloud: GlobalComponentConstructor<VcPrimitiveTimeDynamicPointCloudProps>
+    VcPrimitiveI3sDataProvider: GlobalComponentConstructor<VcPrimitiveI3sDataProviderProps>
+    VcPrimitiveOsmBuildings: GlobalComponentConstructor<VcPrimitiveOsmBuildingsProps>
 
     VcCollectionBillboard: GlobalComponentConstructor<VcCollectionBillboardProps, VcCollectionBillboardSlots>
     VcCollectionLabel: GlobalComponentConstructor<VcCollectionLabelProps, VcCollectionLabelSlots>
@@ -363,6 +370,7 @@ declare module 'vue' {
     VcOverlayWind: GlobalComponentConstructor<VcOverlayWindmapProps>
     VcOverlayDynamic: GlobalComponentConstructor<VcOverlayDynamicProps>
     VcOverlayEcharts: GlobalComponentConstructor<VcOverlayEchartsProps>
+    VcOverlayTyphoon: GlobalComponentConstructor<VcOverlayTyphoonProps>
 
     VcPostProcessStage: GlobalComponentConstructor<VcPostProcessStageProps>
     VcPostProcessStageScan: GlobalComponentConstructor<VcPostProcessStageScanProps>
