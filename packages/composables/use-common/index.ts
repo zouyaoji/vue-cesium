@@ -101,7 +101,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
           cesiumObject: vcInstance.cesiumObject
         })
         // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
-        const readyObj: VcReadyObject = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
+        const readyObj: VcReadyObject = { Cesium, viewer, cesiumObject, vm: vcInstance }
         emit('ready', readyObj)
         vcMitt.emit('ready', readyObj)
         logger.debug(`${vcInstance.cesiumClass}---loaded`)

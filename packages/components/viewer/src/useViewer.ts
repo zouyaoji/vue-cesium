@@ -731,7 +731,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     const readyObj: VcReadyObject = {
       Cesium,
       viewer,
-      vm: vcInstance.proxy as VcViewerRef
+      vm: vcInstance
     }
     if (globalThis.XE) {
       Object.assign(readyObj, {

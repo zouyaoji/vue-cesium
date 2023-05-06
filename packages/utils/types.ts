@@ -8,6 +8,7 @@ import type { VcBtnProps, VcFabActionProps, VcTooltipProps } from '@vue-cesium/c
 import type MouseCoords from '@vue-cesium/components/controls/status-bar/MouseCoords'
 import AMapImageryProvider from '@vue-cesium/components/providers/amap/AMapImageryProvider'
 import TencentImageryProvider from '@vue-cesium/components/providers/tencent/TencentImageryProvider'
+import { VcPointProps } from '@vue-cesium/components/primitive-collections'
 
 interface AnyObject {
   [propName: string]: any
@@ -19,7 +20,8 @@ interface VcReadyObject {
   Cesium: typeof Cesium
   viewer: Cesium.Viewer
   cesiumObject?: VcCesiumObject | Array<VcCesiumObject>
-  vm?: VcComponentPublicInstance
+  // vm?: VcComponentPublicInstance VcComponentInternalInstance
+  vm?: VcComponentInternalInstance
   earth?: any
   map?: any
 }
@@ -715,6 +717,78 @@ export type VueClassObjectProp = {
 export type VueClassProp = string | Array<VueClassProp> | VueClassObjectProp
 
 export type VueStyleObjectProp = Partial<CSSStyleDeclaration>
+
+export type VcTyphoonDatasource = {
+  name: string
+  typhoonRoute: VcTyphoonRoute | VcTyphoonRouteForecast
+  show: boolean
+  points?: VcTyphoonPoint[]
+  colors?: VcColor[]
+  positions: VcPosition[]
+  playInterval?: any
+  playIndex?: number
+  children?: VcTyphoonDatasource[]
+  type?: 'live' | 'forc'
+}
+
+export type VcTyphoonRoute = {
+  begin_time: string
+  ename: string
+  end_time: string
+  ident: string
+  is_current: 1
+  land: any[]
+  name: string
+  points: VcTyphoonPoint[]
+  tfbh: string
+}
+
+export type VcTyphoonRouteForecast = {
+  sets: string
+  points: VcTyphoonPoint[]
+  unshifted?: boolean
+  name?: string
+}
+
+export type VcTyphoonPoint = {
+  id?: string
+  time: string
+  lng: number
+  lat: number
+  strong: string
+  power: number
+  speed: number
+  move_dir: string
+  move_speed: number
+  pressure: number
+  radius7: number
+  radius10: number
+  radius12: number
+  radius7_quad?: {
+    ne: number
+    se: number
+    sw: number
+    nw: number
+  }
+  radius10_quad?: {
+    ne: number
+    se: number
+    sw: number
+    nw: number
+  }
+  radius12_quad?: {
+    ne: number
+    se: number
+    sw: number
+    nw: number
+  }
+  remark: string
+  forecast?: VcTyphoonRouteForecast[]
+  type?: 'live' | 'forc'
+  index?: number
+  tfbh?: string
+  sets?: string
+} & VcPointProps
 
 export {
   AnyObject,
