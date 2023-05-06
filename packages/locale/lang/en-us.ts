@@ -242,6 +242,9 @@ export default {
     overview: {
       show: 'Show',
       hidden: 'Hidden'
+    },
+    typhoon: {
+      warn: 'Failed to play typhoon, reason: no typhoon data with corresponding number found.'
     }
   }
 } as Language

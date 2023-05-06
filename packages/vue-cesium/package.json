@@ -51,8 +51,9 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@zouyaoji/heatmap.js": "^2.0.8",
+    "@turf/circle": "^6.5.0",
     "@vue/shared": "^3.2.26",
+    "@zouyaoji/heatmap.js": "^2.0.8",
     "compare-versions": "^5.0.3",
     "echarts": "^5.3.2",
     "lodash": "^4.17.21",

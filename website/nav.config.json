@@ -122,6 +122,10 @@
             {
               "path": "/overlays/vc-overlay-echarts",
               "title": "VcOverlayEcharts"
+            },
+            {
+              "path": "/overlays/vc-overlay-typhoon",
+              "title": "VcOverlayTyphoon 台风"
             }
           ]
         },
@@ -618,6 +622,10 @@
             {
               "path": "/overlays/vc-overlay-echarts",
               "title": "VcOverlayEcharts"
+            },
+            {
+              "path": "/overlays/vc-overlay-typhoon",
+              "title": "VcOverlayTyphoon"
             }
           ]
         },

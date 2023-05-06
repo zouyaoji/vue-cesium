@@ -222,6 +222,9 @@ export default {
     overview: {
       show: '显示鹰眼',
       hidden: '隐藏鹰眼'
+    },
+    typhoon: {
+      warn: '播放台风失败，原因：未找到对应编号的台风数据。'
     }
   }
 } as Language
