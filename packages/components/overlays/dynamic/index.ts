@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-08-12 14:31:14
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-05-01 15:18:11
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
+ * @FilePath: \vue-cesium\packages\components\overlays\dynamic\index.ts
  */
 import { WatchStopHandle, PropType, toRaw, ComponentPublicInstance } from 'vue'
 import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, ref, watch } from 'vue'
@@ -98,7 +98,14 @@ const emits = {
   'update:startTime': (startTime: Cesium.JulianDate) => true,
   'update:stopTime': (stopTime: Cesium.JulianDate) => true,
   onStop: (clock: Cesium.Clock) => true,
-  stopArrived: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange, clock: Cesium.Clock) => true
+  stopArrived: (e: {
+    overlay: DynamicOverlay
+    position: SampledPosition
+    offset: Cesium.HeadingPitchRange
+    clock: Cesium.Clock
+    indexOverlay: number
+    indexPosition: number
+  }) => true
 }
 export default defineComponent({
   name: 'VcOverlayDynamic',
@@ -397,7 +404,14 @@ export default defineComponent({
             }
 
             if (arrivedFlag) {
-              emit('stopArrived', overlay, sampledPosition, lastOffset, clock)
+              emit('stopArrived', {
+                overlay,
+                position: sampledPosition,
+                offset: lastOffset,
+                clock,
+                indexOverlay: i,
+                indexPosition: j
+              })
               break
             }
           }
@@ -752,7 +766,14 @@ export interface VcOverlayDynamicProps {
   /**
    * Triggers when a stop is reached.
    */
-  onStopArrived?: (overlay: DynamicOverlay, position: SampledPosition, offset: Cesium.HeadingPitchRange, clock: Cesium.Clock) => void
+  onStopArrived?: (e: {
+    overlay: DynamicOverlay
+    position: SampledPosition
+    offset: Cesium.HeadingPitchRange
+    clock: Cesium.Clock
+    indexOverlay: number
+    indexPosition: number
+  }) => void
   /**
    * Triggers when currentTime changed.
    */
