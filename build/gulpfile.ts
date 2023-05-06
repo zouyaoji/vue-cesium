@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2022-01-18 14:59:20
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-05-04 21:27:01
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\build\gulpfile.ts
+ * @FilePath: \vue-cesium\build\gulpfile.ts
  */
 import path from 'path'
 import { mkdir, copyFile } from 'fs/promises'
@@ -26,7 +26,7 @@ export const copyFiles = () =>
   ])
 
 export const copyTypesDefinitions: TaskFunction = done => {
-  const src = path.resolve(buildOutput, 'types')
+  const src = path.resolve(buildOutput, 'types', 'packages')
   const copyTypes = (module: Module) => withTaskName(`copyTypes:${module}`, () => copy(src, buildConfig[module].output.path, { recursive: true }))
 
   return parallel(copyTypes('esm'), copyTypes('cjs'))(done)
