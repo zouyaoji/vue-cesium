@@ -52,7 +52,7 @@ export default defineComponent({
       const slotFn = slots[kebab]
       const classes = `vc-fab__${kebab} absolute-full`
 
-      return slotFn === void 0 ? h(VcIcon, { class: classes, name: props[kebab] as any }) : h('div', { class: classes }, slotFn(slotScope.value))
+      return slotFn === void 0 ? h(VcIcon, { class: classes, name: props[camel] } as any) : h('div', { class: classes }, slotFn(slotScope.value))
     }
 
     function getTriggerContent() {
