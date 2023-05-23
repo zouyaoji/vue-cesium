@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2023-04-15 14:01:51
+ * @LastEditTime: 2023-05-23 10:31:50
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
@@ -696,6 +696,7 @@ export default function (props, ctx, cmpName: string) {
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
     const polyline = renderDatas.value[index] as VcSegmentDrawing
     const positions = polyline.positions
+    const pointIndex = editingPoint.value ? editingPoint.value._index : polyline.positions.length - 1
 
     if (options.button === 2 && editingPoint.value) {
       // 放弃编辑
@@ -715,6 +716,7 @@ export default function (props, ctx, cmpName: string) {
             {
               name: drawingType,
               index,
+              pointIndex,
               renderDatas,
               finished: true,
               windowPoistion: movement,
@@ -829,6 +831,7 @@ export default function (props, ctx, cmpName: string) {
         Object.assign(
           {
             index,
+            pointIndex,
             renderDatas,
             name: drawingType,
             finished,
@@ -864,6 +867,7 @@ export default function (props, ctx, cmpName: string) {
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
     const polyline = renderDatas.value[index] as VcSegmentDrawing
+    const pointIndex = editingPoint.value ? editingPoint.value._index : polyline.positions.length - 1
 
     if (cmpName === 'VcMeasurementVertical') {
       const heightPostion = getHeightPosition(polyline, movement)
@@ -910,6 +914,7 @@ export default function (props, ctx, cmpName: string) {
         Object.assign(
           {
             index,
+            pointIndex,
             renderDatas,
             name: drawingType,
             finished: false,
@@ -962,7 +967,9 @@ export default function (props, ctx, cmpName: string) {
         type: e,
         renderDatas,
         name: drawingType,
-        index: mouseoverPoint.value._vcPolylineIndx
+        index: mouseoverPoint.value._vcPolylineIndx,
+        pointIndex: mouseoverPoint.value._index,
+        point: mouseoverPoint.value
       },
       viewer
     )

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2023-04-15 14:00:29
+ * @LastEditTime: 2023-05-23 10:21:44
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -391,6 +391,8 @@ export default function (props, ctx, cmpName: string) {
     const polyline = renderDatas.value[index] as VcPolylineDrawing
     const tempPositions = polyline.tempPositions
 
+    const pointIndex = editingPoint.value ? editingPoint.value._index : polyline.positions.length - 1
+
     if (options.button === 2 && editingPoint.value) {
       if (editorType.value === 'insert') {
         polyline.positions.splice(editingPoint.value._index, 1)
@@ -409,6 +411,7 @@ export default function (props, ctx, cmpName: string) {
           Object.assign(
             {
               index,
+              pointIndex,
               name: drawingType,
               renderDatas,
               finished: true,
@@ -515,9 +518,10 @@ export default function (props, ctx, cmpName: string) {
         Object.assign(
           {
             index,
+            pointIndex,
             name: drawingType,
-            renderDatas: renderDatas,
-            finished: finished,
+            renderDatas,
+            finished,
             position: cmpName === 'VcMeasurementHorizontal' ? polyline.positions[polyline.positions.length - 1] : position,
             windowPoistion: movement,
             type: type
@@ -547,6 +551,8 @@ export default function (props, ctx, cmpName: string) {
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
     const polyline = renderDatas.value[index] as VcPolylineDrawing
+    const pointIndex = editingPoint.value ? editingPoint.value._index : polyline.positions.length - 1
+
     let type = 'new'
     if (cmpName === 'VcMeasurementHorizontal') {
       const { SceneMode, IntersectionTests, Cartesian3 } = Cesium
@@ -615,6 +621,7 @@ export default function (props, ctx, cmpName: string) {
         Object.assign(
           {
             index,
+            pointIndex,
             name: drawingType,
             renderDatas,
             finished: false,
@@ -634,7 +641,7 @@ export default function (props, ctx, cmpName: string) {
     if (drawStatus.value === DrawStatus.Drawing) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
       const polyline = renderDatas.value[index] as VcPolylineDrawing
-
+      const pointIndex = editingPoint.value ? editingPoint.value._index : polyline.positions.length - 1
       stop(false)
       drawTip.value = drawTipOpts.value.drawingTipStart
 
@@ -644,6 +651,7 @@ export default function (props, ctx, cmpName: string) {
           Object.assign(
             {
               index,
+              pointIndex,
               name: drawingType,
               renderDatas,
               finished: true,
@@ -733,7 +741,9 @@ export default function (props, ctx, cmpName: string) {
         type: e,
         renderDatas: renderDatas,
         name: drawingType,
-        index: mouseoverPoint.value._vcPolylineIndex
+        polylineIndex: mouseoverPoint.value._vcPolylineIndex,
+        pointIndex: mouseoverPoint.value._index,
+        point: mouseoverPoint.value
       },
       viewer
     )

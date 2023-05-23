@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-07-14 22:02:46
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-05-23 10:32:30
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-point.ts
  */
 
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
@@ -447,7 +447,9 @@ export default function (props, ctx, cmpName: string) {
         type: e,
         name: drawingType,
         renderDatas,
-        index: mouseoverPoint.value._vcPolylineIndx
+        index: mouseoverPoint.value._vcPolylineIndx,
+        pointIndex: mouseoverPoint.value._index,
+        point: mouseoverPoint.value
       },
       viewer
     )
