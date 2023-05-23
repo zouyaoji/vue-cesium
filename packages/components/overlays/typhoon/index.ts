@@ -791,7 +791,7 @@ export interface VcOverlayTyphoonProps {
   /**
    * Triggers when the forecast route is added.
    */
-  onForecastRouteAdded: (e: { livePoint: VcTyphoonPoint; datasource: VcTyphoonDatasource; addedByClick: boolean }) => void
+  onForecastRouteAdded?: (e: { livePoint: VcTyphoonPoint; datasource: VcTyphoonDatasource; addedByClick: boolean }) => void
 }
 
 export interface VcOverlayTyphoonRef extends VcComponentPublicInstance<VcOverlayTyphoonProps> {
