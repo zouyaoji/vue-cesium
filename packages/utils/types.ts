@@ -9,6 +9,7 @@ import type MouseCoords from '@vue-cesium/components/controls/status-bar/MouseCo
 import AMapImageryProvider from '@vue-cesium/components/providers/amap/AMapImageryProvider'
 import TencentImageryProvider from '@vue-cesium/components/providers/tencent/TencentImageryProvider'
 import { VcPointProps } from '@vue-cesium/components/primitive-collections'
+import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared'
 
 interface AnyObject {
   [propName: string]: any
@@ -79,6 +80,8 @@ interface MaterialOption {
       lineOffset?: Cesium.Cartesian2 | Cartesian2Option | Array<number> | number
       orientation?: number | Cesium.StripeOrientation
       offset?: number
+      duration?: number
+      count?: number
     }
   }
   strict?: boolean
@@ -453,6 +456,7 @@ export type VcMaterialProperty =
   // | VcCallbackPropertyFunction<CesiumMaterialProperty>
   // | VcCallbackPropertyFunction<Cesium.Color>
   | CesiumMaterialProperty
+  | VcCircleWaveMaterialProperty
 
 export type CesiumMaterial = Cesium.Material | CesiumMaterialProperty
 export type VcMaterial = string | Array<number> | MaterialOption | CesiumMaterial | Cesium.Color | VcMaterialProperty

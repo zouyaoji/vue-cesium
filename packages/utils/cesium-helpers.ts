@@ -49,6 +49,7 @@ import type {
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
+import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
@@ -439,7 +440,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     val instanceof PolylineDashMaterialProperty ||
     val instanceof PolylineGlowMaterialProperty ||
     val instanceof PolylineOutlineMaterialProperty ||
-    val instanceof StripeMaterialProperty
+    val instanceof StripeMaterialProperty ||
+    val instanceof VcCircleWaveMaterialProperty
     // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
@@ -517,6 +519,14 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
           offset: defaultValue(value.fabric.uniforms.offset, 0),
           repeat: defaultValue(value.fabric.uniforms.repeat as number, 1)
         })
+      case 'VcCircleWave': {
+        return new VcCircleWaveMaterialProperty({
+          duration: defaultValue(value.fabric.uniforms.duration, 3000),
+          gradient: defaultValue(value.fabric.uniforms.duration, 0.5),
+          color: makeColor(defaultValue(value.fabric.uniforms.color, Color.RED)),
+          count: defaultValue(value.fabric.uniforms.count, 3)
+        })
+      }
     }
   }
 

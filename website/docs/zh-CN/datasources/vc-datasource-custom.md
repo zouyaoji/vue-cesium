@@ -45,6 +45,14 @@
           outline-rolor="#006400"
         ></vc-graphics-cylinder>
       </vc-entity>
+      <vc-entity ref="entity3" :position="[105,30,200000]" description="Hello VueCesium">
+        <vc-graphics-ellipse
+          ref="cylinder1"
+          :semiMinorAxis="200000.0"
+          :semiMajorAxis="200000.0"
+          :material="{fabric: {type: 'VcCircleWave', uniforms: {count: 3 }}}"
+        ></vc-graphics-ellipse>
+      </vc-entity>
     </vc-datasource-custom>
     <vc-datasource-custom
       @click="onClicked"
@@ -103,6 +111,14 @@
           billboard: {
             image: 'https://zouyaoji.top/vue-cesium/favicon.png',
             scale: 0.25
+          }
+        },
+        {
+          position: [113, 28.5, 400],
+          ellipse: {
+            semiMinorAxis: 20000.0,
+            semiMajorAxis: 20000.0,
+            material: { fabric: { type: 'VcCircleWave', uniforms: { count: 2, color: 'yellow'} } }
           }
         }
       ])
