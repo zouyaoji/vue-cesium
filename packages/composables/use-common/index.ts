@@ -138,6 +138,7 @@ export default function (props, { emit, attrs }, vcInstance: VcComponentInternal
           })
 
           emit('destroyed', vcInstance)
+          vcMitt.emit('destroyed', vcInstance)
 
           logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 

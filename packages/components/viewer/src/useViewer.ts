@@ -853,8 +853,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       globalConfig.value.__scriptPromise = undefined
       loadLibs = []
     }
+    // ensure custom events can be emitted after unmount. 不推荐
+    // https://github.com/vuejs/core/issues/5674
+    vcInstance.isUnmounted = false
+
     const listener = getInstanceListener(vcInstance, 'destroyed')
     listener && emit('destroyed', vcInstance)
+    vcMitt.emit('destroyed', vcInstance)
     logger.debug('viewer---unloaded')
     unloadingResolve(true)
     globalConfig.value.__viewerUnloadingPromise = undefined
