@@ -33,7 +33,6 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // methods
   const handleZoomInMouseDown = e => {
-    console.log('handleZoomInMouseDown')
     const { defined, getTimestamp, SceneMode, ScreenSpaceEventType } = Cesium
     const { viewer } = $services
     $(zoomInTooltipRef)?.hide()

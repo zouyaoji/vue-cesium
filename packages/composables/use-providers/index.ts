@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
- * @LastEditTime: 2023-04-13 22:34:01
+ * @LastEditTime: 2023-06-07 01:37:05
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-providers\index.ts
@@ -30,7 +30,6 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
     const options = commonState.transformProps(props)
 
     if (compareCesiumVersion(Cesium.VERSION, '1.104') && typeof Cesium[vcInstance.cesiumClass].fromUrl === 'function') {
-      console.log(options)
       return await Cesium[vcInstance.cesiumClass].fromUrl(options.url, options)
     } else {
       return new Cesium[vcInstance.cesiumClass](options)

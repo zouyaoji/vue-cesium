@@ -314,7 +314,6 @@ export default defineComponent({
     }
 
     const setData = (data, heatmapInstance: h337.Heatmap<string, string, string>) => {
-      console.log('setData')
       if (data) {
         const { height, xoffset, yoffset, factor, spacing } = config.value
         const xField = options.value.xField || 'x'
