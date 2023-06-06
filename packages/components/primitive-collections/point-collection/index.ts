@@ -156,7 +156,7 @@ export type VcCollectionPointProps = {
    */
   enableMouseEvent?: boolean
   /**
-   * Specify an array of points collections. The structure of the array object is the same as the attribute of the [vc-point](http://localhost:8080/#/en-US/component/primitives/vc-collection-point#vcpoint-props) component.
+   * Specify an array of points collections. The structure of the array object is the same as the attribute of the [vc-point](https://zouyaoji.top/vue-cesium/#/en-US/component/primitives/vc-collection-point#vcpoint-props) component.
    */
   points?: Array<VcPointProps>
   /**

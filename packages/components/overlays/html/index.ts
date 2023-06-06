@@ -41,11 +41,11 @@ export default defineComponent({
     }
     const { $services } = commonState
     const canRender = ref(false)
-    const rootRef = ref<HTMLElement>(null!)
+    const rootRef = ref<HTMLElement>(null)
     const rootStyle = reactive<CSSProperties>({})
-    const offset = ref<Cesium.Cartesian2>(null!)
-    const position = ref<Cesium.Cartesian3>(null!)
-    const lastCanvasPosition = ref<Cesium.Cartesian2>(null!)
+    const offset = ref<Cesium.Cartesian2>(null)
+    const position = ref<Cesium.Cartesian3>(null)
+    const lastCanvasPosition = ref<Cesium.Cartesian2>(null)
 
     // watcch
     let unwatchFns: Array<WatchStopHandle> = []

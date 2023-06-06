@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2023-05-04 01:14:20
+ * @LastEditTime: 2023-06-05 11:08:29
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\typings\global.d.ts
@@ -17,6 +17,7 @@ import {
   ComponentCustomProps
 } from 'vue'
 import {
+  QSliderSlots,
   VcAjaxBarProps,
   VcAnalysesProps,
   VcAnalysesSlots,
@@ -154,6 +155,7 @@ import {
   VcPostProcessStageScanProps,
   VcPrimitiveClassificationProps,
   VcPrimitiveClassificationSlots,
+  VcPrimitiveClusterProps,
   VcPrimitiveGroundProps,
   VcPrimitiveGroundSlots,
   VcPrimitiveI3sDataProviderProps,
@@ -165,7 +167,9 @@ import {
   VcPrimitiveSlots,
   VcPrimitiveTilesetProps,
   VcPrimitiveTimeDynamicPointCloudProps,
+  VcPrimitiveVoxelProps,
   VcSelectionIndicatorProps,
+  VcSliderProps,
   VcSpinnerBallProps,
   VcSpinnerBarsProps,
   VcSpinnerDotsProps,
@@ -319,6 +323,8 @@ declare module 'vue' {
     VcPrimitiveTimeDynamicPointCloud: GlobalComponentConstructor<VcPrimitiveTimeDynamicPointCloudProps>
     VcPrimitiveI3sDataProvider: GlobalComponentConstructor<VcPrimitiveI3sDataProviderProps>
     VcPrimitiveOsmBuildings: GlobalComponentConstructor<VcPrimitiveOsmBuildingsProps>
+    VcPrimitiveVoxel: GlobalComponentConstructor<VcPrimitiveVoxelProps>
+    VcPrimitiveCluster: GlobalComponentConstructor<VcPrimitiveClusterProps>
 
     VcCollectionBillboard: GlobalComponentConstructor<VcCollectionBillboardProps, VcCollectionBillboardSlots>
     VcCollectionLabel: GlobalComponentConstructor<VcCollectionLabelProps, VcCollectionLabelSlots>
@@ -395,6 +401,7 @@ declare module 'vue' {
     VcSpinner: GlobalComponentConstructor<VcSpinnerProps>
     VcFab: GlobalComponentConstructor<VcFabProps, VcFabSlots>
     VcFabAction: GlobalComponentConstructor<VcFabActionProps, VcFabActionSlots>
+    VcSlider: GlobalComponentConstructor<VcSliderProps, QSliderSlots>
 
     VcConfigProvider: GlobalComponentConstructor<VcConfigProviderProps, VcConfigProviderSlots>
   }
