@@ -71,6 +71,7 @@ _2023-03-09_
 
 - Fixed the issue that the Baidu custom map cannot be displayed by `vc-imagery-provider-baidu` component.
 - Fixed the issue that the `vc-overlay-html` component is not displayed properly in 2D SceneMode.
+- Fixed the issue that the `vc-layer-imagery` component crashes in Cesium `1.106.1`.
 
 ### 3.1.4
 

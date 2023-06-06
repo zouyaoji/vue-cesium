@@ -70,14 +70,14 @@ Basic usage of VcPrimitiveCluster component.
       }
 
       const onViewerReady = ({ Cesium, viewer }) => {
-        Cesium.Resource.fetchJson('/SampleData/json/schools.geojson').then(res => {
+        Cesium.Resource.fetchJson('https://zouyaoji.top/vue-cesium/SampleData/json/schools.geojson').then(res => {
           const { features } = res
           for (let i = 0; i < features.length; i++) {
             const feature = features[i]
             const coordinates = feature.geometry.coordinates
 
             billboards.value.push({
-              image: '/images/mark-icon.png',
+              image: 'https://zouyaoji.top/vue-cesium/images/mark-icon.png',
               width: 32,
               height: 32,
               position: [coordinates[0], coordinates[1]]

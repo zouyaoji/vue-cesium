@@ -9,6 +9,7 @@ _2023-xx-xx_
 - 量算绘制组件图标不显示问题修复。
 - `vc-overlay-typhoon` 组件 type 类型定义错误问题修复。
 - `vc-viewer` 组件销毁事件不触发的问题。
+- `vc-layer-imagery` 在版本 `1.106.1` 上配合个别 provider 崩溃问题修复。
 
 #### 新特性
 

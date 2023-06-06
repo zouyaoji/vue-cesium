@@ -36,7 +36,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <div class="block" style="display: flex; flex-direction: column;">
+        <div class="block" style="display: flex; flex-direction: column; max-width: 250px" >
           <span class="demonstration">透明度</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
           <span class="demonstration">亮度</span>
