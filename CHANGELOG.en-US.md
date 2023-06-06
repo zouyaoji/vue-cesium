@@ -1,5 +1,21 @@
 ## Changelog
 
+### 3.1.9
+
+_2023-xx-xx_
+
+#### Bug fixes
+
+- Fixed the issue that the measurement drawing component icon did not display.
+- Fixed the issue that the `vc-overlay-typhoon` component type definition error.
+- Fixed the issue that the `destroyed` event of `vc-viewer` component does not trigger.
+
+#### New feature
+
+- The edit event of the measurement drawing component returns the index of the current edit point.
+- Add water ripple material properties.
+- Add the cluster primitive component `[vc-primitive-cluster](https://zouyaoji.top/vue-cesium/#/en-US/component/primitives/vc-primitive-cluster)`.
+
 ### 3.1.8
 
 _2023-05-06_

@@ -349,6 +349,10 @@
             {
               "path": "/primitives/vc-primitive-particle",
               "title": "ParticleSystem 粒子图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-cluster",
+              "title": "VcPrimitiveCluster 聚合图元"
             }
           ]
         },
@@ -849,6 +853,10 @@
             {
               "path": "/primitives/vc-primitive-particle",
               "title": "ParticleSystem"
+            },
+            {
+              "path": "/primitives/vc-primitive-cluster",
+              "title": "VcPrimitiveCluster"
             }
           ]
         },

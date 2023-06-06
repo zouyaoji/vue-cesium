@@ -12,9 +12,6 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer sceneModePicker @ready="onViewerReady">
     <!-- <vc-terrain-provider-cesium></vc-terrain-provider-cesium> -->
-    <!-- <vc-layer-imagery :sort-order="10">
-      <vc-imagery-provider-urltemplate url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"></vc-imagery-provider-urltemplate>
-    </vc-layer-imagery> -->
     <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :loading-event="morphComplete" :show="show">
       <vc-entity
         ref="entity1"
@@ -67,6 +64,13 @@
     >
     </vc-datasource-custom>
     <vc-selection-indicator ref="indicatorRef" @pickEvt="pickEvt"></vc-selection-indicator>
+    <!-- 注记层 -->
+    <vc-layer-imagery :sort-order="20">
+      <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    </vc-layer-imagery>
+    <vc-layer-imagery :sort-order="10">
+      <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
+    </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -118,7 +122,7 @@
           ellipse: {
             semiMinorAxis: 20000.0,
             semiMajorAxis: 20000.0,
-            material: { fabric: { type: 'VcCircleWave', uniforms: { count: 2, color: 'yellow'} } }
+            material: { fabric: { type: 'VcCircleWave', uniforms: { count: 2, color: 'yellow' } } }
           }
         }
       ])

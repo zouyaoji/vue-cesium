@@ -11,6 +11,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer
+    v-if="show"
     ref="vcViewer"
     :animation="animation"
     :base-layer-picker="baseLayerPicker"
@@ -26,10 +27,11 @@
     @ready="onViewerReady"
     @left-click="onLeftClick"
     @touch-end="onTouchEnd"
+    @destroyed="onDestroyed"
   >
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :other-opts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
-    <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
-      <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
+    <vc-entity @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
+      <vc-graphics-billboard image="https://zouyaoji.top/vue-cesium/favicon.png" :scale="0.5"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
     <vc-layer-imagery>
@@ -57,88 +59,120 @@
 </el-row>
 
 <script>
+  import { watch, ref, onMounted } from 'vue'
   export default {
-    data() {
-      return {
-        loading: true,
-        animation: true,
-        timeline: true,
-        baseLayerPicker: false,
-        fullscreenButton: true,
-        infoBox: true,
-        showCredit: true,
-        fullscreenElement: document.body,
-        point: {
-          pixelSize: 28,
-          color: 'red'
-        },
-        label: {
-          text: 'Hello World',
-          pixelOffset: [0, 150]
-        },
-        billboard: {},
-        offset: [50, 25],
-        otherOpts: {
-          offset: [0, 32],
-          position: 'bottom-right'
-        }
-      }
-    },
-    watch: {
-      timeline(val) {
-        this.otherOpts.offset = val ? [0, 30] : this.fullscreenButton ? [30, 5] : [0, 5]
-      },
-      fullscreenButton(val) {
-        if (!this.timeline && !val) {
-          this.otherOpts.offset = [0, 5]
-        } else if (!this.timeline && val) {
-          this.otherOpts.offset = [30, 5]
-        }
-      }
-    },
-    mounted() {
-      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
-        console.log('viewer is loaded.')
+    setup() {
+      const loading = ref(false)
+      const animation = ref(true)
+      const timeline = ref(true)
+      const baseLayerPicker = ref(false)
+      const fullscreenButton = ref(true)
+      const infoBox = ref(true)
+      const showCredit = ref(true)
+      const fullscreenElement = document.body
+      const vcViewer = ref(null)
+      const point = ref({
+        pixelSize: 28,
+        color: 'red'
       })
-    },
-    methods: {
-      onViewerReady({ Cesium, viewer }) {
-        this.loading = false
+      const label = ref({
+        text: 'Hello World',
+        pixelOffset: [0, 150]
+      })
+      const billboard = ref({})
+      const offset = ref([50, 25])
+      const otherOpts = ref({
+        offset: [0, 32],
+        position: 'bottom-right'
+      })
+      const show = ref(true)
+
+      watch(timeline, val => {
+        otherOpts.value.offset = val ? [0, 30] : fullscreenButton.value ? [30, 5] : [0, 5]
+      })
+
+      watch(fullscreenButton, val => {
+        if (!timeline.value && !val) {
+          otherOpts.value.offset = [0, 5]
+        } else if (!timeline.value && val) {
+          otherOpts.value.offset = [30, 5]
+        }
+      })
+
+      const onViewerReady = ({ Cesium, viewer, vm }) => {
+        console.log('viewer is loaded.', vm)
+        vm.vcMitt.on('destroyed', e => {
+          console.log('viewer is destroyed', e)
+        })
+        loading.value = false
         viewer.scene.globe.enableLighting = true
-      },
-      onCesiumReady(e) {
+      }
+      const onCesiumReady = e => {
         console.log(e)
-      },
-      onNavigationEvt(e) {
+      }
+      const onNavigationEvt = e => {
         console.log(e)
-      },
-      onEntityClick(e) {
+      }
+      const onEntityClick = e => {
         console.log(e)
-      },
-      onLeftClick(e) {
+      }
+      const onLeftClick = e => {
         console.log(e)
-      },
-      onTouchEnd(e) {
+      }
+      const onTouchEnd = e => {
         console.log(e)
-      },
-      load() {
-        this.$refs.vcViewer.load().then(e => {
+      }
+      const onDestroyed = e => {
+        console.log('onDestroyed', e)
+      }
+      const load = () => {
+        // vcViewer.value.load().then(e => {
+        //   console.log(e)
+        //   loading.value = false
+        // })
+        show.value = true
+      }
+      const unload = () => {
+        // this.$refs.vcViewer.unload().then(e => {
+        //   console.log(e)
+        //   this.loading = true
+        // })
+        show.value = false
+      }
+      const reload = () => {
+        loading.value = true
+        vcViewer.value.reload().then(e => {
           console.log(e)
-          this.loading = false
+          loading.value = false
         })
-      },
-      unload() {
-        this.$refs.vcViewer.unload().then(e => {
-          console.log(e)
-          this.loading = true
-        })
-      },
-      reload() {
-        this.loading = true
-        this.$refs.vcViewer.reload().then(e => {
-          console.log(e)
-          this.loading = false
-        })
+      }
+
+      return {
+        loading,
+        animation,
+        timeline,
+        baseLayerPicker,
+        fullscreenButton,
+        infoBox,
+        showCredit,
+        fullscreenElement,
+        vcViewer,
+        point,
+        label,
+        billboard,
+        offset,
+        otherOpts,
+        show,
+        onViewerReady,
+        onCesiumReady,
+        onNavigationEvt,
+        onEntityClick,
+        onLeftClick,
+        onTouchEnd,
+        onDestroyed,
+        load,
+        unload,
+        reload
       }
     }
   }

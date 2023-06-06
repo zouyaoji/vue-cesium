@@ -1,5 +1,21 @@
 ## 更新日志
 
+### 3.1.9
+
+_2023-xx-xx_
+
+#### Bug 修复
+
+- 量算绘制组件图标不显示问题修复。
+- `vc-overlay-typhoon` 组件 type 类型定义错误问题修复。
+- `vc-viewer` 组件销毁事件不触发的问题。
+
+#### 新特性
+
+- 量算绘制组件编辑事件新增返回当前编辑点的索引。
+- 增加水波纹材质属性。
+- 增加聚合图元组件 `[vc-primitive-cluster](https://zouyaoji.top/vue-cesium/#/zh-CN/component/primitives/vc-primitive-cluster)`。
+
 ### 3.1.8
 
 _2023-05-06_
