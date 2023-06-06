@@ -794,6 +794,16 @@ export type VcTyphoonPoint = {
   sets?: string
 } & VcPointProps
 
+export type VcPrimitiveClusterOptions = {
+  show?: boolean
+  enabled?: boolean
+  pixelRange?: number
+  minimumClusterSize?: number
+  clusterBillboards?: boolean
+  clusterLabels?: boolean
+  clusterPoints?: boolean
+}
+
 export {
   AnyObject,
   VcCamera,

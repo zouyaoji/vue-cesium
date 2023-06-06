@@ -132,6 +132,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   return {
     transformProps: commonState.transformProps,
+    transformProp: commonState.transformProp,
     unwatchFns: commonState.unwatchFns,
     setPropsWatcher: commonState.setPropsWatcher,
     $services: commonState.$services

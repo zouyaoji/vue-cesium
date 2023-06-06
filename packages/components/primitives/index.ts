@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2023-04-15 15:19:28
+ * @LastEditTime: 2023-06-05 13:16:37
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\components\primitives\index.ts
@@ -19,6 +19,7 @@ import PrimitiveViewshed from './viewshed'
 import PrimitiveTimeDynamicPointCloud from './time-dynamic-point-cloud'
 import PrimitiveI3sDataProvider from './i3s'
 import PrimitiveVoxel from './voxel'
+import PrimitiveCluster from './primitive-cluster'
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
@@ -31,7 +32,9 @@ const components = [
   PrimitiveOsmBuildings,
   PrimitiveI3sDataProvider,
   PrimitiveVoxel,
-  PrimitiveParticle
+  PrimitiveTimeDynamicPointCloud,
+  PrimitiveParticle,
+  PrimitiveCluster
 ]
 
 const install = (app: App): void => {
@@ -62,6 +65,7 @@ export const VcViewshed = PrimitiveViewshed as SFCWithInstall<typeof PrimitiveVi
 export const VcPrimitiveTimeDynamicPointCloud = PrimitiveTimeDynamicPointCloud as SFCWithInstall<typeof PrimitiveTimeDynamicPointCloud>
 export const VcPrimitiveI3sDataProvider = PrimitiveI3sDataProvider as SFCWithInstall<typeof PrimitiveI3sDataProvider>
 export const VcPrimitiveVoxel = PrimitiveVoxel as SFCWithInstall<typeof PrimitiveVoxel>
+export const VcPrimitiveCluster = PrimitiveCluster as SFCWithInstall<typeof PrimitiveCluster>
 
 export * from './classification'
 export * from './ground'
@@ -75,3 +79,4 @@ export * from './viewshed'
 export * from './time-dynamic-point-cloud'
 export * from './i3s'
 export * from './voxel'
+export * from './primitive-cluster'

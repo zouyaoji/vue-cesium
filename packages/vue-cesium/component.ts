@@ -85,7 +85,8 @@ import {
   VcPrimitiveTimeDynamicPointCloud,
   VcPrimitiveI3sDataProvider,
   VcPrimitiveVoxel,
-  VcPrimitiveParticle
+  VcPrimitiveParticle,
+  VcPrimitiveCluster
 } from '@vue-cesium/components/primitives'
 
 // PrimitiveCollections
@@ -259,6 +260,7 @@ export default [
   VcPrimitiveI3sDataProvider,
   VcPrimitiveVoxel,
   VcPrimitiveParticle,
+  VcPrimitiveCluster,
 
   VcCollectionBillboard,
   VcCollectionCloud,
