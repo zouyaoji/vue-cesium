@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-04-07 02:17:24
+ * @LastEditTime: 2023-06-07 01:36:16
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\components\imagery-layer\src\index.ts
@@ -47,7 +47,7 @@ export default defineComponent({
     // methods
     instance.createCesiumObject = async () => {
       const options = commonState.transformProps(props)
-      const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider
+      const imageryProvider = (props.imageryProvider || new Cesium.ArcGisMapServerImageryProvider()) as Cesium.ImageryProvider
       if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
         return Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
       } else {
