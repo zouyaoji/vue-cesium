@@ -38,6 +38,7 @@ ctrl + 右键取消绘制。
       @ready="drawingsReadyDefault"
       :point-measurement-opts="pointMeasurementOpts"
       :area-measurement-opts="areaMeasurementOpts"
+      @clear-evt="clearEvt"
     >
     </vc-measurements>
     <!-- 修改加载的量算实例 -->
@@ -247,6 +248,9 @@ ctrl + 右键取消绘制。
           }
         }
       },
+      clearEvt(e, viewer) {
+        console.log(e, viewer)
+      },
       unload() {
         this.$refs.measurementsRef.unload()
       },
@@ -381,7 +385,7 @@ ctrl + 右键取消绘制。
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
-| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
+| clearEvt   | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
 
 ### 方法
 

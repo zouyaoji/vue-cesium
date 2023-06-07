@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-03-09 09:46:56
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-06-07 11:19:33
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analyses.md
+ * @FilePath: \vue-cesium\website\docs\en-US\analyses\vc-analyses.md
 -->
 
 ## VcAnalyses
@@ -200,7 +200,7 @@ The parameter configuration of each drawing result is too long to list here. If 
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the editor button is clicked.                              |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
 | fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
-| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | Triggers when the clear button is clicked.                               |
+| clearEvt   | (evt: object, viewer: Cesium.Viewer)             | Triggers when the clear button is clicked.                               |
 
 ### Methods
 

@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2023-02-10 09:38:38
- * @LastEditors: XIAOLIJUN
+ * @LastEditTime: 2023-06-07 11:19:50
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\analyses\vc-analyses.md
 -->
 
 ## VcAnalyses
@@ -196,7 +196,7 @@
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移出绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
-| onClearEvt | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
+| clearEvt   | (evt: object, viewer: Cesium.Viewer)             | 清除绘制时触发。             |
 
 ### 方法
 
