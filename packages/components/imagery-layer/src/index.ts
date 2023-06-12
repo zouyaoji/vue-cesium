@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-06-07 01:36:16
+ * @LastEditTime: 2023-06-12 17:15:57
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -47,10 +47,12 @@ export default defineComponent({
     // methods
     instance.createCesiumObject = async () => {
       const options = commonState.transformProps(props)
-      const imageryProvider = (props.imageryProvider || new Cesium.ArcGisMapServerImageryProvider()) as Cesium.ImageryProvider
+
       if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
+        const imageryProvider = (props.imageryProvider || new Cesium.ArcGisMapServerImageryProvider()) as Cesium.ImageryProvider
         return Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
       } else {
+        const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider
         return new Cesium.ImageryLayer(imageryProvider, options as any)
       }
     }
