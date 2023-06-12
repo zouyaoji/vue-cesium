@@ -1,7 +1,7 @@
 const text = `
-attribute vec2 st;
+in vec2 st;
 // it is not normal itself, but used to control lines drawing
-attribute vec3 normal; // (point to use, offset sign, not used component)
+in vec3 normal; // (point to use, offset sign, not used component)
 
 uniform sampler2D previousParticlesPosition;
 uniform sampler2D currentParticlesPosition;
@@ -93,11 +93,11 @@ vec4 calculateOffsetOnMiterDirection(adjacentPoints projectedCoordinates, float 
   vec4 offset = vec4(0.0);
   // avoid to use values that are too small
   if (projection > 0.1) {
-    float miterLength = offsetLength / projection;
-    offset = vec4(offsetSign * miter * miterLength, 0.0, 0.0);
-    offset.x = offset.x / aspect;
+      float miterLength = offsetLength / projection;
+      offset = vec4(offsetSign * miter * miterLength, 0.0, 0.0);
+      offset.x = offset.x / aspect;
   } else {
-    offset = calculateOffsetOnNormalDirection(PointB, PointC, offsetSign);
+      offset = calculateOffsetOnNormalDirection(PointB, PointC, offsetSign);
   }
 
   return offset;
@@ -106,13 +106,13 @@ vec4 calculateOffsetOnMiterDirection(adjacentPoints projectedCoordinates, float 
 void main() {
   vec2 particleIndex = st;
 
-  vec3 previousPosition = texture2D(previousParticlesPosition, particleIndex).rgb;
-  vec3 currentPosition = texture2D(currentParticlesPosition, particleIndex).rgb;
-  vec3 nextPosition = texture2D(postProcessingPosition, particleIndex).rgb;
+  vec3 previousPosition = texture(previousParticlesPosition, particleIndex).rgb;
+  vec3 currentPosition = texture(currentParticlesPosition, particleIndex).rgb;
+  vec3 nextPosition = texture(postProcessingPosition, particleIndex).rgb;
 
-  float isAnyRandomPointUsed = texture2D(postProcessingPosition, particleIndex).a +
-    texture2D(currentParticlesPosition, particleIndex).a +
-    texture2D(previousParticlesPosition, particleIndex).a;
+  float isAnyRandomPointUsed = texture(postProcessingPosition, particleIndex).a +
+    texture(currentParticlesPosition, particleIndex).a +
+    texture(previousParticlesPosition, particleIndex).a;
 
   adjacentPoints projectedCoordinates;
   if (isAnyRandomPointUsed > 0.0) {

@@ -9,7 +9,7 @@
 const text = `
 void main() {
   const vec4 white = vec4(1.0);
-  gl_FragColor = white;
+  out_FragColor = white;
 }
 `
 export default text

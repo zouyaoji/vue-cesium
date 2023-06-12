@@ -123,6 +123,43 @@ class ParticlesRendering {
 
   createRenderingPrimitives(context, particleSystemOptions, viewerParameters, particlesComputing) {
     const that = this
+
+    const webgl2 = context?.webgl2
+
+    let segmentDrawVertText = segmentDrawVert
+    if (!webgl2) {
+      segmentDrawVertText = segmentDrawVertText.replace('in vec2 st;', 'attribute vec2 st;')
+      segmentDrawVertText = segmentDrawVertText.replace('in vec3 normal;', 'attribute vec3 normal;')
+      segmentDrawVertText = segmentDrawVertText.replace(/texture\(/g, 'texture2D(')
+    }
+
+    let segmentDrawFragText = segmentDrawFrag
+    if (!webgl2) {
+      segmentDrawFragText = segmentDrawFragText.replace(/out_FragColor/g, 'gl_FragColor')
+    }
+
+    let fullscreenVertText = fullscreenVert
+    if (!webgl2) {
+      fullscreenVertText = fullscreenVertText.replace('out vec2 textureCoordinate;', 'varying vec2 textureCoordinate;')
+      fullscreenVertText = fullscreenVertText.replace('in vec3 position;', 'attribute vec3 position;')
+      fullscreenVertText = fullscreenVertText.replace('in vec2 st;', 'attribute vec2 st;')
+    }
+
+    let trailDrawFragText = trailDrawFrag
+    if (!webgl2) {
+      trailDrawFragText = trailDrawFragText.replace('in vec2 textureCoordinate;', 'varying vec2 textureCoordinate;')
+      trailDrawFragText = trailDrawFragText.replace(/out_FragColor/g, 'gl_FragColor')
+      trailDrawFragText = trailDrawFragText.replace(/gl_FragDepth/g, 'gl_FragDepthEXT')
+      trailDrawFragText = trailDrawFragText.replace(/texture\(/g, 'texture2D(')
+    }
+
+    let screenDrawFragText = screenDrawFrag
+    if (!webgl2) {
+      screenDrawFragText = screenDrawFragText.replace('in vec2 textureCoordinate;', 'varying vec2 textureCoordinate;')
+      screenDrawFragText = screenDrawFragText.replace(/out_FragColor/g, 'gl_FragColor')
+      screenDrawFragText = screenDrawFragText.replace(/texture\(/g, 'texture2D(')
+    }
+
     this.primitives = {
       segments: new CustomPrimitive({
         commandType: 'Draw',
@@ -156,10 +193,10 @@ class ParticlesRendering {
           }
         },
         vertexShaderSource: new Cesium.ShaderSource({
-          sources: [segmentDrawVert]
+          sources: [segmentDrawVertText]
         }),
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [segmentDrawFrag]
+          sources: [segmentDrawFragText]
         }),
         rawRenderState: Util.createRawRenderState({
           // undefined value means let Cesium deal with it
@@ -201,11 +238,11 @@ class ParticlesRendering {
         // prevent Cesium from writing depth because the depth here should be written manually
         vertexShaderSource: new Cesium.ShaderSource({
           defines: ['DISABLE_GL_POSITION_LOG_DEPTH'],
-          sources: [fullscreenVert]
+          sources: [fullscreenVertText]
         }),
         fragmentShaderSource: new Cesium.ShaderSource({
           defines: ['DISABLE_LOG_DEPTH_FRAGMENT_WRITE'],
-          sources: [trailDrawFrag]
+          sources: [trailDrawFragText]
         }),
         rawRenderState: Util.createRawRenderState({
           viewport: undefined,
@@ -248,11 +285,11 @@ class ParticlesRendering {
         // prevent Cesium from writing depth because the depth here should be written manually
         vertexShaderSource: new Cesium.ShaderSource({
           defines: ['DISABLE_GL_POSITION_LOG_DEPTH'],
-          sources: [fullscreenVert]
+          sources: [fullscreenVertText]
         }),
         fragmentShaderSource: new Cesium.ShaderSource({
           defines: ['DISABLE_LOG_DEPTH_FRAGMENT_WRITE'],
-          sources: [screenDrawFrag]
+          sources: [screenDrawFragText]
         }),
         rawRenderState: Util.createRawRenderState({
           viewport: undefined,

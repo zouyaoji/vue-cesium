@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 09:20:11
- * @LastEditTime: 2021-10-28 09:37:17
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-06-12 18:10:22
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\glsl\screenDraw.frag.ts
  */
@@ -10,17 +10,17 @@ const text = `
 uniform sampler2D trailsColorTexture;
 uniform sampler2D trailsDepthTexture;
 
-varying vec2 textureCoordinate;
+in vec2 textureCoordinate;
 
 void main() {
-  vec4 trailsColor = texture2D(trailsColorTexture, textureCoordinate);
-  float trailsDepth = texture2D(trailsDepthTexture, textureCoordinate).r;
-  float globeDepth = czm_unpackDepth(texture2D(czm_globeDepthTexture, textureCoordinate));
+  vec4 trailsColor = texture(trailsColorTexture, textureCoordinate);
+  float trailsDepth = texture(trailsDepthTexture, textureCoordinate).r;
+  float globeDepth = czm_unpackDepth(texture(czm_globeDepthTexture, textureCoordinate));
 
   if (trailsDepth < globeDepth) {
-    gl_FragColor = trailsColor;
+    out_FragColor = trailsColor;
   } else {
-    gl_FragColor = vec4(0.0);
+    out_FragColor = vec4(0.0);
   }
 }
 `

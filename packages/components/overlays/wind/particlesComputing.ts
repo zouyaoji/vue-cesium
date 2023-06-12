@@ -14,7 +14,7 @@ class ParticlesComputing {
     this.data = data
     this.createWindTextures(context, data)
     this.createParticlesTextures(context, particleSystemOptions, viewerParameters)
-    this.createComputingPrimitives(data, particleSystemOptions, viewerParameters)
+    this.createComputingPrimitives(data, particleSystemOptions, viewerParameters, context)
   }
 
   createWindTextures(context, data) {
@@ -22,7 +22,7 @@ class ParticlesComputing {
       context: context,
       width: data.dimensions.lon,
       height: data.dimensions.lat * data.dimensions.lev,
-      pixelFormat: Cesium.PixelFormat.LUMINANCE,
+      pixelFormat: !context?.webgl2 ? Cesium.PixelFormat.LUMINANCE : Cesium.PixelFormat.RED,
       pixelDatatype: Cesium.PixelDatatype.FLOAT,
       flipY: false,
       sampler: new Cesium.Sampler({
@@ -83,7 +83,30 @@ class ParticlesComputing {
     })
   }
 
-  createComputingPrimitives(data, particleSystemOptions, viewerParameters) {
+  createComputingPrimitives(data, particleSystemOptions, viewerParameters, context) {
+    const webgl2 = context?.webgl2
+
+    let calculateSpeedFragText = calculateSpeedFrag
+    if (!webgl2) {
+      calculateSpeedFragText = calculateSpeedFragText.replace('in vec2 v_textureCoordinates;', 'varying vec2 v_textureCoordinates;')
+      calculateSpeedFragText = calculateSpeedFragText.replace(/texture\(/g, 'texture2D(')
+      calculateSpeedFragText = calculateSpeedFragText.replace(/out_FragColor/g, 'gl_FragColor')
+    }
+
+    let updatePositionFragText = updatePositionFrag
+    if (!webgl2) {
+      updatePositionFragText = updatePositionFragText.replace('in vec2 v_textureCoordinates;', 'varying vec2 v_textureCoordinates;')
+      updatePositionFragText = updatePositionFragText.replace(/texture\(/g, 'texture2D(')
+      updatePositionFragText = updatePositionFragText.replace(/out_FragColor/g, 'gl_FragColor')
+    }
+
+    let postProcessingPositionFragText = postProcessingPositionFrag
+    if (!webgl2) {
+      postProcessingPositionFragText = postProcessingPositionFragText.replace('in vec2 v_textureCoordinates;', 'varying vec2 v_textureCoordinates;')
+      postProcessingPositionFragText = postProcessingPositionFragText.replace(/texture\(/g, 'texture2D(')
+      postProcessingPositionFragText = postProcessingPositionFragText.replace(/out_FragColor/g, 'gl_FragColor')
+    }
+
     const dimension = new Cesium.Cartesian3(data.dimensions.lon, data.dimensions.lat, data.dimensions.lev)
     const minimum = new Cesium.Cartesian3(data.lon.min, data.lat.min, data.lev.min)
     const maximum = new Cesium.Cartesian3(data.lon.max, data.lat.max, data.lev.max)
@@ -136,7 +159,7 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [calculateSpeedFrag]
+          sources: [calculateSpeedFragText]
         }),
         outputTexture: this.particlesTextures.particlesSpeed,
         preExecute: function () {
@@ -162,7 +185,7 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [updatePositionFrag]
+          sources: [updatePositionFragText]
         }),
         outputTexture: this.particlesTextures.nextParticlesPosition,
         preExecute: function () {
@@ -198,7 +221,7 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [postProcessingPositionFrag]
+          sources: [postProcessingPositionFragText]
         }),
         outputTexture: this.particlesTextures.postProcessingPosition,
         preExecute: function () {

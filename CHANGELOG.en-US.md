@@ -1,5 +1,15 @@
 ## Changelog
 
+### 3.2.0
+
+_2023-06-xx_
+
+
+#### Bug fixes
+
+- Fixed the issue that the `vc-layer-imagery` component displaying an "appendForwardSlash is undefined" error.
+- Fixed the issue that the `vc-overlay-windmap` component crashing when enabling webgl2 in the new version of Cesium.
+
 ### 3.1.9
 
 _2023-06-08_

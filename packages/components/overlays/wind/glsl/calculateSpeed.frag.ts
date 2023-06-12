@@ -7,6 +7,9 @@
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\glsl\calculateSpeed.frag.ts
  */
 export default `
+
+precision highp float;
+
 // the size of UV textures: width = lon, height = lat*lev
 uniform sampler2D U; // eastward wind
 uniform sampler2D V; // northward wind
@@ -23,9 +26,7 @@ uniform vec2 vSpeedRange;
 uniform float pixelSize;
 uniform float speedFactor;
 
-// float speedScaleFactor = speedFactor * pixelSize;
-
-varying vec2 v_textureCoordinates;
+in vec2 v_textureCoordinates;
 
 vec2 mapPositionToNormalizedIndex2D(vec3 lonLatLev) {
   // ensure the range of longitude and latitude
@@ -54,7 +55,7 @@ vec2 mapPositionToNormalizedIndex2D(vec3 lonLatLev) {
 
 float getWindComponent(sampler2D componentTexture, vec3 lonLatLev) {
   vec2 normalizedIndex2D = mapPositionToNormalizedIndex2D(lonLatLev);
-  float result = texture2D(componentTexture, normalizedIndex2D).r;
+  float result = texture(componentTexture, normalizedIndex2D).r;
   return result;
 }
 
@@ -121,8 +122,8 @@ vec3 convertSpeedUnitToLonLat(vec3 lonLatLev, vec3 speed) {
 vec3 calculateSpeedByRungeKutta2(vec3 lonLatLev) {
   // see https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Second-order_methods_with_two_stages for detail
   const float h = 0.5;
-
   float speedScaleFactor = speedFactor * pixelSize;
+
   vec3 y_n = lonLatLev;
   vec3 f_n = linearInterpolation(lonLatLev);
   vec3 midpoint = y_n + 0.5 * h * convertSpeedUnitToLonLat(y_n, f_n) * speedScaleFactor;
@@ -142,11 +143,12 @@ float calculateWindNorm(vec3 speed) {
 
 void main() {
   // texture coordinate must be normalized
-  vec3 lonLatLev = texture2D(currentParticlesPosition, v_textureCoordinates).rgb;
+  vec3 lonLatLev = texture(currentParticlesPosition, v_textureCoordinates).rgb;
+  float speedScaleFactor = speedFactor * pixelSize;
   vec3 speed = calculateSpeedByRungeKutta2(lonLatLev);
   vec3 speedInLonLat = convertSpeedUnitToLonLat(lonLatLev, speed);
-  float speedScaleFactor = speedFactor * pixelSize;
+
   vec4 particleSpeed = vec4(speedInLonLat, calculateWindNorm(speed / speedScaleFactor));
-  gl_FragColor = particleSpeed;
+  out_FragColor = particleSpeed;
 }
 `
