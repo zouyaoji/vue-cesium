@@ -3,11 +3,9 @@
  * @Date: 2023-05-23 13:14:12
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-05-26 10:43:30
- * @FilePath: \vue-cesium\packages\shared\materials\VcCircleWaveMaterialProperty.ts
+ * @LastEditTime: 2023-06-14 17:47:05
+ * @FilePath: \vue-cesium@next\packages\shared\materials\VcCircleWaveMaterialProperty.ts
  */
-import { VcColor } from '@vue-cesium/utils/types'
-import { makeColor } from '@vue-cesium/utils/cesium-helpers'
 export default class VcCircleWaveMaterialProperty {
   _definitionChanged: Cesium.Event<(...args: any[]) => void>
   _color: Cesium.ConstantProperty
@@ -25,7 +23,7 @@ export default class VcCircleWaveMaterialProperty {
     }
 
     this._definitionChanged = new Event()
-    this._color = new Cesium.ConstantProperty(makeColor(options.color))
+    this._color = new Cesium.ConstantProperty(options.color)
     this._duration = defaultValue(options.duration, 1000)
     this.count = defaultValue(options.count, 2)
     if (this.count <= 0) {
@@ -59,7 +57,7 @@ export default class VcCircleWaveMaterialProperty {
     const oldValue = this._color
 
     if (oldValue !== value) {
-      this._color = new Cesium.ConstantProperty(makeColor(value as any))
+      this._color = new Cesium.ConstantProperty(value as any)
       this._definitionChanged.raiseEvent(this, 'color', value, oldValue)
     }
   }

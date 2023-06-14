@@ -49,7 +49,7 @@ import type {
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
-import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared'
+import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared/materials'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
