@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-04-08 14:07:22
+ * @LastEditTime: 2023-07-18 21:47:53
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\components\providers\cesium-terrain\index.ts
@@ -58,8 +58,8 @@ export default defineComponent({
       } else {
         if (typeof Cesium[instance.cesiumClass].fromUrl === 'function') {
           return Cesium.defined(options.url)
-            ? Cesium.CesiumTerrainProvider.fromUrl(options.url, options)
-            : Cesium.createWorldTerrainAsync({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
+            ? await Cesium.CesiumTerrainProvider.fromUrl(options.url, options)
+            : await Cesium.createWorldTerrainAsync({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
         } else {
           return Cesium.defined(options.url)
             ? new Cesium.CesiumTerrainProvider(options as any)

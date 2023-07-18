@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-18 15:43:38
- * @LastEditTime: 2022-05-19 13:06:29
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-07-18 21:53:26
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
 -->
 
 ## VcTerrainProviderCesium
@@ -19,9 +19,12 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="onViewerReady" :imageryProvider="imageryProvider">
-    <vc-navigation></vc-navigation>
+  <vc-viewer @ready="onViewerReady">
     <vc-terrain-provider-cesium ref="provider"></vc-terrain-provider-cesium>
+    <vc-layer-imagery>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
+    </vc-layer-imagery>
+    <vc-navigation></vc-navigation>
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
@@ -39,7 +42,6 @@
       // state
       const instance = getCurrentInstance()
       const provider = ref(null)
-      const imageryProvider = ref(null)
       let viewer = undefined
       // methods
       const unload = () => {
@@ -52,9 +54,6 @@
         provider.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
-        imageryProvider.value = new Cesium.ArcGisMapServerImageryProvider({
-          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
-        })
         var target = new Cesium.Cartesian3(300770.50872389384, 5634912.131394585, 2978152.2865545116)
         var offset = new Cesium.Cartesian3(6344.974098678562, -793.3419798081741, 2499.9508860763162)
         viewer.camera.lookAt(target, offset)
@@ -65,7 +64,6 @@
         unload,
         reload,
         load,
-        imageryProvider,
         onViewerReady
       }
     }

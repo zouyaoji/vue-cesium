@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
- * @LastEditTime: 2023-06-07 01:37:05
+ * @LastEditTime: 2023-07-18 22:19:00
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-providers\index.ts
@@ -88,7 +88,8 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       return parentVM && parentVM.__updateProvider?.(imageryProvider)
     } else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
-      terrainProvider.readyPromise.then(() => {
+
+      terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
@@ -103,7 +104,7 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       return parentVM && parentVM.__updateProvider?.(undefined)
     } else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
-      terrainProvider.readyPromise.then(() => {
+      terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
