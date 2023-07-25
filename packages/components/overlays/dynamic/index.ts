@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2023-05-01 15:18:11
+ * @LastEditTime: 2023-06-30 16:50:14
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\overlays\dynamic\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
  */
 import { WatchStopHandle, PropType, toRaw, ComponentPublicInstance } from 'vue'
 import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, ref, watch } from 'vue'
@@ -347,7 +347,7 @@ export default defineComponent({
 
     const onClockTick = (clock: Cesium.Clock) => {
       let listener = getInstanceListener(instance, 'update:currentTime')
-      props.currentTime !== clock.currentTime && listener && emit('update:currentTime', clock.currentTime)
+      !makeJulianDate(props.currentTime).equalsEpsilon(clock.currentTime, 0.001) && listener && emit('update:currentTime', clock.currentTime)
 
       listener = getInstanceListener(instance, 'update:shouldAnimate')
       props.shouldAnimate !== clock.shouldAnimate && listener && emit('update:shouldAnimate', clock.shouldAnimate)
@@ -365,10 +365,10 @@ export default defineComponent({
       props.multiplier !== clock.multiplier && listener && emit('update:multiplier', clock.multiplier)
 
       listener = getInstanceListener(instance, 'update:startTime')
-      props.startTime !== clock.startTime && listener && emit('update:startTime', clock.startTime)
+      !makeJulianDate(props.startTime).equalsEpsilon(clock.startTime, 0.001) && listener && emit('update:startTime', clock.startTime)
 
       listener = getInstanceListener(instance, 'update:stopTime')
-      props.stopTime !== clock.stopTime && listener && emit('update:stopTime', clock.stopTime)
+      !makeJulianDate(props.stopTime).equalsEpsilon(clock.stopTime, 0.001) && listener && emit('update:stopTime', clock.stopTime)
 
       setTrackView(clock)
 
