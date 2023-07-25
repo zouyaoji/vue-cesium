@@ -17,7 +17,7 @@ const logger = useLog(undefined)
 const INSTALLED_KEY = Symbol('INSTALLED_KEY')
 
 const makeInstaller = (components: Plugin[] = []) => {
-  const install = (app: App, opts: ConfigProviderContext) => {
+  const install = (app: App, opts?: ConfigProviderContext) => {
     if (app[INSTALLED_KEY]) return
 
     const defaultConfig: ConfigProviderContext = {
@@ -27,11 +27,13 @@ const makeInstaller = (components: Plugin[] = []) => {
     }
 
     app[INSTALLED_KEY] = true
-    components.forEach(c => {
-      app.use(c, opts)
-    })
 
     const options = Object.assign(defaultConfig, opts)
+
+    components.forEach(c => {
+      app.use(c, options)
+    })
+
     provideGlobalConfig(options, app, true)
 
     if (process.env.NODE_ENV === 'development') {
