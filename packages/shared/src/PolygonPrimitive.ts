@@ -9,7 +9,7 @@
 
 class PolygonPrimitive {
   show: boolean
-  _id: string
+  _id: any
   _positions: Array<Cesium.Cartesian3>
   _boundingSphere: Cesium.BoundingSphere
   _primitive: Cesium.Primitive | Cesium.GroundPrimitive | undefined

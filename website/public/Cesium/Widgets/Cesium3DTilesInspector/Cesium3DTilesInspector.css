@@ -10,7 +10,7 @@ ul.cesium-cesiumInspector-statistics + ul.cesium-cesiumInspector-statistics {
 .cesium-cesiumInspector-slider {
   margin-top: 5px;
 }
-.cesium-cesiumInspector-slider input[type='number'] {
+.cesium-cesiumInspector-slider input[type=number] {
   text-align: left;
   background-color: #222;
   outline: none;
@@ -22,12 +22,12 @@ ul.cesium-cesiumInspector-statistics + ul.cesium-cesiumInspector-statistics {
   margin-left: 10px;
   cursor: auto;
 }
-.cesium-cesiumInspector-slider input[type='number']::-webkit-outer-spin-button,
-.cesium-cesiumInspector-slider input[type='number']::-webkit-inner-spin-button {
+.cesium-cesiumInspector-slider input[type=number]::-webkit-outer-spin-button,
+.cesium-cesiumInspector-slider input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.cesium-cesiumInspector-slider input[type='range'] {
+.cesium-cesiumInspector-slider input[type=range] {
   margin-left: 5px;
   vertical-align: middle;
 }
@@ -64,7 +64,7 @@ ul.cesium-cesiumInspector-statistics + ul.cesium-cesiumInspector-statistics {
   color: #eed202;
 }
 .cesium-3DTilesInspector div,
-.cesium-3DTilesInspector input[type='range'] {
+.cesium-3DTilesInspector input[type=range] {
   width: 100%;
   box-sizing: border-box;
 }

@@ -1,5 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exports, defaultValue, Check) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], (function (exports, defaultValue, Check) { 'use strict';
 
   /**
    * A vertex format defines what attributes make up a vertex.  A VertexFormat can be provided
@@ -22,7 +21,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
    * @see Packable
    */
   function VertexFormat(options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
 
     /**
      * When <code>true</code>, the vertex has a 3D position attribute.
@@ -34,7 +33,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.position = defaultValue.defaultValue(options.position, false)
+    this.position = defaultValue.defaultValue(options.position, false);
 
     /**
      * When <code>true</code>, the vertex has a normal attribute (normalized), which is commonly used for lighting.
@@ -46,7 +45,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.normal = defaultValue.defaultValue(options.normal, false)
+    this.normal = defaultValue.defaultValue(options.normal, false);
 
     /**
      * When <code>true</code>, the vertex has a 2D texture coordinate attribute.
@@ -58,7 +57,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.st = defaultValue.defaultValue(options.st, false)
+    this.st = defaultValue.defaultValue(options.st, false);
 
     /**
      * When <code>true</code>, the vertex has a bitangent attribute (normalized), which is used for tangent-space effects like bump mapping.
@@ -70,7 +69,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.bitangent = defaultValue.defaultValue(options.bitangent, false)
+    this.bitangent = defaultValue.defaultValue(options.bitangent, false);
 
     /**
      * When <code>true</code>, the vertex has a tangent attribute (normalized), which is used for tangent-space effects like bump mapping.
@@ -82,7 +81,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.tangent = defaultValue.defaultValue(options.tangent, false)
+    this.tangent = defaultValue.defaultValue(options.tangent, false);
 
     /**
      * When <code>true</code>, the vertex has an RGB color attribute.
@@ -94,7 +93,7 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
      *
      * @default false
      */
-    this.color = defaultValue.defaultValue(options.color, false)
+    this.color = defaultValue.defaultValue(options.color, false);
   }
 
   /**
@@ -107,9 +106,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
    */
   VertexFormat.POSITION_ONLY = Object.freeze(
     new VertexFormat({
-      position: true
+      position: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with position and normal attributes.
@@ -124,9 +123,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
   VertexFormat.POSITION_AND_NORMAL = Object.freeze(
     new VertexFormat({
       position: true,
-      normal: true
+      normal: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with position, normal, and st attributes.
@@ -144,9 +143,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
     new VertexFormat({
       position: true,
       normal: true,
-      st: true
+      st: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with position and st attributes.
@@ -161,9 +160,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
   VertexFormat.POSITION_AND_ST = Object.freeze(
     new VertexFormat({
       position: true,
-      st: true
+      st: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with position and color attributes.
@@ -177,9 +176,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
   VertexFormat.POSITION_AND_COLOR = Object.freeze(
     new VertexFormat({
       position: true,
-      color: true
+      color: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with well-known attributes: position, normal, st, tangent, and bitangent.
@@ -199,9 +198,9 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
       normal: true,
       st: true,
       tangent: true,
-      bitangent: true
+      bitangent: true,
     })
-  )
+  );
 
   /**
    * An immutable vertex format with position, normal, and st attributes.
@@ -215,13 +214,13 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
    * @see VertexFormat#position
    * @see VertexFormat#normal
    */
-  VertexFormat.DEFAULT = VertexFormat.POSITION_NORMAL_AND_ST
+  VertexFormat.DEFAULT = VertexFormat.POSITION_NORMAL_AND_ST;
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {number}
    */
-  VertexFormat.packedLength = 6
+  VertexFormat.packedLength = 6;
 
   /**
    * Stores the provided instance into the provided array.
@@ -235,24 +234,24 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
   VertexFormat.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(value)) {
-      throw new Check.DeveloperError('value is required')
+      throw new Check.DeveloperError("value is required");
     }
     if (!defaultValue.defined(array)) {
-      throw new Check.DeveloperError('array is required')
+      throw new Check.DeveloperError("array is required");
     }
     //>>includeEnd('debug');
 
-    startingIndex = defaultValue.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0);
 
-    array[startingIndex++] = value.position ? 1.0 : 0.0
-    array[startingIndex++] = value.normal ? 1.0 : 0.0
-    array[startingIndex++] = value.st ? 1.0 : 0.0
-    array[startingIndex++] = value.tangent ? 1.0 : 0.0
-    array[startingIndex++] = value.bitangent ? 1.0 : 0.0
-    array[startingIndex] = value.color ? 1.0 : 0.0
+    array[startingIndex++] = value.position ? 1.0 : 0.0;
+    array[startingIndex++] = value.normal ? 1.0 : 0.0;
+    array[startingIndex++] = value.st ? 1.0 : 0.0;
+    array[startingIndex++] = value.tangent ? 1.0 : 0.0;
+    array[startingIndex++] = value.bitangent ? 1.0 : 0.0;
+    array[startingIndex] = value.color ? 1.0 : 0.0;
 
-    return array
-  }
+    return array;
+  };
 
   /**
    * Retrieves an instance from a packed array.
@@ -265,24 +264,24 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
   VertexFormat.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(array)) {
-      throw new Check.DeveloperError('array is required')
+      throw new Check.DeveloperError("array is required");
     }
     //>>includeEnd('debug');
 
-    startingIndex = defaultValue.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0);
 
     if (!defaultValue.defined(result)) {
-      result = new VertexFormat()
+      result = new VertexFormat();
     }
 
-    result.position = array[startingIndex++] === 1.0
-    result.normal = array[startingIndex++] === 1.0
-    result.st = array[startingIndex++] === 1.0
-    result.tangent = array[startingIndex++] === 1.0
-    result.bitangent = array[startingIndex++] === 1.0
-    result.color = array[startingIndex] === 1.0
-    return result
-  }
+    result.position = array[startingIndex++] === 1.0;
+    result.normal = array[startingIndex++] === 1.0;
+    result.st = array[startingIndex++] === 1.0;
+    result.tangent = array[startingIndex++] === 1.0;
+    result.bitangent = array[startingIndex++] === 1.0;
+    result.color = array[startingIndex] === 1.0;
+    return result;
+  };
 
   /**
    * Duplicates a VertexFormat instance.
@@ -293,20 +292,21 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26'], function (exp
    */
   VertexFormat.clone = function (vertexFormat, result) {
     if (!defaultValue.defined(vertexFormat)) {
-      return undefined
+      return undefined;
     }
     if (!defaultValue.defined(result)) {
-      result = new VertexFormat()
+      result = new VertexFormat();
     }
 
-    result.position = vertexFormat.position
-    result.normal = vertexFormat.normal
-    result.st = vertexFormat.st
-    result.tangent = vertexFormat.tangent
-    result.bitangent = vertexFormat.bitangent
-    result.color = vertexFormat.color
-    return result
-  }
+    result.position = vertexFormat.position;
+    result.normal = vertexFormat.normal;
+    result.st = vertexFormat.st;
+    result.tangent = vertexFormat.tangent;
+    result.bitangent = vertexFormat.bitangent;
+    result.color = vertexFormat.color;
+    return result;
+  };
 
-  exports.VertexFormat = VertexFormat
-})
+  exports.VertexFormat = VertexFormat;
+
+}));

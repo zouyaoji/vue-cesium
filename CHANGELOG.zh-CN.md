@@ -2,12 +2,13 @@
 
 ### 3.2.0
 
-_2023-06-xx_
+_2023-06-15_
 
 #### Bug 修复
 
 - 修复 `vc-layer-imagery` 组件提示 `appendForwardSlash` 未定义的问题。
 - 修复 `vc-overlay-windmap` 组件在新版 Cesium 中启用 webgl2 情况下的崩溃问题。
+- 修复 umd 加载报错问题。
 
 ### 3.1.9
 

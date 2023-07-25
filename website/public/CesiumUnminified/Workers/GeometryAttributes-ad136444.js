@@ -1,5 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0'], (function (exports, defaultValue) { 'use strict';
 
   /**
    * Attributes, which make up a geometry's vertices.  Each property in this object corresponds to a
@@ -12,7 +11,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @constructor
    */
   function GeometryAttributes(options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
 
     /**
      * The 3D position attribute.
@@ -24,7 +23,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.position = options.position
+    this.position = options.position;
 
     /**
      * The normal attribute (normalized), which is commonly used for lighting.
@@ -36,7 +35,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.normal = options.normal
+    this.normal = options.normal;
 
     /**
      * The 2D texture coordinate attribute.
@@ -48,7 +47,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.st = options.st
+    this.st = options.st;
 
     /**
      * The bitangent attribute (normalized), which is used for tangent-space effects like bump mapping.
@@ -60,7 +59,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.bitangent = options.bitangent
+    this.bitangent = options.bitangent;
 
     /**
      * The tangent attribute (normalized), which is used for tangent-space effects like bump mapping.
@@ -72,7 +71,7 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.tangent = options.tangent
+    this.tangent = options.tangent;
 
     /**
      * The color attribute.
@@ -84,8 +83,9 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      *
      * @default undefined
      */
-    this.color = options.color
+    this.color = options.color;
   }
 
-  exports.GeometryAttributes = GeometryAttributes
-})
+  exports.GeometryAttributes = GeometryAttributes;
+
+}));

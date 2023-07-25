@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-06-12 17:15:57
+ * @LastEditTime: 2023-07-25 09:57:43
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \vue-cesium\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -26,7 +26,9 @@ import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 const emits = {
   ...commonEmits,
-  'update:imageryProvider': (payload: VcImageryProvider) => true
+  'update:imageryProvider': (payload: VcImageryProvider) => true,
+  readyEvent: (payload: VcImageryProvider) => true,
+  errorEvent: (payload: Error) => true
 }
 export const imageryLayerProps = defaultProps
 export default defineComponent({
@@ -37,7 +39,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ImageryLayer'
-    instance.cesiumEvents = []
+    instance.cesiumEvents = ['readyEvent', 'errorEvent']
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
       return
@@ -49,7 +51,14 @@ export default defineComponent({
       const options = commonState.transformProps(props)
 
       if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
-        const imageryProvider = (props.imageryProvider || new Cesium.ArcGisMapServerImageryProvider()) as Cesium.ImageryProvider
+        const url = Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+        const imageryProvider =
+          props.imageryProvider ||
+          (new Cesium.GridImageryProvider({
+            tileWidth: 256,
+            tileHeight: 256
+          }) as Cesium.ImageryProvider)
+        // const imageryProvider = (props.imageryProvider || Cesium.TileMapServiceImageryProvider.fromUrl(url)) as Cesium.ImageryProvider
         return Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
       } else {
         const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider

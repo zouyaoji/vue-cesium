@@ -1,57 +1,12 @@
-define([
-  './defaultValue-fe22d8c0',
-  './Matrix3-fa806b97',
-  './Transforms-9052372a',
-  './ComponentDatatype-cf1fa08e',
-  './Check-6ede7e26',
-  './GeometryAttribute-7a2de5c6',
-  './GeometryAttributes-ad136444',
-  './IndexDatatype-b8f3e09d',
-  './Math-dad82b4d',
-  './VertexFormat-030f11ff',
-  './WallGeometryLibrary-db7a64fb',
-  './Matrix2-1e403d0e',
-  './RuntimeError-ef395448',
-  './combine-d9581036',
-  './WebGLConstants-0b1ce7ba',
-  './arrayRemoveDuplicates-fac118a8',
-  './PolylinePipeline-6d5c63e5',
-  './EllipsoidGeodesic-dcff5cbd',
-  './EllipsoidRhumbLine-b672d507',
-  './IntersectionTests-b4d02d4d',
-  './Plane-c27e1ac6'
-], function (
-  defaultValue,
-  Matrix3,
-  Transforms,
-  ComponentDatatype,
-  Check,
-  GeometryAttribute,
-  GeometryAttributes,
-  IndexDatatype,
-  Math,
-  VertexFormat,
-  WallGeometryLibrary,
-  Matrix2,
-  RuntimeError,
-  combine,
-  WebGLConstants,
-  arrayRemoveDuplicates,
-  PolylinePipeline,
-  EllipsoidGeodesic,
-  EllipsoidRhumbLine,
-  IntersectionTests,
-  Plane
-) {
-  'use strict'
+define(['./defaultValue-fe22d8c0', './Matrix3-41c58dde', './Transforms-e2d4a55a', './ComponentDatatype-cf1fa08e', './Check-6ede7e26', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './IndexDatatype-2643aa47', './Math-0a2ac845', './VertexFormat-030f11ff', './WallGeometryLibrary-3e0819ec', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './WebGLConstants-0b1ce7ba', './arrayRemoveDuplicates-d2061e85', './PolylinePipeline-7119eb3f', './EllipsoidGeodesic-5b3623dc', './EllipsoidRhumbLine-ef872433', './IntersectionTests-85350792', './Plane-4c3d403b'], (function (defaultValue, Matrix3, Transforms, ComponentDatatype, Check, GeometryAttribute, GeometryAttributes, IndexDatatype, Math, VertexFormat, WallGeometryLibrary, Matrix2, RuntimeError, combine, WebGLConstants, arrayRemoveDuplicates, PolylinePipeline, EllipsoidGeodesic, EllipsoidRhumbLine, IntersectionTests, Plane) { 'use strict';
 
-  const scratchCartesian3Position1 = new Matrix3.Cartesian3()
-  const scratchCartesian3Position2 = new Matrix3.Cartesian3()
-  const scratchCartesian3Position4 = new Matrix3.Cartesian3()
-  const scratchCartesian3Position5 = new Matrix3.Cartesian3()
-  const scratchBitangent = new Matrix3.Cartesian3()
-  const scratchTangent = new Matrix3.Cartesian3()
-  const scratchNormal = new Matrix3.Cartesian3()
+  const scratchCartesian3Position1 = new Matrix3.Cartesian3();
+  const scratchCartesian3Position2 = new Matrix3.Cartesian3();
+  const scratchCartesian3Position4 = new Matrix3.Cartesian3();
+  const scratchCartesian3Position5 = new Matrix3.Cartesian3();
+  const scratchBitangent = new Matrix3.Cartesian3();
+  const scratchTangent = new Matrix3.Cartesian3();
+  const scratchNormal = new Matrix3.Cartesian3();
 
   /**
    * A description of a wall, which is similar to a KML line string. A wall is defined by a series of points,
@@ -93,49 +48,63 @@ define([
    * const geometry = Cesium.WallGeometry.createGeometry(wall);
    */
   function WallGeometry(options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
 
-    const wallPositions = options.positions
-    const maximumHeights = options.maximumHeights
-    const minimumHeights = options.minimumHeights
+    const wallPositions = options.positions;
+    const maximumHeights = options.maximumHeights;
+    const minimumHeights = options.minimumHeights;
 
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(wallPositions)) {
-      throw new Check.DeveloperError('options.positions is required.')
+      throw new Check.DeveloperError("options.positions is required.");
     }
-    if (defaultValue.defined(maximumHeights) && maximumHeights.length !== wallPositions.length) {
-      throw new Check.DeveloperError('options.positions and options.maximumHeights must have the same length.')
+    if (
+      defaultValue.defined(maximumHeights) &&
+      maximumHeights.length !== wallPositions.length
+    ) {
+      throw new Check.DeveloperError(
+        "options.positions and options.maximumHeights must have the same length."
+      );
     }
-    if (defaultValue.defined(minimumHeights) && minimumHeights.length !== wallPositions.length) {
-      throw new Check.DeveloperError('options.positions and options.minimumHeights must have the same length.')
+    if (
+      defaultValue.defined(minimumHeights) &&
+      minimumHeights.length !== wallPositions.length
+    ) {
+      throw new Check.DeveloperError(
+        "options.positions and options.minimumHeights must have the same length."
+      );
     }
     //>>includeEnd('debug');
 
-    const vertexFormat = defaultValue.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT)
-    const granularity = defaultValue.defaultValue(options.granularity, Math.CesiumMath.RADIANS_PER_DEGREE)
-    const ellipsoid = defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84)
+    const vertexFormat = defaultValue.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT);
+    const granularity = defaultValue.defaultValue(
+      options.granularity,
+      Math.CesiumMath.RADIANS_PER_DEGREE
+    );
+    const ellipsoid = defaultValue.defaultValue(options.ellipsoid, Matrix3.Ellipsoid.WGS84);
 
-    this._positions = wallPositions
-    this._minimumHeights = minimumHeights
-    this._maximumHeights = maximumHeights
-    this._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat)
-    this._granularity = granularity
-    this._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid)
-    this._workerName = 'createWallGeometry'
+    this._positions = wallPositions;
+    this._minimumHeights = minimumHeights;
+    this._maximumHeights = maximumHeights;
+    this._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat);
+    this._granularity = granularity;
+    this._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid);
+    this._workerName = "createWallGeometry";
 
-    let numComponents = 1 + wallPositions.length * Matrix3.Cartesian3.packedLength + 2
+    let numComponents = 1 + wallPositions.length * Matrix3.Cartesian3.packedLength + 2;
     if (defaultValue.defined(minimumHeights)) {
-      numComponents += minimumHeights.length
+      numComponents += minimumHeights.length;
     }
     if (defaultValue.defined(maximumHeights)) {
-      numComponents += maximumHeights.length
+      numComponents += maximumHeights.length;
     }
 
     /**
      * The number of elements used to pack the object into an array.
      * @type {number}
      */
-    this.packedLength = numComponents + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 1
+    this.packedLength =
+      numComponents + Matrix3.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 1;
   }
 
   /**
@@ -150,66 +119,66 @@ define([
   WallGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(value)) {
-      throw new Check.DeveloperError('value is required')
+      throw new Check.DeveloperError("value is required");
     }
     if (!defaultValue.defined(array)) {
-      throw new Check.DeveloperError('array is required')
+      throw new Check.DeveloperError("array is required");
     }
     //>>includeEnd('debug');
 
-    startingIndex = defaultValue.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0);
 
-    let i
+    let i;
 
-    const positions = value._positions
-    let length = positions.length
-    array[startingIndex++] = length
+    const positions = value._positions;
+    let length = positions.length;
+    array[startingIndex++] = length;
 
     for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
-      Matrix3.Cartesian3.pack(positions[i], array, startingIndex)
+      Matrix3.Cartesian3.pack(positions[i], array, startingIndex);
     }
 
-    const minimumHeights = value._minimumHeights
-    length = defaultValue.defined(minimumHeights) ? minimumHeights.length : 0
-    array[startingIndex++] = length
+    const minimumHeights = value._minimumHeights;
+    length = defaultValue.defined(minimumHeights) ? minimumHeights.length : 0;
+    array[startingIndex++] = length;
 
     if (defaultValue.defined(minimumHeights)) {
       for (i = 0; i < length; ++i) {
-        array[startingIndex++] = minimumHeights[i]
+        array[startingIndex++] = minimumHeights[i];
       }
     }
 
-    const maximumHeights = value._maximumHeights
-    length = defaultValue.defined(maximumHeights) ? maximumHeights.length : 0
-    array[startingIndex++] = length
+    const maximumHeights = value._maximumHeights;
+    length = defaultValue.defined(maximumHeights) ? maximumHeights.length : 0;
+    array[startingIndex++] = length;
 
     if (defaultValue.defined(maximumHeights)) {
       for (i = 0; i < length; ++i) {
-        array[startingIndex++] = maximumHeights[i]
+        array[startingIndex++] = maximumHeights[i];
       }
     }
 
-    Matrix3.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
-    startingIndex += Matrix3.Ellipsoid.packedLength
+    Matrix3.Ellipsoid.pack(value._ellipsoid, array, startingIndex);
+    startingIndex += Matrix3.Ellipsoid.packedLength;
 
-    VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex)
-    startingIndex += VertexFormat.VertexFormat.packedLength
+    VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex);
+    startingIndex += VertexFormat.VertexFormat.packedLength;
 
-    array[startingIndex] = value._granularity
+    array[startingIndex] = value._granularity;
 
-    return array
-  }
+    return array;
+  };
 
-  const scratchEllipsoid = Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE)
-  const scratchVertexFormat = new VertexFormat.VertexFormat()
+  const scratchEllipsoid = Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE);
+  const scratchVertexFormat = new VertexFormat.VertexFormat();
   const scratchOptions = {
     positions: undefined,
     minimumHeights: undefined,
     maximumHeights: undefined,
     ellipsoid: scratchEllipsoid,
     vertexFormat: scratchVertexFormat,
-    granularity: undefined
-  }
+    granularity: undefined,
+  };
 
   /**
    * Retrieves an instance from a packed array.
@@ -222,66 +191,70 @@ define([
   WallGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(array)) {
-      throw new Check.DeveloperError('array is required')
+      throw new Check.DeveloperError("array is required");
     }
     //>>includeEnd('debug');
 
-    startingIndex = defaultValue.defaultValue(startingIndex, 0)
+    startingIndex = defaultValue.defaultValue(startingIndex, 0);
 
-    let i
+    let i;
 
-    let length = array[startingIndex++]
-    const positions = new Array(length)
+    let length = array[startingIndex++];
+    const positions = new Array(length);
 
     for (i = 0; i < length; ++i, startingIndex += Matrix3.Cartesian3.packedLength) {
-      positions[i] = Matrix3.Cartesian3.unpack(array, startingIndex)
+      positions[i] = Matrix3.Cartesian3.unpack(array, startingIndex);
     }
 
-    length = array[startingIndex++]
-    let minimumHeights
+    length = array[startingIndex++];
+    let minimumHeights;
 
     if (length > 0) {
-      minimumHeights = new Array(length)
+      minimumHeights = new Array(length);
       for (i = 0; i < length; ++i) {
-        minimumHeights[i] = array[startingIndex++]
+        minimumHeights[i] = array[startingIndex++];
       }
     }
 
-    length = array[startingIndex++]
-    let maximumHeights
+    length = array[startingIndex++];
+    let maximumHeights;
 
     if (length > 0) {
-      maximumHeights = new Array(length)
+      maximumHeights = new Array(length);
       for (i = 0; i < length; ++i) {
-        maximumHeights[i] = array[startingIndex++]
+        maximumHeights[i] = array[startingIndex++];
       }
     }
 
-    const ellipsoid = Matrix3.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
-    startingIndex += Matrix3.Ellipsoid.packedLength
+    const ellipsoid = Matrix3.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid);
+    startingIndex += Matrix3.Ellipsoid.packedLength;
 
-    const vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
-    startingIndex += VertexFormat.VertexFormat.packedLength
+    const vertexFormat = VertexFormat.VertexFormat.unpack(
+      array,
+      startingIndex,
+      scratchVertexFormat
+    );
+    startingIndex += VertexFormat.VertexFormat.packedLength;
 
-    const granularity = array[startingIndex]
+    const granularity = array[startingIndex];
 
     if (!defaultValue.defined(result)) {
-      scratchOptions.positions = positions
-      scratchOptions.minimumHeights = minimumHeights
-      scratchOptions.maximumHeights = maximumHeights
-      scratchOptions.granularity = granularity
-      return new WallGeometry(scratchOptions)
+      scratchOptions.positions = positions;
+      scratchOptions.minimumHeights = minimumHeights;
+      scratchOptions.maximumHeights = maximumHeights;
+      scratchOptions.granularity = granularity;
+      return new WallGeometry(scratchOptions);
     }
 
-    result._positions = positions
-    result._minimumHeights = minimumHeights
-    result._maximumHeights = maximumHeights
-    result._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid, result._ellipsoid)
-    result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat)
-    result._granularity = granularity
+    result._positions = positions;
+    result._minimumHeights = minimumHeights;
+    result._maximumHeights = maximumHeights;
+    result._ellipsoid = Matrix3.Ellipsoid.clone(ellipsoid, result._ellipsoid);
+    result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat);
+    result._granularity = granularity;
 
-    return result
-  }
+    return result;
+  };
 
   /**
    * A description of a wall, which is similar to a KML line string. A wall is defined by a series of points,
@@ -316,35 +289,35 @@ define([
    * @see WallGeometry#createGeometry
    */
   WallGeometry.fromConstantHeights = function (options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
-    const positions = options.positions
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
+    const positions = options.positions;
 
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(positions)) {
-      throw new Check.DeveloperError('options.positions is required.')
+      throw new Check.DeveloperError("options.positions is required.");
     }
     //>>includeEnd('debug');
 
-    let minHeights
-    let maxHeights
+    let minHeights;
+    let maxHeights;
 
-    const min = options.minimumHeight
-    const max = options.maximumHeight
+    const min = options.minimumHeight;
+    const max = options.maximumHeight;
 
-    const doMin = defaultValue.defined(min)
-    const doMax = defaultValue.defined(max)
+    const doMin = defaultValue.defined(min);
+    const doMax = defaultValue.defined(max);
     if (doMin || doMax) {
-      const length = positions.length
-      minHeights = doMin ? new Array(length) : undefined
-      maxHeights = doMax ? new Array(length) : undefined
+      const length = positions.length;
+      minHeights = doMin ? new Array(length) : undefined;
+      maxHeights = doMax ? new Array(length) : undefined;
 
       for (let i = 0; i < length; ++i) {
         if (doMin) {
-          minHeights[i] = min
+          minHeights[i] = min;
         }
 
         if (doMax) {
-          maxHeights[i] = max
+          maxHeights[i] = max;
         }
       }
     }
@@ -354,10 +327,10 @@ define([
       maximumHeights: maxHeights,
       minimumHeights: minHeights,
       ellipsoid: options.ellipsoid,
-      vertexFormat: options.vertexFormat
-    }
-    return new WallGeometry(newOptions)
-  }
+      vertexFormat: options.vertexFormat,
+    };
+    return new WallGeometry(newOptions);
+  };
 
   /**
    * Computes the geometric representation of a wall, including its vertices, indices, and a bounding sphere.
@@ -366,173 +339,221 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   WallGeometry.createGeometry = function (wallGeometry) {
-    const wallPositions = wallGeometry._positions
-    const minimumHeights = wallGeometry._minimumHeights
-    const maximumHeights = wallGeometry._maximumHeights
-    const vertexFormat = wallGeometry._vertexFormat
-    const granularity = wallGeometry._granularity
-    const ellipsoid = wallGeometry._ellipsoid
+    const wallPositions = wallGeometry._positions;
+    const minimumHeights = wallGeometry._minimumHeights;
+    const maximumHeights = wallGeometry._maximumHeights;
+    const vertexFormat = wallGeometry._vertexFormat;
+    const granularity = wallGeometry._granularity;
+    const ellipsoid = wallGeometry._ellipsoid;
 
-    const pos = WallGeometryLibrary.WallGeometryLibrary.computePositions(ellipsoid, wallPositions, maximumHeights, minimumHeights, granularity, true)
+    const pos = WallGeometryLibrary.WallGeometryLibrary.computePositions(
+      ellipsoid,
+      wallPositions,
+      maximumHeights,
+      minimumHeights,
+      granularity,
+      true
+    );
     if (!defaultValue.defined(pos)) {
-      return
+      return;
     }
 
-    const bottomPositions = pos.bottomPositions
-    const topPositions = pos.topPositions
-    const numCorners = pos.numCorners
+    const bottomPositions = pos.bottomPositions;
+    const topPositions = pos.topPositions;
+    const numCorners = pos.numCorners;
 
-    let length = topPositions.length
-    let size = length * 2
+    let length = topPositions.length;
+    let size = length * 2;
 
-    const positions = vertexFormat.position ? new Float64Array(size) : undefined
-    const normals = vertexFormat.normal ? new Float32Array(size) : undefined
-    const tangents = vertexFormat.tangent ? new Float32Array(size) : undefined
-    const bitangents = vertexFormat.bitangent ? new Float32Array(size) : undefined
-    const textureCoordinates = vertexFormat.st ? new Float32Array((size / 3) * 2) : undefined
+    const positions = vertexFormat.position ? new Float64Array(size) : undefined;
+    const normals = vertexFormat.normal ? new Float32Array(size) : undefined;
+    const tangents = vertexFormat.tangent ? new Float32Array(size) : undefined;
+    const bitangents = vertexFormat.bitangent
+      ? new Float32Array(size)
+      : undefined;
+    const textureCoordinates = vertexFormat.st
+      ? new Float32Array((size / 3) * 2)
+      : undefined;
 
-    let positionIndex = 0
-    let normalIndex = 0
-    let bitangentIndex = 0
-    let tangentIndex = 0
-    let stIndex = 0
+    let positionIndex = 0;
+    let normalIndex = 0;
+    let bitangentIndex = 0;
+    let tangentIndex = 0;
+    let stIndex = 0;
 
     // add lower and upper points one after the other, lower
     // points being even and upper points being odd
-    let normal = scratchNormal
-    let tangent = scratchTangent
-    let bitangent = scratchBitangent
-    let recomputeNormal = true
-    length /= 3
-    let i
-    let s = 0
-    const ds = 1 / (length - numCorners - 1)
+    let normal = scratchNormal;
+    let tangent = scratchTangent;
+    let bitangent = scratchBitangent;
+    let recomputeNormal = true;
+    length /= 3;
+    let i;
+    let s = 0;
+    const ds = 1 / (length - numCorners - 1);
     for (i = 0; i < length; ++i) {
-      const i3 = i * 3
-      const topPosition = Matrix3.Cartesian3.fromArray(topPositions, i3, scratchCartesian3Position1)
-      const bottomPosition = Matrix3.Cartesian3.fromArray(bottomPositions, i3, scratchCartesian3Position2)
+      const i3 = i * 3;
+      const topPosition = Matrix3.Cartesian3.fromArray(
+        topPositions,
+        i3,
+        scratchCartesian3Position1
+      );
+      const bottomPosition = Matrix3.Cartesian3.fromArray(
+        bottomPositions,
+        i3,
+        scratchCartesian3Position2
+      );
       if (vertexFormat.position) {
         // insert the lower point
-        positions[positionIndex++] = bottomPosition.x
-        positions[positionIndex++] = bottomPosition.y
-        positions[positionIndex++] = bottomPosition.z
+        positions[positionIndex++] = bottomPosition.x;
+        positions[positionIndex++] = bottomPosition.y;
+        positions[positionIndex++] = bottomPosition.z;
 
         // insert the upper point
-        positions[positionIndex++] = topPosition.x
-        positions[positionIndex++] = topPosition.y
-        positions[positionIndex++] = topPosition.z
+        positions[positionIndex++] = topPosition.x;
+        positions[positionIndex++] = topPosition.y;
+        positions[positionIndex++] = topPosition.z;
       }
 
       if (vertexFormat.st) {
-        textureCoordinates[stIndex++] = s
-        textureCoordinates[stIndex++] = 0.0
+        textureCoordinates[stIndex++] = s;
+        textureCoordinates[stIndex++] = 0.0;
 
-        textureCoordinates[stIndex++] = s
-        textureCoordinates[stIndex++] = 1.0
+        textureCoordinates[stIndex++] = s;
+        textureCoordinates[stIndex++] = 1.0;
       }
 
       if (vertexFormat.normal || vertexFormat.tangent || vertexFormat.bitangent) {
-        let nextTop = Matrix3.Cartesian3.clone(Matrix3.Cartesian3.ZERO, scratchCartesian3Position5)
+        let nextTop = Matrix3.Cartesian3.clone(
+          Matrix3.Cartesian3.ZERO,
+          scratchCartesian3Position5
+        );
         const groundPosition = Matrix3.Cartesian3.subtract(
           topPosition,
-          ellipsoid.geodeticSurfaceNormal(topPosition, scratchCartesian3Position2),
+          ellipsoid.geodeticSurfaceNormal(
+            topPosition,
+            scratchCartesian3Position2
+          ),
           scratchCartesian3Position2
-        )
+        );
         if (i + 1 < length) {
-          nextTop = Matrix3.Cartesian3.fromArray(topPositions, i3 + 3, scratchCartesian3Position5)
+          nextTop = Matrix3.Cartesian3.fromArray(
+            topPositions,
+            i3 + 3,
+            scratchCartesian3Position5
+          );
         }
 
         if (recomputeNormal) {
-          const scalednextPosition = Matrix3.Cartesian3.subtract(nextTop, topPosition, scratchCartesian3Position4)
-          const scaledGroundPosition = Matrix3.Cartesian3.subtract(groundPosition, topPosition, scratchCartesian3Position1)
-          normal = Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.cross(scaledGroundPosition, scalednextPosition, normal), normal)
-          recomputeNormal = false
+          const scalednextPosition = Matrix3.Cartesian3.subtract(
+            nextTop,
+            topPosition,
+            scratchCartesian3Position4
+          );
+          const scaledGroundPosition = Matrix3.Cartesian3.subtract(
+            groundPosition,
+            topPosition,
+            scratchCartesian3Position1
+          );
+          normal = Matrix3.Cartesian3.normalize(
+            Matrix3.Cartesian3.cross(scaledGroundPosition, scalednextPosition, normal),
+            normal
+          );
+          recomputeNormal = false;
         }
 
-        if (Matrix3.Cartesian3.equalsEpsilon(topPosition, nextTop, Math.CesiumMath.EPSILON10)) {
-          recomputeNormal = true
+        if (
+          Matrix3.Cartesian3.equalsEpsilon(topPosition, nextTop, Math.CesiumMath.EPSILON10)
+        ) {
+          recomputeNormal = true;
         } else {
-          s += ds
+          s += ds;
           if (vertexFormat.tangent) {
-            tangent = Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.subtract(nextTop, topPosition, tangent), tangent)
+            tangent = Matrix3.Cartesian3.normalize(
+              Matrix3.Cartesian3.subtract(nextTop, topPosition, tangent),
+              tangent
+            );
           }
           if (vertexFormat.bitangent) {
-            bitangent = Matrix3.Cartesian3.normalize(Matrix3.Cartesian3.cross(normal, tangent, bitangent), bitangent)
+            bitangent = Matrix3.Cartesian3.normalize(
+              Matrix3.Cartesian3.cross(normal, tangent, bitangent),
+              bitangent
+            );
           }
         }
 
         if (vertexFormat.normal) {
-          normals[normalIndex++] = normal.x
-          normals[normalIndex++] = normal.y
-          normals[normalIndex++] = normal.z
+          normals[normalIndex++] = normal.x;
+          normals[normalIndex++] = normal.y;
+          normals[normalIndex++] = normal.z;
 
-          normals[normalIndex++] = normal.x
-          normals[normalIndex++] = normal.y
-          normals[normalIndex++] = normal.z
+          normals[normalIndex++] = normal.x;
+          normals[normalIndex++] = normal.y;
+          normals[normalIndex++] = normal.z;
         }
 
         if (vertexFormat.tangent) {
-          tangents[tangentIndex++] = tangent.x
-          tangents[tangentIndex++] = tangent.y
-          tangents[tangentIndex++] = tangent.z
+          tangents[tangentIndex++] = tangent.x;
+          tangents[tangentIndex++] = tangent.y;
+          tangents[tangentIndex++] = tangent.z;
 
-          tangents[tangentIndex++] = tangent.x
-          tangents[tangentIndex++] = tangent.y
-          tangents[tangentIndex++] = tangent.z
+          tangents[tangentIndex++] = tangent.x;
+          tangents[tangentIndex++] = tangent.y;
+          tangents[tangentIndex++] = tangent.z;
         }
 
         if (vertexFormat.bitangent) {
-          bitangents[bitangentIndex++] = bitangent.x
-          bitangents[bitangentIndex++] = bitangent.y
-          bitangents[bitangentIndex++] = bitangent.z
+          bitangents[bitangentIndex++] = bitangent.x;
+          bitangents[bitangentIndex++] = bitangent.y;
+          bitangents[bitangentIndex++] = bitangent.z;
 
-          bitangents[bitangentIndex++] = bitangent.x
-          bitangents[bitangentIndex++] = bitangent.y
-          bitangents[bitangentIndex++] = bitangent.z
+          bitangents[bitangentIndex++] = bitangent.x;
+          bitangents[bitangentIndex++] = bitangent.y;
+          bitangents[bitangentIndex++] = bitangent.z;
         }
       }
     }
 
-    const attributes = new GeometryAttributes.GeometryAttributes()
+    const attributes = new GeometryAttributes.GeometryAttributes();
 
     if (vertexFormat.position) {
       attributes.position = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
         componentsPerAttribute: 3,
-        values: positions
-      })
+        values: positions,
+      });
     }
 
     if (vertexFormat.normal) {
       attributes.normal = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
         componentsPerAttribute: 3,
-        values: normals
-      })
+        values: normals,
+      });
     }
 
     if (vertexFormat.tangent) {
       attributes.tangent = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
         componentsPerAttribute: 3,
-        values: tangents
-      })
+        values: tangents,
+      });
     }
 
     if (vertexFormat.bitangent) {
       attributes.bitangent = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
         componentsPerAttribute: 3,
-        values: bitangents
-      })
+        values: bitangents,
+      });
     }
 
     if (vertexFormat.st) {
       attributes.st = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
         componentsPerAttribute: 2,
-        values: textureCoordinates
-      })
+        values: textureCoordinates,
+      });
     }
 
     // prepare the side walls, two triangles for each wall
@@ -549,45 +570,54 @@ define([
     //    C (i)    D (i+2) F
     //
 
-    const numVertices = size / 3
-    size -= 6 * (numCorners + 1)
-    const indices = IndexDatatype.IndexDatatype.createTypedArray(numVertices, size)
+    const numVertices = size / 3;
+    size -= 6 * (numCorners + 1);
+    const indices = IndexDatatype.IndexDatatype.createTypedArray(numVertices, size);
 
-    let edgeIndex = 0
+    let edgeIndex = 0;
     for (i = 0; i < numVertices - 2; i += 2) {
-      const LL = i
-      const LR = i + 2
-      const pl = Matrix3.Cartesian3.fromArray(positions, LL * 3, scratchCartesian3Position1)
-      const pr = Matrix3.Cartesian3.fromArray(positions, LR * 3, scratchCartesian3Position2)
+      const LL = i;
+      const LR = i + 2;
+      const pl = Matrix3.Cartesian3.fromArray(
+        positions,
+        LL * 3,
+        scratchCartesian3Position1
+      );
+      const pr = Matrix3.Cartesian3.fromArray(
+        positions,
+        LR * 3,
+        scratchCartesian3Position2
+      );
       if (Matrix3.Cartesian3.equalsEpsilon(pl, pr, Math.CesiumMath.EPSILON10)) {
-        continue
+        continue;
       }
-      const UL = i + 1
-      const UR = i + 3
+      const UL = i + 1;
+      const UR = i + 3;
 
-      indices[edgeIndex++] = UL
-      indices[edgeIndex++] = LL
-      indices[edgeIndex++] = UR
-      indices[edgeIndex++] = UR
-      indices[edgeIndex++] = LL
-      indices[edgeIndex++] = LR
+      indices[edgeIndex++] = UL;
+      indices[edgeIndex++] = LL;
+      indices[edgeIndex++] = UR;
+      indices[edgeIndex++] = UR;
+      indices[edgeIndex++] = LL;
+      indices[edgeIndex++] = LR;
     }
 
     return new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: indices,
       primitiveType: GeometryAttribute.PrimitiveType.TRIANGLES,
-      boundingSphere: new Transforms.BoundingSphere.fromVertices(positions)
-    })
-  }
+      boundingSphere: new Transforms.BoundingSphere.fromVertices(positions),
+    });
+  };
 
   function createWallGeometry(wallGeometry, offset) {
     if (defaultValue.defined(offset)) {
-      wallGeometry = WallGeometry.unpack(wallGeometry, offset)
+      wallGeometry = WallGeometry.unpack(wallGeometry, offset);
     }
-    wallGeometry._ellipsoid = Matrix3.Ellipsoid.clone(wallGeometry._ellipsoid)
-    return WallGeometry.createGeometry(wallGeometry)
+    wallGeometry._ellipsoid = Matrix3.Ellipsoid.clone(wallGeometry._ellipsoid);
+    return WallGeometry.createGeometry(wallGeometry);
   }
 
-  return createWallGeometry
-})
+  return createWallGeometry;
+
+}));

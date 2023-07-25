@@ -16,7 +16,10 @@
   transform: translate(100%, 0);
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 0.2s, opacity 0.2s ease-in, transform 0.2s ease-in;
+  transition:
+    visibility 0s 0.2s,
+    opacity 0.2s ease-in,
+    transform 0.2s ease-in;
 }
 .cesium-infoBox-visible {
   transform: translate(0, 0);

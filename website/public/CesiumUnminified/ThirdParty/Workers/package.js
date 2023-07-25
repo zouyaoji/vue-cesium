@@ -1,1 +1,1 @@
-module.exports = { type: 'commonjs' }
+module.exports = { type: "commonjs" };

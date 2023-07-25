@@ -1,10 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConstants-0b1ce7ba'], function (
-  exports,
-  defaultValue,
-  Check,
-  WebGLConstants
-) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConstants-0b1ce7ba'], (function (exports, defaultValue, Check, WebGLConstants) { 'use strict';
 
   /**
    * WebGL component datatypes.  Components are intrinsics,
@@ -91,8 +85,8 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
      * @constant
      * @default 0x140A
      */
-    DOUBLE: WebGLConstants.WebGLConstants.DOUBLE
-  }
+    DOUBLE: WebGLConstants.WebGLConstants.DOUBLE,
+  };
 
   /**
    * Returns the size, in bytes, of the corresponding datatype.
@@ -109,33 +103,33 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
   ComponentDatatype.getSizeInBytes = function (componentDatatype) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(componentDatatype)) {
-      throw new Check.DeveloperError('value is required.')
+      throw new Check.DeveloperError("value is required.");
     }
     //>>includeEnd('debug');
 
     switch (componentDatatype) {
       case ComponentDatatype.BYTE:
-        return Int8Array.BYTES_PER_ELEMENT
+        return Int8Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.UNSIGNED_BYTE:
-        return Uint8Array.BYTES_PER_ELEMENT
+        return Uint8Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.SHORT:
-        return Int16Array.BYTES_PER_ELEMENT
+        return Int16Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.UNSIGNED_SHORT:
-        return Uint16Array.BYTES_PER_ELEMENT
+        return Uint16Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.INT:
-        return Int32Array.BYTES_PER_ELEMENT
+        return Int32Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.UNSIGNED_INT:
-        return Uint32Array.BYTES_PER_ELEMENT
+        return Uint32Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.FLOAT:
-        return Float32Array.BYTES_PER_ELEMENT
+        return Float32Array.BYTES_PER_ELEMENT;
       case ComponentDatatype.DOUBLE:
-        return Float64Array.BYTES_PER_ELEMENT
+        return Float64Array.BYTES_PER_ELEMENT;
       //>>includeStart('debug', pragmas.debug);
       default:
-        throw new Check.DeveloperError('componentDatatype is not a valid value.')
+        throw new Check.DeveloperError("componentDatatype is not a valid value.");
       //>>includeEnd('debug');
     }
-  }
+  };
 
   /**
    * Gets the {@link ComponentDatatype} for the provided TypedArray instance.
@@ -145,36 +139,36 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
    */
   ComponentDatatype.fromTypedArray = function (array) {
     if (array instanceof Int8Array) {
-      return ComponentDatatype.BYTE
+      return ComponentDatatype.BYTE;
     }
     if (array instanceof Uint8Array) {
-      return ComponentDatatype.UNSIGNED_BYTE
+      return ComponentDatatype.UNSIGNED_BYTE;
     }
     if (array instanceof Int16Array) {
-      return ComponentDatatype.SHORT
+      return ComponentDatatype.SHORT;
     }
     if (array instanceof Uint16Array) {
-      return ComponentDatatype.UNSIGNED_SHORT
+      return ComponentDatatype.UNSIGNED_SHORT;
     }
     if (array instanceof Int32Array) {
-      return ComponentDatatype.INT
+      return ComponentDatatype.INT;
     }
     if (array instanceof Uint32Array) {
-      return ComponentDatatype.UNSIGNED_INT
+      return ComponentDatatype.UNSIGNED_INT;
     }
     if (array instanceof Float32Array) {
-      return ComponentDatatype.FLOAT
+      return ComponentDatatype.FLOAT;
     }
     if (array instanceof Float64Array) {
-      return ComponentDatatype.DOUBLE
+      return ComponentDatatype.DOUBLE;
     }
 
     //>>includeStart('debug', pragmas.debug);
     throw new Check.DeveloperError(
-      'array must be an Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, or Float64Array.'
-    )
+      "array must be an Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, or Float64Array."
+    );
     //>>includeEnd('debug');
-  }
+  };
 
   /**
    * Validates that the provided component datatype is a valid {@link ComponentDatatype}
@@ -198,8 +192,8 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
         componentDatatype === ComponentDatatype.UNSIGNED_INT ||
         componentDatatype === ComponentDatatype.FLOAT ||
         componentDatatype === ComponentDatatype.DOUBLE)
-    )
-  }
+    );
+  };
 
   /**
    * Creates a typed array corresponding to component data type.
@@ -214,39 +208,42 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
    * // creates a Float32Array with length of 100
    * const typedArray = Cesium.ComponentDatatype.createTypedArray(Cesium.ComponentDatatype.FLOAT, 100);
    */
-  ComponentDatatype.createTypedArray = function (componentDatatype, valuesOrLength) {
+  ComponentDatatype.createTypedArray = function (
+    componentDatatype,
+    valuesOrLength
+  ) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(componentDatatype)) {
-      throw new Check.DeveloperError('componentDatatype is required.')
+      throw new Check.DeveloperError("componentDatatype is required.");
     }
     if (!defaultValue.defined(valuesOrLength)) {
-      throw new Check.DeveloperError('valuesOrLength is required.')
+      throw new Check.DeveloperError("valuesOrLength is required.");
     }
     //>>includeEnd('debug');
 
     switch (componentDatatype) {
       case ComponentDatatype.BYTE:
-        return new Int8Array(valuesOrLength)
+        return new Int8Array(valuesOrLength);
       case ComponentDatatype.UNSIGNED_BYTE:
-        return new Uint8Array(valuesOrLength)
+        return new Uint8Array(valuesOrLength);
       case ComponentDatatype.SHORT:
-        return new Int16Array(valuesOrLength)
+        return new Int16Array(valuesOrLength);
       case ComponentDatatype.UNSIGNED_SHORT:
-        return new Uint16Array(valuesOrLength)
+        return new Uint16Array(valuesOrLength);
       case ComponentDatatype.INT:
-        return new Int32Array(valuesOrLength)
+        return new Int32Array(valuesOrLength);
       case ComponentDatatype.UNSIGNED_INT:
-        return new Uint32Array(valuesOrLength)
+        return new Uint32Array(valuesOrLength);
       case ComponentDatatype.FLOAT:
-        return new Float32Array(valuesOrLength)
+        return new Float32Array(valuesOrLength);
       case ComponentDatatype.DOUBLE:
-        return new Float64Array(valuesOrLength)
+        return new Float64Array(valuesOrLength);
       //>>includeStart('debug', pragmas.debug);
       default:
-        throw new Check.DeveloperError('componentDatatype is not a valid value.')
+        throw new Check.DeveloperError("componentDatatype is not a valid value.");
       //>>includeEnd('debug');
     }
-  }
+  };
 
   /**
    * Creates a typed view of an array of bytes.
@@ -259,42 +256,51 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
    *
    * @exception {DeveloperError} componentDatatype is not a valid value.
    */
-  ComponentDatatype.createArrayBufferView = function (componentDatatype, buffer, byteOffset, length) {
+  ComponentDatatype.createArrayBufferView = function (
+    componentDatatype,
+    buffer,
+    byteOffset,
+    length
+  ) {
     //>>includeStart('debug', pragmas.debug);
     if (!defaultValue.defined(componentDatatype)) {
-      throw new Check.DeveloperError('componentDatatype is required.')
+      throw new Check.DeveloperError("componentDatatype is required.");
     }
     if (!defaultValue.defined(buffer)) {
-      throw new Check.DeveloperError('buffer is required.')
+      throw new Check.DeveloperError("buffer is required.");
     }
     //>>includeEnd('debug');
 
-    byteOffset = defaultValue.defaultValue(byteOffset, 0)
-    length = defaultValue.defaultValue(length, (buffer.byteLength - byteOffset) / ComponentDatatype.getSizeInBytes(componentDatatype))
+    byteOffset = defaultValue.defaultValue(byteOffset, 0);
+    length = defaultValue.defaultValue(
+      length,
+      (buffer.byteLength - byteOffset) /
+        ComponentDatatype.getSizeInBytes(componentDatatype)
+    );
 
     switch (componentDatatype) {
       case ComponentDatatype.BYTE:
-        return new Int8Array(buffer, byteOffset, length)
+        return new Int8Array(buffer, byteOffset, length);
       case ComponentDatatype.UNSIGNED_BYTE:
-        return new Uint8Array(buffer, byteOffset, length)
+        return new Uint8Array(buffer, byteOffset, length);
       case ComponentDatatype.SHORT:
-        return new Int16Array(buffer, byteOffset, length)
+        return new Int16Array(buffer, byteOffset, length);
       case ComponentDatatype.UNSIGNED_SHORT:
-        return new Uint16Array(buffer, byteOffset, length)
+        return new Uint16Array(buffer, byteOffset, length);
       case ComponentDatatype.INT:
-        return new Int32Array(buffer, byteOffset, length)
+        return new Int32Array(buffer, byteOffset, length);
       case ComponentDatatype.UNSIGNED_INT:
-        return new Uint32Array(buffer, byteOffset, length)
+        return new Uint32Array(buffer, byteOffset, length);
       case ComponentDatatype.FLOAT:
-        return new Float32Array(buffer, byteOffset, length)
+        return new Float32Array(buffer, byteOffset, length);
       case ComponentDatatype.DOUBLE:
-        return new Float64Array(buffer, byteOffset, length)
+        return new Float64Array(buffer, byteOffset, length);
       //>>includeStart('debug', pragmas.debug);
       default:
-        throw new Check.DeveloperError('componentDatatype is not a valid value.')
+        throw new Check.DeveloperError("componentDatatype is not a valid value.");
       //>>includeEnd('debug');
     }
-  }
+  };
 
   /**
    * Get the ComponentDatatype from its name.
@@ -306,29 +312,30 @@ define(['exports', './defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConsta
    */
   ComponentDatatype.fromName = function (name) {
     switch (name) {
-      case 'BYTE':
-        return ComponentDatatype.BYTE
-      case 'UNSIGNED_BYTE':
-        return ComponentDatatype.UNSIGNED_BYTE
-      case 'SHORT':
-        return ComponentDatatype.SHORT
-      case 'UNSIGNED_SHORT':
-        return ComponentDatatype.UNSIGNED_SHORT
-      case 'INT':
-        return ComponentDatatype.INT
-      case 'UNSIGNED_INT':
-        return ComponentDatatype.UNSIGNED_INT
-      case 'FLOAT':
-        return ComponentDatatype.FLOAT
-      case 'DOUBLE':
-        return ComponentDatatype.DOUBLE
+      case "BYTE":
+        return ComponentDatatype.BYTE;
+      case "UNSIGNED_BYTE":
+        return ComponentDatatype.UNSIGNED_BYTE;
+      case "SHORT":
+        return ComponentDatatype.SHORT;
+      case "UNSIGNED_SHORT":
+        return ComponentDatatype.UNSIGNED_SHORT;
+      case "INT":
+        return ComponentDatatype.INT;
+      case "UNSIGNED_INT":
+        return ComponentDatatype.UNSIGNED_INT;
+      case "FLOAT":
+        return ComponentDatatype.FLOAT;
+      case "DOUBLE":
+        return ComponentDatatype.DOUBLE;
       //>>includeStart('debug', pragmas.debug);
       default:
-        throw new Check.DeveloperError('name is not a valid value.')
+        throw new Check.DeveloperError("name is not a valid value.");
       //>>includeEnd('debug');
     }
-  }
-  var ComponentDatatype$1 = Object.freeze(ComponentDatatype)
+  };
+  var ComponentDatatype$1 = Object.freeze(ComponentDatatype);
 
-  exports.ComponentDatatype = ComponentDatatype$1
-})
+  exports.ComponentDatatype = ComponentDatatype$1;
+
+}));

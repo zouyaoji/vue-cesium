@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-19 00:16:21
- * @LastEditTime: 2022-04-24 17:46:18
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-07-18 23:38:02
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-tianditu.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-tianditu.md
 -->
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
@@ -27,7 +27,11 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="ready" :camera="{position: [102.8,30.57,6000],heading: 162, pitch: -18.25, roll: 0.05}">
+  <vc-viewer
+    @ready="ready"
+    :camera="{position: [102.8,30.57,6000],heading: 162, pitch: -18.25, roll: 0.05}"
+    cesium-path="https://unpkg.com/cesium@1.91/Build/Cesium/Cesium.js"
+  >
     <vc-terrain-provider-tianditu ref="provider" token="436ce7e50d27eede2f2929307e6b33c0"></vc-terrain-provider-tianditu>
     <vc-layer-imagery>
       <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>

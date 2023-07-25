@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2023-05-06 01:08:46
+ * @LastEditTime: 2023-06-15 00:53:25
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\website\docs\en-US\donations.md
@@ -26,6 +26,7 @@
 
   | amount   | channel | sponsor                                         | message                           | date       |
   | -------- | ------- | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 19.99  | AliPay | \*\*桐                                          | -                                 | 2023-05-20 |
   | ¥ 66.66  | WeChat  | \*                                              | 感谢开源                          | 2023-05-05 |
   | ¥ 20.0   | WeChat  | \*强                                            | vue-cesium 文档很赞               | 2023-04-24 |
   | ¥ 88.0   | WeChat  | \*易                                            | -                                 | 2023-02-10 |

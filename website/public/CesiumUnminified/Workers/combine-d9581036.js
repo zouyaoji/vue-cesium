@@ -1,5 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0'], (function (exports, defaultValue) { 'use strict';
 
   /**
    * Merges two objects, copying their properties onto a new combined object. When two objects have the same
@@ -33,42 +32,51 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @function
    */
   function combine(object1, object2, deep) {
-    deep = defaultValue.defaultValue(deep, false)
+    deep = defaultValue.defaultValue(deep, false);
 
-    const result = {}
+    const result = {};
 
-    const object1Defined = defaultValue.defined(object1)
-    const object2Defined = defaultValue.defined(object2)
-    let property
-    let object1Value
-    let object2Value
+    const object1Defined = defaultValue.defined(object1);
+    const object2Defined = defaultValue.defined(object2);
+    let property;
+    let object1Value;
+    let object2Value;
     if (object1Defined) {
       for (property in object1) {
         if (object1.hasOwnProperty(property)) {
-          object1Value = object1[property]
-          if (object2Defined && deep && typeof object1Value === 'object' && object2.hasOwnProperty(property)) {
-            object2Value = object2[property]
-            if (typeof object2Value === 'object') {
-              result[property] = combine(object1Value, object2Value, deep)
+          object1Value = object1[property];
+          if (
+            object2Defined &&
+            deep &&
+            typeof object1Value === "object" &&
+            object2.hasOwnProperty(property)
+          ) {
+            object2Value = object2[property];
+            if (typeof object2Value === "object") {
+              result[property] = combine(object1Value, object2Value, deep);
             } else {
-              result[property] = object1Value
+              result[property] = object1Value;
             }
           } else {
-            result[property] = object1Value
+            result[property] = object1Value;
           }
         }
       }
     }
     if (object2Defined) {
       for (property in object2) {
-        if (object2.hasOwnProperty(property) && !result.hasOwnProperty(property)) {
-          object2Value = object2[property]
-          result[property] = object2Value
+        if (
+          object2.hasOwnProperty(property) &&
+          !result.hasOwnProperty(property)
+        ) {
+          object2Value = object2[property];
+          result[property] = object2Value;
         }
       }
     }
-    return result
+    return result;
   }
 
-  exports.combine = combine
-})
+  exports.combine = combine;
+
+}));
