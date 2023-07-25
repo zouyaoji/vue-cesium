@@ -1,5 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0'], (function (exports, defaultValue) { 'use strict';
 
   /**
    * Constructs an exception object that is thrown due to an error that can occur at runtime, e.g.,
@@ -24,21 +23,21 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      * @type {string}
      * @readonly
      */
-    this.name = 'RuntimeError'
+    this.name = "RuntimeError";
 
     /**
      * The explanation for why this exception was thrown.
      * @type {string}
      * @readonly
      */
-    this.message = message
+    this.message = message;
 
     //Browsers such as IE don't have a stack property until you actually throw the error.
-    let stack
+    let stack;
     try {
-      throw new Error()
+      throw new Error();
     } catch (e) {
-      stack = e.stack
+      stack = e.stack;
     }
 
     /**
@@ -46,23 +45,24 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      * @type {string}
      * @readonly
      */
-    this.stack = stack
+    this.stack = stack;
   }
 
   if (defaultValue.defined(Object.create)) {
-    RuntimeError.prototype = Object.create(Error.prototype)
-    RuntimeError.prototype.constructor = RuntimeError
+    RuntimeError.prototype = Object.create(Error.prototype);
+    RuntimeError.prototype.constructor = RuntimeError;
   }
 
   RuntimeError.prototype.toString = function () {
-    let str = `${this.name}: ${this.message}`
+    let str = `${this.name}: ${this.message}`;
 
     if (defaultValue.defined(this.stack)) {
-      str += `\n${this.stack.toString()}`
+      str += `\n${this.stack.toString()}`;
     }
 
-    return str
-  }
+    return str;
+  };
 
-  exports.RuntimeError = RuntimeError
-})
+  exports.RuntimeError = RuntimeError;
+
+}));

@@ -104,10 +104,10 @@
 }
 .cesium-cesiumInspector-sectionHeader::before {
   margin-right: 5px;
-  content: '-';
+  content: "-";
   width: 1ch;
   display: inline-block;
 }
 .cesium-cesiumInspector-section-collapsed .cesium-cesiumInspector-sectionHeader::before {
-  content: '+';
+  content: "+";
 }

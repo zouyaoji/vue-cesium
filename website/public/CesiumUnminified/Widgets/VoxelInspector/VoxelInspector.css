@@ -4,7 +4,7 @@
   pointer-events: all;
 }
 .cesium-VoxelInspector div,
-.cesium-VoxelInspector input[type='range'] {
+.cesium-VoxelInspector input[type=range] {
   width: 100%;
   box-sizing: border-box;
 }

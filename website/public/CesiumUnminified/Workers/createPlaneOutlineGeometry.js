@@ -1,31 +1,4 @@
-define([
-  './defaultValue-fe22d8c0',
-  './Transforms-9052372a',
-  './Matrix3-fa806b97',
-  './Check-6ede7e26',
-  './ComponentDatatype-cf1fa08e',
-  './GeometryAttribute-7a2de5c6',
-  './GeometryAttributes-ad136444',
-  './Math-dad82b4d',
-  './Matrix2-1e403d0e',
-  './RuntimeError-ef395448',
-  './combine-d9581036',
-  './WebGLConstants-0b1ce7ba'
-], function (
-  defaultValue,
-  Transforms,
-  Matrix3,
-  Check,
-  ComponentDatatype,
-  GeometryAttribute,
-  GeometryAttributes,
-  Math$1,
-  Matrix2,
-  RuntimeError,
-  combine,
-  WebGLConstants
-) {
-  'use strict'
+define(['./defaultValue-fe22d8c0', './Transforms-e2d4a55a', './Matrix3-41c58dde', './Check-6ede7e26', './ComponentDatatype-cf1fa08e', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './Math-0a2ac845', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './WebGLConstants-0b1ce7ba'], (function (defaultValue, Transforms, Matrix3, Check, ComponentDatatype, GeometryAttribute, GeometryAttributes, Math$1, Matrix2, RuntimeError, combine, WebGLConstants) { 'use strict';
 
   /**
    * Describes geometry representing the outline of a plane centered at the origin, with a unit width and length.
@@ -35,14 +8,14 @@ define([
    *
    */
   function PlaneOutlineGeometry() {
-    this._workerName = 'createPlaneOutlineGeometry'
+    this._workerName = "createPlaneOutlineGeometry";
   }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {number}
    */
-  PlaneOutlineGeometry.packedLength = 0
+  PlaneOutlineGeometry.packedLength = 0;
 
   /**
    * Stores the provided instance into the provided array.
@@ -54,12 +27,12 @@ define([
    */
   PlaneOutlineGeometry.pack = function (value, array) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined('value', value)
-    Check.Check.defined('array', array)
+    Check.Check.defined("value", value);
+    Check.Check.defined("array", array);
     //>>includeEnd('debug');
 
-    return array
-  }
+    return array;
+  };
 
   /**
    * Retrieves an instance from a packed array.
@@ -71,18 +44,18 @@ define([
    */
   PlaneOutlineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined('array', array)
+    Check.Check.defined("array", array);
     //>>includeEnd('debug');
 
     if (!defaultValue.defined(result)) {
-      return new PlaneOutlineGeometry()
+      return new PlaneOutlineGeometry();
     }
 
-    return result
-  }
+    return result;
+  };
 
-  const min = new Matrix3.Cartesian3(-0.5, -0.5, 0.0)
-  const max = new Matrix3.Cartesian3(0.5, 0.5, 0.0)
+  const min = new Matrix3.Cartesian3(-0.5, -0.5, 0.0);
+  const max = new Matrix3.Cartesian3(0.5, 0.5, 0.0);
 
   /**
    * Computes the geometric representation of an outline of a plane, including its vertices, indices, and a bounding sphere.
@@ -90,52 +63,53 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   PlaneOutlineGeometry.createGeometry = function () {
-    const attributes = new GeometryAttributes.GeometryAttributes()
-    const indices = new Uint16Array(4 * 2)
-    const positions = new Float64Array(4 * 3)
+    const attributes = new GeometryAttributes.GeometryAttributes();
+    const indices = new Uint16Array(4 * 2);
+    const positions = new Float64Array(4 * 3);
 
-    positions[0] = min.x
-    positions[1] = min.y
-    positions[2] = min.z
-    positions[3] = max.x
-    positions[4] = min.y
-    positions[5] = min.z
-    positions[6] = max.x
-    positions[7] = max.y
-    positions[8] = min.z
-    positions[9] = min.x
-    positions[10] = max.y
-    positions[11] = min.z
+    positions[0] = min.x;
+    positions[1] = min.y;
+    positions[2] = min.z;
+    positions[3] = max.x;
+    positions[4] = min.y;
+    positions[5] = min.z;
+    positions[6] = max.x;
+    positions[7] = max.y;
+    positions[8] = min.z;
+    positions[9] = min.x;
+    positions[10] = max.y;
+    positions[11] = min.z;
 
     attributes.position = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: positions
-    })
+      values: positions,
+    });
 
-    indices[0] = 0
-    indices[1] = 1
-    indices[2] = 1
-    indices[3] = 2
-    indices[4] = 2
-    indices[5] = 3
-    indices[6] = 3
-    indices[7] = 0
+    indices[0] = 0;
+    indices[1] = 1;
+    indices[2] = 1;
+    indices[3] = 2;
+    indices[4] = 2;
+    indices[5] = 3;
+    indices[6] = 3;
+    indices[7] = 0;
 
     return new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: indices,
       primitiveType: GeometryAttribute.PrimitiveType.LINES,
-      boundingSphere: new Transforms.BoundingSphere(Matrix3.Cartesian3.ZERO, Math.sqrt(2.0))
-    })
-  }
+      boundingSphere: new Transforms.BoundingSphere(Matrix3.Cartesian3.ZERO, Math.sqrt(2.0)),
+    });
+  };
 
   function createPlaneOutlineGeometry(planeGeometry, offset) {
     if (defaultValue.defined(offset)) {
-      planeGeometry = PlaneOutlineGeometry.unpack(planeGeometry, offset)
+      planeGeometry = PlaneOutlineGeometry.unpack(planeGeometry, offset);
     }
-    return PlaneOutlineGeometry.createGeometry(planeGeometry)
+    return PlaneOutlineGeometry.createGeometry(planeGeometry);
   }
 
-  return createPlaneOutlineGeometry
-})
+  return createPlaneOutlineGeometry;
+
+}));

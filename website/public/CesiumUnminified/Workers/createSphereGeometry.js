@@ -1,39 +1,4 @@
-define([
-  './defaultValue-fe22d8c0',
-  './Matrix3-fa806b97',
-  './Check-6ede7e26',
-  './EllipsoidGeometry-d10a5221',
-  './VertexFormat-030f11ff',
-  './Math-dad82b4d',
-  './Transforms-9052372a',
-  './Matrix2-1e403d0e',
-  './RuntimeError-ef395448',
-  './combine-d9581036',
-  './ComponentDatatype-cf1fa08e',
-  './WebGLConstants-0b1ce7ba',
-  './GeometryAttribute-7a2de5c6',
-  './GeometryAttributes-ad136444',
-  './GeometryOffsetAttribute-9ad0019c',
-  './IndexDatatype-b8f3e09d'
-], function (
-  defaultValue,
-  Matrix3,
-  Check,
-  EllipsoidGeometry,
-  VertexFormat,
-  Math,
-  Transforms,
-  Matrix2,
-  RuntimeError,
-  combine,
-  ComponentDatatype,
-  WebGLConstants,
-  GeometryAttribute,
-  GeometryAttributes,
-  GeometryOffsetAttribute,
-  IndexDatatype
-) {
-  'use strict'
+define(['./defaultValue-fe22d8c0', './Matrix3-41c58dde', './Check-6ede7e26', './EllipsoidGeometry-a503d1d6', './VertexFormat-030f11ff', './Math-0a2ac845', './Transforms-e2d4a55a', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './GeometryOffsetAttribute-9ad0019c', './IndexDatatype-2643aa47'], (function (defaultValue, Matrix3, Check, EllipsoidGeometry, VertexFormat, Math, Transforms, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute, IndexDatatype) { 'use strict';
 
   /**
    * A description of a sphere centered at the origin.
@@ -60,24 +25,24 @@ define([
    * const geometry = Cesium.SphereGeometry.createGeometry(sphere);
    */
   function SphereGeometry(options) {
-    const radius = defaultValue.defaultValue(options.radius, 1.0)
-    const radii = new Matrix3.Cartesian3(radius, radius, radius)
+    const radius = defaultValue.defaultValue(options.radius, 1.0);
+    const radii = new Matrix3.Cartesian3(radius, radius, radius);
     const ellipsoidOptions = {
       radii: radii,
       stackPartitions: options.stackPartitions,
       slicePartitions: options.slicePartitions,
-      vertexFormat: options.vertexFormat
-    }
+      vertexFormat: options.vertexFormat,
+    };
 
-    this._ellipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry(ellipsoidOptions)
-    this._workerName = 'createSphereGeometry'
+    this._ellipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry(ellipsoidOptions);
+    this._workerName = "createSphereGeometry";
   }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {number}
    */
-  SphereGeometry.packedLength = EllipsoidGeometry.EllipsoidGeometry.packedLength
+  SphereGeometry.packedLength = EllipsoidGeometry.EllipsoidGeometry.packedLength;
 
   /**
    * Stores the provided instance into the provided array.
@@ -90,20 +55,20 @@ define([
    */
   SphereGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object('value', value)
+    Check.Check.typeOf.object("value", value);
     //>>includeEnd('debug');
 
-    return EllipsoidGeometry.EllipsoidGeometry.pack(value._ellipsoidGeometry, array, startingIndex)
-  }
+    return EllipsoidGeometry.EllipsoidGeometry.pack(value._ellipsoidGeometry, array, startingIndex);
+  };
 
-  const scratchEllipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry()
+  const scratchEllipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry();
   const scratchOptions = {
     radius: undefined,
     radii: new Matrix3.Cartesian3(),
     vertexFormat: new VertexFormat.VertexFormat(),
     stackPartitions: undefined,
-    slicePartitions: undefined
-  }
+    slicePartitions: undefined,
+  };
 
   /**
    * Retrieves an instance from a packed array.
@@ -114,20 +79,27 @@ define([
    * @returns {SphereGeometry} The modified result parameter or a new SphereGeometry instance if one was not provided.
    */
   SphereGeometry.unpack = function (array, startingIndex, result) {
-    const ellipsoidGeometry = EllipsoidGeometry.EllipsoidGeometry.unpack(array, startingIndex, scratchEllipsoidGeometry)
-    scratchOptions.vertexFormat = VertexFormat.VertexFormat.clone(ellipsoidGeometry._vertexFormat, scratchOptions.vertexFormat)
-    scratchOptions.stackPartitions = ellipsoidGeometry._stackPartitions
-    scratchOptions.slicePartitions = ellipsoidGeometry._slicePartitions
+    const ellipsoidGeometry = EllipsoidGeometry.EllipsoidGeometry.unpack(
+      array,
+      startingIndex,
+      scratchEllipsoidGeometry
+    );
+    scratchOptions.vertexFormat = VertexFormat.VertexFormat.clone(
+      ellipsoidGeometry._vertexFormat,
+      scratchOptions.vertexFormat
+    );
+    scratchOptions.stackPartitions = ellipsoidGeometry._stackPartitions;
+    scratchOptions.slicePartitions = ellipsoidGeometry._slicePartitions;
 
     if (!defaultValue.defined(result)) {
-      scratchOptions.radius = ellipsoidGeometry._radii.x
-      return new SphereGeometry(scratchOptions)
+      scratchOptions.radius = ellipsoidGeometry._radii.x;
+      return new SphereGeometry(scratchOptions);
     }
 
-    Matrix3.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii)
-    result._ellipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry(scratchOptions)
-    return result
-  }
+    Matrix3.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii);
+    result._ellipsoidGeometry = new EllipsoidGeometry.EllipsoidGeometry(scratchOptions);
+    return result;
+  };
 
   /**
    * Computes the geometric representation of a sphere, including its vertices, indices, and a bounding sphere.
@@ -136,15 +108,16 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   SphereGeometry.createGeometry = function (sphereGeometry) {
-    return EllipsoidGeometry.EllipsoidGeometry.createGeometry(sphereGeometry._ellipsoidGeometry)
-  }
+    return EllipsoidGeometry.EllipsoidGeometry.createGeometry(sphereGeometry._ellipsoidGeometry);
+  };
 
   function createSphereGeometry(sphereGeometry, offset) {
     if (defaultValue.defined(offset)) {
-      sphereGeometry = SphereGeometry.unpack(sphereGeometry, offset)
+      sphereGeometry = SphereGeometry.unpack(sphereGeometry, offset);
     }
-    return SphereGeometry.createGeometry(sphereGeometry)
+    return SphereGeometry.createGeometry(sphereGeometry);
   }
 
-  return createSphereGeometry
-})
+  return createSphereGeometry;
+
+}));

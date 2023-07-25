@@ -1,5 +1,4 @@
-define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) {
-  'use strict'
+define(['exports', './defaultValue-fe22d8c0'], (function (exports, defaultValue) { 'use strict';
 
   /**
    * Constructs an exception object that is thrown due to a developer error, e.g., invalid argument,
@@ -25,21 +24,21 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      * @type {string}
      * @readonly
      */
-    this.name = 'DeveloperError'
+    this.name = "DeveloperError";
 
     /**
      * The explanation for why this exception was thrown.
      * @type {string}
      * @readonly
      */
-    this.message = message
+    this.message = message;
 
     //Browsers such as IE don't have a stack property until you actually throw the error.
-    let stack
+    let stack;
     try {
-      throw new Error()
+      throw new Error();
     } catch (e) {
-      stack = e.stack
+      stack = e.stack;
     }
 
     /**
@@ -47,49 +46,51 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
      * @type {string}
      * @readonly
      */
-    this.stack = stack
+    this.stack = stack;
   }
 
   if (defaultValue.defined(Object.create)) {
-    DeveloperError.prototype = Object.create(Error.prototype)
-    DeveloperError.prototype.constructor = DeveloperError
+    DeveloperError.prototype = Object.create(Error.prototype);
+    DeveloperError.prototype.constructor = DeveloperError;
   }
 
   DeveloperError.prototype.toString = function () {
-    let str = `${this.name}: ${this.message}`
+    let str = `${this.name}: ${this.message}`;
 
     if (defaultValue.defined(this.stack)) {
-      str += `\n${this.stack.toString()}`
+      str += `\n${this.stack.toString()}`;
     }
 
-    return str
-  }
+    return str;
+  };
 
   /**
    * @private
    */
   DeveloperError.throwInstantiationError = function () {
-    throw new DeveloperError('This function defines an interface and should not be called directly.')
-  }
+    throw new DeveloperError(
+      "This function defines an interface and should not be called directly."
+    );
+  };
 
   /**
    * Contains functions for checking that supplied arguments are of a specified type
    * or meet specified conditions
    * @private
    */
-  const Check = {}
+  const Check = {};
 
   /**
    * Contains type checking functions, all using the typeof operator
    */
-  Check.typeOf = {}
+  Check.typeOf = {};
 
   function getUndefinedErrorMessage(name) {
-    return `${name} is required, actual value was undefined`
+    return `${name} is required, actual value was undefined`;
   }
 
   function getFailedTypeErrorMessage(actual, expected, name) {
-    return `Expected ${name} to be typeof ${expected}, actual typeof was ${actual}`
+    return `Expected ${name} to be typeof ${expected}, actual typeof was ${actual}`;
   }
 
   /**
@@ -101,9 +102,9 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    */
   Check.defined = function (name, test) {
     if (!defaultValue.defined(test)) {
-      throw new DeveloperError(getUndefinedErrorMessage(name))
+      throw new DeveloperError(getUndefinedErrorMessage(name));
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'function'
@@ -113,10 +114,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'function'
    */
   Check.typeOf.func = function (name, test) {
-    if (typeof test !== 'function') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'function', name))
+    if (typeof test !== "function") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "function", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'string'
@@ -126,10 +129,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'string'
    */
   Check.typeOf.string = function (name, test) {
-    if (typeof test !== 'string') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'string', name))
+    if (typeof test !== "string") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "string", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'number'
@@ -139,10 +144,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'number'
    */
   Check.typeOf.number = function (name, test) {
-    if (typeof test !== 'number') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'number', name))
+    if (typeof test !== "number") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "number", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'number' and less than limit
@@ -153,11 +160,13 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'number' and less than limit
    */
   Check.typeOf.number.lessThan = function (name, test, limit) {
-    Check.typeOf.number(name, test)
+    Check.typeOf.number(name, test);
     if (test >= limit) {
-      throw new DeveloperError(`Expected ${name} to be less than ${limit}, actual value was ${test}`)
+      throw new DeveloperError(
+        `Expected ${name} to be less than ${limit}, actual value was ${test}`
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'number' and less than or equal to limit
@@ -168,11 +177,13 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'number' and less than or equal to limit
    */
   Check.typeOf.number.lessThanOrEquals = function (name, test, limit) {
-    Check.typeOf.number(name, test)
+    Check.typeOf.number(name, test);
     if (test > limit) {
-      throw new DeveloperError(`Expected ${name} to be less than or equal to ${limit}, actual value was ${test}`)
+      throw new DeveloperError(
+        `Expected ${name} to be less than or equal to ${limit}, actual value was ${test}`
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'number' and greater than limit
@@ -183,11 +194,13 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'number' and greater than limit
    */
   Check.typeOf.number.greaterThan = function (name, test, limit) {
-    Check.typeOf.number(name, test)
+    Check.typeOf.number(name, test);
     if (test <= limit) {
-      throw new DeveloperError(`Expected ${name} to be greater than ${limit}, actual value was ${test}`)
+      throw new DeveloperError(
+        `Expected ${name} to be greater than ${limit}, actual value was ${test}`
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'number' and greater than or equal to limit
@@ -198,11 +211,13 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'number' and greater than or equal to limit
    */
   Check.typeOf.number.greaterThanOrEquals = function (name, test, limit) {
-    Check.typeOf.number(name, test)
+    Check.typeOf.number(name, test);
     if (test < limit) {
-      throw new DeveloperError(`Expected ${name} to be greater than or equal to ${limit}, actual value was ${test}`)
+      throw new DeveloperError(
+        `Expected ${name} to be greater than or equal to ${limit}, actual value was ${test}`
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'object'
@@ -212,10 +227,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'object'
    */
   Check.typeOf.object = function (name, test) {
-    if (typeof test !== 'object') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'object', name))
+    if (typeof test !== "object") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "object", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'boolean'
@@ -225,10 +242,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'boolean'
    */
   Check.typeOf.bool = function (name, test) {
-    if (typeof test !== 'boolean') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'boolean', name))
+    if (typeof test !== "boolean") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "boolean", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test is not typeof 'bigint'
@@ -238,10 +257,12 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test must be typeof 'bigint'
    */
   Check.typeOf.bigint = function (name, test) {
-    if (typeof test !== 'bigint') {
-      throw new DeveloperError(getFailedTypeErrorMessage(typeof test, 'bigint', name))
+    if (typeof test !== "bigint") {
+      throw new DeveloperError(
+        getFailedTypeErrorMessage(typeof test, "bigint", name)
+      );
     }
-  }
+  };
 
   /**
    * Throws if test1 and test2 is not typeof 'number' and not equal in value
@@ -253,14 +274,17 @@ define(['exports', './defaultValue-fe22d8c0'], function (exports, defaultValue) 
    * @exception {DeveloperError} test1 and test2 should be type of 'number' and be equal in value
    */
   Check.typeOf.number.equals = function (name1, name2, test1, test2) {
-    Check.typeOf.number(name1, test1)
-    Check.typeOf.number(name2, test2)
+    Check.typeOf.number(name1, test1);
+    Check.typeOf.number(name2, test2);
     if (test1 !== test2) {
-      throw new DeveloperError(`${name1} must be equal to ${name2}, the actual values are ${test1} and ${test2}`)
+      throw new DeveloperError(
+        `${name1} must be equal to ${name2}, the actual values are ${test1} and ${test2}`
+      );
     }
-  }
-  var Check$1 = Check
+  };
+  var Check$1 = Check;
 
-  exports.Check = Check$1
-  exports.DeveloperError = DeveloperError
-})
+  exports.Check = Check$1;
+  exports.DeveloperError = DeveloperError;
+
+}));

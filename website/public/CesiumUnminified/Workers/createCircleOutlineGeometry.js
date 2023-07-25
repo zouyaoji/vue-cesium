@@ -1,39 +1,4 @@
-define([
-  './Matrix3-fa806b97',
-  './Check-6ede7e26',
-  './defaultValue-fe22d8c0',
-  './EllipseOutlineGeometry-c5251669',
-  './Math-dad82b4d',
-  './Transforms-9052372a',
-  './Matrix2-1e403d0e',
-  './RuntimeError-ef395448',
-  './combine-d9581036',
-  './ComponentDatatype-cf1fa08e',
-  './WebGLConstants-0b1ce7ba',
-  './EllipseGeometryLibrary-0a1e0170',
-  './GeometryAttribute-7a2de5c6',
-  './GeometryAttributes-ad136444',
-  './GeometryOffsetAttribute-9ad0019c',
-  './IndexDatatype-b8f3e09d'
-], function (
-  Matrix3,
-  Check,
-  defaultValue,
-  EllipseOutlineGeometry,
-  Math,
-  Transforms,
-  Matrix2,
-  RuntimeError,
-  combine,
-  ComponentDatatype,
-  WebGLConstants,
-  EllipseGeometryLibrary,
-  GeometryAttribute,
-  GeometryAttributes,
-  GeometryOffsetAttribute,
-  IndexDatatype
-) {
-  'use strict'
+define(['./Matrix3-41c58dde', './Check-6ede7e26', './defaultValue-fe22d8c0', './EllipseOutlineGeometry-05d35d18', './Math-0a2ac845', './Transforms-e2d4a55a', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './EllipseGeometryLibrary-21262a28', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './GeometryOffsetAttribute-9ad0019c', './IndexDatatype-2643aa47'], (function (Matrix3, Check, defaultValue, EllipseOutlineGeometry, Math, Transforms, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, EllipseGeometryLibrary, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute, IndexDatatype) { 'use strict';
 
   /**
    * A description of the outline of a circle on the ellipsoid.
@@ -65,11 +30,11 @@ define([
    * const geometry = Cesium.CircleOutlineGeometry.createGeometry(circle);
    */
   function CircleOutlineGeometry(options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT)
-    const radius = options.radius
+    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
+    const radius = options.radius;
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.number('radius', radius)
+    Check.Check.typeOf.number("radius", radius);
     //>>includeEnd('debug');
 
     const ellipseGeometryOptions = {
@@ -80,17 +45,17 @@ define([
       height: options.height,
       extrudedHeight: options.extrudedHeight,
       granularity: options.granularity,
-      numberOfVerticalLines: options.numberOfVerticalLines
-    }
-    this._ellipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry(ellipseGeometryOptions)
-    this._workerName = 'createCircleOutlineGeometry'
+      numberOfVerticalLines: options.numberOfVerticalLines,
+    };
+    this._ellipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry(ellipseGeometryOptions);
+    this._workerName = "createCircleOutlineGeometry";
   }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {number}
    */
-  CircleOutlineGeometry.packedLength = EllipseOutlineGeometry.EllipseOutlineGeometry.packedLength
+  CircleOutlineGeometry.packedLength = EllipseOutlineGeometry.EllipseOutlineGeometry.packedLength;
 
   /**
    * Stores the provided instance into the provided array.
@@ -103,16 +68,20 @@ define([
    */
   CircleOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object('value', value)
+    Check.Check.typeOf.object("value", value);
     //>>includeEnd('debug');
-    return EllipseOutlineGeometry.EllipseOutlineGeometry.pack(value._ellipseGeometry, array, startingIndex)
-  }
+    return EllipseOutlineGeometry.EllipseOutlineGeometry.pack(
+      value._ellipseGeometry,
+      array,
+      startingIndex
+    );
+  };
 
   const scratchEllipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry({
     center: new Matrix3.Cartesian3(),
     semiMajorAxis: 1.0,
-    semiMinorAxis: 1.0
-  })
+    semiMinorAxis: 1.0,
+  });
   const scratchOptions = {
     center: new Matrix3.Cartesian3(),
     radius: undefined,
@@ -122,8 +91,8 @@ define([
     granularity: undefined,
     numberOfVerticalLines: undefined,
     semiMajorAxis: undefined,
-    semiMinorAxis: undefined
-  }
+    semiMinorAxis: undefined,
+  };
 
   /**
    * Retrieves an instance from a packed array.
@@ -134,24 +103,34 @@ define([
    * @returns {CircleOutlineGeometry} The modified result parameter or a new CircleOutlineGeometry instance if one was not provided.
    */
   CircleOutlineGeometry.unpack = function (array, startingIndex, result) {
-    const ellipseGeometry = EllipseOutlineGeometry.EllipseOutlineGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
-    scratchOptions.center = Matrix3.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
-    scratchOptions.ellipsoid = Matrix3.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
-    scratchOptions.height = ellipseGeometry._height
-    scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight
-    scratchOptions.granularity = ellipseGeometry._granularity
-    scratchOptions.numberOfVerticalLines = ellipseGeometry._numberOfVerticalLines
+    const ellipseGeometry = EllipseOutlineGeometry.EllipseOutlineGeometry.unpack(
+      array,
+      startingIndex,
+      scratchEllipseGeometry
+    );
+    scratchOptions.center = Matrix3.Cartesian3.clone(
+      ellipseGeometry._center,
+      scratchOptions.center
+    );
+    scratchOptions.ellipsoid = Matrix3.Ellipsoid.clone(
+      ellipseGeometry._ellipsoid,
+      scratchOptions.ellipsoid
+    );
+    scratchOptions.height = ellipseGeometry._height;
+    scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight;
+    scratchOptions.granularity = ellipseGeometry._granularity;
+    scratchOptions.numberOfVerticalLines = ellipseGeometry._numberOfVerticalLines;
 
     if (!defaultValue.defined(result)) {
-      scratchOptions.radius = ellipseGeometry._semiMajorAxis
-      return new CircleOutlineGeometry(scratchOptions)
+      scratchOptions.radius = ellipseGeometry._semiMajorAxis;
+      return new CircleOutlineGeometry(scratchOptions);
     }
 
-    scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis
-    scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis
-    result._ellipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry(scratchOptions)
-    return result
-  }
+    scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis;
+    scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis;
+    result._ellipseGeometry = new EllipseOutlineGeometry.EllipseOutlineGeometry(scratchOptions);
+    return result;
+  };
 
   /**
    * Computes the geometric representation of an outline of a circle on an ellipsoid, including its vertices, indices, and a bounding sphere.
@@ -160,17 +139,22 @@ define([
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   CircleOutlineGeometry.createGeometry = function (circleGeometry) {
-    return EllipseOutlineGeometry.EllipseOutlineGeometry.createGeometry(circleGeometry._ellipseGeometry)
-  }
+    return EllipseOutlineGeometry.EllipseOutlineGeometry.createGeometry(circleGeometry._ellipseGeometry);
+  };
 
   function createCircleOutlineGeometry(circleGeometry, offset) {
     if (defaultValue.defined(offset)) {
-      circleGeometry = CircleOutlineGeometry.unpack(circleGeometry, offset)
+      circleGeometry = CircleOutlineGeometry.unpack(circleGeometry, offset);
     }
-    circleGeometry._ellipseGeometry._center = Matrix3.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
-    circleGeometry._ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
-    return CircleOutlineGeometry.createGeometry(circleGeometry)
+    circleGeometry._ellipseGeometry._center = Matrix3.Cartesian3.clone(
+      circleGeometry._ellipseGeometry._center
+    );
+    circleGeometry._ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(
+      circleGeometry._ellipseGeometry._ellipsoid
+    );
+    return CircleOutlineGeometry.createGeometry(circleGeometry);
   }
 
-  return createCircleOutlineGeometry
-})
+  return createCircleOutlineGeometry;
+
+}));
