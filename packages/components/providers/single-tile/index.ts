@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-04-15 15:51:36
+ * @LastEditTime: 2023-07-25 10:30:37
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\single-tile\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\single-tile\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
@@ -18,8 +18,8 @@ export const singletileImageryProviderProps = {
   ...rectangle,
   ...credit,
   ...ellipsoid,
-  // ...tileWidth,
-  // ...tileHeight
+  ...tileWidth,
+  ...tileHeight
 }
 export default defineComponent({
   name: 'VcImageryProviderSingletile',
@@ -54,11 +54,11 @@ export type VcImageryProviderSingletileProps = {
   /**
    * The width of the tile, in pixels.
    */
-  // tileWidth?: number
-  // /**
-  //  * The height of the tile, in pixels.
-  //  */
-  // tileHeight?: number
+  tileWidth?: number
+  /**
+   * The height of the tile, in pixels.
+   */
+  tileHeight?: number
   /**
    * Triggers before the VcImageryProviderSingletile is loaded.
    */
