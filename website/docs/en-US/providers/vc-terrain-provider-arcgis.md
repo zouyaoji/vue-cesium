@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-02-21 16:38:10
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2023-07-27 22:11:33
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\website\docs\en-US\providers\vc-terrain-provider-arcgis.md
+ * @FilePath: \vue-cesium@next\website\docs\en-US\providers\vc-terrain-provider-arcgis.md
 -->
 
 ## VcTerrainProviderArcgis
@@ -50,10 +50,10 @@ Basic usage of the `vc-terrain-provider-arcgis` component.
       const load = () => {
         provider.value.load()
       }
-      const onViewerReady = ({ Cesium, viewer }) => {
-        imageryProvider.value = new Cesium.ArcGisMapServerImageryProvider({
-          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
-        })
+      const onViewerReady = async ({ Cesium, viewer }) => {
+        imageryProvider.value = await Cesium.ArcGisMapServerImageryProvider.fromUrl(
+          'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+        )
         var target = new Cesium.Cartesian3(300770.50872389384, 5634912.131394585, 2978152.2865545116)
         var offset = new Cesium.Cartesian3(6344.974098678562, -793.3419798081741, 2499.9508860763162)
         viewer.camera.lookAt(target, offset)

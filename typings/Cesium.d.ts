@@ -106,6 +106,7 @@ declare namespace Cesium {
      */
     sortOrder?: number
     vcId?: string
+    readonly errorEvent: Event
   }
 
   interface ImageryLayerCollection {
@@ -867,12 +868,10 @@ declare namespace Cesium {
      * @property [ellipsoid] - The ellipsoid.  If the tilingScheme is specified,
      *                    this parameter is ignored and the tiling scheme's ellipsoid is used instead.
      *                    If neither parameter is specified, the WGS84 ellipsoid is used.
-     * @property [url] - The URL of the ArcGIS ImageServer service. Deprecated.
      */
     type ConstructorOptions = {
       token?: string
       ellipsoid?: Ellipsoid
-      url?: Resource | string | Promise<Resource> | Promise<string>
     }
   }
 
@@ -907,14 +906,6 @@ declare namespace Cesium {
      * Gets the tiling scheme used by this provider.
      */
     readonly tilingScheme: GeographicTilingScheme
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Gets a value indicating whether or not the provider includes a water mask.  The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
@@ -1154,6 +1145,11 @@ declare namespace Cesium {
      * The key for the Bing geocoder service
      */
     readonly key: string
+    /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
     /**
      * @param query - The query to be sent to the geocoder service
      */
@@ -2978,6 +2974,11 @@ declare namespace Cesium {
   export class CartographicGeocoderService {
     constructor()
     /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
+    /**
      * @param query - The query to be sent to the geocoder service
      */
     geocode(query: string): Promise<GeocoderService.Result[]>
@@ -3065,7 +3066,6 @@ declare namespace Cesium {
      * @property [requestMetadata = true] - Flag that indicates if the client should request per tile metadata from the server, if available.
      * @property [ellipsoid] - The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      * @property [credit] - A credit for the data source, which is displayed on the canvas.
-     * @property [url] - The URL of the Cesium terrain server. Deprecated.
      */
     type ConstructorOptions = {
       requestVertexNormals?: boolean
@@ -3073,7 +3073,6 @@ declare namespace Cesium {
       requestMetadata?: boolean
       ellipsoid?: Ellipsoid
       credit?: Credit | string
-      url?: Resource | string | Promise<Resource> | Promise<string>
     }
   }
 
@@ -3130,14 +3129,6 @@ declare namespace Cesium {
      * Gets the tiling scheme used by this provider.
      */
     readonly tilingScheme: GeographicTilingScheme
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Gets a value indicating whether or not the provider includes a water mask.  The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
@@ -5079,7 +5070,7 @@ declare namespace Cesium {
   /**
    * A credit contains data pertaining to how to display attributions/credits for certain content on the screen.
    * @example
-   * //Create a credit with a tooltip, image and link
+   * // Create a credit with a tooltip, image and link
    * const credit = new Cesium.Credit('<a href="https://cesium.com/" target="_blank"><img src="/images/cesium_logo.png" title="Cesium"/></a>');
    * @param html - An string representing an html code snippet
    * @param [showOnScreen = false] - If true, the credit will be visible in the main credit container.  Otherwise, it will appear in a popover
@@ -5249,14 +5240,6 @@ declare namespace Cesium {
      * Gets the tiling scheme used by this provider.
      */
     readonly tilingScheme: TilingScheme
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Gets a value indicating whether or not the provider includes a water mask. The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
@@ -6482,14 +6465,6 @@ declare namespace Cesium {
      */
     readonly tilingScheme: GeographicTilingScheme
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets a value indicating whether or not the provider includes a water mask.  The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
      * as a reflective surface with animated waves.
@@ -6861,6 +6836,7 @@ declare namespace Cesium {
     type Result = {
       displayName: string
       destination: Rectangle | Cartesian3
+      attributions?: object[]
     }
   }
 
@@ -6870,6 +6846,17 @@ declare namespace Cesium {
    */
   export class GeocoderService {
     constructor()
+    /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
+    /**
+     * Parses credits from the geocoder result attributions, if present.
+     * @param geocoderResult - The geocoder result
+     * @returns A list of credits if present in the result, otherwise undefined
+     */
+    static getCreditsFromResult(geocoderResult: GeocoderService.Result): Credit[] | undefined
     /**
      * @param query - The query to be sent to the geocoder service
      * @param [type = GeocodeType.SEARCH] - The type of geocode to perform.
@@ -7557,10 +7544,9 @@ declare namespace Cesium {
    *
    * Provides metadata using the Google Earth Enterprise REST API. This is used by the GoogleEarthEnterpriseImageryProvider
    *  and GoogleEarthEnterpriseTerrainProvider to share metadata requests.
-   * @param [resourceOrUrl] - The url of the Google Earth Enterprise server hosting the imagery. Deprecated.
    */
   export class GoogleEarthEnterpriseMetadata {
-    constructor(resourceOrUrl?: Resource | string)
+    constructor()
     /**
      * True if imagery is available.
      */
@@ -7601,10 +7587,6 @@ declare namespace Cesium {
      * Gets the resource used for metadata requests.
      */
     readonly resource: Resource
-    /**
-     * Gets a promise that resolves to true when the metadata is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Creates a metadata object using the Google Earth Enterprise REST API. This is used by the GoogleEarthEnterpriseImageryProvider
      * and GoogleEarthEnterpriseTerrainProvider to share metadata requests.
@@ -7735,14 +7717,10 @@ declare namespace Cesium {
      * Initialization options for GoogleEarthEnterpriseTerrainProvider constructor
      * @property [ellipsoid] - The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      * @property [credit] - A credit for the data source, which is displayed on the canvas.
-     * @property [url] - The url of the Google Earth Enterprise server hosting the imagery. Deprecated.
-     * @property [metadata] - A metadata object that can be used to share metadata requests with a GoogleEarthEnterpriseImageryProvider. Deprecated.
      */
     type ConstructorOptions = {
       ellipsoid?: Ellipsoid
       credit?: Credit | string
-      url?: Resource | string
-      metadata?: GoogleEarthEnterpriseMetadata
     }
   }
 
@@ -7755,10 +7733,10 @@ declare namespace Cesium {
    * @example
    * const geeMetadata = await GoogleEarthEnterpriseMetadata.fromUrl("http://www.example.com");
    * const gee = Cesium.GoogleEarthEnterpriseTerrainProvider.fromMetadata(geeMetadata);
-   * @param options - An object describing initialization options
+   * @param [options] - An object describing initialization options
    */
   export class GoogleEarthEnterpriseTerrainProvider {
-    constructor(options: GoogleEarthEnterpriseTerrainProvider.ConstructorOptions)
+    constructor(options?: GoogleEarthEnterpriseTerrainProvider.ConstructorOptions)
     /**
      * Gets the name of the Google Earth Enterprise server url hosting the imagery.
      */
@@ -7777,14 +7755,6 @@ declare namespace Cesium {
      * are passed an instance of {@link TileProviderError}.
      */
     readonly errorEvent: Event
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Gets the credit to display when this terrain provider is active.  Typically this is used to credit
      * the source of the terrain.
@@ -7851,6 +7821,24 @@ declare namespace Cesium {
      * @param level - The level of the tile for which to request geometry.
      */
     loadTileDataAvailability(x: number, y: number, level: number): undefined
+  }
+
+  /**
+   * Default settings for accessing the Google Maps API.
+   * <br/>
+   * An API key is only required if you are using any Google Maps APIs, such as {@link createGooglePhotorealistic3DTileset}.
+   * A default key is provided for evaluation purposes only.
+   * Follow instructions for managing API keys for the Google Maps Platform at {@link https://developers.google.com/maps/documentation/embed/get-api-key}
+   */
+  export namespace GoogleMaps {
+    /**
+     * Gets or sets the default Google Maps API key.
+     */
+    var defaultApiKey: string
+    /**
+     * Gets or sets the default Google Map Tiles API endpoint.
+     */
+    var mapTilesApiEndpoint: string | Resource
   }
 
   /**
@@ -8852,6 +8840,11 @@ declare namespace Cesium {
    */
   export class IonGeocoderService {
     constructor(options: { scene: Scene; accessToken?: string; server?: string | Resource })
+    /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
     /**
      * @param query - The query to be sent to the geocoder service
      * @param [type = GeocodeType.SEARCH] - The type of geocode to perform.
@@ -11924,6 +11917,11 @@ declare namespace Cesium {
      */
     readonly params: any
     /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
+    /**
      * @param query - The query to be sent to the geocoder service
      */
     geocode(query: string): Promise<GeocoderService.Result[]>
@@ -12438,6 +12436,11 @@ declare namespace Cesium {
      * The Resource used to access the Pelias endpoint.
      */
     readonly url: Resource
+    /**
+     * Gets the credit to display after a geocode is performed. Typically this is used to credit
+     * the geocoder service.
+     */
+    readonly credit: Credit | undefined
     /**
      * @param query - The query to be sent to the geocoder service
      * @param [type = GeocodeType.SEARCH] - The type of geocode to perform.
@@ -14718,6 +14721,7 @@ declare namespace Cesium {
    * @param [options.throttle = false] - Whether to throttle and prioritize the request. If false, the request will be sent immediately. If true, the request will be throttled and sent based on priority.
    * @param [options.throttleByServer = false] - Whether to throttle the request by server.
    * @param [options.type = RequestType.OTHER] - The type of request.
+   * @param [options.serverKey] - A key used to identify the server that a request is going to.
    */
   export class Request {
     constructor(options?: {
@@ -14729,6 +14733,7 @@ declare namespace Cesium {
       throttle?: boolean
       throttleByServer?: boolean
       type?: RequestType
+      serverKey?: string
     })
     /**
      * The URL to request.
@@ -14844,11 +14849,14 @@ declare namespace Cesium {
      */
     var maximumRequestsPerServer: number
     /**
-     * A per server key list of overrides to use for throttling instead of <code>maximumRequestsPerServer</code>
+     * A per server key list of overrides to use for throttling instead of <code>maximumRequestsPerServer</code>.
+     * Useful when streaming data from a known HTTP/2 or HTTP/3 server.
+     * @example
+     * RequestScheduler.requestsByServer["myserver.com:443"] = 18;
      * @example
      * RequestScheduler.requestsByServer = {
-     *   'api.cesium.com:443': 18,
-     *   'assets.cesium.com:443': 18
+     *   "api.cesium.com:443": 18,
+     *   "assets.cesium.com:443": 18,
      * };
      */
     var requestsByServer: any
@@ -14921,6 +14929,7 @@ declare namespace Cesium {
      * @property [retryCallback] - The Function to call when a request for this resource fails. If it returns true, the request will be retried.
      * @property [retryAttempts = 0] - The number of times the retryCallback should be called before giving up.
      * @property [request] - A Request object that will be used. Intended for internal use only.
+     * @property [parseUrl = true] - If true, parse the url for query parameters; otherwise store the url without change
      */
     type ConstructorOptions = {
       url: string
@@ -14931,6 +14940,7 @@ declare namespace Cesium {
       retryCallback?: Resource.RetryCallback
       retryAttempts?: number
       request?: Request
+      parseUrl?: boolean
     }
     /**
      * A function that returns the value of the property.
@@ -16555,14 +16565,6 @@ declare namespace Cesium {
      */
     readonly tilingScheme: TilingScheme
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets a value indicating whether or not the provider includes a water mask.  The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
      * as a reflective surface with animated waves.
@@ -17697,12 +17699,10 @@ declare namespace Cesium {
      * Initialization options for the VRTheWorldTerrainProvider constructor
      * @property [ellipsoid] - The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      * @property [credit] - A credit for the data source, which is displayed on the canvas.
-     * @property [url] - The URL of the VR-TheWorld TileMap. Deprecated.
      */
     type ConstructorOptions = {
       ellipsoid?: Ellipsoid
       credit?: Credit | string
-      url?: Resource | string
     }
   }
 
@@ -17737,14 +17737,6 @@ declare namespace Cesium {
      * Gets the tiling scheme used by this provider.
      */
     readonly tilingScheme: GeographicTilingScheme
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
     /**
      * Gets a value indicating whether or not the provider includes a water mask.  The water mask
      * indicates which areas of the globe are water rather than land, so they can be rendered
@@ -18462,27 +18454,6 @@ declare namespace Cesium {
    * this.guid = Cesium.createGuid();
    */
   export function createGuid(): string
-
-  /**
-   * Creates a {@link CesiumTerrainProvider} instance for the {@link https://cesium.com/content/#cesium-world-terrain|Cesium World Terrain}.
-   * @example
-   * // Create Cesium World Terrain with default settings
-   * const viewer = new Cesium.Viewer('cesiumContainer', {
-   *     terrainProvider : Cesium.createWorldTerrain();
-   * });
-   * @example
-   * // Create Cesium World Terrain with water and normals.
-   * const viewer1 = new Cesium.Viewer('cesiumContainer', {
-   *     terrainProvider : Cesium.createWorldTerrain({
-   *         requestWaterMask : true,
-   *         requestVertexNormals : true
-   *     });
-   * });
-   * @param [options] - Object with the following properties:
-   * @param [options.requestVertexNormals = false] - Flag that indicates if the client should request additional lighting information from the server if available.
-   * @param [options.requestWaterMask = false] - Flag that indicates if the client should request per tile water masks from the server if available.
-   */
-  export function createWorldTerrain(options?: { requestVertexNormals?: boolean; requestWaterMask?: boolean }): CesiumTerrainProvider
 
   /**
    * Creates a {@link CesiumTerrainProvider} instance for the {@link https://cesium.com/content/#cesium-world-terrain|Cesium World Terrain}.
@@ -20602,13 +20573,14 @@ declare namespace Cesium {
     /**
      * A function which creates an array of visualizers used for visualization.
      * @example
-     * function createVisualizers(scene, dataSource) {
-     *     return [new Cesium.BillboardVisualizer(scene, dataSource.entities)];
+     * function createVisualizers(scene, entityCluster, dataSource) {
+     *     return [new Cesium.BillboardVisualizer(entityCluster, dataSource.entities)];
      * }
      * @param scene - The scene to create visualizers for.
+     * @param entityCluster - The entity cluster to create visualizers for.
      * @param dataSource - The data source to create visualizers for.
      */
-    type VisualizersCallback = (scene: Scene, dataSource: DataSource) => Visualizer[]
+    type VisualizersCallback = (scene: Scene, entityCluster: EntityCluster, dataSource: DataSource) => Visualizer[]
   }
 
   /**
@@ -21199,11 +21171,10 @@ declare namespace Cesium {
      */
     merge(source: Entity): void
     /**
-     * Computes the model matrix for the entity's transform at specified time. Returns undefined if orientation or position
-     * are undefined.
+     * Computes the model matrix for the entity's transform at specified time. Returns undefined if position is undefined
      * @param time - The time to retrieve model matrix for.
      * @param [result] - The object onto which to store the result.
-     * @returns The modified result parameter or a new Matrix4 instance if one was not provided. Result is undefined if position or orientation are undefined.
+     * @returns The modified result parameter or a new Matrix4 instance if one was not provided. Result is undefined if position is undefined.
      */
     computeModelMatrix(time: JulianDate, result?: Matrix4): Matrix4
     /**
@@ -22336,7 +22307,7 @@ declare namespace Cesium {
      * @param [cameraOptions] - these options will be merged with {@link Camera#flyTo}
      * options for FlyTo playlist entries.
      */
-    play(widget: Viewer | CesiumWidget, cameraOptions?: any): void
+    play(widget: CesiumWidget, cameraOptions?: any): void
     /**
      * Stop curently playing tour.
      */
@@ -25647,11 +25618,18 @@ declare namespace Cesium {
     getRenderState(): any
   }
 
+  /**
+   * ArcGisBaseMapType enumerates the ArcGIS image tile layers that are supported by default.
+   */
+  export enum ArcGisBaseMapType {
+    SATELLITE = 1,
+    OCEANS = 2,
+    HILLSHADE = 3
+  }
+
   export namespace ArcGisMapServerImageryProvider {
     /**
      * Initialization options for the ArcGisMapServerImageryProvider constructor
-     * @property [url] - The URL of the ArcGIS MapServer service. Deprecated.
-     * @property [token] - The ArcGIS token used to authenticate with the ArcGIS MapServer service. Deprecated.
      * @property [tileDiscardPolicy] - The policy that determines if a tile
      *        is invalid and should be discarded.  If this value is not specified, a default
      *        {@link DiscardMissingTileImagePolicy} is used for tiled map servers, and a
@@ -25664,8 +25642,7 @@ declare namespace Cesium {
      *        that no tiles are discarded, construct and pass a {@link NeverTileDiscardPolicy} for this
      *        parameter.
      * @property [usePreCachedTilesIfAvailable = true] - If true, the server's pre-cached
-     *        tiles are used if they are available.  If false, any pre-cached tiles are ignored and the
-     *        'export' service is used.
+     *        tiles are used if they are available. Exporting Tiles is only supported with deprecated APIs.
      * @property [layers] - A comma-separated list of the layers to show, or undefined if all layers should be shown.
      * @property [enablePickFeatures = true] - If true, {@link ArcGisMapServerImageryProvider#pickFeatures} will invoke
      *        the Identify service on the MapServer and return the features included in the response.  If false,
@@ -25686,8 +25663,6 @@ declare namespace Cesium {
      *                                        a tiled server.
      */
     type ConstructorOptions = {
-      url?: Resource | string
-      token?: string
       tileDiscardPolicy?: TileDiscardPolicy
       usePreCachedTilesIfAvailable?: boolean
       layers?: string
@@ -25704,15 +25679,35 @@ declare namespace Cesium {
 
   /**
    * <div class="notice">
-   * To construct a ArcGisMapServerImageryProvider call {@link ArcGisMapServerImageryProvider.fromUrl}. Do not call the constructor directly.
+   * This object is normally not instantiated directly, use {@link ArcGisMapServerImageryProvider.fromBasemapType} or {@link ArcGisMapServerImageryProvider.fromUrl}.
    * </div>
    *
    * Provides tiled imagery hosted by an ArcGIS MapServer.  By default, the server's pre-cached tiles are
    * used, if available.
+   *
+   * <br/>
+   *
+   * An {@link https://developers.arcgis.com/documentation/mapping-apis-and-services/security| ArcGIS Access Token } is required to authenticate requests to an ArcGIS Image Tile service.
+   * To access secure ArcGIS resources, it's required to create an ArcGIS developer
+   * account or an ArcGIS online account, then implement an authentication method to obtain an access token.
    * @example
+   * // Set the default access token for accessing ArcGIS Image Tile service
+   * Cesium.ArcGisMapService.defaultAccessToken = "<ArcGIS Access Token>";
+   *
+   * // Add a base layer from a default ArcGIS basemap
+   * const viewer = new Cesium.Viewer("cesiumContainer", {
+   *   baseLayer: Cesium.ImageryLayer.fromProviderAsync(
+   *     Cesium.ArcGisMapServerImageryProvider.fromBasemapType(
+   *       Cesium.ArcGisBaseMapType.SATELLITE
+   *     )
+   *   ),
+   * });
+   * @example
+   * // Create an imagery provider from the url directly
    * const esri = await Cesium.ArcGisMapServerImageryProvider.fromUrl(
-   *     "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
-   * );
+   *   "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer", {
+   *     token: "<ArcGIS Access Token>"
+   * });
    * @param [options] - Object describing initialization options
    */
   export class ArcGisMapServerImageryProvider {
@@ -25724,6 +25719,34 @@ declare namespace Cesium {
      * without communicating with the server.
      */
     enablePickFeatures: boolean
+    /**
+     * Creates an {@link ImageryProvider} which provides tiled imagery from an ArcGIS base map.
+     * @example
+     * // Set the default access token for accessing ArcGIS Image Tile service
+     * Cesium.ArcGisMapService.defaultAccessToken = "<ArcGIS Access Token>";
+     *
+     * // Add a base layer from a default ArcGIS basemap
+     * const provider = await Cesium.ArcGisMapServerImageryProvider.fromBasemapType(
+     *   Cesium.ArcGisBaseMapType.SATELLITE);
+     * @example
+     * // Add a base layer from a default ArcGIS Basemap
+     * const viewer = new Cesium.Viewer("cesiumContainer", {
+     *   baseLayer: Cesium.ImageryLayer.fromProviderAsync(
+     *     Cesium.ArcGisMapServerImageryProvider.fromBasemapType(
+     *       Cesium.ArcGisBaseMapType.HILLSHADE, {
+     *         token: "<ArcGIS Access Token>"
+     *       }
+     *     )
+     *   ),
+     * });
+     * @param style - The style of the ArcGIS base map imagery. Valid options are {@link ArcGisBaseMapType.SATELLITE}, {@link ArcGisBaseMapType.OCEANS}, and {@link ArcGisBaseMapType.HILLSHADE}.
+     * @param [options] - Object describing initialization options.
+     * @returns A promise that resolves to the created ArcGisMapServerImageryProvider.
+     */
+    static fromBasemapType(
+      style: ArcGisBaseMapType,
+      options?: ArcGisMapServerImageryProvider.ConstructorOptions
+    ): Promise<ArcGisMapServerImageryProvider>
     /**
      * Gets the URL of the ArcGIS MapServer.
      */
@@ -25773,16 +25796,8 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
-     * the source of the imagery.  This function should not be called before {@link ArcGisMapServerImageryProvider#ready} returns true.
+     * the source of the imagery.
      */
     readonly credit: Credit
     /**
@@ -25802,52 +25817,6 @@ declare namespace Cesium {
      * Gets the comma-separated list of layer IDs to show.
      */
     layers: string
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates an {@link ImageryProvider} which provides tiled imagery hosted by an ArcGIS MapServer.  By default, the server's pre-cached tiles are
      * used, if available.
@@ -25892,6 +25861,34 @@ declare namespace Cesium {
      *                   instances.  The array may be empty if no features are found at the given location.
      */
     pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]> | undefined
+  }
+
+  /**
+   * Default options for accessing the ArcGIS image tile service.
+   *
+   * An ArcGIS access token is required to access ArcGIS image tile layers.
+   * A default token is provided for evaluation purposes only.
+   * To obtain an access token, go to {@link https://developers.arcgis.com} and create a free account.
+   * More info can be found in the {@link https://developers.arcgis.com/documentation/mapping-apis-and-services/security/ | ArcGIS developer guide}.
+   */
+  export namespace ArcGisMapService {
+    /**
+     * Gets or sets the default ArcGIS access token.
+     */
+    var defaultAccessToken: string
+    /**
+     * Gets or sets the URL of the ArcGIS World Imagery tile service.
+     */
+    var defaultWorldImageryServer: string | Resource
+    /**
+     * Gets or sets the URL of the ArcGIS World Hillshade tile service.
+     */
+    var defaultWorldHillshadeServer: string | Resource
+    /**
+     * Gets or sets the URL of the ArcGIS World Oceans tile service.
+     */
+    var defaultWorldOceanServer: string | Resource
+    function getDefaultTokenCredit(providedKey: string): string | undefined
   }
 
   /**
@@ -26438,7 +26435,6 @@ declare namespace Cesium {
   export namespace BingMapsImageryProvider {
     /**
      * Initialization options for the BingMapsImageryProvider constructor
-     * @property [url] - The url of the Bing Maps server hosting the imagery. Deprecated.
      * @property [key] - The Bing Maps key for your application, which can be
      *        created at {@link https://www.bingmapsportal.com/}.
      * @property [tileProtocol] - The protocol to use when loading tiles, e.g. 'http' or 'https'.
@@ -26454,7 +26450,6 @@ declare namespace Cesium {
      *        To ensure that no tiles are discarded, construct and pass a {@link NeverTileDiscardPolicy} for this parameter.
      */
     type ConstructorOptions = {
-      url?: Resource | string
       key?: string
       tileProtocol?: string
       mapStyle?: BingMapsStyle
@@ -26539,14 +26534,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -26559,52 +26546,6 @@ declare namespace Cesium {
      * and texture upload time.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates an {@link ImageryProvider} which provides tiled imagery using the Bing Maps Imagery REST API.
      * @example
@@ -26881,7 +26822,7 @@ declare namespace Cesium {
    * An orientation given by numeric heading, pitch, and roll
    * @property [heading = 0.0] - The heading in radians
    * @property [pitch = -Math.PI_OVER_TWO] - The pitch in radians
-   * @property [roll = 0.0] - The roll in meters
+   * @property [roll = 0.0] - The roll in radians
    */
   export type HeadingPitchRollValues = {
     heading?: number
@@ -27799,10 +27740,6 @@ declare namespace Cesium {
      * Returns true when the tile's content is ready to render; otherwise false
      */
     readonly ready: boolean
-    /**
-     * Gets the promise that will be resolved when the tile's content is ready to render.
-     */
-    readonly readyPromise: Promise<Cesium3DTileContent>
     /**
      * Gets the tileset for this tile.
      */
@@ -28916,18 +28853,9 @@ declare namespace Cesium {
    * This object is normally not instantiated directly, use {@link Cesium3DTilesVoxelProvider.fromUrl}.
    * </div>
    * @param options - Object with the following properties:
-   * @param [options.url] - The URL to a tileset JSON file. Deprecated.
    */
   export class Cesium3DTilesVoxelProvider extends VoxelProvider {
-    constructor(options: { url?: Resource | string | Promise<Resource> | Promise<string> })
-    /**
-     * Gets the promise that will be resolved when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<Cesium3DTilesVoxelProvider>
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
+    constructor(options: any)
     /**
      * Creates a {@link VoxelProvider} that fetches voxel data from a 3D Tiles tileset.
      * @param url - The URL to a tileset JSON file
@@ -29020,14 +28948,15 @@ declare namespace Cesium {
   export namespace Cesium3DTileset {
     /**
      * Initialization options for the Cesium3DTileset constructor
-     * @property [.url] - The url to a tileset JSON file. Deprecated.
      * @property [show = true] - Determines if the tileset will be shown.
      * @property [modelMatrix = Matrix4.IDENTITY] - A 4x4 transformation matrix that transforms the tileset's root tile.
      * @property [modelUpAxis = Axis.Y] - Which axis is considered up when loading models for tile contents.
      * @property [modelForwardAxis = Axis.X] - Which axis is considered forward when loading models for tile contents.
      * @property [shadows = ShadowMode.ENABLED] - Determines whether the tileset casts or receives shadows from light sources.
      * @property [maximumScreenSpaceError = 16] - The maximum screen space error used to drive level of detail refinement.
-     * @property [maximumMemoryUsage = 512] - The maximum amount of memory in MB that can be used by the tileset.
+     * @property [maximumMemoryUsage = 512] - The maximum amount of memory in MB that can be used by the tileset. Deprecated.
+     * @property [cacheBytes = 536870912] - The size (in bytes) to which the tile cache will be trimmed, if the cache contains tiles not needed for the current view.
+     * @property [maximumCacheOverflowBytes = 536870912] - The maximum additional memory (in bytes) to allow for cache headroom, if more than {@link Cesium3DTileset#cacheBytes} are needed for the current view.
      * @property [cullWithChildrenBounds = true] - Optimization option. Whether to cull tiles using the union of their children bounding volumes.
      * @property [cullRequestsWhileMoving = true] - Optimization option. Don't request tiles that will likely be unused when they come back because of the camera's movement. This optimization only applies to stationary tilesets.
      * @property [cullRequestsWhileMovingMultiplier = 60.0] - Optimization option. Multiplier used in culling requests while moving. Larger is more aggressive culling, smaller less aggressive culling.
@@ -29088,6 +29017,8 @@ declare namespace Cesium {
       shadows?: ShadowMode
       maximumScreenSpaceError?: number
       maximumMemoryUsage?: number
+      cacheBytes?: number
+      maximumCacheOverflowBytes?: number
       cullWithChildrenBounds?: boolean
       cullRequestsWhileMoving?: boolean
       cullRequestsWhileMovingMultiplier?: number
@@ -29161,7 +29092,7 @@ declare namespace Cesium {
    * try {
    *   const tileset = await Cesium.Cesium3DTileset.fromUrl(
    *      "http://localhost:8002/tilesets/Seattle/tileset.json"
-   *   });
+   *   );
    *   scene.primitives.add(tileset);
    * } catch (error) {
    *   console.error(`Error creating tileset: ${error}`);
@@ -29615,27 +29546,6 @@ declare namespace Cesium {
      */
     readonly properties: any
     /**
-     * When <code>true</code>, the tileset's root tile is loaded and the tileset is ready to render.
-     */
-    readonly ready: boolean
-    /**
-     * Gets the promise that will be resolved when the tileset's root tile is loaded and the tileset is ready to render.
-     * <p>
-     * This promise is resolved at the end of the frame before the first frame the tileset is rendered in.
-     * </p>
-     * @example
-     * tileset.readyPromise.then(function(tileset) {
-     *     // tile.properties is not defined until readyPromise resolves.
-     *     const properties = tileset.properties;
-     *     if (Cesium.defined(properties)) {
-     *         for (const name in properties) {
-     *             console.log(properties[name]);
-     *         }
-     *     }
-     * });
-     */
-    readonly readyPromise: Promise<Cesium3DTileset>
-    /**
      * When <code>true</code>, all tiles that meet the screen space error this frame are loaded. The tileset is
      * completely loaded for this view.
      */
@@ -29725,6 +29635,40 @@ declare namespace Cesium {
      * </p>
      */
     maximumMemoryUsage: number
+    /**
+     * The amount of GPU memory (in bytes) used to cache tiles. This memory usage is estimated from
+     * geometry, textures, and batch table textures of loaded tiles. For point clouds, this value also
+     * includes per-point metadata.
+     * <p>
+     * Tiles not in view are unloaded to enforce this.
+     * </p>
+     * <p>
+     * If decreasing this value results in unloading tiles, the tiles are unloaded the next frame.
+     * </p>
+     * <p>
+     * If tiles sized more than <code>cacheBytes</code> are needed to meet the
+     * desired screen space error, determined by {@link Cesium3DTileset#maximumScreenSpaceError},
+     * for the current view, then the memory usage of the tiles loaded will exceed
+     * <code>cacheBytes</code> by up to <code>maximumCacheOverflowBytes</code>.
+     * For example, if <code>cacheBytes</code> is 500000, but 600000 bytes
+     * of tiles are needed to meet the screen space error, then 600000 bytes of tiles
+     * may be loaded (if <code>maximumCacheOverflowBytes</code> is at least 100000).
+     * When these tiles go out of view, they will be unloaded.
+     * </p>
+     */
+    cacheBytes: number
+    /**
+     * The maximum additional amount of GPU memory (in bytes) that will be used to cache tiles.
+     * <p>
+     * If tiles sized more than <code>cacheBytes</code> plus <code>maximumCacheOverflowBytes</code>
+     * are needed to meet the desired screen space error, determined by
+     * {@link Cesium3DTileset#maximumScreenSpaceError} for the current view, then
+     * {@link Cesium3DTileset#memoryAdjustedScreenSpaceError} will be adjusted
+     * until the tiles required to meet the adjusted screen space error use less
+     * than <code>cacheBytes</code> plus <code>maximumCacheOverflowBytes</code>.
+     * </p>
+     */
+    maximumCacheOverflowBytes: number
     /**
      * Options for controlling point size based on geometric error and eye dome lighting.
      */
@@ -29879,7 +29823,7 @@ declare namespace Cesium {
      * try {
      *   const tileset = await Cesium.Cesium3DTileset.fromUrl(
      *      "http://localhost:8002/tilesets/Seattle/tileset.json"
-     *   });
+     *   );
      *   scene.primitives.add(tileset);
      * } catch (error) {
      *   console.error(`Error creating tileset: ${error}`);
@@ -29908,9 +29852,9 @@ declare namespace Cesium {
      * });
      * scene.primitives.add(tileset);
      * @param url - The url to a tileset JSON file.
-     * @param options - An object describing initialization options
+     * @param [options] - An object describing initialization options
      */
-    static fromUrl(url: Resource | string, options: Cesium3DTileset.ConstructorOptions): Promise<Cesium3DTileset>
+    static fromUrl(url: Resource | string, options?: Cesium3DTileset.ConstructorOptions): Promise<Cesium3DTileset>
     /**
      * Provides a hook to override the method used to request the tileset json
      * useful when fetching tilesets from remote servers
@@ -29926,7 +29870,7 @@ declare namespace Cesium {
     /**
      * Unloads all tiles that weren't selected the previous frame.  This can be used to
      * explicitly manage the tile cache and reduce the total number of tiles loaded below
-     * {@link Cesium3DTileset#maximumMemoryUsage}.
+     * {@link Cesium3DTileset#cacheBytes}.
      * <p>
      * Tile unloads occur at the next frame to keep all the WebGL delete calls
      * within the render loop.
@@ -30096,10 +30040,6 @@ declare namespace Cesium {
      * is called.
      */
     readonly ready: boolean
-    /**
-     * Gets a promise that resolves when the primitive is ready to render.
-     */
-    readonly readyPromise: Promise<ClassificationPrimitive>
     /**
      * Determines if ClassificationPrimitive rendering is supported.
      * @param scene - The scene.
@@ -30619,7 +30559,13 @@ declare namespace Cesium {
   /**
    * The credit display is responsible for displaying credits on screen.
    * @example
-   * const creditDisplay = new Cesium.CreditDisplay(creditContainer);
+   * // Add a credit with a tooltip, image and link to display onscreen
+   * const credit = new Cesium.Credit(`<a href="https://cesium.com/" target="_blank"><img src="/images/cesium_logo.png" title="Cesium"/></a>`, true);
+   * viewer.creditDisplay.addStaticCredit(credit);
+   * @example
+   * // Add a credit with a plaintext link to display in the lightbox
+   * const credit = new Cesium.Credit('<a href="https://cesium.com/" target="_blank">Cesium</a>');
+   * viewer.creditDisplay.addStaticCredit(credit);
    * @param container - The HTML element where credits will be displayed
    * @param [delimiter = ' • '] - The string to separate text credits
    * @param [viewport = document.body] - The HTML element that will contain the credits popup
@@ -30631,20 +30577,29 @@ declare namespace Cesium {
      */
     container: HTMLElement
     /**
-     * Adds a credit to the list of current credits to be displayed in the credit container
-     * @param credit - The credit to display
+     * Adds a {@link Credit} that will show on screen or in the lightbox until
+     * the next frame. This is mostly for internal use. Use {@link CreditDisplay.addStaticCredit} to add a persistent credit to the screen.
+     * @param credit - The credit to display in the next frame.
      */
-    addCredit(credit: Credit): void
+    addCreditToNextFrame(credit: Credit): void
     /**
-     * Adds credits that will persist until they are removed
-     * @param credit - The credit to added to defaults
+     * Adds a {@link Credit} that will show on screen or in the lightbox until removed with {@link CreditDisplay.removeStaticCredit}.
+     * @example
+     * // Add a credit with a tooltip, image and link to display onscreen
+     * const credit = new Cesium.Credit(`<a href="https://cesium.com/" target="_blank"><img src="/images/cesium_logo.png" title="Cesium"/></a>`, true);
+     * viewer.creditDisplay.addStaticCredit(credit);
+     * @example
+     * // Add a credit with a plaintext link to display in the lightbox
+     * const credit = new Cesium.Credit('<a href="https://cesium.com/" target="_blank">Cesium</a>');
+     * viewer.creditDisplay.addStaticCredit(credit);
+     * @param credit - The credit to added
      */
-    addDefaultCredit(credit: Credit): void
+    addStaticCredit(credit: Credit): void
     /**
-     * Removes a default credit
-     * @param credit - The credit to be removed from defaults
+     * Removes a static credit shown on screen or in the lightbox.
+     * @param credit - The credit to be removed.
      */
-    removeDefaultCredit(credit: Credit): void
+    removeStaticCredit(credit: Credit): void
     /**
      * Updates the credit display before a new frame is rendered.
      */
@@ -31907,8 +31862,6 @@ declare namespace Cesium {
   export namespace GoogleEarthEnterpriseImageryProvider {
     /**
      * Initialization options for the GoogleEarthEnterpriseImageryProvider constructor
-     * @property [url] - The url of the Google Earth Enterprise server hosting the imagery. Deprecated.
-     * @property [metadata] - A metadata object that can be used to share metadata requests with a GoogleEarthEnterpriseTerrainProvider. Deprecated.
      * @property [ellipsoid] - The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      * @property [tileDiscardPolicy] - The policy that determines if a tile
      *        is invalid and should be discarded. If this value is not specified, a default
@@ -31916,8 +31869,6 @@ declare namespace Cesium {
      * @property [credit] - A credit for the data source, which is displayed on the canvas.
      */
     type ConstructorOptions = {
-      url?: Resource | string
-      metadata?: GoogleEarthEnterpriseMetadata
       ellipsoid?: Ellipsoid
       tileDiscardPolicy?: TileDiscardPolicy
       credit?: Credit | string
@@ -31936,10 +31887,10 @@ declare namespace Cesium {
    * @example
    * const geeMetadata = await GoogleEarthEnterpriseMetadata.fromUrl("http://www.example.com");
    * const gee = Cesium.GoogleEarthEnterpriseImageryProvider.fromMetadata(geeMetadata);
-   * @param options - Object describing initialization options
+   * @param [options] - Object describing initialization options
    */
   export class GoogleEarthEnterpriseImageryProvider {
-    constructor(options: GoogleEarthEnterpriseImageryProvider.ConstructorOptions)
+    constructor(options?: GoogleEarthEnterpriseImageryProvider.ConstructorOptions)
     /**
      * Gets the name of the Google Earth Enterprise server url hosting the imagery.
      */
@@ -31985,14 +31936,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -32005,52 +31948,6 @@ declare namespace Cesium {
      * and texture upload time.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates a tiled imagery provider using the Google Earth Enterprise REST API.
      * @example
@@ -32097,7 +31994,6 @@ declare namespace Cesium {
   export namespace GoogleEarthEnterpriseMapsProvider {
     /**
      * Initialization options for the GoogleEarthEnterpriseMapsProvider constructor
-     * @property [url] - The url of the Google Earth server hosting the imagery. Deprecated.
      * @property channel - The channel (id) to be used when requesting data from the server.
      *        The channel number can be found by looking at the json file located at:
      *        earth.localdomain/default_map/query?request=Json&vars=geeServerDefs The /default_map path may
@@ -32125,7 +32021,6 @@ declare namespace Cesium {
      * @property [ellipsoid] - The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      */
     type ConstructorOptions = {
-      url?: Resource | string
       channel: number
       path?: string
       maximumLevel?: number
@@ -32219,14 +32114,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -32239,52 +32126,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates a tiled imagery provider using the Google Earth Imagery API.
      * @example
@@ -32407,14 +32248,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -32427,52 +32260,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Draws a grid of lines into a canvas.
      */
@@ -32639,10 +32426,6 @@ declare namespace Cesium {
      * is called.
      */
     readonly ready: boolean
-    /**
-     * Gets a promise that resolves when the primitive is ready to render.
-     */
-    readonly readyPromise: Promise<GroundPolylinePrimitive>
     /**
      * This property is for debugging only; it is not for production use nor is it optimized.
      * <p>
@@ -32868,10 +32651,6 @@ declare namespace Cesium {
      */
     readonly ready: boolean
     /**
-     * Gets a promise that resolves when the primitive is ready to render.
-     */
-    readonly readyPromise: Promise<GroundPrimitive>
-    /**
      * Determines if GroundPrimitive rendering is supported.
      * @param scene - The scene.
      * @returns <code>true</code> if GroundPrimitives are supported; otherwise, returns <code>false</code>
@@ -32978,7 +32757,6 @@ declare namespace Cesium {
   export namespace I3SDataProvider {
     /**
      * Initialization options for the I3SDataProvider constructor
-     * @property [url] - The url of the I3S dataset. Deprecated.
      * @property [name] - The name of the I3S dataset.
      * @property [show = true] - Determines if the dataset will be shown.
      * @property [geoidTiledTerrainProvider] - Tiled elevation provider describing an Earth Gravitational Model. If defined, geometry will be shifted based on the offsets given by this provider. Required to position I3S data sets with gravity-related height at the correct location.
@@ -32986,7 +32764,6 @@ declare namespace Cesium {
      * @property [cesium3dTilesetOptions] - Object containing options to pass to an internally created {@link Cesium3DTileset}. See {@link Cesium3DTileset} for list of valid properties. All options can be used with the exception of <code>url</code> and <code>show</code> which are overridden by values from I3SDataProvider.
      */
     type ConstructorOptions = {
-      url?: Resource | string
       name?: string
       show?: boolean
       geoidTiledTerrainProvider?: ArcGISTiledElevationTerrainProvider | Promise<ArcGISTiledElevationTerrainProvider>
@@ -33058,15 +32835,6 @@ declare namespace Cesium {
      * Gets the extent covered by this I3S.
      */
     readonly extent: Rectangle
-    /**
-     * Gets the promise that will be resolved when the I3S scene is loaded.
-     */
-    readonly readyPromise: Promise<I3SDataProvider>
-    /**
-     * When <code>true</code>, the I3S scene is loaded.
-     * This is set to <code>true</code> right before {@link I3SDataProvider#readyPromise} is resolved.
-     */
-    readonly ready: boolean
     /**
      * The resource used to fetch the I3S dataset.
      */
@@ -33735,19 +33503,6 @@ declare namespace Cesium {
      * producing the overall bounds of imagery that can be produced by this layer.
      * @example
      * // Zoom to an imagery layer.
-     * imageryLayer.getViewableRectangle().then(function (rectangle) {
-     *     return camera.flyTo({
-     *         destination: rectangle
-     *     });
-     * });
-     * @returns A promise to a rectangle which defines the overall bounds of imagery that can be produced by this layer.
-     */
-    getViewableRectangle(): Promise<Rectangle>
-    /**
-     * Computes the intersection of this layer's rectangle with the imagery provider's availability rectangle,
-     * producing the overall bounds of imagery that can be produced by this layer.
-     * @example
-     * // Zoom to an imagery layer.
      * const imageryRectangle = imageryLayer.getImageryRectangle();
      * scene.camera.flyTo({
      *     destination: rectangle
@@ -33985,14 +33740,6 @@ declare namespace Cesium {
   export class ImageryProvider {
     constructor()
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the rectangle, in radians, of the imagery provided by the instance.
      */
     readonly rectangle: Rectangle
@@ -34050,52 +33797,6 @@ declare namespace Cesium {
      */
     readonly hasAlphaChannel: boolean
     /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
-    /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
      * @param y - The tile Y coordinate.
@@ -34143,12 +33844,10 @@ declare namespace Cesium {
   export namespace IonImageryProvider {
     /**
      * Initialization options for the TileMapServiceImageryProvider constructor
-     * @property [assetId] - An ion imagery asset ID. Deprecated.
      * @property [accessToken = Ion.defaultAccessToken] - The access token to use.
      * @property [server = Ion.defaultServer] - The resource to the Cesium ion API server.
      */
     type ConstructorOptions = {
-      assetId?: number
       accessToken?: string
       server?: string | Resource
     }
@@ -34163,18 +33862,10 @@ declare namespace Cesium {
    * @example
    * const imageryLayer = Cesium.ImageryLayer.fromProviderAsync(Cesium.IonImageryProvider.fromAssetId(3812));
    * viewer.imageryLayers.add(imageryLayer);
-   * @param options - Object describing initialization options
+   * @param [options] - Object describing initialization options
    */
   export class IonImageryProvider {
-    constructor(options: IonImageryProvider.ConstructorOptions)
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
+    constructor(options?: IonImageryProvider.ConstructorOptions)
     /**
      * Gets the rectangle, in radians, of the imagery provided by the instance.
      */
@@ -34232,52 +33923,6 @@ declare namespace Cesium {
      * Gets the proxy used by this provider.
      */
     readonly proxy: Proxy
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates a provider for tiled imagery using the Cesium ion REST API.
      * @example
@@ -34879,14 +34524,6 @@ declare namespace Cesium {
      */
     readonly url: string
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the rectangle, in radians, of the imagery provided by the instance.
      */
     readonly rectangle: Rectangle
@@ -34943,52 +34580,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -35072,14 +34663,6 @@ declare namespace Cesium {
      */
     readonly url: string
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the rectangle, in radians, of the imagery provided by the instance.
      */
     readonly rectangle: Rectangle
@@ -35136,52 +34719,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -36320,7 +35857,7 @@ declare namespace Cesium {
      */
     setUniform(
       uniformName: string,
-      value: boolean | number | Cartesian2 | Cartesian3 | Cartesian4 | Matrix2 | Matrix3 | Matrix4 | string | Resource
+      value: boolean | number | Cartesian2 | Cartesian3 | Cartesian4 | Matrix2 | Matrix3 | Matrix4 | string | Resource | TextureUniform
     ): void
   }
 
@@ -36500,14 +36037,6 @@ declare namespace Cesium {
      * are passed an instance of the {@link Model}.
      */
     readonly texturesReadyEvent: Event
-    /**
-     * Gets the promise that will be resolved when this model is ready to render, i.e. when the external resources
-     * have been downloaded and the WebGL resources are created.
-     * <p>
-     * This promise is resolved at the end of the frame before the first frame the model is rendered in.
-     * </p>
-     */
-    readonly readyPromise: Promise<Model>
     /**
      * The currently playing glTF animations.
      */
@@ -36755,110 +36284,6 @@ declare namespace Cesium {
     destroy(): void
     /**
      * <p>
-     * Creates a model from a glTF asset.  When the model is ready to render, i.e., when the external binary, image,
-     * and shader files are downloaded and the WebGL resources are created, the {@link Model#readyPromise} is resolved.
-     * </p>
-     * <p>
-     * The model can be a traditional glTF asset with a .gltf extension or a Binary glTF using the .glb extension.
-     * @param options - Object with the following properties:
-     * @param options.url - The url to the .gltf or .glb file.
-     * @param [options.basePath = ''] - The base path that paths in the glTF JSON are relative to.
-     * @param [options.show = true] - Whether or not to render the model.
-     * @param [options.modelMatrix = Matrix4.IDENTITY] - The 4x4 transformation matrix that transforms the model from model to world coordinates.
-     * @param [options.scale = 1.0] - A uniform scale applied to this model.
-     * @param [options.minimumPixelSize = 0.0] - The approximate minimum pixel size of the model regardless of zoom.
-     * @param [options.maximumScale] - The maximum scale size of a model. An upper limit for minimumPixelSize.
-     * @param [options.id] - A user-defined object to return when the model is picked with {@link Scene#pick}.
-     * @param [options.allowPicking = true] - When <code>true</code>, each primitive is pickable with {@link Scene#pick}.
-     * @param [options.incrementallyLoadTextures = true] - Determine if textures may continue to stream in after the model is loaded.
-     * @param [options.asynchronous = true] - Determines if model WebGL resource creation will be spread out over several frames or block until completion once all glTF files are loaded.
-     * @param [options.clampAnimations = true] - Determines if the model's animations should hold a pose over frames where no keyframes are specified.
-     * @param [options.shadows = ShadowMode.ENABLED] - Determines whether the model casts or receives shadows from light sources.
-     * @param [options.releaseGltfJson = false] - When true, the glTF JSON is released once the glTF is loaded. This is is especially useful for cases like 3D Tiles, where each .gltf model is unique and caching the glTF JSON is not effective.
-     * @param [options.debugShowBoundingVolume = false] - For debugging only. Draws the bounding sphere for each draw command in the model.
-     * @param [options.enableDebugWireframe = false] - For debugging only. This must be set to true for debugWireframe to work in WebGL1. This cannot be set after the model has loaded.
-     * @param [options.debugWireframe = false] - For debugging only. Draws the model in wireframe. Will only work for WebGL1 if enableDebugWireframe is set to true.
-     * @param [options.cull = true] - Whether or not to cull the model using frustum/horizon culling. If the model is part of a 3D Tiles tileset, this property will always be false, since the 3D Tiles culling system is used.
-     * @param [options.opaquePass = Pass.OPAQUE] - The pass to use in the {@link DrawCommand} for the opaque portions of the model.
-     * @param [options.upAxis = Axis.Y] - The up-axis of the glTF model.
-     * @param [options.forwardAxis = Axis.Z] - The forward-axis of the glTF model.
-     * @param [options.customShader] - A custom shader. This will add user-defined GLSL code to the vertex and fragment shaders. Using custom shaders with a {@link Cesium3DTileStyle} may lead to undefined behavior.
-     * @param [options.content] - The tile content this model belongs to. This property will be undefined if model is not loaded as part of a tileset.
-     * @param [options.heightReference = HeightReference.NONE] - Determines how the model is drawn relative to terrain.
-     * @param [options.scene] - Must be passed in for models that use the height reference property.
-     * @param [options.distanceDisplayCondition] - The condition specifying at what distance from the camera that this model will be displayed.
-     * @param [options.color] - A color that blends with the model's rendered color.
-     * @param [options.colorBlendMode = ColorBlendMode.HIGHLIGHT] - Defines how the color blends with the model.
-     * @param [options.colorBlendAmount = 0.5] - Value used to determine the color strength when the <code>colorBlendMode</code> is <code>MIX</code>. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
-     * @param [options.silhouetteColor = Color.RED] - The silhouette color. If more than 256 models have silhouettes enabled, there is a small chance that overlapping models will have minor artifacts.
-     * @param [options.silhouetteSize = 0.0] - The size of the silhouette in pixels.
-     * @param [options.enableShowOutline = true] - Whether to enable outlines for models using the {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/CESIUM_primitive_outline|CESIUM_primitive_outline} extension. This can be set false to avoid post-processing geometry at load time. When false, the showOutlines and outlineColor options are ignored.
-     * @param [options.showOutline = true] - Whether to display the outline for models using the {@link https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/CESIUM_primitive_outline|CESIUM_primitive_outline} extension. When true, outlines are displayed. When false, outlines are not displayed.
-     * @param [options.outlineColor = Color.BLACK] - The color to use when rendering outlines.
-     * @param [options.clippingPlanes] - The {@link ClippingPlaneCollection} used to selectively disable rendering the model.
-     * @param [options.lightColor] - The light color when shading the model. When <code>undefined</code> the scene's light color is used instead.
-     * @param [options.imageBasedLighting] - The properties for managing image-based lighting on this model.
-     * @param [options.backFaceCulling = true] - Whether to cull back-facing geometry. When true, back face culling is determined by the material's doubleSided property; when false, back face culling is disabled. Back faces are not culled if the model's color is translucent.
-     * @param [options.credit] - A credit for the data source, which is displayed on the canvas.
-     * @param [options.showCreditsOnScreen = false] - Whether to display the credits of this model on screen.
-     * @param [options.splitDirection = SplitDirection.NONE] - The {@link SplitDirection} split to apply to this model.
-     * @param [options.projectTo2D = false] - Whether to accurately project the model's positions in 2D. If this is true, the model will be projected accurately to 2D, but it will use more memory to do so. If this is false, the model will use less memory and will still render in 2D / CV mode, but its positions may be inaccurate. This disables minimumPixelSize and prevents future modification to the model matrix. This also cannot be set after the model has loaded.
-     * @param [options.featureIdLabel = "featureId_0"] - Label of the feature ID set to use for picking and styling. For EXT_mesh_features, this is the feature ID's label property, or "featureId_N" (where N is the index in the featureIds array) when not specified. EXT_feature_metadata did not have a label field, so such feature ID sets are always labeled "featureId_N" where N is the index in the list of all feature Ids, where feature ID attributes are listed before feature ID textures. If featureIdLabel is an integer N, it is converted to the string "featureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
-     * @param [options.instanceFeatureIdLabel = "instanceFeatureId_0"] - Label of the instance feature ID set used for picking and styling. If instanceFeatureIdLabel is set to an integer N, it is converted to the string "instanceFeatureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
-     * @param [options.pointCloudShading] - Options for constructing a {@link PointCloudShading} object to control point attenuation and lighting.
-     * @param [options.classificationType] - Determines whether terrain, 3D Tiles or both will be classified by this model. This cannot be set after the model has loaded.
-     * @returns The newly created model.
-     */
-    static fromGltf(options: {
-      url: string | Resource
-      basePath?: string | Resource
-      show?: boolean
-      modelMatrix?: Matrix4
-      scale?: number
-      minimumPixelSize?: number
-      maximumScale?: number
-      id?: any
-      allowPicking?: boolean
-      incrementallyLoadTextures?: boolean
-      asynchronous?: boolean
-      clampAnimations?: boolean
-      shadows?: ShadowMode
-      releaseGltfJson?: boolean
-      debugShowBoundingVolume?: boolean
-      enableDebugWireframe?: boolean
-      debugWireframe?: boolean
-      cull?: boolean
-      opaquePass?: boolean
-      upAxis?: Axis
-      forwardAxis?: Axis
-      customShader?: CustomShader
-      content?: Cesium3DTileContent
-      heightReference?: HeightReference
-      scene?: Scene
-      distanceDisplayCondition?: DistanceDisplayCondition
-      color?: Color
-      colorBlendMode?: ColorBlendMode
-      colorBlendAmount?: number
-      silhouetteColor?: Color
-      silhouetteSize?: number
-      enableShowOutline?: boolean
-      showOutline?: boolean
-      outlineColor?: Color
-      clippingPlanes?: ClippingPlaneCollection
-      lightColor?: Cartesian3
-      imageBasedLighting?: ImageBasedLighting
-      backFaceCulling?: boolean
-      credit?: Credit | string
-      showCreditsOnScreen?: boolean
-      splitDirection?: SplitDirection
-      projectTo2D?: boolean
-      featureIdLabel?: string | number
-      instanceFeatureIdLabel?: string | number
-      pointCloudShading?: any
-      classificationType?: ClassificationType
-    }): Model
-    /**
-     * <p>
      * Asynchronously creates a model from a glTF asset. This function returns a promise that resolves when the model is ready to render, i.e., when the external binary, image,
      * and shader files are downloaded and the WebGL resources are created.
      * </p>
@@ -36901,6 +36326,27 @@ declare namespace Cesium {
      * } catch (error) {
      *  console.log(`Failed to load model. ${error}`);
      * }
+     * @example
+     * // Load a model and play the last animation at half speed
+     * let animations;
+     * try {
+     *  const model = await Cesium.Model.fromGltfAsync({
+     *    url: "../../SampleData/models/CesiumMan/Cesium_Man.glb",
+     *    gltfCallback: gltf => {
+     *      animations = gltf.animations
+     *    }
+     *  });
+     *  viewer.scene.primitives.add(model);
+     *  model.readyEvent.addEventListener(() => {
+     *    model.activeAnimations.add({
+     *      index: animations.length - 1,
+     *      loop: Cesium.ModelAnimationLoop.REPEAT,
+     *      multiplier: 0.5,
+     *    });
+     *  });
+     * } catch (error) {
+     *  console.log(`Failed to load model. ${error}`);
+     * }
      * @param options - Object with the following properties:
      * @param options.url - The url to the .gltf or .glb file.
      * @param [options.basePath = ''] - The base path that paths in the glTF JSON are relative to.
@@ -36948,6 +36394,7 @@ declare namespace Cesium {
      * @param [options.instanceFeatureIdLabel = "instanceFeatureId_0"] - Label of the instance feature ID set used for picking and styling. If instanceFeatureIdLabel is set to an integer N, it is converted to the string "instanceFeatureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
      * @param [options.pointCloudShading] - Options for constructing a {@link PointCloudShading} object to control point attenuation and lighting.
      * @param [options.classificationType] - Determines whether terrain, 3D Tiles or both will be classified by this model. This cannot be set after the model has loaded.
+     * @param [options.gltfCallback] - A function that is called with the loaded gltf object once loaded.
      * @returns A promise that resolves to the created model when it is ready to render.
      */
     static fromGltfAsync(options: {
@@ -36997,7 +36444,16 @@ declare namespace Cesium {
       instanceFeatureIdLabel?: string | number
       pointCloudShading?: any
       classificationType?: ClassificationType
+      gltfCallback?: Model.GltfCallback
     }): Promise<Model>
+  }
+
+  export namespace Model {
+    /**
+     * Interface for the function that is called with the loaded gltf object once loaded.
+     * @param gltf - The gltf object
+     */
+    type GltfCallback = (gltf: any) => void
   }
 
   /**
@@ -37547,7 +37003,7 @@ declare namespace Cesium {
     /**
      * A 3x3 matrix of floating point values.
      */
-    MAT3 = 'mat2',
+    MAT3 = 'mat3',
     /**
      * A 3x3 matrix of floating point values.
      */
@@ -39761,10 +39217,6 @@ declare namespace Cesium {
      */
     readonly ready: boolean
     /**
-     * Gets a promise that resolves when the primitive is ready to render.
-     */
-    readonly readyPromise: Promise<Primitive>
-    /**
      * Called when {@link Viewer} or {@link CesiumWidget} render the scene to
      * get the draw commands needed to render this primitive.
      * <p>
@@ -40218,7 +39670,7 @@ declare namespace Cesium {
      */
     readonly drawingBufferHeight: number
     /**
-     * The drawingBufferHeight of the underlying GL context.
+     * The drawingBufferWidth of the underlying GL context.
      */
     readonly drawingBufferWidth: number
     /**
@@ -40765,7 +40217,7 @@ declare namespace Cesium {
     /**
      * The input that allows the user to pan around the map. This only applies in 2D and Columbus view modes.
      * <p>
-     * The type came be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
+     * The type can be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
      * and <code>modifier</code> properties with types <code>CameraEventType</code> and {@link KeyboardEventModifier},
      * or an array of any of the preceding.
      * </p>
@@ -40774,7 +40226,7 @@ declare namespace Cesium {
     /**
      * The input that allows the user to zoom in/out.
      * <p>
-     * The type came be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
+     * The type can be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
      * and <code>modifier</code> properties with types <code>CameraEventType</code> and {@link KeyboardEventModifier},
      * or an array of any of the preceding.
      * </p>
@@ -40783,7 +40235,7 @@ declare namespace Cesium {
     /**
      * The input that allows the user to rotate around the globe or another object. This only applies in 3D and Columbus view modes.
      * <p>
-     * The type came be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
+     * The type can be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
      * and <code>modifier</code> properties with types <code>CameraEventType</code> and {@link KeyboardEventModifier},
      * or an array of any of the preceding.
      * </p>
@@ -40792,7 +40244,7 @@ declare namespace Cesium {
     /**
      * The input that allows the user to tilt in 3D and Columbus view or twist in 2D.
      * <p>
-     * The type came be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
+     * The type can be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
      * and <code>modifier</code> properties with types <code>CameraEventType</code> and {@link KeyboardEventModifier},
      * or an array of any of the preceding.
      * </p>
@@ -40801,14 +40253,14 @@ declare namespace Cesium {
     /**
      * The input that allows the user to change the direction the camera is viewing. This only applies in 3D and Columbus view modes.
      * <p>
-     * The type came be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
+     * The type can be a {@link CameraEventType}, <code>undefined</code>, an object with <code>eventType</code>
      * and <code>modifier</code> properties with types <code>CameraEventType</code> and {@link KeyboardEventModifier},
      * or an array of any of the preceding.
      * </p>
      */
     lookEventTypes: CameraEventType | any[] | undefined
     /**
-     * The minimum height the camera must be before picking the terrain instead of the ellipsoid.
+     * The minimum height the camera must be before picking the terrain or scene content instead of the ellipsoid.
      */
     minimumPickingTerrainHeight: number
     /**
@@ -40996,14 +40448,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -41016,52 +40460,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Creates a provider for a single, top-level imagery tile.  The single image is assumed to use a
      * @example
@@ -41617,14 +41015,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -41637,52 +41027,6 @@ declare namespace Cesium {
      * and texture upload time.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -41735,7 +41079,6 @@ declare namespace Cesium {
   export namespace TileMapServiceImageryProvider {
     /**
      * Initialization options for the TileMapServiceImageryProvider constructor
-     * @property [url] - Path to image tiles on server. Deprecated
      * @property [fileExtension = 'png'] - The file extension for images on the server.
      * @property [credit = ''] - A credit for the data source, which is displayed on the canvas.
      * @property [minimumLevel = 0] - The minimum level-of-detail supported by the imagery provider.  Take care when specifying
@@ -41756,7 +41099,6 @@ declare namespace Cesium {
      * Specifying this option will do the same, allowing for loading of these incorrect tilesets.
      */
     type ConstructorOptions = {
-      url?: Resource | string | Promise<Resource> | Promise<string>
       fileExtension?: string
       credit?: Credit | string
       minimumLevel?: number
@@ -41789,10 +41131,10 @@ declare namespace Cesium {
    *        Cesium.Math.toRadians(-60.0),
    *        Cesium.Math.toRadians(40.0))
    * });
-   * @param options - Object describing initialization options
+   * @param [options] - Object describing initialization options
    */
   export class TileMapServiceImageryProvider extends UrlTemplateImageryProvider {
-    constructor(options: TileMapServiceImageryProvider.ConstructorOptions)
+    constructor(options?: TileMapServiceImageryProvider.ConstructorOptions)
     /**
      * Creates a TileMapServiceImageryProvider from the specified url.
      * @example
@@ -41987,10 +41329,6 @@ declare namespace Cesium {
      */
     readonly boundingSphere: BoundingSphere
     /**
-     * Gets the promise that will be resolved when the point cloud renders a frame for the first time.
-     */
-    readonly readyPromise: Promise<TimeDynamicPointCloud>
-    /**
      * Marks the point cloud's {@link TimeDynamicPointCloud#style} as dirty, which forces all
      * points to re-evaluate the style in the next frame.
      */
@@ -42019,7 +41357,6 @@ declare namespace Cesium {
   export namespace UrlTemplateImageryProvider {
     /**
      * Initialization options for the UrlTemplateImageryProvider constructor
-     * @property [options] - Object with the following properties:
      * @property url - The URL template to use to request tiles.  It has the following keywords:
      * <ul>
      *     <li><code>{z}</code>: The level of the tile in the tiling scheme.  Level zero is the root of the quadtree pyramid.</li>
@@ -42104,7 +41441,6 @@ declare namespace Cesium {
      * @property [customTags] - Allow to replace custom keywords in the URL template. The object must have strings as keys and functions as values.
      */
     type ConstructorOptions = {
-      options?: Promise<object> | any
       url: Resource | string
       pickFeaturesUrl?: Resource | string
       urlSchemeZeroPadding?: any
@@ -42268,14 +41604,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -42288,58 +41616,6 @@ declare namespace Cesium {
      * and texture upload time are reduced.
      */
     readonly hasAlphaChannel: boolean
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
-    /**
-     * Reinitializes this instance.  Reinitializing an instance already in use is supported, but it is not
-     * recommended because existing tiles provided by the imagery provider will not be updated.
-     * @param options - Any of the options that may be passed to the {@link UrlTemplateImageryProvider} constructor.
-     */
-    reinitialize(options: Promise<object> | any): void
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -42481,10 +41757,6 @@ declare namespace Cesium {
      */
     readonly ready: boolean
     /**
-     * Gets the promise that will be resolved when the primitive is ready for use.
-     */
-    readonly readyPromise: Promise<VoxelPrimitive>
-    /**
      * Gets the {@link VoxelProvider} associated with this primitive.
      */
     readonly provider: VoxelProvider
@@ -42613,14 +41885,6 @@ declare namespace Cesium {
    */
   export class VoxelProvider {
     constructor()
-    /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets the promise that will be resolved when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<VoxelProvider>
     /**
      * A transform from local space to global space. If undefined, the identity matrix will be used instead.
      */
@@ -42869,14 +42133,6 @@ declare namespace Cesium {
      */
     readonly errorEvent: Event
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -42911,52 +42167,6 @@ declare namespace Cesium {
      * Gets the getFeatureInfo URL of the WMS server.
      */
     readonly getFeatureInfoUrl: Resource | string
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -43155,14 +42365,6 @@ declare namespace Cesium {
      */
     readonly format: string
     /**
-     * Gets a value indicating whether or not the provider is ready for use.
-     */
-    readonly ready: boolean
-    /**
-     * Gets a promise that resolves to true when the provider is ready for use.
-     */
-    readonly readyPromise: Promise<boolean>
-    /**
      * Gets the credit to display when this imagery provider is active.  Typically this is used to credit
      * the source of the imagery.
      */
@@ -43189,52 +42391,6 @@ declare namespace Cesium {
      * Gets or sets an object that contains static dimensions and their values.
      */
     dimensions: any
-    /**
-     * The default alpha blending value of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultAlpha: number | undefined
-    /**
-     * The default alpha blending value on the night side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultNightAlpha: number | undefined
-    /**
-     * The default alpha blending value on the day side of the globe of this provider, with 0.0 representing fully transparent and
-     * 1.0 representing fully opaque.
-     */
-    defaultDayAlpha: number | undefined
-    /**
-     * The default brightness of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0
-     * makes the imagery darker while greater than 1.0 makes it brighter.
-     */
-    defaultBrightness: number | undefined
-    /**
-     * The default contrast of this provider.  1.0 uses the unmodified imagery color.  Less than 1.0 reduces
-     * the contrast while greater than 1.0 increases it.
-     */
-    defaultContrast: number | undefined
-    /**
-     * The default hue of this provider in radians. 0.0 uses the unmodified imagery color.
-     */
-    defaultHue: number | undefined
-    /**
-     * The default saturation of this provider. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the
-     * saturation while greater than 1.0 increases it.
-     */
-    defaultSaturation: number | undefined
-    /**
-     * The default gamma correction to apply to this provider.  1.0 uses the unmodified imagery color.
-     */
-    defaultGamma: number | undefined
-    /**
-     * The default texture minification filter to apply to this provider.
-     */
-    defaultMinificationFilter: TextureMinificationFilter
-    /**
-     * The default texture magnification filter to apply to this provider.
-     */
-    defaultMagnificationFilter: TextureMagnificationFilter
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -43322,45 +42478,22 @@ declare namespace Cesium {
   export function createElevationBandMaterial(options: { scene: Scene; layers: createElevationBandMaterialBand[] }): Material
 
   /**
-   * Creates a {@link Cesium3DTileset} instance for the
-   * {@link https://cesium.com/content/cesium-osm-buildings/|Cesium OSM Buildings}
-   * tileset.
+   * Creates a {@link Cesium3DTileset} instance for the Google Photorealistic 3D Tiles tileset.
    * @example
-   * // Create Cesium OSM Buildings with default styling
-   * const viewer = new Cesium.Viewer('cesiumContainer');
-   * viewer.scene.primitives.add(Cesium.createOsmBuildings());
-   * @example
-   * // Create Cesium OSM Buildings with a custom style highlighting
-   * // schools and hospitals.
-   * viewer.scene.primitives.add(Cesium.createOsmBuildings({
-   *   style: new Cesium.Cesium3DTileStyle({
-   *     color: {
-   *       conditions: [
-   *         ["${feature['building']} === 'hospital'", "color('#0000FF')"],
-   *         ["${feature['building']} === 'school'", "color('#00FF00')"],
-   *         [true, "color('#ffffff')"]
-   *       ]
-   *     }
-   *   })
-   * }));
-   * @param [options] - Construction options. Any options allowed by the {@link Cesium3DTileset} constructor
-   *        may be specified here. In addition to those, the following properties are supported:
-   * @param [options.defaultColor = Color.WHITE] - The default color to use for buildings
-   *        that do not have a color. This parameter is ignored if <code>options.style</code> is specified.
-   * @param [options.style] - The style to use with the tileset. If not
-   *        specified, a default style is used which gives each building or building part a
-   *        color inferred from its OpenStreetMap <code>tags</code>. If no color can be inferred,
-   *        <code>options.defaultColor</code> is used.
-   * @param [options.enableShowOutline = true] - If true, enable rendering outlines. This can be set to false to avoid the additional processing of geometry at load time.
-   * @param [options.showOutline = true] - Whether to show outlines around buildings. When true,
-   *        outlines are displayed. When false, outlines are not displayed.
+   * Cesium.GoogleMaps.defaultApiKey = "your-api-key";
+   *
+   * const viewer = new Cesium.Viewer("cesiumContainer");
+   *
+   * try {
+   *   const tileset = await Cesium.createGooglePhotorealistic3DTileset();
+   *   viewer.scene.primitives.add(tileset));
+   * } catch (error) {
+   *   console.log(`Error creating tileset: ${error}`);
+   * }
+   * @param [key = GoogleMaps.defaultApiKey] - Your API key to access Google Photorealistic 3D Tiles. See {@link https://developers.google.com/maps/documentation/javascript/get-api-key} for instructions on how to create your own key.
+   * @param [options] - An object describing initialization options.
    */
-  export function createOsmBuildings(options?: {
-    defaultColor?: Color
-    style?: Cesium3DTileStyle
-    enableShowOutline?: boolean
-    showOutline?: boolean
-  }): Cesium3DTileset
+  export function createGooglePhotorealistic3DTileset(key?: string, options?: Cesium3DTileset.ConstructorOptions): Promise<Cesium3DTileset>
 
   /**
    * Creates a {@link Cesium3DTileset} instance for the
@@ -43436,25 +42569,6 @@ declare namespace Cesium {
   /**
    * Creates an {@link IonImageryProvider} instance for ion's default global base imagery layer, currently Bing Maps.
    * @example
-   * // Create Cesium World Imagery with default settings
-   * const viewer = new Cesium.Viewer('cesiumContainer', {
-   *     imageryProvider : Cesium.createWorldImagery();
-   * });
-   * @example
-   * // Create Cesium World Imagery with a different style
-   * const viewer = new Cesium.Viewer('cesiumContainer', {
-   *     imageryProvider : Cesium.createWorldImagery({
-   *         style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS
-   *     })
-   * });
-   * @param [options] - Object with the following properties:
-   * @param [options.style = IonWorldImageryStyle] - The style of base imagery, only AERIAL, AERIAL_WITH_LABELS, and ROAD are currently supported.
-   */
-  export function createWorldImagery(options?: { style?: IonWorldImageryStyle }): IonImageryProvider
-
-  /**
-   * Creates an {@link IonImageryProvider} instance for ion's default global base imagery layer, currently Bing Maps.
-   * @example
    * // Create a Cesium World Imagery base layer with default settings
    * try {
    *   const imageryProvider = await Cesium.createWorldImageryAsync();
@@ -43505,8 +42619,7 @@ declare namespace Cesium {
    * @param container - The DOM element or ID that will contain the widget.
    * @param [options] - Object with the following properties:
    * @param [options.clock = new Clock()] - The clock to use to control current time.
-   * @param [options.imageryProvider = createWorldImagery()] - The imagery provider to serve as the base layer. If set to <code>false</code>, no imagery provider will be added. Deprecated.
-   * @param [baseLayer = ImageryLayer.fromWorldImagery()] - The bottommost imagery layer applied to the globe. If set to <code>false</code>, no imagery provider will be added.
+   * @param [options.baseLayer = ImageryLayer.fromWorldImagery()] - The bottommost imagery layer applied to the globe. If set to <code>false</code>, no imagery provider will be added.
    * @param [options.terrainProvider = new EllipsoidTerrainProvider] - The terrain provider.
    * @param [options.terrain] - A terrain object which handles asynchronous terrain provider. Can only specify if options.terrainProvider is undefined.
    * @param [options.skyBox] - The skybox used to render the stars.  When <code>undefined</code>, the default stars are used. If set to <code>false</code>, no skyBox, Sun, or Moon will be added.
@@ -43537,7 +42650,7 @@ declare namespace Cesium {
       container: Element | string,
       options?: {
         clock?: Clock
-        imageryProvider?: ImageryProvider | false
+        baseLayer?: ImageryLayer | false
         terrainProvider?: TerrainProvider
         terrain?: Terrain
         skyBox?: SkyBox | false
@@ -43561,8 +42674,7 @@ declare namespace Cesium {
         requestRenderMode?: boolean
         maximumRenderTimeChange?: number
         msaaSamples?: number
-      },
-      baseLayer?: ImageryLayer | false
+      }
     )
     /**
      * Gets the parent container.
@@ -43592,6 +42704,10 @@ declare namespace Cesium {
      * The terrain provider providing surface geometry for the globe.
      */
     terrainProvider: TerrainProvider
+    /**
+     * Manages the list of credits to display on screen and in the lightbox.
+     */
+    creditDisplay: CreditDisplay
     /**
      * Gets the camera.
      */
@@ -44930,6 +44046,15 @@ declare namespace Cesium {
      * A function to fly to the destination found by a successful geocode.
      */
     static flyToDestination: Geocoder.DestinationFoundFunction
+    /**
+     * @returns true if the object has been destroyed, false otherwise.
+     */
+    isDestroyed(): boolean
+    /**
+     * Destroys the widget.  Should be called if permanently
+     * removing the widget from layout.
+     */
+    destroy(): void
   }
 
   /**
@@ -45648,10 +44773,9 @@ declare namespace Cesium {
      * @property [imageryProviderViewModels = createDefaultImageryProviderViewModels()] - The array of ProviderViewModels to be selectable from the BaseLayerPicker.  This value is only valid if `baseLayerPicker` is set to true.
      * @property [selectedTerrainProviderViewModel] - The view model for the current base terrain layer, if not supplied the first available base layer is used.  This value is only valid if `baseLayerPicker` is set to true.
      * @property [terrainProviderViewModels = createDefaultTerrainProviderViewModels()] - The array of ProviderViewModels to be selectable from the BaseLayerPicker.  This value is only valid if `baseLayerPicker` is set to true.
-     * @property [imageryProvider = createWorldImagery()] - The imagery provider to use.  This value is only valid if `baseLayerPicker` is set to false. Deprecated.
      * @property [baseLayer = ImageryLayer.fromWorldImagery()] - The bottommost imagery layer applied to the globe. If set to <code>false</code>, no imagery provider will be added. This value is only valid if `baseLayerPicker` is set to false.
      * @property [terrainProvider = new EllipsoidTerrainProvider()] - The terrain provider to use
-     * @property [options.terrain] - A terrain object which handles asynchronous terrain provider. Can only specify if options.terrainProvider is undefined.
+     * @property [terrain] - A terrain object which handles asynchronous terrain provider. Can only specify if options.terrainProvider is undefined.
      * @property [skyBox] - The skybox used to render the stars.  When <code>undefined</code>, the default stars are used. If set to <code>false</code>, no skyBox, Sun, or Moon will be added.
      * @property [skyAtmosphere] - Blue sky, and the glow around the Earth's limb.  Set to <code>false</code> to turn it off.
      * @property [fullscreenElement = document.body] - The element or id to be placed into fullscreen mode when the full screen button is pressed.
@@ -45699,9 +44823,9 @@ declare namespace Cesium {
       imageryProviderViewModels?: ProviderViewModel[]
       selectedTerrainProviderViewModel?: ProviderViewModel
       terrainProviderViewModels?: ProviderViewModel[]
-      imageryProvider?: ImageryProvider | false
       baseLayer?: ImageryLayer | false
       terrainProvider?: TerrainProvider
+      terrain?: Terrain
       skyBox?: SkyBox | false
       skyAtmosphere?: SkyAtmosphere | false
       fullscreenElement?: Element | string
@@ -45795,6 +44919,10 @@ declare namespace Cesium {
      * Gets the parent container.
      */
     readonly container: Element
+    /**
+     * Manages the list of credits to display on screen and in the lightbox.
+     */
+    creditDisplay: CreditDisplay
     /**
      * Gets the DOM element for the area at the bottom of the window containing the
      * {@link CreditDisplay} and potentially other things.

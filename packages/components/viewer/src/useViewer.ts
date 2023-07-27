@@ -248,7 +248,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.baseLayerPicker,
-    val => {
+    async val => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const {
@@ -266,9 +266,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewer.imageryLayers.remove(viewer.imageryLayers.get(viewer.imageryLayers.length - 1))
         const url = buildModuleUrl('Assets/Textures/NaturalEarthII')
         const baseLayer = viewer.imageryLayers.addImageryProvider(
-          new Cesium.TileMapServiceImageryProvider({
-            url
-          })
+          compareCesiumVersion(Cesium.VERSION, '1.104')
+            ? await Cesium.TileMapServiceImageryProvider.fromUrl(url)
+            : new Cesium.TileMapServiceImageryProvider({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                url
+              })
         )
         viewer.imageryLayers.lowerToBottom(baseLayer)
       } else if (!defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
@@ -629,6 +633,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         ? ImageryLayer.fromProviderAsync(TileMapServiceImageryProvider.fromUrl(url), {})
         : options.baseLayer
     } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       options.imageryProvider = isEmptyObj(options.imageryProvider) ? new TileMapServiceImageryProvider({ url }) : options.imageryProvider
     }
 

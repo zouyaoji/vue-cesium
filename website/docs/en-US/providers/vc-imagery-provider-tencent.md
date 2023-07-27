@@ -30,7 +30,7 @@ Basic usage of the `vc-imagery-provider-tencent` component.
     </el-row>
     <el-row>
       <el-col>
-        <div class="block" style="display: flex; flex-direction: column;">
+        <div class="block">
           <span class="demonstration">alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
           <span class="demonstration">brightness</span>
@@ -38,13 +38,17 @@ Basic usage of the `vc-imagery-provider-tencent` component.
           <span class="demonstration">contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">switch style</span>
-          <el-select v-model="mapStyle" placeholder="mapStyle">
-            <el-option v-for="item in mapStyleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+          <el-row>
+            <el-select v-model="mapStyle" placeholder="mapStyle">
+              <el-option v-for="item in mapStyleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-row>
           <span class="demonstration" v-if="mapStyle === 'vector'">switch styleId</span>
-          <el-select v-model="styleId" placeholder="styleId" v-if="mapStyle === 'vector'">
-            <el-option v-for="item in styleIdOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+          <el-row>
+            <el-select v-model="styleId" placeholder="styleId" v-if="mapStyle === 'vector'">
+              <el-option v-for="item in styleIdOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-row>
         </div>
       </el-col>
     </el-row>

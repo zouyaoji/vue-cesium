@@ -64,7 +64,9 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   vcInstance.mount = async () => {
     const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
-    // // TODO: 1.104+ 版本废弃了 readyPromise
+    // 1.104+ 版本废弃了 readyPromise
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     primitive?.readyPromise?.then(e => {
       const listener = getInstanceListener(vcInstance, 'readyPromise')
       listener && emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy as VcComponentPublicInstance)

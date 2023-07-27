@@ -30,7 +30,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <div class="block" style="display: flex; flex-direction: column;">
+        <div class="block">
           <span class="demonstration">透明度</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
           <span class="demonstration">亮度</span>
@@ -38,13 +38,17 @@
           <span class="demonstration">对比度</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">切换风格</span>
-          <el-select v-model="mapStyle" placeholder="请选择">
-            <el-option v-for="item in mapStyleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+          <el-row>
+            <el-select v-model="mapStyle" placeholder="请选择">
+              <el-option v-for="item in mapStyleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-row>
           <span class="demonstration" v-if="mapStyle === 'vector'">切换类型</span>
-          <el-select v-model="styleId" placeholder="请选择" v-if="mapStyle === 'vector'">
-            <el-option v-for="item in styleIdOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+          <el-row>
+            <el-select v-model="styleId" placeholder="请选择" v-if="mapStyle === 'vector'">
+              <el-option v-for="item in styleIdOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-row>
         </div>
       </el-col>
     </el-row>

@@ -91,7 +91,6 @@ class SuperMapImageryProvider {
     this._ready = false
     this._readyPromise = defer()
     this._options = options
-    init.call(this)
   }
 
   get url() {
@@ -223,6 +222,10 @@ class SuperMapImageryProvider {
   pickFeatures(x, y, level, longitude, latitude) {
     return undefined
   }
+
+  async init() {
+    await init.call(this)
+  }
 }
 
 let previousError: any = {}
@@ -273,7 +276,8 @@ function buildImageResource(this, x, y, level) {
   return url
 }
 
-function init(this) {
+async function init(this) {
+  console.log('ada')
   const { Resource } = Cesium
   if (this.isTileMap) {
     const promise = Resource.fetchJsonp({
@@ -293,11 +297,11 @@ function init(this) {
   } else {
     // r(c.CREDENTIAL) && (o = c.addToken(o)),
     try {
-      Resource.fetchText({
+      const e = await Resource.fetchText({
         url: this.url + 'config'
-      }).then(e => {
-        onFulfilledRest3D.call(this, e)
       })
+      console.log('ada')
+      onFulfilledRest3D.call(this, e)
     } catch (e) {
       onRejected.call(this)
     }

@@ -44,6 +44,8 @@ export default defineComponent({
       const options: any = primitivesState?.transformProps(props)
       options.style = options.tileStyle
       delete options.tileStyle
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return compareCesiumVersion(Cesium.VERSION, '1.104') ? await Cesium.createOsmBuildingsAsync(options) : Cesium.createOsmBuildings(options)
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))

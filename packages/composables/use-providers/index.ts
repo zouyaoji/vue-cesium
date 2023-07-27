@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
- * @LastEditTime: 2023-07-18 22:19:00
+ * @LastEditTime: 2023-07-28 00:45:31
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\composables\use-providers\index.ts
+ * @FilePath: \vue-cesium@next\packages\composables\use-providers\index.ts
  */
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
@@ -42,7 +42,9 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       vcInstance.renderByParent = true
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
 
-      // TODO: 1.104+ 版本废弃了 readyPromise
+      // 1.104+ 版本废弃了 readyPromise
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       imageryProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', imageryProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
@@ -89,6 +91,8 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
     } else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
@@ -104,6 +108,8 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       return parentVM && parentVM.__updateProvider?.(undefined)
     } else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)

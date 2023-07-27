@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-07-18 21:47:53
+ * @LastEditTime: 2023-07-28 00:40:54
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\cesium-terrain\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { PropType } from 'vue'
@@ -63,6 +63,8 @@ export default defineComponent({
         } else {
           return Cesium.defined(options.url)
             ? new Cesium.CesiumTerrainProvider(options as any)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             : Cesium.createWorldTerrain({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
         }
       }

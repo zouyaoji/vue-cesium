@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-07-25 09:57:43
+ * @LastEditTime: 2023-07-27 21:08:13
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\imagery-layer\src\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
@@ -51,15 +51,17 @@ export default defineComponent({
       const options = commonState.transformProps(props)
 
       if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
-        const url = Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
-        const imageryProvider =
-          props.imageryProvider ||
-          (new Cesium.GridImageryProvider({
-            tileWidth: 256,
-            tileHeight: 256
-          }) as Cesium.ImageryProvider)
-        // const imageryProvider = (props.imageryProvider || Cesium.TileMapServiceImageryProvider.fromUrl(url)) as Cesium.ImageryProvider
-        return Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
+        const imageryProvider = (props.imageryProvider ||
+          Cesium.BingMapsImageryProvider.fromUrl(undefined, {
+            key: ''
+          })) as Cesium.ImageryProvider
+
+        const imageryLayer = Cesium.ImageryLayer.fromProviderAsync(imageryProvider as any, options as any)
+        imageryLayer.errorEvent.addEventListener(error => {
+          // console.log(error)
+        })
+
+        return imageryLayer
       } else {
         const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider
         return new Cesium.ImageryLayer(imageryProvider, options as any)

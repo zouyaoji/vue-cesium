@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:44:46
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-07-27 21:07:48
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\supermap\index.ts
  */
@@ -50,7 +50,9 @@ export default defineComponent({
         providersState.setPropsWatcher(true)
       }
       const options = providersState.transformProps(props)
-      return new Cesium.SuperMapImageryProvider(options)
+      const provider = new Cesium.SuperMapImageryProvider(options)
+      await provider.init()
+      return provider
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }

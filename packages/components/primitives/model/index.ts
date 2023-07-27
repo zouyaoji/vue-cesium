@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2023-04-15 14:34:02
+ * @LastEditTime: 2023-07-28 00:41:06
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\components\primitives\model\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\primitives\model\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType, VNode } from 'vue'
 import type {
@@ -116,6 +116,8 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       const options: any = primitivesState?.transformProps(props)
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return compareCesiumVersion(Cesium.VERSION, '1.104') ? await Cesium.Model.fromGltfAsync(options) : Cesium.Model.fromGltf(options)
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
