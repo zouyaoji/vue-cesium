@@ -21,6 +21,7 @@
         :minimum-cluster-size="minimumClusterSize"
         @cluster-event="onClusterEvent"
         @click="onClicked"
+        @mouseover="onMouseOver"
       ></vc-primitive-cluster>
     </vc-collection-primitive>
 
@@ -57,7 +58,10 @@
       const minimumClusterSize = ref(3)
       // methods
       const onClicked = e => {
-        console.log(e)
+        console.log('onClicked', e)
+      }
+      const onMouseOver = e => {
+        console.log('onMouseOver', e)
       }
       const unload = () => {
         primitiveClusterRef.value.unload()
@@ -80,13 +84,17 @@
               image: 'https://zouyaoji.top/vue-cesium/images/mark-icon.png',
               width: 32,
               height: 32,
-              position: [coordinates[0], coordinates[1]]
+              position: [coordinates[0], coordinates[1]],
+              onClick: (e) => {
+                console.log(e)
+              }
             })
           }
         })
       }
 
       const onClusterEvent = (ids, cluster) => {
+        console.log('asd')
         // 关闭自带的显示聚合数量的标签
         // cluster.label.show = false
         // cluster.billboard.show = true
@@ -102,7 +110,7 @@
 
         cluster.billboard.show = true
         cluster.label.show = false
-        cluster.billboard.id = cluster.label.id
+        cluster.billboard.id = ids
         cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.CENTER
         ids.length >= 300
           ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/300+.png')
@@ -156,6 +164,7 @@
         load,
         show,
         onClicked,
+        onMouseOver,
         onViewerReady,
         billboards,
         pickEvt,

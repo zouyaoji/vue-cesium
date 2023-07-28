@@ -147,13 +147,22 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       const callbackName = item.callbackName
       const pickedFeature = item.pickedFeature
       if (pickedFeature.id) {
-        if (isArray(pickedFeature.id) && pickedFeature.id[0] instanceof Cesium.Entity) {
-          // 数据源集合（集群）
-          eventSourceList.push({
-            callbackName,
-            cesiumObject: pickedFeature.id[0].entityCollection.owner,
-            pickedFeature
-          })
+        if (isArray(pickedFeature.id)) {
+          if (pickedFeature.id[0] instanceof Cesium.Entity) {
+            // 数据源集合（集群）
+            eventSourceList.push({
+              callbackName,
+              cesiumObject: pickedFeature.id[0].entityCollection.owner,
+              pickedFeature
+            })
+          } else {
+            // 图元集群 PrimitiveCluster
+            eventSourceList.push({
+              callbackName,
+              cesiumObject: pickedFeature.primitive.owner,
+              pickedFeature
+            })
+          }
         } else if (pickedFeature.id instanceof Cesium.Entity) {
           // 实体
           eventSourceList.push({

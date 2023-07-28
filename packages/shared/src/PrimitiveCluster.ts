@@ -3,8 +3,8 @@
  * @Date: 2023-05-26 13:30:22
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-06-06 00:57:04
- * @FilePath: \vue-cesium\packages\shared\src\PrimitiveCluster.ts
+ * @LastEditTime: 2023-07-28 14:58:36
+ * @FilePath: \vue-cesium@next\packages\shared\src\PrimitiveCluster.ts
  */
 import { defaultValue } from '@vue-cesium/utils/util'
 import KDBush from 'kdbush'
@@ -488,6 +488,9 @@ function addCluster(position, numPoints, ids, entityCluster) {
   cluster.label.text = numPoints.toLocaleString()
   cluster.label.id = ids
   cluster.billboard.position = cluster.label.position = cluster.point.position = position
+  cluster.billboard.owner = entityCluster
+  cluster.label.owner = entityCluster
+  cluster.point.owner = entityCluster
 
   entityCluster._clusterEvent.raiseEvent(ids, cluster)
 }
