@@ -16,6 +16,8 @@ Basic usage of the `vc-imagery-provider-singletile` component.
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-imagery-provider-singletile
         ref="provider"
+        :height="undefined"
+        :width="undefined"
         url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"
       ></vc-imagery-provider-singletile>
     </vc-layer-imagery>

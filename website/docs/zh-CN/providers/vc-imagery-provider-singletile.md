@@ -17,6 +17,8 @@
       <vc-imagery-provider-singletile
         ref="provider"
         url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"
+        :height="undefined"
+        :width="undefined"
       ></vc-imagery-provider-singletile>
     </vc-layer-imagery>
   </vc-viewer>
