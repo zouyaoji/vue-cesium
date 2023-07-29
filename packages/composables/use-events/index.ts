@@ -18,7 +18,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
   }
   const registerEvents = register => {
     const { viewer, cesiumObject } = vcInstance
-    if (cesiumObject === void 0) {
+    if (cesiumObject === undefined || viewer === undefined) {
       return
     }
     const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
