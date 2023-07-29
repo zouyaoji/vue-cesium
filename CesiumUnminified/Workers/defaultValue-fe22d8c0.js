@@ -1,5 +1,4 @@
-define(['exports'], function (exports) {
-  'use strict'
+define(['exports'], (function (exports) { 'use strict';
 
   /**
    * @function
@@ -15,7 +14,7 @@ define(['exports'], function (exports) {
    * }
    */
   function defined(value) {
-    return value !== undefined && value !== null
+    return value !== undefined && value !== null;
   }
 
   /**
@@ -33,9 +32,9 @@ define(['exports'], function (exports) {
    */
   function defaultValue(a, b) {
     if (a !== undefined && a !== null) {
-      return a
+      return a;
     }
-    return b
+    return b;
   }
 
   /**
@@ -44,8 +43,9 @@ define(['exports'], function (exports) {
    * @type {object}
    * @memberof defaultValue
    */
-  defaultValue.EMPTY_OBJECT = Object.freeze({})
+  defaultValue.EMPTY_OBJECT = Object.freeze({});
 
-  exports.defaultValue = defaultValue
-  exports.defined = defined
-})
+  exports.defaultValue = defaultValue;
+  exports.defined = defined;
+
+}));

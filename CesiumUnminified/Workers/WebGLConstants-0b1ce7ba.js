@@ -1,5 +1,4 @@
-define(['exports'], function (exports) {
-  'use strict'
+define(['exports'], (function (exports) { 'use strict';
 
   /**
    * Enum containing WebGL Constant values by name.
@@ -612,9 +611,10 @@ define(['exports'], function (exports) {
     TEXTURE_IMMUTABLE_LEVELS: 0x82df,
 
     // Extensions
-    MAX_TEXTURE_MAX_ANISOTROPY_EXT: 0x84ff
-  }
-  var WebGLConstants$1 = Object.freeze(WebGLConstants)
+    MAX_TEXTURE_MAX_ANISOTROPY_EXT: 0x84ff,
+  };
+  var WebGLConstants$1 = Object.freeze(WebGLConstants);
 
-  exports.WebGLConstants = WebGLConstants$1
-})
+  exports.WebGLConstants = WebGLConstants$1;
+
+}));

@@ -1,5 +1,4 @@
-define(['./defaultValue-fe22d8c0'], function (defaultValue) {
-  'use strict'
+define(['./defaultValue-fe22d8c0'], (function (defaultValue) { 'use strict';
 
   /**
    * Formats an error object into a String.  If available, uses name, message, and stack
@@ -11,22 +10,22 @@ define(['./defaultValue-fe22d8c0'], function (defaultValue) {
    * @returns {string} A string containing the formatted error.
    */
   function formatError(object) {
-    let result
+    let result;
 
-    const name = object.name
-    const message = object.message
+    const name = object.name;
+    const message = object.message;
     if (defaultValue.defined(name) && defaultValue.defined(message)) {
-      result = `${name}: ${message}`
+      result = `${name}: ${message}`;
     } else {
-      result = object.toString()
+      result = object.toString();
     }
 
-    const stack = object.stack
+    const stack = object.stack;
     if (defaultValue.defined(stack)) {
-      result += `\n${stack}`
+      result += `\n${stack}`;
     }
 
-    return result
+    return result;
   }
 
   // createXXXGeometry functions may return Geometry or a Promise that resolves to Geometry
@@ -34,12 +33,12 @@ define(['./defaultValue-fe22d8c0'], function (defaultValue) {
   // For fully synchronous functions, just wrapping the function call in a Promise doesn't
   // handle errors correctly, hence try-catch
   function callAndWrap(workerFunction, parameters, transferableObjects) {
-    let resultOrPromise
+    let resultOrPromise;
     try {
-      resultOrPromise = workerFunction(parameters, transferableObjects)
-      return resultOrPromise // errors handled by Promise
+      resultOrPromise = workerFunction(parameters, transferableObjects);
+      return resultOrPromise; // errors handled by Promise
     } catch (e) {
-      return Promise.reject(e)
+      return Promise.reject(e);
     }
   }
 
@@ -69,21 +68,23 @@ define(['./defaultValue-fe22d8c0'], function (defaultValue) {
    * @see {@link http://www.w3.org/TR/html5/common-dom-interfaces.html#transferable-objects|Transferable objects}
    */
   function createTaskProcessorWorker(workerFunction) {
-    let postMessage
+    let postMessage;
 
     return function (event) {
-      const data = event.data
+      const data = event.data;
 
-      const transferableObjects = []
+      const transferableObjects = [];
       const responseMessage = {
         id: data.id,
         result: undefined,
-        error: undefined
-      }
+        error: undefined,
+      };
 
-      return Promise.resolve(callAndWrap(workerFunction, data.parameters, transferableObjects))
+      return Promise.resolve(
+        callAndWrap(workerFunction, data.parameters, transferableObjects)
+      )
         .then(function (result) {
-          responseMessage.result = result
+          responseMessage.result = result;
         })
         .catch(function (e) {
           if (e instanceof Error) {
@@ -91,33 +92,36 @@ define(['./defaultValue-fe22d8c0'], function (defaultValue) {
             responseMessage.error = {
               name: e.name,
               message: e.message,
-              stack: e.stack
-            }
+              stack: e.stack,
+            };
           } else {
-            responseMessage.error = e
+            responseMessage.error = e;
           }
         })
         .finally(function () {
           if (!defaultValue.defined(postMessage)) {
-            postMessage = defaultValue.defaultValue(self.webkitPostMessage, self.postMessage)
+            postMessage = defaultValue.defaultValue(self.webkitPostMessage, self.postMessage);
           }
 
           if (!data.canTransferArrayBuffer) {
-            transferableObjects.length = 0
+            transferableObjects.length = 0;
           }
 
           try {
-            postMessage(responseMessage, transferableObjects)
+            postMessage(responseMessage, transferableObjects);
           } catch (e) {
             // something went wrong trying to post the message, post a simpler
             // error that we can be sure will be cloneable
-            responseMessage.result = undefined
-            responseMessage.error = `postMessage failed with error: ${formatError(e)}\n  with responseMessage: ${JSON.stringify(responseMessage)}`
-            postMessage(responseMessage)
+            responseMessage.result = undefined;
+            responseMessage.error = `postMessage failed with error: ${formatError(
+            e
+          )}\n  with responseMessage: ${JSON.stringify(responseMessage)}`;
+            postMessage(responseMessage);
           }
-        })
-    }
+        });
+    };
   }
 
-  return createTaskProcessorWorker
-})
+  return createTaskProcessorWorker;
+
+}));
