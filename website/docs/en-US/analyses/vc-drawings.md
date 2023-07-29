@@ -70,7 +70,7 @@ Basic usage of drawing components.
     </vc-drawings>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @ready-promise="onTilesetReady"
+      @ready="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
       <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
@@ -156,7 +156,7 @@ Basic usage of drawing components.
       toggle(drawingActionInstance) {
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
-      onTilesetReady(tileset, viewer) {
+      onTilesetReady({ cesiumObject: tileset, viewer }) {
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
         const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
         const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)

@@ -71,7 +71,7 @@ ctrl + 右键取消绘制。
     </vc-drawings>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @ready-promise="onTilesetReady"
+      @ready="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
       <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
@@ -176,7 +176,7 @@ ctrl + 右键取消绘制。
       toggle(drawingActionInstance) {
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
-      onTilesetReady(tileset, viewer) {
+      onTilesetReady({ cesiumObject: tileset, viewer }) {
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
         const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
         const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)

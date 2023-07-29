@@ -122,10 +122,9 @@
           const boundingSphereUnion = instances.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.geometry || cur.cesiumObject
             const computGeometry = geometry.constructor.createGeometry(geometry)
-            const boundingSphere =
-              cur.cesiumObject.modelMatrix || cur.vm.$parent.modelMatrix
-                ? BoundingSphere.transform(computGeometry.boundingSphere, cur.cesiumObject.modelMatrix || cur.vm.$parent.modelMatrix)
-                : computGeometry.boundingSphere
+            const boundingSphere = cur.cesiumObject.geometry
+              ? BoundingSphere.transform(computGeometry.boundingSphere, cur.cesiumObject.modelMatrix || cur.vm.proxy.$parent.modelMatrix)
+              : computGeometry.boundingSphere
             return prev === null ? boundingSphere : BoundingSphere.union(prev, boundingSphere)
           }, null)
           instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
@@ -158,12 +157,12 @@
 
 ### 属性
 
-| 属性名      | 类型   | 默认值 | 描述                                                                                                           |
-| ----------- | ------ | ------ | -------------------------------------------------------------------------------------------------------------- |
+| 属性名      | 类型                                      | 默认值 | 描述                                                                                                           |
+| ----------- | ----------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------- |
 | geometry    | Cesium.Geometry \| Cesium.GeometryFactory |        | `required` 指定 geometry。                                                                                     |
-| modelMatrix | Cesium.Matrix4 |        | `optional` 指定将几何图形从模型坐标转换为世界坐标的模型矩阵。                                                  |
-| id          | \*     |        | `optional` 指定与 geometry 关联的信息，拾取时或者 Primitive#getGeometryInstanceAttributes 方法将返回该属性值。 |
-| attributes  | any |        | `optional` 指定每个实例的属性。                                                                                |
+| modelMatrix | Cesium.Matrix4                            |        | `optional` 指定将几何图形从模型坐标转换为世界坐标的模型矩阵。                                                  |
+| id          | \*                                        |        | `optional` 指定与 geometry 关联的信息，拾取时或者 Primitive#getGeometryInstanceAttributes 方法将返回该属性值。 |
+| attributes  | any                                       |        | `optional` 指定每个实例的属性。                                                                                |
 
 ### 事件
 
@@ -175,13 +174,13 @@
 
 ### 方法
 
-| 方法名             | 参数                                    | 描述                                        |
-| ------------------ | --------------------------------------- | ------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
-| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
-| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| 方法名             | 参数                                     | 描述                                        |
+| ------------------ | ---------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>  | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                 | 手动卸载组件。                              |
 | getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
-| getCesiumObject    | () => VcCesiumObject                    | 获取通过该组件加载的 Cesium 对象。          |
+| getCesiumObject    | () => VcCesiumObject                     | 获取通过该组件加载的 Cesium 对象。          |
 
 ### 插槽
 

@@ -86,7 +86,7 @@ Basic usage of VcGeometryBox component.
           const { BoundingSphere } = Cesium
           const boundingSphereUnion = geometries.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
-            const boundingSphere = BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+            const boundingSphere = BoundingSphere.transform(geometry.boundingSphere, cur.vm.proxy.$parent.modelMatrix)
             return prev === null ? boundingSphere : BoundingSphere.union(prev, boundingSphere)
           }, null)
           geometries[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)

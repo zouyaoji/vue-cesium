@@ -154,7 +154,7 @@ Basic usage of VcPrimitiveParticle component.
         var maxLife = 1.0
         var life = normalSize * (maxLife - minLife) + minLife
         return {
-          color: {},
+          color,
           image: this.getImage(),
           startColor: color,
           endColor: color.withAlpha(0.0),

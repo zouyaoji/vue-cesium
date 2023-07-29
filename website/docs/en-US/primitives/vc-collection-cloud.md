@@ -47,9 +47,9 @@ Basic usage of VcCollectionCloud component.
       const load = () => {
         cloudCollectionRef.value.load()
       }
-      const onViewerReady = ({ Cesium, viewer }) => {
+      const onViewerReady = async ({ Cesium, viewer }) => {
         const scene = viewer.scene
-        scene.primitives.add(Cesium.createOsmBuildings())
+        scene.primitives.add(await Cesium.createOsmBuildingsAsync())
         // clouds.value.push({
         //   position: [-122.6908, 45.496, 300],
         //   scale: [1500, 250],

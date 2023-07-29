@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2023-06-07 11:19:50
+ * @LastEditTime: 2023-07-29 18:38:54
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\website\docs\zh-CN\analyses\vc-analyses.md
@@ -37,7 +37,7 @@
     ></vc-analyses>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @ready-promise="onTilesetReady"
+      @ready="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
       <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
@@ -81,7 +81,7 @@
       toggle(drawingActionInstance) {
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
-      onTilesetReady(tileset, viewer) {
+      onTilesetReady({ cesiumObject: tileset, viewer }) {
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
         this.restoreCursorMove = 'auto'

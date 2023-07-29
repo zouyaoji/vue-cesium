@@ -1,5 +1,15 @@
 ## Changelog
 
+### 3.2.1
+
+_2023-07-29_
+
+#### Bug fixes
+
+- Fixed the issue that the `vc-terrain-provider-cesium` component crashing in Cesium 1.107.
+- Fixed the various compatibility issues with Cesium version 1.107.
+- Fixed the issue that the mouse event of the `vc-primitive-cluster` component does not trigger.[#405](https://github.com/zouyaoji/vue-cesium/issues/405).
+
 ### 3.2.0
 
 _2023-06-15_

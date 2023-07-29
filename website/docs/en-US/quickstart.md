@@ -15,14 +15,15 @@ import App from './App.vue'
 import 'vue-cesium/dist/index.css'
 
 const app = createApp(App)
-app.use(VueCesium)
+app.use(VueCesium) // The Cesium version at https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js is used by default
 
 app.mount('#app')
-```
 
-:::tip
-The Cesium version at https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js is used by default
-:::
+// Since the Cesium version update may have broken updates, it is recommended to lock the Cesium version in the production environment.
+// app.use(VueCesium, {
+//   cesiumPath: 'https://unpkg.com/cesium@1.104.0/Build/Cesium/Cesium.js'
+// })
+```
 
 ## On-demand Import
 

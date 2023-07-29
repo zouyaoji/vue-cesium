@@ -61,6 +61,8 @@
       :entities="datasource.entities"
       @cluster-event="onDatasourceClusterEvent"
       @ready="onDatasourceReady"
+      @mouseover="onMouseover"
+      @mouseout="onMouseout"
     >
     </vc-datasource-custom>
     <vc-selection-indicator ref="indicatorRef" @pickEvt="pickEvt"></vc-selection-indicator>
@@ -273,6 +275,12 @@
         window.picked = e
         console.log(e)
       }
+      const onMouseover = e => {
+        console.log('onMouseover', e)
+      }
+      const onMouseout = e => {
+        console.log('onMouseout', e)
+      }
       const indicatorRef = ref(null)
       window.indicatorRef = indicatorRef
       return {
@@ -290,7 +298,9 @@
         clusterSch,
         morphComplete,
         pickEvt,
-        indicatorRef
+        indicatorRef,
+        onMouseover,
+        onMouseout
       }
     }
   }

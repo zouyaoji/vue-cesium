@@ -86,8 +86,8 @@
           const { BoundingSphere } = Cesium
           const boundingSphereUnion = geometries.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
-            const boundingSphere = cur.vm.$parent.modelMatrix
-              ? BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+            const boundingSphere = cur.vm.proxy.$parent.modelMatrix
+              ? BoundingSphere.transform(geometry.boundingSphere, cur.vm.proxy.$parent.modelMatrix)
               : geometry.boundingSphere
             return prev === null ? boundingSphere : BoundingSphere.union(prev, boundingSphere)
           }, null)

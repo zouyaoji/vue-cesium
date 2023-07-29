@@ -1,5 +1,17 @@
 ## 更新日志
 
+### 3.2.1
+
+_2023-07-29_
+
+#### Bug 修复
+
+- 修复 `vc-terrain-provider-cesium` 组件在Cesium 1.107版本崩溃的问题。
+- 修复 Cesium 1.107 版本的各种不兼容问题。
+- 修复 `vc-primitive-cluster` 组件鼠标事件不触发的问题。[#405](https://github.com/zouyaoji/vue-cesium/issues/405).
+
+#### Bug 修复
+
 ### 3.2.0
 
 _2023-06-15_

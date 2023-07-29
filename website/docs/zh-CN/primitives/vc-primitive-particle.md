@@ -55,6 +55,7 @@
         this.list.indexOf(el) === -1 && this.list.push(el)
       },
       onViewerReady({ Cesium, viewer }) {
+        window.vm = this
         var scene = viewer.scene
         scene.debugShowFramesPerSecond = true
         Cesium.Math.setRandomNumberSeed(315)
@@ -108,6 +109,7 @@
           var z = Cesium.Math.randomBetween(zMin, zMax)
           var offset = new Cesium.Cartesian3(x, y, z)
           var color = Cesium.Color.fromRandom(colorOptions[i % colorOptions.length])
+          console.log(color)
 
           var bursts = []
           for (var j = 0; j < 3; ++j) {
@@ -154,7 +156,7 @@
         var maxLife = 1.0
         var life = normalSize * (maxLife - minLife) + minLife
         return {
-          color: {},
+          color,
           image: this.getImage(),
           startColor: color,
           endColor: color.withAlpha(0.0),

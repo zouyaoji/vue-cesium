@@ -122,10 +122,9 @@ Basic usage of geometry instance components.
           const boundingSphereUnion = instances.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.geometry || cur.cesiumObject
             const computGeometry = geometry.constructor.createGeometry(geometry)
-            const boundingSphere =
-              cur.cesiumObject.modelMatrix || cur.vm.$parent.modelMatrix
-                ? BoundingSphere.transform(computGeometry.boundingSphere, cur.cesiumObject.modelMatrix || cur.vm.$parent.modelMatrix)
-                : computGeometry.boundingSphere
+            const boundingSphere = cur.cesiumObject.geometry
+              ? BoundingSphere.transform(computGeometry.boundingSphere, cur.cesiumObject.modelMatrix || cur.vm.proxy.$parent.modelMatrix)
+              : computGeometry.boundingSphere
             return prev === null ? boundingSphere : BoundingSphere.union(prev, boundingSphere)
           }, null)
           instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
@@ -158,12 +157,12 @@ Basic usage of geometry instance components.
 
 ### Props
 
-| Name        | Type   | Default | Description                                                                                            |
-| ----------- | ------ | ------- | ------------------------------------------------------------------------------------------------------ |
+| Name        | Type                                      | Default | Description                                                                                            |
+| ----------- | ----------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
 | geometry    | Cesium.Geometry \| Cesium.GeometryFactory |         | `optional` The geometry to instance.                                                                   |
-| modelMatrix | Cesium.Matrix4 |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
-| id | any |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
-| attributes  | any |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
+| modelMatrix | Cesium.Matrix4                            |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
+| id          | any                                       |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
+| attributes  | any                                       |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
 
 ### Events
 
@@ -175,13 +174,13 @@ Basic usage of geometry instance components.
 
 ### Methods
 
-| Name               | Parameters                              | Description                                     |
-| ------------------ | --------------------------------------- | ----------------------------------------------- |
-| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
-| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
-| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| Name               | Parameters                               | Description                                     |
+| ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>  | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\>  | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                 | Destroy the loaded component manually.          |
 | getCreatingPromise | () => Promise\<boolean \| VcReadyObject> | Get the creatingPromise.                        |
-| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| getCesiumObject    | () => VcCesiumObject                     | Get the Cesium object loaded by this component. |
 
 ### Slots
 
