@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2023-02-02 00:41:00
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-07-29 23:21:45
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\README.zh.md
+ * @FilePath: \vue-cesium\README.zh.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -30,14 +30,19 @@
 </p>
 
 <p align="center">Vue for Cesium - 基于 Vue 3，面向开发者的 CesiumJS 组件库。</p>
-
-- 💪 Vue 3.0 Composition API
-- 🔥 Written in TypeScript
-- 🎉 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
-
 <p align="center">
   <img width="600px" src="https://zouyaoji.top/vue-cesium/images/certified-dev-banner-light-sm_01.png">
 </p>
+
+- 💪 Vue 3 组合式 API
+- 🔥 用 TypeScript 编写
+
+## 高光时刻
+
+- 🌎 2022-06-08 用 vue-cesium 开发的月球项目上了20220608期[新闻联播](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29)21分52秒处。[截图](https://zouyaoji.top/vue-cesium/images/cctv.png)
+- 🎉 2022-12-10 通过了Cesium开发者认证。[Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+- 🚀 2023-04-25 突破 1000 star。
+
 
 ## 开始 | [English](./README.md)
 

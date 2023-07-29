@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-12-22 10:30:18
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-07-30 01:19:17
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\README.md
+ * @FilePath: \vue-cesium\README.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -33,11 +33,17 @@
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
-- 🎉 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+
 
 <p align="center">
   <img width="600px" src="https://zouyaoji.top/vue-cesium/images/certified-dev-banner-light-sm_01.png">
 </p>
+
+## Highlight Moments
+
+- 🌎 2022-06-08 The moon project developed with vue-cesium was published in the 20220608 issue [News Broadcast] (https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt. EbD5Beq0unIQ.29) at 21:52. [Screenshot](https://zouyaoji.top/vue-cesium/images/cctv.png)
+- 🎉 2022-12-10 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+- 🚀 2023-04-25 Break through 1000 stars.
 
 ## Getting Started | [简体中文](./README.zh.md)
 
