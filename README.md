@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2023-07-30 10:00:06
+ * @LastEditTime: 2023-07-30 10:31:34
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\README.md
@@ -23,9 +23,9 @@
   <a href="https://github.com/zouyaoji/vue-cesium/blob/dev/LICENSE" target="_blank">
     <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
   </a>
-  <!-- <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev" target="_blank">
-    <img src="https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic">
-  </a> -->
+  <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
+    <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=plastic" />
+  </a>
   <br>
 </p>
 
@@ -40,9 +40,9 @@
 
 ## Highlight Moments | [简体中文](./README.zh.md)
 
-- 🌎 2022-06-08 The moon project developed with vue-cesium was published in the 20220608 issue [CCTV News](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29) at 21:52. [Screenshot](https://zouyaoji.top/vue-cesium/images/cctv.png)
-- 🎉 2022-12-10 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
-- 🚀 2023-04-25 Break through 1000 stars.
+- 🌎 2022-06-08 The moon project developed with vue-cesium was featured in the [CCTV News Broadcast](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29) on June 8, 2022, at 21 minutes and 52 seconds. [Screenshot](https://zouyaoji.top/vue-cesium/images/cctv.png).
+- 🚀 2022-12-10 Joined the [Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/).
+- 🎉 2023-04-25 The GitHub project `vue-cesium` has reached over 1000 [stars](https://github.com/zouyaoji/vue-cesium/stargazers)! Thank you all for your support and contributions.
 
 ## Getting Started
 

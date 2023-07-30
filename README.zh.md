@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2023-07-30 10:00:38
+ * @LastEditTime: 2023-07-30 10:32:02
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\README.zh.md
@@ -26,6 +26,9 @@
   <!-- <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev" target="_blank">
     <img src="https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic">
   </a> -->
+  <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
+    <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=plastic" />
+  </a>
   <br>
 </p>
 
@@ -40,8 +43,8 @@
 ## 高光时刻 | [English](./README.md)
 
 - 🌎 2022-06-08 用 vue-cesium 开发的月球项目上了 20220608 期[CCTV 新闻联播](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29)21 分 52 秒处。[截图](https://zouyaoji.top/vue-cesium/images/cctv.png)
-- 🎉 2022-12-10 通过了 Cesium 开发者认证。[Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
-- 🚀 2023-04-25 突破 1000 star。
+- 🚀 2022-12-10 通过了 Cesium 开发者认证。[Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+- 🎉 2023-04-25 GitHub 项目 `vue-cesium` 已经突破 1000 个 Star！感谢大家的支持和贡献!
 
 ## 开始
 
