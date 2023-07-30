@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2023-07-29 23:21:45
+ * @LastEditTime: 2023-07-30 10:00:38
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\README.zh.md
@@ -37,14 +37,13 @@
 - 💪 Vue 3 组合式 API
 - 🔥 用 TypeScript 编写
 
-## 高光时刻
+## 高光时刻 | [English](./README.md)
 
-- 🌎 2022-06-08 用 vue-cesium 开发的月球项目上了20220608期[新闻联播](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29)21分52秒处。[截图](https://zouyaoji.top/vue-cesium/images/cctv.png)
-- 🎉 2022-12-10 通过了Cesium开发者认证。[Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
+- 🌎 2022-06-08 用 vue-cesium 开发的月球项目上了 20220608 期[CCTV 新闻联播](https://tv.cctv.com/2022/06/08/VIDEazqfs4AIBuVEvBzob6DA220608.shtml?spm=C31267.PXDaChrrDGdt.EbD5Beq0unIQ.29)21 分 52 秒处。[截图](https://zouyaoji.top/vue-cesium/images/cctv.png)
+- 🎉 2022-12-10 通过了 Cesium 开发者认证。[Cesium Certified Developer Program](https://cesium.com/learn/certified-developer-directory/)
 - 🚀 2023-04-25 突破 1000 star。
 
-
-## 开始 | [English](./README.md)
+## 开始
 
 请访问 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
