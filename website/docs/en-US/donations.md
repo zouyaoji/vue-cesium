@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2023-08-01 10:56:42
+ * @LastEditTime: 2023-08-01 11:15:08
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
@@ -11,7 +11,7 @@
 
 ### Sponsor vue-cesium
 
-- `vue-cesium` adopts the MIT open-source license, committing to keep the framework itself and official documentation permanently open and free. However, the daily updates and community operations of the framework require a significant amount of effort. Relying solely on goodwill donations is not sustainable in the long run. If `vue-cesium` has been helpful to you, you can show your friendly support for `vue-cesium`.
+- `vue-cesium` adopts the MIT open-source license, promising that the framework itself and official documentation will be permanently open and free. However, the daily updates and community operation of the framework require a significant amount of effort. If `vue-cesium` has been helpful to you, you can kindly show your support for `vue-cesium`.
 
 
 - <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
