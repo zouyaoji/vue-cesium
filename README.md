@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2023-07-30 10:31:34
+ * @LastEditTime: 2023-08-01 11:01:36
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\README.md
+ * @FilePath: \vue-cesium@next\README.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -89,7 +89,17 @@ Copyright (c) 2018-present, zouyaoji 370681295@qq.com
 
 ## Sponsors
 
-[See](https://zouyaoji.top/vue-cesium/#/en-US/donations)
+`vue-cesium` adopts the MIT open-source license, committing to keep the framework itself and official documentation permanently open and free. However, the daily updates and community operations of the framework require a significant amount of effort. Relying solely on goodwill donations is not sustainable in the long run. If `vue-cesium` has been helpful to you, you can show your friendly support for `vue-cesium`.
+
+- <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
+
+- WeChat / AliPay
+  <div style="display: flex">
+    <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
+    <img alt="alipay" title="alipay" src="https://zouyaoji.top/vue-cesium/images/alipay.png">
+  </div>
+
+- [donation list](https://zouyaoji.top/vue-cesium/#/en-US/donations)
 
 ## Contributors
 

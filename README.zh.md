@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2023-07-30 10:32:02
+ * @LastEditTime: 2023-08-01 11:05:07
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\README.zh.md
+ * @FilePath: \vue-cesium@next\README.zh.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -91,7 +91,20 @@ Copyright (c) 2018-present, zouyaoji 370681295@qq.com
 
 ## 捐赠者
 
-[链接](https://zouyaoji.top/vue-cesium/#/zh-CN/donations)
+`vue-cesium` 采用 MIT 开源协议，承诺框架本身与官网文档永久免费开放， 但是框架的日常更新与社区运营需要付出大量的精力，靠爱发电难以长久，如果 `vue-cesium` 帮助到了您，您可以友情支持一下 `vue-cesium`。
+
+- <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
+
+- 微信 / 支付宝
+
+  <div style="display: flex">
+    <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
+    <img alt="alipay" title="alipay" src="https://zouyaoji.top/vue-cesium/images/alipay.png">
+  </div>
+
+- 江山父老能容我，不使人间造孽钱
+
+- [捐赠列表](https://zouyaoji.top/vue-cesium/#/zh-CN/donations)
 
 ## 贡献者
 

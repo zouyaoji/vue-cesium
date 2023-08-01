@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2023-07-30 09:57:43
+ * @LastEditTime: 2023-08-01 10:59:31
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\website\docs\zh-CN\donations.md
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
 -->
 
 ## 赞助
@@ -12,6 +12,8 @@
 ### 赞助 vue-cesium
 
 - `vue-cesium` 采用 MIT 开源协议，承诺框架本身与官网文档永久免费开放， 但是框架的日常更新与社区运营需要付出大量的精力，靠爱发电难以长久，如果 `vue-cesium` 帮助到了您，您可以友情支持一下 `vue-cesium`。
+
+- <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
 
 - 微信 / 支付宝
 
