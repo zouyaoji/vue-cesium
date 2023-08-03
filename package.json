@@ -124,7 +124,7 @@
     "cz-git": "^1.6.1",
     "czg": "^1.6.1",
     "echarts": "^5.2.1",
-    "element-plus": "^2.0.5",
+    "element-plus": "^2.1.0",
     "element-theme-chalk": "^2.15.6",
     "esbuild": "0.14.20",
     "eslint": "^8.23.1",
