@@ -1,19 +1,21 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2023-07-30 09:57:51
+ * @LastEditTime: 2023-08-01 11:15:08
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\website\docs\en-US\donations.md
+ * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
 -->
 
 ## Donation
 
 ### Sponsor vue-cesium
 
-- `vue-cesium` adopts the MIT open source agreement, and promises that the framework itself and the official website documents will be permanently free and open, but the daily update of the framework and community operations require a lot of effort, and it is difficult to generate electricity by love. If `vue-cesium` helps you , you can support `vue-cesium`.
+- `vue-cesium` adopts the MIT open-source license, promising that the framework itself and official documentation will be permanently open and free. However, the daily updates and community operation of the framework require a significant amount of effort. If `vue-cesium` has been helpful to you, you can kindly show your support for `vue-cesium`.
+
 
 - <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
+
 - WeChat / AliPay
   <div style="display: flex">
     <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
