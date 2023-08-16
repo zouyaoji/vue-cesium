@@ -118,6 +118,8 @@ export default defineComponent({
           } else {
             rootStyle.display = 'block'
           }
+        } else if (!Cesium.defined(canvasPosition)){
+          rootStyle.display = 'none'
         }
 
         lastCanvasPosition.value = canvasPosition
