@@ -58,7 +58,8 @@ export default defineComponent({
             }
 
             modifies.forEach(modify => {
-              const modifyBillboard = billboardCollection._billboards.find(v => v.id === modify.oldOptions.id)
+              // TODO: 连续绘制 Pin 切换时 billboardCollection._billboards 中有undefined的对象。
+              const modifyBillboard = billboardCollection._billboards.find(v => v?.id === modify.oldOptions.id)
               modifyBillboard &&
                 Object.keys(modify.newOptions).forEach(prop => {
                   if (modify.oldOptions[prop] !== modify.newOptions[prop]) {

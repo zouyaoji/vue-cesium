@@ -3,7 +3,7 @@
  * @Date: 2023-05-31 16:51:54
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-06-06 01:29:54
+ * @LastEditTime: 2023-08-16 22:46:10
  * @FilePath: \vue-cesium\packages\components\primitives\primitive-cluster\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, PropType, watch, WatchStopHandle } from 'vue'
@@ -163,7 +163,7 @@ export default defineComponent({
             }
 
             modifies.forEach(modify => {
-              const modifyBillboard = billboardCollection._billboards.find(v => v.id === modify.oldOptions.id)
+              const modifyBillboard = billboardCollection._billboards.find(v => v?.id === modify.oldOptions.id)
               modifyBillboard &&
                 Object.keys(modify.newOptions).forEach(prop => {
                   if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
