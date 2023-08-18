@@ -1,5 +1,18 @@
 ## 更新日志
 
+### 3.2.2
+
+_2023-08-18_
+
+#### 新特性
+
+- 增加流动效果材质。[#423](https://github.com/zouyaoji/vue-cesium/issues/423)
+
+#### Bug 修复
+
+- 修复 `vc-overlay-html` 组件在 `viewer.zoomTo` 之后表现不正常的问题。[#429](https://github.com/zouyaoji/vue-cesium/issues/429)
+- 修复 `vc-drawings` 组件在连续绘制模式下从 `pin` 切换到其他action报错的问题。
+
 ### 3.2.1
 
 _2023-07-29_

@@ -13,9 +13,20 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-primitive :appearance="appearance" @click="onClicked">
+    <vc-primitive
+      :appearance="{ type: 'MaterialAppearance',
+      options: {
+        material: {
+          fabric: {
+            type: 'VcLineFlow',
+            uniforms: { image: '/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
+          }
+        }
+      }}"
+      @click="onClicked"
+    >
       <vc-geometry-instance :attributes="attributes">
-        <vc-geometry-wall ref="geometryRef" :positions="positions" :vertexFormat="vertexFormat"></vc-geometry-wall>
+        <vc-geometry-wall ref="geometryRef" :positions="positions"></vc-geometry-wall>
       </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
@@ -71,6 +82,7 @@
       const onViewerReady = ({ Cesium, viewer }) => {
         console.log('onViewerReady')
         const { ColorGeometryInstanceAttribute, PerInstanceColorAppearance, Cartesian3, MaterialAppearance } = Cesium
+
         appearance.value = new PerInstanceColorAppearance({
           flat: true
         })
@@ -121,14 +133,14 @@
 
 ### 属性
 
-| 属性名         | 类型   | 默认值 | 描述                                              |
-| -------------- | ------ | ------ | ------------------------------------------------- |
-| positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
-| maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
-| minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
-| ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定参考椭球体。                       |
-| vertexFormat | Cesium.VertexFormat |        | `optional` 指定顶点属性渲染方式。                 |
+| 属性名         | 类型                | 默认值 | 描述                                              |
+| -------------- | ------------------- | ------ | ------------------------------------------------- |
+| positions      | Array               |        | `required` 指定 wall 位置数组。                   |
+| granularity    | number              |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
+| maximumHeights | Array               |        | `optional` 指定 wall 顶部的高度数组。             |
+| minimumHeights | Array               |        | `optional` 指定 wall 底部的高度数组。             |
+| ellipsoid      | Cesium.Ellipsoid    |        | `optional` 指定参考椭球体。                       |
+| vertexFormat   | Cesium.VertexFormat |        | `optional` 指定顶点属性渲染方式。                 |
 
 ### 事件
 
@@ -146,12 +158,12 @@
 
 ### VcGeometryWallOutline 属性
 
-| 属性名         | 类型   | 默认值 | 描述                                              |
-| -------------- | ------ | ------ | ------------------------------------------------- |
-| positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
-| maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
-| minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
+| 属性名         | 类型             | 默认值 | 描述                                              |
+| -------------- | ---------------- | ------ | ------------------------------------------------- |
+| positions      | Array            |        | `required` 指定 wall 位置数组。                   |
+| granularity    | number           |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
+| maximumHeights | Array            |        | `optional` 指定 wall 顶部的高度数组。             |
+| minimumHeights | Array            |        | `optional` 指定 wall 底部的高度数组。             |
 | ellipsoid      | Cesium.Ellipsoid |        | `optional` 指定参考椭球体。                       |
 
 ### VcGeometryWallOutline 事件

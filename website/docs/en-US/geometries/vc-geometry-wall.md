@@ -13,9 +13,20 @@ Basic usage of VcGeometryWall component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-primitive :appearance="appearance" @click="onClicked">
+    <vc-primitive
+      :appearance="{ type: 'MaterialAppearance',
+      options: {
+        material: {
+          fabric: {
+            type: 'VcLineFlow',
+            uniforms: { image: '/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
+          }
+        }
+      }}"
+      @click="onClicked"
+    >
       <vc-geometry-instance :attributes="attributes">
-        <vc-geometry-wall ref="geometryRef" :positions="positions" :vertexFormat="vertexFormat"></vc-geometry-wall>
+        <vc-geometry-wall ref="geometryRef" :positions="positions"></vc-geometry-wall>
       </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">

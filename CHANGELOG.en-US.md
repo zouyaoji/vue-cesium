@@ -1,5 +1,18 @@
 ## Changelog
 
+### 3.2.2
+
+_2023-08-18_
+
+#### New feature
+
+- Added `VcLineFlow` material. [#423](https://github.com/zouyaoji/vue-cesium/issues/423)
+
+#### Bug fixes
+
+- Fixed the issue that the `vc-overlay-html` component behaves incorrectly after `viewer.zoomTo` method. [#429](https://github.com/zouyaoji/vue-cesium/issues/429)
+- Fixed the issue that `vc-drawings` component reporting an error when switching from `pin` to other actions in continuous drawing mode.
+
 ### 3.2.1
 
 _2023-07-29_
@@ -13,7 +26,6 @@ _2023-07-29_
 ### 3.2.0
 
 _2023-06-15_
-
 
 #### Bug fixes
 

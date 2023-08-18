@@ -108,6 +108,18 @@ Basic usage of VcDatasourceCustom component.
             semiMajorAxis: 200000.0,
             material: { fabric: { type: 'VcCircleWave', uniforms: { count: 2, color: 'red' } } }
           }
+        },
+        {
+          position: [113, 28.5, 400],
+          wall: {
+            positions: [112.5, 28, 1000, 113, 28, 1000, 113, 29, 1000, 112.5, 29, 1000, 112.5, 29, 1000],
+            material: {
+              fabric: {
+                type: 'VcLineFlow',
+                uniforms: { image: '/images/textures/arrow.png', color: 'yellow', repeat: { x: 30, y: 1 }, speed: 10 }
+              }
+            }
+          }
         }
       ])
       const clusterSch = ref(true)

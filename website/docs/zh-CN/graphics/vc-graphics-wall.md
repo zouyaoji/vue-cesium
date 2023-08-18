@@ -25,15 +25,23 @@
       <vc-graphics-wall
         ref="wall2"
         :positions="[-107,43,100000,-97,43,100000,-97,40,100000,-107,40,100000,-107,43,100000]"
-        material="green"
-        :outline="true"
+        :material="{
+          fabric: {
+            type: 'VcLineFlow',
+            uniforms: { image: '/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
+          }
+        }"
       ></vc-graphics-wall>
     </vc-entity>
     <vc-entity description="Hello VueCesium">
       <vc-graphics-wall
         :positions="[[-115,50],[-112,50],[-107.5,50],[-105,50],[-102.5,50],[-100,50],[-97.5,50],[-95,50],[-92.5,50],[-90,50]]"
-        :material="[0,0,125,125]"
-        :outline="true"
+        :material="{
+          fabric: {
+            type: 'VcLineFlow',
+            uniforms: { image: '/images/textures/arrow.png', color: 'yellow', repeat: { x: 30, y: 1 }, speed: 10 }
+          }
+        }"
         outlineColor="black"
         :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000]"
         :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000]"
