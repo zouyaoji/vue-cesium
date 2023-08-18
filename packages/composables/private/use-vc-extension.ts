@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-25 16:05:16
- * @LastEditTime: 2022-05-13 09:57:29
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-18 01:08:33
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\private\use-vc-extension.ts
+ * @FilePath: \vue-cesium\packages\composables\private\use-vc-extension.ts
  */
-import { RectangleExtend, ShadowMapShaderExtend } from '@vue-cesium/shared'
+import { MaterialExtend, RectangleExtend, ShadowMapShaderExtend } from '@vue-cesium/shared'
 
-const vcExtends = [RectangleExtend, ShadowMapShaderExtend]
+const vcExtends = [RectangleExtend, ShadowMapShaderExtend, MaterialExtend]
 
 export default function useVcExtension() {
   const invokeExtensions = (viewer: Cesium.Viewer) => {

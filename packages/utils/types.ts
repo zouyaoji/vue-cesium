@@ -82,6 +82,11 @@ interface MaterialOption {
       offset?: number
       duration?: number
       count?: number
+      gradient?: number
+      axisY?: boolean
+      mixt?: boolean
+      speed?: number
+      time?: number
     }
   }
   strict?: boolean

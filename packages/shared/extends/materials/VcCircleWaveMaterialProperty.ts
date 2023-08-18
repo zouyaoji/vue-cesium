@@ -1,12 +1,14 @@
+import VcBaseMaterialProperty from './VcBaseMaterialProperty'
+
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2023-05-23 13:14:12
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-06-14 17:47:05
- * @FilePath: \vue-cesium@next\packages\shared\materials\VcCircleWaveMaterialProperty.ts
+ * @LastEditTime: 2023-08-18 01:11:19
+ * @FilePath: \vue-cesium\packages\shared\extends\materials\VcCircleWaveMaterialProperty.ts
  */
-export default class VcCircleWaveMaterialProperty {
+export default class VcCircleWaveMaterialProperty extends VcBaseMaterialProperty {
   _definitionChanged: Cesium.Event<(...args: any[]) => void>
   _color: Cesium.ConstantProperty
   _duration: number
@@ -14,6 +16,7 @@ export default class VcCircleWaveMaterialProperty {
   _gradient: number
   _time: number
   constructor(options) {
+    super(options)
     const { Event, defaultValue } = Cesium
 
     if (!Object.getOwnPropertyDescriptor(VcCircleWaveMaterialProperty.prototype, 'color')) {
@@ -37,8 +40,6 @@ export default class VcCircleWaveMaterialProperty {
       this._gradient = 1
     }
     this._time = new Date().getTime()
-
-    this._init()
   }
 
   get isConstant() {
@@ -106,58 +107,5 @@ export default class VcCircleWaveMaterialProperty {
   equals(other) {
     const reData = this === other || (other instanceof VcCircleWaveMaterialProperty && Cesium.Property['equals'](this._color, other._color))
     return reData
-  }
-
-  _init() {
-    const CircleWaveMaterialType = 'VcCircleWave'
-    const CircleWaveSource = `
-      czm_material czm_getMaterial(czm_materialInput materialInput) {
-      czm_material material = czm_getDefaultMaterial(materialInput);
-      material.diffuse = 1.5 * color.rgb;
-      vec2 st = materialInput.st;
-      vec3 str = materialInput.str;
-      float dis = distance(st, vec2(0.5, 0.5));
-      float per = fract(time);
-      if (abs(str.z) > 0.001) {
-        discard;
-      }
-      if (dis > 0.5) {
-        discard;
-      } else {
-        float perDis = 0.5 / count;
-        float disNum;
-        float bl = .0;
-        for (int i = 0; i <= 9; i++) {
-          if (float(i) <= count) {
-            disNum = perDis *float(i) - dis + per / count;
-            if (disNum > 0.0) {
-              if (disNum < perDis) {
-                bl = 1.0 - disNum / perDis;
-              } else if(disNum - perDis < perDis) {
-                bl = 1.0 - abs(1.0 - disNum / perDis);
-              }
-              material.alpha = pow(bl, gradient);
-            }
-          }
-        }
-      }
-      return material;
-    }`
-
-    Cesium.Material['_materialCache'].addMaterial(CircleWaveMaterialType, {
-      fabric: {
-        type: CircleWaveMaterialType,
-        uniforms: {
-          color: new Cesium.Color(1, 0, 0, 1),
-          time: 1,
-          count: 1,
-          gradient: 0.1
-        },
-        source: CircleWaveSource
-      },
-      translucent() {
-        return true
-      }
-    })
   }
 }

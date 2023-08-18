@@ -49,7 +49,7 @@ import type {
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
-import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared/materials'
+import { VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty } from '@vue-cesium/shared'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
@@ -424,7 +424,9 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     PolylineOutlineMaterialProperty,
     StripeMaterialProperty,
     StripeOrientation,
-    defaultValue
+    defaultValue,
+    Cartesian2,
+    Material
   } = Cesium
 
   if (
@@ -441,7 +443,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     val instanceof PolylineGlowMaterialProperty ||
     val instanceof PolylineOutlineMaterialProperty ||
     val instanceof StripeMaterialProperty ||
-    val instanceof VcCircleWaveMaterialProperty
+    val instanceof VcCircleWaveMaterialProperty ||
+    val instanceof VcLineFlowMaterialProperty
     // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
@@ -522,9 +525,20 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
       case 'VcCircleWave': {
         return new VcCircleWaveMaterialProperty({
           duration: defaultValue(value.fabric.uniforms.duration, 3000),
-          gradient: defaultValue(value.fabric.uniforms.duration, 0.5),
+          gradient: defaultValue(value.fabric.uniforms.gradient, 0.5),
           color: makeColor(defaultValue(value.fabric.uniforms.color, Color.RED)),
           count: defaultValue(value.fabric.uniforms.count, 3)
+        })
+      }
+      case 'VcLineFlow': {
+        return new VcLineFlowMaterialProperty({
+          image: defaultValue(value.fabric.uniforms.image, Material.DefaultImageId),
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 1, 1, 1))),
+          repeat: makeCartesian2(defaultValue(value.fabric.uniforms.repeat, new Cartesian2(1, 1))),
+          axisY: defaultValue(value.fabric.uniforms.axisY, false),
+          mixt: defaultValue(value.fabric.uniforms.mixt, false),
+          speed: defaultValue(value.fabric.uniforms.speed, 10),
+          time: defaultValue(value.fabric.uniforms.time, -1)
         })
       }
     }
@@ -1079,4 +1093,37 @@ export function heightToLevel(altitude: number) {
 
 export function compareCesiumVersion(a, b, operator: CompareOperator = '>=') {
   return compare(a, b, operator)
+}
+
+export function getCesiumColor(inputColor, fallbackColor, timestamp?) {
+  const { JulianDate, Color } = Cesium
+  const now = JulianDate.now()
+  if (inputColor) {
+    if (typeof inputColor.getValue === 'function') {
+      inputColor = inputColor.getValue(timestamp || now)
+    }
+    if (typeof inputColor === 'string') {
+      return Color.fromCssColorString(inputColor)
+    } else if (typeof inputColor === 'function') {
+      return getCesiumColor(inputColor(timestamp), fallbackColor)
+    } else {
+      return inputColor
+    }
+  } else {
+    return fallbackColor
+  }
+}
+
+export function getCesiumValue(value, valueType, timestamp) {
+  const { JulianDate, Property } = Cesium
+  const now = JulianDate.now()
+  if (!value) return value
+  if (valueType) {
+    if (value instanceof valueType) return value
+    else {
+      if (value instanceof Property && (value as any)._value instanceof valueType) return (value as any)._value
+    }
+  }
+  if (isFunction(value.getValue)) return value.getValue(timestamp || now)
+  return value
 }
