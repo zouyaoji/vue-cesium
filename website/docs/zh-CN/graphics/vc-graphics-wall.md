@@ -39,7 +39,7 @@
         :material="{
           fabric: {
             type: 'VcLineFlow',
-            uniforms: { image: '/images/textures/arrow.png', color: 'yellow', repeat: { x: 30, y: 1 }, speed: 10 }
+            uniforms: { image: 'https://zouyaoji.top/vue-cesium/images/textures/arrow.png', color: 'yellow', repeat: { x: 30, y: 1 }, speed: 10 }
           }
         }"
         outlineColor="black"
