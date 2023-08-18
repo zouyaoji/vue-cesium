@@ -25,7 +25,12 @@ Basic usage of the VcGraphicsWall component.
       <vc-graphics-wall
         ref="wall2"
         :positions="[-107,43,100000,-97,43,100000,-97,40,100000,-107,40,100000,-107,43,100000]"
-        material="green"
+        :material="{
+          fabric: {
+            type: 'VcLineFlow',
+            uniforms: { image: 'https://zouyaoji.top/vue-cesium/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
+          }
+        }"
         :outline="true"
       ></vc-graphics-wall>
     </vc-entity>

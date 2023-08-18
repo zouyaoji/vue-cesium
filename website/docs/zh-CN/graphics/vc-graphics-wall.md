@@ -28,7 +28,7 @@
         :material="{
           fabric: {
             type: 'VcLineFlow',
-            uniforms: { image: '/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
+            uniforms: { image: 'https://zouyaoji.top/vue-cesium/images/textures/fence.png', axisY: true, color: '#bdf700', repeat: { x: 5, y: 1 }, speed: 5 }
           }
         }"
       ></vc-graphics-wall>
