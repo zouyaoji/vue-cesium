@@ -209,6 +209,7 @@ export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
 export function isNumber(v) {
   return typeof v === 'number' && isFinite(v)
 }
+
 // reexport from lodash & vue shared
 export {
   hasOwn,
@@ -226,4 +227,37 @@ export {
   isFunction,
   camelCase,
   addCustomProperty
+}
+
+export function getCesiumColor(inputColor, fallbackColor, timestamp?) {
+  const { JulianDate, Color } = Cesium
+  const now = JulianDate.now()
+  if (inputColor) {
+    if (typeof inputColor.getValue === 'function') {
+      inputColor = inputColor.getValue(timestamp || now)
+    }
+    if (typeof inputColor === 'string') {
+      return Color.fromCssColorString(inputColor)
+    } else if (typeof inputColor === 'function') {
+      return getCesiumColor(inputColor(timestamp), fallbackColor)
+    } else {
+      return inputColor
+    }
+  } else {
+    return fallbackColor
+  }
+}
+
+export function getCesiumValue(value, valueType, timestamp) {
+  const { JulianDate, Property } = Cesium
+  const now = JulianDate.now()
+  if (!value) return value
+  if (valueType) {
+    if (value instanceof valueType) return value
+    else {
+      if (value instanceof Property && (value as any)._value instanceof valueType) return (value as any)._value
+    }
+  }
+  if (isFunction(value.getValue)) return value.getValue(timestamp || now)
+  return value
 }

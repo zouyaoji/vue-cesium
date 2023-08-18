@@ -3,10 +3,10 @@
  * @Date: 2023-08-17 23:55:24
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-08-18 01:26:43
+ * @LastEditTime: 2023-08-18 20:42:09
  * @FilePath: \vue-cesium\packages\shared\extends\materials\VcLineFlowMaterialProperty.ts
  */
-import { getCesiumColor, getCesiumValue } from '@vue-cesium/utils/cesium-helpers'
+import { getCesiumColor, getCesiumValue } from '@vue-cesium/utils/util'
 import VcBaseMaterialProperty from './VcBaseMaterialProperty'
 
 export default class VcLineFlowMaterialProperty extends VcBaseMaterialProperty {
