@@ -1,12 +1,57 @@
-define(['./defaultValue-fe22d8c0', './FrustumGeometry-87ce8622', './Transforms-e2d4a55a', './Matrix3-41c58dde', './Check-6ede7e26', './Math-0a2ac845', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './Plane-4c3d403b', './VertexFormat-030f11ff'], (function (defaultValue, FrustumGeometry, Transforms, Matrix3, Check, Math, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, GeometryAttribute, GeometryAttributes, Plane, VertexFormat) { 'use strict';
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.109
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
 
-  function createFrustumGeometry(frustumGeometry, offset) {
-    if (defaultValue.defined(offset)) {
-      frustumGeometry = FrustumGeometry.FrustumGeometry.unpack(frustumGeometry, offset);
-    }
-    return FrustumGeometry.FrustumGeometry.createGeometry(frustumGeometry);
+import {
+  FrustumGeometry_default
+} from "./chunk-VSCXSFHE.js";
+import "./chunk-2NLMZNJI.js";
+import "./chunk-PGB3EFR7.js";
+import "./chunk-N5MMDSD2.js";
+import "./chunk-UGZGTV5K.js";
+import "./chunk-5U4UHRZ2.js";
+import "./chunk-FE2XG3SS.js";
+import "./chunk-PW5CA4MJ.js";
+import "./chunk-KAFF2QX3.js";
+import "./chunk-XJCTFTBM.js";
+import "./chunk-PWDYKCNC.js";
+import "./chunk-527JG4D7.js";
+import "./chunk-FVDTKX3F.js";
+import "./chunk-BT6YIL2N.js";
+import "./chunk-UN7AK64D.js";
+import {
+  defined_default
+} from "./chunk-QVJ6IRKV.js";
+
+// packages/engine/Source/Workers/createFrustumGeometry.js
+function createFrustumGeometry(frustumGeometry, offset) {
+  if (defined_default(offset)) {
+    frustumGeometry = FrustumGeometry_default.unpack(frustumGeometry, offset);
   }
-
-  return createFrustumGeometry;
-
-}));
+  return FrustumGeometry_default.createGeometry(frustumGeometry);
+}
+var createFrustumGeometry_default = createFrustumGeometry;
+export {
+  createFrustumGeometry_default as default
+};

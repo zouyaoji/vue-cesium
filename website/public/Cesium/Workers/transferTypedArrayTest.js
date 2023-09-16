@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.107.2
+ * Version 1.109
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -23,4 +23,4 @@
  * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-typeof self>"u"&&(self={}),self.onmessage=function(a){const e=a.data.array,s=self.webkitPostMessage||self.postMessage;try{s({array:e},[e.buffer])}catch{s({})}};
+self.onmessage=function(a){let s=a.data.array,e=self.webkitPostMessage||self.postMessage;try{e({array:s},[s.buffer])}catch{e({})}};

@@ -6676,6 +6676,11 @@ declare namespace Cesium {
      * @returns true if the browser supports a WebGL2 rendering context, false if not.
      */
     function supportsWebgl2(scene: Scene): boolean
+    /**
+     * Detects whether the current browser supports ECMAScript modules in web workers.
+     * @returns true if the browser supports ECMAScript modules in web workers.
+     */
+    function supportsEsmWebWorkers(): boolean
   }
 
   /**
@@ -16438,7 +16443,7 @@ declare namespace Cesium {
     scheduleTask(parameters: any, transferableObjects?: object[]): Promise<object> | undefined
     /**
      * Posts a message to a web worker with configuration to initialize loading
-     * and compiling a web assembly module asychronously, as well as an optional
+     * and compiling a web assembly module asynchronously, as well as an optional
      * fallback JavaScript module to use if Web Assembly is not supported.
      * @param [webAssemblyOptions] - An object with the following properties:
      * @param [webAssemblyOptions.modulePath] - The path of the web assembly JavaScript wrapper module.
@@ -16446,7 +16451,7 @@ declare namespace Cesium {
      * @param [webAssemblyOptions.fallbackModulePath] - The path of the fallback JavaScript module to use if web assembly is not supported.
      * @returns A promise that resolves to the result when the web worker has loaded and compiled the web assembly module and is ready to process tasks.
      */
-    initWebAssemblyModule(webAssemblyOptions?: { modulePath?: string; wasmBinaryFile?: string; fallbackModulePath?: string }): Promise<object>
+    initWebAssemblyModule(webAssemblyOptions?: { modulePath?: string; wasmBinaryFile?: string; fallbackModulePath?: string }): Promise<any>
     /**
      * Returns true if this object was destroyed; otherwise, false.
      * <br /><br />
@@ -17547,10 +17552,10 @@ declare namespace Cesium {
      * at a given time.  This function may return undefined if the data necessary to
      * do the transformation is not yet loaded.
      * @example
-     * // Transform a point from the ICRF axes to the Fixed axes.
+     * // Transform a point from the Fixed axes to the ICRF axes.
      * const now = Cesium.JulianDate.now();
      * const pointInFixed = Cesium.Cartesian3.fromDegrees(0.0, 0.0);
-     * const fixedToIcrf = Cesium.Transforms.computeIcrfToFixedMatrix(now);
+     * const fixedToIcrf = Cesium.Transforms.computeFixedToIcrfMatrix(now);
      * let pointInInertial = new Cesium.Cartesian3();
      * if (Cesium.defined(fixedToIcrf)) {
      *     pointInInertial = Cesium.Matrix3.multiplyByVector(fixedToIcrf, pointInFixed, pointInInertial);
@@ -18504,7 +18509,7 @@ declare namespace Cesium {
    * @param value - The object.
    * @returns Returns true if the object is defined, returns false otherwise.
    */
-  export function defined(value: any): boolean
+  export function defined<Type>(value: Type): value is NonNullable<Type>
 
   /**
    * Destroys an object.  Each of the object's functions, including functions in its prototype,
@@ -33251,8 +33256,8 @@ declare namespace Cesium {
    * on a {@link Globe}.
    * @example
    * // Add an OpenStreetMaps layer
-   * const imageryLayer = new Cesium.ImageryLayer(OpenStreetMapImageryProvider({
-   *   url: "https://a.tile.openstreetmap.org/"
+   * const imageryLayer = new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
+   *   url: "https://tile.openstreetmap.org/"
    * })),
    * scene.imageryLayers.add(imageryLayer);
    * @example
@@ -37138,8 +37143,9 @@ declare namespace Cesium {
   export namespace OpenStreetMapImageryProvider {
     /**
      * Initialization options for the OpenStreetMapImageryProvider constructor
-     * @property [url = 'https://a.tile.openstreetmap.org'] - The OpenStreetMap server url.
+     * @property [url = 'https://tile.openstreetmap.org'] - The OpenStreetMap server url.
      * @property [fileExtension = 'png'] - The file extension for images on the server.
+     * @property [retinaTiles = false] - When true, request tiles at the 2x resolution for retina displays.
      * @property [rectangle = Rectangle.MAX_VALUE] - The rectangle of the layer.
      * @property [minimumLevel = 0] - The minimum level-of-detail supported by the imagery provider.
      * @property [maximumLevel] - The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit.
@@ -37149,6 +37155,7 @@ declare namespace Cesium {
     type ConstructorOptions = {
       url?: string
       fileExtension?: string
+      retinaTiles?: boolean
       rectangle?: Rectangle
       minimumLevel?: number
       maximumLevel?: number
@@ -37164,7 +37171,7 @@ declare namespace Cesium {
    * {@link http://wiki.openstreetmap.org/wiki/Tile_usage_policy|Tile Usage Policy}.
    * @example
    * const osm = new Cesium.OpenStreetMapImageryProvider({
-   *     url : 'https://a.tile.openstreetmap.org/'
+   *     url : 'https://tile.openstreetmap.org/'
    * });
    * @param options - Object describing initialization options
    */
@@ -40397,8 +40404,9 @@ declare namespace Cesium {
   }
 
   /**
-   * Provides a single, top-level imagery tile.  The single image is assumed to use a
-   * {@link GeographicTilingScheme}.
+   * Provides a single, top-level imagery tile.  The single image is assumed to be in
+   * the Geographic projection (i.e. WGS84 / EPSG:4326),
+   * and will be rendered using a {@link GeographicTilingScheme}.
    * @param options - Object describing initialization options
    */
   export class SingleTileImageryProvider {
@@ -40466,8 +40474,9 @@ declare namespace Cesium {
      * const provider = await SingleTileImageryProvider.fromUrl("https://yoururl.com/image.png");
      * @param url - The url for the tile
      * @param [options] - Object describing initialization options.
+     * @returns The resolved SingleTileImageryProvider.
      */
-    static fromUrl(url: Resource | string, options?: SingleTileImageryProvider.fromUrlOptions): void
+    static fromUrl(url: Resource | string, options?: SingleTileImageryProvider.fromUrlOptions): Promise<SingleTileImageryProvider>
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -42974,7 +42983,7 @@ declare namespace Cesium {
 
   /**
    * <span style="display: block; text-align: center;">
-   * <img src="Images/BaseLayerPicker.png" width="264" height="287" alt="" />
+   * <img src="Images/BaseLayerPicker.png" width="264" alt="BaseLayerPicker" />
    * <br />BaseLayerPicker with its drop-panel open.
    * </span>
    * <br /><br />
@@ -42984,6 +42993,9 @@ declare namespace Cesium {
    * it replaces the current terrain provider.  Each item in the available providers list contains a name,
    * a representative icon, and a tooltip to display more information when hovered. The list is initially
    * empty, and must be configured before use, as illustrated in the below example.
+   * <br /><br />
+   * By default, the BaseLayerPicker uses a default list of example providers for demonstration purposes.
+   * Notably some of these providers, such as <a href="https://developers.arcgis.com" target="_blank">Esri ArcGIS</a> and <a href="https://docs.stadiamaps.com/ target="_blank">Stadia Maps</a>, have seperate terms of service and require authentication for production use.
    * @example
    * // In HTML head, include a link to the BaseLayerPicker.css stylesheet,
    * // and in the body, include: <div id="baseLayerPickerContainer"
@@ -42999,7 +43011,7 @@ declare namespace Cesium {
    * map of the world.\nhttp://www.openstreetmap.org",
    *      creationFunction: function() {
    *          return new Cesium.OpenStreetMapImageryProvider({
-   *              url: "https://a.tile.openstreetmap.org/"
+   *              url: "https://tile.openstreetmap.org/"
    *          });
    *      }
    *  }));
@@ -43180,7 +43192,9 @@ declare namespace Cesium {
       | ImageryProvider[]
       | TerrainProvider[]
       | Promise<TerrainProvider>
+      | Promise<ImageryProvider>
       | Promise<TerrainProvider[]>
+      | Promise<ImageryProvider[]>
   }
 
   /**
@@ -44874,8 +44888,8 @@ declare namespace Cesium {
    *     // Hide the base layer picker
    *     baseLayerPicker: false,
    *     // Use OpenStreetMaps
-   *     baseLayer: new Cesium.ImageryLayer(OpenStreetMapImageryProvider({
-   *       url: "https://a.tile.openstreetmap.org/"
+   *     baseLayer: new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
+   *       url: "https://tile.openstreetmap.org/"
    *     })),
    *     skyBox: new Cesium.SkyBox({
    *       sources: {

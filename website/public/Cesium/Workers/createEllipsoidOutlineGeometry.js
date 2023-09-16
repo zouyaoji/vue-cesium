@@ -1,1 +1,26 @@
-define(["./defaultValue-f6d5e6da","./EllipsoidOutlineGeometry-52005f3f","./Transforms-f17097e5","./Matrix3-b2351961","./Math-355606c6","./Matrix2-7a8e9daf","./RuntimeError-9b4ce3fb","./combine-0c102d93","./ComponentDatatype-ab629b88","./WebGLConstants-7f557f93","./GeometryAttribute-9c1a6bab","./GeometryAttributes-1e4ddcd2","./GeometryOffsetAttribute-2579b8d2","./IndexDatatype-a9b1bc18"],(function(e,t,r,i,n,o,u,a,l,m,s,f,y,d){"use strict";return function(r,i){return e.defined(r.buffer)&&(r=t.EllipsoidOutlineGeometry.unpack(r,i)),t.EllipsoidOutlineGeometry.createGeometry(r)}}));
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.109
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
+
+import{a as t}from"./chunk-UJ35IVNP.js";import"./chunk-YYCOBWZH.js";import"./chunk-67OQHZOZ.js";import"./chunk-FUN3J34G.js";import"./chunk-A4RD4IQP.js";import"./chunk-NNIY7VTE.js";import"./chunk-NX64RCXJ.js";import"./chunk-5EDTRNG5.js";import"./chunk-IO6LETQ6.js";import"./chunk-C6Y3PRDH.js";import"./chunk-LI57NJAL.js";import"./chunk-IBAO62UG.js";import"./chunk-3NARV6MR.js";import"./chunk-P44SUSQU.js";import"./chunk-FUATUYJ3.js";import{e as n}from"./chunk-ODUTJJQ5.js";function u(r,e){return n(r.buffer,e)&&(r=t.unpack(r,e)),t.createGeometry(r)}var a=u;export{a as default};
