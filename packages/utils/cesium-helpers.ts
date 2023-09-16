@@ -45,7 +45,8 @@ import type {
   VcHeadingPitchRoll,
   VcHeadingPitchRange,
   VcPlane,
-  CesiumPlane
+  CesiumPlane,
+  VcImageBasedLighting
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
@@ -1093,4 +1094,32 @@ export function heightToLevel(altitude: number) {
 
 export function compareCesiumVersion(a, b, operator: CompareOperator = '>=') {
   return compare(a, b, operator)
+}
+
+export function makeImageBasedLighting(options: VcImageBasedLighting) {
+  const { ImageBasedLighting, defined } = Cesium
+
+  if (options instanceof Cesium.ImageBasedLighting) {
+    return options
+  }
+
+  const imageBasedLighting = new ImageBasedLighting()
+
+  if (imageBasedLighting.imageBasedLightingFactor) {
+    imageBasedLighting.imageBasedLightingFactor = makeCartesian2(options.imageBasedLightingFactor) as Cesium.Cartesian2
+  }
+
+  if (imageBasedLighting.sphericalHarmonicCoefficients) {
+    imageBasedLighting.sphericalHarmonicCoefficients = makeCartesian3Array(options.sphericalHarmonicCoefficients) as Cesium.Cartesian3[]
+  }
+
+  if (imageBasedLighting.luminanceAtZenith) {
+    imageBasedLighting.luminanceAtZenith = Number(options.luminanceAtZenith)
+  }
+
+  if (defined(imageBasedLighting.specularEnvironmentMaps)) {
+    imageBasedLighting.specularEnvironmentMaps = options.specularEnvironmentMaps
+  }
+
+  return imageBasedLighting
 }

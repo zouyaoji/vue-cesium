@@ -17,7 +17,8 @@ import {
   makeTranslationRotationScale,
   makeQuaternion,
   makeOptions,
-  makeAppearance
+  makeAppearance,
+  makeImageBasedLighting
 } from './cesium-helpers'
 import type { PropType } from 'vue'
 import type {
@@ -35,7 +36,8 @@ import type {
   VcPolygonHierarchy,
   VcMaterial,
   VcBoundingRectangle,
-  VcPlane
+  VcPlane,
+  VcImageBasedLighting
 } from './types'
 
 // 下面属性作为实体加载时 可以传 Function
@@ -1634,6 +1636,15 @@ const specularEnvironmentMaps = {
   specularEnvironmentMaps: String
 }
 
+const imageBasedLighting = {
+  imageBasedLighting: {
+    type: Object as PropType<VcImageBasedLighting>,
+    watcherOptions: {
+      cesiumObjectBuilder: makeImageBasedLighting
+    }
+  }
+}
+
 /**
  * @const {Boolean} backFaceCulling mixin
  */
@@ -1742,6 +1753,7 @@ export {
   colors,
   enableMouseEvent,
   backFaceCulling,
+  imageBasedLighting,
   specularEnvironmentMaps,
   sphericalHarmonicCoefficients,
   luminanceAtZenith,

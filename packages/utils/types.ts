@@ -809,6 +809,27 @@ export type VcPrimitiveClusterOptions = {
   clusterPoints?: boolean
 }
 
+export type VcImageBasedLightingOpts = {
+  /**
+   * Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.
+   */
+  imageBasedLightingFactor?: VcCartesian2
+  /**
+   * The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map.
+   */
+  luminanceAtZenith?: number
+  /**
+   * The third order spherical harmonic coefficients used for the diffuse color of image-based lighting.
+   */
+  sphericalHarmonicCoefficients?: CesiumCartesian3Array
+  /**
+   * A URL to a KTX2 file that contains a cube map of the specular lighting and the convoluted specular mipmaps.
+   */
+  specularEnvironmentMaps?: string
+}
+
+export type VcImageBasedLighting = VcImageBasedLightingOpts | Cesium.ImageBasedLighting
+
 export {
   AnyObject,
   VcCamera,

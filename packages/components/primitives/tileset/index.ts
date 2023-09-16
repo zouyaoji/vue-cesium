@@ -4,6 +4,7 @@ import type {
   VcCartesian2,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
+  VcImageBasedLighting,
   VcPickEvent,
   VcPosition,
   VcReadyObject
@@ -26,7 +27,9 @@ import {
   debugWireframe,
   debugShowBoundingVolume,
   customShader,
-  enableMouseEvent
+  enableMouseEvent,
+  imageBasedLighting,
+  outlineColor
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
@@ -45,11 +48,28 @@ export const tilesetPrimitiveProps = {
   url: [String, Object] as PropType<string | Promise<string> | Promise<Cesium.Resource> | Cesium.Resource>,
   ...show,
   ...modelMatrix,
+  modelUpAxis: {
+    type: Number,
+    // default: 1 // Cesium.Axis.Y
+  },
+  modelForwardAxis: {
+    type: Number,
+    // default: 0 // Cesium.Axis.X
+  },
   ...shadows,
   ...maximumScreenSpaceError,
+  // Deprecated
   maximumMemoryUsage: {
     type: Number,
-    default: 512
+    // default: 512
+  },
+  cacheBytes: {
+    type: Number,
+    default: 536870912
+  },
+  maximumCacheOverflowBytes: {
+    type: Number,
+    default: 536870912
   },
   cullWithChildrenBounds: {
     type: Boolean,
@@ -145,11 +165,17 @@ export const tilesetPrimitiveProps = {
   ...luminanceAtZenith,
   ...sphericalHarmonicCoefficients,
   ...specularEnvironmentMaps,
+  ...imageBasedLighting,
   ...backFaceCulling,
+  enableShowOutline: {
+    type: Boolean,
+    default: true
+  },
   showOutline: {
     type: Boolean,
     default: true
   },
+  ...outlineColor,
   vectorClassificationOnly: {
     type: Boolean,
     default: false
@@ -165,6 +191,20 @@ export const tilesetPrimitiveProps = {
   instanceFeatureIdIndex: {
     type: Number,
     default: 0
+  },
+  featureIdLabel: {
+    type: [String, Number]
+  },
+  instanceFeatureIdLabel: {
+    type: [String, Number]
+  },
+  splitDirection: {
+    type: Number as PropType<Cesium.SplitDirection>,
+    default: 0 //Cesium.SplitDirection.NONE
+  },
+  projectTo2D: {
+    type: Boolean,
+    default: false
   },
   showCreditsOnScreen: {
     type: Boolean,
@@ -295,6 +335,14 @@ export type VcPrimitiveTilesetProps = {
    */
   modelMatrix?: Cesium.Matrix4
   /**
+   * Which axis is considered up when loading models for tile contents.
+   */
+  modelUpAxis?: number | Cesium.Axis.Y
+  /**
+   * Which axis is considered forward when loading models for tile contents.
+   */
+  modelForwardAxis?: number | Cesium.Axis.X
+  /**
    * Determines whether the tileset casts or receives shadows from light sources.
    */
   shadows?: number | Cesium.ShadowMode
@@ -308,6 +356,14 @@ export type VcPrimitiveTilesetProps = {
    * Default value: 512
    */
   maximumMemoryUsage?: number
+  /**
+   * The size (in bytes) to which the tile cache will be trimmed, if the cache contains tiles not needed for the current view.
+   */
+  cacheBytes?: number
+  /**
+   * The maximum additional memory (in bytes) to allow for cache headroom, if more than Cesium3DTileset#cacheBytes are needed for the current view.
+   */
+  maximumCacheOverflowBytes?: number
   /**
    * Optimization option. Whether to cull tiles using the union of their children bounding volumes.
    * Default value: true
@@ -459,10 +515,18 @@ export type VcPrimitiveTilesetProps = {
    */
   specularEnvironmentMaps?: string
   /**
+   * The properties for managing image-based lighting for this tileset.
+   */
+  imageBasedLighting?: VcImageBasedLighting
+  /**
    * Whether to cull back-facing geometry. When true, back face culling is determined by the glTF material's doubleSided property; when false, back face culling is disabled.
    * Default value: true
    */
   backFaceCulling?: boolean
+  /**
+   * Whether to enable outlines for models using the CESIUM_primitive_outline extension. This can be set to false to avoid the additional processing of geometry at load time. When false, the showOutlines and outlineColor options are ignored.
+   */
+  enableShowOutline?: boolean
   /**
    * Whether to display the outline for models using the CESIUM_primitive_outline extension. When true, outlines are displayed. When false, outlines are not displayed.
    * Default value: true
@@ -488,6 +552,22 @@ export type VcPrimitiveTilesetProps = {
    * Default value: 0
    */
   instanceFeatureIdIndex?: number
+  /**
+   * Label of the feature ID set to use for picking and styling. For EXT_mesh_features, this is the feature ID's label property, or "featureId_N" (where N is the index in the featureIds array) when not specified. EXT_feature_metadata did not have a label field, so such feature ID sets are always labeled "featureId_N" where N is the index in the list of all feature Ids, where feature ID attributes are listed before feature ID textures. If featureIdLabel is an integer N, it is converted to the string "featureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
+   */
+  featureIdLabel?: number | string
+  /**
+   * Label of the instance feature ID set used for picking and styling. If instanceFeatureIdLabel is set to an integer N, it is converted to the string "instanceFeatureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.
+   */
+  instanceFeatureIdLabel?: number | string
+  /**
+   * The SplitDirection split to apply to this tileset.
+   */
+  splitDirection?: number | Cesium.SplitDirection
+  /**
+   * Whether to accurately project the tileset to 2D. If this is true, the tileset will be projected accurately to 2D, but it will use more memory to do so. If this is false, the tileset will use less memory and will still render in 2D / CV mode, but its projected positions may be inaccurate. This cannot be set after the tileset has loaded.
+   */
+  projectTo2D?: boolean
   /**
    * Whether to display the credits of this tileset on screen.
    * Default value: false
