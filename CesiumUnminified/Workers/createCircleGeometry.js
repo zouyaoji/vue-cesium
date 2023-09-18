@@ -1,213 +1,196 @@
-define(['./Matrix3-41c58dde', './Check-6ede7e26', './defaultValue-fe22d8c0', './EllipseGeometry-16b3736a', './VertexFormat-030f11ff', './Math-0a2ac845', './Transforms-e2d4a55a', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './EllipseGeometryLibrary-21262a28', './GeometryAttribute-8fcff0d5', './GeometryAttributes-ad136444', './GeometryInstance-34d9e21e', './GeometryOffsetAttribute-9ad0019c', './GeometryPipeline-70d69a43', './AttributeCompression-f9f6c717', './EncodedCartesian3-57415c8a', './IndexDatatype-2643aa47', './IntersectionTests-85350792', './Plane-4c3d403b'], (function (Matrix3, Check, defaultValue, EllipseGeometry, VertexFormat, Math, Transforms, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, EllipseGeometryLibrary, GeometryAttribute, GeometryAttributes, GeometryInstance, GeometryOffsetAttribute, GeometryPipeline, AttributeCompression, EncodedCartesian3, IndexDatatype, IntersectionTests, Plane) { 'use strict';
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.109
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
 
-  /**
-   * A description of a circle on the ellipsoid. Circle geometry can be rendered with both {@link Primitive} and {@link GroundPrimitive}.
-   *
-   * @alias CircleGeometry
-   * @constructor
-   *
-   * @param {object} options Object with the following properties:
-   * @param {Cartesian3} options.center The circle's center point in the fixed frame.
-   * @param {number} options.radius The radius in meters.
-   * @param {Ellipsoid} [options.ellipsoid=Ellipsoid.WGS84] The ellipsoid the circle will be on.
-   * @param {number} [options.height=0.0] The distance in meters between the circle and the ellipsoid surface.
-   * @param {number} [options.granularity=0.02] The angular distance between points on the circle in radians.
-   * @param {VertexFormat} [options.vertexFormat=VertexFormat.DEFAULT] The vertex attributes to be computed.
-   * @param {number} [options.extrudedHeight=0.0] The distance in meters between the circle's extruded face and the ellipsoid surface.
-   * @param {number} [options.stRotation=0.0] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
-   *
-   * @exception {DeveloperError} radius must be greater than zero.
-   * @exception {DeveloperError} granularity must be greater than zero.
-   *
-   * @see CircleGeometry.createGeometry
-   * @see Packable
-   *
-   * @example
-   * // Create a circle.
-   * const circle = new Cesium.CircleGeometry({
-   *   center : Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
-   *   radius : 100000.0
-   * });
-   * const geometry = Cesium.CircleGeometry.createGeometry(circle);
-   */
-  function CircleGeometry(options) {
-    options = defaultValue.defaultValue(options, defaultValue.defaultValue.EMPTY_OBJECT);
-    const radius = options.radius;
+import {
+  EllipseGeometry_default
+} from "./chunk-AXGQUPXA.js";
+import "./chunk-H6MBQ4W4.js";
+import "./chunk-V2LKNJGT.js";
+import "./chunk-HCZR75II.js";
+import "./chunk-P7PWX5HR.js";
+import "./chunk-I5MQWHBR.js";
+import "./chunk-A6EA6KIE.js";
+import {
+  VertexFormat_default
+} from "./chunk-2NLMZNJI.js";
+import "./chunk-QIS3NB7U.js";
+import "./chunk-PGB3EFR7.js";
+import "./chunk-TF5D2H7B.js";
+import "./chunk-N5MMDSD2.js";
+import "./chunk-UGZGTV5K.js";
+import "./chunk-5U4UHRZ2.js";
+import "./chunk-FE2XG3SS.js";
+import "./chunk-PW5CA4MJ.js";
+import "./chunk-KAFF2QX3.js";
+import {
+  Cartesian3_default,
+  Ellipsoid_default
+} from "./chunk-XJCTFTBM.js";
+import "./chunk-PWDYKCNC.js";
+import "./chunk-527JG4D7.js";
+import "./chunk-FVDTKX3F.js";
+import {
+  defaultValue_default
+} from "./chunk-BT6YIL2N.js";
+import {
+  Check_default
+} from "./chunk-UN7AK64D.js";
+import {
+  defined_default
+} from "./chunk-QVJ6IRKV.js";
 
-    //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.number("radius", radius);
-    //>>includeEnd('debug');
-
-    const ellipseGeometryOptions = {
-      center: options.center,
-      semiMajorAxis: radius,
-      semiMinorAxis: radius,
-      ellipsoid: options.ellipsoid,
-      height: options.height,
-      extrudedHeight: options.extrudedHeight,
-      granularity: options.granularity,
-      vertexFormat: options.vertexFormat,
-      stRotation: options.stRotation,
-      shadowVolume: options.shadowVolume,
-    };
-    this._ellipseGeometry = new EllipseGeometry.EllipseGeometry(ellipseGeometryOptions);
-    this._workerName = "createCircleGeometry";
+// packages/engine/Source/Core/CircleGeometry.js
+function CircleGeometry(options) {
+  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  const radius = options.radius;
+  Check_default.typeOf.number("radius", radius);
+  const ellipseGeometryOptions = {
+    center: options.center,
+    semiMajorAxis: radius,
+    semiMinorAxis: radius,
+    ellipsoid: options.ellipsoid,
+    height: options.height,
+    extrudedHeight: options.extrudedHeight,
+    granularity: options.granularity,
+    vertexFormat: options.vertexFormat,
+    stRotation: options.stRotation,
+    shadowVolume: options.shadowVolume
+  };
+  this._ellipseGeometry = new EllipseGeometry_default(ellipseGeometryOptions);
+  this._workerName = "createCircleGeometry";
+}
+CircleGeometry.packedLength = EllipseGeometry_default.packedLength;
+CircleGeometry.pack = function(value, array, startingIndex) {
+  Check_default.typeOf.object("value", value);
+  return EllipseGeometry_default.pack(value._ellipseGeometry, array, startingIndex);
+};
+var scratchEllipseGeometry = new EllipseGeometry_default({
+  center: new Cartesian3_default(),
+  semiMajorAxis: 1,
+  semiMinorAxis: 1
+});
+var scratchOptions = {
+  center: new Cartesian3_default(),
+  radius: void 0,
+  ellipsoid: Ellipsoid_default.clone(Ellipsoid_default.UNIT_SPHERE),
+  height: void 0,
+  extrudedHeight: void 0,
+  granularity: void 0,
+  vertexFormat: new VertexFormat_default(),
+  stRotation: void 0,
+  semiMajorAxis: void 0,
+  semiMinorAxis: void 0,
+  shadowVolume: void 0
+};
+CircleGeometry.unpack = function(array, startingIndex, result) {
+  const ellipseGeometry = EllipseGeometry_default.unpack(
+    array,
+    startingIndex,
+    scratchEllipseGeometry
+  );
+  scratchOptions.center = Cartesian3_default.clone(
+    ellipseGeometry._center,
+    scratchOptions.center
+  );
+  scratchOptions.ellipsoid = Ellipsoid_default.clone(
+    ellipseGeometry._ellipsoid,
+    scratchOptions.ellipsoid
+  );
+  scratchOptions.height = ellipseGeometry._height;
+  scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight;
+  scratchOptions.granularity = ellipseGeometry._granularity;
+  scratchOptions.vertexFormat = VertexFormat_default.clone(
+    ellipseGeometry._vertexFormat,
+    scratchOptions.vertexFormat
+  );
+  scratchOptions.stRotation = ellipseGeometry._stRotation;
+  scratchOptions.shadowVolume = ellipseGeometry._shadowVolume;
+  if (!defined_default(result)) {
+    scratchOptions.radius = ellipseGeometry._semiMajorAxis;
+    return new CircleGeometry(scratchOptions);
   }
-
-  /**
-   * The number of elements used to pack the object into an array.
-   * @type {number}
-   */
-  CircleGeometry.packedLength = EllipseGeometry.EllipseGeometry.packedLength;
-
-  /**
-   * Stores the provided instance into the provided array.
-   *
-   * @param {CircleGeometry} value The value to pack.
-   * @param {number[]} array The array to pack into.
-   * @param {number} [startingIndex=0] The index into the array at which to start packing the elements.
-   *
-   * @returns {number[]} The array that was packed into
-   */
-  CircleGeometry.pack = function (value, array, startingIndex) {
-    //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
-    //>>includeEnd('debug');
-    return EllipseGeometry.EllipseGeometry.pack(value._ellipseGeometry, array, startingIndex);
-  };
-
-  const scratchEllipseGeometry = new EllipseGeometry.EllipseGeometry({
-    center: new Matrix3.Cartesian3(),
-    semiMajorAxis: 1.0,
-    semiMinorAxis: 1.0,
+  scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis;
+  scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis;
+  result._ellipseGeometry = new EllipseGeometry_default(scratchOptions);
+  return result;
+};
+CircleGeometry.createGeometry = function(circleGeometry) {
+  return EllipseGeometry_default.createGeometry(circleGeometry._ellipseGeometry);
+};
+CircleGeometry.createShadowVolume = function(circleGeometry, minHeightFunc, maxHeightFunc) {
+  const granularity = circleGeometry._ellipseGeometry._granularity;
+  const ellipsoid = circleGeometry._ellipseGeometry._ellipsoid;
+  const minHeight = minHeightFunc(granularity, ellipsoid);
+  const maxHeight = maxHeightFunc(granularity, ellipsoid);
+  return new CircleGeometry({
+    center: circleGeometry._ellipseGeometry._center,
+    radius: circleGeometry._ellipseGeometry._semiMajorAxis,
+    ellipsoid,
+    stRotation: circleGeometry._ellipseGeometry._stRotation,
+    granularity,
+    extrudedHeight: minHeight,
+    height: maxHeight,
+    vertexFormat: VertexFormat_default.POSITION_ONLY,
+    shadowVolume: true
   });
-  const scratchOptions = {
-    center: new Matrix3.Cartesian3(),
-    radius: undefined,
-    ellipsoid: Matrix3.Ellipsoid.clone(Matrix3.Ellipsoid.UNIT_SPHERE),
-    height: undefined,
-    extrudedHeight: undefined,
-    granularity: undefined,
-    vertexFormat: new VertexFormat.VertexFormat(),
-    stRotation: undefined,
-    semiMajorAxis: undefined,
-    semiMinorAxis: undefined,
-    shadowVolume: undefined,
-  };
-
-  /**
-   * Retrieves an instance from a packed array.
-   *
-   * @param {number[]} array The packed array.
-   * @param {number} [startingIndex=0] The starting index of the element to be unpacked.
-   * @param {CircleGeometry} [result] The object into which to store the result.
-   * @returns {CircleGeometry} The modified result parameter or a new CircleGeometry instance if one was not provided.
-   */
-  CircleGeometry.unpack = function (array, startingIndex, result) {
-    const ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(
-      array,
-      startingIndex,
-      scratchEllipseGeometry
-    );
-    scratchOptions.center = Matrix3.Cartesian3.clone(
-      ellipseGeometry._center,
-      scratchOptions.center
-    );
-    scratchOptions.ellipsoid = Matrix3.Ellipsoid.clone(
-      ellipseGeometry._ellipsoid,
-      scratchOptions.ellipsoid
-    );
-    scratchOptions.height = ellipseGeometry._height;
-    scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight;
-    scratchOptions.granularity = ellipseGeometry._granularity;
-    scratchOptions.vertexFormat = VertexFormat.VertexFormat.clone(
-      ellipseGeometry._vertexFormat,
-      scratchOptions.vertexFormat
-    );
-    scratchOptions.stRotation = ellipseGeometry._stRotation;
-    scratchOptions.shadowVolume = ellipseGeometry._shadowVolume;
-
-    if (!defaultValue.defined(result)) {
-      scratchOptions.radius = ellipseGeometry._semiMajorAxis;
-      return new CircleGeometry(scratchOptions);
-    }
-
-    scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis;
-    scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis;
-    result._ellipseGeometry = new EllipseGeometry.EllipseGeometry(scratchOptions);
-    return result;
-  };
-
-  /**
-   * Computes the geometric representation of a circle on an ellipsoid, including its vertices, indices, and a bounding sphere.
-   *
-   * @param {CircleGeometry} circleGeometry A description of the circle.
-   * @returns {Geometry|undefined} The computed vertices and indices.
-   */
-  CircleGeometry.createGeometry = function (circleGeometry) {
-    return EllipseGeometry.EllipseGeometry.createGeometry(circleGeometry._ellipseGeometry);
-  };
-
+};
+Object.defineProperties(CircleGeometry.prototype, {
   /**
    * @private
    */
-  CircleGeometry.createShadowVolume = function (
-    circleGeometry,
-    minHeightFunc,
-    maxHeightFunc
-  ) {
-    const granularity = circleGeometry._ellipseGeometry._granularity;
-    const ellipsoid = circleGeometry._ellipseGeometry._ellipsoid;
-
-    const minHeight = minHeightFunc(granularity, ellipsoid);
-    const maxHeight = maxHeightFunc(granularity, ellipsoid);
-
-    return new CircleGeometry({
-      center: circleGeometry._ellipseGeometry._center,
-      radius: circleGeometry._ellipseGeometry._semiMajorAxis,
-      ellipsoid: ellipsoid,
-      stRotation: circleGeometry._ellipseGeometry._stRotation,
-      granularity: granularity,
-      extrudedHeight: minHeight,
-      height: maxHeight,
-      vertexFormat: VertexFormat.VertexFormat.POSITION_ONLY,
-      shadowVolume: true,
-    });
-  };
-
-  Object.defineProperties(CircleGeometry.prototype, {
-    /**
-     * @private
-     */
-    rectangle: {
-      get: function () {
-        return this._ellipseGeometry.rectangle;
-      },
-    },
-    /**
-     * For remapping texture coordinates when rendering CircleGeometries as GroundPrimitives.
-     * @private
-     */
-    textureCoordinateRotationPoints: {
-      get: function () {
-        return this._ellipseGeometry.textureCoordinateRotationPoints;
-      },
-    },
-  });
-
-  function createCircleGeometry(circleGeometry, offset) {
-    if (defaultValue.defined(offset)) {
-      circleGeometry = CircleGeometry.unpack(circleGeometry, offset);
+  rectangle: {
+    get: function() {
+      return this._ellipseGeometry.rectangle;
     }
-    circleGeometry._ellipseGeometry._center = Matrix3.Cartesian3.clone(
-      circleGeometry._ellipseGeometry._center
-    );
-    circleGeometry._ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(
-      circleGeometry._ellipseGeometry._ellipsoid
-    );
-    return CircleGeometry.createGeometry(circleGeometry);
+  },
+  /**
+   * For remapping texture coordinates when rendering CircleGeometries as GroundPrimitives.
+   * @private
+   */
+  textureCoordinateRotationPoints: {
+    get: function() {
+      return this._ellipseGeometry.textureCoordinateRotationPoints;
+    }
   }
+});
+var CircleGeometry_default = CircleGeometry;
 
-  return createCircleGeometry;
-
-}));
+// packages/engine/Source/Workers/createCircleGeometry.js
+function createCircleGeometry(circleGeometry, offset) {
+  if (defined_default(offset)) {
+    circleGeometry = CircleGeometry_default.unpack(circleGeometry, offset);
+  }
+  circleGeometry._ellipseGeometry._center = Cartesian3_default.clone(
+    circleGeometry._ellipseGeometry._center
+  );
+  circleGeometry._ellipseGeometry._ellipsoid = Ellipsoid_default.clone(
+    circleGeometry._ellipseGeometry._ellipsoid
+  );
+  return CircleGeometry_default.createGeometry(circleGeometry);
+}
+var createCircleGeometry_default = createCircleGeometry;
+export {
+  createCircleGeometry_default as default
+};
