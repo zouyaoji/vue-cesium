@@ -66,10 +66,13 @@ Basic usage of VcPrimitiveTileset component.
 | show | boolean | `true` | `optional` Determines if the tileset will be shown. |
 | modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` A 4x4 transformation matrix that transforms the tileset's root tile. |
 | shadows | number | `1` | `optional` Determines whether the tileset casts or receives shadows from light sources. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| modelUpAxis|Cesium.Axis\| number| `` | `optional` Which axis is considered up when loading models for tile contents.| | modelForwardAxis|Cesium.Axis\| number|  ``| `optional` Which axis is considered forward when loading models for tile contents.|
 | maximumScreenSpaceError | number | `16` | `optional` The maximum screen space error used to drive level of detail refinement. |
 | maximumMemoryUsage | number | `512` | `optional` The maximum amount of memory in MB that can be used by the tileset. |
 | cullWithChildrenBounds | boolean | `true` | `optional` Optimization option. Whether to cull tiles using the union of their children bounding volumes. |
 | cullRequestsWhileMoving | boolean | `true` | `optional` Optimization option. Don't request tiles that will likely be unused when they come back because of the camera's movement. This optimization only applies to stationary tilesets. |
+| cacheBytes | number | `536870912` | `optional` tileset The size (in bytes) to which the tile cache will be trimmed, if the cache contains tiles not needed for the current view. |
+| maximumCacheOverflowBytes | number | `536870912` | `optional` The maximum additional memory (in bytes) to allow for cache headroom, if more than Cesium3DTileset#cacheBytes are needed for the current view. |
 | cullRequestsWhileMovingMultiplier | number | `60.0` | `optional` Optimization option. Multiplier used in culling requests while moving. Larger is more aggressive culling, smaller less aggressive culling. |
 | preloadWhenHidden | boolean| `false` | `optional` Preload tiles when tileset.show is false. Loads tiles as if the tileset is visible but does not render them. |
 | preloadFlightDestinations | boolean | `true` | `optional` Optimization option. Preload tiles at the camera's flight destination while the camera is in flight. |
@@ -99,11 +102,17 @@ Basic usage of VcPrimitiveTileset component.
 | luminanceAtZenith | number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map. |
 | sphericalHarmonicCoefficients | Array || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting. |
 | specularEnvironmentMaps | string | | `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
+| imageBasedLighting | string | | `optional` The properties for managing image-based lighting for this tileset. |
 | backFaceCulling | boolean |`false`| `optional`Whether to cull back-facing geometry. When true, back face culling is determined by the glTF material's doubleSided property; when false, back face culling is disabled.|
+| enableShowOutline | boolean |`true`| `optional` Whether to enable outlines for models using the CESIUM_primitive_outline extension. This can be set to false to avoid the additional processing of geometry at load time. When false, the showOutlines and outlineColor options are ignored.|
 | showOutline | boolean |`true`| `optional`Whether to display the outline for models using the CESIUM_primitive_outline extension. When true, outlines are displayed. When false, outlines are not displayed.|
 | vectorKeepDecodedPositions | boolean |`false`| `optional`Whether vector tiles should keep decoded positions in memory. This is used with Cesium3DTileFeature.getPolylinePositions.|
 | vectorClassificationOnly | boolean |`false`| `optional` Indicates that only the tileset's vector tiles should be used for classification. |
 | debugHeatmapTilePropertyName | string || `optional` The tile variable to colorize as a heatmap. All rendered tiles will be colorized relative to each other's specified variable value.|
+| featureIdLabel | string \| number | | `optional` Label of the feature ID set to use for picking and styling. For EXT_mesh_features, this is the feature ID's label property, or "featureId_N" (where N is the index in the featureIds array) when not specified. EXT_feature_metadata did not have a label field, so such feature ID sets are always labeled "featureId_N" where N is the index in the list of all feature Ids, where feature ID attributes are listed before feature ID textures. If featureIdLabel is an integer N, it is converted to the string "featureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.|
+| instanceFeatureIdLabel | string \| number | | `optional` Label of the instance feature ID set used for picking and styling. If instanceFeatureIdLabel is set to an integer N, it is converted to the string "instanceFeatureId_N" automatically. If both per-primitive and per-instance feature IDs are present, the instance feature IDs take priority.|
+| splitDirection | number\| Cesium.SplitDirection | ``|`optional`The SplitDirection split to apply to this tileset. | 
+| projectTo2D | boolean | false |`optional`Whether to accurately project the tileset to 2D. If this is true, the tileset will be projected accurately to 2D, but it will use more memory to do so. If this is false, the tileset will use less memory and will still render in 2D / CV mode, but its projected positions may be inaccurate. This cannot be set after the tileset has loaded. |
 | debugFreezeFrame | boolean | false | `optional` For debugging only. Determines if only the tiles from last frame should be used for rendering. |
 | debugColorizeTiles | boolean | false | `optional` For debugging only. When true, assigns a random color to each tile. |
 | debugWireframe | boolean | false | `optional` For debugging only. When true, render's each tile's content as a wireframe. |

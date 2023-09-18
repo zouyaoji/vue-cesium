@@ -69,9 +69,13 @@
 | assetId | number | | `optional` 指定 Cesium ion 上模型的 assetId 。|
 | show | boolean | `true` | `optional` 是否显示 tileset 模型。 |
 | modelMatrix | Cesium.Matrix4 | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
+| modelUpAxis|Cesium.Axis\| number| `` | `optional` 加载图块内容的模型时会考虑哪个轴。|
+| modelForwardAxis|Cesium.Axis\| number|  ``| `optional` 加载图块内容的模型时，哪个轴被视为向前。 |
 | shadows | number | `1` | `optional` 确定 tileset 是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | maximumScreenSpaceError | number | `16` | `optional` 用于驱动细节细化级别的最大屏幕空间错误。 |
 | maximumMemoryUsage | number | `512` | `optional` tileset 可以使用的最大内存量（MB）。 |
+| cacheBytes | number | `536870912` | `optional` tileset 如果缓存包含当前视图不需要的切片，则切片缓存将被修剪到的大小（以字节为单位）。 |
+| maximumCacheOverflowBytes | number | `536870912` | `optional` 如果当前视图需要超过 Cesium3DTileset#cacheBytes，则允许缓存空间的最大附加内存（以字节为单位）。|
 | cullWithChildrenBounds | boolean | `true` | `optional` 优化选项。 是否使用子绑定卷的并集来剔除切片。 |
 | cullRequestsWhileMoving | boolean | `true` | `optional` 优化选项。 请勿请求由于相机的移动而可能回来的未使用的图块。 此优化仅适用于固定图块集。 |
 | cullRequestsWhileMovingMultiplier | number | `60.0` | `optional` 优化选项。 移动时用于剔除请求的乘数。 较大的代表更积极的剔除，较小的代表较不积极的剔除。 |
@@ -96,29 +100,30 @@
 | loadSiblings | boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，确定在遍历期间是否始终下载可见切片的兄弟节点。 |
 | clippingPlanes | Cesium.ClippingPlaneCollection \| VcCallbackPropertyFunction\<Cesium.ClippingPlaneCollection\> | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
 | classificationType | number | | `optional` 确定此 tileset 是否会对 terrain，3D Tiles 或两者进行分类。 有关限制和限制的详细信息，请参阅 Cesium3DTileset＃classificationType。**TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| ellipsoid      | Cesium.Ellipsoid  | `optional` 决定地球的大小和形状参考椭球体。 |
+| ellipsoid | Cesium.Ellipsoid | | `optional` 决定地球的大小和形状参考椭球体。 |
 | pointCloudShading | Cesium.PointCloudShading | | `optional` 用于构造 PointCloudShading 对象以基于几何误差和光照控制点衰减的选项。 |
 | imageBasedLightingFactor | VcCartesian2\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
 | lightColor | VcColor\|Array | | `optional` 模型阴影的颜色和强度。 |
 | luminanceAtZenith | number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。 |
 | sphericalHarmonicCoefficients | Array || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
-| specularEnvironmentMaps | string | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |
+| specularEnvironmentMaps | VcImageBasedLighting | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |
+| imageBasedLighting | string | | `optional` 用于管理此图块集基于图像的照明的属性。 |
 | backFaceCulling | boolean |`false`| `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于 glTF 材料的 doubleSided 属性； 如果为假，则禁用背面剔除。|
-| showOutline | boolean |`true`| `optional` 是否使用cesium_primity_outline扩展显示模型的轮廓。|
-| vectorKeepDecodedPositions | boolean |`false`| `optional` 是否应在内存中保持解码位置。这与Cesium3DTileFeature.getPolylinePositions一起使用。|
+| enableShowOutline | boolean |`true`| `optional` 是否使用CESIUM_primitive_outline扩展启用模型的轮廓。 可以将其设置为 false 以避免在加载时对几何体进行额外的处理。 如果为 false，则忽略 showOutlines 和outlineColor 选项。|
+| showOutline | boolean |`true`| `optional` 是否使用 cesium_primity_outline 扩展显示模型的轮廓。|
+| vectorKeepDecodedPositions | boolean |`false`| `optional` 是否应在内存中保持解码位置。这与 Cesium3DTileFeature.getPolylinePositions 一起使用。|
 | vectorClassificationOnly | boolean |`false`| `optional` 是否仅应使用图块集的矢量图块进行分类。|
-| debugHeatmapTilePropertyName | string || `optional` tile 变量以着色为热图。 所有渲染的图块将相对于彼此的指定变量值进行着色。|
-| debugFreezeFrame | boolean | false | `optional` 仅调试可用，确定是否只使用最后一帧的切片进行渲染。 |
-| debugColorizeTiles | boolean | false | `optional` 仅调试可用，如果为 true，则给每个 tile 一个随机颜色。 |
-| debugWireframe | boolean | false | `optional` 仅调试可用， 如果为 ture，则渲染每个 tile content 为线框。 |
-| debugShowBoundingVolume | boolean | false | `optional` 仅调试可用，如果为 true，则渲染每个 tile 的边界体积。 |
-| debugShowContentBoundingVolume | boolean | false | `optional` 仅调试可用，如果为 true，则渲染每个 tile content 的边界体积。 |
-| debugShowViewerRequestVolume | boolean | false | `optional` 仅调试可用，如果为 true，则渲染每个 tile 的请求量。 |
-| debugShowGeometricError | boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签表示每个 tile 的几何误差。 |
-| debugShowRenderingStatistics | boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签以表示每个 tile 的 commonds、points、triangles、features 的数量。 |
-| debugShowMemoryUsage | boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签表示每个 tile 的纹理和几何内存，以 mb 为单位。 |
-| debugShowUrl | boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签表示每个 tile 的网址。 |
-| enableMouseEvent | boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| featureIdLabel | string \| number | | `optional` 用于拾取和设计样式的要素 ID 集的标签。 对于 EXT_mesh_features，这是要素 ID 的标签属性，如果未指定，则为“featureId_N”（其中 N 是 featureIds 数组中的索引）。 EXT_feature_metadata 没有标签字段，因此此类要素 ID 集始终标记为“featureId_N”，其中 N 是所有要素 Id 列表中的索引，其中要素 ID 属性列在要素 ID 纹理之前。 如果featureIdLabel是整数N，则自动转换为字符串“featureId_N”。 如果每个基元和每个实例的功能 ID 均存在，则实例功能 ID 优先。|
+| instanceFeatureIdLabel | string \| number | | `optional` 用于拾取和样式化的实例功能 ID 集的标签。 如果instanceFeatureIdLabel设置为整数N，则会自动转换为字符串“instanceFeatureId_N”。 如果每个基元和每个实例的功能 ID 均存在，则实例功能 ID 优先。 |
+| splitDirection | number\| Cesium.SplitDirection | ``|`optional` 要应用于此图块集的 SplitDirection 分割。| 
+| projectTo2D | boolean | false |`optional` 是否将图块集精确投影为 2D。 如果这是真的，则图块集将准确投影为 2D，但会使用更多内存。 如果这是 false，则图块集将使用较少的内存，并且仍将以 2D/CV 模式渲染，但其投影位置可能不准确。 加载图块集后无法设置此设置。 |
+| debugHeatmapTilePropertyName | string ||`optional`tile 变量以着色为热图。 所有渲染的图块将相对于彼此的指定变量值进行着色。| 
+| debugFreezeFrame | boolean | false |`optional`仅调试可用，确定是否只使用最后一帧的切片进行渲染。 | | debugColorizeTiles | boolean | false |`optional`仅调试可用，如果为 true，则给每个 tile 一个随机颜色。 | | debugWireframe | boolean | false |`optional`仅调试可用， 如果为 ture，则渲染每个 tile content 为线框。 |
+| debugShowBoundingVolume | boolean | false |`optional`仅调试可用，如果为 true，则渲染每个 tile 的边界体积。 | | debugShowContentBoundingVolume | boolean | false |`optional`仅调试可用，如果为 true，则渲染每个 tile content 的边界体积。 | | debugShowViewerRequestVolume | boolean | false |`optional`仅调试可用，如果为 true，则渲染每个 tile 的请求量。 |
+| debugShowGeometricError | boolean | false |`optional`仅调试可用，如果为 true，则绘制标签表示每个 tile 的几何误差。 |
+| debugShowRenderingStatistics | boolean | false |`optional`仅调试可用，如果为 true，则绘制标签以表示每个 tile 的 commonds、points、triangles、features 的数量。 | 
+| debugShowMemoryUsage | boolean | false |`optional`仅调试可用，如果为 true，则绘制标签表示每个 tile 的纹理和几何内存，以 mb 为单位。 | | debugShowUrl | boolean | false |`optional`仅调试可用，如果为 true，则绘制标签表示每个 tile 的网址。 |
+| enableMouseEvent | boolean |`true`|`optional` 指定鼠标事件是否生效。 |
 
 ### 事件
 

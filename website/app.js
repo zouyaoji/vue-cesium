@@ -1,12 +1,3 @@
-<!--
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2022-06-15 14:22:09
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\website\app.vue
--->
-<script>
 import { defineComponent, h, computed, watch, getCurrentInstance, onMounted } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { VcConfigProvider } from 'vue-cesium'
@@ -102,8 +93,7 @@ export default defineComponent({
       VcConfigProvider,
       {
         locale: localeMap[this.lang],
-        cesiumPath:
-          process.env.NODE_ENV === 'development' ? './CesiumUnminified/Cesium.js' : 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
+        cesiumPath: './Cesium/Cesium.js',
         accessToken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzkyNWNlYi0xMzgxLTQwOTYtOTRhYS02ZTM4YjYwYWVjMzYiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODAzNDEyMn0.0MtHA4jjYQAtYyKjnKnzNziwkSmtLq8qiQqqPtiAfnA'
       },
@@ -122,4 +112,3 @@ export default defineComponent({
     )
   }
 })
-</script>

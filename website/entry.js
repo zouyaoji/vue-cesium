@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-31 16:26:50
- * @LastEditTime: 2022-02-17 11:47:55
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-09-18 17:07:23
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\entry.js
+ * @FilePath: \vue-cesium\website\entry.js
  */
 import { createApp, nextTick } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -25,7 +25,7 @@ import './demo-styles/index.scss'
 import './assets/styles/common.scss'
 import './assets/styles/fonts/style.css'
 
-import App from './app.vue'
+import App from './app'
 import ElementPlus from 'element-plus'
 import * as ElementPlusSvgIcons from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
