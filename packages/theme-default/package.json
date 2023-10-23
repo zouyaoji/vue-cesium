@@ -30,7 +30,7 @@
     "gulp-postcss": "9.0.1",
     "gulp-rename": "2.0.0",
     "gulp-sass": "5.1.0",
-    "postcss": "^8.3.9",
+    "postcss": "^8.4.31",
     "postcss-import": "^14.0.2",
     "postcss-url": "^10.1.3"
   }
