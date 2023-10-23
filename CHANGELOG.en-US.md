@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.2.3
+
+_2023-10-23_
+
+#### Bug 修复
+
+- Fixed the issue that the `vc-imagery-provider-supermap` component causing errors with the SuperMap platform.
+- Resolved the discrepancy between the props passed to the `vc-primitive-tileset` component and the official documentation.
+
 ### 3.2.2
 
 _2023-08-18_

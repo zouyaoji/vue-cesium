@@ -1,5 +1,14 @@
 ## 更新日志
 
+### 3.2.3
+
+_2023-10-23_
+
+#### Bug 修复
+
+- `vc-imagery-provider-supermap` 组件在引入超图平台报错的问题。
+- `vc-primitive-tileset` 组件传参与官方文档不一致的问题。
+
 ### 3.2.2
 
 _2023-08-18_
@@ -11,7 +20,7 @@ _2023-08-18_
 #### Bug 修复
 
 - 修复 `vc-overlay-html` 组件在 `viewer.zoomTo` 之后表现不正常的问题。[#429](https://github.com/zouyaoji/vue-cesium/issues/429)
-- 修复 `vc-drawings` 组件在连续绘制模式下从 `pin` 切换到其他action报错的问题。
+- 修复 `vc-drawings` 组件在连续绘制模式下从 `pin` 切换到其他 action 报错的问题。
 
 ### 3.2.1
 
@@ -19,7 +28,7 @@ _2023-07-29_
 
 #### Bug 修复
 
-- 修复 `vc-terrain-provider-cesium` 组件在Cesium 1.107版本崩溃的问题。
+- 修复 `vc-terrain-provider-cesium` 组件在 Cesium 1.107 版本崩溃的问题。
 - 修复 Cesium 1.107 版本的各种不兼容问题。
 - 修复 `vc-primitive-cluster` 组件鼠标事件不触发的问题。[#405](https://github.com/zouyaoji/vue-cesium/issues/405).
 
