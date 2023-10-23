@@ -8,6 +8,7 @@ _2023-10-23_
 
 - `vc-imagery-provider-supermap` 组件在引入超图平台报错的问题。
 - `vc-primitive-tileset` 组件传参与官方文档不一致的问题。
+- `vc-collection-primitive` 组件未转发官方新增事件的问题。
 
 ### 3.2.2
 

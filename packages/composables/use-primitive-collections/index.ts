@@ -30,6 +30,9 @@ export type Collection =
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
+
+  vcInstance.cesiumEvents = ['primitiveAdded', 'primitiveRemoved']
+
   const commonState = useCommon(props, ctx, vcInstance)
   if (commonState === void 0) {
     return

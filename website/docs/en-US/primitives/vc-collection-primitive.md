@@ -213,19 +213,22 @@ Basic usage of VcCollectionPrimitive component.
 
 ### Events
 
-| Name       | Parameters                              | Description                                                      |
-| ---------- | --------------------------------------- | ---------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                      |
-| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.           |
-| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                     |
-| mousedown  | (evt: VcPickEvent)                      | Triggers when the mouse is pressed on this primitive.            |
-| mouseup    | (evt: VcPickEvent)                      | Triggers when the mouse bounces up on this primitive.            |
-| click      | (evt: VcPickEvent)                      | Triggers when the mouse clicks on the primitive.                 |
-| clickout   | (evt: VcPickEvent)                      | Triggers when the mouse clicks outside the primitive.            |
-| dblclick   | (evt: VcPickEvent)                      | Triggers when the left mouse button double-clicks the primitive. |
-| mousemove  | (evt: VcPickEvent)                      | Triggers when the mouse moves on this primitive.                 |
-| mouseover  | (evt: VcPickEvent)                      | Triggers when the mouse moves to this primitive.                 |
-| mouseout   | (evt: VcPickEvent)                      | Triggers when the mouse moves out of this primitive.             |
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ---------------- | ------------------------------------------- | ---------------------------------------------------------------- |
+| primitiveAdded | (evt: VcPrimitive \| VcPrimitiveCollection) | Triggers when a primitive is added to the collection. [VueCesium3.23+;Cesium 1.110+] |
+| primitiveRemoved | (evt: VcPrimitive \| VcPrimitiveCollection) | Triggers when a primitive is removed from the collection. [VueCesium3.23+;Cesium 1.110+] |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded. |
+| ready | (readyObj: VcReadyObject) | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed. |
+| mousedown | (evt: VcPickEvent) | Triggers when the mouse is pressed on this primitive. |
+| mouseup | (evt: VcPickEvent) | Triggers when the mouse bounces up on this primitive. |
+| click | (evt: VcPickEvent) | Triggers when the mouse clicks on the primitive. |
+| clickout | (evt: VcPickEvent) | Triggers when the mouse clicks outside the primitive. |
+| dblclick | (evt: VcPickEvent) | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove | (evt: VcPickEvent) | Triggers when the mouse moves on this primitive. |
+| mouseover | (evt: VcPickEvent) | Triggers when the mouse moves to this primitive. |
+| mouseout | (evt: VcPickEvent) | Triggers when the mouse moves out of this primitive. |
 
 ### Slots
 

@@ -8,6 +8,7 @@ _2023-10-23_
 
 - Fixed the issue that the `vc-imagery-provider-supermap` component causing errors with the SuperMap platform.
 - Resolved the discrepancy between the props passed to the `vc-primitive-tileset` component and the official documentation.
+- Fixed the issue that the `vc-collection-primitive` component not forwarding newly added events.
 
 ### 3.2.2
 

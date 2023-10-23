@@ -16,13 +16,13 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-selection-indicator ref="selectionIndicator" @pickEvt="pickEvt"></vc-selection-indicator>
-    <vc-collection-primitive @click="onClicked" :show="show" ref="collectionRef">
+    <vc-collection-primitive @click="onClicked" :show="show" ref="collectionRef" @primitive-added="primitiveAdded">
       <vc-collection-billboard :billboards="billboards1"></vc-collection-billboard>
       <vc-collection-primitive>
         <vc-collection-billboard :billboards="billboards2"></vc-collection-billboard>
       </vc-collection-primitive>
     </vc-collection-primitive>
-    <vc-collection-primitive @click="onClicked" :polygons="polygons">
+    <!-- <vc-collection-primitive @click="onClicked" :polygons="polygons">
       <vc-primitive-model
         @click="onClicked"
         url="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
@@ -33,7 +33,7 @@
       >
       </vc-primitive-model>
       <vc-polygon @click="onClicked" :positions="positions" color="yellow"></vc-polygon>
-    </vc-collection-primitive>
+    </vc-collection-primitive> -->
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -170,6 +170,7 @@
           billboard1.image = 'https://zouyaoji.top/vue-cesium/favicon.png'
           billboard1.scale = 0.1
           billboards1.value.push(billboard1)
+          window.billboards1 = billboards1
 
           let billboard2 = {}
           billboard2.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
@@ -182,6 +183,9 @@
       }
       const pickEvt = e => {
         console.log(e)
+      }
+      const primitiveAdded = (a, b) => {
+        console.log('primitiveAdded', a, b)
       }
       return {
         pickEvt,
@@ -196,7 +200,8 @@
         modelMatrix,
         show,
         positions,
-        polygons
+        polygons,
+        primitiveAdded
       }
     }
   }
@@ -216,19 +221,21 @@
 
 ### 事件
 
-| 事件名     | 参数                                    | 描述                       |
-| ---------- | --------------------------------------- | -------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。           |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。       |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。           |
-| mousedown  | (evt: VcPickEvent)                      | 鼠标在该图元上按下时触发。 |
-| mouseup    | (evt: VcPickEvent)                      | 鼠标在该图元上弹起时触发。 |
-| click      | (evt: VcPickEvent)                      | 鼠标单击该图元时触发。     |
-| clickout   | (evt: VcPickEvent)                      | 鼠标单击该图元外部时触发。 |
-| dblclick   | (evt: VcPickEvent)                      | 鼠标左键双击该图元时触发。 |
-| mousemove  | (evt: VcPickEvent)                      | 鼠标在该图元上移动时触发。 |
-| mouseover  | (evt: VcPickEvent)                      | 鼠标移动到该图元时触发。   |
-| mouseout   | (evt: VcPickEvent)                      | 鼠标移出该图元时触发。     |
+| 事件名           | 参数                                        | 描述                                           |
+| ---------------- | ------------------------------------------- | ---------------------------------------------- |
+| primitiveAdded   | (evt: VcPrimitive \| VcPrimitiveCollection) | 图元添加时触发。[VueCesium3.23+;Cesium 1.110+] |
+| primitiveRemoved | (evt: VcPrimitive \| VcPrimitiveCollection) | 图元移除时触发。[VueCesium3.23+;Cesium 1.110+] |
+| beforeLoad       | (instance: VcComponentInternalInstance)     | 对象加载前触发。                               |
+| ready            | (readyObj: VcReadyObject)                   | 对象加载成功时触发。                           |
+| destroyed        | (instance: VcComponentInternalInstance)     | 对象销毁时触发。                               |
+| mousedown        | (evt: VcPickEvent)                          | 鼠标在该图元上按下时触发。                     |
+| mouseup          | (evt: VcPickEvent)                          | 鼠标在该图元上弹起时触发。                     |
+| click            | (evt: VcPickEvent)                          | 鼠标单击该图元时触发。                         |
+| clickout         | (evt: VcPickEvent)                          | 鼠标单击该图元外部时触发。                     |
+| dblclick         | (evt: VcPickEvent)                          | 鼠标左键双击该图元时触发。                     |
+| mousemove        | (evt: VcPickEvent)                          | 鼠标在该图元上移动时触发。                     |
+| mouseover        | (evt: VcPickEvent)                          | 鼠标移动到该图元时触发。                       |
+| mouseout         | (evt: VcPickEvent)                          | 鼠标移出该图元时触发。                         |
 
 ### 插槽
 

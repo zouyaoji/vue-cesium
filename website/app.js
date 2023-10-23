@@ -93,7 +93,8 @@ export default defineComponent({
       VcConfigProvider,
       {
         locale: localeMap[this.lang],
-        cesiumPath: './Cesium/Cesium.js',
+        cesiumPath:
+          process.env.NODE_ENV === 'development' ? './CesiumUnminified/Cesium.js' : 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
         accessToken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzkyNWNlYi0xMzgxLTQwOTYtOTRhYS02ZTM4YjYwYWVjMzYiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODAzNDEyMn0.0MtHA4jjYQAtYyKjnKnzNziwkSmtLq8qiQqqPtiAfnA'
       },
