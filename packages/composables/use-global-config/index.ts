@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-09 16:19:57
- * @LastEditTime: 2022-09-06 23:38:00
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-10-23 17:23:48
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-global-config\index.ts
  */
@@ -44,7 +44,13 @@ export const provideGlobalConfig = (config: MaybeRef<ConfigProviderContext>, app
     if (!oldConfig?.value) return cfg
     return mergeConfig(oldConfig.value, cfg)
   })
-  provideFn(configProviderContextKey, context)
+
+  if (app?.provide) {
+    app.provide(configProviderContextKey, context)
+  } else {
+    provide(configProviderContextKey, context)
+  }
+
   if (global || !globalConfig.value) {
     globalConfig.value = context.value
   }

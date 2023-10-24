@@ -17,8 +17,8 @@
         {{ item }}
       </el-link>
     </div>
-    <app-link href="https://xn--4gq62f52gdss.com/#/register?code=hbv1fTgZ" style="position: absolute">
-      <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">hbv1fTgZ</el-tag></span>
+    <app-link href="https://new1.502502.xyz/#/register?code=jlz6Frzz" style="position: absolute">
+      <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">jlz6Frzz</el-tag></span>
     </app-link>
   </el-scrollbar>
 
@@ -53,7 +53,7 @@ export default defineComponent({
       active.value = anchor
     }
 
-    let resizeObserver = null
+    let resizeObserver: any = null
 
     const adSlot = computed(() => {
       const cnHref = location.href.indexOf('vue-cesium.songluck.com') > -1
@@ -73,7 +73,7 @@ export default defineComponent({
       const content = document.querySelector('.content.vue-cesium-doc.content')
       if (!content) return
       const h3 = content.querySelectorAll('h2,h3')
-      anchors.value = Array.from(h3).map(item => {
+      anchors.value = Array.from(h3).map((item: any) => {
         const text = item.childNodes[1] && item.childNodes[1].textContent.trim()
         map.set(text, item.offsetTop)
         return text
@@ -82,7 +82,7 @@ export default defineComponent({
       let mapValues = Array.from(map.values()).reverse()
       let mapKeys = Array.from(map.keys()).reverse()
       resizeObserver = new ResizeObserver(() => {
-        Array.from(h3).forEach(item => {
+        Array.from(h3).forEach((item: any) => {
           const text = item.childNodes[1] && item.childNodes[1].textContent.trim()
           map.set(text, item.offsetTop)
         })
