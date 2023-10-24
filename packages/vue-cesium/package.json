@@ -52,16 +52,16 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@turf/circle": "^6.5.0",
-    "@vue/shared": "^3.2.26",
+    "@vue/shared": "^3.2.47",
     "@zouyaoji/heatmap.js": "^2.0.8",
-    "compare-versions": "^5.0.3",
-    "echarts": "^5.3.2",
+    "compare-versions": "^6.1.0",
+    "echarts": "^5.4.3",
     "kdbush": "^3.0.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "lodash-unified": "^1.0.1",
-    "mitt": "^3.0.0",
-    "proj4": "^2.7.5",
+    "lodash-unified": "^1.0.3",
+    "mitt": "^3.0.1",
+    "proj4": "^2.9.1",
     "urijs": "^1.19.11"
   },
   "vetur": {
