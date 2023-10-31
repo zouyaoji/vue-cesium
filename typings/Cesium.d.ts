@@ -7831,15 +7831,14 @@ declare namespace Cesium {
   /**
    * Default settings for accessing the Google Maps API.
    * <br/>
-   * An API key is only required if you are using any Google Maps APIs, such as {@link createGooglePhotorealistic3DTileset}.
-   * A default key is provided for evaluation purposes only.
+   * An API key is only required if you are directly using any Google Maps APIs, such as through {@link createGooglePhotorealistic3DTileset}.
    * Follow instructions for managing API keys for the Google Maps Platform at {@link https://developers.google.com/maps/documentation/embed/get-api-key}
    */
   export namespace GoogleMaps {
     /**
      * Gets or sets the default Google Maps API key.
      */
-    var defaultApiKey: string
+    var defaultApiKey: undefined | string
     /**
      * Gets or sets the default Google Map Tiles API endpoint.
      */
@@ -13185,6 +13184,15 @@ declare namespace Cesium {
      */
     static unpack(array: number[], startingIndex?: number, result?: PolygonGeometry): void
     /**
+     * Computes a rectangle which encloses the polygon defined by the list of positions, including cases over the international date line and the poles.
+     * @param positions - A linear ring defining the outer boundary of the polygon.
+     * @param [ellipsoid = Ellipsoid.WGS84] - The ellipsoid to be used as a reference.
+     * @param [arcType = ArcType.GEODESIC] - The type of line the polygon edges must follow. Valid options are {@link ArcType.GEODESIC} and {@link ArcType.RHUMB}.
+     * @param [result] - An object in which to store the result.
+     * @returns The result rectangle
+     */
+    static computeRectangleFromPositions(positions: Cartesian3[], ellipsoid?: Ellipsoid, arcType?: ArcType, result?: Rectangle): Rectangle
+    /**
      * Returns the bounding rectangle given the provided options
      * @param options - Object with the following properties:
      * @param options.polygonHierarchy - A polygon hierarchy that can include holes.
@@ -16405,6 +16413,15 @@ declare namespace Cesium {
   }
 
   /**
+   * Represents a point in stereographic coordinates, which can be obtained by projecting a cartesian coordinate from one pole onto a tangent plane at the other pole.
+   * The stereographic projection faithfully represents the relative directions of all great circles passing through its center point.
+   * To faithfully represents angles everywhere, this is a conformal projection, which means points are projected onto an arbrary sphere.
+   * @param [position] - The steroegraphic coordinates.
+   * @param [tangentPlane] - The tangent plane onto which the point was projected.
+   */
+  export function Stereographic(position?: Cartesian2, tangentPlane?: EllipseGeometry): void
+
+  /**
    * A wrapper around a web worker that allows scheduling tasks for a given worker,
    * returning results asynchronously via a promise.
    *
@@ -18718,12 +18735,25 @@ declare namespace Cesium {
    * const updatedPositions = await Cesium.sampleTerrain(terrainProvider, 11, positions);
    * // positions[0].height and positions[1].height have been updated.
    * // updatedPositions is just a reference to positions.
+   *
+   * // To handle tile errors, pass true for the rejectOnTileFail parameter.
+   * try {
+   *    const updatedPositions = await Cesium.sampleTerrain(terrainProvider, 11, positions, true);
+   * } catch (error) {
+   *   // A tile request error occurred.
+   * }
    * @param terrainProvider - The terrain provider from which to query heights.
    * @param level - The terrain level-of-detail from which to query terrain heights.
    * @param positions - The positions to update with terrain heights.
+   * @param [rejectOnTileFail = false] - If true, for a failed terrain tile request the promise will be rejected. If false, returned heights will be undefined.
    * @returns A promise that resolves to the provided list of positions when terrain the query has completed.
    */
-  export function sampleTerrain(terrainProvider: TerrainProvider, level: number, positions: Cartographic[]): Promise<Cartographic[]>
+  export function sampleTerrain(
+    terrainProvider: TerrainProvider,
+    level: number,
+    positions: Cartographic[],
+    rejectOnTileFail?: boolean
+  ): Promise<Cartographic[]>
 
   /**
    * Initiates a sampleTerrain() request at the maximum available tile level for a terrain dataset.
@@ -18737,12 +18767,24 @@ declare namespace Cesium {
    * const updatedPositions = await Cesium.sampleTerrainMostDetailed(terrainProvider, positions);
    * // positions[0].height and positions[1].height have been updated.
    * // updatedPositions is just a reference to positions.
+   *
+   * // To handle tile errors, pass true for the rejectOnTileFail parameter.
+   * try {
+   *    const updatedPositions = await Cesium.sampleTerrainMostDetailed(terrainProvider, positions, true);
+   * } catch (error) {
+   *   // A tile request error occurred.
+   * }
    * @param terrainProvider - The terrain provider from which to query heights.
    * @param positions - The positions to update with terrain heights.
+   * @param [rejectOnTileFail = false] - If true, for a failed terrain tile request the promise will be rejected. If false, returned heights will be undefined.
    * @returns A promise that resolves to the provided list of positions when terrain the query has completed.  This
    *                                     promise will reject if the terrain provider's `availability` property is undefined.
    */
-  export function sampleTerrainMostDetailed(terrainProvider: TerrainProvider, positions: Cartographic[]): Promise<Cartographic[]>
+  export function sampleTerrainMostDetailed(
+    terrainProvider: TerrainProvider,
+    positions: Cartographic[],
+    rejectOnTileFail?: boolean
+  ): Promise<Cartographic[]>
 
   /**
    * Subdivides an array into a number of smaller, equal sized arrays.
@@ -28959,7 +29001,6 @@ declare namespace Cesium {
      * @property [modelForwardAxis = Axis.X] - Which axis is considered forward when loading models for tile contents.
      * @property [shadows = ShadowMode.ENABLED] - Determines whether the tileset casts or receives shadows from light sources.
      * @property [maximumScreenSpaceError = 16] - The maximum screen space error used to drive level of detail refinement.
-     * @property [maximumMemoryUsage = 512] - The maximum amount of memory in MB that can be used by the tileset. Deprecated.
      * @property [cacheBytes = 536870912] - The size (in bytes) to which the tile cache will be trimmed, if the cache contains tiles not needed for the current view.
      * @property [maximumCacheOverflowBytes = 536870912] - The maximum additional memory (in bytes) to allow for cache headroom, if more than {@link Cesium3DTileset#cacheBytes} are needed for the current view.
      * @property [cullWithChildrenBounds = true] - Optimization option. Whether to cull tiles using the union of their children bounding volumes.
@@ -29021,7 +29062,6 @@ declare namespace Cesium {
       modelForwardAxis?: Axis
       shadows?: ShadowMode
       maximumScreenSpaceError?: number
-      maximumMemoryUsage?: number
       cacheBytes?: number
       maximumCacheOverflowBytes?: number
       cullWithChildrenBounds?: boolean
@@ -29620,26 +29660,6 @@ declare namespace Cesium {
      * </p>
      */
     maximumScreenSpaceError: number
-    /**
-     * The maximum amount of GPU memory (in MB) that may be used to cache tiles. This value is estimated from
-     * geometry, textures, and batch table textures of loaded tiles. For point clouds, this value also
-     * includes per-point metadata.
-     * <p>
-     * Tiles not in view are unloaded to enforce this.
-     * </p>
-     * <p>
-     * If decreasing this value results in unloading tiles, the tiles are unloaded the next frame.
-     * </p>
-     * <p>
-     * If tiles sized more than <code>maximumMemoryUsage</code> are needed
-     * to meet the desired screen space error, determined by {@link Cesium3DTileset#maximumScreenSpaceError},
-     * for the current view, then the memory usage of the tiles loaded will exceed
-     * <code>maximumMemoryUsage</code>.  For example, if the maximum is 256 MB, but
-     * 300 MB of tiles are needed to meet the screen space error, then 300 MB of tiles may be loaded.  When
-     * these tiles go out of view, they will be unloaded.
-     * </p>
-     */
-    maximumMemoryUsage: number
     /**
      * The amount of GPU memory (in bytes) used to cache tiles. This memory usage is estimated from
      * geometry, textures, and batch table textures of loaded tiles. For point clouds, this value also
@@ -38883,16 +38903,16 @@ declare namespace Cesium {
      * </p>
      * @example
      * // multiple silhouette effects
-     * const yellowEdge = Cesium.PostProcessLibrary.createEdgeDetectionStage();
+     * const yellowEdge = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
      * yellowEdge.uniforms.color = Cesium.Color.YELLOW;
      * yellowEdge.selected = [feature0];
      *
-     * const greenEdge = Cesium.PostProcessLibrary.createEdgeDetectionStage();
+     * const greenEdge = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
      * greenEdge.uniforms.color = Cesium.Color.LIME;
      * greenEdge.selected = [feature1];
      *
      * // draw edges around feature0 and feature1
-     * postProcessStages.add(Cesium.PostProcessLibrary.createSilhouetteStage([yellowEdge, greenEdge]);
+     * postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([yellowEdge, greenEdge]);
      * @returns A post-process stage that applies an edge detection effect.
      */
     function createEdgeDetectionStage(): PostProcessStage
@@ -39314,6 +39334,19 @@ declare namespace Cesium {
      * Gets the number of primitives in the collection.
      */
     readonly length: number
+    /**
+     * An event that is raised when a primitive is added to the collection.
+     * Event handlers are passed the primitive that was added.
+     */
+    readonly primitiveAdded: Event
+    /**
+     * An event that is raised when a primitive is removed from the collection.
+     * Event handlers are passed the primitive that was removed.
+     * <p>
+     * Note: Depending on the destroyPrimitives constructor option, the primitive may already be destroyed.
+     * </p>
+     */
+    readonly primitiveRemoved: Event
     /**
      * Adds a primitive to the collection.
      * @example
@@ -42489,6 +42522,16 @@ declare namespace Cesium {
   /**
    * Creates a {@link Cesium3DTileset} instance for the Google Photorealistic 3D Tiles tileset.
    * @example
+   * const viewer = new Cesium.Viewer("cesiumContainer");
+   *
+   * try {
+   *   const tileset = await Cesium.createGooglePhotorealistic3DTileset();
+   *   viewer.scene.primitives.add(tileset));
+   * } catch (error) {
+   *   console.log(`Error creating tileset: ${error}`);
+   * }
+   * @example
+   * // Use your own Google Maps API key
    * Cesium.GoogleMaps.defaultApiKey = "your-api-key";
    *
    * const viewer = new Cesium.Viewer("cesiumContainer");
@@ -42637,7 +42680,7 @@ declare namespace Cesium {
    * @param [options.scene3DOnly = false] - When <code>true</code>, each geometry instance will only be rendered in 3D to save GPU memory.
    * @param [options.orderIndependentTranslucency = true] - If true and the configuration supports it, use order independent translucency.
    * @param [options.mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
-   * @param [options.globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added.
+   * @param [options.globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added and the sky atmosphere will be hidden by default.
    * @param [options.useDefaultRenderLoop = true] - True if this widget should control the render loop, false otherwise.
    * @param [options.useBrowserRecommendedResolution = true] - If true, render at the browser's recommended resolution and ignore <code>window.devicePixelRatio</code>.
    * @param [options.targetFrameRate] - The target frame rate when using the default render loop.
@@ -44801,7 +44844,7 @@ declare namespace Cesium {
      * @property [contextOptions] - Context and WebGL creation properties passed to {@link Scene}.
      * @property [sceneMode = SceneMode.SCENE3D] - The initial scene mode.
      * @property [mapProjection = new GeographicProjection()] - The map projection to use in 2D and Columbus View modes.
-     * @property [globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added.
+     * @property [globe = new Globe(mapProjection.ellipsoid)] - The globe to use in the scene.  If set to <code>false</code>, no globe will be added and the sky atmosphere will be hidden by default.
      * @property [orderIndependentTranslucency = true] - If true and the configuration supports it, use order independent translucency.
      * @property [creditContainer] - The DOM element or ID that will contain the {@link CreditDisplay}.  If not specified, the credits are added to the bottom of the widget itself.
      * @property [creditViewport] - The DOM element or ID that will contain the credit pop up created by the {@link CreditDisplay}.  If not specified, it will appear over the widget itself.
