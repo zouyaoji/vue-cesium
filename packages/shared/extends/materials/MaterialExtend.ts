@@ -3,7 +3,7 @@
  * @Date: 2023-08-18 00:56:13
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-08-18 01:15:38
+ * @LastEditTime: 2023-10-31 19:38:24
  * @FilePath: \vue-cesium\packages\shared\extends\materials\MaterialExtend.ts
  */
 
@@ -11,12 +11,21 @@ import { VcCircleWaveMaterial, VcLineFlowMaterial } from '@vue-cesium/shared/sha
 
 let isExtended = false
 export default class MaterialExtend {
-  static extend(viewer?: Cesium.Viewer) {
+  static extend(viewer: Cesium.Viewer) {
     if (isExtended) {
       return
     }
 
     const { Material, Color, Cartesian2 } = Cesium
+    const webgl2 = (viewer as any).context?.webgl2
+
+    let shaderSourceTextVcLine = VcLineFlowMaterial
+    let shaderSourceTextVcCircle = VcCircleWaveMaterial
+
+    if (!webgl2) {
+      shaderSourceTextVcLine = shaderSourceTextVcLine.replace(/texture\(/g, 'texture2D(')
+      shaderSourceTextVcCircle = shaderSourceTextVcCircle.replace(/texture\(/g, 'texture2D(')
+    }
 
     /**
      * Gets the name of the VcCircleWave material.
@@ -33,7 +42,7 @@ export default class MaterialExtend {
           count: 1,
           gradient: 0.1
         },
-        source: VcCircleWaveMaterial
+        source: shaderSourceTextVcCircle
       },
       translucent() {
         return true
@@ -62,7 +71,7 @@ export default class MaterialExtend {
           color2: new Color(1, 1, 1),
           globalAlpha: 1
         },
-        source: VcLineFlowMaterial
+        source: shaderSourceTextVcLine
       },
       translucent() {
         return true
