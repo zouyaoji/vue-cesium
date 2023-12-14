@@ -1,5 +1,32 @@
 ## 更新日志
 
+### 3.2.5
+
+_2023-12-23_
+
+#### Bug 修复
+
+-  `vc-graphics-polygon` 组件使用 ref、reactive 包裹 hierarchy 参数后浏览器崩溃问题。
+-  原生 Cesium 下 `vc-provider-imagery-supermap`加载超图 iserver 的地图服务报错问题。
+
+### 3.2.4
+
+_2023-10-23_
+
+#### Bug 修复
+
+  - 3.2.3 npm 发布错误，用3.2.4代替。
+
+### 3.2.3
+
+_2023-10-23_
+
+#### Bug 修复
+
+- `vc-imagery-provider-supermap` 组件在引入超图平台报错的问题。
+- `vc-primitive-tileset` 组件传参与官方文档不一致的问题。
+- `vc-collection-primitive` 组件未转发官方新增事件的问题。
+
 ### 3.2.3
 
 _2023-10-23_
