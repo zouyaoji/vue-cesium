@@ -1,5 +1,22 @@
 ## Changelog
 
+### 3.2.5
+
+_2023-12-23_
+
+#### Bug fixes
+
+  - The browser crash issue occurs when using `ref` or `reactive` to wrap the `hierarchy` prop in the `vc-graphics-polygon` component.
+  - In native Cesium, there is an error when loading SuperMap iServer map services using `vc-provider-imagery-supermap`.
+
+### 3.2.4
+
+_2023-10-23_
+
+#### Bug fixes
+
+  - The npm release for version 3.2.3 has an error. 
+
 ### 3.2.3
 
 _2023-10-23_
