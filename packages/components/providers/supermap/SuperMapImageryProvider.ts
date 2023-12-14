@@ -277,20 +277,16 @@ function buildImageResource(this, x, y, level) {
 }
 
 async function init(this) {
-  console.log('ada')
   const { Resource } = Cesium
   if (this.isTileMap) {
-    const promise = Resource.fetchJsonp({
-      url: this._options.url + '.jsonp',
-      queryParameters: {
-        f: 'json'
-      }
-    })
-
     try {
-      promise.then(e => {
-        onFulfilledTileMap.call(this, e)
+      const res = await Resource.fetchJsonp({
+        url: this._options.url + '.jsonp',
+        queryParameters: {
+          f: 'json'
+        }
       })
+      onFulfilledTileMap.call(this, res)
     } catch (e) {
       onRejected.call(this)
     }
@@ -300,7 +296,6 @@ async function init(this) {
       const e = await Resource.fetchText({
         url: this.url + 'config'
       })
-      console.log('ada')
       onFulfilledRest3D.call(this, e)
     } catch (e) {
       onRejected.call(this)
