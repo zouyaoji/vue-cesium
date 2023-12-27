@@ -189,18 +189,18 @@ export default defineComponent({
               ref: outerRingRef,
               class: 'vc-compass-outer-ring-sm',
               style: outerRingStyle.value
-            },
-            props.tooltip
-              ? h(
-                  VcTooltip,
-                  {
-                    ref: compassState.tooltipRef,
-                    ...props.tooltip,
-                    onBeforeShow: compassState.onTooltipBeforeShow
-                  },
-                  () => h('strong', {}, (props.tooltip as any).tip || t('vc.navigationSm.compass.outerTip'))
-                )
-              : createCommentVNode('v-if')
+            }
+            // props.tooltip
+            //   ? h(
+            //       VcTooltip,
+            //       {
+            //         ref: compassState.tooltipRef,
+            //         ...props.tooltip,
+            //         onBeforeShow: compassState.onTooltipBeforeShow
+            //       },
+            //       () => h('strong', {}, (props.tooltip as any).tip || t('vc.navigationSm.compass.outerTip'))
+            //     )
+            //   : createCommentVNode('v-if')
           )
         )
         children.push(
@@ -234,7 +234,7 @@ export default defineComponent({
             ref: rootRef,
             class: 'vc-compass-sm ' + positionState.classes.value,
             style: rootStyle,
-            onDblclick: compassState.handleDoubleClick,
+            // onDblclick: compassState.handleDoubleClick,
             onMousedown: compassState.handleMouseDown,
             onMouseup: compassState.handleMouseUp,
             onTouchend: compassState.handleMouseUp,
