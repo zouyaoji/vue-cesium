@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2023-08-01 11:05:07
- * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2023-12-27 10:28:42
+ * @LastEditors: ly
  * @Description:
- * @FilePath: \vue-cesium@next\README.zh.md
+ * @FilePath: \vue-cesium\README.zh.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -77,6 +77,7 @@ $ pnpm i
 命令
 
 ```bash
+$ pnpm gen:version
 $ pnpm website-dev
 ```
 
