@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2023-03-13 17:52:59
+ * @LastEditTime: 2023-12-06 00:13:43
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
@@ -168,6 +168,11 @@ export default function (
           if (defined(position)) {
             return Cartesian3.clone(position, result)
           }
+        }
+      } else {
+        position = scene.pickPosition(windowPosition, cartesianScratch)
+        if (defined(position)) {
+          return Cartesian3.clone(position, result)
         }
       }
     }
