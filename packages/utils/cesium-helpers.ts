@@ -51,6 +51,7 @@ import type {
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 import { VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty } from '@vue-cesium/shared/extends/materials'
+import { cloneDeep } from 'lodash'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
@@ -273,7 +274,7 @@ export function makePolygonHierarchy(val: VcPolygonHierarchy, ellipsoid?: Cesium
   }
 
   if (isPlainObject(val) && hasOwn(val, 'positions')) {
-    const value = val as PolygonHierarchyOption
+    const value = cloneDeep(val) as PolygonHierarchyOption
     value.positions = makeCartesian3Array(value.positions, ellipsoid) as Array<Cesium.Cartesian3>
     value.holes?.length && parsePolygonHierarchyJson(value.holes, ellipsoid)
     return value
