@@ -2,12 +2,13 @@
 
 ### 3.2.5
 
-_2023-12-23_
+_2023-12-27_
 
 #### Bug fixes
 
   - The browser crash issue occurs when using `ref` or `reactive` to wrap the `hierarchy` prop in the `vc-graphics-polygon` component.
   - In native Cesium, there is an error when loading SuperMap iServer map services using `vc-provider-imagery-supermap`.
+  - Fixed the issue of consecutive mouse clicks not taking effect in the `vc-navigation-sm` component. **[Removed the functionality of double-clicking the outer dial to realign with the north direction]**
 
 ### 3.2.4
 

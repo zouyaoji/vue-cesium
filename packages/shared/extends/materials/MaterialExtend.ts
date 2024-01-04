@@ -3,7 +3,7 @@
  * @Date: 2023-08-18 00:56:13
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-10-31 22:33:58
+ * @LastEditTime: 2023-12-06 15:54:24
  * @FilePath: \vue-cesium\packages\shared\extends\materials\MaterialExtend.ts
  */
 
@@ -12,7 +12,6 @@ import { VcCircleWaveMaterial, VcLineFlowMaterial } from '@vue-cesium/shared/sha
 let isExtended = false
 export default class MaterialExtend {
   static extend(viewer: Cesium.Viewer) {
-    console.log('asdf', viewer)
     if (isExtended) {
       return
     }

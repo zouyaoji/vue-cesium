@@ -2,12 +2,13 @@
 
 ### 3.2.5
 
-_2023-12-23_
+_2023-12-27_
 
 #### Bug 修复
 
 -  `vc-graphics-polygon` 组件使用 ref、reactive 包裹 hierarchy 参数后浏览器崩溃问题。
 -  原生 Cesium 下 `vc-provider-imagery-supermap`加载超图 iserver 的地图服务报错问题。
+- `vc-navigation-sm` 组件四个方向按钮连续点击不生效的问题。**【去掉了双击外圆盘回正北的功能】**
 
 ### 3.2.4
 

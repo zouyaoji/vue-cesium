@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2023-08-01 11:14:52
- * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2023-12-13 10:33:36
+ * @LastEditors: ly
  * @Description:
- * @FilePath: \vue-cesium@next\README.md
+ * @FilePath: \vue-cesium\README.md
 -->
 <p align="center">
   <img width="256px" src="https://zouyaoji.top/vue-cesium/images/vue-cesium-logo.svg">
@@ -75,6 +75,7 @@ the project will install all dependencies.
 With command
 
 ```bash
+$ pnpm gen:version
 $ pnpm website-dev
 ```
 

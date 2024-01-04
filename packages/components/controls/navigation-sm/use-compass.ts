@@ -220,9 +220,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     const scene = vcInstance.viewer.scene
     const sscc = scene.screenSpaceCameraController
     // do not orbit if it is disabled
-    if (scene.mode === SceneMode.MORPHING || !sscc.enableInputs) {
-      return
-    }
+    // if (scene.mode === SceneMode.MORPHING || !sscc.enableInputs) {
+    //   return
+    // }
 
     switch (scene.mode) {
       case SceneMode.COLUMBUS_VIEW:
