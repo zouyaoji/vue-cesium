@@ -12,7 +12,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           const methodName = register ? 'addEventListener' : 'removeEventListener'
           listener && cesiumObject[eventName][methodName](listener)
         } else if (process.env.NODE_ENV === 'development') {
-          logger.warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
+          // logger.warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
         }
       })
   }
