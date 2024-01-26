@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2023-12-06 00:13:43
+ * @LastEditTime: 2024-01-26 14:04:15
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-fab.ts
@@ -168,11 +168,6 @@ export default function (
           if (defined(position)) {
             return Cartesian3.clone(position, result)
           }
-        }
-      } else {
-        position = scene.pickPosition(windowPosition, cartesianScratch)
-        if (defined(position)) {
-          return Cartesian3.clone(position, result)
         }
       }
     }
