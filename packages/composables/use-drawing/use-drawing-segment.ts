@@ -532,7 +532,9 @@ export default function (props, ctx, cmpName: string) {
             const l = (startPositionWindow.y - positionWindow.y) / (positionWindow.x - startPositionWindow.x)
             const label = labels[i - 1]
             if (label && label !== labelTotalLength) {
-              label.horizontalOrigin = 0 < l ? HorizontalOrigin.LEFT : HorizontalOrigin.RIGHT
+              if (defined(label?.horizontalOrigin)) {
+                label.horizontalOrigin = 0 < l ? HorizontalOrigin.LEFT : HorizontalOrigin.RIGHT
+              }
             }
 
             if (positionWindow.y < startY) {
