@@ -19,7 +19,10 @@
     "strictNullChecks": false,
     "removeComments": false,
     "rootDir": ".",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@vue-cesium/*": ["package/*"]
+    }
   },
   "include": ["packages", "typings"],
   "exclude": ["node_modules", "**/dist"]
