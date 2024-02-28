@@ -1,13 +1,27 @@
 ## 更新日志
 
+### 3.2.6
+
+_2024-02-29_
+
+#### 新特性
+
+- `vc-measurements` 组件为量算结果添加格式化函数。`distanceFormatter`、`areaFormatter`、`angleFormatter`。
+- 适配 `dc-sdk` 3.x 版本。
+
+#### Bug 修复
+
+- 修复 `vc-measurements` 组件 `areaMeasurementOpts` 的参数同时配置 `showAngleLabel` 和 `showDistanceLabel` 为 `false` 报错。[#518](https://github.com/zouyaoji/vue-cesium/issues/518)
+- 修复使用超图扩展Cesium包引入因没有 Cesium.VERSION 引起的报错问题。
+
 ### 3.2.5
 
 _2023-12-27_
 
 #### Bug 修复
 
--  `vc-graphics-polygon` 组件使用 ref、reactive 包裹 hierarchy 参数后浏览器崩溃问题。
--  原生 Cesium 下 `vc-provider-imagery-supermap`加载超图 iserver 的地图服务报错问题。
+- `vc-graphics-polygon` 组件使用 ref、reactive 包裹 hierarchy 参数后浏览器崩溃问题。
+- 原生 Cesium 下 `vc-provider-imagery-supermap`加载超图 iserver 的地图服务报错问题。
 - `vc-navigation-sm` 组件四个方向按钮连续点击不生效的问题。**【去掉了双击外圆盘回正北的功能】**
 
 ### 3.2.4
@@ -16,7 +30,7 @@ _2023-10-23_
 
 #### Bug 修复
 
-  - 3.2.3 npm 发布错误，用3.2.4代替。
+- 3.2.3 npm 发布错误，用 3.2.4 代替。
 
 ### 3.2.3
 

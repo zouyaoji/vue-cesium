@@ -717,6 +717,16 @@ export type Mars3dConfig = {
   }
 }
 
+export type DCConfig = {
+  baseUrl: string
+  Cesium: string
+  echarts?: string
+  turf?: string
+  accessToken?: string
+  logoImage?: string
+  logoSize?: [number, number]
+}
+
 export type Arrayable<T> = T | T[]
 export type Awaitable<T> = Promise<T> | T
 

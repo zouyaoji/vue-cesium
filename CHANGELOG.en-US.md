@@ -1,5 +1,20 @@
 ## Changelog
 
+### 3.2.6
+
+_2024-02-29_
+
+#### New feature
+
+- Added formatting functions to the `vc-measurements` component for measurement results. `distanceFormatter`, `areaFormatter`, `angleFormatter`.
+- Adapt for compatibility with dc-sdk version 3.x.
+
+#### Bug fixes
+
+- Fixed the issue that parameter configuration of areaMeasurementOpts in the vc-measurements component, setting both showAngleLabel and showDistanceLabel to false, results in an error.[#518](https://github.com/zouyaoji/vue-cesium/issues/518)
+- Fixed the issue that Cesium.VERSION being undefined, causing an error.
+
+
 ### 3.2.5
 
 _2023-12-27_

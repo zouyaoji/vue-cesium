@@ -1,4 +1,4 @@
-import type { Mars3dConfig, VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
+import type { Mars3dConfig, DCConfig, VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
 import { VcSkeletonProps } from '../../ui'
 import { VcViewerCreatorFunction } from './useViewer'
@@ -207,5 +207,6 @@ export default {
   },
   viewerCreator: Function as PropType<VcViewerCreatorFunction>,
   mars3dConfig: Object as PropType<Mars3dConfig>,
+  dcConfig: Object as PropType<DCConfig>,
   containerId: String
 }

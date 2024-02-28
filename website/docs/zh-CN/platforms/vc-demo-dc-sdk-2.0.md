@@ -2,8 +2,6 @@
 
 vue-cesium 使用数字视觉的 dc-sdk 开发时只需要在引入 VueCesium 时通过配置项 `cesiumPath` 指定为 dc-sdk 库地址即可。
 
-**注意**：本例采用为dc-sdk@3.x版本，[dc-sdk@2.x版本参考](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-dc-sdk)
-
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
@@ -12,11 +10,7 @@ import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueCesium, {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/@dvgis/dc-sdk/dist/dc.min.js',
-  dcConfig: {
-    baseUrl: 'https://cdn.jsdelivr.net/npm/@dvgis/dc-sdk/dist/resources/',
-    Cesium: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'
-  }
+  cesiumPath: 'https://resource.dvgis.cn/libs/2.x/dc.base.min.js'
 })
 app.mount('#app')
 ```
@@ -36,7 +30,6 @@ app.mount('#app')
   <vc-viewer
     ref="vcViewer"
     :cesium-path="cesiumPath"
-    :dc-config="viewerOpts.dcConfig"
     :animation="animation"
     :timeline="timeline"
     :fullscreenButton="fullscreenButton"
@@ -89,13 +82,7 @@ app.mount('#app')
           offset: [0, 32],
           position: 'bottom-right'
         },
-        cesiumPath: 'https://cdn.jsdelivr.net/npm/@dvgis/dc-sdk/dist/dc.min.js',
-        viewerOpts: {
-          dcConfig: {
-            baseUrl: 'https://cdn.jsdelivr.net/npm/@dvgis/dc-sdk/dist/resources/',
-            Cesium: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'
-          }
-        }
+        cesiumPath: 'https://resource.dvgis.cn/libs/2.x/dc.base.min.js'
       }
     },
     mounted() {

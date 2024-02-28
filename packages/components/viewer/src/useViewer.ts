@@ -17,7 +17,8 @@ import type {
   ViewerWidgetResizedEvent,
   VcContextOptions,
   VcViewerProvider,
-  Mars3dConfig
+  Mars3dConfig,
+  DCConfig
 } from '@vue-cesium/utils/types'
 import { compareCesiumVersion, setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
@@ -888,6 +889,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       const cesiumPath = props.cesiumPath ? props.cesiumPath : globalConfig.value.cesiumPath
       const dirName = dirname(cesiumPath)
       const mars3dConfig = globalConfig.value.mars3dConfig || props.mars3dConfig
+      const dcConfig = globalConfig.value.dcConfig || props.dcConfig
       if (mars3dConfig) {
         // 引入 mars3d
         const libsConfig = mars3dConfig.libs || getDefaultMars3dConfig()
@@ -903,6 +905,21 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           keys[key] = true
           loadLibs.push(...libsConfig[key])
         }
+      } else if (dcConfig) {
+        loadLibs.push(cesiumPath)
+        loadLibs.push(cesiumPath.replace('dc.min.js', 'dc.min.css'))
+
+        loadLibs.push(dcConfig.Cesium)
+        const dirName = dirname(dcConfig.Cesium)
+        loadLibs.push(`${dirName}/Widgets/widgets.css`)
+
+        if (dcConfig.turf) {
+          loadLibs.push(dcConfig.turf)
+        }
+
+        if (dcConfig.echarts) {
+          loadLibs.push(dcConfig.echarts)
+        }
       } else if (cesiumPath.includes('/dc.base.min.js')) {
         loadLibs.push(cesiumPath)
         loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js'))
@@ -915,7 +932,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       }
 
       const secondaryLibs = loadLibs
-      if (mars3dConfig) {
+      if (mars3dConfig || dcConfig) {
         // mars3d 必须要等 Cesium 先初始化
         const primaryLib = loadLibs.find(v => v.includes('Cesium.js'))
         await loadScript(primaryLib)
@@ -934,9 +951,30 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
       return Promise.all(scriptLoadPromises).then(() => {
         if (globalThis.Cesium) {
-          const listener = getInstanceListener(vcInstance, 'cesiumReady')
-          listener && emit('cesiumReady', globalThis.Cesium)
-          return globalThis.Cesium
+          if (globalThis.DC) {
+            const config: any = {
+              ...dcConfig,
+              Cesium: globalThis.Cesium
+            }
+            if (dcConfig.echarts) {
+              config.echarts = globalThis.echarts
+            }
+
+            if (dcConfig.turf) {
+              config.turf = globalThis.turf
+            }
+
+            return globalThis.DC.ready(config).then(() => {
+              globalThis.Cesium = DC.getLib('Cesium')
+              const listener = getInstanceListener(vcInstance, 'cesiumReady')
+              listener && emit('cesiumReady', globalThis.DC)
+              return globalThis.Cesium
+            })
+          } else {
+            const listener = getInstanceListener(vcInstance, 'cesiumReady')
+            listener && emit('cesiumReady', globalThis.Cesium)
+            return globalThis.Cesium
+          }
         } else if (globalThis.XE) {
           // 兼容 cesiumlab earthsdk
           return globalThis.XE.ready().then(() => {
@@ -947,16 +985,28 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           })
         } else if (globalThis.DC) {
           // 兼容  dc-sdk
-          globalThis.DC.use(globalThis.DcCore.default || globalThis.DcCore)
-          globalThis.DC.baseUrl = `${dirName}/resources/`
-          globalThis.DC.ready(() => {
-            globalThis.Cesium = DC.Namespace.Cesium
+          if (compareCesiumVersion(globalThis.DC.VERSION, '3.0.0')) {
+            return globalThis.DC.ready({
+              ...dcConfig,
+              Cesium: globalThis.Cesium
+            }).then(() => {
+              globalThis.Cesium = DC.getLib('Cesium')
+              const listener = getInstanceListener(vcInstance, 'cesiumReady')
+              listener && emit('cesiumReady', globalThis.DC)
+              return globalThis.Cesium
+            })
+          } else {
+            globalThis.DC.use(globalThis.DcCore.default || globalThis.DcCore)
+            globalThis.DC.baseUrl = `${dirName}/resources/`
+            globalThis.DC.ready(() => {
+              globalThis.Cesium = DC.Namespace.Cesium
 
-            const listener = getInstanceListener(vcInstance, 'cesiumReady')
-            listener && emit('cesiumReady', globalThis.DC)
+              const listener = getInstanceListener(vcInstance, 'cesiumReady')
+              listener && emit('cesiumReady', globalThis.DC)
+              return globalThis.Cesium
+            })
             return globalThis.Cesium
-          })
-          return globalThis.Cesium
+          }
         } else {
           reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
         }
@@ -1578,6 +1628,10 @@ export interface VcViewerProps {
    * for mars3d only.
    */
   mars3dConfig?: Mars3dConfig
+  /**
+   * for dc-sdk 3.0+ only.
+   */
+  dcConfig?: DCConfig
   /**
    * Specifies the container id of the viewer.
    */
