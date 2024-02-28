@@ -1094,6 +1094,7 @@ export function heightToLevel(altitude: number) {
 }
 
 export function compareCesiumVersion(a, b, operator: CompareOperator = '>=') {
+  a = a || '1.6.7'
   return compare(a, b, operator)
 }
 
