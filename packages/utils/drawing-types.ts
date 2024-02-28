@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-07-07 13:54:08
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2024-02-28 17:17:37
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
+ * @FilePath: \vue-cesium\packages\utils\drawing-types.ts
  */
 
 import {
@@ -358,3 +358,5 @@ export type VcViewshedOpts = {
   lineColor?: VcColor
   faceColor?: VcColor
 }
+
+export type VcMeasurementFormatter = (value: number, defaultUnits: string, defaultLocale?, defaultDecimals?) => string

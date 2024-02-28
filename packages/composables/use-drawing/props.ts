@@ -1,15 +1,15 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-25 14:46:48
- * @LastEditTime: 2022-03-10 00:50:43
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2024-02-28 17:14:00
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-drawing\props.ts
+ * @FilePath: \vue-cesium\packages\composables\use-drawing\props.ts
  */
 
 import type { VcPointProps } from '@vue-cesium/components/primitive-collections'
 import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
-import type { VcDrawTipOpts, VcEditorOpts, VcDrawingPreRenderDatas } from '@vue-cesium/utils/drawing-types'
+import type { VcDrawTipOpts, VcEditorOpts, VcDrawingPreRenderDatas, VcMeasurementFormatter } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
 import { clearActionDefault } from './defaultOpts'
@@ -23,7 +23,10 @@ export const useDrawingActionProps = {
   editorOpts: Object as PropType<VcEditorOpts>,
   mode: Number,
   preRenderDatas: Array as PropType<VcDrawingPreRenderDatas>,
-  disableDepthTest: Boolean
+  disableDepthTest: Boolean,
+  distanceFormatter: Function as PropType<VcMeasurementFormatter>,
+  angleFormatter: Function as PropType<VcMeasurementFormatter>,
+  areaFormatter: Function as PropType<VcMeasurementFormatter>
 }
 
 export const useDrawingFabProps = {

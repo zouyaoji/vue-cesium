@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2023-05-23 10:32:30
+ * @LastEditTime: 2024-02-28 17:14:41
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-point.ts
@@ -468,31 +468,29 @@ export default function (props, ctx, cmpName: string) {
       return ''
     }
 
+    const angleFormatter = props.angleFormatter || MeasureUnits.angleToString
+    const distanceFormatter = props.distanceFormatter || MeasureUnits.distanceToString
+
     return (
-      `${t('vc.measurement.point.lng')}${MeasureUnits.angleToString(
+      `${t('vc.measurement.point.lng')}${angleFormatter(
         positionCartographic.longitude,
         props.measureUnits?.angleUnits,
         props.locale,
         props.decimals?.lng
       )}\n` +
-      `${t('vc.measurement.point.lat')}${MeasureUnits.angleToString(
+      `${t('vc.measurement.point.lat')}${angleFormatter(
         positionCartographic.latitude,
         props.measureUnits?.angleUnits,
         props.locale,
         props.decimals?.lat
       )}\n` +
-      `${t('vc.measurement.point.height')}${MeasureUnits.distanceToString(
+      `${t('vc.measurement.point.height')}${distanceFormatter(
         point.height,
         props.measureUnits?.distanceUnits,
         props.locale,
         props.decimals?.height
       )}\n` +
-      `${t('vc.measurement.point.slope')}${MeasureUnits.angleToString(
-        point.slope,
-        props.measureUnits?.slopeUnits,
-        props.locale,
-        props.decimals?.slope
-      )}`
+      `${t('vc.measurement.point.slope')}${angleFormatter(point.slope, props.measureUnits?.slopeUnits, props.locale, props.decimals?.slope)}`
     )
   }
 

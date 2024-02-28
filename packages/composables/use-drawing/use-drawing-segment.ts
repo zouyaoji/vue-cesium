@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2023-05-23 10:31:50
+ * @LastEditTime: 2024-02-28 17:21:40
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
@@ -102,6 +102,10 @@ export default function (props, ctx, cmpName: string) {
     const polylines: Array<VcSegmentDrawing> = []
     const { Cartesian3, Cartographic, Rectangle, createGuid, defined, Math: CesiumMath, Ray } = Cesium
     const { viewer } = $services
+
+    const angleFormatter = props.angleFormatter || MeasureUnits.angleToString
+    const distanceFormatter = props.distanceFormatter || MeasureUnits.distanceToString
+    const areaFormatter = props.areaFormatter || MeasureUnits.areaToString
 
     renderDatas.value.forEach(polylineSegment => {
       const startPosition = polylineSegment.positions[0]
@@ -235,7 +239,7 @@ export default function (props, ctx, cmpName: string) {
         labels.push({
           position: labelPosition,
           id: createGuid(),
-          text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+          text: distanceFormatter(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           ...labelOpts
         })
       }
@@ -254,7 +258,7 @@ export default function (props, ctx, cmpName: string) {
           distances.push(s)
           if (s > 0 && positions.length > 2 && props.showDistanceLabel) {
             labels.push({
-              text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+              text: distanceFormatter(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
               ...labelsOpts
@@ -273,7 +277,7 @@ export default function (props, ctx, cmpName: string) {
               }
               angles.push(angle)
               labels.push({
-                text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
+                text: angleFormatter(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
                 position: point1,
                 id: createGuid(),
                 ...labelsOpts
@@ -285,7 +289,7 @@ export default function (props, ctx, cmpName: string) {
         const area = calculateAreaByPostions(positions)
         props.showLabel &&
           labels.push({
-            text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+            text: areaFormatter(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
             position: polylineSegment.positions[0],
             id: createGuid(),
             ...labelOpts
@@ -306,28 +310,28 @@ export default function (props, ctx, cmpName: string) {
         labels.push({
           position: polyline.xLabelPosition,
           id: createGuid(),
-          text: MeasureUnits.distanceToString(polyline.xDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+          text: distanceFormatter(polyline.xDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           ...props.xLabelOpts
         })
 
         labels.push({
           position: polyline.yLabelPosition,
           id: createGuid(),
-          text: MeasureUnits.distanceToString(polyline.yDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+          text: distanceFormatter(polyline.yDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           ...props.yLabelOpts
         })
 
         labels.push({
           position: polyline.xAnglePosition,
           id: createGuid(),
-          text: MeasureUnits.angleToString(polyline.xAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
+          text: angleFormatter(polyline.xAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
           ...props.xAngleLabelOpts
         })
 
         labels.push({
           position: polyline.yAnglePosition,
           id: createGuid(),
-          text: MeasureUnits.angleToString(polyline.yAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
+          text: angleFormatter(polyline.yAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
           ...props.yAngleLabelOpts
         })
       }

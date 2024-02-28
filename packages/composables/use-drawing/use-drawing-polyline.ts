@@ -95,6 +95,10 @@ export default function (props, ctx, cmpName: string) {
     const { Cartesian3, createGuid, defined, Math: CesiumMath } = Cesium
     const polylines: Array<VcPolylineDrawing> = []
     const { viewer } = $services
+    const angleFormatter = props.angleFormatter || MeasureUnits.angleToString
+    const distanceFormatter = props.distanceFormatter || MeasureUnits.distanceToString
+    const areaFormatter = props.areaFormatter || MeasureUnits.areaToString
+
     renderDatas.value.forEach((polyline, index) => {
       const labels = reactive<Array<VcLabelProps>>([])
       const distances: number[] = []
@@ -158,9 +162,10 @@ export default function (props, ctx, cmpName: string) {
           distances.push(s)
           distance = distance + s
           const polylineLabelsOpts = Object.assign({}, props.labelsOpts, polyline.labelsOpts)
+
           if (s > 0 && positions.length > 2 && props.showDistanceLabel) {
             labels.push({
-              text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+              text: distanceFormatter(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
               ...polylineLabelsOpts
@@ -179,7 +184,7 @@ export default function (props, ctx, cmpName: string) {
               }
               angles.push(angle)
               labels.push({
-                text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
+                text: angleFormatter(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
                 position: point1,
                 id: createGuid(),
                 ...polylineLabelsOpts
@@ -206,14 +211,14 @@ export default function (props, ctx, cmpName: string) {
         if (props.showLabel && positions.length) {
           if (cmpName.includes('Area')) {
             labels.push({
-              text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+              text: areaFormatter(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
               position: positions[positions.length - 1],
               id: createGuid(),
               ...polylineLabelOpts
             })
           } else {
             labels.push({
-              text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+              text: distanceFormatter(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: positions[positions.length - 1],
               id: createGuid(),
               ...polylineLabelOpts
