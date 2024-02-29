@@ -50,7 +50,7 @@ import type {
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
-import { VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty } from '@vue-cesium/shared/extends/materials'
+import { VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty, VcLineTrailMaterialProperty } from '@vue-cesium/shared/extends/materials'
 import { cloneDeep } from 'lodash'
 
 /**
@@ -446,7 +446,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     val instanceof PolylineOutlineMaterialProperty ||
     val instanceof StripeMaterialProperty ||
     val instanceof VcCircleWaveMaterialProperty ||
-    val instanceof VcLineFlowMaterialProperty
+    val instanceof VcLineFlowMaterialProperty ||
+    val instanceof VcLineTrailMaterialProperty
     // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
@@ -541,6 +542,16 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
           mixt: defaultValue(value.fabric.uniforms.mixt, false),
           speed: defaultValue(value.fabric.uniforms.speed, 10),
           time: defaultValue(value.fabric.uniforms.time, -1)
+        })
+      }
+      case 'VcLineTrail': {
+        return new VcLineTrailMaterialProperty({
+          image: defaultValue(value.fabric.uniforms.image, Material.DefaultImageId),
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 0, 0, 1))),
+          repeat: makeCartesian2(defaultValue(value.fabric.uniforms.repeat, new Cartesian2(1, 1))),
+          axisY: defaultValue(value.fabric.uniforms.axisY, false),
+          duration: defaultValue(value.fabric.uniforms.duration, 3000),
+          loop: defaultValue(value.fabric.uniforms.loop, true)
         })
       }
     }

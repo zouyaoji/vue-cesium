@@ -8,12 +8,12 @@ _2024-02-29_
 
 - Added formatting functions to the `vc-measurements` component for measurement results. `distanceFormatter`, `areaFormatter`, `angleFormatter`.
 - Adapt for compatibility with dc-sdk version 3.x.
+- Added custom material `VcLineTrail`.
 
 #### Bug fixes
 
 - Fixed the issue that parameter configuration of areaMeasurementOpts in the vc-measurements component, setting both showAngleLabel and showDistanceLabel to false, results in an error.[#518](https://github.com/zouyaoji/vue-cesium/issues/518)
 - Fixed the issue that Cesium.VERSION being undefined, causing an error.
-
 
 ### 3.2.5
 
@@ -21,9 +21,9 @@ _2023-12-27_
 
 #### Bug fixes
 
-  - The browser crash issue occurs when using `ref` or `reactive` to wrap the `hierarchy` prop in the `vc-graphics-polygon` component.
-  - In native Cesium, there is an error when loading SuperMap iServer map services using `vc-provider-imagery-supermap`.
-  - Fixed the issue of consecutive mouse clicks not taking effect in the `vc-navigation-sm` component. **[Removed the functionality of double-clicking the outer dial to realign with the north direction]**
+- The browser crash issue occurs when using `ref` or `reactive` to wrap the `hierarchy` prop in the `vc-graphics-polygon` component.
+- In native Cesium, there is an error when loading SuperMap iServer map services using `vc-provider-imagery-supermap`.
+- Fixed the issue of consecutive mouse clicks not taking effect in the `vc-navigation-sm` component. **[Removed the functionality of double-clicking the outer dial to realign with the north direction]**
 
 ### 3.2.4
 
@@ -31,7 +31,7 @@ _2023-10-23_
 
 #### Bug fixes
 
-  - The npm release for version 3.2.3 has an error. 
+- The npm release for version 3.2.3 has an error.
 
 ### 3.2.3
 

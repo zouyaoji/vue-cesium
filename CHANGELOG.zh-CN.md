@@ -8,6 +8,7 @@ _2024-02-29_
 
 - `vc-measurements` 组件为量算结果添加格式化函数。`distanceFormatter`、`areaFormatter`、`angleFormatter`。
 - 适配 `dc-sdk` 3.x 版本。
+- 添加 `VcLineTrail` 自定义材质。
 
 #### Bug 修复
 

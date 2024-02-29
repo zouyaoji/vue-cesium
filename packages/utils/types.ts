@@ -87,6 +87,7 @@ interface MaterialOption {
       mixt?: boolean
       speed?: number
       time?: number
+      loop?: boolean
     }
   }
   strict?: boolean

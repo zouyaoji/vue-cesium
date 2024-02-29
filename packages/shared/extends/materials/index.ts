@@ -9,5 +9,6 @@
 import MaterialExtend from './MaterialExtend'
 import VcCircleWaveMaterialProperty from './VcCircleWaveMaterialProperty'
 import VcLineFlowMaterialProperty from './VcLineFlowMaterialProperty'
+import VcLineTrailMaterialProperty from './VcLineTrailMaterialProperty'
 
-export { MaterialExtend, VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty }
+export { MaterialExtend, VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty, VcLineTrailMaterialProperty }

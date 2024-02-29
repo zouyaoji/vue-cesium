@@ -38,8 +38,8 @@
         :positions="[[-115,50],[-112,50],[-107.5,50],[-105,50],[-102.5,50],[-100,50],[-97.5,50],[-95,50],[-92.5,50],[-90,50]]"
         :material="{
           fabric: {
-            type: 'VcLineFlow',
-            uniforms: { image: 'https://zouyaoji.top/vue-cesium/images/textures/arrow.png', color: 'yellow', repeat: { x: 30, y: 1 }, speed: 10 }
+            type: 'VcLineTrail',
+            uniforms: { image: 'https://zouyaoji.top/vue-cesium/images/textures/colors.png',  }
           }
         }"
         outlineColor="black"

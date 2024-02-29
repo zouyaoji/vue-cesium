@@ -160,8 +160,8 @@ ctrl + 右键取消绘制。
               [108.95499, 34.21761]
             ]
           ],
-          showAngleLabel: false,
-          showDistanceLabel: false,
+          // showAngleLabel: false,
+          // showDistanceLabel: false,
           areaFormatter: (value, defaultUnits, defaultLocale, defaultDecimals) => {
             return `${(value * 0.0015).toFixed(4)} 亩`
           }
