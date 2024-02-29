@@ -7,18 +7,18 @@ import * as coordtransform from '@vue-cesium/utils/coordtransform'
  * {@link https://github.com/openlayers/openlayers/issues/3522#issuecomment-570493906}
  */
 class BaiduMapMercatorTilingScheme {
-  _ellipsoid: any
+  _ellipsoid: Cesium.Ellipsoid
   _projection: any
   _rectangleSouthwestInMeters: any
   _rectangleNortheastInMeters: any
   _rectangle: any
-  resolutions: any[]
+  resolutions: number[]
   constructor(options) {
     const { defaultValue, Ellipsoid, WebMercatorProjection, Cartesian2, Cartographic, Math: CesiumMath, Rectangle } = Cesium
     options = options || {}
     this._ellipsoid = defaultValue(options.ellipsoid, Ellipsoid.WGS84)
     this._projection = new WebMercatorProjection(this._ellipsoid)
-    const projection = new BaiduMapMercatorProjection()
+    const baiduProjection = new BaiduMapMercatorProjection()
     this._projection.project = function (cartographic, result) {
       result = result || {}
 
@@ -32,15 +32,15 @@ class BaiduMapMercatorTilingScheme {
       }
       result[0] = Math.min(result[0], 180)
       result[0] = Math.max(result[0], -180)
-      result[1] = Math.min(result[1], 74.000022)
-      result[1] = Math.max(result[1], -71.988531)
-      result = projection.lngLatToPoint(new Point(result[0], result[1]))
+      result[1] = Math.min(result[1], 74)
+      result[1] = Math.max(result[1], -74)
+      result = baiduProjection.lngLatToPoint(new Point(result[0], result[1]))
       return new Cartesian2(result.x, result.y)
     }
 
     this._projection.unproject = function (cartographic, result) {
       result = result || {}
-      result = projection.mercatorToLngLat(new Point(cartographic.x, cartographic.y))
+      result = baiduProjection.mercatorToLngLat(new Point(cartographic.x, cartographic.y))
       result[0] = ((result[0] + 180) % 360) - 180
       if (options.projectionTransforms && options.projectionTransforms.from !== options.projectionTransforms.to) {
         if (options.projectionTransforms.to.toUpperCase() === 'WGS84') {

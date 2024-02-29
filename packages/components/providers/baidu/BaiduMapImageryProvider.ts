@@ -49,7 +49,7 @@ class BaiduMapImageryProvider {
       if (options.mapStyle === 'img') {
         this._url = `//maponline{s}.bdimg.com/starpic/u=x={x};y={y};z={z};v=009;type=sate&qt=satepc&app=webearth2&udt={udt}&fm=46&v=009`
       } else if (options.mapStyle === 'vec') {
-        this._url = `//maponline{s}.bdimg.com/tile/?qt={qt}&x={x}&y={y}&z={z}&styles={styles}&scaler={scale}&udt={udt}&from=jsapi2_0&showtext={showtext}`
+        this._url = `//maponline{s}.bdimg.com/tile/?qt={qt}&x={x}&y={y}&z={z}&styles={styles}&scaler={scale}&udt={udt}&from=jsapi3_0&showtext={showtext}`
       } else if (options.mapStyle === 'traffic') {
         this._url = `https://its.map.baidu.com/traffic/TrafficTileService?time={time}&label={labelStyle}&v=016&level={z}&x={x}&y={y}&scaler={scale}`
       } else {
