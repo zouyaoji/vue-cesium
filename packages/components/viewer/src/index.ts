@@ -1,16 +1,17 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-08-12 11:40:04
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2024-03-17 18:08:40
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \10_vue-cesium\packages\components\viewer\src\index.ts
+ * @FilePath: \vue-cesium\packages\components\viewer\src\index.ts
  */
 import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, withDirectives, computed } from 'vue'
 import type { VNode } from 'vue'
 import useViewer, { viewerProps } from './useViewer'
 import type { VcViewerProps } from './useViewer'
 import type {
+  VcCamera,
   VcComponentInternalInstance,
   VcDatasource,
   VcTerrainProvider,
@@ -86,7 +87,8 @@ const emits = {
   wheel: (delta: number) => true,
   imageryLayersUpdatedEvent: () => true,
   tileLoadProgressEvent: (length: number) => true,
-  touchEnd: evt => true
+  touchEnd: evt => true,
+  'update:camera': (evt: VcCamera) => true
 }
 export default defineComponent({
   name: 'VcViewer',
