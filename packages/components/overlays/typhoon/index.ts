@@ -25,14 +25,13 @@ import {
   VcPointProps,
   VcPolygon
 } from '@vue-cesium/components/primitive-collections'
-import { cloneDeep, uniqWith } from 'lodash-es'
+import { cloneDeep, merge, uniqWith } from 'lodash-es'
 import useLog from '@vue-cesium/composables/private/use-log'
 import { VcPrimitive, VcPrimitiveProps } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolyline, VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
 import VcOverlayHtml from '@vue-cesium/components/overlays/html'
 import circle from '@turf/circle'
-import { deepMerge } from '@vue-cesium/utils/util'
 import { useCommon } from '@vue-cesium/composables'
 
 const defaultPointProps = {
@@ -148,7 +147,7 @@ export default defineComponent({
       const position = [point.lng, point.lat]
       datasource.positions.push(position)
 
-      const pointProps = typeof props.pointProps === 'function' ? deepMerge(cloneDeep(defaultPointProps), props.pointProps(point)) : props.pointProps
+      const pointProps = typeof props.pointProps === 'function' ? merge(cloneDeep(defaultPointProps), props.pointProps(point)) : props.pointProps
       datasource.points.push({
         id: point.id || Cesium.createGuid(),
         position,
@@ -431,12 +430,12 @@ export default defineComponent({
         if (typhoonDatasource.positions.length > 1) {
           const linePrimitiveProps: any =
             typeof props.linePrimitiveProps === 'function'
-              ? deepMerge(cloneDeep(defaultLinePrimitiveProps), props.linePrimitiveProps(typhoonDatasource))
+              ? merge(cloneDeep(defaultLinePrimitiveProps), props.linePrimitiveProps(typhoonDatasource))
               : props.linePrimitiveProps
 
           const lineGeometryProps =
             typeof props.lineGeometryProps === 'function'
-              ? deepMerge(cloneDeep(defaultLineGeometryProps), props.lineGeometryProps(typhoonDatasource))
+              ? merge(cloneDeep(defaultLineGeometryProps), props.lineGeometryProps(typhoonDatasource))
               : props.lineGeometryProps
 
           children.push(
@@ -522,7 +521,7 @@ export default defineComponent({
         // polygon 台风风圈
         if (typhoonDatasource.type === 'live') {
           const labelProps =
-            typeof props.labelProps === 'function' ? deepMerge(cloneDeep(defaultLabelProps), props.labelProps(typhoonDatasource)) : props.labelProps
+            typeof props.labelProps === 'function' ? merge(cloneDeep(defaultLabelProps), props.labelProps(typhoonDatasource)) : props.labelProps
 
           //text   台风名字
           children.push(

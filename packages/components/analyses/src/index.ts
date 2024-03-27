@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2023-03-13 17:56:05
+ * @LastEditTime: 2024-03-27 13:55:06
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
+ * @FilePath: \vue-cesium\packages\components\analyses\src\index.ts
  */
 
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
@@ -12,13 +12,13 @@ import { defineComponent, getCurrentInstance, reactive, ref, computed, VNode } f
 import { useLocale } from '@vue-cesium/composables'
 import { defaultOptions, analysesProps, VcAnalysesProps } from './defaultProps'
 import type { AnalysisActionCmpRef, VcDrawingActionInstance, VcDrawingOpts, VcViewshedAnalysisOpts } from '@vue-cesium/utils/drawing-types'
-import { camelize, deepMerge } from '@vue-cesium/utils/util'
+import { camelize } from '@vue-cesium/utils/util'
 import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import { cloneDeep, isEqual } from 'lodash-es'
+import { cloneDeep, isEqual, merge } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -51,14 +51,12 @@ export default defineComponent({
     const sightlineActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.sightlineActionOpts, mergeActionOpts('sightlineActionOpts'))
     )
-    const sightlineAnalysisOpts = reactive<VcDrawingOpts>(deepMerge(cloneDeep(defaultOptions.sightlineAnalysisOpts), props.sightlineAnalysisOpts))
+    const sightlineAnalysisOpts = reactive<VcDrawingOpts>(merge(cloneDeep(defaultOptions.sightlineAnalysisOpts), props.sightlineAnalysisOpts))
 
     const viewshedActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.viewshedActionOpts, mergeActionOpts('viewshedActionOpts'))
     )
-    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(
-      deepMerge(cloneDeep(defaultOptions.viewshedAnalysisOpts), props.viewshedAnalysisOpts)
-    )
+    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(merge(cloneDeep(defaultOptions.viewshedAnalysisOpts), props.viewshedAnalysisOpts))
 
     options.sightlineActionOpts = sightlineActionOpts
     options.sightlineAnalysisOpts = sightlineAnalysisOpts

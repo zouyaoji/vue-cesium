@@ -197,15 +197,6 @@ export function isArrayLike(obj) {
   return typeof length === 'number' && length >= 0
 }
 
-// 深度合并
-export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
-  let key: string
-  for (key in target) {
-    src[key] = isObject(src[key]) ? deepMerge(src[key], target[key]) : (src[key] = target[key])
-  }
-  return src
-}
-
 export function isNumber(v) {
   return typeof v === 'number' && isFinite(v)
 }
