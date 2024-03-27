@@ -488,8 +488,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
         return new PolylineDashMaterialProperty({
           color: makeColor(defaultValue(value.fabric.uniforms.color, 'white')),
           gapColor: makeColor(defaultValue(value.fabric.uniforms.gapColor, Color.TRANSPARENT)),
-          dashLength: defaultValue(value.fabric.uniforms.taperPower, 16.0),
-          dashPattern: defaultValue(value.fabric.uniforms.taperPower, 255.0)
+          dashLength: defaultValue(value.fabric.uniforms.dashLength, 16.0),
+          dashPattern: defaultValue(value.fabric.uniforms.dashPattern, 255.0)
         })
       case 'PolylineGlow':
         return new PolylineGlowMaterialProperty({
