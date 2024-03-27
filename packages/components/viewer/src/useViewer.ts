@@ -1851,6 +1851,10 @@ export interface VcViewerProps {
    */
   onTileLoadProgressEvent?: (length: number) => void
   onTouchEnd?: (evt: any) => void
+  /**
+   *  Triggers when the camera has changed by percentageChanged.
+   */
+  'onUpdate:camera'?: (evt: VcCamera) => void
 }
 
 export interface VcViewerSlots {
