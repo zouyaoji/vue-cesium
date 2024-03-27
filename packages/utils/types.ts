@@ -141,15 +141,11 @@ interface NavigationOption {
   distanceLegendOptions?: AnyObject | boolean
 }
 
-interface HeatmapConfiguration extends h337.HeatmapConfiguration {
-  useEntitiesIfAvailable?: boolean
-  minCanvasSize: number
-  maxCanvasSize: number
-  radiusFactor: number
-  spacingFactor: number
-  maxOpacity: number
-  minOpacity: number
-  container: HTMLElement
+type HeatmapConfiguration = Partial<h337.HeatmapConfiguration> & {
+  minCanvasSize?: number
+  maxCanvasSize?: number
+  radiusFactor?: number
+  spacingFactor?: number
 }
 
 interface DynamicOverlayOpts extends Cesium.Entity {

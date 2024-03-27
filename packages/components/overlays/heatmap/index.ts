@@ -195,7 +195,7 @@ export default defineComponent({
         }
       }
 
-      const heatmapInstance = h337.create(options.value)
+      const heatmapInstance = h337.create(options.value as unknown as h337.HeatmapConfiguration)
       container.children[0].setAttribute('id', id + '-hm')
       if (Array.isArray(props.data)) {
         setData(props.data, heatmapInstance)
