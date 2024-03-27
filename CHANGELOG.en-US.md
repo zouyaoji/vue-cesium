@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.2.7
+
+_2024-03-27_
+
+#### Bug fixes
+
+- Fixed the issue that modifying parameters for measuring area drawing is ineffective. Change all merging methods of parameters related to measuring drawing to use lodash's merge method.
+- Fixed the issue that the `VcOverlayHeatmap` component's type definition is incorrect.
+
 ### 3.2.6
 
 _2024-02-29_

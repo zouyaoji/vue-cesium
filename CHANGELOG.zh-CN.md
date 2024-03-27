@@ -1,5 +1,14 @@
 ## 更新日志
 
+### 3.2.7
+
+_2024-03-27_
+
+#### Bug 修复
+
+- 修复量算绘制面参数修改无效问题。量算绘制相关的参数合并方法全部改为 lodash 的 merge 方法。
+- 修复 `VcOverlayHeatmap` 组件配置选项 type 定义错误问题。
+
 ### 3.2.6
 
 _2024-02-29_
@@ -13,7 +22,7 @@ _2024-02-29_
 #### Bug 修复
 
 - 修复 `vc-measurements` 组件 `areaMeasurementOpts` 的参数同时配置 `showAngleLabel` 和 `showDistanceLabel` 为 `false` 报错。[#518](https://github.com/zouyaoji/vue-cesium/issues/518)
-- 修复使用超图扩展Cesium包引入因没有 Cesium.VERSION 引起的报错问题。
+- 修复使用超图扩展 Cesium 包引入因没有 Cesium.VERSION 引起的报错问题。
 
 ### 3.2.5
 
