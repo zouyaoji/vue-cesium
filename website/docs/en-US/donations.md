@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2024-01-23 17:17:17
+ * @LastEditTime: 2024-03-27 14:27:09
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\website\docs\en-US\donations.md
@@ -12,7 +12,6 @@
 ### Sponsor vue-cesium
 
 - `vue-cesium` adopts the MIT open-source license, promising that the framework itself and official documentation will be permanently open and free. However, the daily updates and community operation of the framework require a significant amount of effort. If `vue-cesium` has been helpful to you, you can kindly show your support for `vue-cesium`.
-
 
 - <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
 
@@ -28,15 +27,16 @@
 
   | amount   | channel | sponsor                                         | message                           | date       |
   | -------- | ------- | ----------------------------------------------- | --------------------------------- | ---------- |
-    | ¥ 50.0   | WeChat | \*呵                                            |                                   | 2024-01-23 |
-  | ¥ 100.0  | WeChat | \*噻                                            |                                   | 2024-01-19 |
-  | ¥ 30.0   | WeChat | A\*a                                            |                                   | 2024-01-09 |
-  | ¥ 1.0    | AliPay | \*昊                                            | 感谢开源                          | 2023-12-28 |
-  | ¥ 119.9  | AliPay | \*\*英                                          |                                   | 2023-11-17 |
-  | ¥ 66.0   | WeChat | \*噻                                            | 好人一生平安                      | 2023-10-11 |
-  | ¥ 20.0   | WeChat | \*生                                            | 酱香拿铁                          | 2023-09-13 |
-  | ¥ 3.0    | WeChat | X\*i                                            | 微薄之力莫要嫌弃                  | 2023-09-07 |
-  | ¥ 66.0   | WeChat | J\*n                                            | 开源不易，感谢                    | 2023-07-28 |
+  | ¥ 9.9    | WeChat  | \*墨                                            |                                   | 2024-03-18 |
+  | ¥ 50.0   | WeChat  | \*呵                                            |                                   | 2024-01-23 |
+  | ¥ 100.0  | WeChat  | \*噻                                            |                                   | 2024-01-19 |
+  | ¥ 30.0   | WeChat  | A\*a                                            |                                   | 2024-01-09 |
+  | ¥ 1.0    | AliPay  | \*昊                                            | 感谢开源                          | 2023-12-28 |
+  | ¥ 119.9  | AliPay  | \*\*英                                          |                                   | 2023-11-17 |
+  | ¥ 66.0   | WeChat  | \*噻                                            | 好人一生平安                      | 2023-10-11 |
+  | ¥ 20.0   | WeChat  | \*生                                            | 酱香拿铁                          | 2023-09-13 |
+  | ¥ 3.0    | WeChat  | X\*i                                            | 微薄之力莫要嫌弃                  | 2023-09-07 |
+  | ¥ 66.0   | WeChat  | J\*n                                            | 开源不易，感谢                    | 2023-07-28 |
   | ¥ 66.00  | WeChat  | J\*n                                            | 开源不易，感谢                    | 2023-07-28 |
   | ¥ 100.00 | WeChat  | \*禹                                            | 感谢开源                          | 2023-07-11 |
   | ¥ 19.99  | AliPay  | \*\*桐                                          | -                                 | 2023-05-20 |

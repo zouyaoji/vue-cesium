@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2024-01-23 17:17:03
+ * @LastEditTime: 2024-03-27 14:26:59
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\website\docs\zh-CN\donations.md
@@ -28,8 +28,9 @@
 
 - 特别感谢以下捐赠者：
 
-  | 金额     | 来源   | 赞助人                                          | 留言                              | 时间日期       |
+  | 金额     | 来源   | 赞助人                                          | 留言                              | 时间日期   |
   | -------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 9.9    | WeChat | \*墨                                            |                                   | 2024-03-18 |
   | ¥ 50.0   | WeChat | \*呵                                            |                                   | 2024-01-23 |
   | ¥ 100.0  | WeChat | \*噻                                            |                                   | 2024-01-19 |
   | ¥ 30.0   | WeChat | A\*a                                            |                                   | 2024-01-09 |
