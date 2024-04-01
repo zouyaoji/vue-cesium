@@ -3,8 +3,8 @@
  * @Date: 2023-05-26 13:30:22
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2023-07-28 14:58:36
- * @FilePath: \vue-cesium@next\packages\shared\src\PrimitiveCluster.ts
+ * @LastEditTime: 2024-04-02 00:43:38
+ * @FilePath: \vue-cesium\packages\shared\src\PrimitiveCluster.ts
  */
 import { defaultValue } from '@vue-cesium/utils/util'
 import KDBush from 'kdbush'
@@ -633,7 +633,11 @@ function createDeclutterCallback(entityCluster) {
     let collection
     let collectionIndex
 
-    const index = new KDBush(points, getX, getY, 64, Int32Array)
+    const index = new KDBush(points.length, 64, Int32Array)
+    for (let i = 0; i < points.length; i++) {
+      index.add(points[i].coord.x, points[i].coord.y)
+    }
+    index.finish()
 
     if (currentHeight < previousHeight) {
       length = clusters.length
