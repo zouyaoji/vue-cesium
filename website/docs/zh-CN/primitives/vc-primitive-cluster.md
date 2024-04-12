@@ -18,6 +18,7 @@
         :enabled="enabled"
         v-if="billboards.length"
         :billboards="billboards"
+        :labels="labels"
         :minimum-cluster-size="minimumClusterSize"
         @cluster-event="onClusterEvent"
         @click="onClicked"
@@ -26,7 +27,7 @@
     </vc-collection-primitive>
 
     <vc-selection-indicator ref="indicatorRef" @pickEvt="pickEvt"></vc-selection-indicator>
-      <!-- 注记层 -->
+    <!-- 注记层 -->
     <vc-layer-imagery :sort-order="20">
       <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
@@ -53,6 +54,7 @@
       const show = ref(true)
       const enabled = ref(true)
       const billboards = ref([])
+      const labels = ref([])
       const primitiveClusterRef = ref(null)
       const indicatorRef = ref(null)
       const minimumClusterSize = ref(3)
@@ -80,12 +82,27 @@
             const feature = features[i]
             const coordinates = feature.geometry.coordinates
 
+            labels.value.push({
+              show: true,
+              scale: 1,
+              showBackground: true,
+              backgroundColor: Cesium.Color.fromCssColorString('#000000').withAlpha(0.8),
+              verticalOrigin: 1,
+              horizontalOrigin: 0,
+              pixelOffset: new Cesium.Cartesian2(0, -10),
+              font: '16px sans-serif',
+              position: [coordinates[0], coordinates[1]],
+              disableDepthTestDistance: Number.POSITIVE_INFINITY,
+              distanceDisplayCondition: [0, Number.POSITIVE_INFINITY],
+              text: 'label'
+            })
+
             billboards.value.push({
               image: 'https://zouyaoji.top/vue-cesium/images/mark-icon.png',
               width: 32,
               height: 32,
               position: [coordinates[0], coordinates[1]],
-              onClick: (e) => {
+              onClick: e => {
                 console.log(e)
               }
             })
@@ -166,6 +183,7 @@
         onClicked,
         onMouseOver,
         onViewerReady,
+        labels,
         billboards,
         pickEvt,
         indicatorRef,

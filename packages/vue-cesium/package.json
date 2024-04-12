@@ -56,7 +56,7 @@
     "@zouyaoji/heatmap.js": "^2.0.8",
     "compare-versions": "^6.1.0",
     "echarts": "^5.4.3",
-    "kdbush": "^3.0.0",
+    "kdbush": "^4.0.2",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.3",
