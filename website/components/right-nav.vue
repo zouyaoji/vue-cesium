@@ -17,7 +17,7 @@
         {{ item }}
       </el-link>
     </div>
-    <app-link href="https://new1.502502.xyz/#/register?code=jlz6Frzz" style="position: absolute">
+    <app-link href="https://home.502502.xyz/#/register?code=jlz6Frzz" style="position: absolute">
       <span style="padding-left: 10px; line-height: 120px">{{ otherAd }}<el-tag effect="dark" type="success">jlz6Frzz</el-tag></span>
     </app-link>
   </el-scrollbar>

@@ -9,7 +9,7 @@
           <router-view class="content" />
         </div>
         <footer-nav />
-        <app-link href="https://new1.502502.xyz/#/register?code=jlz6Frzz">
+        <app-link href="https://home.502502.xyz/#/register?code=jlz6Frzz">
           <span style="padding-left: 20px">{{ otherAd }}</span>
         </app-link>
         <ad-sense
