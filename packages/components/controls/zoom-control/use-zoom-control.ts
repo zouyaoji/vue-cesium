@@ -10,15 +10,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const zoomOutTooltipRef = ref<VcTooltipRef>(null)
   const resetTooltipRef = ref<VcTooltipRef>(null)
 
-  const zoomIn = e => {
+  const zoomIn = (e?: MouseEvent) => {
     zoom(1 / props.zoomAmount, e)
   }
 
-  const zoomOut = e => {
+  const zoomOut = (e?: MouseEvent) => {
     zoom(props.zoomAmount, e)
   }
 
-  const zoom = (relativeAmount, e) => {
+  const zoom = (relativeAmount, e?: MouseEvent) => {
     $(zoomInTooltipRef)?.hide()
     $(zoomOutTooltipRef)?.hide()
 
@@ -129,7 +129,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
-  const zoomReset = e => {
+  const zoomReset = (e?: MouseEvent) => {
     $(resetTooltipRef)?.hide()
     const { viewer } = $services
     const scene = viewer.scene
@@ -145,7 +145,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       viewer.trackedEntity = trackedEntity
     } else {
       const listener = getInstanceListener(vcInstance, 'zoomEvt')
-      const target = e.currentTarget
+      const target = e?.currentTarget
       const level = heightToLevel(viewer.camera.positionCartographic.height).toFixed(0)
       // reset to a default position or view defined in the options
       listener &&

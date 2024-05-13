@@ -240,9 +240,9 @@ export default defineComponent({
     }
 
     Object.assign(instance.proxy, {
-      zoomIn: () => zoomControlState.zoomIn,
-      zoomOut: () => zoomControlState.zoomOut,
-      zoomReset: () => zoomControlState.zoomReset
+      zoomIn: (e?: MouseEvent) => zoomControlState.zoomIn(e),
+      zoomOut: (e?: MouseEvent) => zoomControlState.zoomOut(e),
+      zoomReset: (e?: MouseEvent) => zoomControlState.zoomReset(e)
     })
 
     return () => {
