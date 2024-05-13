@@ -199,6 +199,16 @@ export default defineComponent({
       cameraInfo.roll = CesiumMath.toDegrees(viewer.camera.roll).toFixed(1)
       cameraInfo.height = viewer.camera.positionCartographic.height.toFixed(2)
       cameraInfo.level = heightToLevel(Number(cameraInfo.height)).toFixed(0)
+
+
+      const listener = getInstanceListener(instance, 'statusBarEvt')
+      listener &&
+        ctx.emit('statusBarEvt', {
+          type: 'statusBar',
+          mouseCoordsInfo: mouseCoordsInfo.value,
+          cameraInfo: cameraInfo,
+          performanceInfo: performanceInfo
+        })
     }
 
     const onMouseMove = e => {
