@@ -1,5 +1,19 @@
 ## Changelog
 
+### 3.2.8
+
+_2024-05-13_
+
+#### Optimization
+
+- `PrimitiveCluster` upgrade depends on the kdbush version.
+- Modify the export method of the library to avoid the problem that some classes cannot be referenced in umd mode.
+
+#### Bug fixes
+
+- Fixed the issue that the ref method of the `vc-zoom-control` component exposed errors.
+- Fixed the issue that `statusBarEvt` of the `vc-statu-bar` component is not triggered when camera changed.
+
 ### 3.2.7
 
 _2024-03-27_
