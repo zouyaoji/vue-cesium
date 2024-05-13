@@ -1,23 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-23 00:57:59
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\vue-cesium\index.ts
+ * @Date: 2023-11-10 17:59:25
+ * @Description: Do not edit
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2024-04-29 10:02:47
+ * @FilePath: \vue-cesium\packages\vue-cesium\index.ts
  */
-import installer from './defaults'
-export * from '@vue-cesium/components'
-export * from '@vue-cesium/directives'
-export * from '@vue-cesium/composables'
-export * from '@vue-cesium/shared'
+import * as VueCesiumExport from './all'
 
-// type define
-export * from '@vue-cesium/utils/emits'
-
-export { default as makeInstaller } from './make-installer'
-
-export const install = installer.install
-export const version = installer.version
-
-export default installer
+export * from './all'
+export default VueCesiumExport

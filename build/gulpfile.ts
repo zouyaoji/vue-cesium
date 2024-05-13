@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2023-05-04 21:27:01
+ * @LastEditTime: 2024-04-16 17:51:40
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\build\gulpfile.ts
@@ -53,7 +53,7 @@ export default series(
   ),
 
   parallel(copyTypesDefinitions, copyFiles)
-)
+) as any
 
 export * from './types-definitions'
 export * from './modules'
