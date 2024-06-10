@@ -67,7 +67,10 @@ export default {
   selectedTerrainProviderViewModel: Object as PropType<Cesium.ProviderViewModel>,
   terrainProviderViewModels: Array as PropType<Array<Cesium.ProviderViewModel>>,
   imageryProvider: Object as PropType<Cesium.ImageryProvider>,
-  baseLayer: Object as PropType<Cesium.ImageryLayer | false>,
+  baseLayer: {
+    type: [Object, Boolean] as PropType<Cesium.ImageryLayer | false>,
+    default: () => undefined
+  },
   terrainProvider: Object as PropType<Cesium.TerrainProvider>,
   skyBox: {
     type: [Object, Boolean] as PropType<Cesium.SkyBox | false>,
