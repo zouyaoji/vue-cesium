@@ -14,6 +14,7 @@
     v-if="show"
     ref="vcViewer"
     :animation="animation"
+    :base-layer="false"
     :base-layer-picker="baseLayerPicker"
     :timeline="timeline"
     :fullscreen-button="fullscreenButton"
@@ -201,6 +202,7 @@
 |containerId|string|`'cesiumContainer'`|`optional` 指定 `vc-viewer` 容器 div 元素的 id。|
 |mars3dConfig|Mars3dConfig||`optional` 仅适用于 mars3d，指定用于初始化 `vc-viewer` 组件的 mars3d 库的配置参数。|
 |animation|boolean|`false`|`optional` 是否显示动画控件。|
+|baseLayer|false\|Cesium.ImageryProvider|`undefined`|`optional` 禁用或配置内部基础图层。|
 |baseLayerPicker| boolean|`false`|`optional` 是否显示基础图层切换按钮。|
 |fullscreenButton|boolean| `false`| `optional` 是否显示全屏切换按钮。|
 |vrButton|boolean|`false`|`optional` 是否显示 VR 功能按钮。|
@@ -215,8 +217,8 @@
 |scene3DOnly|boolean|`false`|`optional` 如果为true，则每个几何实例仅以3D形式呈现以节省GPU内存。|
 |shouldAnimate|boolean|`false`|`optional`true 是否开始时间模拟。 |
 |clockViewModel|Cesium.ClockViewModel||`optional`用于控制当前时间的时钟视图模型。|
-|selectedImageryProviderViewModel|Cesium.ProviderViewModel||`optional` 使用当前基础图像层的视图模型，如果没有提供第一个可用基础层。仅当`baseelayerpicker`设置为true时有效。|
-|terrainProviderViewModels|Array<Cesium.ProviderViewModel>||`optional` 为BaseAlayerPicker中提供可选择的ProviderViewModel数组。仅当`baseelayerpicker`设置为true时有效。|
+|selectedImageryProviderViewModel|Cesium.ProviderViewModel||`optional` 使用当前基础图像层的视图模型，如果没有提供第一个可用基础层。仅当`baseLayerPicker`设置为true时有效。|
+|terrainProviderViewModels|Array<Cesium.ProviderViewModel>||`optional` 为BaseAlayerPicker中提供可选择的ProviderViewModel数组。仅当`baseLayerPicker`设置为true时有效。|
 |imageryProvider|Cesium.ImageryProvider||`optional` 指定初始化时加载的影像。`vue-cesium` 已经将默认的替换成引用 Cesium 资源自带的`NaturalEarthII` 了。|
 |terrainProvider|Cesium.TerrainProvider||`optional` 指定初始化时加载的地形。|
 |skyBox|Cesium.SkyBox\|false||`optional` 指定初始化时加载的天空盒。 `undefined` 是默认的星空背景，`false`则天空盒、太阳、月亮等都不会添加。|

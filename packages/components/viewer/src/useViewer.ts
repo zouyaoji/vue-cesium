@@ -630,9 +630,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     options.fullscreenElement = isEmptyObj(options.fullscreenElement) ? $(viewerRef) : options.fullscreenElement
 
     if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
-      options.baseLayer = isEmptyObj(options.baseLayer)
-        ? ImageryLayer.fromProviderAsync(TileMapServiceImageryProvider.fromUrl(url), {})
-        : options.baseLayer
+      options.baseLayer =
+        isEmptyObj(options.baseLayer) && options.baseLayer !== false
+          ? ImageryLayer.fromProviderAsync(TileMapServiceImageryProvider.fromUrl(url), {})
+          : options.baseLayer
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
