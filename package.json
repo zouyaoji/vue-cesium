@@ -1,7 +1,6 @@
 {
   "name": "vue-cesium",
   "private": true,
-  "packageManager": "pnpm@9.0.4",
   "workspaces": [
     "packages/*",
     "website"
