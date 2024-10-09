@@ -671,7 +671,11 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     vcInstance.mounted = true
 
     if (compareCesiumVersion(Cesium.VERSION, '1.83')) {
-      viewer.scene.globe.terrainExaggeration = options.terrainExaggeration
+      if (compareCesiumVersion(Cesium.VERSION, '1.116')) {
+        viewer.scene.verticalExaggeration = options.verticalExaggeration || options.terrainExaggeration
+      } else {
+        viewer.scene.globe['terrainExaggeration'] = options.verticalExaggeration || options.terrainExaggeration
+      }
     }
 
     // vue-cesium 扩展补充

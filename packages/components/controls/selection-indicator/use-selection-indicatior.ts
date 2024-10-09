@@ -4,6 +4,7 @@ import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
 import { isArray } from '@vue-cesium/utils/util'
 import { pickImageryLayerFeatures } from './util'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export default function (instance: VcComponentInternalInstance, props, $services: VcViewerProvider) {
   // state
@@ -289,7 +290,10 @@ export default function (instance: VcComponentInternalInstance, props, $services
 
   const computeScreenSpacePosition = (position: Cesium.Cartesian3, result: Cesium.Cartesian2) => {
     const { viewer } = $services
-    return Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, position, result)
+
+    return compareCesiumVersion(Cesium.VERSION, '1.121')
+      ? Cesium.SceneTransforms.worldToWindowCoordinates(viewer.scene, position, result)
+      : Cesium.SceneTransforms['wgs84ToWindowCoordinates'](viewer.scene, position, result)
   }
 
   const update = () => {

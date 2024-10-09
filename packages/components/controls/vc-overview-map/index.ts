@@ -8,7 +8,7 @@ import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, o
 import VcViewer, { VcViewerProps, VcViewerRef } from '@vue-cesium/components/viewer'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { commonEmits } from '@vue-cesium/utils/emits'
-import { makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { compareCesiumVersion, makeColor } from '@vue-cesium/utils/cesium-helpers'
 
 export const overviewProps = {
   position: {
@@ -170,10 +170,24 @@ export default defineComponent({
         const wsPosition = Cartesian3.fromRadians(parentCameraRectangle.west, parentCameraRectangle.south)
         const esPosition = Cartesian3.fromRadians(parentCameraRectangle.east, parentCameraRectangle.south)
         const scene = overviewViewer.scene
-        const wnWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, wnPosition)
-        const enWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, enPosition)
-        const wsWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, wsPosition)
-        const esWindowPosition = SceneTransforms.wgs84ToWindowCoordinates(scene, esPosition)
+
+        compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, wnPosition)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, wnPosition)
+
+        const wnWindowPosition = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, wnPosition)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, wnPosition)
+        const enWindowPosition = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, enPosition)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, enPosition)
+
+        const wsWindowPosition = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, wsPosition)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, wsPosition)
+        const esWindowPosition = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, esPosition)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, esPosition)
 
         if (!defined(wnWindowPosition) || !defined(enWindowPosition) || !defined(wsWindowPosition) || !defined(esWindowPosition)) {
           return

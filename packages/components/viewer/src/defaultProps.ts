@@ -121,6 +121,10 @@ export default {
     type: Number,
     default: 1.0
   },
+  verticalExaggeration: {
+    type: Number,
+    default: 1.0
+  },
   shadows: {
     type: Boolean,
     default: false

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2023-05-23 10:21:44
+ * @LastEditTime: 2024-10-08 23:22:33
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -14,7 +14,13 @@ import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelPro
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
-import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
+import {
+  calculateAreaByPostions,
+  compareCesiumVersion,
+  getFirstIntersection,
+  getGeodesicDistance,
+  makeCartesian3Array
+} from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
 import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { reactive, VNode } from 'vue'
@@ -277,7 +283,9 @@ export default function (props, ctx, cmpName: string) {
         const scene = viewer.scene
 
         let startPosition = positions[0]
-        const positionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, startPosition, {} as any)
+        const positionWindow = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates(scene, startPosition, {} as any)
+          : SceneTransforms['wgs84ToWindowCoordinates'](scene, startPosition, {} as any)
 
         let startPositionWindow = defined(positionWindow)
           ? Cartesian2.clone(positionWindow, {} as any)
@@ -290,7 +298,10 @@ export default function (props, ctx, cmpName: string) {
         const labels = labelCollection[index]._labels
         const labelTotalLength = labels[labels.length - 1]
         for (let i = 1; i < positions.length; i++) {
-          const positionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, positions[i], {} as any)
+          const positionWindow = compareCesiumVersion(Cesium.VERSION, '1.121')
+            ? SceneTransforms.worldToWindowCoordinates(scene, positions[i], {} as any)
+            : SceneTransforms['wgs84ToWindowCoordinates'](scene, positions[i], {} as any)
+
           if (defined(positionWindow)) {
             const l = (startPositionWindow.y - positionWindow.y) / (positionWindow.x - startPositionWindow.x)
             if (labels[i - 1] !== labelTotalLength) {

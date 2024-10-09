@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2024-02-28 17:21:40
+ * @LastEditTime: 2024-10-08 23:24:06
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
@@ -23,7 +23,8 @@ import {
   getPolylineSegmentPitch,
   makeCartesian2,
   makeCartesian3Array,
-  getFirstIntersection
+  getFirstIntersection,
+  compareCesiumVersion
 } from '@vue-cesium/utils/cesium-helpers'
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
 import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
@@ -422,9 +423,14 @@ export default function (props, ctx, cmpName: string) {
         endPoint = ellipsoid.cartographicToCartesian(endPointCartographic, endPoint)
       }
 
-      if (SceneTransforms.wgs84ToWindowCoordinates(scene, positions[0], {} as any).y < movement.y) {
+      const worldToWindowCoordinates = compareCesiumVersion(Cesium.VERSION, '1.121')
+        ? SceneTransforms.worldToWindowCoordinates
+        : SceneTransforms['wgs84ToWindowCoordinates']
+
+      if (worldToWindowCoordinates(scene, positions[0], {} as any).y < movement.y) {
         surfaceNormal = Cartesian3.negate(surfaceNormal, {} as any)
       }
+
       let diffrence = Cartesian3.subtract(endPoint, p1, {} as any)
       diffrence = Cartesian3.projectVector(diffrence, surfaceNormal, diffrence)
       endPoint = Cartesian3.add(p1, diffrence, endPoint)
@@ -512,7 +518,12 @@ export default function (props, ctx, cmpName: string) {
         const scene = viewer.scene
 
         let startPosition = polyline.positions[0]
-        const positionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, startPosition, {} as any)
+
+        const worldToWindowCoordinates = compareCesiumVersion(Cesium.VERSION, '1.121')
+          ? SceneTransforms.worldToWindowCoordinates
+          : SceneTransforms['wgs84ToWindowCoordinates']
+
+        const positionWindow = worldToWindowCoordinates(scene, startPosition, {} as any)
 
         let startPositionWindow = defined(positionWindow)
           ? Cartesian2.clone(positionWindow, {} as any)
@@ -527,7 +538,7 @@ export default function (props, ctx, cmpName: string) {
 
         if (!labelTotalLength) return
         for (let i = 1; i < positions.length; i++) {
-          const positionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, positions[i], {} as any)
+          const positionWindow = worldToWindowCoordinates(scene, positions[i], {} as any)
           if (defined(positionWindow)) {
             const l = (startPositionWindow.y - positionWindow.y) / (positionWindow.x - startPositionWindow.x)
             const label = labels[i - 1]
@@ -560,8 +571,12 @@ export default function (props, ctx, cmpName: string) {
       const positions = polyline.positions
       const startPosition = positions[0]
       const endPosition = positions[1]
-      const startPositionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, startPosition, {} as any)
-      const endPositionWindow = SceneTransforms.wgs84ToWindowCoordinates(scene, endPosition, {} as any)
+      const worldToWindowCoordinates = compareCesiumVersion(Cesium.VERSION, '1.121')
+        ? SceneTransforms.worldToWindowCoordinates
+        : SceneTransforms['wgs84ToWindowCoordinates']
+
+      const startPositionWindow = worldToWindowCoordinates(scene, startPosition, {} as any)
+      const endPositionWindow = worldToWindowCoordinates(scene, endPosition, {} as any)
       if (defined(startPositionWindow) && defined(endPositionWindow)) {
         const labelCollection: Array<Cesium.LabelCollection> = (primitiveCollection as any)._primitives.filter(
           v => v instanceof Cesium.LabelCollection
