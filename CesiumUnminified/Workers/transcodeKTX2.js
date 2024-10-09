@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,33 +25,32 @@
 
 import {
   createTaskProcessorWorker_default
-} from "./chunk-U5LKG6LX.js";
+} from "./chunk-5ODQSF26.js";
 import {
   WebGLConstants_default
-} from "./chunk-527JG4D7.js";
+} from "./chunk-MXIZJAPH.js";
 import {
   RuntimeError_default
-} from "./chunk-FVDTKX3F.js";
+} from "./chunk-6CHGCNMW.js";
 import {
   defaultValue_default
-} from "./chunk-BT6YIL2N.js";
+} from "./chunk-7JO7GPJN.js";
 import {
   Check_default
-} from "./chunk-UN7AK64D.js";
+} from "./chunk-AD63PIY6.js";
 import {
   __commonJS,
   __require,
   __toESM,
   defined_default
-} from "./chunk-QVJ6IRKV.js";
+} from "./chunk-E63IIM5T.js";
 
 // packages/engine/Source/ThirdParty/Workers/basis_transcoder.js
 var require_basis_transcoder = __commonJS({
   "packages/engine/Source/ThirdParty/Workers/basis_transcoder.js"(exports, module) {
     var BASIS = function() {
       var _scriptDir = typeof document !== "undefined" && document.currentScript ? document.currentScript.src : void 0;
-      if (typeof __filename !== "undefined")
-        _scriptDir = _scriptDir || __filename;
+      if (typeof __filename !== "undefined") _scriptDir = _scriptDir || __filename;
       return function(BASIS2) {
         BASIS2 = BASIS2 || {};
         var Module = typeof BASIS2 !== "undefined" ? BASIS2 : {};
@@ -97,10 +96,8 @@ var require_basis_transcoder = __commonJS({
             scriptDirectory = __dirname + "/";
           }
           read_ = function shell_read(filename, binary) {
-            if (!nodeFS)
-              nodeFS = __require("fs");
-            if (!nodePath)
-              nodePath = __require("path");
+            if (!nodeFS) nodeFS = __require("fs");
+            if (!nodePath) nodePath = __require("path");
             filename = nodePath["normalize"](filename);
             return nodeFS["readFileSync"](filename, binary ? null : "utf8");
           };
@@ -154,8 +151,7 @@ var require_basis_transcoder = __commonJS({
             };
           }
           if (typeof print !== "undefined") {
-            if (typeof console === "undefined")
-              console = {};
+            if (typeof console === "undefined") console = {};
             console.log = print;
             console.warn = console.error = typeof printErr !== "undefined" ? printErr : print;
           }
@@ -217,19 +213,15 @@ var require_basis_transcoder = __commonJS({
           }
         }
         moduleOverrides = null;
-        if (Module["arguments"])
-          arguments_ = Module["arguments"];
-        if (Module["thisProgram"])
-          thisProgram = Module["thisProgram"];
-        if (Module["quit"])
-          quit_ = Module["quit"];
+        if (Module["arguments"]) arguments_ = Module["arguments"];
+        if (Module["thisProgram"]) thisProgram = Module["thisProgram"];
+        if (Module["quit"]) quit_ = Module["quit"];
         var tempRet0 = 0;
         var setTempRet0 = function(value) {
           tempRet0 = value;
         };
         var wasmBinary;
-        if (Module["wasmBinary"])
-          wasmBinary = Module["wasmBinary"];
+        if (Module["wasmBinary"]) wasmBinary = Module["wasmBinary"];
         var noExitRuntime = Module["noExitRuntime"] || true;
         if (typeof WebAssembly !== "object") {
           abort("no native wasm support detected");
@@ -246,8 +238,7 @@ var require_basis_transcoder = __commonJS({
         function UTF8ArrayToString(heap, idx, maxBytesToRead) {
           var endIdx = idx + maxBytesToRead;
           var endPtr = idx;
-          while (heap[endPtr] && !(endPtr >= endIdx))
-            ++endPtr;
+          while (heap[endPtr] && !(endPtr >= endIdx)) ++endPtr;
           if (endPtr - idx > 16 && heap.subarray && UTF8Decoder) {
             return UTF8Decoder.decode(heap.subarray(idx, endPtr));
           } else {
@@ -283,8 +274,7 @@ var require_basis_transcoder = __commonJS({
           return ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : "";
         }
         function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
-          if (!(maxBytesToWrite > 0))
-            return 0;
+          if (!(maxBytesToWrite > 0)) return 0;
           var startIdx = outIdx;
           var endIdx = outIdx + maxBytesToWrite - 1;
           for (var i = 0; i < str.length; ++i) {
@@ -294,23 +284,19 @@ var require_basis_transcoder = __commonJS({
               u = 65536 + ((u & 1023) << 10) | u1 & 1023;
             }
             if (u <= 127) {
-              if (outIdx >= endIdx)
-                break;
+              if (outIdx >= endIdx) break;
               heap[outIdx++] = u;
             } else if (u <= 2047) {
-              if (outIdx + 1 >= endIdx)
-                break;
+              if (outIdx + 1 >= endIdx) break;
               heap[outIdx++] = 192 | u >> 6;
               heap[outIdx++] = 128 | u & 63;
             } else if (u <= 65535) {
-              if (outIdx + 2 >= endIdx)
-                break;
+              if (outIdx + 2 >= endIdx) break;
               heap[outIdx++] = 224 | u >> 12;
               heap[outIdx++] = 128 | u >> 6 & 63;
               heap[outIdx++] = 128 | u & 63;
             } else {
-              if (outIdx + 3 >= endIdx)
-                break;
+              if (outIdx + 3 >= endIdx) break;
               heap[outIdx++] = 240 | u >> 18;
               heap[outIdx++] = 128 | u >> 12 & 63;
               heap[outIdx++] = 128 | u >> 6 & 63;
@@ -327,16 +313,11 @@ var require_basis_transcoder = __commonJS({
           var len = 0;
           for (var i = 0; i < str.length; ++i) {
             var u = str.charCodeAt(i);
-            if (u >= 55296 && u <= 57343)
-              u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-            if (u <= 127)
-              ++len;
-            else if (u <= 2047)
-              len += 2;
-            else if (u <= 65535)
-              len += 3;
-            else
-              len += 4;
+            if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
+            if (u <= 127) ++len;
+            else if (u <= 2047) len += 2;
+            else if (u <= 65535) len += 3;
+            else len += 4;
           }
           return len;
         }
@@ -345,8 +326,7 @@ var require_basis_transcoder = __commonJS({
           var endPtr = ptr;
           var idx = endPtr >> 1;
           var maxIdx = idx + maxBytesToRead / 2;
-          while (!(idx >= maxIdx) && HEAPU16[idx])
-            ++idx;
+          while (!(idx >= maxIdx) && HEAPU16[idx]) ++idx;
           endPtr = idx << 1;
           if (endPtr - ptr > 32 && UTF16Decoder) {
             return UTF16Decoder.decode(HEAPU8.subarray(ptr, endPtr));
@@ -354,8 +334,7 @@ var require_basis_transcoder = __commonJS({
             var str = "";
             for (var i = 0; !(i >= maxBytesToRead / 2); ++i) {
               var codeUnit = HEAP16[ptr + i * 2 >> 1];
-              if (codeUnit == 0)
-                break;
+              if (codeUnit == 0) break;
               str += String.fromCharCode(codeUnit);
             }
             return str;
@@ -365,8 +344,7 @@ var require_basis_transcoder = __commonJS({
           if (maxBytesToWrite === void 0) {
             maxBytesToWrite = 2147483647;
           }
-          if (maxBytesToWrite < 2)
-            return 0;
+          if (maxBytesToWrite < 2) return 0;
           maxBytesToWrite -= 2;
           var startPtr = outPtr;
           var numCharsToWrite = maxBytesToWrite < str.length * 2 ? maxBytesToWrite / 2 : str.length;
@@ -386,8 +364,7 @@ var require_basis_transcoder = __commonJS({
           var str = "";
           while (!(i >= maxBytesToRead / 4)) {
             var utf32 = HEAP32[ptr + i * 4 >> 2];
-            if (utf32 == 0)
-              break;
+            if (utf32 == 0) break;
             ++i;
             if (utf32 >= 65536) {
               var ch = utf32 - 65536;
@@ -402,8 +379,7 @@ var require_basis_transcoder = __commonJS({
           if (maxBytesToWrite === void 0) {
             maxBytesToWrite = 2147483647;
           }
-          if (maxBytesToWrite < 4)
-            return 0;
+          if (maxBytesToWrite < 4) return 0;
           var startPtr = outPtr;
           var endPtr = startPtr + maxBytesToWrite - 4;
           for (var i = 0; i < str.length; ++i) {
@@ -414,8 +390,7 @@ var require_basis_transcoder = __commonJS({
             }
             HEAP32[outPtr >> 2] = codeUnit;
             outPtr += 4;
-            if (outPtr + 4 > endPtr)
-              break;
+            if (outPtr + 4 > endPtr) break;
           }
           HEAP32[outPtr >> 2] = 0;
           return outPtr - startPtr;
@@ -424,8 +399,7 @@ var require_basis_transcoder = __commonJS({
           var len = 0;
           for (var i = 0; i < str.length; ++i) {
             var codeUnit = str.charCodeAt(i);
-            if (codeUnit >= 55296 && codeUnit <= 57343)
-              ++i;
+            if (codeUnit >= 55296 && codeUnit <= 57343) ++i;
             len += 4;
           }
           return len;
@@ -457,8 +431,7 @@ var require_basis_transcoder = __commonJS({
         var runtimeInitialized = false;
         function preRun() {
           if (Module["preRun"]) {
-            if (typeof Module["preRun"] == "function")
-              Module["preRun"] = [Module["preRun"]];
+            if (typeof Module["preRun"] == "function") Module["preRun"] = [Module["preRun"]];
             while (Module["preRun"].length) {
               addOnPreRun(Module["preRun"].shift());
             }
@@ -474,8 +447,7 @@ var require_basis_transcoder = __commonJS({
         }
         function postRun() {
           if (Module["postRun"]) {
-            if (typeof Module["postRun"] == "function")
-              Module["postRun"] = [Module["postRun"]];
+            if (typeof Module["postRun"] == "function") Module["postRun"] = [Module["postRun"]];
             while (Module["postRun"].length) {
               addOnPostRun(Module["postRun"].shift());
             }
@@ -2011,9 +1983,9 @@ var require_basis_transcoder = __commonJS({
           if (typeof globalThis === "object") {
             return globalThis;
           }
-          return function() {
+          return (/* @__PURE__ */ function() {
             return Function;
-          }()("return this")();
+          }())("return this")();
         }
         function __emval_get_global(name) {
           if (name === 0) {
@@ -2220,10 +2192,8 @@ var require_basis_transcoder = __commonJS({
           this.status = status;
         }
         dependenciesFulfilled = function runCaller() {
-          if (!calledRun)
-            run();
-          if (!calledRun)
-            dependenciesFulfilled = runCaller;
+          if (!calledRun) run();
+          if (!calledRun) dependenciesFulfilled = runCaller;
         };
         function run(args) {
           args = args || arguments_;
@@ -2235,17 +2205,14 @@ var require_basis_transcoder = __commonJS({
             return;
           }
           function doRun() {
-            if (calledRun)
-              return;
+            if (calledRun) return;
             calledRun = true;
             Module["calledRun"] = true;
-            if (ABORT)
-              return;
+            if (ABORT) return;
             initRuntime();
             preMain();
             readyPromiseResolve(Module);
-            if (Module["onRuntimeInitialized"])
-              Module["onRuntimeInitialized"]();
+            if (Module["onRuntimeInitialized"]) Module["onRuntimeInitialized"]();
             postRun();
           }
           if (Module["setStatus"]) {
@@ -2262,8 +2229,7 @@ var require_basis_transcoder = __commonJS({
         }
         Module["run"] = run;
         if (Module["preInit"]) {
-          if (typeof Module["preInit"] == "function")
-            Module["preInit"] = [Module["preInit"]];
+          if (typeof Module["preInit"] == "function") Module["preInit"] = [Module["preInit"]];
           while (Module["preInit"].length > 0) {
             Module["preInit"].pop()();
           }
@@ -2338,6 +2304,17 @@ PixelDatatype.sizeInBytes = function(pixelDatatype) {
 };
 PixelDatatype.validate = function(pixelDatatype) {
   return pixelDatatype === PixelDatatype.UNSIGNED_BYTE || pixelDatatype === PixelDatatype.UNSIGNED_SHORT || pixelDatatype === PixelDatatype.UNSIGNED_INT || pixelDatatype === PixelDatatype.FLOAT || pixelDatatype === PixelDatatype.HALF_FLOAT || pixelDatatype === PixelDatatype.UNSIGNED_INT_24_8 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_4_4_4_4 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_5_5_1 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_6_5;
+};
+PixelDatatype.getTypedArrayConstructor = function(pixelDatatype) {
+  const sizeInBytes = PixelDatatype.sizeInBytes(pixelDatatype);
+  if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
+    return Uint8Array;
+  } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
+    return Uint16Array;
+  } else if (sizeInBytes === Float32Array.BYTES_PER_ELEMENT && pixelDatatype === PixelDatatype.FLOAT) {
+    return Float32Array;
+  }
+  return Uint32Array;
 };
 var PixelDatatype_default = Object.freeze(PixelDatatype);
 
@@ -2519,7 +2496,7 @@ PixelFormat.validate = function(pixelFormat) {
   return pixelFormat === PixelFormat.DEPTH_COMPONENT || pixelFormat === PixelFormat.DEPTH_STENCIL || pixelFormat === PixelFormat.ALPHA || pixelFormat === PixelFormat.RED || pixelFormat === PixelFormat.RG || pixelFormat === PixelFormat.RGB || pixelFormat === PixelFormat.RGBA || pixelFormat === PixelFormat.LUMINANCE || pixelFormat === PixelFormat.LUMINANCE_ALPHA || pixelFormat === PixelFormat.RGB_DXT1 || pixelFormat === PixelFormat.RGBA_DXT1 || pixelFormat === PixelFormat.RGBA_DXT3 || pixelFormat === PixelFormat.RGBA_DXT5 || pixelFormat === PixelFormat.RGB_PVRTC_4BPPV1 || pixelFormat === PixelFormat.RGB_PVRTC_2BPPV1 || pixelFormat === PixelFormat.RGBA_PVRTC_4BPPV1 || pixelFormat === PixelFormat.RGBA_PVRTC_2BPPV1 || pixelFormat === PixelFormat.RGBA_ASTC || pixelFormat === PixelFormat.RGB_ETC1 || pixelFormat === PixelFormat.RGB8_ETC2 || pixelFormat === PixelFormat.RGBA8_ETC2_EAC || pixelFormat === PixelFormat.RGBA_BC7;
 };
 PixelFormat.isColorFormat = function(pixelFormat) {
-  return pixelFormat === PixelFormat.ALPHA || pixelFormat === PixelFormat.RGB || pixelFormat === PixelFormat.RGBA || pixelFormat === PixelFormat.LUMINANCE || pixelFormat === PixelFormat.LUMINANCE_ALPHA;
+  return pixelFormat === PixelFormat.RED || pixelFormat === PixelFormat.ALPHA || pixelFormat === PixelFormat.RGB || pixelFormat === PixelFormat.RGBA || pixelFormat === PixelFormat.LUMINANCE || pixelFormat === PixelFormat.LUMINANCE_ALPHA;
 };
 PixelFormat.isDepthFormat = function(pixelFormat) {
   return pixelFormat === PixelFormat.DEPTH_COMPONENT || pixelFormat === PixelFormat.DEPTH_STENCIL;
@@ -2583,17 +2560,7 @@ PixelFormat.alignmentInBytes = function(pixelFormat, pixelDatatype, width) {
   return mod === 0 ? 4 : mod === 2 ? 2 : 1;
 };
 PixelFormat.createTypedArray = function(pixelFormat, pixelDatatype, width, height) {
-  let constructor;
-  const sizeInBytes = PixelDatatype_default.sizeInBytes(pixelDatatype);
-  if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
-    constructor = Uint8Array;
-  } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
-    constructor = Uint16Array;
-  } else if (sizeInBytes === Float32Array.BYTES_PER_ELEMENT && pixelDatatype === PixelDatatype_default.FLOAT) {
-    constructor = Float32Array;
-  } else {
-    constructor = Uint32Array;
-  }
+  const constructor = PixelDatatype_default.getTypedArrayConstructor(pixelDatatype);
   const size = PixelFormat.componentsLength(pixelFormat) * width * height;
   return new constructor(size);
 };
@@ -3031,8 +2998,7 @@ var BufferReader = class {
       byteLength++;
       this._offset++;
     }
-    if (byteLength < maxByteLength)
-      this._offset++;
+    if (byteLength < maxByteLength) this._offset++;
     return new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + byteOffset, byteLength);
   }
 };
@@ -3053,10 +3019,7 @@ var KTX2_ID = [
   10
 ];
 function decodeText(buffer) {
-  if (typeof TextDecoder !== "undefined") {
-    return new TextDecoder().decode(buffer);
-  }
-  return Buffer.from(buffer).toString("utf8");
+  return new TextDecoder().decode(buffer);
 }
 function read2(data) {
   const id = new Uint8Array(data.buffer, data.byteOffset, KTX2_ID.length);
@@ -3153,8 +3116,7 @@ function read2(data) {
     const kvPadding = keyValueByteLength % 4 ? 4 - keyValueByteLength % 4 : 0;
     kvdReader._skip(kvPadding);
   }
-  if (sgdByteLength <= 0)
-    return container;
+  if (sgdByteLength <= 0) return container;
   const sgdReader = new BufferReader(data, sgdByteOffset, sgdByteLength, true);
   const endpointCount = sgdReader._nextUint16();
   const selectorCount = sgdReader._nextUint16();

@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,78 +25,77 @@
 
 import {
   BoundingRectangle_default
-} from "./chunk-EQ6ZAP37.js";
+} from "./chunk-FDOV2LBJ.js";
 import {
   CoplanarPolygonGeometryLibrary_default
-} from "./chunk-LQRFWCNX.js";
-import "./chunk-YLAFWVOW.js";
+} from "./chunk-76BYBWHP.js";
+import "./chunk-M3GMB5OP.js";
 import {
   PolygonGeometryLibrary_default
-} from "./chunk-7IMAWM6A.js";
-import "./chunk-2C65EKYA.js";
+} from "./chunk-PGRPDNHG.js";
+import "./chunk-PRGYLLJT.js";
 import {
   GeometryInstance_default
-} from "./chunk-V2LKNJGT.js";
+} from "./chunk-7KTQP4VB.js";
 import {
   GeometryPipeline_default
-} from "./chunk-HCZR75II.js";
-import "./chunk-P7PWX5HR.js";
-import "./chunk-I5MQWHBR.js";
+} from "./chunk-GGZJN2TI.js";
+import "./chunk-NGPPMXRM.js";
+import "./chunk-C6YYBQXW.js";
 import {
   VertexFormat_default
-} from "./chunk-2NLMZNJI.js";
-import "./chunk-4V6RCTVH.js";
-import "./chunk-G3MOT7BZ.js";
+} from "./chunk-EJZTDTUH.js";
+import "./chunk-CKY7HOHV.js";
+import "./chunk-S6MRMMQU.js";
 import {
   PolygonPipeline_default
-} from "./chunk-RDM3BKNC.js";
+} from "./chunk-SMDOP47J.js";
 import {
   arrayRemoveDuplicates_default
-} from "./chunk-XZVQMPWG.js";
-import "./chunk-RRUPTJ6P.js";
-import "./chunk-QIS3NB7U.js";
-import "./chunk-PGB3EFR7.js";
+} from "./chunk-472HQ3EH.js";
+import "./chunk-E6V6SQZW.js";
+import "./chunk-3Q2L65QU.js";
+import "./chunk-2ZGOQXYU.js";
 import {
   IndexDatatype_default
-} from "./chunk-TF5D2H7B.js";
+} from "./chunk-26GA3JAM.js";
 import {
   GeometryAttributes_default
-} from "./chunk-N5MMDSD2.js";
+} from "./chunk-DI5NGJUP.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-UGZGTV5K.js";
+} from "./chunk-GWCFU2SA.js";
 import {
-  BoundingSphere_default,
+  BoundingSphere_default
+} from "./chunk-VJZB3WAV.js";
+import {
   Quaternion_default
-} from "./chunk-5U4UHRZ2.js";
-import "./chunk-FE2XG3SS.js";
-import {
-  Cartesian2_default
-} from "./chunk-PW5CA4MJ.js";
+} from "./chunk-5PTXS2GO.js";
 import {
   ComponentDatatype_default
-} from "./chunk-KAFF2QX3.js";
+} from "./chunk-K4GQUNB5.js";
 import {
+  Cartesian2_default,
   Cartesian3_default,
   Ellipsoid_default,
   Matrix3_default
-} from "./chunk-XJCTFTBM.js";
+} from "./chunk-YFXQECWV.js";
 import {
   Math_default
-} from "./chunk-PWDYKCNC.js";
-import "./chunk-527JG4D7.js";
-import "./chunk-FVDTKX3F.js";
+} from "./chunk-XY4BATBS.js";
+import "./chunk-MXIZJAPH.js";
+import "./chunk-6CHGCNMW.js";
 import {
   defaultValue_default
-} from "./chunk-BT6YIL2N.js";
+} from "./chunk-7JO7GPJN.js";
 import {
   Check_default
-} from "./chunk-UN7AK64D.js";
+} from "./chunk-AD63PIY6.js";
 import {
   defined_default
-} from "./chunk-QVJ6IRKV.js";
+} from "./chunk-E63IIM5T.js";
 
 // packages/engine/Source/Core/CoplanarPolygonGeometry.js
 var scratchPosition = new Cartesian3_default();
@@ -264,7 +263,7 @@ function CoplanarPolygonGeometry(options) {
   this._polygonHierarchy = polygonHierarchy;
   this._stRotation = defaultValue_default(options.stRotation, 0);
   this._ellipsoid = Ellipsoid_default.clone(
-    defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84)
+    defaultValue_default(options.ellipsoid, Ellipsoid_default.default)
   );
   this._workerName = "createCoplanarPolygonGeometry";
   this._textureCoordinates = textureCoordinates;

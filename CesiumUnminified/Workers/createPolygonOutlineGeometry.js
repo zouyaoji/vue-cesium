@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,71 +25,70 @@
 
 import {
   PolygonGeometryLibrary_default
-} from "./chunk-7IMAWM6A.js";
+} from "./chunk-PGRPDNHG.js";
 import {
   ArcType_default
-} from "./chunk-2C65EKYA.js";
+} from "./chunk-PRGYLLJT.js";
 import {
   GeometryInstance_default
-} from "./chunk-V2LKNJGT.js";
+} from "./chunk-7KTQP4VB.js";
 import {
   GeometryPipeline_default
-} from "./chunk-HCZR75II.js";
-import "./chunk-P7PWX5HR.js";
-import "./chunk-I5MQWHBR.js";
+} from "./chunk-GGZJN2TI.js";
+import "./chunk-NGPPMXRM.js";
+import "./chunk-C6YYBQXW.js";
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-A6EA6KIE.js";
+} from "./chunk-I2ITFFPX.js";
 import {
   EllipsoidTangentPlane_default
-} from "./chunk-4V6RCTVH.js";
-import "./chunk-G3MOT7BZ.js";
+} from "./chunk-CKY7HOHV.js";
+import "./chunk-S6MRMMQU.js";
 import {
   PolygonPipeline_default,
   WindingOrder_default
-} from "./chunk-RDM3BKNC.js";
-import "./chunk-XZVQMPWG.js";
-import "./chunk-RRUPTJ6P.js";
-import "./chunk-QIS3NB7U.js";
-import "./chunk-PGB3EFR7.js";
+} from "./chunk-SMDOP47J.js";
+import "./chunk-472HQ3EH.js";
+import "./chunk-E6V6SQZW.js";
+import "./chunk-3Q2L65QU.js";
+import "./chunk-2ZGOQXYU.js";
 import {
   IndexDatatype_default
-} from "./chunk-TF5D2H7B.js";
+} from "./chunk-26GA3JAM.js";
 import {
   GeometryAttributes_default
-} from "./chunk-N5MMDSD2.js";
+} from "./chunk-DI5NGJUP.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-UGZGTV5K.js";
+} from "./chunk-GWCFU2SA.js";
 import {
   BoundingSphere_default
-} from "./chunk-5U4UHRZ2.js";
-import "./chunk-FE2XG3SS.js";
-import "./chunk-PW5CA4MJ.js";
+} from "./chunk-VJZB3WAV.js";
+import "./chunk-5PTXS2GO.js";
 import {
   ComponentDatatype_default
-} from "./chunk-KAFF2QX3.js";
+} from "./chunk-K4GQUNB5.js";
 import {
   Cartesian3_default,
   Ellipsoid_default
-} from "./chunk-XJCTFTBM.js";
+} from "./chunk-YFXQECWV.js";
 import {
   Math_default
-} from "./chunk-PWDYKCNC.js";
-import "./chunk-527JG4D7.js";
-import "./chunk-FVDTKX3F.js";
+} from "./chunk-XY4BATBS.js";
+import "./chunk-MXIZJAPH.js";
+import "./chunk-6CHGCNMW.js";
 import {
   defaultValue_default
-} from "./chunk-BT6YIL2N.js";
+} from "./chunk-7JO7GPJN.js";
 import {
   Check_default,
   DeveloperError_default
-} from "./chunk-UN7AK64D.js";
+} from "./chunk-AD63PIY6.js";
 import {
   defined_default
-} from "./chunk-QVJ6IRKV.js";
+} from "./chunk-E63IIM5T.js";
 
 // packages/engine/Source/Core/PolygonOutlineGeometry.js
 var createGeometryFromPositionsPositions = [];
@@ -100,9 +99,7 @@ function createGeometryFromPositions(ellipsoid, positions, minDistance, perPosit
     positions,
     createGeometryFromPositionsPositions
   );
-  const originalWindingOrder = PolygonPipeline_default.computeWindingOrder2D(
-    positions2D
-  );
+  const originalWindingOrder = PolygonPipeline_default.computeWindingOrder2D(positions2D);
   if (originalWindingOrder === WindingOrder_default.CLOCKWISE) {
     positions2D.reverse();
     positions = positions.slice().reverse();
@@ -198,9 +195,7 @@ function createGeometryFromPositionsExtruded(ellipsoid, positions, minDistance, 
     positions,
     createGeometryFromPositionsPositions
   );
-  const originalWindingOrder = PolygonPipeline_default.computeWindingOrder2D(
-    positions2D
-  );
+  const originalWindingOrder = PolygonPipeline_default.computeWindingOrder2D(positions2D);
   if (originalWindingOrder === WindingOrder_default.CLOCKWISE) {
     positions2D.reverse();
     positions = positions.slice().reverse();
@@ -316,7 +311,7 @@ function PolygonOutlineGeometry(options) {
     );
   }
   const polygonHierarchy = options.polygonHierarchy;
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
+  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
   const granularity = defaultValue_default(
     options.granularity,
     Math_default.RADIANS_PER_DEGREE
@@ -474,13 +469,11 @@ PolygonOutlineGeometry.createGeometry = function(polygonGeometry) {
           offsetValue = polygonGeometry._offsetAttribute === GeometryOffsetAttribute_default.NONE ? 0 : 1;
           offsetAttribute = offsetAttribute.fill(offsetValue);
         }
-        geometryInstance.geometry.attributes.applyOffset = new GeometryAttribute_default(
-          {
-            componentDatatype: ComponentDatatype_default.UNSIGNED_BYTE,
-            componentsPerAttribute: 1,
-            values: offsetAttribute
-          }
-        );
+        geometryInstance.geometry.attributes.applyOffset = new GeometryAttribute_default({
+          componentDatatype: ComponentDatatype_default.UNSIGNED_BYTE,
+          componentsPerAttribute: 1,
+          values: offsetAttribute
+        });
       }
       geometries.push(geometryInstance);
     }
@@ -503,13 +496,11 @@ PolygonOutlineGeometry.createGeometry = function(polygonGeometry) {
         const length = geometryInstance.geometry.attributes.position.values.length;
         offsetValue = polygonGeometry._offsetAttribute === GeometryOffsetAttribute_default.NONE ? 0 : 1;
         const applyOffset = new Uint8Array(length / 3).fill(offsetValue);
-        geometryInstance.geometry.attributes.applyOffset = new GeometryAttribute_default(
-          {
-            componentDatatype: ComponentDatatype_default.UNSIGNED_BYTE,
-            componentsPerAttribute: 1,
-            values: applyOffset
-          }
-        );
+        geometryInstance.geometry.attributes.applyOffset = new GeometryAttribute_default({
+          componentDatatype: ComponentDatatype_default.UNSIGNED_BYTE,
+          componentsPerAttribute: 1,
+          values: applyOffset
+        });
       }
       geometries.push(geometryInstance);
     }
