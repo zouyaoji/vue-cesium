@@ -1,5 +1,16 @@
 ## Changelog
 
+### 3.2.9
+
+_2024-10-09_
+
+#### Bug fixes
+
+- Compatible with Cesium version 1.121 to avoid some error issues. [#598](https://github.com/zouyaoji/vue-cesium/issues/598)
+- Fixed an issue where, in edit mode, after right-clicking to cancel modifying the position of a drawing icon point, a label tooltip would appear and not disappear. [#600](https://github.com/zouyaoji/vue-cesium/issues/600)
+- Fixed the offsetHeight parameter not working in viewshed analysis. [#602](https://github.com/zouyaoji/vue-cesium/discussions/602)
+- Fixed an issue where VcOverlayHtml would insert several empty tags into the body. [#612](https://github.com/zouyaoji/vue-cesium/issues/612)
+
 ### 3.2.8
 
 _2024-05-13_

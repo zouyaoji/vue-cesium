@@ -1,5 +1,16 @@
 ## 更新日志
 
+### 3.2.9
+
+_2024-10-09_
+
+#### Bug 修复
+
+- 兼容 Cesium 1.121 版本，避免一些报错问题。[#598](https://github.com/zouyaoji/vue-cesium/issues/598)
+- 绘制图标点在可编辑模式下，右键放弃修改图标点位置时，会出现一个 label 提示框无法消失。[#600](https://github.com/zouyaoji/vue-cesium/issues/600)
+- 修复可视域分析 `offsetHeight` 参数不生效问题。[#602](https://github.com/zouyaoji/vue-cesium/discussions/602)
+- 修复 VcOverlayHtml 会在 body 里面插入几个空标签的问题。[#612](https://github.com/zouyaoji/vue-cesium/issues/612)
+
 ### 3.2.8
 
 _2024-05-13_
