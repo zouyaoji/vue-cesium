@@ -141,7 +141,7 @@ class MeasureUnits {
       case DistanceUnits.MILES:
         return 'mi'
       default:
-        return void 0
+        return 'm'
     }
   }
 
@@ -166,7 +166,7 @@ class MeasureUnits {
       case AreaUnits.HECTARES:
         return 'ha'
       default:
-        return void 0
+        return 'm²'
     }
   }
 
@@ -187,7 +187,7 @@ class MeasureUnits {
       case VolumeUnits.CUBIC_MILES:
         return 'cu mi'
       default:
-        return void 0
+        return 'm³'
     }
   }
 
