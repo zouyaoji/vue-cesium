@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2024-02-28 17:14:41
+ * @LastEditTime: 2024-10-09 15:33:13
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-point.ts
@@ -126,6 +126,7 @@ export default function (props, ctx, cmpName: string) {
     if (options.button === 2 && options.ctrl) {
       const drawingsOption = drawingFabInstanceVm?.getDrawingActionInstance(drawingType)
       drawingFabInstanceVm?.toggleAction(drawingsOption)
+
       nextTick(() => {
         emit(
           'drawEvt',
@@ -155,6 +156,7 @@ export default function (props, ctx, cmpName: string) {
       renderDatas.value[index].drawStatus = DrawStatus.AfterDraw
       editingPoint.value = undefined
       drawTip.value = drawTipOpts.value.drawingTipStart
+      canShowDrawTip.value = Cesium.defined(selectedDrawingActionInstance)
       nextTick(() => {
         emit(
           'drawEvt',

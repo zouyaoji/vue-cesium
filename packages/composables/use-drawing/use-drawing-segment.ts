@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2024-10-08 23:24:06
+ * @LastEditTime: 2024-10-09 15:33:21
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
@@ -727,6 +727,7 @@ export default function (props, ctx, cmpName: string) {
       polyline.drawStatus = DrawStatus.AfterDraw
       editingPoint.value = undefined
       drawTip.value = drawTipOpts.value.drawingTipStart
+      canShowDrawTip.value = Cesium.defined(selectedDrawingActionInstance)
       if (cmpName === 'VcMeasurementHeight') {
         makeHeightPositions(polyline, restorePosition)
       }
