@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,36 +25,33 @@
 
 import {
   PrimitivePipeline_default
-} from "./chunk-FKHRSGKP.js";
+} from "./chunk-TKVT5GQM.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-U5LKG6LX.js";
-import "./chunk-RDCDRNJ7.js";
-import "./chunk-HCZR75II.js";
-import "./chunk-P7PWX5HR.js";
-import "./chunk-I5MQWHBR.js";
-import "./chunk-QIS3NB7U.js";
-import "./chunk-PGB3EFR7.js";
-import "./chunk-TF5D2H7B.js";
-import "./chunk-N5MMDSD2.js";
-import "./chunk-UGZGTV5K.js";
-import "./chunk-5U4UHRZ2.js";
-import "./chunk-FE2XG3SS.js";
-import "./chunk-PW5CA4MJ.js";
-import "./chunk-KAFF2QX3.js";
-import "./chunk-XJCTFTBM.js";
-import "./chunk-PWDYKCNC.js";
-import "./chunk-527JG4D7.js";
-import "./chunk-FVDTKX3F.js";
-import "./chunk-BT6YIL2N.js";
-import "./chunk-UN7AK64D.js";
-import "./chunk-QVJ6IRKV.js";
+} from "./chunk-5ODQSF26.js";
+import "./chunk-E27BLMDD.js";
+import "./chunk-GGZJN2TI.js";
+import "./chunk-NGPPMXRM.js";
+import "./chunk-C6YYBQXW.js";
+import "./chunk-3Q2L65QU.js";
+import "./chunk-2ZGOQXYU.js";
+import "./chunk-26GA3JAM.js";
+import "./chunk-DI5NGJUP.js";
+import "./chunk-GWCFU2SA.js";
+import "./chunk-VJZB3WAV.js";
+import "./chunk-5PTXS2GO.js";
+import "./chunk-K4GQUNB5.js";
+import "./chunk-YFXQECWV.js";
+import "./chunk-XY4BATBS.js";
+import "./chunk-MXIZJAPH.js";
+import "./chunk-6CHGCNMW.js";
+import "./chunk-7JO7GPJN.js";
+import "./chunk-AD63PIY6.js";
+import "./chunk-E63IIM5T.js";
 
 // packages/engine/Source/Workers/combineGeometry.js
 function combineGeometry(packedParameters, transferableObjects) {
-  const parameters = PrimitivePipeline_default.unpackCombineGeometryParameters(
-    packedParameters
-  );
+  const parameters = PrimitivePipeline_default.unpackCombineGeometryParameters(packedParameters);
   const results = PrimitivePipeline_default.combineGeometry(parameters);
   return PrimitivePipeline_default.packCombineGeometryResults(
     results,

@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,54 +25,53 @@
 
 import {
   Color_default
-} from "./chunk-27R2KRIK.js";
+} from "./chunk-5OOFQLKF.js";
 import {
   ArcType_default
-} from "./chunk-2C65EKYA.js";
+} from "./chunk-PRGYLLJT.js";
 import {
   PolylinePipeline_default
-} from "./chunk-H52L6U76.js";
-import "./chunk-7CZEWQWE.js";
-import "./chunk-RRUPTJ6P.js";
-import "./chunk-QIS3NB7U.js";
-import "./chunk-PGB3EFR7.js";
+} from "./chunk-TGONEMZO.js";
+import "./chunk-BHQJ2NT7.js";
+import "./chunk-E6V6SQZW.js";
+import "./chunk-3Q2L65QU.js";
+import "./chunk-2ZGOQXYU.js";
 import {
   IndexDatatype_default
-} from "./chunk-TF5D2H7B.js";
+} from "./chunk-26GA3JAM.js";
 import {
   GeometryAttributes_default
-} from "./chunk-N5MMDSD2.js";
+} from "./chunk-DI5NGJUP.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-UGZGTV5K.js";
+} from "./chunk-GWCFU2SA.js";
 import {
   BoundingSphere_default
-} from "./chunk-5U4UHRZ2.js";
-import "./chunk-FE2XG3SS.js";
-import "./chunk-PW5CA4MJ.js";
+} from "./chunk-VJZB3WAV.js";
+import "./chunk-5PTXS2GO.js";
 import {
   ComponentDatatype_default
-} from "./chunk-KAFF2QX3.js";
+} from "./chunk-K4GQUNB5.js";
 import {
   Cartesian3_default,
   Ellipsoid_default
-} from "./chunk-XJCTFTBM.js";
+} from "./chunk-YFXQECWV.js";
 import {
   Math_default
-} from "./chunk-PWDYKCNC.js";
-import "./chunk-527JG4D7.js";
-import "./chunk-FVDTKX3F.js";
+} from "./chunk-XY4BATBS.js";
+import "./chunk-MXIZJAPH.js";
+import "./chunk-6CHGCNMW.js";
 import {
   defaultValue_default
-} from "./chunk-BT6YIL2N.js";
+} from "./chunk-7JO7GPJN.js";
 import {
   DeveloperError_default
-} from "./chunk-UN7AK64D.js";
+} from "./chunk-AD63PIY6.js";
 import {
   defined_default
-} from "./chunk-QVJ6IRKV.js";
+} from "./chunk-E63IIM5T.js";
 
 // packages/engine/Source/Core/SimplePolylineGeometry.js
 function interpolateColors(p0, p1, color0, color1, minDistance, array, offset) {
@@ -127,7 +126,7 @@ function SimplePolylineGeometry(options) {
     options.granularity,
     Math_default.RADIANS_PER_DEGREE
   );
-  this._ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
+  this._ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
   this._workerName = "createSimplePolylineGeometry";
   let numComponents = 1 + positions.length * Cartesian3_default.packedLength;
   numComponents += defined_default(colors) ? 1 + colors.length * Color_default.packedLength : 1;

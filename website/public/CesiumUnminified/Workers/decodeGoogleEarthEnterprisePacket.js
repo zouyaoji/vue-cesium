@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.109
+ * Version 1.122
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,18 +25,18 @@
 
 import {
   createTaskProcessorWorker_default
-} from "./chunk-U5LKG6LX.js";
+} from "./chunk-5ODQSF26.js";
 import {
   RuntimeError_default
-} from "./chunk-FVDTKX3F.js";
+} from "./chunk-6CHGCNMW.js";
 import {
   Check_default
-} from "./chunk-UN7AK64D.js";
+} from "./chunk-AD63PIY6.js";
 import {
   __commonJS,
   __toESM,
   defined_default
-} from "./chunk-QVJ6IRKV.js";
+} from "./chunk-E63IIM5T.js";
 
 // node_modules/pako/lib/zlib/adler32.js
 var require_adler32 = __commonJS({
@@ -1067,6 +1067,7 @@ var require_inflate = __commonJS({
               hold = 0;
               bits = 0;
               state.mode = TIME;
+            /* falls through */
             case TIME:
               while (bits < 32) {
                 if (have === 0) {
@@ -1089,6 +1090,7 @@ var require_inflate = __commonJS({
               hold = 0;
               bits = 0;
               state.mode = OS;
+            /* falls through */
             case OS:
               while (bits < 16) {
                 if (have === 0) {
@@ -1110,6 +1112,7 @@ var require_inflate = __commonJS({
               hold = 0;
               bits = 0;
               state.mode = EXLEN;
+            /* falls through */
             case EXLEN:
               if (state.flags & 1024) {
                 while (bits < 16) {
@@ -1135,6 +1138,7 @@ var require_inflate = __commonJS({
                 state.head.extra = null;
               }
               state.mode = EXTRA;
+            /* falls through */
             case EXTRA:
               if (state.flags & 1024) {
                 copy = state.length;
@@ -1171,6 +1175,7 @@ var require_inflate = __commonJS({
               }
               state.length = 0;
               state.mode = NAME;
+            /* falls through */
             case NAME:
               if (state.flags & 2048) {
                 if (have === 0) {
@@ -1196,6 +1201,7 @@ var require_inflate = __commonJS({
               }
               state.length = 0;
               state.mode = COMMENT;
+            /* falls through */
             case COMMENT:
               if (state.flags & 4096) {
                 if (have === 0) {
@@ -1220,6 +1226,7 @@ var require_inflate = __commonJS({
                 state.head.comment = null;
               }
               state.mode = HCRC;
+            /* falls through */
             case HCRC:
               if (state.flags & 512) {
                 while (bits < 16) {
@@ -1258,6 +1265,7 @@ var require_inflate = __commonJS({
               hold = 0;
               bits = 0;
               state.mode = DICT;
+            /* falls through */
             case DICT:
               if (state.havedict === 0) {
                 strm.next_out = put;
@@ -1270,10 +1278,12 @@ var require_inflate = __commonJS({
               }
               strm.adler = state.check = 1;
               state.mode = TYPE;
+            /* falls through */
             case TYPE:
               if (flush === Z_BLOCK || flush === Z_TREES) {
                 break inf_leave;
               }
+            /* falls through */
             case TYPEDO:
               if (state.last) {
                 hold >>>= bits & 7;
@@ -1338,8 +1348,10 @@ var require_inflate = __commonJS({
               if (flush === Z_TREES) {
                 break inf_leave;
               }
+            /* falls through */
             case COPY_:
               state.mode = COPY;
+            /* falls through */
             case COPY:
               copy = state.length;
               if (copy) {
@@ -1387,6 +1399,7 @@ var require_inflate = __commonJS({
               }
               state.have = 0;
               state.mode = LENLENS;
+            /* falls through */
             case LENLENS:
               while (state.have < state.ncode) {
                 while (bits < 3) {
@@ -1416,6 +1429,7 @@ var require_inflate = __commonJS({
               }
               state.have = 0;
               state.mode = CODELENS;
+            /* falls through */
             case CODELENS:
               while (state.have < state.nlen + state.ndist) {
                 for (; ; ) {
@@ -1533,8 +1547,10 @@ var require_inflate = __commonJS({
               if (flush === Z_TREES) {
                 break inf_leave;
               }
+            /* falls through */
             case LEN_:
               state.mode = LEN;
+            /* falls through */
             case LEN:
               if (have >= 6 && left >= 258) {
                 strm.next_out = put;
@@ -1616,6 +1632,7 @@ var require_inflate = __commonJS({
               }
               state.extra = here_op & 15;
               state.mode = LENEXT;
+            /* falls through */
             case LENEXT:
               if (state.extra) {
                 n = state.extra;
@@ -1634,6 +1651,7 @@ var require_inflate = __commonJS({
               }
               state.was = state.length;
               state.mode = DIST;
+            /* falls through */
             case DIST:
               for (; ; ) {
                 here = state.distcode[hold & (1 << state.distbits) - 1];
@@ -1684,6 +1702,7 @@ var require_inflate = __commonJS({
               state.offset = here_val;
               state.extra = here_op & 15;
               state.mode = DISTEXT;
+            /* falls through */
             case DISTEXT:
               if (state.extra) {
                 n = state.extra;
@@ -1706,6 +1725,7 @@ var require_inflate = __commonJS({
                 break;
               }
               state.mode = MATCH;
+            /* falls through */
             case MATCH:
               if (left === 0) {
                 break inf_leave;
@@ -1782,6 +1802,7 @@ var require_inflate = __commonJS({
                 bits = 0;
               }
               state.mode = LENGTH;
+            /* falls through */
             case LENGTH:
               if (state.wrap && state.flags) {
                 while (bits < 32) {
@@ -1801,6 +1822,7 @@ var require_inflate = __commonJS({
                 bits = 0;
               }
               state.mode = DONE;
+            /* falls through */
             case DONE:
               ret = Z_STREAM_END;
               break inf_leave;
@@ -1810,6 +1832,7 @@ var require_inflate = __commonJS({
             case MEM:
               return Z_MEM_ERROR;
             case SYNC:
+            /* falls through */
             default:
               return Z_STREAM_ERROR;
           }
@@ -2219,12 +2242,9 @@ var require_inflate2 = __commonJS({
       const chunkSize = this.options.chunkSize;
       const dictionary = this.options.dictionary;
       let status, _flush_mode, last_avail_out;
-      if (this.ended)
-        return false;
-      if (flush_mode === ~~flush_mode)
-        _flush_mode = flush_mode;
-      else
-        _flush_mode = flush_mode === true ? Z_FINISH : Z_NO_FLUSH;
+      if (this.ended) return false;
+      if (flush_mode === ~~flush_mode) _flush_mode = flush_mode;
+      else _flush_mode = flush_mode === true ? Z_FINISH : Z_NO_FLUSH;
       if (toString.call(data) === "[object ArrayBuffer]") {
         strm.input = new Uint8Array(data);
       } else {
@@ -2269,24 +2289,21 @@ var require_inflate2 = __commonJS({
               let utf8str = strings.buf2string(strm.output, next_out_utf8);
               strm.next_out = tail;
               strm.avail_out = chunkSize - tail;
-              if (tail)
-                strm.output.set(strm.output.subarray(next_out_utf8, next_out_utf8 + tail), 0);
+              if (tail) strm.output.set(strm.output.subarray(next_out_utf8, next_out_utf8 + tail), 0);
               this.onData(utf8str);
             } else {
               this.onData(strm.output.length === strm.next_out ? strm.output : strm.output.subarray(0, strm.next_out));
             }
           }
         }
-        if (status === Z_OK && last_avail_out === 0)
-          continue;
+        if (status === Z_OK && last_avail_out === 0) continue;
         if (status === Z_STREAM_END) {
           status = zlib_inflate.inflateEnd(this.strm);
           this.onEnd(status);
           this.ended = true;
           return true;
         }
-        if (strm.avail_in === 0)
-          break;
+        if (strm.avail_in === 0) break;
       }
       return true;
     };
@@ -2308,8 +2325,7 @@ var require_inflate2 = __commonJS({
     function inflate(input, options) {
       const inflator = new Inflate(options);
       inflator.push(input);
-      if (inflator.err)
-        throw inflator.msg || msg[inflator.err];
+      if (inflator.err) throw inflator.msg || msg[inflator.err];
       return inflator.result;
     }
     function inflateRaw(input, options) {
