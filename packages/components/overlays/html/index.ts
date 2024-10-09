@@ -82,7 +82,11 @@ export default defineComponent({
     instance.mount = async () => {
       const { viewer } = $services
       canRender.value = true
-      showPortal()
+
+      if (props.teleport && props.teleport.to && !props.teleport.disabled) {
+        showPortal()
+      }
+
       offset.value = makeCartesian2(props.pixelOffset) as Cesium.Cartesian2
       position.value = makeCartesian3(props.position!, viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
       viewer.scene.preRender.addEventListener(onPreRender)
@@ -92,7 +96,11 @@ export default defineComponent({
       const { viewer } = $services
       viewer.scene.preRender.removeEventListener(onPreRender)
       canRender.value = false
-      hidePortal()
+
+      if (props.teleport && props.teleport.to && !props.teleport.disabled) {
+        hidePortal()
+      }
+
       return true
     }
     const onPreRender = () => {
@@ -118,7 +126,7 @@ export default defineComponent({
           } else {
             rootStyle.display = 'block'
           }
-        } else if (!Cesium.defined(canvasPosition)){
+        } else if (!Cesium.defined(canvasPosition)) {
           rootStyle.display = 'none'
         }
 
