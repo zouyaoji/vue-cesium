@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-16 18:52:39
- * @LastEditTime: 2022-05-14 22:42:17
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2024-10-09 14:57:31
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\shared\analyses\Viewshed.ts
+ * @FilePath: \vue-cesium\packages\shared\analyses\Viewshed.ts
  */
 
 import { VcViewshedOpts } from '@vue-cesium/utils/drawing-types'
@@ -142,7 +142,7 @@ class Viewshed {
 
     this._offsetHeight = Number(e)
     this.setView({
-      destination: this._position,
+      destination: this._position.clone(),
       orientation: {
         heading: this._spotLightCamera.heading,
         pitch: this._spotLightCamera.pitch,

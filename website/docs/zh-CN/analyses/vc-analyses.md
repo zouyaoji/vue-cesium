@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2023-07-29 18:38:54
+ * @LastEditTime: 2024-10-09 14:56:02
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\website\docs\zh-CN\analyses\vc-analyses.md
@@ -29,6 +29,7 @@
       :main-fab-opts="mainFabOpts"
       :offset="[10, 30]"
       :editable="editable"
+      :viewshedAnalysisOpts="viewshedAnalysisOpts"
       @draw-evt="drawEvt"
       @active-evt="activeEvt"
       @editor-evt="editorEvt"
@@ -63,6 +64,11 @@
         editable: false,
         mainFabOpts: {
           direction: 'right'
+        },
+        viewshedAnalysisOpts: {
+          viewshedOpts: {
+            offsetHeight: 5
+          }
         }
       }
     },

@@ -1,11 +1,11 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, PropType, watch, WatchStopHandle } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, PropType, toRaw, watch, WatchStopHandle } from 'vue'
 import type { VcColor, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { scene } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
 import { Viewshed } from '@vue-cesium/shared'
-import { makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { makeCartesian3, makeColor } from '@vue-cesium/utils/cesium-helpers'
 import fragmentShader from '@vue-cesium/shared/shaders/Viewshed'
 
 export const viewshedProps = {
@@ -82,7 +82,8 @@ export default defineComponent({
           if (!instance.mounted) {
             return
           }
-          updateViewshed(newStartPosition, newEndPosition)
+
+          updateViewshed(makeCartesian3(toRaw(newStartPosition)), makeCartesian3(toRaw(newEndPosition)))
         },
         {
           deep: true
@@ -219,7 +220,6 @@ export default defineComponent({
         invisibleColor: makeColor(props.invisibleColor),
         showGridLine: props.showGridLine
       })
-
       ;(viewshed._viewshedShadowMap as any).cascadesEnabled = false
       viewshed._viewshedShadowMap.softShadows = false
       viewshed._viewshedShadowMap.normalOffset = false
@@ -248,7 +248,7 @@ export default defineComponent({
         shaderSourceText = shaderSourceText.replace(/out_FragColor/g, 'gl_FragColor')
       }
 
-      updateViewshed(props.startPosition, props.endPosition)
+      updateViewshed(makeCartesian3(toRaw(props.startPosition)), makeCartesian3(toRaw(props.endPosition)))
       attachedViewshedStage = new PostProcessStage({
         fragmentShader: props.fragmentShader || shaderSourceText,
         uniforms: props.uniforms || {
@@ -333,6 +333,7 @@ export default defineComponent({
 
     const updateViewshed = (startPosition, endPosition) => {
       const viewshed = instance.cesiumObject as Viewshed
+
       const { Cartesian3 } = Cesium
       let diffrence = Cartesian3.subtract(endPosition, startPosition, new Cartesian3())
       const magnitudeSquared = Cartesian3.magnitudeSquared(diffrence)
