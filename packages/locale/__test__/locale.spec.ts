@@ -2,13 +2,14 @@
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-13 22:43:29
  * @LastEditTime: 2023-04-14 00:49:29
- * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditors: tbayri yo@tayebbayri.com
  * @Description:
  * @FilePath: \vue-cesium\packages\locale\__test__\locale.spec.ts
  */
 import { t, use } from '../index'
 import zhCn from '../lang/zh-hans'
 import en from '../lang/en-us'
+import fr from '../lang/fr-fr'
 import { describe, expect, test } from 'vitest'
 
 describe('Locale', () => {
@@ -23,6 +24,9 @@ describe('Locale', () => {
   test('use', () => {
     use(en)
     expect(t('vc.navigation.compass.title')).toBe('Click and drag to rotate the camera.')
+
+    use(fr)
+    expect(t('vc.navigation.compass.title')).toBe('Cliquer et faire glisser pour pivoter la caméra.')
     use(zhCn)
   })
 })
