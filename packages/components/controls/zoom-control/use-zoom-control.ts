@@ -81,7 +81,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction)
           const endPosition = Cartesian3.add(focus, movementVector, focus)
           const type = relativeAmount < 1 ? 'zoomIn' : 'zoomOut'
-          const target = e.currentTarget
+          const target = e && e?.currentTarget
           const level = heightToLevel(camera.positionCartographic.height).toFixed(0)
           const listener = getInstanceListener(vcInstance, 'zoomEvt')
           listener &&
