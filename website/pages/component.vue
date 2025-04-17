@@ -150,7 +150,8 @@ export default {
 
 .page-component {
   box-sizing: border-box;
-  height: 100%;
+  height: 95vh;
+  overflow-y: auto;
 
   // &.page-container {
   //   padding: 20px;
