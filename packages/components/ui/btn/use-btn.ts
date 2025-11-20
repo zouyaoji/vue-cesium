@@ -163,7 +163,7 @@ export default function (props) {
   const innerClasses = computed(
     () =>
       alignClass.value
-      + (props.stack === true ? ' column' : ' row')
+      + (props.stack === true ? ' vc-column' : ' vc-row')
       + (props.noWrap === true ? ' no-wrap text-no-wrap' : '')
       + (props.loading === true ? ' vc-btn__content--hidden' : '')
   )

@@ -6,6 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\theme-default\gulpfile.ts
  */
+import type { TaskFunction } from 'gulp'
 import path from 'node:path'
 import { Transform } from 'node:stream'
 import { vcOutput } from '@vue-cesium/build/utils/paths'
@@ -103,6 +104,6 @@ export function copyThemeChalkSource() {
   return src(path.resolve(__dirname, 'src/**')).pipe(dest(path.resolve(distBundle, 'src')))
 }
 
-export const build = parallel(copyThemeChalkSource, series(buildThemeChalk, copyThemeChalkBundle))
+export const build: TaskFunction = parallel(copyThemeChalkSource, series(buildThemeChalk, copyThemeChalkBundle))
 
 export default build

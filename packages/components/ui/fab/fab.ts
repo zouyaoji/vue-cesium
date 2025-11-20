@@ -34,14 +34,14 @@ export default defineComponent({
 
     const classes = computed(
       () =>
-        `vc-fab z-fab row inline justify-center`
+        `vc-fab z-fab vc-row inline justify-center`
         + ` vc-fab--align-${props.verticalActionsAlign} ${formClass.value}${
           showing.value === true ? ' vc-fab--opened' : ' vc-fab--closed'}`
     )
 
     const actionClass = computed(
       () =>
-        'vc-fab__actions flex no-wrap inline'
+        'vc-fab__actions vc-flex no-wrap inline'
         + ` vc-fab__actions--${props.direction}`
         + ` vc-fab__actions--${showing.value === true ? 'opened' : 'closed'}`
     )
