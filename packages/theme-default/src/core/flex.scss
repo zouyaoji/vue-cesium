@@ -8,7 +8,7 @@ $flex-prefix: 'vc' !default;
   $noProcNotZero: $size > 0;
 
   @media (min-width: $size) {
-    #{str-fe(".col<name>", $name, $noProcNotZero)} {
+    #{str-fe(".#{$flex-prefix}-col<name>", $name, $noProcNotZero)} {
       &,
       &-auto,
       &-grow,
@@ -48,12 +48,12 @@ $flex-prefix: 'vc' !default;
     @for $i from 0 through $flex-cols {
       $ic: quote('' + $i);
 
-      #{str-fe(".col<name>-<i>", $name, $noProcNotZero, $ic)} {
-        @extend .col#{$name}-auto;
+      #{str-fe(".#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
+        @extend .#{$flex-prefix}-col#{$name}-auto;
       }
 
       .#{$flex-prefix}-row {
-        #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
+        #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: auto;
           width: toFixed(percentage(math.div($i, $flex-cols)), 10000);
         }
@@ -66,7 +66,7 @@ $flex-prefix: 'vc' !default;
       }
 
       .#{$flex-prefix}-column {
-        #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
+        #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: toFixed(percentage(math.div($i, $flex-cols)), 10000);
           width: auto;
         }
