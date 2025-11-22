@@ -50,7 +50,15 @@ import type {
 } from './types'
 import { compare, CompareOperator } from 'compare-versions'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
-import { VcCircleWaveMaterialProperty, VcLineFlowMaterialProperty, VcLineTrailMaterialProperty } from '@vue-cesium/shared/extends/materials'
+import {
+  VcCircleWaveMaterialProperty,
+  VcLineFlowColorMaterialProperty,
+  VcLineFlowMaterialProperty,
+  VcLineTrailColorMaterialProperty,
+  VcLineTrailMaterialProperty,
+  VcScanLineMaterialProperty,
+  VcODLineMaterialProperty
+} from '@vue-cesium/shared/extends/materials'
 import { cloneDeep } from 'lodash'
 
 /**
@@ -447,7 +455,9 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
     val instanceof StripeMaterialProperty ||
     val instanceof VcCircleWaveMaterialProperty ||
     val instanceof VcLineFlowMaterialProperty ||
-    val instanceof VcLineTrailMaterialProperty
+    val instanceof VcLineTrailMaterialProperty ||
+    val instanceof VcScanLineMaterialProperty ||
+    val instanceof VcODLineMaterialProperty
     // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
@@ -552,6 +562,41 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
           axisY: defaultValue(value.fabric.uniforms.axisY, false),
           duration: defaultValue(value.fabric.uniforms.duration, 3000),
           loop: defaultValue(value.fabric.uniforms.loop, true)
+        })
+      }
+      case 'VcLineTrailColor': {
+        return new VcLineTrailColorMaterialProperty({
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 0, 0, 0.7))) as Cesium.Color,
+          bgColor: makeColor(defaultValue(value.fabric.uniforms.bgColor, new Color(0, 0, 0, 0))) as Cesium.Color,
+          speed: defaultValue(value.fabric.uniforms.speed, 5),
+          globalAlpha: defaultValue(value.fabric.uniforms.globalAlpha, 1)
+        })
+      }
+      case 'VcLineFlowColor': {
+        return new VcLineFlowColorMaterialProperty({
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 0, 0, 0.7))) as Cesium.Color,
+          startTime: defaultValue(value.fabric.uniforms.startTime, 0),
+          speed: defaultValue(value.fabric.uniforms.speed, 2),
+          percent: defaultValue(value.fabric.uniforms.percent, 0.04),
+          alpha: defaultValue(value.fabric.uniforms.alpha, 0.1),
+          globalAlpha: defaultValue(value.fabric.uniforms.globalAlpha, 1)
+        })
+      }
+      case 'VcScanLine': {
+        return new VcScanLineMaterialProperty({
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 1, 0, 1))) as Cesium.Color,
+          speed: defaultValue(value.fabric.uniforms.speed, 10),
+          globalAlpha: defaultValue(value.fabric.uniforms.globalAlpha, 1)
+        })
+      }
+      case 'VcODLine': {
+        return new VcODLineMaterialProperty({
+          color: makeColor(defaultValue(value.fabric.uniforms.color, new Color(1, 1, 0, 1))) as Cesium.Color,
+          bgColor: makeColor(defaultValue(value.fabric.uniforms.bgColor, new Color(0, 0, 0, 0))) as Cesium.Color,
+          speed: defaultValue(value.fabric.uniforms.speed, 10),
+          startTime: defaultValue(value.fabric.uniforms.startTime, 0),
+          bidirectional: defaultValue(value.fabric.uniforms.bidirectional, 0),
+          globalAlpha: defaultValue(value.fabric.uniforms.globalAlpha, 1)
         })
       }
     }

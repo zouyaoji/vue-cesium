@@ -88,6 +88,12 @@ interface MaterialOption {
       speed?: number
       time?: number
       loop?: boolean
+      globalAlpha?: number
+      startTime?: number
+      percent?: number
+      alpha?: number
+      bidirectional?: number
+      bgColor?: Cesium.Color | string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color>
     }
   }
   strict?: boolean

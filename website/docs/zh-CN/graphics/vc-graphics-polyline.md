@@ -24,14 +24,14 @@
     <vc-entity>
       <vc-graphics-polyline
         :positions="[90, 30, 1000, 120, 30, 1000]"
-        :material="{fabric: { type: 'PolylineGlow', uniforms: { glowPower: 0.2, color: 'blue' }}}"
-        :width="10"
+        :material="{fabric: { type: 'VcLineTrailColor', uniforms: { color: '#00ffff', bgColor: 'red'}}}"
+        :width="5"
       ></vc-graphics-polyline>
     </vc-entity>
     <vc-entity>
       <vc-graphics-polyline
         :positions="[[90, 40, 1000], [120, 40, 1000]]"
-        :material="{fabric: { type: 'PolylineArrow', uniforms: { color: 'purple' }}}"
+        :material="{fabric: { type: 'VcLineFlowColor', uniforms: { color: '#00ffff', speed: 50, percent: 0.5, alpha: 0.5 }}}"
         :width="10"
       ></vc-graphics-polyline>
     </vc-entity>

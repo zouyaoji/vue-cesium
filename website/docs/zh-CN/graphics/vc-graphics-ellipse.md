@@ -30,7 +30,7 @@
       ></vc-graphics-ellipse>
     </vc-entity>
     <vc-entity ref="entity2" :position="[103, 40]" description="Hello VueCesium">
-      <vc-graphics-ellipse :semiMinorAxis="250000.0" :semiMajorAxis="400000.0" :material="[255, 0, 0, 125]"></vc-graphics-ellipse>
+      <vc-graphics-ellipse :semiMinorAxis="250000.0" :semiMajorAxis="400000.0" :material="{fabric: { type: 'VcScanLine', uniforms: { color: '#00ffff', speed: 10 }}}"></vc-graphics-ellipse>
     </vc-entity>
     <vc-entity ref="entity3" :position="[95, 40, 100000]" description="Hello VueCesium">
       <vc-graphics-ellipse

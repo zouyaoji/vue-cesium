@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-04 10:37:42
- * @LastEditTime: 2022-09-23 15:10:19
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2025-03-20 22:17:53
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\controls\vc-selection-indicator.md
 -->
 
 ## VcSelectionIndicator
@@ -23,7 +23,8 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer :selection-indicator="true" :info-box="true">
     <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
-    <vc-entity ref="entity" :billboard="billboard" :position="{lng: 108, lat: 32}" :point="point" :label="label">
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
+    <vc-entity ref="entity" :billboard="billboard" :position="{lng: 98, lat: 28.4}" :point="point" :label="label">
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
     <vc-layer-imagery :sort-order="10">
@@ -61,7 +62,8 @@
       return {
         point: {
           pixelSize: 28,
-          color: 'red'
+          color: 'red',
+          heightReference: 1
         },
         label: {
           text: 'Hello World',
@@ -69,7 +71,8 @@
         },
         billboard: {
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          scale: 0.5
+          scale: 0.2,
+          heightReference: 1
         }
       }
     },

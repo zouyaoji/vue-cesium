@@ -3,11 +3,19 @@
  * @Date: 2023-08-18 00:56:13
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2024-02-29 00:41:04
+ * @LastEditTime: 2024-06-23 18:43:39
  * @FilePath: \vue-cesium\packages\shared\extends\materials\MaterialExtend.ts
  */
 
-import { VcCircleWaveMaterial, VcLineFlowMaterial, VcLineTrailMaterial } from '@vue-cesium/shared/shaders/materials'
+import {
+  VcCircleWaveMaterial,
+  VcLineFlowMaterial,
+  VcLineFlowColorMaterial,
+  VcLineTrailMaterial,
+  VcLineTrailColorMaterial,
+  VcScanLineMaterial,
+  VcODLineMaterial
+} from '@vue-cesium/shared/shaders/materials'
 
 let isExtended = false
 export default class MaterialExtend {
@@ -19,14 +27,16 @@ export default class MaterialExtend {
     const { Material, Color, Cartesian2 } = Cesium
     const webgl2 = viewer.scene.context?.webgl2
 
-    let shaderSourceTextVcLineFlow = VcLineFlowMaterial
     let shaderSourceTextVcCircle = VcCircleWaveMaterial
+    let shaderSourceTextVcLineFlow = VcLineFlowMaterial
+    let shaderSourceTextVcLineFlowColor = VcLineFlowColorMaterial
     let shaderSourceTextVcLineTrail = VcLineTrailMaterial
 
     if (!webgl2) {
       shaderSourceTextVcLineFlow = shaderSourceTextVcLineFlow.replace(/texture\(/g, 'texture2D(')
       shaderSourceTextVcCircle = shaderSourceTextVcCircle.replace(/texture\(/g, 'texture2D(')
       shaderSourceTextVcLineTrail = shaderSourceTextVcLineTrail.replace(/texture\(/g, 'texture2D(')
+      shaderSourceTextVcLineFlowColor = shaderSourceTextVcLineFlowColor.replace(/texture\(/g, 'texture2D(')
     }
 
     /**
@@ -81,6 +91,30 @@ export default class MaterialExtend {
     })
 
     /**
+     * Gets the name of the VcLineFlowColor material.
+     * @type {string}
+     * @readonly
+     */
+    Material['VcLineFlowColor'] = 'VcLineFlowColor'
+    Cesium.Material['_materialCache'].addMaterial(Material['VcLineFlowColor'], {
+      fabric: {
+        type: Material['VcLineFlowColor'],
+        uniforms: {
+          color: new Color(1, 0, 0, 0.7),
+          startTime: 0,
+          speed: 2,
+          percent: 0.04,
+          alpha: 0.1,
+          globalAlpha: 1
+        },
+        source: shaderSourceTextVcLineFlowColor
+      },
+      translucent() {
+        return true
+      }
+    })
+
+    /**
      * Gets the name of the VcLineTrail material.
      * @type {string}
      * @readonly
@@ -97,6 +131,70 @@ export default class MaterialExtend {
           axisY: false
         },
         source: shaderSourceTextVcLineTrail
+      },
+      translucent() {
+        return true
+      }
+    })
+
+    /**
+     * Gets the name of the VcLineTrailColor material.
+     * @type {string}
+     * @readonly
+     */
+    Material['VcLineTrailColor'] = 'VcLineTrailColor'
+    Cesium.Material['_materialCache'].addMaterial(Material['VcLineTrailColor'], {
+      fabric: {
+        type: Material['VcLineTrailColor'],
+        uniforms: {
+          color: new Color(1, 0, 0, 0.7),
+          bgColor: new Color(0, 0, 0, 0),
+          speed: 5,
+          globalAlpha: 1
+        },
+        source: VcLineTrailColorMaterial
+      },
+      translucent() {
+        return true
+      }
+    })
+
+    /**
+     * Gets the name of the VcScanLine material.
+     * @type {string}
+     * @readonly
+     */
+    Material['VcScanLine'] = 'VcScanLine'
+    Cesium.Material['_materialCache'].addMaterial(Material['VcScanLine'], {
+      fabric: {
+        type: Material['VcScanLine'],
+        uniforms: {
+          color: new Color(1, 0, 0, 1),
+          speed: 10,
+          globalAlpha: 1
+        },
+        source: VcScanLineMaterial
+      },
+      translucent() {
+        return true
+      }
+    })
+
+    /**
+     * Gets the name of the VcScanLine material.
+     * @type {string}
+     * @readonly
+     */
+    Material['VcODLine'] = 'VcODLine'
+    Cesium.Material['_materialCache'].addMaterial(Material['VcODLine'], {
+      fabric: {
+        type: Material['VcODLine'],
+        uniforms: {
+          color: new Color(1, 0, 0, 1),
+          speed: 10,
+          startTime: Math.random()
+        },
+        source: VcODLineMaterial
       },
       translucent() {
         return true
