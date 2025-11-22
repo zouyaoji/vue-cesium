@@ -27,14 +27,14 @@ export default class VcLineFlowColorMaterialProperty extends VcBaseMaterialPrope
   globalAlpha: number
   constructor(options: VcLineFlowColorMaterialPropertyOptions = {}) {
     super(options)
-    const { Color, defaultValue } = Cesium
+    const { Color } = Cesium
 
-    this.color = defaultValue(options.color, new Color(1, 0, 0, 0.7))
-    this.startTime = defaultValue(options.startTime, 0)
-    this.speed = defaultValue(options.speed, 2)
-    this.percent = defaultValue(options.percent, 0.04)
-    this.alpha = defaultValue(options.alpha, 0.1)
-    this.globalAlpha = defaultValue(options.globalAlpha, 1)
+    this.color = options.color ?? new Color(1, 0, 0, 0.7)
+    this.startTime = options.startTime ?? 0
+    this.speed = options.speed ?? 2
+    this.percent = options.percent ?? 0.04
+    this.alpha = options.alpha ?? 0.1
+    this.globalAlpha = options.globalAlpha ?? 1
   }
 
   getType(value) {

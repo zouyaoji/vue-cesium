@@ -112,10 +112,10 @@ class TiandituImageryProvider {
           break
       }
     })
-    const { Credit, Resource, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme } = Cesium
-    options = defaultValue(options, {})
-    this._mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
-    this._url = options.url || defaultValue(options.url, TiandituMapsStyleUrl[this._mapStyle])
+    const { Credit, Resource, Event, GeographicTilingScheme, WebMercatorTilingScheme } = Cesium
+    options = options ?? {}
+    this._mapStyle = options.mapStyle ?? TiandituMapsStyle.IMG_W
+    this._url = options.url ?? TiandituMapsStyleUrl[this._mapStyle]
 
     const resource = (Resource as any).createIfNeeded(this._url)
     resource.appendForwardSlash()
@@ -123,23 +123,23 @@ class TiandituImageryProvider {
     this._ready = false
     this._resource = resource
     this._token = options.token
-    this._layer = defaultValue(options.layer, TiandituMapsStyleLayer[this._mapStyle])
-    this._style = defaultValue(options.style, 'default')
-    this._tileMatrixSetID = defaultValue(options.tileMatrixSetID, TiandituMapsStyleID[this._mapStyle])
-    this._tileMatrixLabels = defaultValue(options.tileMatrixLabels, TiandituMapsStyleLabels[this._mapStyle])
-    this._format = defaultValue(options.format, TiandituMapsStyleFormat[this._mapStyle])
+    this._layer = options.layer ?? TiandituMapsStyleLayer[this._mapStyle]
+    this._style = options.style, 'default'
+    this._tileMatrixSetID = options.tileMatrixSetID ?? TiandituMapsStyleID[this._mapStyle]
+    this._tileMatrixLabels = options.tileMatrixLabels ?? TiandituMapsStyleLabels[this._mapStyle]
+    this._format = options.format ?? TiandituMapsStyleFormat[this._mapStyle]
     this._epsgCode = TiandituMapsStyleEPSG[this._mapStyle]
     this._tilingScheme = this._epsgCode === '900913' ? new WebMercatorTilingScheme() : new GeographicTilingScheme()
-    this._tileWidth = defaultValue(options.tileWidth, 256)
-    this._tileHeight = defaultValue(options.tileHeight, 256)
-    this._minimumLevel = defaultValue(options.minimumLevel, 0)
-    this._maximumLevel = defaultValue(options.maximumLevel, TiandituMapsStyleLabels[this._mapStyle].length)
-    this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)
+    this._tileWidth = options.tileWidth ?? 256
+    this._tileHeight = options.tileHeight ?? 256
+    this._minimumLevel = options.minimumLevel ?? 0
+    this._maximumLevel = options.maximumLevel ?? TiandituMapsStyleLabels[this._mapStyle].length
+    this._rectangle = options.rectangle ?? this._tilingScheme.rectangle
     // this._readyPromise = defer()
     this._errorEvent = new Event()
-    const credit = defaultValue(options.credit, '天地图全球影像服务')
+    const credit = options.credit ?? '天地图全球影像服务'
     this._credit = typeof credit === 'string' ? new Credit(credit) : credit
-    this._subdomains = defaultValue(options.subdomains, ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'])
+    this._subdomains = options.subdomains ?? ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
     this._tileDiscardPolicy = options.tileDiscardPolicy
     this._ready = true
   }
@@ -233,7 +233,7 @@ class TiandituImageryProvider {
  * @private
  */
 function buildImageResource(this, x, y, level, request) {
-  const { combine, defined, defaultValue, queryToObject, objectToQuery } = Cesium
+  const { combine, defined, queryToObject, objectToQuery } = Cesium
   const freezeObject = Object.freeze
   const options = freezeObject({
     service: 'WMTS',
@@ -246,7 +246,7 @@ function buildImageResource(this, x, y, level, request) {
   const subdomains = this._subdomains
   let url = this._url.replace('{s}', subdomains[(x + y + level) % subdomains.length])
   const uri = new Uri(url)
-  let obj = queryToObject(defaultValue(uri.query?.(), ''))
+  let obj = queryToObject(uri.query?.() ?? '')
   obj = combine(options, obj)
   obj.tilematrix = tileMatrixLabel
   obj.layer = this._layer

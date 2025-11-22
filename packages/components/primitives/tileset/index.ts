@@ -159,6 +159,10 @@ export const tilesetPrimitiveProps = {
   ...clippingPlanes,
   ...classificationType,
   ...ellipsoid,
+  enableCollision: {
+    type: Boolean,
+    default: false
+  },
   pointCloudShading: Object as PropType<Cesium.PointCloudShading>,
   ...imageBasedLightingFactor,
   ...lightColor2,
@@ -275,10 +279,10 @@ export default defineComponent({
     instance.cesiumClass = 'Cesium3DTileset'
     instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
     const primitivesStates = usePrimitives(props, ctx, instance)
-    ;(instance.proxy as VcComponentPublicInstance).creatingPromise.then(obj => {
-      const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
-      instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
-    })
+      ; (instance.proxy as VcComponentPublicInstance).creatingPromise.then(obj => {
+        const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
+        instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
+      })
 
     const updateTile = (tile: Cesium.Cesium3DTile) => {
       const content = tile.content
@@ -489,6 +493,10 @@ export type VcPrimitiveTilesetProps = {
    * The ellipsoid determining the size and shape of the globe.
    */
   ellipsoid?: Cesium.Ellipsoid
+  /**
+   * Gets an ellipsoid describing the shape of the globe.
+   */
+  enableCollision?: boolean
   /**
    * Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting.
    */

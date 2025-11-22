@@ -187,7 +187,7 @@ const scratchV1 = {}
 const scratchV2 = {}
 
 export function extendForMouseCoords() {
-  const { Globe, GlobeSurfaceTile, BoundingSphere, defaultValue, Cartesian3, defined, DeveloperError, IntersectionTests, SceneMode } = Cesium
+  const { Globe, GlobeSurfaceTile, BoundingSphere, Cartesian3, defined, DeveloperError, IntersectionTests, SceneMode } = Cesium
   Globe.prototype.pickTriangle =
     Globe.prototype.pickTriangle ||
     function (this, ray, scene, cullBackFaces, result) {
@@ -200,7 +200,7 @@ export function extendForMouseCoords() {
       }
       // >>includeEnd('debug');
 
-      cullBackFaces = defaultValue(cullBackFaces, true)
+      cullBackFaces = cullBackFaces as any ?? true
 
       const mode = scene.mode
       const projection = scene.mapProjection

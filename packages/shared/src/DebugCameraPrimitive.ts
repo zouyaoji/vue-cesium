@@ -36,17 +36,17 @@ class DebugCameraPrimitive {
   _lineCommand: any
   _shaderprogram: any
   constructor(options) {
-    const { defaultValue, Matrix4, Math: CesiumMath, Color, BoundingSphere } = Cesium
-    this.modelMatrix = defaultValue(options.modelMatrix, new Matrix4())
-    this.fovH = defaultValue(options.fovH, CesiumMath.toRadians(60))
-    this.fovV = defaultValue(options.fovV, CesiumMath.toRadians(30))
-    this.segmentH = defaultValue(options.segmentH, 16)
-    this.segmentV = defaultValue(options.segmentV, 8)
-    this.subSegmentH = defaultValue(options.subSegmentH, 3)
-    this.subSegmentV = defaultValue(options.subSegmentV, 3)
-    this._faceColor = defaultValue(options.faceColor, new Color(1, 1, 1, 0.1))
-    this._lineColor = defaultValue(options.lineColor, new Color(1, 1, 1, 0.4))
-    this.show = defaultValue(options.show, true)
+    const { Matrix4, Math: CesiumMath, Color, BoundingSphere } = Cesium
+    this.modelMatrix = options.modelMatrix ?? new Matrix4()
+    this.fovH = options.fovH ?? CesiumMath.toRadians(60)
+    this.fovV = options.fovV ?? CesiumMath.toRadians(30)
+    this.segmentH = options.segmentH ?? 16
+    this.segmentV = options.segmentV ?? 8
+    this.subSegmentH = options.subSegmentH ?? 3
+    this.subSegmentV = options.subSegmentV ?? 3
+    this._faceColor = options.faceColor ?? new Color(1, 1, 1, 0.1)
+    this._lineColor = options.lineColor ?? new Color(1, 1, 1, 0.4)
+    this.show = options.show ?? true
     this._modelMatrix = Matrix4.clone(Matrix4.IDENTITY)
     this._fovH = 0
     this._fovV = 0

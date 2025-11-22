@@ -12,6 +12,7 @@ import ImageryProviderArcgis from './arcgis/imagery'
 import ImageryProviderBaidu from './baidu'
 import ImageryProviderBing from './bingmaps'
 import ImageryProviderGoogle from './google-earth'
+import ImageryProviderGoogle2D from './google-2d'
 import ImageryProviderGrid from './grid'
 import ImageryProviderIon from './ion'
 import ImageryProviderMapbox from './mapbox-style'
@@ -39,6 +40,7 @@ const components = [
   ImageryProviderBaidu,
   ImageryProviderBing,
   ImageryProviderGoogle,
+  ImageryProviderGoogle2D,
   ImageryProviderGrid,
   ImageryProviderIon,
   ImageryProviderMapbox,
@@ -81,6 +83,7 @@ export const VcImageryProviderArcgis = ImageryProviderArcgis as SFCWithInstall<t
 export const VcImageryProviderBaidu = ImageryProviderBaidu as SFCWithInstall<typeof ImageryProviderBaidu>
 export const VcImageryProviderBing = ImageryProviderBing as SFCWithInstall<typeof ImageryProviderBing>
 export const VcImageryProviderGoogle = ImageryProviderGoogle as SFCWithInstall<typeof ImageryProviderGoogle>
+export const VcImageryProviderGoogle2D = ImageryProviderGoogle2D as SFCWithInstall<typeof ImageryProviderGoogle2D>
 export const VcImageryProviderGrid = ImageryProviderGrid as SFCWithInstall<typeof ImageryProviderGrid>
 export const VcImageryProviderIon = ImageryProviderIon as SFCWithInstall<typeof ImageryProviderIon>
 export const VcImageryProviderMapbox = ImageryProviderMapbox as SFCWithInstall<typeof ImageryProviderMapbox>

@@ -8,8 +8,8 @@ import { AnyFunction } from '@vue-cesium/utils/types'
  */
 class CameraFlightPath {
   static createTween(scene, options) {
-    const { Cartesian2, Cartesian3, defaultValue, defined, DeveloperError, EasingFunction, Math: CesiumMath, SceneMode } = Cesium
-    options = defaultValue(options, {})
+    const { Cartesian2, Cartesian3, defined, DeveloperError, EasingFunction, Math: CesiumMath, SceneMode } = Cesium
+    options = options ?? {}
     let destination = options.destination
 
     // >>includeStart('debug', pragmas.debug);
@@ -26,7 +26,7 @@ class CameraFlightPath {
       return emptyFlight()
     }
 
-    const convert = defaultValue(options.convert, true)
+    const convert = options.convert ?? true
     const projection = scene.mapProjection
     const ellipsoid = projection.ellipsoid
     const maximumHeight = options.maximumHeight
@@ -52,9 +52,9 @@ class CameraFlightPath {
       duration = Math.min(duration, 3.0)
     }
 
-    const heading = defaultValue(options.heading, 0.0)
-    const pitch = defaultValue(options.pitch, -CesiumMath.PI_OVER_TWO)
-    const roll = defaultValue(options.roll, 0.0)
+    const heading = options.heading ?? 0.0
+    const pitch = options.pitch ?? -CesiumMath.PI_OVER_TWO
+    const roll = options.roll ?? 0.0
 
     const controller = scene.screenSpaceCameraController
     controller.enableInputs = false

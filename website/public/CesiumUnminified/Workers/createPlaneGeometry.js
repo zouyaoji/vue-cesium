@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,42 +25,40 @@
 
 import {
   VertexFormat_default
-} from "./chunk-EJZTDTUH.js";
+} from "./chunk-JZFU2LEM.js";
 import {
   GeometryAttributes_default
-} from "./chunk-DI5NGJUP.js";
+} from "./chunk-YLILBDWK.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-GWCFU2SA.js";
+} from "./chunk-XPVZWY4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-VJZB3WAV.js";
-import "./chunk-5PTXS2GO.js";
+} from "./chunk-MXHRZHDF.js";
+import "./chunk-3GL53OCU.js";
 import {
   ComponentDatatype_default
-} from "./chunk-K4GQUNB5.js";
+} from "./chunk-EZ7NJXQN.js";
+import "./chunk-IGX772ZQ.js";
+import "./chunk-5T5SY63I.js";
 import {
-  Cartesian3_default
-} from "./chunk-YFXQECWV.js";
-import "./chunk-XY4BATBS.js";
-import "./chunk-MXIZJAPH.js";
-import "./chunk-6CHGCNMW.js";
-import {
-  defaultValue_default
-} from "./chunk-7JO7GPJN.js";
+  Cartesian3_default,
+  Frozen_default
+} from "./chunk-RQRODXVN.js";
+import "./chunk-OE22564R.js";
 import {
   Check_default
-} from "./chunk-AD63PIY6.js";
+} from "./chunk-W4PIP5PG.js";
 import {
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Core/PlaneGeometry.js
 function PlaneGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
-  const vertexFormat = defaultValue_default(options.vertexFormat, VertexFormat_default.DEFAULT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
+  const vertexFormat = options.vertexFormat ?? VertexFormat_default.DEFAULT;
   this._vertexFormat = vertexFormat;
   this._workerName = "createPlaneGeometry";
 }
@@ -68,7 +66,7 @@ PlaneGeometry.packedLength = VertexFormat_default.packedLength;
 PlaneGeometry.pack = function(value, array, startingIndex) {
   Check_default.typeOf.object("value", value);
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   VertexFormat_default.pack(value._vertexFormat, array, startingIndex);
   return array;
 };
@@ -78,7 +76,7 @@ var scratchOptions = {
 };
 PlaneGeometry.unpack = function(array, startingIndex, result) {
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   const vertexFormat = VertexFormat_default.unpack(
     array,
     startingIndex,

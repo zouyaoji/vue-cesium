@@ -319,7 +319,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
       })
     }
 
-    const filterFn = ({ value }) => value >= props.min && value <= props.max
+    const filterFn = (entry: any) => entry.value >= props.min && entry.value <= props.max
 
     if (Array.isArray(def) === true) {
       return def.map(item => (isObject(item) === true ? item : { value: item })).filter(filterFn)

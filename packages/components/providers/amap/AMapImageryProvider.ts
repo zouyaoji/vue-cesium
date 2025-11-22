@@ -32,7 +32,7 @@ class AMapImageryProvider {
   _scl: any
   _ltype: any
   constructor(options) {
-    const { Resource, defaultValue, Credit, Event } = Cesium
+    const { Resource, Credit, Event } = Cesium
     this._url = options.url
     const resource = (Resource as any).createIfNeeded(this._url)
     resource.appendForwardSlash()
@@ -51,8 +51,8 @@ class AMapImageryProvider {
       credit = new Credit(credit)
     }
     this._credit = credit
-    this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
-    this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
+    this.enablePickFeatures = options.enablePickFeatures ?? false
+    this._hasAlphaChannel = options.hasAlphaChannel ?? true
     this._errorEvent = new Event()
     this._readyPromise = defer()
     this._ready = true

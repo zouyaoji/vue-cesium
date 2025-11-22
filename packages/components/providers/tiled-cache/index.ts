@@ -71,8 +71,7 @@ export default defineComponent({
     // methods
     instance.createCesiumObject = async () => {
       const options = providersState.transformProps(props)
-      const { Credit, defined, defaultValue, DeveloperError, Ellipsoid, GeographicTilingScheme, Rectangle, Resource, UrlTemplateImageryProvider } =
-        Cesium
+      const { Credit, defined, DeveloperError, Ellipsoid, GeographicTilingScheme, Rectangle, Resource, UrlTemplateImageryProvider } = Cesium
 
       const { url, dir, format } = options
       if (!defined(url)) {
@@ -84,35 +83,35 @@ export default defineComponent({
       const resource = (Resource as any).createIfNeeded(url)
       resource.url += `?dir=${dir}&scale={scale}&col={x}&row={y}&format=${format}`
 
-      const tilingScheme = defaultValue(
-        options.tilingScheme,
+      const tilingScheme =
+        options.tilingScheme ??
         new GeographicTilingScheme({
-          ellipsoid: defaultValue(options.ellipsoid, Ellipsoid.WGS84),
+          ellipsoid: options.ellipsoid ?? Ellipsoid.WGS84,
           numberOfLevelZeroTilesX: 2,
           numberOfLevelZeroTilesY: 1
         })
-      )
-      const tileWidth = defaultValue(options.tileWidth, 256)
-      const tileHeight = defaultValue(options.tileHeight, 256)
+
+      const tileWidth = options.tileWidth ?? 256
+      const tileHeight = options.tileHeight ?? 256
       const maximumLevel = options.maximumLevel
-      const minimumLevel = defaultValue(options.minimumLevel, 0)
-      const rectangle = defaultValue(options.rectangle, tilingScheme.rectangle)
+      const minimumLevel = options.minimumLevel ?? 0
+      const rectangle = options.rectangle ?? tilingScheme.rectangle
       // Check the number of tiles at the minimum level.  If it's more than four,
       // throw an exception, because starting at the higher minimum
       // level will cause too many tiles to be downloaded and rendered.
-      const swTile = tilingScheme.positionToTileXY(Rectangle.southwest(rectangle), minimumLevel)
-      const neTile = tilingScheme.positionToTileXY(Rectangle.northeast(rectangle), minimumLevel)
+      const swTile = tilingScheme.positionToTileXY(Rectangle.southwest(rectangle as Cesium.Rectangle), minimumLevel)
+      const neTile = tilingScheme.positionToTileXY(Rectangle.northeast(rectangle as Cesium.Rectangle), minimumLevel)
       const tileCount = (Math.abs(neTile.x - swTile.x) + 1) * (Math.abs(neTile.y - swTile.y) + 1)
 
       if (tileCount > 4) {
         throw new DeveloperError(
           'The rectangle and minimumLevel indicate that there are ' +
-            tileCount +
-            ' tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.'
+          tileCount +
+          ' tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.'
         )
       }
 
-      let credit = defaultValue(options.credit, '')
+      let credit = options.credit ?? ''
       if (typeof credit === 'string') {
         credit = new Credit(credit)
       }
@@ -125,7 +124,7 @@ export default defineComponent({
         tileHeight: tileHeight,
         minimumLevel: minimumLevel,
         maximumLevel: maximumLevel,
-        rectangle: rectangle,
+        rectangle: rectangle as Cesium.Rectangle,
         customTags: {
           scale: (imageryProvider, x, y, level) => {
             const s = 1 / props.scales[level]

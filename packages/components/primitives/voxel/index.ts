@@ -22,6 +22,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VoxelPrimitive'
+    instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
     usePrimitives(props, ctx, instance)
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }

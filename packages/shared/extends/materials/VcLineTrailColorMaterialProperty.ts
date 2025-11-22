@@ -25,12 +25,12 @@ export default class VcLineTrailMaterialProperty extends VcBaseMaterialProperty 
   constructor(options: VcLineTrailMaterialPropertyOptions = {}) {
     super(options)
 
-    const { Color, defaultValue } = Cesium
+    const { Color } = Cesium
 
-    this.color = defaultValue(options.color, new Color(1, 0, 0, 0.7))
-    this.bgColor = defaultValue(options.bgColor, new Color(0, 0, 0, 0))
-    this.speed = defaultValue(options.speed, 5)
-    this.globalAlpha = defaultValue(options.globalAlpha, 1)
+    this.color = options.color ?? new Color(1, 0, 0, 0.7)
+    this.bgColor = options.bgColor ?? new Color(0, 0, 0, 0)
+    this.speed = options.speed ?? 5
+    this.globalAlpha = options.globalAlpha, 1
   }
 
   getType(value) {

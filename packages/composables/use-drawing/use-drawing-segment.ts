@@ -629,7 +629,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const makeHeightPositions = (polyline: VcSegmentDrawing, position: Cesium.Cartesian3) => {
-    const { defined, defaultValue, Cartesian3 } = Cesium
+    const { defined, Cartesian3 } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
     const positions = polyline.positions
@@ -637,7 +637,7 @@ export default function (props, ctx, cmpName: string) {
     const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
     const postionCartographic = ellipsoid.cartesianToCartographic(position, {} as any)
     const globe = scene.globe
-    postionCartographic.height = defined(globe) ? defaultValue(globe.getHeight(postionCartographic), 0) : 0
+    postionCartographic.height = defined(globe) ? globe.getHeight(postionCartographic) ?? 0 : 0
     positions[1] = ellipsoid.cartographicToCartesian(postionCartographic, {} as any)
     polyline.distance = Cartesian3.distance(positions[0], positions[1])
     polyline.labelPosition = Cartesian3.midpoint(positions[0], positions[1], {} as any)

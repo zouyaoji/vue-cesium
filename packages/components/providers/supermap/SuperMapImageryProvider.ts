@@ -32,8 +32,8 @@ class SuperMapImageryProvider {
   _readyPromise: any
   _options: any
   constructor(options) {
-    const { appendForwardSlash, Credit, defaultValue, defined, DeveloperError, Event, Resource, Math } = Cesium
-    options = defaultValue(options, {})
+    const { appendForwardSlash, Credit, defined, DeveloperError, Event, Resource, Math } = Cesium
+    options = options ?? {}
     const { url } = options
     if (!defined(url)) {
       throw new DeveloperError('options.url is required.')
@@ -68,22 +68,22 @@ class SuperMapImageryProvider {
     }
     this._url = forwardSlashUrl
     this._resource = (Resource as any).createIfNeeded(forwardSlashUrl)
-    this._transparent = defaultValue(options.transparent, true)
+    this._transparent = options.transparent ?? true
     this._name = options.name || ''
     this._urlTemplate = undefined!
     this._errorEvent = new Event()
     this._fileExtension = 'png'
     this._tileWidth = 256
     this._tileHeight = 256
-    this._minimumLevel = defaultValue(options.minimumLevel, 0)
+    this._minimumLevel = options.minimumLevel ?? 0
     this._maximumLevel = options.maximumLevel
     this._rectangle = undefined
     this._tilingScheme = undefined
     this._tileDiscardPolicy = options.tileDiscardPolicy
-    this._fRatio = defaultValue(options.ratio, Math.DEGREES_PER_RADIAN / 6378137.0)
+    this._fRatio = options.ratio ?? Math.DEGREES_PER_RADIAN / 6378137.0
     this._scales = []
     this._coordUnit = 'DEGREE'
-    let credit = defaultValue(options.credit, new Credit('MapQuest, SuperMap iServer Imagery'))
+    let credit = options.credit ?? new Credit('MapQuest, SuperMap iServer Imagery')
     if (typeof credit === 'string') {
       credit = new Credit(credit)
     }
@@ -312,14 +312,14 @@ function getMaximumLevelbyScale(scale) {
 
 function onFulfilledRest3D(this, xmlText) {
   const options = parseConfigFromXmlText.call(this, xmlText)
-  const { defaultValue, defined, GeographicTilingScheme, Math, Rectangle } = Cesium
-  this._fileExtension = defaultValue(options.fileExtentName, 'png')
-  this._tileWidth = defaultValue(options.imageSizeWidth, 256)
-  this._tileHeight = defaultValue(options.imageSizeHeight, 256)
+  const { defined, GeographicTilingScheme, Math, Rectangle } = Cesium
+  this._fileExtension = options.fileExtentName ?? 'png'
+  this._tileWidth = options.imageSizeWidth ?? 256
+  this._tileHeight = options.imageSizeHeight ?? 256
   const levels = options.levels
   const length = levels.length
-  this._minimumLevel = defaultValue(levels[0], 0)
-  this._maximumLevel = defaultValue(levels[length - 1], length - 1)
+  this._minimumLevel = levels[0] ?? 0
+  this._maximumLevel = levels[length - 1], length - 1
   if (!defined(this._tilingScheme)) {
     this._tilingScheme = new GeographicTilingScheme({
       ellipsoid: this._options.ellipsoid
@@ -422,7 +422,7 @@ function queryNodes(xmlNode, attribute, namespaceURI) {
 }
 
 function onFulfilledTileMap(this, response) {
-  const { Cartesian3, defaultValue, defined, GeographicTilingScheme, Math: CesiumMath, Rectangle, WebMercatorTilingScheme } = Cesium
+  const { Cartesian3, defined, GeographicTilingScheme, Math: CesiumMath, Rectangle, WebMercatorTilingScheme } = Cesium
   const coordUnit = response.prjCoordSys.coordUnit
   this._coordUnit = coordUnit
   const bounds = response.bounds
@@ -458,7 +458,7 @@ function onFulfilledTileMap(this, response) {
   }
   this._urlTemplate = this._urlTemplate.replace('{transparent}', this._transparent)
   this.layersID && (this._urlTemplate = this._urlTemplate + '&layersID=' + this.layersID)
-  this._rectangle || (this._rectangle = defaultValue(this._options.rectangle, this._tilingScheme.rectangle))
+  this._rectangle || (this._rectangle = this._options.rectangle ?? this._tilingScheme.rectangle)
   this._ready = true
   this._readyPromise.resolve(true)
 }

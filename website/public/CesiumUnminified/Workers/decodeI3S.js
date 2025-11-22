@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,35 +25,32 @@
 
 import {
   require_draco_decoder_nodejs
-} from "./chunk-GESF4OXQ.js";
+} from "./chunk-QSMIHPUM.js";
 import {
   Color_default
-} from "./chunk-5OOFQLKF.js";
+} from "./chunk-A4DPJIWS.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-5ODQSF26.js";
+} from "./chunk-VVZ667H6.js";
 import {
   WebMercatorProjection_default
-} from "./chunk-E27BLMDD.js";
+} from "./chunk-LWJXCI3F.js";
 import {
   Cartesian3_default,
   Cartographic_default,
   Ellipsoid_default,
   Matrix3_default
-} from "./chunk-YFXQECWV.js";
+} from "./chunk-RQRODXVN.js";
 import {
   Math_default
-} from "./chunk-XY4BATBS.js";
-import {
-  defaultValue_default
-} from "./chunk-7JO7GPJN.js";
+} from "./chunk-OE22564R.js";
 import {
   Check_default
-} from "./chunk-AD63PIY6.js";
+} from "./chunk-W4PIP5PG.js";
 import {
   __toESM,
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Workers/decodeI3S.js
 var import_draco_decoder_nodejs = __toESM(require_draco_decoder_nodejs(), 1);
@@ -242,10 +239,7 @@ function getFeatureHash(symbologyData, outlinesHash, featureIndex) {
     indices: {},
     edges: {}
   };
-  const featureSymbology = defaultValue_default(
-    symbologyData[featureIndex],
-    symbologyData.default
-  );
+  const featureSymbology = symbologyData[featureIndex] ?? symbologyData.default;
   newFeatureHash.hasOutline = defined_default(featureSymbology?.edges);
   return newFeatureHash;
 }

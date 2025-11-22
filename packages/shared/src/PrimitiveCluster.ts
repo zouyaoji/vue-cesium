@@ -6,7 +6,6 @@
  * @LastEditTime: 2024-04-02 00:43:38
  * @FilePath: \vue-cesium\packages\shared\src\PrimitiveCluster.ts
  */
-import { defaultValue } from '@vue-cesium/utils/util'
 import KDBush from 'kdbush'
 import { VcPrimitiveClusterOptions } from '@vue-cesium/utils/types'
 
@@ -43,14 +42,14 @@ export default class PrimitiveCluster {
   _pixelRangeDirty: boolean
   _minimumClusterSizeDirty: boolean
   constructor(options?: VcPrimitiveClusterOptions) {
-    options = defaultValue(options, {})
+    options = options ?? {}
 
-    this._enabled = defaultValue(options.enabled, false)
-    this._pixelRange = defaultValue(options.pixelRange, 80)
-    this._minimumClusterSize = defaultValue(options.minimumClusterSize, 2)
-    this._clusterBillboards = defaultValue(options.clusterBillboards, true)
-    this._clusterLabels = defaultValue(options.clusterLabels, true)
-    this._clusterPoints = defaultValue(options.clusterPoints, true)
+    this._enabled = options.enabled ?? false
+    this._pixelRange = options.pixelRange ?? 80
+    this._minimumClusterSize = options.minimumClusterSize ?? 2
+    this._clusterBillboards = options.clusterBillboards ?? true
+    this._clusterLabels = options.clusterLabels ?? true
+    this._clusterPoints = options.clusterPoints ?? true
 
     this._labelCollection = undefined
     this._billboardCollection = undefined
@@ -83,7 +82,7 @@ export default class PrimitiveCluster {
      * @type {Boolean}
      * @default true
      */
-    this.show = defaultValue(options.show, true)
+    this.show = options.show ?? true
   }
 
   _initialize(scene: Cesium.Scene) {

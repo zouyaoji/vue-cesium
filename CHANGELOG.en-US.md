@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.2.10
+
+_2025-11-22_
+
+#### Bug fixes
+
+- Added compatibility with Cesium@1.135.
+
 ### 3.2.9
 
 _2024-10-09_

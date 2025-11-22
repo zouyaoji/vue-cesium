@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,62 +25,60 @@
 
 import {
   CorridorGeometryLibrary_default
-} from "./chunk-JW4FOI6M.js";
+} from "./chunk-U4XMLGSR.js";
 import {
   CornerType_default
-} from "./chunk-7O373FFS.js";
-import "./chunk-TGONEMZO.js";
-import "./chunk-BHQJ2NT7.js";
+} from "./chunk-M7HRE4QR.js";
+import "./chunk-7KAXDKRU.js";
+import "./chunk-A6JAFSZT.js";
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-I2ITFFPX.js";
-import "./chunk-CKY7HOHV.js";
-import "./chunk-S6MRMMQU.js";
+} from "./chunk-JDJAPBZP.js";
+import "./chunk-U7CX3HHE.js";
+import "./chunk-NGKF5NTR.js";
 import {
   PolygonPipeline_default
-} from "./chunk-SMDOP47J.js";
+} from "./chunk-KUB64XW6.js";
 import {
   arrayRemoveDuplicates_default
-} from "./chunk-472HQ3EH.js";
-import "./chunk-E6V6SQZW.js";
-import "./chunk-3Q2L65QU.js";
-import "./chunk-2ZGOQXYU.js";
+} from "./chunk-VCVA7BMD.js";
+import "./chunk-AARZSH4V.js";
+import "./chunk-AOM3FHBN.js";
+import "./chunk-N52ZRKUE.js";
 import {
   IndexDatatype_default
-} from "./chunk-26GA3JAM.js";
+} from "./chunk-H7B7FU2U.js";
 import {
   GeometryAttributes_default
-} from "./chunk-DI5NGJUP.js";
+} from "./chunk-YLILBDWK.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-GWCFU2SA.js";
+} from "./chunk-XPVZWY4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-VJZB3WAV.js";
-import "./chunk-5PTXS2GO.js";
+} from "./chunk-MXHRZHDF.js";
+import "./chunk-3GL53OCU.js";
 import {
   ComponentDatatype_default
-} from "./chunk-K4GQUNB5.js";
+} from "./chunk-EZ7NJXQN.js";
+import "./chunk-IGX772ZQ.js";
+import "./chunk-5T5SY63I.js";
 import {
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-YFXQECWV.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-RQRODXVN.js";
 import {
   Math_default
-} from "./chunk-XY4BATBS.js";
-import "./chunk-MXIZJAPH.js";
-import "./chunk-6CHGCNMW.js";
-import {
-  defaultValue_default
-} from "./chunk-7JO7GPJN.js";
+} from "./chunk-OE22564R.js";
 import {
   Check_default
-} from "./chunk-AD63PIY6.js";
+} from "./chunk-W4PIP5PG.js";
 import {
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Core/CorridorOutlineGeometry.js
 var cartesian1 = new Cartesian3_default();
@@ -388,25 +386,20 @@ function computePositionsExtruded(params) {
   };
 }
 function CorridorOutlineGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const positions = options.positions;
   const width = options.width;
   Check_default.typeOf.object("options.positions", positions);
   Check_default.typeOf.number("options.width", width);
-  const height = defaultValue_default(options.height, 0);
-  const extrudedHeight = defaultValue_default(options.extrudedHeight, height);
+  const height = options.height ?? 0;
+  const extrudedHeight = options.extrudedHeight ?? height;
   this._positions = positions;
-  this._ellipsoid = Ellipsoid_default.clone(
-    defaultValue_default(options.ellipsoid, Ellipsoid_default.default)
-  );
+  this._ellipsoid = Ellipsoid_default.clone(options.ellipsoid ?? Ellipsoid_default.default);
   this._width = width;
   this._height = Math.max(height, extrudedHeight);
   this._extrudedHeight = Math.min(height, extrudedHeight);
-  this._cornerType = defaultValue_default(options.cornerType, CornerType_default.ROUNDED);
-  this._granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
+  this._cornerType = options.cornerType ?? CornerType_default.ROUNDED;
+  this._granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
   this._offsetAttribute = options.offsetAttribute;
   this._workerName = "createCorridorOutlineGeometry";
   this.packedLength = 1 + positions.length * Cartesian3_default.packedLength + Ellipsoid_default.packedLength + 6;
@@ -414,7 +407,7 @@ function CorridorOutlineGeometry(options) {
 CorridorOutlineGeometry.pack = function(value, array, startingIndex) {
   Check_default.typeOf.object("value", value);
   Check_default.typeOf.object("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   const positions = value._positions;
   const length = positions.length;
   array[startingIndex++] = length;
@@ -428,7 +421,7 @@ CorridorOutlineGeometry.pack = function(value, array, startingIndex) {
   array[startingIndex++] = value._extrudedHeight;
   array[startingIndex++] = value._cornerType;
   array[startingIndex++] = value._granularity;
-  array[startingIndex] = defaultValue_default(value._offsetAttribute, -1);
+  array[startingIndex] = value._offsetAttribute ?? -1;
   return array;
 };
 var scratchEllipsoid = Ellipsoid_default.clone(Ellipsoid_default.UNIT_SPHERE);
@@ -444,7 +437,7 @@ var scratchOptions = {
 };
 CorridorOutlineGeometry.unpack = function(array, startingIndex, result) {
   Check_default.typeOf.object("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   const length = array[startingIndex++];
   const positions = new Array(length);
   for (let i = 0; i < length; ++i, startingIndex += Cartesian3_default.packedLength) {

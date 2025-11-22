@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,55 +25,53 @@
 
 import {
   WallGeometryLibrary_default
-} from "./chunk-IBLIYJZR.js";
-import "./chunk-TGONEMZO.js";
-import "./chunk-BHQJ2NT7.js";
-import "./chunk-472HQ3EH.js";
-import "./chunk-E6V6SQZW.js";
-import "./chunk-3Q2L65QU.js";
-import "./chunk-2ZGOQXYU.js";
+} from "./chunk-5B7VZQZY.js";
+import "./chunk-7KAXDKRU.js";
+import "./chunk-A6JAFSZT.js";
+import "./chunk-VCVA7BMD.js";
+import "./chunk-AARZSH4V.js";
+import "./chunk-AOM3FHBN.js";
+import "./chunk-N52ZRKUE.js";
 import {
   IndexDatatype_default
-} from "./chunk-26GA3JAM.js";
+} from "./chunk-H7B7FU2U.js";
 import {
   GeometryAttributes_default
-} from "./chunk-DI5NGJUP.js";
+} from "./chunk-YLILBDWK.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-GWCFU2SA.js";
+} from "./chunk-XPVZWY4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-VJZB3WAV.js";
-import "./chunk-5PTXS2GO.js";
+} from "./chunk-MXHRZHDF.js";
+import "./chunk-3GL53OCU.js";
 import {
   ComponentDatatype_default
-} from "./chunk-K4GQUNB5.js";
+} from "./chunk-EZ7NJXQN.js";
+import "./chunk-IGX772ZQ.js";
+import "./chunk-5T5SY63I.js";
 import {
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-YFXQECWV.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-RQRODXVN.js";
 import {
   Math_default
-} from "./chunk-XY4BATBS.js";
-import "./chunk-MXIZJAPH.js";
-import "./chunk-6CHGCNMW.js";
-import {
-  defaultValue_default
-} from "./chunk-7JO7GPJN.js";
+} from "./chunk-OE22564R.js";
 import {
   DeveloperError_default
-} from "./chunk-AD63PIY6.js";
+} from "./chunk-W4PIP5PG.js";
 import {
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Core/WallOutlineGeometry.js
 var scratchCartesian3Position1 = new Cartesian3_default();
 var scratchCartesian3Position2 = new Cartesian3_default();
 function WallOutlineGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const wallPositions = options.positions;
   const maximumHeights = options.maximumHeights;
   const minimumHeights = options.minimumHeights;
@@ -90,11 +88,8 @@ function WallOutlineGeometry(options) {
       "options.positions and options.minimumHeights must have the same length."
     );
   }
-  const granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
+  const granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
+  const ellipsoid = options.ellipsoid ?? Ellipsoid_default.default;
   this._positions = wallPositions;
   this._minimumHeights = minimumHeights;
   this._maximumHeights = maximumHeights;
@@ -117,7 +112,7 @@ WallOutlineGeometry.pack = function(value, array, startingIndex) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   const positions = value._positions;
   let length = positions.length;
@@ -158,7 +153,7 @@ WallOutlineGeometry.unpack = function(array, startingIndex, result) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   let length = array[startingIndex++];
   const positions = new Array(length);
@@ -199,7 +194,7 @@ WallOutlineGeometry.unpack = function(array, startingIndex, result) {
   return result;
 };
 WallOutlineGeometry.fromConstantHeights = function(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const positions = options.positions;
   if (!defined_default(positions)) {
     throw new DeveloperError_default("options.positions is required.");

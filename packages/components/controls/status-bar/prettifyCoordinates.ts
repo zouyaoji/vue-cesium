@@ -22,9 +22,9 @@ function prettifyCoordinates(longitude, latitude, options) {
     longitude: '',
     elevation: ''
   }
-  const { defaultValue, defined } = Cesium
-  const optionsDefaulted = defaultValue(options, {})
-  const decimal = defaultValue(optionsDefaulted.decimal, 5)
+  const { defined } = Cesium
+  const optionsDefaulted = options ?? {}
+  const decimal = optionsDefaulted.decimal ?? 5
 
   if (optionsDefaulted.rangeType === 0) {
     result.latitude = Math.abs(latitude).toFixed(decimal) + '°' + (latitude < 0.0 ? 'S' : 'N')

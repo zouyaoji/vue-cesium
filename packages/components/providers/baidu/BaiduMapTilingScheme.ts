@@ -14,9 +14,9 @@ class BaiduMapMercatorTilingScheme {
   _rectangle: any
   resolutions: number[]
   constructor(options) {
-    const { defaultValue, Ellipsoid, WebMercatorProjection, Cartesian2, Cartographic, Math: CesiumMath, Rectangle } = Cesium
+    const { Ellipsoid, WebMercatorProjection, Cartesian2, Cartographic, Math: CesiumMath, Rectangle } = Cesium
     options = options || {}
-    this._ellipsoid = defaultValue(options.ellipsoid, Ellipsoid.WGS84)
+    this._ellipsoid = options.ellipsoid ?? Ellipsoid.WGS84
     this._projection = new WebMercatorProjection(this._ellipsoid)
     const baiduProjection = new BaiduMapMercatorProjection()
     this._projection.project = function (cartographic, result) {

@@ -26,6 +26,7 @@ import {
   VcImageryProviderBaidu,
   VcImageryProviderBing,
   VcImageryProviderGoogle,
+  VcImageryProviderGoogle2D,
   VcImageryProviderGrid,
   VcImageryProviderIon,
   VcImageryProviderMapbox,

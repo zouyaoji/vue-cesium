@@ -17,7 +17,7 @@ export default class VcCircleWaveMaterialProperty extends VcBaseMaterialProperty
   _time: number
   constructor(options) {
     super(options)
-    const { Event, defaultValue } = Cesium
+    const { Event } = Cesium
 
     if (!Object.getOwnPropertyDescriptor(VcCircleWaveMaterialProperty.prototype, 'color')) {
       Object.defineProperties(VcCircleWaveMaterialProperty.prototype, {
@@ -27,12 +27,12 @@ export default class VcCircleWaveMaterialProperty extends VcBaseMaterialProperty
 
     this._definitionChanged = new Event()
     this._color = new Cesium.ConstantProperty(options.color)
-    this._duration = defaultValue(options.duration, 1000)
-    this.count = defaultValue(options.count, 2)
+    this._duration = options.duration ?? 1000
+    this.count = options.count ?? 2
     if (this.count <= 0) {
       this.count = 1
     }
-    this._gradient = defaultValue(options.gradient, 0.1)
+    this._gradient = options.gradient ?? 0.1
     if (this._gradient === 0) {
       this._gradient = 0
     }

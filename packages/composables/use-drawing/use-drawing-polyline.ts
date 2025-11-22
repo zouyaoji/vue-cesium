@@ -264,13 +264,13 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const getEndPostion = (position: Cesium.Cartesian3) => {
-    const { defined, defaultValue } = Cesium
+    const { defined } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
     const globe = scene.globe
     const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
     const positionCartographic = ellipsoid.cartesianToCartographic(position)
-    positionCartographic.height = defined(globe) ? defaultValue(globe.getHeight(positionCartographic), 0) : 0
+    positionCartographic.height = defined(globe) ? globe.getHeight(positionCartographic) ?? 0 : 0
     return ellipsoid.cartographicToCartesian(positionCartographic)
   }
 

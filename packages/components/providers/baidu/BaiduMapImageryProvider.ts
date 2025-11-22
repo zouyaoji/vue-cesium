@@ -41,8 +41,8 @@ class BaiduMapImageryProvider {
     | 'grayscale'
     | 'hardedge'
   constructor(options) {
-    const { Resource, defaultValue, Credit, Event } = Cesium
-    this._subdomains = defaultValue(options.subdomains, ['0', '1', '2', '3'])
+    const { Resource, Credit, Event } = Cesium
+    this._subdomains = options.subdomains ?? ['0', '1', '2', '3']
     if (options.url) {
       this._url = options.url
     } else {
@@ -68,14 +68,14 @@ class BaiduMapImageryProvider {
     this._minimumLevel = options.minimumLevel || 0
     this._maximumLevel = options.maximumLevel || 18
     this._tilingScheme = new BaiduMapMercatorTilingScheme(options)
-    this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)
+    this._rectangle = options.rectangle ?? this._tilingScheme.rectangle
     let credit = options.credit
     if (typeof credit === 'string') {
       credit = new Credit(credit)
     }
     this._credit = credit
-    this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
-    this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
+    this.enablePickFeatures = options.enablePickFeatures ?? false
+    this._hasAlphaChannel = options.hasAlphaChannel ?? true
     this._errorEvent = new Event()
     // this._readyPromise = defer()
     this._ready = true

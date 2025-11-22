@@ -1,4 +1,3 @@
-import { defaultValue } from '@vue-cesium/utils/util'
 
 const DistanceUnits = Object.freeze({
   METERS: 'METERS',
@@ -49,12 +48,12 @@ class MeasureUnits {
   slopeUnits: string
 
   constructor(options?) {
-    options = defaultValue(options, {})
-    this.distanceUnits = defaultValue(options.distanceUnits, DistanceUnits.METERS)
-    this.areaUnits = defaultValue(options.areaUnits, AreaUnits.SQUARE_METERS)
-    this.volumeUnits = defaultValue(options.volumeUnits, VolumeUnits.CUBIC_METERS)
-    this.angleUnits = defaultValue(options.angleUnits, AngleUnits.DEGREES)
-    this.slopeUnits = defaultValue(options.slopeUnits, AngleUnits.DEGREES)
+    options = options ?? {}
+    this.distanceUnits = options.distanceUnits ?? DistanceUnits.METERS
+    this.areaUnits = options.areaUnits ?? AreaUnits.SQUARE_METERS
+    this.volumeUnits = options.volumeUnits ?? VolumeUnits.CUBIC_METERS
+    this.angleUnits = options.angleUnits ?? AngleUnits.DEGREES
+    this.slopeUnits = options.slopeUnits ?? AngleUnits.DEGREES
   }
 
   static numberToString = function (number, locale, decimals) {
@@ -346,7 +345,7 @@ function getLocaleFormatStringOptions(decimals, number?, locale?) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }
-  decimals = Cesium.defaultValue(decimals, 2)
+  decimals = decimals ?? 2
   if (typeof decimals === 'number') {
     numberFormatter.minimumFractionDigits = decimals
     numberFormatter.maximumFractionDigits = decimals

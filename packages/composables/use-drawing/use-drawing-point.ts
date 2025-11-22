@@ -311,11 +311,11 @@ export default function (props, ctx, cmpName: string) {
   const getMeasurementResult = (point: VcPointDrawing, movement?) => {
     const { viewer } = $services
     const scene = viewer.scene
-    const { defined, defaultValue, Math: CesiumMath, SceneMode } = Cesium
+    const { defined, Math: CesiumMath, SceneMode } = Cesium
     const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
     const positionCartographic = ellipsoid.cartesianToCartographic(point.position, {} as any)
     const globe = scene.globe
-    let height = defined(globe) ? defaultValue(globe.getHeight(positionCartographic), 0) : 0
+    let height = defined(globe) ? globe.getHeight(positionCartographic) ?? 0 : 0
     height = props.heightReference === 0 ? positionCartographic.height : positionCartographic.height - height
     CesiumMath.equalsEpsilon(height, 0, CesiumMath.EPSILON3) && (height = 0)
     let slope = 0

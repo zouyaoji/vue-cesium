@@ -256,7 +256,6 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         defined,
         buildModuleUrl,
         DeveloperError,
-        defaultValue,
         createDefaultImageryProviderViewModels,
         createDefaultTerrainProviderViewModels,
         BaseLayerPicker
@@ -298,8 +297,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         Either specify options.terrainProvider instead or set options.baseLayerPicker to true.`)
         }
         if (createBaseLayerPicker) {
-          const imageryProviderViewModels = defaultValue(props.imageryProviderViewModels, createDefaultImageryProviderViewModels())
-          const terrainProviderViewModels = defaultValue(props.terrainProviderViewModels, createDefaultTerrainProviderViewModels())
+          const imageryProviderViewModels = props.imageryProviderViewModels ?? createDefaultImageryProviderViewModels()
+          const terrainProviderViewModels = props.terrainProviderViewModels ?? createDefaultTerrainProviderViewModels()
           const baseLayerPicker = new BaseLayerPicker(toolbar!, {
             globe: viewer.scene.globe,
             imageryProviderViewModels: imageryProviderViewModels,
@@ -330,7 +329,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     val => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
-      const { defined, defaultValue, NavigationHelpButton } = Cesium
+      const { defined, NavigationHelpButton } = Cesium
       if (defined(viewer.navigationHelpButton) && !viewer.navigationHelpButton.isDestroyed() && !val) {
         viewer.navigationHelpButton.destroy()
         viewer._navigationHelpButton = undefined
@@ -350,7 +349,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         }
         const navigationHelpButton = new NavigationHelpButton({
           container: toolbar!,
-          instructionsInitiallyVisible: defaultValue(props.navigationInstructionsInitiallyVisible, showNavHelp)
+          instructionsInitiallyVisible: props.navigationInstructionsInitiallyVisible ?? showNavHelp
         })
         viewer._navigationHelpButton = navigationHelpButton
         resizeToolbar(toolbar, navigationHelpButton)

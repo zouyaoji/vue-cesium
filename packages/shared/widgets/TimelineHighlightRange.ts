@@ -15,7 +15,7 @@ export default class VcTimelineHighlightRange {
   constructor(color, heightInPx, base) {
     this._color = color
     this._height = heightInPx
-    this._base = Cesium.defaultValue(base, 0)
+    this._base = base ?? 0
   }
 
   getHeight() {

@@ -35,7 +35,6 @@ class Viewshed {
       ShadowMode,
       Event,
       Cartesian3,
-      defaultValue,
       Color
     } = Cesium
     if (!defined(scene)) {
@@ -60,17 +59,17 @@ class Viewshed {
     this._debugCameraPrimitive = new DebugCameraPrimitive({})
     this._enabledChangedEvent = new Event()
     this._position = new Cartesian3()
-    this._offsetHeight = defaultValue(options.offsetHeight, 1.8)
-    this._visibleColor = defaultValue(options.visibleColor, new Color(0, 1, 0, 1))
-    this._invisibleColor = defaultValue(options.invisibleColor, new Color(1, 0, 0, 1))
+    this._offsetHeight = options.offsetHeight ?? 1.8
+    this._visibleColor = options.visibleColor as Cesium.Color ?? new Color(0, 1, 0, 1)
+    this._invisibleColor = options.invisibleColor as Cesium.Color ?? new Color(1, 0, 0, 1)
     ;(this._viewshedShadowMap as any)._viewshedColors = {
       visible: this._visibleColor,
       invisible: this._invisibleColor
     }
     this._showGridLine = options.showGridLine
     this._debugCameraPrimitive.show = this._showGridLine
-    this._debugCameraPrimitive.lineColor = defaultValue(options.lineColor, new Color(1, 1, 1, 0.4))
-    this._debugCameraPrimitive.faceColor = defaultValue(options.faceColor, new Color(1, 1, 1, 0.1))
+    this._debugCameraPrimitive.lineColor = options.lineColor as Cesium.Color ?? new Color(1, 1, 1, 0.4)
+    this._debugCameraPrimitive.faceColor = options.faceColor as Cesium.Color ?? new Color(1, 1, 1, 0.1)
   }
 
   get frustum() {

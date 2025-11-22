@@ -27,13 +27,13 @@ export default class VcODLineMaterialProperty extends VcBaseMaterialProperty {
   globalAlpha: number
   constructor(options: VcODLineMaterialPropertyOptions = {}) {
     super(options)
-    const { Color, defaultValue } = Cesium
+    const { Color } = Cesium
 
-    this.color = defaultValue(options.color, new Color(1, 0, 0, 0.7))
-    this.color = defaultValue(options.bgColor, new Color(1, 0, 0, 0.7))
-    this.startTime = defaultValue(options.startTime, 0)
-    this.speed = defaultValue(options.speed, 2)
-    this.globalAlpha = defaultValue(options.globalAlpha, 1)
+    this.color = options.color ?? new Color(1, 0, 0, 0.7)
+    this.color = options.bgColor ?? new Color(1, 0, 0, 0.7)
+    this.startTime = options.startTime ?? 0
+    this.speed = options.speed ?? 2
+    this.globalAlpha = options.globalAlpha ?? 1
   }
 
   getType(value) {

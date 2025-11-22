@@ -25,20 +25,20 @@ class PolygonPrimitive {
   _depthFailAppearance: Cesium.Appearance
 
   constructor(options) {
-    const { defined, defaultValue, createGuid, BoundingSphere, Ellipsoid, ClassificationType, ArcType } = Cesium
-    options = defaultValue(options, {})
-    this.show = defaultValue(options.show, true)
+    const { defined, createGuid, BoundingSphere, Ellipsoid, ClassificationType, ArcType } = Cesium
+    options = options ?? {}
+    this.show = options.show ?? true
     this._id = defined(options.id) ? options.id : createGuid()
-    this._ellipsoid = defaultValue(options.ellipsoid, Ellipsoid.WGS84)
-    this._appearance = defaultValue(options.appearance, new Cesium.MaterialAppearance())
+    this._ellipsoid = options.ellipsoid ?? Ellipsoid.WGS84
+    this._appearance = options.appearance ?? new Cesium.MaterialAppearance()
     this._depthFailAppearance = options.depthFailAppearance
-    this._positions = defaultValue(options.positions, [])
+    this._positions = options.positions ?? []
     this._polygonHierarchy = options.polygonHierarchy
-    this._clampToGround = defaultValue(options.clampToGround, false)
-    this._classificationType = defaultValue(options.classificationType, ClassificationType.BOTH)
-    this._arcType = defaultValue(options.arcType, ArcType.RHUMB)
-    this._allowPicking = defaultValue(options.allowPicking, true)
-    this._asynchronous = defaultValue(options.asynchronous, false)
+    this._clampToGround = options.clampToGround ?? false
+    this._classificationType = options.classificationType ?? ClassificationType.BOTH
+    this._arcType = options.arcType ?? ArcType.RHUMB
+    this._allowPicking = options.allowPicking ?? true
+    this._asynchronous = options.asynchronous ?? false
     this._boundingSphere = new BoundingSphere()
     this._primitive = void 0
     this._update = true

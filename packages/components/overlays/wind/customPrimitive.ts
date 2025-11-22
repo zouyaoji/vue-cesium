@@ -31,7 +31,7 @@ class CustomPrimitive {
 
     this.outputTexture = options.outputTexture
 
-    this.autoClear = Cesium.defaultValue(options.autoClear, false)
+    this.autoClear = options.autoClear ?? false
     this.preExecute = options.preExecute
 
     this.show = true
