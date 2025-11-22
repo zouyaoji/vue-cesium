@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,70 +25,68 @@
 
 import {
   PolygonGeometryLibrary_default
-} from "./chunk-PGRPDNHG.js";
+} from "./chunk-726NINF5.js";
 import {
   ArcType_default
-} from "./chunk-PRGYLLJT.js";
+} from "./chunk-XZO6F23E.js";
 import {
   GeometryInstance_default
-} from "./chunk-7KTQP4VB.js";
+} from "./chunk-NHZNMTIR.js";
 import {
   GeometryPipeline_default
-} from "./chunk-GGZJN2TI.js";
-import "./chunk-NGPPMXRM.js";
-import "./chunk-C6YYBQXW.js";
+} from "./chunk-GYRDA3XK.js";
+import "./chunk-6HBKE43B.js";
+import "./chunk-5ZF53EY6.js";
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-I2ITFFPX.js";
+} from "./chunk-JDJAPBZP.js";
 import {
   EllipsoidTangentPlane_default
-} from "./chunk-CKY7HOHV.js";
-import "./chunk-S6MRMMQU.js";
+} from "./chunk-U7CX3HHE.js";
+import "./chunk-NGKF5NTR.js";
 import {
   PolygonPipeline_default,
   WindingOrder_default
-} from "./chunk-SMDOP47J.js";
-import "./chunk-472HQ3EH.js";
-import "./chunk-E6V6SQZW.js";
-import "./chunk-3Q2L65QU.js";
-import "./chunk-2ZGOQXYU.js";
+} from "./chunk-KUB64XW6.js";
+import "./chunk-VCVA7BMD.js";
+import "./chunk-AARZSH4V.js";
+import "./chunk-AOM3FHBN.js";
+import "./chunk-N52ZRKUE.js";
 import {
   IndexDatatype_default
-} from "./chunk-26GA3JAM.js";
+} from "./chunk-H7B7FU2U.js";
 import {
   GeometryAttributes_default
-} from "./chunk-DI5NGJUP.js";
+} from "./chunk-YLILBDWK.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-GWCFU2SA.js";
+} from "./chunk-XPVZWY4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-VJZB3WAV.js";
-import "./chunk-5PTXS2GO.js";
+} from "./chunk-MXHRZHDF.js";
+import "./chunk-3GL53OCU.js";
 import {
   ComponentDatatype_default
-} from "./chunk-K4GQUNB5.js";
+} from "./chunk-EZ7NJXQN.js";
+import "./chunk-IGX772ZQ.js";
+import "./chunk-5T5SY63I.js";
 import {
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-YFXQECWV.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-RQRODXVN.js";
 import {
   Math_default
-} from "./chunk-XY4BATBS.js";
-import "./chunk-MXIZJAPH.js";
-import "./chunk-6CHGCNMW.js";
-import {
-  defaultValue_default
-} from "./chunk-7JO7GPJN.js";
+} from "./chunk-OE22564R.js";
 import {
   Check_default,
   DeveloperError_default
-} from "./chunk-AD63PIY6.js";
+} from "./chunk-W4PIP5PG.js";
 import {
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Core/PolygonOutlineGeometry.js
 var createGeometryFromPositionsPositions = [];
@@ -311,16 +309,13 @@ function PolygonOutlineGeometry(options) {
     );
   }
   const polygonHierarchy = options.polygonHierarchy;
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
-  const granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
-  const perPositionHeight = defaultValue_default(options.perPositionHeight, false);
+  const ellipsoid = options.ellipsoid ?? Ellipsoid_default.default;
+  const granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
+  const perPositionHeight = options.perPositionHeight ?? false;
   const perPositionHeightExtrude = perPositionHeight && defined_default(options.extrudedHeight);
-  const arcType = defaultValue_default(options.arcType, ArcType_default.GEODESIC);
-  let height = defaultValue_default(options.height, 0);
-  let extrudedHeight = defaultValue_default(options.extrudedHeight, height);
+  const arcType = options.arcType ?? ArcType_default.GEODESIC;
+  let height = options.height ?? 0;
+  let extrudedHeight = options.extrudedHeight ?? height;
   if (!perPositionHeightExtrude) {
     const h = Math.max(height, extrudedHeight);
     extrudedHeight = Math.min(height, extrudedHeight);
@@ -344,7 +339,7 @@ function PolygonOutlineGeometry(options) {
 PolygonOutlineGeometry.pack = function(value, array, startingIndex) {
   Check_default.typeOf.object("value", value);
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   startingIndex = PolygonGeometryLibrary_default.packPolygonHierarchy(
     value._polygonHierarchy,
     array,
@@ -359,7 +354,7 @@ PolygonOutlineGeometry.pack = function(value, array, startingIndex) {
   array[startingIndex++] = value._perPositionHeightExtrude ? 1 : 0;
   array[startingIndex++] = value._perPositionHeight ? 1 : 0;
   array[startingIndex++] = value._arcType;
-  array[startingIndex++] = defaultValue_default(value._offsetAttribute, -1);
+  array[startingIndex++] = value._offsetAttribute ?? -1;
   array[startingIndex] = value.packedLength;
   return array;
 };
@@ -369,7 +364,7 @@ var dummyOptions = {
 };
 PolygonOutlineGeometry.unpack = function(array, startingIndex, result) {
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   const polygonHierarchy = PolygonGeometryLibrary_default.unpackPolygonHierarchy(
     array,
     startingIndex,
@@ -403,7 +398,7 @@ PolygonOutlineGeometry.unpack = function(array, startingIndex, result) {
   return result;
 };
 PolygonOutlineGeometry.fromPositions = function(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   Check_default.defined("options.positions", options.positions);
   const newOptions = {
     polygonHierarchy: {

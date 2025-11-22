@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.122
+ * Version 1.135.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,27 +25,26 @@
 
 import {
   require_draco_decoder_nodejs
-} from "./chunk-GESF4OXQ.js";
+} from "./chunk-QSMIHPUM.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-5ODQSF26.js";
+} from "./chunk-VVZ667H6.js";
 import {
   IndexDatatype_default
-} from "./chunk-26GA3JAM.js";
+} from "./chunk-H7B7FU2U.js";
 import {
   ComponentDatatype_default
-} from "./chunk-K4GQUNB5.js";
-import "./chunk-XY4BATBS.js";
-import "./chunk-MXIZJAPH.js";
+} from "./chunk-EZ7NJXQN.js";
+import "./chunk-IGX772ZQ.js";
 import {
   RuntimeError_default
-} from "./chunk-6CHGCNMW.js";
-import "./chunk-7JO7GPJN.js";
-import "./chunk-AD63PIY6.js";
+} from "./chunk-5T5SY63I.js";
+import "./chunk-OE22564R.js";
+import "./chunk-W4PIP5PG.js";
 import {
   __toESM,
   defined_default
-} from "./chunk-E63IIM5T.js";
+} from "./chunk-75HAJIDT.js";
 
 // packages/engine/Source/Workers/decodeDraco.js
 var import_draco_decoder_nodejs = __toESM(require_draco_decoder_nodejs(), 1);
@@ -296,10 +295,11 @@ function decodePointCloud(parameters) {
 }
 function decodePrimitive(parameters) {
   const dracoDecoder = new draco.Decoder();
-  const attributesToSkip = ["POSITION", "NORMAL", "COLOR", "TEX_COORD"];
   if (parameters.dequantizeInShader) {
-    for (let i = 0; i < attributesToSkip.length; ++i) {
-      dracoDecoder.SkipAttributeTransform(draco[attributesToSkip[i]]);
+    for (let i = 0; i < parameters.attributesToSkipTransform.length; ++i) {
+      dracoDecoder.SkipAttributeTransform(
+        draco[parameters.attributesToSkipTransform[i]]
+      );
     }
   }
   const bufferView = parameters.bufferView;
