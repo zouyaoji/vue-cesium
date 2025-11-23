@@ -344,20 +344,20 @@ const circleDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actio
 
 export {
   actionOptions,
+  billboardOptsDefault,
+  circleDrawingActionDefault,
+  circleDrawingDefault,
   clearActionDefault,
   editorOptsDefault,
-  pointOptsDefault,
-  billboardOptsDefault,
   labelOptsDefault,
-  polylineOptsDefault,
   pointDrawingDefault,
-  segmentDrawingDefault,
-  polylineDrawingDefault,
+  pointOptsDefault,
   polygonDrawingDefault,
+  polylineDrawingDefault,
+  polylineOptsDefault,
+  polylinePrimitiveOptsDefault,
   rectangleDrawingDefault,
-  circleDrawingDefault,
-  circleDrawingActionDefault,
-  regularDrawingDefault,
   regularDrawingActionDefault,
-  polylinePrimitiveOptsDefault
+  regularDrawingDefault,
+  segmentDrawingDefault
 }

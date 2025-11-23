@@ -1,3 +1,5 @@
+import type { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,15 +9,13 @@
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polyline\index.ts
  */
 import type { ComputedRef, PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
-import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { VcGeometryPolylineProps } from '../../../geometries'
-import { drawingEmit } from '@vue-cesium/utils/emits'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcDrawingPolyline',
@@ -39,7 +39,7 @@ export default defineComponent({
   }
 })
 
-export type VcDrawingPolylineProps = {
+export interface VcDrawingPolylineProps {
   /**
    * Specify whether to respond to mouse pick events.
    */

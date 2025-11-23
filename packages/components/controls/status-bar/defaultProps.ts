@@ -6,8 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\defaultProps.ts
  */
-import { PropType } from 'vue'
-import { VcTooltipProps } from '../../ui'
+import type { PropType } from 'vue'
+import type { VcTooltipProps } from '../../ui'
 
 export default {
   gridFileUrl: {

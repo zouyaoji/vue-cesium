@@ -23,7 +23,7 @@ export function width(el) {
 export function css(element, css) {
   const style = element.style
 
-  Object.keys(css).forEach(prop => {
+  Object.keys(css).forEach((prop) => {
     style[prop] = css[prop]
   })
 }
@@ -53,7 +53,8 @@ export function getElement(el) {
   if (typeof el === 'string') {
     try {
       return document.querySelector(el) || void 0
-    } catch (err) {
+    }
+    catch (err) {
       return void 0
     }
   }

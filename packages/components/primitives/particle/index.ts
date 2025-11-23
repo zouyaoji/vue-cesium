@@ -1,3 +1,11 @@
+import type {
+  VcCartesian2,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcPickEvent,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,31 +15,23 @@
  * @FilePath: \vue-cesium@next\packages\components\primitives\particle\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  VcCartesian2,
-  VcColor,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcPickEvent,
-  VcReadyObject
-} from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
-  show,
-  modelMatrix,
-  image,
   color,
-  startColor,
+  enableMouseEvent,
   endColor,
+  image,
   imageSize,
-  minimumImageSize,
   maximumImageSize,
+  minimumImageSize,
+  modelMatrix,
+  show,
   sizeInMeters,
-  enableMouseEvent
+  startColor
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 const emits = {
   ...primitiveEmits,
@@ -93,7 +93,7 @@ export const particlePrimitiveProps = {
 export default defineComponent({
   name: 'VcPrimitiveParticle',
   props: particlePrimitiveProps,
-  emits: emits,
+  emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -105,7 +105,7 @@ export default defineComponent({
 })
 
 export type VcPrimitiveParticleEmits = typeof emits
-export type VcPrimitiveParticleProps = {
+export interface VcPrimitiveParticleProps {
   /**
    * Whether to display the particle system.
    * Default value: true

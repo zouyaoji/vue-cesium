@@ -1,19 +1,5 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-06-24 16:58:32
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
- */
-import { defineComponent, Ref } from 'vue'
-import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import type { PropType } from 'vue'
-import { MeasureUnits } from '@vue-cesium/shared'
-import type { VcLabelProps, VcPointProps } from '../../../primitive-collections'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import {
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type {
   MeasurementDecimals,
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
@@ -23,7 +9,21 @@ import {
   VcEditorOpts,
   VcPointDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType, Ref } from 'vue'
+import type { VcLabelProps, VcPointProps } from '../../../primitive-collections'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:23
+ * @LastEditTime: 2022-06-24 16:58:32
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
+ */
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcMeasurementPoint',
@@ -43,7 +43,7 @@ export default defineComponent({
   }
 })
 
-export type VcMeasurementPointProps = {
+export interface VcMeasurementPointProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -118,7 +118,7 @@ export type VcMeasurementPointProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

@@ -1,4 +1,4 @@
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import useSpinner, { useSpinnerProps } from './use-spinner'
 
@@ -6,17 +6,17 @@ const svg = [
   h(
     'g',
     {
-      transform: 'translate(1 1)',
+      'transform': 'translate(1 1)',
       'stroke-width': '2',
-      fill: 'none',
+      'fill': 'none',
       'fill-rule': 'evenodd'
     },
     [
       h('circle', {
         'stroke-opacity': '.5',
-        cx: '18',
-        cy: '18',
-        r: '18'
+        'cx': '18',
+        'cy': '18',
+        'r': '18'
       }),
       h(
         'path',

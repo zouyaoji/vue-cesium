@@ -1,3 +1,5 @@
+import type { VcBtnTooltipProps } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -7,9 +9,7 @@
  * @FilePath: \vue-cesium@next\packages\components\controls\compass\defaultProps.ts
  */
 import { positionProps } from '@vue-cesium/composables/private/use-position'
-import type { VcBtnTooltipProps } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType } from 'vue'
 
 const defaultProps = {
   enableCompassOuterRing: {
@@ -72,4 +72,4 @@ const defaultProps = {
   }
 }
 const defaultOptions = getDefaultOptionByProps<typeof defaultProps>(defaultProps)
-export { defaultProps, defaultOptions }
+export { defaultOptions, defaultProps }

@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,21 +7,20 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\components\primitives\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import PrimitiveClassification from './classification'
 import PrimitiveGround from './ground'
 import PrimitiveGroundPolyline from './ground-polyline'
+import PrimitiveI3sDataProvider from './i3s'
 import PrimitiveModel from './model'
-import Primitive from './primitive'
-import PrimitiveTileset from './tileset'
 import PrimitiveOsmBuildings from './osm-buildings'
 import PrimitiveParticle from './particle'
-import PrimitiveViewshed from './viewshed'
-import PrimitiveTimeDynamicPointCloud from './time-dynamic-point-cloud'
-import PrimitiveI3sDataProvider from './i3s'
-import PrimitiveVoxel from './voxel'
+import Primitive from './primitive'
 import PrimitiveCluster from './primitive-cluster'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import PrimitiveTileset from './tileset'
+import PrimitiveTimeDynamicPointCloud from './time-dynamic-point-cloud'
+import PrimitiveViewshed from './viewshed'
+import PrimitiveVoxel from './voxel'
 
 const components = [
   PrimitiveClassification,
@@ -37,8 +37,8 @@ const components = [
   PrimitiveCluster
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -47,7 +47,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }
@@ -70,13 +70,13 @@ export const VcPrimitiveCluster = PrimitiveCluster as SFCWithInstall<typeof Prim
 export * from './classification'
 export * from './ground'
 export * from './ground-polyline'
+export * from './i3s'
 export * from './model'
 export * from './osm-buildings'
 export * from './particle'
 export * from './primitive'
-export * from './tileset'
-export * from './viewshed'
-export * from './time-dynamic-point-cloud'
-export * from './i3s'
-export * from './voxel'
 export * from './primitive-cluster'
+export * from './tileset'
+export * from './time-dynamic-point-cloud'
+export * from './viewshed'
+export * from './voxel'

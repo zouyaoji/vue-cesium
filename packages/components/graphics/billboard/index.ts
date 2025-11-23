@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 11:32:32
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\billboard\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcBoundingRectangle,
   VcCallbackPropertyFunction,
@@ -21,29 +12,39 @@ import type {
 } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  show,
-  image,
-  scale,
-  pixelOffset,
-  eyeOffset,
-  horizontalOrigin,
-  verticalOrigin,
-  heightReference,
-  color,
-  rotation,
   alignedAxis,
-  sizeInMeters,
-  width,
-  height,
-  scaleByDistance,
-  translucencyByDistance,
-  pixelOffsetScaleByDistance,
-  imageSubRegion,
+  color,
+  disableDepthTestDistance,
   distanceDisplayCondition,
-  disableDepthTestDistance
+  eyeOffset,
+  height,
+  heightReference,
+  horizontalOrigin,
+  image,
+  imageSubRegion,
+  pixelOffset,
+  pixelOffsetScaleByDistance,
+  rotation,
+  scale,
+  scaleByDistance,
+  show,
+  sizeInMeters,
+  translucencyByDistance,
+  verticalOrigin,
+  width
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { graphicsEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-08 11:32:32
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\billboard\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const billboarGraphicsProps = {
   ...image,
   ...scale,
@@ -79,7 +80,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsBillboardProps = {
+export interface VcGraphicsBillboardProps {
   /**
    * A boolean Property specifying the visibility of the billboard.
    * Default value: true

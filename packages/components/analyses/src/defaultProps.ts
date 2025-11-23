@@ -7,17 +7,7 @@
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
  */
 
-import {
-  actionOptions,
-  pointOptsDefault,
-  polygonDrawingDefault,
-  editorOptsDefault,
-  polylineOptsDefault,
-  segmentDrawingDefault,
-  polylinePrimitiveOptsDefault
-} from '@vue-cesium/composables/use-drawing/defaultOpts'
-import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
-import {
+import type {
   VcDrawingActiveEvt,
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
@@ -29,9 +19,19 @@ import {
   VcViewshedAnalysisOpts
 } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 import type { PropType } from 'vue'
 import type { VcFabProps } from '../../ui'
+import {
+  actionOptions,
+  editorOptsDefault,
+  pointOptsDefault,
+  polygonDrawingDefault,
+  polylineOptsDefault,
+  polylinePrimitiveOptsDefault,
+  segmentDrawingDefault
+} from '@vue-cesium/composables/use-drawing/defaultOpts'
+import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
+import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 
 const sightlineAnalysisActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-analysis-sightline'
@@ -129,9 +129,9 @@ const mainFabDefault = Object.assign({}, actionOptions, {
 
 export const analysisType = ['sightline', 'viewshed']
 
-const isValidAnalysisType = (drawings: string[]) => {
+function isValidAnalysisType(drawings: string[]) {
   let flag = true
-  drawings.forEach(drawing => {
+  drawings.forEach((drawing) => {
     if (!analysisType.includes(drawing)) {
       console.error(`VueCesium: unknown analysis type: ${drawing}`)
       flag = false
@@ -177,14 +177,14 @@ const defaultOptions = getDefaultOptionByProps<VcAnalysesProps>(analysesProps)
 export {
   analysesProps,
   defaultOptions,
+  mainFabDefault,
   sightlineAnalysisActionDefault,
   sightlineAnalysisDefault,
   viewshedAnalysisActionDefault,
-  viewshedAnalysisDefault,
-  mainFabDefault
+  viewshedAnalysisDefault
 }
 
-export type VcAnalysesProps = {
+export interface VcAnalysesProps {
   /**
    * Specify the position of the VcAnalyses.
    * Default value: bottom-left
@@ -269,7 +269,7 @@ export type VcAnalysesProps = {
    */
   onActiveEvt?: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

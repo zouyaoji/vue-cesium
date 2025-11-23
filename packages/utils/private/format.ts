@@ -3,7 +3,7 @@ const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 export function humanStorageSize(bytes) {
   let u = 0
 
-  while (parseInt(bytes, 10) >= 1024 && u < units.length - 1) {
+  while (Number.parseInt(bytes, 10) >= 1024 && u < units.length - 1) {
     bytes /= 1024
     ++u
   }
@@ -39,8 +39,8 @@ export function pad(v, length = 2, char = '0') {
     return v
   }
 
-  const val = '' + v
-  return val.length >= length ? val : new Array(length - val.length + 1).join(char) + val
+  const val = `${v}`
+  return val.length >= length ? val : Array.from({ length: length - val.length + 1 }).join(char) + val
 }
 
 export default {

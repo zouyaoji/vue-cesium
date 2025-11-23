@@ -1,13 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 15:00:36
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\datasources\geojson\index.ts
- */
-import type { PropType, VNode } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import type {
   AnyObject,
   VcColor,
@@ -17,13 +7,23 @@ import type {
   VcPickEvent,
   VcReadyObject
 } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-06 15:00:36
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\datasources\geojson\index.ts
+ */
+import type { PropType, VNode } from 'vue'
+import type { VcEntityProps } from '../../entity/src'
 import { useDatasources } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, enableMouseEvent, data, sourceUri, clampToGround, credit } from '@vue-cesium/utils/cesium-props'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
-import { VcEntityProps } from '../../entity/src'
+import { clampToGround, credit, data, enableMouseEvent, show, sourceUri } from '@vue-cesium/utils/cesium-props'
 import { datasourceEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 
 export const geojsonDatasourceProps = {
   ...show,
@@ -105,7 +105,7 @@ export default defineComponent({
   }
 })
 
-export type VcDatasourceGeojsonProps = {
+export interface VcDatasourceGeojsonProps {
   /**
    * Specify whether the data source is displayed.
    * Default value: true
@@ -231,7 +231,7 @@ export type VcDatasourceGeojsonProps = {
    */
   onClusterEvent?: (
     entities: Array<Cesium.Entity>,
-    cluster: { billboard: Cesium.Billboard; label: Cesium.Label; point: Cesium.PointPrimitive }
+    cluster: { billboard: Cesium.Billboard, label: Cesium.Label, point: Cesium.PointPrimitive }
   ) => void
   /**
    * Triggers when entities are added or removed from the collection.datasource.entities

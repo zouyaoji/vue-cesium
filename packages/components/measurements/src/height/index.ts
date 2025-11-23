@@ -1,21 +1,5 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-06-24 16:56:48
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\measurements\src\height\index.ts
- */
-import { ComputedRef, defineComponent, Ref } from 'vue'
-import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import type { PropType } from 'vue'
-import { MeasureUnits } from '@vue-cesium/shared'
-import type { VcLabelProps, VcPointProps } from '../../../primitive-collections'
-import type { VcGeometryPolylineProps } from '../../../geometries'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import {
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type {
   MeasurementDecimals,
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
@@ -25,7 +9,23 @@ import {
   VcEditorOpts,
   VcSegmentDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcLabelProps, VcPointProps } from '../../../primitive-collections'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:23
+ * @LastEditTime: 2022-06-24 16:56:48
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\height\index.ts
+ */
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcMeasurementHeight',
@@ -46,7 +46,7 @@ export default defineComponent({
   }
 })
 
-export type VcMeasurementHeightProps = {
+export interface VcMeasurementHeightProps {
   /**
    * Specify whether to respond to mouse pick events.
    */

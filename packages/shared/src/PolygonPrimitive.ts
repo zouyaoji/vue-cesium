@@ -47,6 +47,7 @@ class PolygonPrimitive {
   get positions() {
     return this._positions
   }
+
   set positions(val) {
     this._positions = val
     this._update = true
@@ -55,6 +56,7 @@ class PolygonPrimitive {
   get polygonHierarchy() {
     return this._polygonHierarchy
   }
+
   set polygonHierarchy(val) {
     this._polygonHierarchy = val
     this._update = true
@@ -63,6 +65,7 @@ class PolygonPrimitive {
   get appearance() {
     return this._appearance
   }
+
   set appearance(val) {
     this._appearance = val
     if (this._primitive !== undefined) {
@@ -73,6 +76,7 @@ class PolygonPrimitive {
   get depthFailAppearance() {
     return this._depthFailAppearance
   }
+
   set depthFailAppearance(val) {
     this._depthFailAppearance = val
     if (this._primitive !== undefined && this._primitive instanceof Cesium.Primitive) {
@@ -83,6 +87,7 @@ class PolygonPrimitive {
   get id() {
     return this._id
   }
+
   set id(id) {
     this._id = id
   }
@@ -98,6 +103,7 @@ class PolygonPrimitive {
   get clampToGround() {
     return this._clampToGround
   }
+
   set clampToGround(val) {
     this._clampToGround = val
   }
@@ -105,6 +111,7 @@ class PolygonPrimitive {
   get classificationType() {
     return this._classificationType
   }
+
   set classificationType(e) {
     this._classificationType = e
     this._update = true
@@ -113,6 +120,7 @@ class PolygonPrimitive {
   get allowPicking() {
     return this._allowPicking
   }
+
   set allowPicking(val) {
     this._allowPicking = val
   }
@@ -120,6 +128,7 @@ class PolygonPrimitive {
   get asynchronous() {
     return this._asynchronous
   }
+
   set asynchronous(val) {
     this._asynchronous = val
   }
@@ -130,17 +139,19 @@ class PolygonPrimitive {
       if (positions.length < 3) {
         this._primitive && this._primitive.destroy()
         this._primitive = undefined
-      } else {
+      }
+      else {
         if (this._update) {
           this._update = false
 
           let promise
           if (this._clampToGround) {
             promise = this._createGroundPolygon()
-          } else {
+          }
+          else {
             promise = this._createPolygon()
           }
-          promise.then(primitive => {
+          promise.then((primitive) => {
             this._primitive && this._primitive.destroy()
             this._primitive = undefined
             this._primitive = primitive
@@ -163,7 +174,7 @@ class PolygonPrimitive {
               ellipsoid: this._ellipsoid
             })
           : CoplanarPolygonGeometry.fromPositions({
-              positions: this._positions.map(function (e) {
+              positions: this._positions.map((e) => {
                 return Cartesian3.clone(e)
               }),
               ellipsoid: this._ellipsoid
@@ -189,7 +200,7 @@ class PolygonPrimitive {
               arcType: this._arcType
             })
           : PolygonGeometry.fromPositions({
-              positions: this._positions.map(function (e) {
+              positions: this._positions.map((e) => {
                 return Cartesian3.clone(e)
               }),
               ellipsoid: this._ellipsoid,

@@ -7,24 +7,25 @@
  * @FilePath: \vue-cesium@next\packages\directives\touch-repeat\index.ts
  */
 
+import { platform } from '@vue-cesium/utils/platform'
 import { createDirective } from '@vue-cesium/utils/private/create'
 import { addEvt, cleanEvt, leftClick, noop, position, stopAndPrevent } from '@vue-cesium/utils/private/event'
-import { clearSelection } from '@vue-cesium/utils/private/selection'
-import { platform } from '@vue-cesium/utils/platform'
 import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
+import { clearSelection } from '@vue-cesium/utils/private/selection'
 
 const keyCodes = {
-    esc: 27,
-    tab: 9,
-    enter: 13,
-    space: 32,
-    up: 38,
-    left: 37,
-    right: 39,
-    down: 40,
-    delete: [8, 46]
-  },
-  keyRegex = new RegExp(`^([\\d+]+|${Object.keys(keyCodes).join('|')})$`, 'i')
+  esc: 27,
+  tab: 9,
+  enter: 13,
+  space: 32,
+  up: 38,
+  left: 37,
+  right: 39,
+  down: 40,
+  delete: [8, 46]
+}
+// eslint-disable-next-line regexp/no-unused-capturing-group
+const keyRegex = new RegExp(`^([\\d+]+|${Object.keys(keyCodes).join('|')})$`, 'i')
 
 function shouldEnd(evt, origin) {
   const { top, left } = position(evt)
@@ -38,7 +39,7 @@ export default createDirective({
   beforeMount(el, { modifiers, value, arg, touchStart }) {
     const keyboard = Object.keys(modifiers).reduce((acc, key) => {
       if (keyRegex.test(key) === true) {
-        const keyCode = isNaN(parseInt(key, 10)) ? keyCodes[key.toLowerCase()] : parseInt(key, 10)
+        const keyCode = Number.isNaN(Number.parseInt(key, 10)) ? keyCodes[key.toLowerCase()] : Number.parseInt(key, 10)
         keyCode >= 0 && acc.push(keyCode)
       }
       return acc
@@ -49,7 +50,7 @@ export default createDirective({
       return
     }
 
-    const durations = typeof arg === 'string' && arg.length > 0 ? arg.split(':').map(val => parseInt(val, 10)) : [0, 600, 300]
+    const durations = typeof arg === 'string' && arg.length > 0 ? arg.split(':').map(val => Number.parseInt(val, 10)) : [0, 600, 300]
 
     const durationsLast = durations.length - 1
 
@@ -117,7 +118,8 @@ export default createDirective({
           if (withDelay === true) {
             clearSelection()
             setTimeout(remove, 10)
-          } else {
+          }
+          else {
             remove()
           }
         }
@@ -146,7 +148,8 @@ export default createDirective({
 
             if (keyboardEvent === true) {
               ctx.event.keyCode = evt.keyCode
-            } else {
+            }
+            else {
               ctx.event.position = position(evt)
             }
 
@@ -170,7 +173,8 @@ export default createDirective({
 
         if (durations[0] === 0) {
           fn()
-        } else {
+        }
+        else {
           ctx.timer = setTimeout(fn, durations[0])
         }
       },
@@ -200,11 +204,11 @@ export default createDirective({
 
     modifiers.mouse === true && addEvt(ctx, 'main', [[el, 'mousedown', 'mouseStart', `passive${modifiers.mouseCapture === true ? 'Capture' : ''}`]])
 
-    platform().hasTouch === true &&
-      addEvt(ctx, 'main', [
-        [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
-        [el, 'touchend', 'noop', 'notPassiveCapture']
-      ])
+    platform().hasTouch === true
+    && addEvt(ctx, 'main', [
+      [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
+      [el, 'touchend', 'noop', 'notPassiveCapture']
+    ])
 
     keyboard.length > 0 && addEvt(ctx, 'main', [[el, 'keydown', 'keyboardStart', `notPassive${modifiers.keyCapture === true ? 'Capture' : ''}`]])
   },

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-promise-reject-errors */
 /**
  * 操作状态。
  */
@@ -20,7 +21,7 @@ class IndexedDBScheduler {
   creatingTable: boolean
   /**
    *
-   * @param {Object} options
+   * @param {object} options
    */
   constructor(options) {
     if (!Cesium.defined(options.name)) {
@@ -36,27 +37,27 @@ class IndexedDBScheduler {
     const that = this as IndexedDBScheduler
 
     return new Promise((resolve, reject) => {
-      dbRequest.onsuccess = event => {
+      dbRequest.onsuccess = (event) => {
         that.db = (event.target as IDBOpenDBRequest).result
         that.version = that.db.version
         that.cachestatus = that.cachestatus || {}
         resolve(that)
       }
-      dbRequest.onupgradeneeded = event => {
+      dbRequest.onupgradeneeded = (event) => {
         that.db = (event.target as any).result
         that.version = that.db.version
         resolve(that)
       }
-      dbRequest.onerror = event => {
+      dbRequest.onerror = (event) => {
         that.db = null
-        reject('create database fail, error code : ' + (event.target as any).errorcode)
+        reject(`create database fail, error code : ${(event.target as any).errorcode}`)
       }
     }) as any
   }
 
   /**
    * 检查对象仓库是否存在。
-   * @param {String} storeName 对象仓库（表）名称
+   * @param {string} storeName 对象仓库（表）名称
    */
   checkObjectStoreExist(storeName) {
     return Cesium.defined(this.db) ? this.db.objectStoreNames.contains(storeName) : false
@@ -64,25 +65,26 @@ class IndexedDBScheduler {
 
   /**
    *  创建 IndexedDB 浏对象仓库，IndexedDB 是浏览器提供的本地数据库
-   * @param {String} storeName 对象仓库（表）名称
+   * @param {string} storeName 对象仓库（表）名称
    * @returns {Promise}
    */
   createObjectStore(storeName) {
     return new Promise((resolve, reject) => {
       if (this.creatingTable) {
         reject(false)
-      } else {
+      }
+      else {
         if (this.db.objectStoreNames.contains(storeName)) {
           reject(false)
           return
         }
         this.creatingTable = true
-        const version = parseInt(this.db.version)
+        const version = Number.parseInt(this.db.version)
         this.db.close()
         const that = this
         // 打开或新建 IndexedDB 数据库
         const dbRequest = window.indexedDB.open(this.dbname, version + 1)
-        dbRequest.onupgradeneeded = event => {
+        dbRequest.onupgradeneeded = (event) => {
           const db = (event.target as any).result
           that.db = db
           // 创建对象仓库（表）
@@ -99,20 +101,21 @@ class IndexedDBScheduler {
             that.cachestatus[storeName] = {}
             that.db.close()
             const dbRequest = window.indexedDB.open(that.dbname)
-            dbRequest.onsuccess = event => {
+            dbRequest.onsuccess = (event) => {
               that.db = (event.target as any).result
               resolve(true)
             }
-          } else {
+          }
+          else {
             that.creatingTable = false
             resolve(false)
           }
         }
-        dbRequest.onsuccess = event => {
+        dbRequest.onsuccess = (event) => {
           ;(event.target as any).result.close()
           resolve(true)
         }
-        dbRequest.onerror = event => {
+        dbRequest.onerror = (event) => {
           that.creatingTable = false
           reject(false)
         }
@@ -122,8 +125,8 @@ class IndexedDBScheduler {
 
   /**
    * 向对象仓库写入数据记录。
-   * @param {String} storeName 对象仓库（表）名称
-   * @param {Number} id 主键
+   * @param {string} storeName 对象仓库（表）名称
+   * @param {number} id 主键
    * @param {*} value 值
    * @returns {Promise}
    */
@@ -135,8 +138,8 @@ class IndexedDBScheduler {
       }
       const { cachestatus, db } = this
       if (
-        Cesium.defined(cachestatus[storeName]) &&
-        Cesium.defined(cachestatus[storeName][id] && (cachestatus[storeName][id] === Status.STORING || cachestatus[storeName][id] === Status.STORED))
+        Cesium.defined(cachestatus[storeName])
+        && Cesium.defined(cachestatus[storeName][id] && (cachestatus[storeName][id] === Status.STORING || cachestatus[storeName][id] === Status.STORED))
       ) {
         resolve(false)
         return
@@ -145,28 +148,29 @@ class IndexedDBScheduler {
         cachestatus[storeName] = cachestatus[storeName] || {}
         try {
           const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
-            id: id,
-            value: value
+            id,
+            value
           })
           cachestatus[storeName][id] = Status.STORING
-          request.onsuccess = event => {
+          request.onsuccess = (event) => {
             cachestatus[storeName][id] = Status.STORED
             resolve(true)
           }
-          request.onerror = event => {
+          request.onerror = (event) => {
             cachestatus[storeName][id] = Status.FAILED
             resolve(false)
           }
-        } catch (error) {
-          reject(null)
-          return
         }
-      } else {
+        catch (error) {
+          reject(null)
+        }
+      }
+      else {
         this.createObjectStore(storeName).then(
           () => {
             const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
-              id: id,
-              value: value
+              id,
+              value
             })
             request.onsuccess = function (e) {
               resolve(true)
@@ -185,8 +189,8 @@ class IndexedDBScheduler {
 
   /**
    * 向对象仓库读取数据。
-   * @param {String} storeName 对象仓库（表）名称
-   * @param {Number} id 主键
+   * @param {string} storeName 对象仓库（表）名称
+   * @param {number} id 主键
    * @returns {Promise}
    */
   getElementFromDB(storeName, id) {
@@ -202,13 +206,14 @@ class IndexedDBScheduler {
         const transaction = db.transaction([storeName])
         const objectStore = transaction.objectStore(storeName)
         const request = objectStore.get(id)
-        request.onsuccess = e => {
+        request.onsuccess = (e) => {
           return Cesium.defined(e.target.result) ? resolve(e.target.result.value) : reject(null)
         }
-        request.onerror = e => {
+        request.onerror = (e) => {
           reject(null)
         }
-      } catch (error) {
+      }
+      catch (error) {
         reject(null)
       }
     })
@@ -216,8 +221,8 @@ class IndexedDBScheduler {
 
   /**
    * 更新数据。
-   * @param {String} storeName
-   * @param {Number} id
+   * @param {string} storeName
+   * @param {number} id
    * @param {*} value
    * @returns {Promise}
    */
@@ -233,14 +238,15 @@ class IndexedDBScheduler {
         return
       }
       try {
-        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).put({ id: id, value: value })
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).put({ id, value })
         request.onsuccess = () => {
           resolve(true)
         }
         request.onerror = () => {
           resolve(false)
         }
-      } catch (e) {
+      }
+      catch (e) {
         resolve(false)
       }
     })
@@ -248,8 +254,8 @@ class IndexedDBScheduler {
 
   /**
    * 移除数据。
-   * @param {String} storeName
-   * @param {Number} id
+   * @param {string} storeName
+   * @param {number} id
    * @returns {Promise}
    */
   removeElementFromDB(storeName, id) {
@@ -272,7 +278,8 @@ class IndexedDBScheduler {
         request.onerror = () => {
           resolve(false)
         }
-      } catch (e) {
+      }
+      catch (e) {
         resolve(false)
       }
     })
@@ -280,7 +287,7 @@ class IndexedDBScheduler {
 
   /**
    *  清空对象仓库
-   * @param {String} storeName
+   * @param {string} storeName
    */
   clear(storeName) {
     return new Promise((resolve, reject) => {
@@ -303,7 +310,8 @@ class IndexedDBScheduler {
         request.onerror = () => {
           resolve(false)
         }
-      } catch (e) {
+      }
+      catch (e) {
         resolve(false)
       }
     })

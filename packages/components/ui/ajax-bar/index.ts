@@ -1,20 +1,19 @@
-import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, ComponentPublicInstance } from 'vue'
-import type { CSSProperties, ExtractPropTypes } from 'vue'
-
+import type { ComponentPublicInstance, CSSProperties } from 'vue'
 import { between } from '@vue-cesium/utils/private/format'
-import { AnyFunction } from '@vue-cesium/utils/types'
 
-const xhr = XMLHttpRequest,
-  send = xhr.prototype.send,
-  open = xhr.prototype.open,
-  positionValues = ['top', 'right', 'bottom', 'left']
+import { computed, defineComponent, getCurrentInstance, h, onBeforeUnmount, onMounted, ref } from 'vue'
+
+const xhr = XMLHttpRequest
+const send = xhr.prototype.send
+const open = xhr.prototype.open
+const positionValues = ['top', 'right', 'bottom', 'left']
 
 let stack = []
 let highjackCount = 0
 
 function translate({ p, pos, active, horiz, reverse, dir }) {
-  let x = 1,
-    y = 1
+  let x = 1
+  let y = 1
 
   if (horiz === true) {
     if (reverse === true) {
@@ -39,13 +38,17 @@ function inc(p, amount) {
   if (typeof amount !== 'number') {
     if (p < 25) {
       amount = Math.random() * 3 + 3
-    } else if (p < 65) {
+    }
+    else if (p < 65) {
       amount = Math.random() * 3
-    } else if (p < 85) {
+    }
+    else if (p < 85) {
       amount = Math.random() * 2
-    } else if (p < 99) {
+    }
+    else if (p < 99) {
       amount = 0.6
-    } else {
+    }
+    else {
       amount = 0
     }
   }
@@ -65,7 +68,7 @@ function highjackAjax(stackEntry) {
     const stopStack = []
 
     const loadStart = () => {
-      stack.forEach(entry => {
+      stack.forEach((entry) => {
         if (entry.hijackFilter.value === null || entry.hijackFilter.value(url) === true) {
           entry.start()
           stopStack.push(entry.stop)
@@ -74,7 +77,7 @@ function highjackAjax(stackEntry) {
     }
 
     const loadEnd = () => {
-      stopStack.forEach(stop => {
+      stopStack.forEach((stop) => {
         stop()
       })
     }
@@ -131,15 +134,15 @@ export default defineComponent({
     const onScreen = ref(false)
     const animate = ref(true)
 
-    let sessions = 0,
-      timer,
-      speed
+    let sessions = 0
+    let timer
+    let speed
 
     const classes = computed(
       () =>
-        `vc-loading-bar vc-loading-bar--${props.position}` +
-        (props.color !== void 0 ? ` bg-${props.color}` : '') +
-        (animate.value === true ? '' : ' no-transition')
+        `vc-loading-bar vc-loading-bar--${props.position}${
+          props.color !== void 0 ? ` bg-${props.color}` : ''
+        }${animate.value === true ? '' : ' no-transition'}`
     )
 
     const horizontal = computed(() => props.position === 'top' || props.position === 'bottom')
@@ -168,7 +171,7 @@ export default defineComponent({
     const attributes = computed(() =>
       onScreen.value === true
         ? {
-            role: 'progressbar',
+            'role': 'progressbar',
             'aria-valuemin': 0,
             'aria-valuemax': 100,
             'aria-valuenow': progress.value
@@ -185,7 +188,8 @@ export default defineComponent({
       if (sessions > 1) {
         if (oldSpeed === 0 && newSpeed > 0) {
           planNextStep()
-        } else if (oldSpeed > 0 && newSpeed <= 0) {
+        }
+        else if (oldSpeed > 0 && newSpeed <= 0) {
           clearTimeout(timer)
         }
         return sessions
@@ -239,7 +243,8 @@ export default defineComponent({
 
       if (progress.value === 0) {
         timer = setTimeout(end, 1)
-      } else {
+      }
+      else {
         end()
       }
     }

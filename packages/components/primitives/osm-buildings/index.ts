@@ -1,19 +1,16 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType, VNode } from 'vue'
 import type {
-  VcCartesian2,
-  VcCartesian3Array,
   VcColor,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
-  VcDistanceDisplayCondition,
   VcPickEvent,
   VcReadyObject
 } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
-import { defaultColor, tileStyle, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { primitiveEmits } from '@vue-cesium/utils/emits'
 import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import { defaultColor, enableMouseEvent, tileStyle } from '@vue-cesium/utils/cesium-props'
+import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const osmBuildingsProps = {
   ...defaultColor,
@@ -44,15 +41,15 @@ export default defineComponent({
       const options: any = primitivesState?.transformProps(props)
       options.style = options.tileStyle
       delete options.tileStyle
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       return compareCesiumVersion(Cesium.VERSION, '1.104') ? await Cesium.createOsmBuildingsAsync(options) : Cesium.createOsmBuildings(options)
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
 
-export type VcPrimitiveOsmBuildingsProps = {
+export interface VcPrimitiveOsmBuildingsProps {
   /**
    * The default color to use for buildings that do not have a color. This parameter is ignored if options.style is specified.
    * Default value: white

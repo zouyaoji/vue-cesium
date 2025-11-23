@@ -6,22 +6,22 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polygon-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
 import {
-  polygonHierarchy,
-  height,
-  extrudedHeight,
-  vertexFormat,
+  arcType,
   ellipsoid,
+  extrudedHeight,
   granularity,
+  height,
   perPositionHeight,
-  arcType
+  polygonHierarchy,
+  vertexFormat
 } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const polygonOutlineGeometryProps = {
   ...polygonHierarchy,
   ...height,
@@ -46,7 +46,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonOutlineProps = {
+export interface VcGeometryPolygonOutlineProps {
   /**
    * A polygon hierarchy that can include holes.
    */

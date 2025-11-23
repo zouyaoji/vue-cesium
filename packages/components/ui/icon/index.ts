@@ -1,7 +1,7 @@
-import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
-import type { CSSProperties } from 'vue'
+import type { ComponentPublicInstance, CSSProperties, VNode } from 'vue'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
 import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
+import { computed, defineComponent, h } from 'vue'
 
 export const iconProps = {
   ...useSizeProps,
@@ -34,10 +34,10 @@ export default defineComponent({
 
     const classes = computed(
       () =>
-        'vc-icon' +
-        (props.left === true ? ' on-left' : '') +
-        (props.right === true ? ' on-right' : '') +
-        (props.color !== void 0 ? ` text-${props.color}` : '')
+        `vc-icon${
+          props.left === true ? ' on-left' : ''
+        }${props.right === true ? ' on-right' : ''
+        }${props.color !== void 0 ? ` text-${props.color}` : ''}`
     )
 
     const type = computed(() => {
@@ -57,7 +57,7 @@ export default defineComponent({
         return {
           svg: true,
           cls: classes.value,
-          nodes: def.split('&&').map(path => {
+          nodes: def.split('&&').map((path) => {
             const [d, style, transform] = path.split('@@')
             return h('path', {
               style,
@@ -90,25 +90,34 @@ export default defineComponent({
 
       let content = ' '
 
-      if (/^[l|f]a[s|r|l|b|d]{0,1} /.test(icon) || icon.startsWith('icon-') === true) {
+      if (/^[l|f]a[s|rlbd]? /.test(icon) || icon.startsWith('icon-') === true) {
         cls = icon
-      } else if (icon.startsWith('bt-') === true) {
+      }
+      else if (icon.startsWith('bt-') === true) {
         cls = `bt ${icon}`
-      } else if (icon.startsWith('eva-') === true) {
+      }
+      else if (icon.startsWith('eva-') === true) {
         cls = `eva ${icon}`
-      } else if (/^ion-(md|ios|logo)/.test(icon) === true) {
+      }
+      else if (/^ion-(?:md|ios|logo)/.test(icon) === true) {
         cls = `ionicons ${icon}`
-      } else if (icon.startsWith('ion-') === true) {
+      }
+      else if (icon.startsWith('ion-') === true) {
         cls = `ionicons ion-md${icon.substr(3)}`
-      } else if (icon.startsWith('mdi-') === true) {
+      }
+      else if (icon.startsWith('mdi-') === true) {
         cls = `mdi ${icon}`
-      } else if (icon.startsWith('iconfont ') === true) {
+      }
+      else if (icon.startsWith('iconfont ') === true) {
         cls = `${icon}`
-      } else if (icon.startsWith('ti-') === true) {
+      }
+      else if (icon.startsWith('ti-') === true) {
         cls = `themify-icon ${icon}`
-      } else if (icon.startsWith('vc-') === true) {
+      }
+      else if (icon.startsWith('vc-') === true) {
         cls = `vc-icons ${icon}`
-      } else {
+      }
+      else {
         // "notranslate" class is for Google Translate
         // to avoid tampering with Material Icons ligature font
         //
@@ -119,10 +128,12 @@ export default defineComponent({
         if (icon.startsWith('o_') === true) {
           icon = icon.substring(2)
           cls += '-outlined'
-        } else if (icon.startsWith('r_') === true) {
+        }
+        else if (icon.startsWith('r_') === true) {
           icon = icon.substring(2)
           cls += '-round'
-        } else if (icon.startsWith('s_') === true) {
+        }
+        else if (icon.startsWith('s_') === true) {
           icon = icon.substring(2)
           cls += '-sharp'
         }
@@ -131,19 +142,19 @@ export default defineComponent({
       }
 
       return {
-        cls: cls + ' ' + classes.value,
+        cls: `${cls} ${classes.value}`,
         content
       }
     })
 
     return () => {
       const data = {
-        class: type.value.cls,
-        style: style.value,
+        'class': type.value.cls,
+        'style': style.value,
         'aria-hidden': 'true',
-        role: 'presentation',
-        viewBox: '',
-        src: ''
+        'role': 'presentation',
+        'viewBox': '',
+        'src': ''
       }
 
       if (type.value.none === true) {

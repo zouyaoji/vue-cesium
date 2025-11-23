@@ -1,3 +1,5 @@
+import type { AnyFunction, VcImageryProvider } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -6,9 +8,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\defaultProps.ts
  */
-import { rectangle, colorToAlpha, cutoutRectangle, show } from '@vue-cesium/utils/cesium-props'
-import type { AnyFunction, VcImageryProvider } from '@vue-cesium/utils/types'
-import type { PropType } from 'vue'
+import { colorToAlpha, cutoutRectangle, rectangle, show } from '@vue-cesium/utils/cesium-props'
+
 export default {
   imageryProvider: Object as PropType<VcImageryProvider>,
   ...rectangle,

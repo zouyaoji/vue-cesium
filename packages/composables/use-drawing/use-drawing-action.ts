@@ -1,3 +1,4 @@
+import type { VcDrawTipOpts } from '@vue-cesium/utils/drawing-types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-15 09:47:36
@@ -7,13 +8,12 @@
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-action.ts
  */
 // import { enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcDrawingProvider, VcPickEvent } from '@vue-cesium/utils/types'
-import { ref, computed } from 'vue'
-import { useLocale } from '../use-locale'
-import { DrawStatus } from '@vue-cesium/shared'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcDrawingProvider, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import { DrawStatus } from '@vue-cesium/shared'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { VcDrawTipOpts } from '@vue-cesium/utils/drawing-types'
+import { computed, ref } from 'vue'
+import { useLocale } from '../use-locale'
 
 export default function (props, ctx, instance: VcComponentInternalInstance, cmpName: string, $services: VcDrawingProvider) {
   instance.cesiumClass = cmpName
@@ -111,11 +111,11 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     )
   }
 
-  const onMouseenterEditor = evt => {
+  const onMouseenterEditor = (evt) => {
     removeTimeout()
   }
 
-  const onMouseleaveEditor = evt => {
+  const onMouseleaveEditor = (evt) => {
     removeTimeout()
     registerTimeout(() => {
       editorPosition.value = [0, 0, 0]
@@ -150,7 +150,8 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcCollectionLabelReady = (e: VcReadyObject) => {
-    if (props.disableDepthTest) return
+    if (props.disableDepthTest)
+      return
     const labelCollection = e.cesiumObject as any
     const originalUpdate = labelCollection.update
 
@@ -172,7 +173,8 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcPrimitiveReady = (e: VcReadyObject) => {
-    if (props.disableDepthTest) return
+    if (props.disableDepthTest)
+      return
 
     const primitive = e.cesiumObject as any
     const originalPrimitiveUpdate = primitive.update

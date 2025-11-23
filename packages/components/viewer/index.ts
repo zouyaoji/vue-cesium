@@ -1,3 +1,5 @@
+import type { ConfigProviderContext } from '@vue-cesium/utils/config'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,9 +8,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\viewer\index.ts
  */
-import { App } from 'vue'
-import { ConfigProviderContext } from '@vue-cesium/utils/config'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import Viewer from './src'
 
 Viewer.install = (app: App, opts: ConfigProviderContext): void => {

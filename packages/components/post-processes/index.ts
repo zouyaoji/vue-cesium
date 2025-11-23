@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,16 +7,15 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import PostProcessStage from './post-process-stage'
-import PostProcessStageScan from './post-process-stage-scan'
 import PostProcessStageCollection from './post-process-stage-collection'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import PostProcessStageScan from './post-process-stage-scan'
 
 const components = [PostProcessStage, PostProcessStageScan, PostProcessStageCollection]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -24,7 +24,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

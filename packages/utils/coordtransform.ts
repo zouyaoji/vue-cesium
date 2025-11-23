@@ -1,4 +1,7 @@
-/* eslint-disable */
+/* eslint-disable ts/no-redeclare */
+/* eslint-disable no-var */
+/* eslint-disable no-loss-of-precision */
+
 /**
  * Created by Wandergis on 2015/7/8. coordtransform.js@2.1.2
  * 提供了百度坐标（BD-09）、国测局坐标（火星坐标，GCJ-02）、和 WGS-84 坐标系之间的转换
@@ -16,7 +19,7 @@ const ee = 0.00669342162296594323
  * @param bd_lat
  * @returns {*[]}
  */
-const bd09togcj02 = function bd09togcj02(bd_lng: number, bd_lat: number) {
+function bd09togcj02(bd_lng: number, bd_lat: number) {
   var bd_lng = +bd_lng
   var bd_lat = +bd_lat
   const x = bd_lng - 0.0065
@@ -35,7 +38,7 @@ const bd09togcj02 = function bd09togcj02(bd_lng: number, bd_lat: number) {
  * @param lat
  * @returns {*[]}
  */
-const gcj02tobd09 = function gcj02tobd09(lng: number, lat: number) {
+function gcj02tobd09(lng: number, lat: number) {
   var lat = +lat
   var lng = +lng
   const z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * x_PI)
@@ -51,12 +54,13 @@ const gcj02tobd09 = function gcj02tobd09(lng: number, lat: number) {
  * @param lat
  * @returns {*[]}
  */
-const wgs84togcj02 = function wgs84togcj02(lng: number, lat: number) {
+function wgs84togcj02(lng: number, lat: number) {
   var lat = +lat
   var lng = +lng
   if (out_of_china(lng, lat)) {
     return [lng, lat]
-  } else {
+  }
+  else {
     let dlat = transformlat(lng - 105.0, lat - 35.0)
     let dlng = transformlng(lng - 105.0, lat - 35.0)
     const radlat = (lat / 180.0) * PI
@@ -77,12 +81,13 @@ const wgs84togcj02 = function wgs84togcj02(lng: number, lat: number) {
  * @param lat
  * @returns {*[]}
  */
-const gcj02towgs84 = function gcj02towgs84(lng: number, lat: number) {
+function gcj02towgs84(lng: number, lat: number) {
   var lat = +lat
   var lng = +lng
   if (out_of_china(lng, lat)) {
     return [lng, lat]
-  } else {
+  }
+  else {
     let dlat = transformlat(lng - 105.0, lat - 35.0)
     let dlng = transformlng(lng - 105.0, lat - 35.0)
     const radlat = (lat / 180.0) * PI
@@ -97,6 +102,7 @@ const gcj02towgs84 = function gcj02towgs84(lng: number, lat: number) {
   }
 }
 
+// eslint-disable-next-line vars-on-top
 var transformlat = function transformlat(lng: number, lat: number) {
   var lat = +lat
   var lng = +lng
@@ -107,6 +113,7 @@ var transformlat = function transformlat(lng: number, lat: number) {
   return ret
 }
 
+// eslint-disable-next-line vars-on-top
 var transformlng = function transformlng(lng: number, lat: number) {
   var lat = +lat
   var lng = +lng
@@ -123,11 +130,12 @@ var transformlng = function transformlng(lng: number, lat: number) {
  * @param lat
  * @returns {boolean}
  */
-var out_of_china = function out_of_china(lng: number, lat: number) {
+// eslint-disable-next-line vars-on-top
+var out_of_china = function out_of_china(lng: number, lat: number): boolean {
   var lat = +lat
   var lng = +lng
   // 纬度 3.86~53.55, 经度 73.66~135.05
   return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55)
 }
 
-export { bd09togcj02, gcj02tobd09, wgs84togcj02, gcj02towgs84 }
+export { bd09togcj02, gcj02tobd09, gcj02towgs84, wgs84togcj02 }

@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -7,14 +8,13 @@
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
  */
 import type { PropType, Ref } from 'vue'
-import { useCommon } from '@vue-cesium/composables'
-import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, h } from 'vue'
-import useSelectionIndicatior from './use-selection-indicatior'
-import { commonEmits } from '@vue-cesium/utils/emits'
 import type Feature from './Feature'
 import type PickedFeatures from './PickedFeatures'
+import { useCommon } from '@vue-cesium/composables'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { $ } from '@vue-cesium/utils/private/vm'
+import { defineComponent, getCurrentInstance, h } from 'vue'
+import useSelectionIndicatior from './use-selection-indicatior'
 
 export const selectionIndicatorProps = {
   show: {
@@ -53,7 +53,7 @@ const emits = {
 export default defineComponent({
   name: 'VcSelectionIndicator',
   props: selectionIndicatorProps,
-  emits: emits,
+  emits,
   setup(props: VcSelectionIndicatorProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -81,7 +81,7 @@ export default defineComponent({
       const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
 
       pickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
-      pickScreenSpaceEventHandler.setInputAction(movement => {
+      pickScreenSpaceEventHandler.setInputAction((movement) => {
         useSelectionIndicatiorState.pickFromScreenPosition(movement.position)
       }, ScreenSpaceEventType.LEFT_CLICK)
 

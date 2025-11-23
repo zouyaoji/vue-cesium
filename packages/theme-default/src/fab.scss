@@ -40,7 +40,9 @@
 
   &__icon,
   &__active-icon {
-    transition: opacity 0.4s, transform 0.4s;
+    transition:
+      opacity 0.4s,
+      transform 0.4s;
   }
 
   &__icon {
@@ -91,7 +93,9 @@
 
     &--internal {
       padding: 0;
-      transition: font-size 0.12s cubic-bezier(0.65, 0.815, 0.735, 0.395), max-height 0.12s cubic-bezier(0.65, 0.815, 0.735, 0.395),
+      transition:
+        font-size 0.12s cubic-bezier(0.65, 0.815, 0.735, 0.395),
+        max-height 0.12s cubic-bezier(0.65, 0.815, 0.735, 0.395),
         opacity 0.07s cubic-bezier(0.65, 0.815, 0.735, 0.395);
       max-height: 30px;
 
@@ -136,7 +140,9 @@
   &__actions {
     position: absolute;
     opacity: 0;
-    transition: transform 0.18s ease-in, opacity 0.18s ease-in;
+    transition:
+      transform 0.18s ease-in,
+      opacity 0.18s ease-in;
     pointer-events: none;
     align-items: center;
     justify-content: center;

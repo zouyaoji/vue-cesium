@@ -6,13 +6,8 @@
  * @Description: refer to https://blog.csdn.net/fywindmoon/article/details/108415116
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\viewshed\index.ts
  */
-import { ComputedRef, defineComponent, PropType, Ref } from 'vue'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import { VcGeometryPolylineProps } from '../../../geometries'
-import { VcPrimitiveProps } from '../../../primitives'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import {
+
+import type {
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
   VcDrawingMouseEvt,
@@ -23,8 +18,16 @@ import {
   VcSegmentDrawing,
   VcViewshedOpts
 } from '@vue-cesium/utils/drawing-types'
-import { VcPointProps } from '../../../primitive-collections'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcPointProps } from '../../../primitive-collections'
+import type { VcPrimitiveProps } from '../../../primitives'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'VcAnalysisViewshed',
   props: {
@@ -40,7 +43,7 @@ export default defineComponent({
   }
 })
 
-export type VcAnalysisViewshedProps = {
+export interface VcAnalysisViewshedProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -102,7 +105,7 @@ export type VcAnalysisViewshedProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**

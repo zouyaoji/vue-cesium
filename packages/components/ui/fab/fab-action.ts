@@ -1,3 +1,8 @@
+import type { LooseDictionary } from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, VNode } from 'vue'
+import { fabKey } from '@vue-cesium/utils/config'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,22 +11,17 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\fab\fab-action.ts
  */
-import { h, defineComponent, computed, inject, getCurrentInstance, ComponentPublicInstance } from 'vue'
-import type { VNode, ExtractPropTypes } from 'vue'
-import { fabKey } from '@vue-cesium/utils/config'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
-
+import { computed, defineComponent, getCurrentInstance, h, inject } from 'vue'
 import VcBtn from '../btn'
 import VcIcon from '../icon'
-import useFab from './use-fab'
 import defaultPropsAction, { anchorMap } from './defaultPropsAction'
-import { LooseDictionary } from '@vue-cesium/utils/types'
+import useFab from './use-fab'
 
 interface FabData {
   showing?: {
     value: boolean
   }
-  onChildClick?(...args: any[]): any
+  onChildClick?: (...args: any[]) => any
 }
 
 export const fabActionProps = defaultPropsAction
@@ -38,7 +38,7 @@ export default defineComponent({
     const { formClass, labelProps } = useFab(props, $fab?.showing)
 
     const classes = computed(() => {
-      let align = undefined
+      let align
       if (props.anchor) {
         align = anchorMap[props.anchor]
       }

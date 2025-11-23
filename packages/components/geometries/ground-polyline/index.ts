@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\ground-polyline\index.ts
  */
-import { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { positions, width, granularity, loop, arcType } from '@vue-cesium/utils/cesium-props'
+import { arcType, granularity, loop, positions, width } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const groundPolylineGeometryProps = {
   ...positions,
   ...width,
@@ -33,7 +34,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryGroundPolylineProps = {
+export interface VcGeometryGroundPolylineProps {
   /**
    * An array of Cartesian3 defining the polyline's points. Heights above the ellipsoid will be ignored.
    */

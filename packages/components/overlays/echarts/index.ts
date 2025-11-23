@@ -1,3 +1,5 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { EChartsOption, EChartsType } from 'echarts'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
@@ -6,14 +8,12 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\components\overlays\echarts\index.ts
  */
-import type { CSSProperties, WatchStopHandle, PropType } from 'vue'
-import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, nextTick } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties, PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
+import { commonEmits } from '@vue-cesium/utils/emits'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import * as echarts from 'echarts'
-import { EChartsType, EChartsOption } from 'echarts'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, onUnmounted, reactive, ref, watch } from 'vue'
 
 export const echartsOverlayProps = {
   options: {
@@ -65,7 +65,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.options,
-        val => {
+        (val) => {
           commonState.reload()
         }
       )
@@ -121,7 +121,7 @@ export default defineComponent({
       }
 
       CoordSystem.create = function (ecModel) {
-        ecModel.eachSeries(function (seriesModel) {
+        ecModel.eachSeries((seriesModel) => {
           if (seriesModel.get('coordinateSystem') === props.coordinateSystem) {
             seriesModel.coordinateSystem = new CoordSystem(viewer)
           }
@@ -183,28 +183,29 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: `vc-echart-container${props.customClass ? ' ' + props.customClass : ''}`,
+            class: `vc-echart-container${props.customClass ? ` ${props.customClass}` : ''}`,
             style: rootStyle,
-            onMouseenter: onMouseenter,
-            onMouseleave: onMouseleave,
-            onClick: onClick
+            onMouseenter,
+            onMouseleave,
+            onClick
           },
           hSlot(ctx.slots.default)
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
 
-    const onClick = evt => {
+    const onClick = (evt) => {
       ctx.emit('click', evt)
     }
 
-    const onMouseenter = evt => {
+    const onMouseenter = (evt) => {
       ctx.emit('mouseenter', evt)
     }
 
-    const onMouseleave = evt => {
+    const onMouseleave = (evt) => {
       ctx.emit('mouseleave', evt)
     }
 

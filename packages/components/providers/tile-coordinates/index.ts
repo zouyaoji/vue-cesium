@@ -1,3 +1,4 @@
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,12 +8,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\tile-coordinates\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { tilingScheme, ellipsoid, tileWidth, tileHeight } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { ellipsoid, tileHeight, tileWidth, tilingScheme } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const tileCoordinatesImageryProviderProps = {
   ...tilingScheme,
@@ -37,7 +37,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderTileCoordinatesProps = {
+export interface VcImageryProviderTileCoordinatesProps {
   /**
    * The tiling scheme to use to divide the world into tiles. This parameter is ignored when accessing a tiled server.
    */

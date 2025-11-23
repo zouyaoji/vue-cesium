@@ -1,5 +1,10 @@
-import type { PropType, VNode } from 'vue'
-import { defineComponent, getCurrentInstance, ref, h, reactive } from 'vue'
+import type { VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
+import type {
+  VcCollectionPrimitiveRef,
+  VcLabelProps,
+  VcPointProps
+} from '@vue-cesium/components/primitive-collections'
+import type { VcPrimitiveProps } from '@vue-cesium/components/primitives'
 import type {
   VcAppearance,
   VcCartesian3Array,
@@ -13,26 +18,24 @@ import type {
   VcTyphoonPoint,
   VcTyphoonRoute
 } from '@vue-cesium/utils/types'
-import { useLocale } from '@vue-cesium/composables'
-import { makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import type { PropType, VNode } from 'vue'
+import circle from '@turf/circle'
+import { VcGeometryPolyline } from '@vue-cesium/components/geometries'
+import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
+import VcOverlayHtml from '@vue-cesium/components/overlays/html'
 import {
   VcCollectionLabel,
   VcCollectionPoint,
   VcCollectionPrimitive,
-  VcCollectionPrimitiveRef,
-  VcLabelProps,
-  VcPointProps,
   VcPolygon
 } from '@vue-cesium/components/primitive-collections'
+import { VcPrimitive } from '@vue-cesium/components/primitives'
+import { useCommon, useLocale } from '@vue-cesium/composables'
+import { logger } from '@vue-cesium/utils'
+import { makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
+import { commonEmits } from '@vue-cesium/utils/emits'
 import { cloneDeep, merge, uniqWith } from 'lodash-es'
-import useLog from '@vue-cesium/composables/private/use-log'
-import { VcPrimitive, VcPrimitiveProps } from '@vue-cesium/components/primitives'
-import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
-import { VcGeometryPolyline, VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
-import VcOverlayHtml from '@vue-cesium/components/overlays/html'
-import circle from '@turf/circle'
-import { useCommon } from '@vue-cesium/composables'
+import { defineComponent, getCurrentInstance, h, reactive, ref } from 'vue'
 
 const defaultPointProps = {
   color: '#409eff',
@@ -111,13 +114,13 @@ const emits = {
   mouseout: (e: VcPickEvent) => true,
   click: (e: VcPickEvent) => true,
   clickout: (e: VcPickEvent) => true,
-  forecastRouteAdded: (e: { livePoint: VcTyphoonPoint; datasource: VcTyphoonDatasource; addedByClick: boolean }) => true
+  forecastRouteAdded: (e: { livePoint: VcTyphoonPoint, datasource: VcTyphoonDatasource, addedByClick: boolean }) => true
 }
 
 export default defineComponent({
   name: 'VcOverlayTyphoon',
   props: typhoonOverlayProps,
-  emits: emits,
+  emits,
   setup(props: VcOverlayTyphoonProps, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcOverlayTyphoon'
@@ -128,7 +131,6 @@ export default defineComponent({
     }
 
     const { $services } = commonState
-    const logger = useLog(instance as VcComponentInternalInstance)
     const { t } = useLocale()
     const primitiveCollectionRef = ref<VcCollectionPrimitiveRef>(null)
     const typhoonDatasources: VcTyphoonDatasource[] = reactive([])
@@ -190,14 +192,16 @@ export default defineComponent({
           index++
           if (index >= typhoonData.points.length) {
             cancelAnimationFrame(datasource.playInterval)
-          } else {
+          }
+          else {
             addTyphoonPath(index, datasource)
           }
 
           datasource.playInterval = requestAnimationFrame(animation)
         }
         datasource.playInterval = requestAnimationFrame(animation)
-      } else {
+      }
+      else {
         // logger.warn('播放台风失败，原因：未找到对应编号的台风数据。')
         logger.warn(t(`vc.typhoon.warn`) || '播放台风失败，原因：未找到对应编号的台风数据。')
       }
@@ -233,7 +237,8 @@ export default defineComponent({
               }
 
               // continue
-            } else if (index > 0) {
+            }
+            else if (index > 0) {
               const preLivePoint = datasource.typhoonRoute.points[index - 1]
               f(preLivePoint, index - 1)
             }
@@ -257,7 +262,7 @@ export default defineComponent({
         const points: VcTyphoonPoint[] = []
         const positions: VcPosition[] = []
         const datasourceBySet: VcTyphoonDatasource = {
-          name: datasource.name + '_' + typhoonRouteBySet.sets,
+          name: `${datasource.name}_${typhoonRouteBySet.sets}`,
           typhoonRoute: typhoonRouteBySet,
           show: true,
           positions,
@@ -277,22 +282,22 @@ export default defineComponent({
           point.type = 'forc'
           point.index = index
           const pointProps = typeof props.pointProps === 'function' ? props.pointProps(point) : props.pointProps
-          index !== 0 &&
-            datasourceBySet.points.push({
-              id: point.id || Cesium.createGuid(),
-              position,
-              onMouseover(evt: VcPickEvent) {
-                ctx.emit('mouseover', evt)
-              },
-              onMouseout(evt) {
-                ctx.emit('mouseout', evt)
-              },
-              onClick(evt) {
-                ctx.emit('click', evt)
-              },
-              ...pointProps,
-              ...point
-            })
+          index !== 0
+          && datasourceBySet.points.push({
+            id: point.id || Cesium.createGuid(),
+            position,
+            onMouseover(evt: VcPickEvent) {
+              ctx.emit('mouseover', evt)
+            },
+            onMouseout(evt) {
+              ctx.emit('mouseout', evt)
+            },
+            onClick(evt) {
+              ctx.emit('click', evt)
+            },
+            ...pointProps,
+            ...point
+          })
         })
       }
 
@@ -342,23 +347,24 @@ export default defineComponent({
       const names = []
       if (typeof typhoon === 'string') {
         names.push(typhoon)
-      } else {
+      }
+      else {
         names.push(...typhoon)
       }
       let boundingSphereUnion = null
-      names.forEach(name => {
+      names.forEach((name) => {
         const positions = []
         const typhoonDatasource = typhoonDatasources.find(v => v.name === name)
         if (typhoonDatasource && typhoonDatasource.typhoonRoute.points) {
-          typhoonDatasource.typhoonRoute.points.forEach(point => {
+          typhoonDatasource.typhoonRoute.points.forEach((point) => {
             positions.push([point.lng, point.lat])
           })
         }
 
         // 预报路径点
         if (typhoonDatasource?.children?.length) {
-          typhoonDatasource.children.forEach(v => {
-            v.typhoonRoute.points.forEach(point => {
+          typhoonDatasource.children.forEach((v) => {
+            v.typhoonRoute.points.forEach((point) => {
               positions.push([point.lng, point.lat])
             })
           })
@@ -366,9 +372,10 @@ export default defineComponent({
 
         const cartesian3Array = makeCartesian3Array(positions)
         const boundingSphere = Cesium.BoundingSphere.fromPoints(cartesian3Array as Cesium.Cartesian3[])
-        if (null === boundingSphereUnion) {
+        if (boundingSphereUnion === null) {
           boundingSphereUnion = boundingSphere
-        } else {
+        }
+        else {
           boundingSphereUnion = Cesium.BoundingSphere.union(boundingSphereUnion, boundingSphere)
         }
       })
@@ -387,7 +394,7 @@ export default defineComponent({
     }
 
     const removeAllTyphoonData = () => {
-      typhoonDatasources.forEach(datasource => {
+      typhoonDatasources.forEach((datasource) => {
         clearInterval(datasource.playInterval)
       })
       typhoonDatasources.length = 0
@@ -399,19 +406,21 @@ export default defineComponent({
         positions = circle(center as number[], radiusData * 1000, {
           units: 'meters'
         }).geometry.coordinates as unknown as VcPosition[]
-      } else if (radiusData['ne']) {
+      }
+      else if (radiusData['ne']) {
         const _angInterval = 6
         const _pointNums = 360 / (_angInterval * 4)
         const quadrant = {
           // 逆时针算角度
-          '0': 'ne',
-          '1': 'nw',
-          '2': 'sw',
-          '3': 'se'
+          0: 'ne',
+          1: 'nw',
+          2: 'sw',
+          3: 'se'
         }
         for (let i = 0; i < 4; i++) {
-          let _r = parseFloat(radiusData[quadrant[i]]) * 1000 // 单位是km
-          if (!_r) _r = 0
+          let _r = Number.parseFloat(radiusData[quadrant[i]]) * 1000 // 单位是km
+          if (!_r)
+            _r = 0
           for (let j = i * _pointNums; j <= (i + 1) * _pointNums; j++) {
             const _ang = _angInterval * j
             const x: number = center[0] + (_r * Math.cos((_ang * Math.PI) / 180)) / 111000
@@ -425,16 +434,16 @@ export default defineComponent({
 
     const getChildren = (datasources: VcTyphoonDatasource[], centerPointCircle: VNode[]) => {
       const children: Array<VNode> = []
-      datasources.forEach(typhoonDatasource => {
+      datasources.forEach((typhoonDatasource) => {
         // polyline 台风路径-线
         if (typhoonDatasource.positions.length > 1) {
-          const linePrimitiveProps: any =
-            typeof props.linePrimitiveProps === 'function'
+          const linePrimitiveProps: any
+            = typeof props.linePrimitiveProps === 'function'
               ? merge(cloneDeep(defaultLinePrimitiveProps), props.linePrimitiveProps(typhoonDatasource))
               : props.linePrimitiveProps
 
-          const lineGeometryProps =
-            typeof props.lineGeometryProps === 'function'
+          const lineGeometryProps
+            = typeof props.lineGeometryProps === 'function'
               ? merge(cloneDeep(defaultLineGeometryProps), props.lineGeometryProps(typhoonDatasource))
               : props.lineGeometryProps
 
@@ -460,16 +469,16 @@ export default defineComponent({
                     translucent: true
                   }
                 } as VcAppearance,
-                onMouseover: evt => {
+                onMouseover: (evt) => {
                   ctx.emit('mouseover', evt)
                 },
-                onMouseout: evt => {
+                onMouseout: (evt) => {
                   ctx.emit('mouseout', evt)
                 },
-                onClick: evt => {
+                onClick: (evt) => {
                   ctx.emit('click', evt)
                 },
-                onClickout: evt => {
+                onClickout: (evt) => {
                   ctx.emit('clickout', evt)
                 },
                 ...linePrimitiveProps
@@ -491,39 +500,39 @@ export default defineComponent({
           )
         }
         // points 台风路径-点
-        typhoonDatasource.points.length &&
-          children.push(
-            h(VcCollectionPoint, {
-              show: typhoonDatasource.show,
-              points: typhoonDatasource.points,
-              onReady: (e: VcReadyObject) => {
-                const { cesiumObject: pointPrimitiveCollection } = e as any
-                const originalUpdate = pointPrimitiveCollection.update
+        typhoonDatasource.points.length
+        && children.push(
+          h(VcCollectionPoint, {
+            show: typhoonDatasource.show,
+            points: typhoonDatasource.points,
+            onReady: (e: VcReadyObject) => {
+              const { cesiumObject: pointPrimitiveCollection } = e as any
+              const originalUpdate = pointPrimitiveCollection.update
 
-                pointPrimitiveCollection.update = function (frameState) {
-                  const originalLength = frameState.commandList.length
-                  originalUpdate.call(this, frameState)
-                  const endLength = frameState.commandList.length
-                  for (let i = originalLength; i < endLength; ++i) {
-                    frameState.commandList[i].pass = Cesium['Pass'].TRANSLUCENT
-                    frameState.commandList[i].renderState = Cesium['RenderState'].fromCache({
-                      depthTest: {
-                        enabled: false
-                      },
-                      depthMask: false
-                    })
-                  }
+              pointPrimitiveCollection.update = function (frameState) {
+                const originalLength = frameState.commandList.length
+                originalUpdate.call(this, frameState)
+                const endLength = frameState.commandList.length
+                for (let i = originalLength; i < endLength; ++i) {
+                  frameState.commandList[i].pass = Cesium['Pass'].TRANSLUCENT
+                  frameState.commandList[i].renderState = Cesium['RenderState'].fromCache({
+                    depthTest: {
+                      enabled: false
+                    },
+                    depthMask: false
+                  })
                 }
               }
-            })
-          )
+            }
+          })
+        )
 
         // polygon 台风风圈
         if (typhoonDatasource.type === 'live') {
-          const labelProps =
-            typeof props.labelProps === 'function' ? merge(cloneDeep(defaultLabelProps), props.labelProps(typhoonDatasource)) : props.labelProps
+          const labelProps
+            = typeof props.labelProps === 'function' ? merge(cloneDeep(defaultLabelProps), props.labelProps(typhoonDatasource)) : props.labelProps
 
-          //text   台风名字
+          // text   台风名字
           children.push(
             h(VcCollectionLabel, {
               show: typhoonDatasource.show,
@@ -539,9 +548,9 @@ export default defineComponent({
           )
 
           const point = typhoonDatasource.points[typhoonDatasource.playIndex]
-          centerPointCircle.length =
+          centerPointCircle.length
             // 旋转图形
-            centerPointCircle.push(
+            = centerPointCircle.push(
               h(VcOverlayHtml, { show: typhoonDatasource.show, position: point.position, autoHidden: true }, () =>
                 h('div', {
                   class: 'vc-typhoon-circle',
@@ -549,8 +558,7 @@ export default defineComponent({
                     backgroundPosition:
                       typeof props.circleOverlayPosition == 'function' ? props.circleOverlayPosition(point) : props.circleOverlayPosition
                   }
-                })
-              )
+                }))
             )
           // 7 级风圈
           if (point?.radius7 > 0) {
@@ -646,7 +654,7 @@ export default defineComponent({
       return children
     }
 
-    const onVcPolygonReady = e => {
+    const onVcPolygonReady = (e) => {
       const primitive = e.cesiumObject as any
       const originalPrimitiveUpdate = primitive.update
 
@@ -680,7 +688,7 @@ export default defineComponent({
       getTyphoonDatasources: () => typhoonDatasources
     })
 
-    props.typhoonRoutes.forEach(typhoonData => {
+    props.typhoonRoutes.forEach((typhoonData) => {
       addTyphoonRoute(typhoonData)
     })
 
@@ -790,7 +798,7 @@ export interface VcOverlayTyphoonProps {
   /**
    * Triggers when the forecast route is added.
    */
-  onForecastRouteAdded?: (e: { livePoint: VcTyphoonPoint; datasource: VcTyphoonDatasource; addedByClick: boolean }) => void
+  onForecastRouteAdded?: (e: { livePoint: VcTyphoonPoint, datasource: VcTyphoonDatasource, addedByClick: boolean }) => void
 }
 
 export interface VcOverlayTyphoonRef extends VcComponentPublicInstance<VcOverlayTyphoonProps> {

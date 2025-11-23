@@ -1,3 +1,13 @@
+import type {
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts,
+  VcSegmentDrawing
+} from '@vue-cesium/utils/drawing-types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,23 +17,14 @@
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\rectangle\index.ts
  */
 import type { ComputedRef, PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
-import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import { drawingEmit } from '@vue-cesium/utils/emits'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import {
-  VcDrawingDrawEvt,
-  VcDrawingEditorEvt,
-  VcDrawingMouseEvt,
-  VcDrawingPreRenderDatas,
-  VcDrawTipOpts,
-  VcEditorOpts,
-  VcSegmentDrawing
-} from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'VcDrawingRectangle',
   props: {
@@ -47,7 +48,7 @@ export default defineComponent({
   }
 })
 
-export type VcDrawingRectangleProps = {
+export interface VcDrawingRectangleProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -135,7 +136,7 @@ export type VcDrawingRectangleProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**

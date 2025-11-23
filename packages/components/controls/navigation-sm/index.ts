@@ -1,15 +1,15 @@
-import type { CSSProperties, VNode, PropType } from 'vue'
-import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
 import type { VcCompassEvt, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcZoomEvt } from '@vue-cesium/utils/types'
-import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
-import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import type { CSSProperties, PropType, VNode } from 'vue'
+import type { VcCompassSmProps, VcCompassSmRef } from './compass-sm'
+import type { VcZoomControlSmProps, VcZoomControlSmRef } from './zoom-control-sm'
 import { useCommon } from '@vue-cesium/composables'
+import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import VcCompassSm from './compass-sm'
 import VcZoomControlSm from './zoom-control-sm'
-import type { VcZoomControlSmProps, VcZoomControlSmRef } from './zoom-control-sm'
-import type { VcCompassSmProps, VcCompassSmRef } from './compass-sm'
-import { commonEmits } from '@vue-cesium/utils/emits'
 
 const compassOptsDefault = {
   enableCompassOuterRing: true,
@@ -53,7 +53,7 @@ export default defineComponent({
   name: 'VcNavigationSm',
   inheritAttrs: false,
   props: navigationSmProps,
-  emits: emits,
+  emits,
   setup(props: VcNavigationSmProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -90,11 +90,11 @@ export default defineComponent({
     const zoomControlOptions = computed(() => Object.assign({}, zoomOptsDefault, props.zoomOpts))
 
     // methods
-    const onCompassEvt = e => {
+    const onCompassEvt = (e) => {
       const listener = getInstanceListener(instance, 'compassEvt')
       listener && emit('compassEvt', e)
     }
-    const onZoomEvt = e => {
+    const onZoomEvt = (e) => {
       const listener = getInstanceListener(instance, 'zoomEvt')
       listener && emit('zoomEvt', e)
     }
@@ -170,7 +170,7 @@ export default defineComponent({
           children.push(
             h(VcCompassSm, {
               ref: compassRef,
-              onCompassEvt: onCompassEvt,
+              onCompassEvt,
               ...compassOptions.value
             })
           )
@@ -179,7 +179,7 @@ export default defineComponent({
           children.push(
             h(VcZoomControlSm, {
               ref: zoomControlRef,
-              onZoomEvt: onZoomEvt,
+              onZoomEvt,
               ...zoomControlOptions.value
             })
           )
@@ -188,12 +188,13 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-navigation-sm ' + positionState.classes.value,
+            class: `vc-navigation-sm ${positionState.classes.value}`,
             style: rootStyle
           },
           children
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -201,7 +202,7 @@ export default defineComponent({
 })
 
 export type VcNavigationSmEmits = typeof emits
-export type VcNavigationSmProps = {
+export interface VcNavigationSmProps {
   /**
    * Specify the position of the VcNavigationSm.
    * Default value: top-right

@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-21 08:59:40
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polyline\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcComponentInternalInstance,
   VcComponentPublicInstance,
@@ -17,9 +8,18 @@ import type {
   VcReadyObject
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import { distanceDisplayCondition, id, loop, material, positions, show, width, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { distanceDisplayCondition, enableMouseEvent, id, loop, material, positions, show, width } from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-03-21 08:59:40
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polyline\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const polylineProps = {
   ...distanceDisplayCondition,
@@ -45,7 +45,7 @@ export default defineComponent({
   }
 })
 
-export type VcPolylineProps = {
+export interface VcPolylineProps {
   /**
    * true if this polyline will be shown; otherwise, false.
    * Default value: true

@@ -19,11 +19,11 @@ try {
   })
   window.addEventListener('qtest', null as any, opts)
   window.removeEventListener('qtest', null as any, opts)
-} catch (e) {
+}
+catch (e) {
   //
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}
 
 export function leftClick(e) {
@@ -41,9 +41,11 @@ export function rightClick(e) {
 export function position(e) {
   if (e.touches && e.touches[0]) {
     e = e.touches[0]
-  } else if (e.changedTouches && e.changedTouches[0]) {
+  }
+  else if (e.changedTouches && e.changedTouches[0]) {
     e = e.changedTouches[0]
-  } else if (e.targetTouches && e.targetTouches[0]) {
+  }
+  else if (e.targetTouches && e.targetTouches[0]) {
     e = e.targetTouches[0]
   }
 
@@ -78,12 +80,12 @@ export function getEventPath(e) {
 }
 
 // Reasonable defaults
-const LINE_HEIGHT = 40,
-  PAGE_HEIGHT = 800
+const LINE_HEIGHT = 40
+const PAGE_HEIGHT = 800
 
 export function getMouseWheelDistance(e) {
-  let x = e.deltaX,
-    y = e.deltaY
+  let x = e.deltaX
+  let y = e.deltaY
 
   if ((x || y) && e.deltaMode) {
     const multiplier = e.deltaMode === 1 ? LINE_HEIGHT : PAGE_HEIGHT
@@ -116,13 +118,13 @@ export function preventDraggable(el, status) {
     return
   }
 
-  const fn =
-    status === true
-      ? el => {
+  const fn
+    = status === true
+      ? (el) => {
           el.__dragPrevented = true
           el.addEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
         }
-      : el => {
+      : (el) => {
           delete el.__dragPrevented
           el.removeEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
         }
@@ -135,7 +137,7 @@ export function addEvt(ctx, targetName, events) {
 
   ctx[name] = ctx[name] !== void 0 ? ctx[name].concat(events) : events
 
-  events.forEach(evt => {
+  events.forEach((evt) => {
     evt[0].addEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]])
   })
 }
@@ -144,7 +146,7 @@ export function cleanEvt(ctx, targetName) {
   const name = `__vc_${targetName}_evt`
 
   if (ctx[name] !== void 0) {
-    ctx[name].forEach(evt => {
+    ctx[name].forEach((evt) => {
       evt[0].removeEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]])
     })
     ctx[name] = void 0

@@ -1,22 +1,22 @@
-import type { ComponentPublicInstance, ExtractPropTypes, PropType, VNode } from 'vue'
-import { h, defineComponent, ref, computed, watch, onBeforeUnmount, Transition, getCurrentInstance } from 'vue'
+import type { LooseDictionary } from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, PropType, VNode } from 'vue'
 
 import useAnchor, { useAnchorProps } from '@vue-cesium/composables/private/use-anchor'
-import useScrollTarget from '@vue-cesium/composables/private/use-scroll-target'
-import useModelToggle, { useModelToggleProps, useModelToggleEmits } from '@vue-cesium/composables/private/use-model-toggle'
+import useModelToggle, { useModelToggleEmits, useModelToggleProps } from '@vue-cesium/composables/private/use-model-toggle'
 import usePortal from '@vue-cesium/composables/private/use-portal'
-import useTransition, { useTransitionProps } from '@vue-cesium/composables/private/use-transition'
+import useScrollTarget from '@vue-cesium/composables/private/use-scroll-target'
 import useTick from '@vue-cesium/composables/private/use-tick'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useTransition, { useTransitionProps } from '@vue-cesium/composables/private/use-transition'
 
-import { getScrollTarget } from '@vue-cesium/utils/private/scroll'
-import { getTouchTarget } from '@vue-cesium/utils/private/touch'
-import { addEvt, cleanEvt } from '@vue-cesium/utils/private/event'
-import { clearSelection } from '@vue-cesium/utils/private/selection'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { validatePosition, validateOffset, setPosition, parsePosition } from '@vue-cesium/utils/private/position-engine'
 import { platform } from '@vue-cesium/utils/platform'
-import { LooseDictionary } from '@vue-cesium/utils/types'
+import { addEvt, cleanEvt } from '@vue-cesium/utils/private/event'
+import { parsePosition, setPosition, validateOffset, validatePosition } from '@vue-cesium/utils/private/position-engine'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { getScrollTarget } from '@vue-cesium/utils/private/scroll'
+import { clearSelection } from '@vue-cesium/utils/private/selection'
+import { getTouchTarget } from '@vue-cesium/utils/private/touch'
+import { computed, defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, Transition, watch } from 'vue'
 
 export const tooltipProps = {
   ...useAnchorProps,
@@ -161,11 +161,10 @@ export default defineComponent({
       prepareTick()
 
       if (unwatchPosition === void 0) {
-        unwatchPosition = watch(() => props.self + '|' + props.anchor, updatePosition)
+        unwatchPosition = watch(() => `${props.self}|${props.anchor}`, updatePosition)
       }
 
       registerTimeout(() => {
-        // eslint-disable-next-line vue/require-explicit-emits
         emit('show', evt)
       }, props.transitionDuration)
     }
@@ -178,7 +177,7 @@ export default defineComponent({
 
       registerTimeout(() => {
         hidePortal()
-        // eslint-disable-next-line vue/require-explicit-emits
+
         emit('hide', evt)
       }, props.transitionDuration)
     }
@@ -254,8 +253,8 @@ export default defineComponent({
         return
       }
 
-      const evts =
-        platform().isPhone === true
+      const evts
+        = platform().isPhone === true
           ? [[anchorEl.value, 'touchstart', 'delayShow', 'passive']]
           : [
               [anchorEl.value, 'mouseenter', 'delayShow', 'passive'],
@@ -317,34 +316,34 @@ export interface VcTooltipProps {
    * One of VueCesium's embedded transitions.
    * Default value: jump-down
    */
-  transitionShow?: string | undefined
+  'transitionShow'?: string | undefined
   /**
    * One of VueCesium's embedded transitions.
    * Default value: jump-up
    */
-  transitionHide?: string | undefined
+  'transitionHide'?: string | undefined
   /**
    * Transition duration (in milliseconds, without unit).
    * Default value: 300
    */
-  transitionDuration?: string | number | undefined
+  'transitionDuration'?: string | number | undefined
   /**
    * Model of the component defining shown/hidden state; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive.
    */
-  modelValue?: boolean
+  'modelValue'?: boolean
   /**
    * The maximum height of the Tooltip; Size in CSS units, including unit name.
    */
-  maxHeight?: string | undefined
+  'maxHeight'?: string | undefined
   /**
    * The maximum width of the Tooltip; Size in CSS units, including unit name.
    */
-  maxWidth?: string | undefined
+  'maxWidth'?: string | undefined
   /**
    * Two values setting the starting position or anchor point of the Tooltip relative to its target.
    * Default value: bottom middle
    */
-  anchor?:
+  'anchor'?:
     | 'top left'
     | 'top middle'
     | 'top right'
@@ -365,7 +364,7 @@ export interface VcTooltipProps {
    * Two values setting the Tooltip's own position relative to its target.
    * Default value: top middle
    */
-  self?:
+  'self'?:
     | 'top left'
     | 'top middle'
     | 'top right'
@@ -386,31 +385,31 @@ export interface VcTooltipProps {
    * An array of two numbers to offset the Tooltip horizontally and vertically in pixels.
    * Default value: [14, 14]
    */
-  offset?: any[] | undefined
+  'offset'?: any[] | undefined
   /**
    * CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one.
    */
-  scrollTarget?: string | undefined
+  'scrollTarget'?: string | undefined
   /**
    * Configure a target element to trigger Tooltip toggle; 'true' means it enables the parent DOM element, 'false' means it disables attaching events to any DOM elements; By using a String (CSS selector) it attaches the events to the specified DOM element (if it exists).
    * Default value: true
    */
-  target?: boolean | string | undefined
+  'target'?: boolean | string | undefined
   /**
    * Skips attaching events to the target DOM element (that trigger the element to get shown).
    */
-  noParentEvent?: boolean | undefined
+  'noParentEvent'?: boolean | undefined
   /**
    * Configure Tooltip to appear with delay.
    */
-  delay?: number | undefined
+  'delay'?: number | undefined
   /**
    * Configure Tooltip to disappear with delay.
    */
-  hideDelay?: number | undefined
-  tip?: string | undefined
-  persistent?: boolean
-  contextMenu?: boolean
+  'hideDelay'?: number | undefined
+  'tip'?: string | undefined
+  'persistent'?: boolean
+  'contextMenu'?: boolean
   /**
    * Emitted when showing/hidden state changes; Is also used by v-model.
    * @param value New state (showing/hidden)
@@ -420,22 +419,22 @@ export interface VcTooltipProps {
    * Emitted after component has triggered show()
    * @param evt JS event object
    */
-  onShow?: (evt: LooseDictionary) => void
+  'onShow'?: (evt: LooseDictionary) => void
   /**
    * Emitted when component triggers show() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeShow?: (evt: LooseDictionary) => void
+  'onBeforeShow'?: (evt: LooseDictionary) => void
   /**
    * Emitted after component has triggered hide()
    * @param evt JS event object
    */
-  onHide?: (evt: LooseDictionary) => void
+  'onHide'?: (evt: LooseDictionary) => void
   /**
    * Emitted when component triggers hide() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeHide?: (evt: LooseDictionary) => void
+  'onBeforeHide'?: (evt: LooseDictionary) => void
 }
 
 export interface VcTooltipSlots {

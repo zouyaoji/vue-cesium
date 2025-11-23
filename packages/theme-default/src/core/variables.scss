@@ -169,8 +169,14 @@ $z-max: 9998 !default;
 $elevation-umbra: rgba($shadow-color, 0.2) !default;
 $elevation-penumbra: rgba($shadow-color, 0.14) !default;
 $elevation-ambient: rgba($shadow-color, 0.12) !default;
-$shadow-2: 0 1px 5px $elevation-umbra, 0 2px 2px $elevation-penumbra, 0 3px 1px -2px $elevation-ambient !default;
-$shadow-5: 0 3px 5px -1px $elevation-umbra, 0 5px 8px $elevation-penumbra, 0 1px 14px $elevation-ambient !default;
+$shadow-2:
+  0 1px 5px $elevation-umbra,
+  0 2px 2px $elevation-penumbra,
+  0 3px 1px -2px $elevation-ambient !default;
+$shadow-5:
+  0 3px 5px -1px $elevation-umbra,
+  0 5px 8px $elevation-penumbra,
+  0 1px 14px $elevation-ambient !default;
 
 $generic-border-radius: 4px !default;
 $generic-hover-transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1) !default;

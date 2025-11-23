@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,10 +7,16 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
+import AjaxBar from './ajax-bar'
 import Btn from './btn'
+import Fab from './fab/fab'
+import FabAction from './fab/fab-action'
 import Icon from './icon'
+import Skeleton from './skeleton'
+import Slider from './slider'
 import {
+  Spinner,
   SpinnerBall,
   SpinnerBars,
   SpinnerDots,
@@ -20,17 +27,10 @@ import {
   SpinnerOval,
   SpinnerPuff,
   SpinnerRings,
-  SpinnerTail,
-  Spinner
+  SpinnerTail
 } from './spinner'
-import Tooltip from './tooltip'
-import AjaxBar from './ajax-bar'
-import Skeleton from './skeleton'
-import Fab from './fab/fab'
-import FabAction from './fab/fab-action'
-import Slider from './slider'
 
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import Tooltip from './tooltip'
 
 const components = [
   Btn,
@@ -55,8 +55,8 @@ const components = [
   Slider
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -65,7 +65,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }
@@ -98,6 +98,6 @@ export * from './fab/fab'
 export * from './fab/fab-action'
 export * from './icon'
 export * from './skeleton'
+export * from './slider'
 export * from './spinner'
 export * from './tooltip'
-export * from './slider'

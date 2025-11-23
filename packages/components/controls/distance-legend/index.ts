@@ -1,14 +1,14 @@
-import { CSSProperties, Teleport } from 'vue'
-import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
-import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcDistanceLegendEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import throttle from '@vue-cesium/utils/private/throttle'
-import { useCommon } from '@vue-cesium/composables'
-import defaultProps from './defaultProps'
-import { VcBtn } from '@vue-cesium/components/ui'
 import type { VcBtnRef } from '@vue-cesium/components/ui'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcDistanceLegendEvt, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties } from 'vue'
+import { VcBtn } from '@vue-cesium/components/ui'
+import { useCommon } from '@vue-cesium/composables'
+import usePosition from '@vue-cesium/composables/private/use-position'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import throttle from '@vue-cesium/utils/private/throttle'
+import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import defaultProps from './defaultProps'
 
 const emits = {
   ...commonEmits,
@@ -19,7 +19,7 @@ export const distanceLegendProps = defaultProps
 export default defineComponent({
   name: 'VcDistanceLegend',
   props: distanceLegendProps,
-  emits: emits,
+  emits,
   setup(props: VcDistanceLegendProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -43,7 +43,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -125,7 +125,7 @@ export default defineComponent({
       Object.assign(rootStyle, css)
     }
 
-    const onScenePostRender = throttle(scene => {
+    const onScenePostRender = throttle((scene) => {
       const { Cartesian2, defined, getTimestamp, EllipsoidGeodesic } = Cesium
       const now = getTimestamp()
       if (now < lastLegendUpdate + 250) {
@@ -166,12 +166,12 @@ export default defineComponent({
           if (distance !== _distance) {
             distance = _distance
             const listener = getInstanceListener(instance, 'distanceLegendEvt')
-            listener &&
-              ctx.emit('distanceLegendEvt', {
-                type: 'distanceLegend',
-                distance,
-                status: 'changed'
-              })
+            listener
+            && ctx.emit('distanceLegendEvt', {
+              type: 'distanceLegend',
+              distance,
+              status: 'changed'
+            })
           }
         }
       }
@@ -179,14 +179,16 @@ export default defineComponent({
       if (defined(_distance)) {
         let label
         if (distance >= 1000) {
-          label = (_distance / 1000).toString() + ' km'
-        } else {
-          label = _distance.toString() + ' m'
+          label = `${(_distance / 1000).toString()} km`
+        }
+        else {
+          label = `${_distance.toString()} m`
         }
 
         barWidth.value = (_distance / pixelDistance) | 0
         distanceLabel.value = label
-      } else {
+      }
+      else {
         barWidth.value = 0
         distanceLabel.value = ''
       }
@@ -213,7 +215,8 @@ export default defineComponent({
         )
 
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -221,12 +224,42 @@ export default defineComponent({
 })
 
 const distances = [
-  1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000, 10000, 20000, 30000, 50000, 100000, 200000, 300000, 500000, 1000000,
-  2000000, 3000000, 5000000, 10000000, 20000000, 30000000, 50000000
+  1,
+  2,
+  3,
+  5,
+  10,
+  20,
+  30,
+  50,
+  100,
+  200,
+  300,
+  500,
+  1000,
+  2000,
+  3000,
+  5000,
+  10000,
+  20000,
+  30000,
+  50000,
+  100000,
+  200000,
+  300000,
+  500000,
+  1000000,
+  2000000,
+  3000000,
+  5000000,
+  10000000,
+  20000000,
+  30000000,
+  50000000
 ]
 
 export type VcDistanceLegendEmits = typeof emits
-export type VcDistanceLegendProps = {
+export interface VcDistanceLegendProps {
   /**
    * Specify the position of the VcDistanceLegend.
    * Default value: bottom-right

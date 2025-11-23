@@ -8,10 +8,10 @@
  */
 
 import type { VcPointProps } from '@vue-cesium/components/primitive-collections'
-import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
-import type { VcDrawTipOpts, VcEditorOpts, VcDrawingPreRenderDatas, VcMeasurementFormatter } from '@vue-cesium/utils/drawing-types'
+import type { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcMeasurementFormatter } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
+import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
 import { clearActionDefault } from './defaultOpts'
 
 export const useDrawingActionProps = {

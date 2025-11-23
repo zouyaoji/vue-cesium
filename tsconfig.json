@@ -21,7 +21,7 @@
     "strictNullChecks": false,
     "removeComments": false,
     "rootDir": ".",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "paths": {
       "@vue-cesium/*": ["package/*"]
     }

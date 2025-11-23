@@ -1,3 +1,14 @@
+import type {
+  VcCompassEvt,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDistanceLegendEvt,
+  VcLocationEvt,
+  VcPrintEvt,
+  VcReadyObject,
+  VcStatusBarEvt,
+  VcZoomEvt
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -6,37 +17,27 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
  */
-import { VNode, CSSProperties, Teleport } from 'vue'
-import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
-import type {
-  VcCompassEvt,
-  VcDistanceLegendEvt,
-  VcLocationEvt,
-  VcPrintEvt,
-  VcStatusBarEvt,
-  VcComponentInternalInstance,
-  VcZoomEvt,
-  VcReadyObject,
-  VcComponentPublicInstance
-} from '@vue-cesium/utils/types'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { defaultProps, defaultOptions, VcNavigationOtherOpts } from './defaultProps'
+import type { CSSProperties, VNode } from 'vue'
+import type { VcCompassProps, VcCompassRef } from '../compass'
+import type { VcDistanceLegendRef } from '../distance-legend'
+import type { VcMyLocationProps, VcMyLocationRef } from '../my-location'
+import type { VcPrintProps, VcPrintRef } from '../print'
+import type { VcStatusBarRef } from '../status-bar'
+import type { VcZoomControlProps, VcZoomControlRef } from '../zoom-control'
+import type { VcNavigationOtherOpts } from './defaultProps'
 import { useCommon } from '@vue-cesium/composables'
+import usePosition from '@vue-cesium/composables/private/use-position'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import VcCompass from '../compass'
 import VcDistanceLegend from '../distance-legend'
+import VcMyLocation from '../my-location'
+import VcPrint from '../print'
 import VcStatusBar from '../status-bar'
 import VcZoomControl from '../zoom-control'
-import VcMyLocation from '../my-location'
-import VcCompass from '../compass'
-import VcPrint from '../print'
-import type { VcPrintProps, VcPrintRef } from '../print'
-import type { VcCompassProps, VcCompassRef } from '../compass'
-import type { VcMyLocationProps, VcMyLocationRef } from '../my-location'
-import type { VcZoomControlProps, VcZoomControlRef } from '../zoom-control'
-import type { VcStatusBarRef } from '../status-bar'
-import type { VcDistanceLegendRef } from '../distance-legend'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { defaultOptions, defaultProps } from './defaultProps'
 
 const emits = {
   ...commonEmits,
@@ -52,7 +53,7 @@ export default defineComponent({
   name: 'VcNavigation',
   inheritAttrs: false,
   props: navigationProps,
-  emits: emits,
+  emits,
   setup(props: VcNavigationProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -173,7 +174,7 @@ export default defineComponent({
       let marginX = 0
       if (compassTarget !== void 0 && compassTarget.nodeName !== '#comment') {
         const margin = getComputedStyle(compassTarget.parentNode as Element).margin
-        marginX = parseInt(margin)
+        marginX = Number.parseInt(margin)
         height += compassTarget.getBoundingClientRect().height + marginX * 2
       }
       const zoomControlTarget = $(zoomControlRef)?.$el as HTMLElement
@@ -254,7 +255,8 @@ export default defineComponent({
               ]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
         if (zoomControlOptions.value && props.zoomOpts !== false) {
@@ -273,7 +275,8 @@ export default defineComponent({
               ]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
         if (printViewOptions.value && props.printOpts !== false) {
@@ -292,7 +295,8 @@ export default defineComponent({
               ]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -312,7 +316,8 @@ export default defineComponent({
               ]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -332,7 +337,8 @@ export default defineComponent({
 
         if (props.teleportToViewer) {
           root.push(h(Teleport, { to: $services.viewer._element }, renderNavigationContent))
-        } else {
+        }
+        else {
           root.push(renderNavigationContent)
         }
 
@@ -341,7 +347,7 @@ export default defineComponent({
             'div',
             {
               ref: secondRootRef,
-              class: 'vc-location-other-controls ' + positionStateOther.classes.value,
+              class: `vc-location-other-controls ${positionStateOther.classes.value}`,
               style: secondRootStyle
             },
             [
@@ -359,12 +365,14 @@ export default defineComponent({
           )
           if (props.teleportToViewer) {
             root.push(h(Teleport, { to: $services.viewer._element }, renderOtherContent))
-          } else {
+          }
+          else {
             root.push(renderOtherContent)
           }
         }
         return root
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }

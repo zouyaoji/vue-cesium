@@ -1,4 +1,4 @@
-import { Language } from '..'
+import type { Language } from '..'
 
 export default {
   name: 'en-us',
@@ -57,15 +57,15 @@ export default {
       }
     },
     measurement: {
-      expand: 'Expand',
-      collapse: 'Collapse',
-      editor: {
+      'expand': 'Expand',
+      'collapse': 'Collapse',
+      'editor': {
         move: 'Move the point',
         insert: 'Insert a point',
         remove: 'Remove the point',
         removeAll: 'Remove all the points'
       },
-      distance: {
+      'distance': {
         tip: 'Distance',
         drawingTipStart: 'Click the left button to draw the starting point of the distance measurement.',
         drawingTipEnd: 'Click the left mouse button to draw the end point of the distance measurement.',
@@ -79,42 +79,42 @@ export default {
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      polyline: {
+      'polyline': {
         tip: 'Polyline Distance',
         drawingTipStart: 'Click the left button to draw the first point.',
         drawingTipEnd: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      horizontal: {
+      'horizontal': {
         tip: 'Horizontal Distance',
         drawingTipStart: 'Click the left button to draw the first point.',
         drawingTipEnd: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      vertical: {
+      'vertical': {
         tip: 'Vertical Distance',
         drawingTipStart: 'Click the left button to draw the starting point of the vertical distance measurement.',
         drawingTipEnd: 'Click the left button to draw the end point of the vertical distance measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      height: {
+      'height': {
         tip: 'Height ',
         drawingTipStart: 'Click the left button to draw the height measurement point.',
         drawingTipEnd: 'Click the left button to draw the height measurement point.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      area: {
+      'area': {
         tip: 'Area',
         drawingTipStart: 'Click the left button to draw the first point.',
         drawingTipEnd: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      point: {
+      'point': {
         tip: 'Point Coordinate',
         drawingTipStart: 'Click the left button to draw the point coordinate measurement.',
         drawingTipEnd: 'Click the left button to draw the point coordinate measurement.',
@@ -125,28 +125,28 @@ export default {
         height: 'height:',
         slope: 'slope:'
       },
-      rectangle: {
+      'rectangle': {
         tip: 'Rectangle',
         drawingTipStart: 'Click the left button to draw the rectangle measurement.',
         drawingTipEnd: 'Click the left button to draw the rectangle measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      regular: {
+      'regular': {
         tip: 'Regular',
         drawingTipStart: 'Click the left button to draw the regular measurement.',
         drawingTipEnd: 'Click the left button to draw the regular measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      circle: {
+      'circle': {
         tip: 'Circle',
         drawingTipStart: 'Click the left button to draw the circle measurement.',
         drawingTipEnd: 'Click the left button to draw the circle measurement.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
-      clear: {
+      'clear': {
         tip: 'Clear measurement results'
       }
     },

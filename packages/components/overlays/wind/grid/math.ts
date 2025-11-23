@@ -147,7 +147,7 @@ export function indicatrix(project, λ, φ, x, y) {
  * @returns {number} the specified argument converted to a number.
  */
 export function decimalize(x) {
-  if (typeof x === 'string' && x.indexOf('/') >= 0) {
+  if (typeof x === 'string' && x.includes('/')) {
     x = x.split('/')
   }
   // CONSIDER: remove dependency on isArrayLike

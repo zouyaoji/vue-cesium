@@ -1,10 +1,11 @@
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import useCommon from '../use-common'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { onUnmounted, provide, watch, WatchStopHandle } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { WatchStopHandle } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
-import { cloneDeep, differenceBy } from 'lodash-unified'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { addCustomProperty } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { onUnmounted, provide, watch } from 'vue'
+import useCommon from '../use-common'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -55,28 +56,30 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
             if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
               modifies.push({
                 newOptions: options,
-                oldOptions: oldOptions
+                oldOptions
               })
             }
           }
 
-          modifies.forEach(v => {
+          modifies.forEach((v) => {
             const modifyEntity = datasource.entities.getById(v.oldOptions.id)
             if (v.oldOptions.id === v.newOptions.id) {
-              modifyEntity &&
-                Object.keys(v.newOptions).forEach(prop => {
-                  if (v.oldOptions[prop] !== v.newOptions[prop]) {
-                    modifyEntity[prop] = commonState.transformProp(prop, v.newOptions[prop])
-                  }
-                })
-            } else {
+              modifyEntity
+              && Object.keys(v.newOptions).forEach((prop) => {
+                if (v.oldOptions[prop] !== v.newOptions[prop]) {
+                  modifyEntity[prop] = commonState.transformProp(prop, v.newOptions[prop])
+                }
+              })
+            }
+            else {
               // 改了 id
               datasource.entities.remove(modifyEntity!)
               const entityOptions = v.newOptions
               addEntities(datasource, [entityOptions])
             }
           })
-        } else {
+        }
+        else {
           const addeds: any = differenceBy(newVal, oldVal, 'id')
           const deletes: any = differenceBy(oldVal, newVal, 'id')
           const deletedEntities: Array<Cesium.Entity> = []
@@ -85,7 +88,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
             deletedEntities.push(deleteEntity!)
           }
 
-          deletedEntities.forEach(v => {
+          deletedEntities.forEach((v) => {
             datasource.entities.remove(v)
           })
           addEntities(datasource, addeds)

@@ -179,8 +179,8 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{sy}', ((1 << level) - y) >> 4)
     .replace('{reverseY}', reverseY)
   const resource = this._resource.getDerivedResource({
-    url: url,
-    request: request
+    url,
+    request
   })
   return resource
 }

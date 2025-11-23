@@ -1,5 +1,6 @@
-import { useFabProps } from './use-fab'
 import { useModelToggleProps } from '@vue-cesium/composables/private/use-model-toggle'
+import { useFabProps } from './use-fab'
+
 const directions = ['up', 'right', 'down', 'left']
 const alignValues = ['left', 'center', 'right']
 

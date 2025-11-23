@@ -1,12 +1,13 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, PropType, toRaw, watch, WatchStopHandle } from 'vue'
 import type { VcColor, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import { scene } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
 import { Viewshed } from '@vue-cesium/shared'
-import { makeCartesian3, makeColor } from '@vue-cesium/utils/cesium-helpers'
 import fragmentShader from '@vue-cesium/shared/shaders/Viewshed'
+import { makeCartesian3, makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { scene } from '@vue-cesium/utils/cesium-props'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, toRaw, watch } from 'vue'
 
 export const viewshedProps = {
   ...scene,
@@ -94,7 +95,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.fovH,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -108,7 +109,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.fovV,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -122,7 +123,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.fovV,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -136,7 +137,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.offsetHeight,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -150,7 +151,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.visibleColor,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -164,7 +165,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.invisibleColor,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -178,7 +179,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.showGridLine,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -192,7 +193,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           if (!instance.mounted) {
             return
           }
@@ -252,66 +253,66 @@ export default defineComponent({
       attachedViewshedStage = new PostProcessStage({
         fragmentShader: props.fragmentShader || shaderSourceText,
         uniforms: props.uniforms || {
-          u_color1: function () {
+          u_color1() {
             return viewshed.visibleColor
           },
-          u_color2: function () {
+          u_color2() {
             return viewshed.invisibleColor
           },
-          u_isShed: function () {
+          u_isShed() {
             return viewshed.shadowMap.enabled
           },
-          u_radius: function () {
+          u_radius() {
             return viewshed.lightCamera.frustum.far
           },
-          shadowMap_depthTexture: function () {
+          shadowMap_depthTexture() {
             return viewshed.shadowMap.enabled ? viewshed.shadowMap._shadowMapTexture : (viewer.scene as any).context.defaultTexture
           },
-          shadowMap_matrix: function () {
+          shadowMap_matrix() {
             return viewshed.shadowMap._shadowMapMatrix
           },
-          shadowMap_cascadeSplits: function () {
+          shadowMap_cascadeSplits() {
             return (viewshed.shadowMap as any)._cascadeSplits
           },
-          shadowMap_cascadeMatrices: function () {
+          shadowMap_cascadeMatrices() {
             return (viewshed.shadowMap as any)._cascadeMatrices
           },
-          shadowMap_lightDirectionEC: function () {
+          shadowMap_lightDirectionEC() {
             return (viewshed.shadowMap as any)._lightDirectionEC
           },
-          shadowMap_lightPositionEC: function () {
+          shadowMap_lightPositionEC() {
             return viewshed.shadowMap._lightPositionEC
           },
-          shadowMap_cascadeDistances: function () {
+          shadowMap_cascadeDistances() {
             return (viewshed.shadowMap as any)._cascadeDistances
           },
-          shadowMap_normalOffsetScaleDistanceMaxDistanceAndDarkness: function () {
+          shadowMap_normalOffsetScaleDistanceMaxDistanceAndDarkness() {
             const e = viewshed.shadowMap._pointBias
             return Cartesian4.fromElements(e.normalOffsetScale, viewshed.shadowMap._distance, viewshed.shadowMap.maximumDistance, 0, new Cartesian4())
           },
-          shadowMap_texelSizeDepthBiasAndNormalShadingSmooth: function () {
+          shadowMap_texelSizeDepthBiasAndNormalShadingSmooth() {
             const e = viewshed.shadowMap._pointBias
             const t = new Cartesian2()
             t.x = 1 / viewshed.shadowMap._textureSize.x
             t.y = 1 / viewshed.shadowMap._textureSize.y
             return Cartesian4.fromElements(t.x, t.y, e.depthBias, e.normalShadingSmooth, new Cartesian4())
           },
-          czzj: function () {
+          czzj() {
             return (viewshed.lightCamera.frustum as Cesium.PerspectiveFrustum).fov
           },
-          spzj: function () {
+          spzj() {
             return (viewshed.lightCamera.frustum as Cesium.PerspectiveFrustum).fov
           },
-          mixNum: function () {
+          mixNum() {
             return 0.5
           },
-          shadowMap_lightUp: function () {
+          shadowMap_lightUp() {
             return viewshed.lightCamera.up
           },
-          shadowMap_lightDir: function () {
+          shadowMap_lightDir() {
             return viewshed.lightCamera.direction
           },
-          shadowMap_lightRight: function () {
+          shadowMap_lightRight() {
             return viewshed.lightCamera.right
           }
         }
@@ -341,7 +342,8 @@ export default defineComponent({
 
       if (magnitudeSquared < 0.01 || viewshed.frustum.near > distance) {
         viewshed.enabled = false
-      } else {
+      }
+      else {
         viewshed.enabled = true
         diffrence = Cartesian3.normalize(diffrence, diffrence)
         const up = Cartesian3.normalize(endPosition, new Cartesian3())
@@ -350,7 +352,7 @@ export default defineComponent({
           destination: startPosition,
           orientation: {
             direction: diffrence,
-            up: up
+            up
           }
         })
         viewshed.frustum.far = Math.max(distance, 1.1)

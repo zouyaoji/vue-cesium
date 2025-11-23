@@ -15,7 +15,7 @@ const modifiersAll = {
 export function getModifierDirections(mod) {
   const dir: any = {}
 
-  directions.forEach(direction => {
+  directions.forEach((direction) => {
     if (mod[direction]) {
       dir[direction] = true
     }
@@ -44,15 +44,15 @@ export function getModifierDirections(mod) {
   return dir
 }
 
-export const getTouchTarget = platform().isIOS || navigator.vendor.toLowerCase().indexOf('apple') > -1 ? () => document : target => target
+export const getTouchTarget = platform().isIOS || navigator.vendor.toLowerCase().includes('apple') ? () => document : target => target
 
 export function shouldStart(evt, ctx) {
   return (
-    ctx.event === void 0 &&
-    evt.target !== void 0 &&
-    evt.target.draggable !== true &&
-    typeof ctx.handler === 'function' &&
-    evt.target.nodeName.toUpperCase() !== 'INPUT' &&
-    (evt.qClonedBy === void 0 || evt.qClonedBy.indexOf(ctx.uid) === -1)
+    ctx.event === void 0
+    && evt.target !== void 0
+    && evt.target.draggable !== true
+    && typeof ctx.handler === 'function'
+    && evt.target.nodeName.toUpperCase() !== 'INPUT'
+    && (evt.qClonedBy === void 0 || !evt.qClonedBy.includes(ctx.uid))
   )
 }

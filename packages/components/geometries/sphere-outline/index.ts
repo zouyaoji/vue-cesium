@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\sphere-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { radius, stackPartitions, slicePartitions, subdivisions } from '@vue-cesium/utils/cesium-props'
+import { radius, slicePartitions, stackPartitions, subdivisions } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const sphereGeometryOutlineProps = {
   ...radius,
   ...stackPartitions,
@@ -32,7 +33,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometrySphereOutlineProps = {
+export interface VcGeometrySphereOutlineProps {
   /**
    * The radius of the sphere.
    */

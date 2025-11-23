@@ -7,8 +7,8 @@
  * @FilePath: \vue-cesium@next\packages\utils\private\throttle.ts
  */
 export default function (fn, limit = 250) {
-  let wait = false,
-    result
+  let wait = false
+  let result
 
   return function (this /* ...args */) {
     if (wait === false) {

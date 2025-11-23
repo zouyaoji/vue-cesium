@@ -1,3 +1,11 @@
+import type {
+  ProjectionTransforms,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcImageryProvider,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-31 11:14:52
@@ -7,19 +15,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\tencent\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  ProjectionTransforms,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcImageryProvider,
-  VcReadyObject,
-  VcRectangle
-} from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { url, credit, minimumLevel, maximumLevel, rectangle, tilingScheme, projectionTransforms } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, maximumLevel, minimumLevel, projectionTransforms, rectangle, tilingScheme, url } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import TencentImageryProvider from './TencentImageryProvider'
 
 export const tencentImageryProviderProps = {

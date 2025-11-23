@@ -1,3 +1,4 @@
+import type { DynamicOverlayOpts, VcPosition } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 14:20:28
@@ -7,7 +8,6 @@
  * @FilePath: \vue-cesium@next\packages\shared\src\DynamicOverlay.ts
  */
 import { makeCartesian3, makeJulianDate } from '@vue-cesium/utils/cesium-helpers'
-import type { DynamicOverlayOpts, VcPosition } from '@vue-cesium/utils/types'
 
 class DynamicOverlay {
   _sampledPosition: Cesium.SampledPositionProperty
@@ -38,7 +38,8 @@ class DynamicOverlay {
         const ori = orientation.getValue(time)
         if (ori) {
           lastOri = ori
-        } else {
+        }
+        else {
           return lastOri
         }
         return ori
@@ -53,6 +54,7 @@ class DynamicOverlay {
   get id() {
     return this._entity.id
   }
+
   set id(id) {
     this._entity.id = id
   }
@@ -60,6 +62,7 @@ class DynamicOverlay {
   set maxCacheSize(maxCacheSize) {
     this._maxCacheSize = maxCacheSize
   }
+
   get maxCacheSize() {
     return this._maxCacheSize
   }
@@ -74,13 +77,14 @@ class DynamicOverlay {
       const stop = Cesium.JulianDate.addSeconds(this._cache[this._cache.length - this._maxCacheSize], -0.2, new Cesium.JulianDate())
       this._sampledPosition.removeSamples(
         new Cesium.TimeInterval({
-          start: start,
-          stop: stop
+          start,
+          stop
         })
       )
       this._cache.splice(0, this._cache.length - this._maxCacheSize)
     }
   }
+
   /**
    *
    * @param position
@@ -94,7 +98,8 @@ class DynamicOverlay {
       const now = Cesium.JulianDate.now()
       time = Cesium.JulianDate.addSeconds(now, timeOrInterval, new Cesium.JulianDate())
       Cesium.destroyObject(now)
-    } else {
+    }
+    else {
       time = makeJulianDate(timeOrInterval)
     }
 

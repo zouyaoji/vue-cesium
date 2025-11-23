@@ -6,35 +6,37 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-segment.ts
  */
-import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
-import { VcOverlayHtml } from '@vue-cesium/components/overlays'
-import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelProps, VcPolygon } from '@vue-cesium/components/primitive-collections'
-import { VcPrimitive, VcPrimitiveGroundPolyline, VcViewshed } from '@vue-cesium/components/primitives'
+
+import type { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
+import type { VcLabelProps } from '@vue-cesium/components/primitive-collections'
+import type { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
+import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
+import { VcGeometryGroundPolyline, VcGeometryPolyline } from '@vue-cesium/components/geometries'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
-import { VcGeometryPolyline, VcGeometryGroundPolyline } from '@vue-cesium/components/geometries'
-import { useLocale } from '../use-locale'
+import { VcOverlayHtml } from '@vue-cesium/components/overlays'
+import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
+import { VcPrimitive, VcPrimitiveGroundPolyline, VcViewshed } from '@vue-cesium/components/primitives'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import {
   calculateAreaByPostions,
+  compareCesiumVersion,
+  getFirstIntersection,
   getGeodesicDistance,
-  getPolylineSegmentHeading,
   getHeadingPitchRoll,
   getPolylineSegmentEndpoint,
+  getPolylineSegmentHeading,
   getPolylineSegmentPitch,
   makeCartesian2,
-  makeCartesian3Array,
-  getFirstIntersection,
-  compareCesiumVersion
+  makeCartesian3Array
 } from '@vue-cesium/utils/cesium-helpers'
-import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import { isUndefined } from '@vue-cesium/utils/util'
-import { reactive, VNode } from 'vue'
-import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
-import useCommon from '../use-common'
-import useDrawingAction from './use-drawing-action'
-import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 import { platform } from '@vue-cesium/utils/platform'
+import { isUndefined } from '@vue-cesium/utils/util'
+import { computed, getCurrentInstance, h, nextTick, reactive, ref } from 'vue'
+import useCommon from '../use-common'
+import { useLocale } from '../use-locale'
+import useDrawingAction from './use-drawing-action'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -73,7 +75,7 @@ export default function (props, ctx, cmpName: string) {
 
   const renderDatas = ref<Array<VcSegmentDrawing>>([])
   if (props.preRenderDatas && props.preRenderDatas.length) {
-    props.preRenderDatas.forEach(preRenderData => {
+    props.preRenderDatas.forEach((preRenderData) => {
       const segmentDrawing: VcSegmentDrawing = {
         positions: makeCartesian3Array(preRenderData) as Array<Cesium.Cartesian3>,
         show: true,
@@ -89,15 +91,88 @@ export default function (props, ctx, cmpName: string) {
         polygonOpts: {}
       }
 
-      cmpName === 'VcMeasurementVertical' &&
-        Object.assign(segmentDrawing, {
-          draggingPlane: new Cesium.Plane(Cesium.Cartesian3.UNIT_X, 0),
-          surfaceNormal: new Cesium.Cartesian3()
-        })
+      cmpName === 'VcMeasurementVertical'
+      && Object.assign(segmentDrawing, {
+        draggingPlane: new Cesium.Plane(Cesium.Cartesian3.UNIT_X, 0),
+        surfaceNormal: new Cesium.Cartesian3()
+      })
 
       renderDatas.value.push(segmentDrawing)
     })
   }
+
+  const updateComponents = (polyline: VcSegmentDrawing) => {
+    const { Cartesian3, Math: CesiumMath, defined } = Cesium
+    const { viewer } = $services
+    const ellipsoid = viewer.scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
+    const startPosition = polyline.positions[0]
+    const endPosition = polyline.positions[1]
+    const startCartographic = ellipsoid.cartesianToCartographic(startPosition, {} as any)
+
+    if (!defined(startCartographic)) {
+      return
+    }
+    const endCartographic = ellipsoid.cartesianToCartographic(endPosition, {} as any)
+
+    const startHeight = startCartographic.height
+    const endHeight = endCartographic.height
+
+    let startPoint, endPoint, height1, height2
+
+    if (startHeight < endHeight) {
+      startPoint = startPosition
+      endPoint = endPosition
+      height2 = endHeight
+      height1 = startHeight
+    }
+    else {
+      startPoint = endPosition
+      endPoint = startPosition
+      height2 = startHeight
+      height1 = endHeight
+    }
+
+    const xyPolylinePositions = polyline.xyPolylinePositions
+    if (xyPolylinePositions === undefined) {
+      return
+    }
+    xyPolylinePositions[0] = startPoint
+    xyPolylinePositions[2] = endPoint
+    let normal = ellipsoid.geodeticSurfaceNormal(startPoint, {} as any)
+    normal = Cartesian3.multiplyByScalar(normal, height2 - height1, normal)
+    const xyPoint = Cartesian3.add(startPoint, normal, xyPolylinePositions[1])
+    if (!(Cartesian3.equalsEpsilon(xyPoint, endPoint, CesiumMath.EPSILON10) && Cartesian3.equalsEpsilon(xyPoint, startPoint, CesiumMath.EPSILON10))) {
+      let diffrenceX = Cartesian3.subtract(endPoint, xyPoint, {} as any)
+      let diffrenceY = Cartesian3.subtract(startPoint, xyPoint, {} as any)
+      const distanceMin = Math.min(Cartesian3.magnitude(diffrenceX), Cartesian3.magnitude(diffrenceY))
+      const factor = distanceMin > 15 ? 0.15 * distanceMin : 0.25 * distanceMin
+      diffrenceX = Cartesian3.normalize(diffrenceX, diffrenceX)
+      diffrenceY = Cartesian3.normalize(diffrenceY, diffrenceY)
+      diffrenceX = Cartesian3.multiplyByScalar(diffrenceX, factor, diffrenceX)
+      diffrenceY = Cartesian3.multiplyByScalar(diffrenceY, factor, diffrenceY)
+      const xyBoxPositions = polyline.xyBoxPositions
+      if (xyBoxPositions === undefined) {
+        return
+      }
+      Cartesian3.add(xyPoint, diffrenceX, xyBoxPositions[0])
+      Cartesian3.add(xyBoxPositions[0], diffrenceY, xyBoxPositions[1])
+      Cartesian3.add(xyPoint, diffrenceY, xyBoxPositions[2])
+
+      polyline.xLabelPosition = Cartesian3.midpoint(xyPoint, endPoint, {} as any)
+      polyline.yLabelPosition = Cartesian3.midpoint(startPoint, xyPoint, {} as any)
+      polyline.xAnglePosition = endPoint
+      polyline.yAnglePosition = startPoint
+      const diffrence1 = Cartesian3.subtract(xyPoint, endPoint, {} as any)
+      const diffrence2 = Cartesian3.subtract(xyPoint, startPoint, {} as any)
+      let diffrence3 = Cartesian3.subtract(endPoint, startPoint, {} as any)
+      polyline.yAngle = Cartesian3.angleBetween(diffrence2, diffrence3)
+      diffrence3 = Cartesian3.negate(diffrence3, diffrence3)
+      polyline.xAngle = Cartesian3.angleBetween(diffrence1, diffrence3)
+      polyline.xDistance = Cartesian3.magnitude(diffrence1)
+      polyline.yDistance = Cartesian3.magnitude(diffrence2)
+    }
+  }
+
   let restorePosition
   const computedRenderDatas = computed<Array<VcSegmentDrawing>>(() => {
     const polylines: Array<VcSegmentDrawing> = []
@@ -108,7 +183,7 @@ export default function (props, ctx, cmpName: string) {
     const distanceFormatter = props.distanceFormatter || MeasureUnits.distanceToString
     const areaFormatter = props.areaFormatter || MeasureUnits.areaToString
 
-    renderDatas.value.forEach(polylineSegment => {
+    renderDatas.value.forEach((polylineSegment) => {
       const startPosition = polylineSegment.positions[0]
       const endPosition = polylineSegment.positions[1]
 
@@ -120,8 +195,8 @@ export default function (props, ctx, cmpName: string) {
       const distances: number[] = []
       const angles: number[] = []
 
-      const distance =
-        props.polylineOpts?.arcType === 0
+      const distance
+        = props.polylineOpts?.arcType === 0
           ? Cartesian3.distance(startPosition, endPosition)
           : getGeodesicDistance(startPosition, endPosition, $services.viewer.scene.globe.ellipsoid)
       const labelPosition = Cartesian3.midpoint(startPosition, endPosition, {} as any)
@@ -129,7 +204,7 @@ export default function (props, ctx, cmpName: string) {
       const heading = getPolylineSegmentHeading(startPosition, endPosition)
       const pitch = getPolylineSegmentPitch(startPosition, endPosition)
 
-      polylineSegment.points = polylineSegment.positions.map(v => {
+      polylineSegment.points = polylineSegment.positions.map((v) => {
         return {
           position: v
         }
@@ -173,7 +248,8 @@ export default function (props, ctx, cmpName: string) {
           polygonPositions,
           height
         })
-      } else if (cmpName === 'VcDrawingRegular' || cmpName === 'VcMeasurementRegular') {
+      }
+      else if (cmpName === 'VcDrawingRegular' || cmpName === 'VcMeasurementRegular') {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
 
@@ -200,16 +276,18 @@ export default function (props, ctx, cmpName: string) {
             height: startCartographic.height
           })
         }
-      } else if (cmpName === 'VcAnalysisViewshed') {
+      }
+      else if (cmpName === 'VcAnalysisViewshed') {
         // updateViewshed
         Object.assign(polyline.viewshedOpts, { startPosition, endPosition })
-      } else if (cmpName === 'VcAnalysisSightline') {
+      }
+      else if (cmpName === 'VcAnalysisSightline') {
         if (props.sightlineType === 'segment') {
           const positionsNew: Array<Cesium.Cartesian3> = []
           positionsNew.push(startPosition)
           const objectsToExclude = []
           const primitiveCollection: Array<Cesium.PrimitiveCollection> = (primitiveCollectionRef.value.cesiumObject as any)._primitives
-          primitiveCollection.forEach(primitive => {
+          primitiveCollection.forEach((primitive) => {
             if (primitive instanceof Cesium.PointPrimitiveCollection) {
               objectsToExclude.push(...primitive._pointPrimitives)
             }
@@ -233,10 +311,12 @@ export default function (props, ctx, cmpName: string) {
             positions: positionsNew,
             distance
           })
-        } else if (props.sightlineType === 'circle') {
+        }
+        else if (props.sightlineType === 'circle') {
           // Todo
         }
-      } else {
+      }
+      else {
         labels.push({
           position: labelPosition,
           id: createGuid(),
@@ -253,7 +333,8 @@ export default function (props, ctx, cmpName: string) {
           let s = 0
           if (props.polylineOpts?.arcType === 0) {
             s = getGeodesicDistance(positions[i], positions[i + 1], $services.viewer.scene.globe.ellipsoid)
-          } else {
+          }
+          else {
             s = Cartesian3.distance(positions[i], positions[i + 1])
           }
           distances.push(s)
@@ -288,13 +369,13 @@ export default function (props, ctx, cmpName: string) {
         }
 
         const area = calculateAreaByPostions(positions)
-        props.showLabel &&
-          labels.push({
-            text: areaFormatter(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
-            position: polylineSegment.positions[0],
-            id: createGuid(),
-            ...labelOpts
-          })
+        props.showLabel
+        && labels.push({
+          text: areaFormatter(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+          position: polylineSegment.positions[0],
+          id: createGuid(),
+          ...labelOpts
+        })
       }
 
       if (props.showComponentLines) {
@@ -340,174 +421,20 @@ export default function (props, ctx, cmpName: string) {
       Object.assign(polyline, {
         labels
       })
-      polyline.positionsDegreesArray = polyline.positions.map(v => {
+      polyline.positionsDegreesArray = polyline.positions.map((v) => {
         const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
         return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
       })
-      polyline?.polygonPositions?.length &&
-        (polyline.polygonPositionsDegreesArray = polyline.polygonPositions.map(v => {
-          const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
-          return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
-        }))
+      polyline?.polygonPositions?.length
+      && (polyline.polygonPositionsDegreesArray = polyline.polygonPositions.map((v) => {
+        const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
+        return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
+      }))
 
       polylines.push(polyline)
     })
     return polylines
   })
-
-  // methods
-  instance.createCesiumObject = async () => {
-    return primitiveCollectionRef
-  }
-
-  instance.mount = async () => {
-    const { viewer } = $services
-    if (props.autoUpdateLabelPosition) {
-      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.addEventListener(updateLabelPosition)
-      ;(cmpName === 'VcMeasurementRegular' ||
-        cmpName === 'VcMeasurementRectangle' ||
-        cmpName === 'VcDrawingRegular' ||
-        cmpName === 'VcDrawingRectangle') &&
-        viewer.scene.preRender.addEventListener(updateLabelPositionPolygon)
-    }
-
-    return true
-  }
-
-  instance.unmount = async () => {
-    const { viewer } = $services
-    if (props.autoUpdateLabelPosition) {
-      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.removeEventListener(updateLabelPosition)
-      ;(cmpName === 'VcMeasurementRegular' ||
-        cmpName === 'VcMeasurementRectangle' ||
-        cmpName === 'VcDrawingRegular' ||
-        cmpName === 'VcDrawingRectangle') &&
-        viewer.scene.preRender.removeEventListener(updateLabelPositionPolygon)
-    }
-
-    return true
-  }
-
-  const getHeightPosition = (polyline: VcSegmentDrawing, movement: Cesium.Cartesian2) => {
-    const { defined, SceneMode, Cartesian3, IntersectionTests, Plane, SceneTransforms, Ray } = Cesium
-    const { viewer } = $services
-    const scene = viewer.scene
-    const camera = scene.camera
-    const direction = camera.direction
-    const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
-    const positions = polyline.positions
-    const p1 = positions[0]
-    let startPoint = p1
-    let endPoint = positions[1]
-    let draggingPlane = polyline.draggingPlane
-    let surfaceNormal = polyline.surfaceNormal
-    let normal = surfaceNormal
-
-    if (scene.mode === SceneMode.COLUMBUS_VIEW) {
-      normal = Cartesian3.UNIT_X
-      const startPointCartographic = ellipsoid.cartesianToCartographic(p1, {} as any)
-      startPoint = scene.mapProjection.project(startPointCartographic, {} as any)
-      Cartesian3.fromElements(startPoint.z, startPoint.x, startPoint.y, startPoint)
-    }
-
-    let forward = Cartesian3.cross(normal, direction, {} as any) // m
-    forward = Cartesian3.cross(normal, forward, forward)
-    forward = Cartesian3.normalize(forward, forward)
-    draggingPlane = Plane.fromPointNormal(startPoint, forward, draggingPlane)
-    const ray = camera.getPickRay(movement, new Ray())
-    endPoint = IntersectionTests.rayPlane(ray, draggingPlane, {} as any)
-    if (defined(endPoint)) {
-      if (scene.mode === SceneMode.COLUMBUS_VIEW) {
-        endPoint = Cartesian3.fromElements(endPoint.y, endPoint.z, endPoint.x, endPoint)
-        const endPointCartographic = scene.mapProjection.unproject(endPoint, {} as any)
-        endPoint = ellipsoid.cartographicToCartesian(endPointCartographic, endPoint)
-      }
-
-      const worldToWindowCoordinates = compareCesiumVersion(Cesium.VERSION, '1.121')
-        ? SceneTransforms.worldToWindowCoordinates
-        : SceneTransforms['wgs84ToWindowCoordinates']
-
-      if (worldToWindowCoordinates(scene, positions[0], {} as any).y < movement.y) {
-        surfaceNormal = Cartesian3.negate(surfaceNormal, {} as any)
-      }
-
-      let diffrence = Cartesian3.subtract(endPoint, p1, {} as any)
-      diffrence = Cartesian3.projectVector(diffrence, surfaceNormal, diffrence)
-      endPoint = Cartesian3.add(p1, diffrence, endPoint)
-      return endPoint
-    }
-  }
-
-  const updateComponents = (polyline: VcSegmentDrawing) => {
-    const { Cartesian3, Math: CesiumMath, defined } = Cesium
-    const { viewer } = $services
-    const ellipsoid = viewer.scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
-    const startPosition = polyline.positions[0]
-    const endPosition = polyline.positions[1]
-    const startCartographic = ellipsoid.cartesianToCartographic(startPosition, {} as any)
-
-    if (!defined(startCartographic)) {
-      return
-    }
-    const endCartographic = ellipsoid.cartesianToCartographic(endPosition, {} as any)
-
-    const startHeight = startCartographic.height
-    const endHeight = endCartographic.height
-
-    let startPoint, endPoint, height1, height2
-
-    if (startHeight < endHeight) {
-      startPoint = startPosition
-      endPoint = endPosition
-      height2 = endHeight
-      height1 = startHeight
-    } else {
-      startPoint = endPosition
-      endPoint = startPosition
-      height2 = startHeight
-      height1 = endHeight
-    }
-
-    const xyPolylinePositions = polyline.xyPolylinePositions
-    if (xyPolylinePositions === undefined) {
-      return
-    }
-    xyPolylinePositions[0] = startPoint
-    xyPolylinePositions[2] = endPoint
-    let normal = ellipsoid.geodeticSurfaceNormal(startPoint, {} as any)
-    normal = Cartesian3.multiplyByScalar(normal, height2 - height1, normal)
-    const xyPoint = Cartesian3.add(startPoint, normal, xyPolylinePositions[1])
-    if (!(Cartesian3.equalsEpsilon(xyPoint, endPoint, CesiumMath.EPSILON10) && Cartesian3.equalsEpsilon(xyPoint, startPoint, CesiumMath.EPSILON10))) {
-      let diffrenceX = Cartesian3.subtract(endPoint, xyPoint, {} as any)
-      let diffrenceY = Cartesian3.subtract(startPoint, xyPoint, {} as any)
-      const distanceMin = Math.min(Cartesian3.magnitude(diffrenceX), Cartesian3.magnitude(diffrenceY))
-      const factor = 15 < distanceMin ? 0.15 * distanceMin : 0.25 * distanceMin
-      diffrenceX = Cartesian3.normalize(diffrenceX, diffrenceX)
-      diffrenceY = Cartesian3.normalize(diffrenceY, diffrenceY)
-      diffrenceX = Cartesian3.multiplyByScalar(diffrenceX, factor, diffrenceX)
-      diffrenceY = Cartesian3.multiplyByScalar(diffrenceY, factor, diffrenceY)
-      const xyBoxPositions = polyline.xyBoxPositions
-      if (xyBoxPositions === undefined) {
-        return
-      }
-      Cartesian3.add(xyPoint, diffrenceX, xyBoxPositions[0])
-      Cartesian3.add(xyBoxPositions[0], diffrenceY, xyBoxPositions[1])
-      Cartesian3.add(xyPoint, diffrenceY, xyBoxPositions[2])
-
-      polyline.xLabelPosition = Cartesian3.midpoint(xyPoint, endPoint, {} as any)
-      polyline.yLabelPosition = Cartesian3.midpoint(startPoint, xyPoint, {} as any)
-      polyline.xAnglePosition = endPoint
-      polyline.yAnglePosition = startPoint
-      const diffrence1 = Cartesian3.subtract(xyPoint, endPoint, {} as any)
-      const diffrence2 = Cartesian3.subtract(xyPoint, startPoint, {} as any)
-      let diffrence3 = Cartesian3.subtract(endPoint, startPoint, {} as any)
-      polyline.yAngle = Cartesian3.angleBetween(diffrence2, diffrence3)
-      diffrence3 = Cartesian3.negate(diffrence3, diffrence3)
-      polyline.xAngle = Cartesian3.angleBetween(diffrence1, diffrence3)
-      polyline.xDistance = Cartesian3.magnitude(diffrence1)
-      polyline.yDistance = Cartesian3.magnitude(diffrence2)
-    }
-  }
 
   const updateLabelPositionPolygon = () => {
     computedRenderDatas.value.forEach((polyline, index) => {
@@ -536,7 +463,8 @@ export default function (props, ctx, cmpName: string) {
         const labels = labelCollection[index]._labels
         const labelTotalLength = labels[labels.length - 1]
 
-        if (!labelTotalLength) return
+        if (!labelTotalLength)
+          return
         for (let i = 1; i < positions.length; i++) {
           const positionWindow = worldToWindowCoordinates(scene, positions[i], {} as any)
           if (defined(positionWindow)) {
@@ -544,7 +472,7 @@ export default function (props, ctx, cmpName: string) {
             const label = labels[i - 1]
             if (label && label !== labelTotalLength) {
               if (defined(label?.horizontalOrigin)) {
-                label.horizontalOrigin = 0 < l ? HorizontalOrigin.LEFT : HorizontalOrigin.RIGHT
+                label.horizontalOrigin = l > 0 ? HorizontalOrigin.LEFT : HorizontalOrigin.RIGHT
               }
             }
 
@@ -608,7 +536,8 @@ export default function (props, ctx, cmpName: string) {
             }
 
             label.horizontalOrigin = HorizontalOrigin.LEFT
-          } else {
+          }
+          else {
             if (!isUndefined(yLabel) && !isUndefined(yPixelOffset)) {
               yPixelOffset.x = 9
               yLabel.pixelOffset = yPixelOffset
@@ -643,6 +572,89 @@ export default function (props, ctx, cmpName: string) {
     polyline.labelPosition = Cartesian3.midpoint(positions[0], positions[1], {} as any)
   }
 
+  // methods
+  instance.createCesiumObject = async () => {
+    return primitiveCollectionRef
+  }
+
+  instance.mount = async () => {
+    const { viewer } = $services
+    if (props.autoUpdateLabelPosition) {
+      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.addEventListener(updateLabelPosition)
+      ;(cmpName === 'VcMeasurementRegular'
+        || cmpName === 'VcMeasurementRectangle'
+        || cmpName === 'VcDrawingRegular'
+        || cmpName === 'VcDrawingRectangle')
+      && viewer.scene.preRender.addEventListener(updateLabelPositionPolygon)
+    }
+
+    return true
+  }
+
+  instance.unmount = async () => {
+    const { viewer } = $services
+    if (props.autoUpdateLabelPosition) {
+      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.removeEventListener(updateLabelPosition)
+      ;(cmpName === 'VcMeasurementRegular'
+        || cmpName === 'VcMeasurementRectangle'
+        || cmpName === 'VcDrawingRegular'
+        || cmpName === 'VcDrawingRectangle')
+      && viewer.scene.preRender.removeEventListener(updateLabelPositionPolygon)
+    }
+
+    return true
+  }
+
+  const getHeightPosition = (polyline: VcSegmentDrawing, movement: Cesium.Cartesian2) => {
+    const { defined, SceneMode, Cartesian3, IntersectionTests, Plane, SceneTransforms, Ray } = Cesium
+    const { viewer } = $services
+    const scene = viewer.scene
+    const camera = scene.camera
+    const direction = camera.direction
+    const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
+    const positions = polyline.positions
+    const p1 = positions[0]
+    let startPoint = p1
+    let endPoint = positions[1]
+    let draggingPlane = polyline.draggingPlane
+    let surfaceNormal = polyline.surfaceNormal
+    let normal = surfaceNormal
+
+    if (scene.mode === SceneMode.COLUMBUS_VIEW) {
+      normal = Cartesian3.UNIT_X
+      const startPointCartographic = ellipsoid.cartesianToCartographic(p1, {} as any)
+      startPoint = scene.mapProjection.project(startPointCartographic, {} as any)
+      Cartesian3.fromElements(startPoint.z, startPoint.x, startPoint.y, startPoint)
+    }
+
+    let forward = Cartesian3.cross(normal, direction, {} as any) // m
+    forward = Cartesian3.cross(normal, forward, forward)
+    forward = Cartesian3.normalize(forward, forward)
+    draggingPlane = Plane.fromPointNormal(startPoint, forward, draggingPlane)
+    const ray = camera.getPickRay(movement, new Ray())
+    endPoint = IntersectionTests.rayPlane(ray, draggingPlane, {} as any)
+    if (defined(endPoint)) {
+      if (scene.mode === SceneMode.COLUMBUS_VIEW) {
+        endPoint = Cartesian3.fromElements(endPoint.y, endPoint.z, endPoint.x, endPoint)
+        const endPointCartographic = scene.mapProjection.unproject(endPoint, {} as any)
+        endPoint = ellipsoid.cartographicToCartesian(endPointCartographic, endPoint)
+      }
+
+      const worldToWindowCoordinates = compareCesiumVersion(Cesium.VERSION, '1.121')
+        ? SceneTransforms.worldToWindowCoordinates
+        : SceneTransforms['wgs84ToWindowCoordinates']
+
+      if (worldToWindowCoordinates(scene, positions[0], {} as any).y < movement.y) {
+        surfaceNormal = Cartesian3.negate(surfaceNormal, {} as any)
+      }
+
+      let diffrence = Cartesian3.subtract(endPoint, p1, {} as any)
+      diffrence = Cartesian3.projectVector(diffrence, surfaceNormal, diffrence)
+      endPoint = Cartesian3.add(p1, diffrence, endPoint)
+      return endPoint
+    }
+  }
+
   const startNew = () => {
     const { Cartesian3, Plane } = Cesium
     const polyline: VcSegmentDrawing = {
@@ -660,11 +672,11 @@ export default function (props, ctx, cmpName: string) {
       polygonOpts: {}
     }
 
-    cmpName === 'VcMeasurementVertical' &&
-      Object.assign(polyline, {
-        draggingPlane: new Plane(Cartesian3.UNIT_X, 0),
-        surfaceNormal: new Cartesian3()
-      })
+    cmpName === 'VcMeasurementVertical'
+    && Object.assign(polyline, {
+      draggingPlane: new Plane(Cartesian3.UNIT_X, 0),
+      surfaceNormal: new Cartesian3()
+    })
 
     renderDatas.value.push(polyline)
     drawStatus.value = DrawStatus.BeforeDraw
@@ -800,7 +812,8 @@ export default function (props, ctx, cmpName: string) {
           ...props.viewshedOpts
         }
       }
-    } else {
+    }
+    else {
       // if (cmpName !== 'VcMeasurementHeight') {
 
       // }
@@ -827,7 +840,8 @@ export default function (props, ctx, cmpName: string) {
           drawTip.value = drawTipOpts.value.drawingTipStart
           canShowDrawTip.value = true
         }
-      } else {
+      }
+      else {
         if (cmpName !== 'VcMeasurementVertical') {
           if (platform().hasTouch === true) {
             const position = getWorldPosition(scene, movement, {} as any)
@@ -868,7 +882,7 @@ export default function (props, ctx, cmpName: string) {
     })
   }
 
-  const handleMouseMove = movement => {
+  const handleMouseMove = (movement) => {
     const { viewer, getWorldPosition } = $services
     const scene = viewer.scene
     const position = getWorldPosition(scene, movement, {} as any)
@@ -899,13 +913,15 @@ export default function (props, ctx, cmpName: string) {
         positions[editingPoint.value ? editingPoint.value._index : 1] = heightPostion
         polyline.positions = positions
       }
-    } else if (cmpName === 'VcMeasurementHeight') {
+    }
+    else if (cmpName === 'VcMeasurementHeight') {
       makeHeightPositions(polyline, position)
-    } else if (
-      cmpName === 'VcDrawingRectangle' ||
-      cmpName === 'VcDrawingRegular' ||
-      cmpName === 'VcMeasurementRegular' ||
-      cmpName === 'VcMeasurementRectangle'
+    }
+    else if (
+      cmpName === 'VcDrawingRectangle'
+      || cmpName === 'VcDrawingRegular'
+      || cmpName === 'VcMeasurementRegular'
+      || cmpName === 'VcMeasurementRectangle'
     ) {
       const positions = polyline.positions
       const startPosition = positions[0]
@@ -913,7 +929,8 @@ export default function (props, ctx, cmpName: string) {
       const endCartographic = Cartographic.fromCartesian(position, viewer.scene.globe.ellipsoid)
       !props.clampToGround && (endCartographic.height = startCartographic.height)
       positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid)
-    } else if (cmpName === 'VcAnalysisSightline') {
+    }
+    else if (cmpName === 'VcAnalysisSightline') {
       // if (props.sightlineType === 'segment') {
 
       // }
@@ -921,10 +938,12 @@ export default function (props, ctx, cmpName: string) {
       if (editingPoint.value) {
         const index = editingPoint.value._index > 0 ? 1 : 0
         positions[index] = position
-      } else {
+      }
+      else {
         positions[1] = position
       }
-    } else {
+    }
+    else {
       const positions = polyline.positions.slice()
       positions[editingPoint.value ? editingPoint.value._index : 1] = position
       polyline.positions = positions
@@ -951,7 +970,7 @@ export default function (props, ctx, cmpName: string) {
     })
   }
 
-  const onEditorClick = e => {
+  const onEditorClick = (e) => {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
 
@@ -970,14 +989,17 @@ export default function (props, ctx, cmpName: string) {
       canShowDrawTip.value = true
       const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
       drawingFabInstanceVm.editingActionName = drawingType
-    } else if (e === 'remove') {
+    }
+    else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       const polyline = renderDatas.value[index]
       polyline.positions.splice(mouseoverPoint.value._index, 1)
-    } else if (e === 'removeAll') {
+    }
+    else if (e === 'removeAll') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
-    } else {
+    }
+    else {
       const index = mouseoverPoint.value._vcPolylineIndx
       const polyline = renderDatas.value[index]
       props.editorOpts?.[e]?.callback?.(index, polyline)
@@ -1011,11 +1033,11 @@ export default function (props, ctx, cmpName: string) {
 
     const children: Array<VNode> = []
     computedRenderDatas.value.forEach((polyline, index) => {
-      const isRegular =
-        cmpName === 'VcDrawingRectangle' ||
-        cmpName === 'VcDrawingRegular' ||
-        cmpName === 'VcMeasurementRegular' ||
-        cmpName === 'VcMeasurementRectangle'
+      const isRegular
+        = cmpName === 'VcDrawingRectangle'
+          || cmpName === 'VcDrawingRegular'
+          || cmpName === 'VcMeasurementRegular'
+          || cmpName === 'VcMeasurementRectangle'
       const positions = isRegular ? polyline.polygonPositions?.slice() : polyline.positions
       isRegular && positions?.push(positions[0])
       const polylineOpts = Object.assign({}, props.polylineOpts, polyline.polylineOpts)
@@ -1042,7 +1064,7 @@ export default function (props, ctx, cmpName: string) {
                 },
                 () =>
                   h(props.clampToGround ? VcGeometryGroundPolyline : VcGeometryPolyline, {
-                    positions: positions,
+                    positions,
                     ...polylineOpts
                   })
               )
@@ -1061,7 +1083,7 @@ export default function (props, ctx, cmpName: string) {
         // polygon
         children.push(
           h(VcPolygon, {
-            positions: positions,
+            positions,
             show: polyline.show && polygonOpts?.show,
             ...polygonOpts,
             onReady: (readyObject: VcReadyObject) => {
@@ -1139,8 +1161,8 @@ export default function (props, ctx, cmpName: string) {
               _vcPolylineIndx: index, // for editor
               ...pointOpts,
               show:
-                (pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
-                (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
+                (pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing)
+                && (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
             }
           }),
           onMouseover: onMouseoverPoints,

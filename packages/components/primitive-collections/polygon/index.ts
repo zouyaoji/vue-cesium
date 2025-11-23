@@ -6,37 +6,38 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
  */
-import type { WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
+
 import type {
-  VcPickEvent,
   VcAppearance,
   VcCartesian3Array,
   VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcPickEvent,
   VcPolygonHierarchy,
-  VcReadyObject,
-  VcComponentPublicInstance
+  VcReadyObject
 } from '@vue-cesium/utils/types'
+import type { WatchStopHandle } from 'vue'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import {
-  id,
-  show,
-  enableMouseEvent,
-  positions,
-  arcType,
-  classificationType,
-  polygonHierarchy,
-  clampToGround,
-  appearance,
-  depthFailAppearance,
-  ellipsoid,
-  allowPicking,
-  asynchronous
-} from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { PolygonPrimitive } from '@vue-cesium/shared'
 import { makeAppearance, makeCartesian3Array, makePolygonHierarchy } from '@vue-cesium/utils/cesium-helpers'
+import {
+  allowPicking,
+  appearance,
+  arcType,
+  asynchronous,
+  clampToGround,
+  classificationType,
+  depthFailAppearance,
+  ellipsoid,
+  enableMouseEvent,
+  id,
+  polygonHierarchy,
+  positions,
+  show
+} from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
 
 export const polygonProps = {
   ...positions,
@@ -72,7 +73,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clampToGround,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.clampToGround = val as boolean)
         }
@@ -81,7 +82,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.positions,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.positions = makeCartesian3Array(val!) as Array<Cesium.Cartesian3>)
         }
@@ -91,7 +92,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.polygonHierarchy,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.polygonHierarchy = makePolygonHierarchy(val!) as Cesium.PolygonHierarchy)
         }
@@ -101,7 +102,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.appearance,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.appearance = makeAppearance.call(instance, val!) as Cesium.Appearance)
         }
@@ -111,7 +112,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.depthFailAppearance,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.depthFailAppearance = makeAppearance.call(instance, val!) as Cesium.Appearance)
         }
@@ -121,7 +122,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.show = val)
         }
@@ -131,7 +132,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.classificationType,
-        val => {
+        (val) => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
           polygonPrimitive && (polygonPrimitive.classificationType = val as number)
         }
@@ -167,7 +168,7 @@ export default defineComponent({
   }
 })
 
-export type VcPolygonProps = {
+export interface VcPolygonProps {
   /**
    * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes.
    */
@@ -182,7 +183,7 @@ export type VcPolygonProps = {
    */
   positions?: VcCartesian3Array
   /**
-   * 	A polygon hierarchy that can include holes.
+   * A polygon hierarchy that can include holes.
    */
   polygonHierarchy?: VcPolygonHierarchy
   /**

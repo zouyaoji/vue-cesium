@@ -7,16 +7,18 @@
  * @FilePath: \10_vue-cesium\packages\components\geometry-instance\src\index.ts
  */
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide, VNode } from 'vue'
+import type { PropType, VNode } from 'vue'
+import type { VcPrimitiveRef } from '../../primitives'
 import { useCommon } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { modelMatrix, id } from '@vue-cesium/utils/cesium-props'
-import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { hSlot } from '@vue-cesium/utils/private/render'
+import { id, modelMatrix } from '@vue-cesium/utils/cesium-props'
 import { vcKey } from '@vue-cesium/utils/config'
 import { commonEmits } from '@vue-cesium/utils/emits'
-import { VcPrimitiveRef } from '../../primitives'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, provide, ref } from 'vue'
+
 export const geometryInstanceProps = {
   geometry: Object as PropType<Cesium.Geometry | Cesium.GeometryFactory>,
   ...modelMatrix,
@@ -30,7 +32,7 @@ const emits = {
 export default defineComponent({
   name: 'VcGeometryInstance',
   props: geometryInstanceProps,
-  emits: emits,
+  emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -69,11 +71,12 @@ export default defineComponent({
       return true
     }
 
-    const updateGeometry = geometry => {
+    const updateGeometry = (geometry) => {
       const listener = getInstanceListener(instance, 'update:geometry')
       if (listener) {
         emit('update:geometry', geometry)
-      } else {
+      }
+      else {
         const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
         geometryInstance.geometry = geometry
       }
@@ -113,39 +116,39 @@ export default defineComponent({
 })
 
 export type VcGeometryInstanceEmits = typeof emits
-export type VcGeometryInstanceProps = {
+export interface VcGeometryInstanceProps {
   /**
    * The geometry to instance.
    */
-  geometry?: Cesium.Geometry | Cesium.GeometryFactory
+  'geometry'?: Cesium.Geometry | Cesium.GeometryFactory
   /**
    * The model matrix that transforms to transform the geometry from model to world coordinates.
    */
-  modelMatrix?: Cesium.Matrix4
+  'modelMatrix'?: Cesium.Matrix4
   /**
    * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes.
    */
-  id?: any
+  'id'?: any
   /**
    * Per-instance attributes like a show or color attribute shown in the example below.
    */
-  attributes?: any
+  'attributes'?: any
   /**
    * Triggers before the VcGeometryInstance is loaded.
    */
-  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  'onBeforeLoad'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the VcGeometryInstance is successfully loaded.
    */
-  onReady?: (readyObject: VcReadyObject) => void
+  'onReady'?: (readyObject: VcReadyObject) => void
   /**
    * Triggers when the component load failed.
    */
-  onUnready?: (e: any) => void
+  'onUnready'?: (e: any) => void
   /**
    * Triggers when the VcGeometryInstance is destroyed.
    */
-  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  'onDestroyed'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the geometry mounted.
    */
@@ -157,7 +160,7 @@ export interface VcGeometryInstanceRef extends VcComponentPublicInstance<VcGeome
    * private but needed by VcGeometryXXX.
    * @param geometry
    */
-  __updateGeometry?(geometry: Cesium.Geometry): boolean
+  __updateGeometry?: (geometry: Cesium.Geometry) => boolean
 }
 
 export interface VcGeometryInstanceSlots {

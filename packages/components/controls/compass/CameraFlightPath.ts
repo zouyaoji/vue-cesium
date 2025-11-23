@@ -1,4 +1,4 @@
-import { AnyFunction } from '@vue-cesium/utils/types'
+import type { AnyFunction } from '@vue-cesium/utils/types'
 /**
  * Creates tweens for camera flights.
  * <br /><br />
@@ -66,22 +66,22 @@ class CameraFlightPath {
 
     let empty = scene.mode === SceneMode.SCENE2D
     empty = empty && Cartesian2.equalsEpsilon(camera.position, destination, CesiumMath.EPSILON6)
-    empty =
-      empty && CesiumMath.equalsEpsilon(Math.max(frustum.right - frustum.left, frustum.top - frustum.bottom), destination.z, CesiumMath.EPSILON6)
+    empty
+      = empty && CesiumMath.equalsEpsilon(Math.max(frustum.right - frustum.left, frustum.top - frustum.bottom), destination.z, CesiumMath.EPSILON6)
 
     empty = empty || (scene.mode !== SceneMode.SCENE2D && Cartesian3.equalsEpsilon(destination, camera.position, CesiumMath.EPSILON10))
 
-    empty =
-      empty &&
-      CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(heading), CesiumMath.negativePiToPi(camera.heading), CesiumMath.EPSILON10) &&
-      CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(pitch), CesiumMath.negativePiToPi(camera.pitch), CesiumMath.EPSILON10) &&
-      CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(roll), CesiumMath.negativePiToPi(camera.roll), CesiumMath.EPSILON10)
+    empty
+      = empty
+        && CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(heading), CesiumMath.negativePiToPi(camera.heading), CesiumMath.EPSILON10)
+        && CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(pitch), CesiumMath.negativePiToPi(camera.pitch), CesiumMath.EPSILON10)
+        && CesiumMath.equalsEpsilon(CesiumMath.negativePiToPi(roll), CesiumMath.negativePiToPi(camera.roll), CesiumMath.EPSILON10)
 
     if (empty) {
       return emptyFlight(complete, cancel)
     }
 
-    const updateFunctions = new Array(4)
+    const updateFunctions: any = Array.from({ length: 4 })
     updateFunctions[SceneMode.SCENE2D] = createUpdate2D
     updateFunctions[SceneMode.SCENE3D] = createUpdate3D
     updateFunctions[SceneMode.COLUMBUS_VIEW] = createUpdateCV
@@ -128,23 +128,24 @@ class CameraFlightPath {
 
       if (startHeight > endHeight && startHeight > 11500.0) {
         easingFunction = EasingFunction.CUBIC_OUT
-      } else {
+      }
+      else {
         easingFunction = EasingFunction.QUINTIC_IN_OUT
       }
     }
 
     return {
-      duration: duration,
-      easingFunction: easingFunction,
+      duration,
+      easingFunction,
       startObject: {
         time: 0.0
       },
       stopObject: {
         time: duration
       },
-      update: update,
-      complete: complete,
-      cancel: cancel
+      update,
+      complete,
+      cancel
     }
   }
 }
@@ -160,7 +161,8 @@ function getAltitude(frustum, dx, dy) {
     top = frustum.near * tanTheta
     right = frustum.aspectRatio * top
     return Math.max((dx * near) / right, (dy * near) / top)
-  } else if (frustum instanceof PerspectiveOffCenterFrustum) {
+  }
+  else if (frustum instanceof PerspectiveOffCenterFrustum) {
     near = frustum.near
     top = frustum.top
     right = frustum.right
@@ -228,12 +230,12 @@ function createHeightFunction(
     const power = 8.0
     const factor = 1000000.0
 
-    const s = -Math.pow((altitude - startHeight) * factor, 1.0 / power)
-    const e = Math.pow((altitude - endHeight) * factor, 1.0 / power)
+    const s = -(((altitude - startHeight) * factor) ** (1.0 / power))
+    const e = ((altitude - endHeight) * factor) ** (1.0 / power)
 
     return function (t) {
       const x = t * (e - s) + s
-      return -Math.pow(x, power) / factor + altitude
+      return -(x ** power) / factor + altitude
     }
   }
 
@@ -250,7 +252,8 @@ function adjustAngleForLERP(startAngle: number, endAngle: number) {
 
   if (endAngle > startAngle + Math.PI) {
     startAngle += CesiumMath.TWO_PI
-  } else if (endAngle < startAngle - Math.PI) {
+  }
+  else if (endAngle < startAngle - Math.PI) {
     startAngle -= CesiumMath.TWO_PI
   }
 
@@ -299,7 +302,8 @@ function useLongestFlight(startCart, destCart) {
   const { Math: CesiumMath } = Cesium
   if (startCart.longitude < destCart.longitude) {
     startCart.longitude += CesiumMath.TWO_PI
-  } else {
+  }
+  else {
     destCart.longitude += CesiumMath.TWO_PI
   }
 }
@@ -309,7 +313,8 @@ function useShortestFlight(startCart, destCart) {
   const diff = startCart.longitude - destCart.longitude
   if (diff < -CesiumMath.PI) {
     startCart.longitude += CesiumMath.TWO_PI
-  } else if (diff > CesiumMath.PI) {
+  }
+  else if (diff > CesiumMath.PI) {
     destCart.longitude += CesiumMath.TWO_PI
   }
 }
@@ -365,14 +370,16 @@ function createUpdate3D(
       if (hitDistance < offDistance * optionFlyOverLongitudeWeight && !hitInside) {
         useLongFlight = true
       }
-    } else if (!hitInside) {
+    }
+    else if (!hitInside) {
       useLongFlight = true
     }
   }
 
   if (useLongFlight) {
     useLongestFlight(startCart, destCart)
-  } else {
+  }
+  else {
     useShortestFlight(startCart, destCart)
   }
 
@@ -456,8 +463,8 @@ function emptyFlight(complete?, cancel?) {
     startObject: {},
     stopObject: {},
     duration: 0.0,
-    complete: complete,
-    cancel: cancel
+    complete,
+    cancel
   }
 }
 

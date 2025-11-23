@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 10:49:53
@@ -7,15 +8,14 @@
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\cloud-collection\index.ts
  */
 import type { PropType, WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { cloneDeep, differenceBy } from 'lodash-unified'
-import { show } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { commonEmits } from '@vue-cesium/utils/emits'
 import type { VcCumulusCloudProps } from '../cloud'
+import { usePrimitiveCollections } from '@vue-cesium/composables'
+import { show } from '@vue-cesium/utils/cesium-props'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import VcCumulusCloud from '../cloud'
 
 export const cloudCollectionProps = {
@@ -78,21 +78,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyCloud = cloudCollection._clouds.find(v => v.id === modify.oldOptions.id)
-              modifyCloud &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyCloud[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyCloud
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyCloud[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteClouds: Array<Cesium.CumulusCloud> = []
@@ -101,7 +102,7 @@ export default defineComponent({
               deleteCloud && deleteClouds.push(deleteCloud)
             }
 
-            deleteClouds.forEach(v => {
+            deleteClouds.forEach((v) => {
               cloudCollection.remove(v)
             })
 
@@ -152,7 +153,7 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionCloudProps = {
+export interface VcCollectionCloudProps {
   /**
    * Whether to display the clouds.
    * Default value: true

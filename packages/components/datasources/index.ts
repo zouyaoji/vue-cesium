@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,18 +7,17 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\datasources\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import DatasourceCustom from './custom'
 import DatasourceCzml from './czml'
 import DatasourceGeojson from './geojson'
-import DatasourceKml from './kml'
 
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import DatasourceKml from './kml'
 
 const components = [DatasourceCustom, DatasourceCzml, DatasourceGeojson, DatasourceKml]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -26,7 +26,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

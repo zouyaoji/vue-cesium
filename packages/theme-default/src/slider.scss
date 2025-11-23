@@ -72,7 +72,13 @@
     }
 
     &--h {
-      background-image: repeating-linear-gradient(to right, currentColor, currentColor 2px, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0));
+      background-image: repeating-linear-gradient(
+        to right,
+        currentColor,
+        currentColor 2px,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0)
+      );
 
       &:after {
         height: 100%;
@@ -83,7 +89,13 @@
     }
 
     &--v {
-      background-image: repeating-linear-gradient(to bottom, currentColor, currentColor 2px, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0));
+      background-image: repeating-linear-gradient(
+        to bottom,
+        currentColor,
+        currentColor 2px,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0)
+      );
 
       &:after {
         width: 100%;
@@ -146,7 +158,10 @@
     z-index: 1;
     outline: 0;
     color: var(--vc-primary);
-    transition: transform 0.18s ease-out, fill 0.18s ease-out, stroke 0.18s ease-out;
+    transition:
+      transform 0.18s ease-out,
+      fill 0.18s ease-out,
+      stroke 0.18s ease-out;
 
     &.vc-slider--focus {
       opacity: 1 !important;
@@ -195,7 +210,10 @@
   &__focus-ring {
     border-radius: 50%;
     opacity: 0;
-    transition: transform 266.67ms ease-out, opacity 266.67ms ease-out, background-color 266.67ms ease-out;
+    transition:
+      transform 266.67ms ease-out,
+      opacity 266.67ms ease-out,
+      background-color 266.67ms ease-out;
     transition-delay: 0.14s;
   }
 
@@ -341,16 +359,26 @@
   &--inactive {
     .vc-slider__thumb {
       &--h {
-        transition: left 0.28s, right 0.28s;
+        transition:
+          left 0.28s,
+          right 0.28s;
       }
 
       &--v {
-        transition: top 0.28s, bottom 0.28s;
+        transition:
+          top 0.28s,
+          bottom 0.28s;
       }
     }
 
     .vc-slider__selection {
-      transition: width 0.28s, left 0.28s, right 0.28s, height 0.28s, top 0.28s, bottom 0.28s;
+      transition:
+        width 0.28s,
+        left 0.28s,
+        right 0.28s,
+        height 0.28s,
+        top 0.28s,
+        bottom 0.28s;
     }
 
     .vc-slider__text-container {

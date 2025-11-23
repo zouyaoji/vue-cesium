@@ -1,4 +1,4 @@
-import { Language } from '..'
+import type { Language } from '..'
 
 export default {
   name: 'zh-hans',
@@ -57,15 +57,15 @@ export default {
       }
     },
     measurement: {
-      expand: '展开',
-      collapse: '收拢',
-      editor: {
+      'expand': '展开',
+      'collapse': '收拢',
+      'editor': {
         move: '移动节点',
         insert: '插入节点',
         remove: '移除节点',
         removeAll: '移除所有节点'
       },
-      distance: {
+      'distance': {
         tip: '距离量算',
         drawingTipStart: '单击左键绘制距离量算起点。',
         drawingTipEnd: '单击左键绘制距离量算终点。',
@@ -77,37 +77,37 @@ export default {
         drawingTipEnd: '单击左键绘制三角量算终点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      polyline: {
+      'polyline': {
         tip: '折线距离量算',
         drawingTipStart: '单击左键绘制第一个点。',
         drawingTipEnd: '单击左键绘制下一个点，双击左键结束量算。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      horizontal: {
+      'horizontal': {
         tip: '水平距离量算',
         drawingTipStart: '单击左键绘制第一个点。',
         drawingTipEnd: '单击左键绘制下一个点，双击左键结束量算。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      vertical: {
+      'vertical': {
         tip: '垂直距离量算',
         drawingTipStart: '单击左键绘制垂直距离量算起点。',
         drawingTipEnd: '单击左键绘制垂直距离量算终点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      height: {
+      'height': {
         tip: '地表高度量算',
         drawingTipStart: '单击左键绘制高度量算点。',
         drawingTipEnd: '单击左键绘制高度量算点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      area: {
+      'area': {
         tip: '面积量算',
         drawingTipStart: '单击左键绘制第一个点。',
         drawingTipEnd: '点击左键绘制下一个点，双击左键结束量算。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      point: {
+      'point': {
         tip: '坐标量算',
         drawingTipStart: '点击左键绘制坐标量算点。',
         drawingTipEnd: '点击左键绘制坐标量算点。',
@@ -117,25 +117,25 @@ export default {
         height: '高度：',
         slope: '坡度：'
       },
-      rectangle: {
+      'rectangle': {
         tip: '矩形量算',
         drawingTipStart: '单击左键绘制矩形量算起点。',
         drawingTipEnd: '单击左键绘制矩形量算终点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      regular: {
+      'regular': {
         tip: '正多边形量算',
         drawingTipStart: '单击左键绘制正多边形量算起点。',
         drawingTipEnd: '单击左键绘制正多边形量算终点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      circle: {
+      'circle': {
         tip: '圆形量算',
         drawingTipStart: '单击左键绘制圆形量算起点。',
         drawingTipEnd: '单击左键绘制圆形量算终点。',
         drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      clear: {
+      'clear': {
         tip: '清除量算结果'
       }
     },

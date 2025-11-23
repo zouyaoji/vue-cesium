@@ -1,17 +1,17 @@
-import { CSSProperties, Teleport, VNode } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive } from 'vue'
-import type { VcPrintEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
+import type { VcBtnRef, VcTooltipProps, VcTooltipRef } from '@vue-cesium/components/ui'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPrintEvt, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties, VNode } from 'vue'
+import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
-import type { VcTooltipRef, VcBtnRef } from '@vue-cesium/components/ui'
-import { VcBtn, VcTooltip, VcIcon, VcTooltipProps } from '@vue-cesium/components/ui'
-import { useCommon, useLocale } from '@vue-cesium/composables'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { isPlainObject } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
 import createPrintView from './createPrintView'
 import defaultProps from './defaultProps'
 import printWindow from './printWindow'
-import { isPlainObject } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
 
 const emits = {
   ...commonEmits,
@@ -22,7 +22,7 @@ export const printProps = defaultProps
 export default defineComponent({
   name: 'VcPrint',
   props: printProps,
-  emits: emits,
+  emits,
   setup(props: VcPrintProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -46,7 +46,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -122,7 +122,7 @@ export default defineComponent({
       $(tooltipRef)?.hide()
 
       const { viewer } = $services
-      captureScreenshot(viewer).then(imgSrc => {
+      captureScreenshot(viewer).then((imgSrc) => {
         if (props.downloadAutomatically) {
           const link = document.createElement('a')
           link.download = props.screenshotName || t('vc.navigation.print.screenshot')
@@ -136,26 +136,27 @@ export default defineComponent({
         if (props.printAutomatically || props.showPrintView) {
           if (props.showPrintView) {
             showPrintView(imgSrc)
-          } else if (props.printAutomatically) {
+          }
+          else if (props.printAutomatically) {
             print(imgSrc)
           }
         }
 
         const listener = getInstanceListener(instance, 'printEvt')
-        listener &&
-          ctx.emit('printEvt', {
-            type: 'capture',
-            image: imgSrc,
-            status: 'end'
-          })
+        listener
+        && ctx.emit('printEvt', {
+          type: 'capture',
+          image: imgSrc,
+          status: 'end'
+        })
       })
     }
 
-    const print = image => {
+    const print = (image) => {
       create(true, true, image)
     }
 
-    const showPrintView = image => {
+    const showPrintView = (image) => {
       create(false, false, image)
     }
 
@@ -175,10 +176,10 @@ export default defineComponent({
         credits: getCredits(viewer),
         printWindow: iframe ? iframe.contentWindow : undefined,
         title: t('vc.navigation.print.printViewTitle'),
-        readyCallback: windowToPrint => {
+        readyCallback: (windowToPrint) => {
           if (printAutomatically) {
             printWindow(windowToPrint)
-              .catch(e => {
+              .catch((e) => {
                 commonState.logger.warn(e)
               })
               .then(() => {
@@ -191,7 +192,7 @@ export default defineComponent({
               })
           }
         },
-        closeCallback: windowToPrint => {
+        closeCallback: (windowToPrint) => {
           if (hidden) {
             creatingPrintView.value = false
           }
@@ -203,14 +204,14 @@ export default defineComponent({
       }
     }
 
-    const getCredits = viewer => {
+    const getCredits = (viewer) => {
       const credits = viewer.scene.frameState.creditDisplay._currentFrameCredits.screenCredits.values.concat(
         viewer.scene.frameState.creditDisplay._currentFrameCredits.lightboxCredits.values
       )
       return credits.map(credit => credit.html)
     }
 
-    const onTooltipBeforeShow = e => {
+    const onTooltipBeforeShow = (e) => {
       if (creatingPrintView.value) {
         e.cancel = true
       }
@@ -239,7 +240,8 @@ export default defineComponent({
               () => h('strong', null, (isPlainObject(props.tooltip) && props.tooltip.tip) || t('vc.navigation.print.printTip'))
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -271,7 +273,8 @@ export default defineComponent({
           child
         )
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -279,7 +282,7 @@ export default defineComponent({
 })
 
 export type VcPrintEmits = typeof emits
-export type VcPrintProps = {
+export interface VcPrintProps {
   /**
    * Specify the position of the VcPrint.
    * Default value: top-right

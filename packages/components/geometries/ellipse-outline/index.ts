@@ -6,23 +6,24 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\ellipse-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
 import {
   center,
+  ellipsoid,
+  extrudedHeight,
+  granularity,
+  height,
+  numberOfVerticalLines,
+  rotation,
   semiMajorAxis,
   semiMinorAxis,
-  ellipsoid,
-  height,
-  extrudedHeight,
-  rotation,
-  stRotation,
-  granularity,
-  numberOfVerticalLines
+  stRotation
 } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const ellipseOutlineGeometryProps = {
   ...center,
   ...semiMajorAxis,
@@ -49,7 +50,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryEllipseOutlineProps = {
+export interface VcGeometryEllipseOutlineProps {
   /**
    * The ellipse's center point in the fixed frame.
    */

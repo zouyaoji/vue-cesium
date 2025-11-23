@@ -1,9 +1,10 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { usePrimitives } from '@vue-cesium/composables'
-import { modelMatrix, customShader, clock, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { clock, customShader, enableMouseEvent, modelMatrix } from '@vue-cesium/utils/cesium-props'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const voxelPromitiveProps = {
   provider: {
@@ -28,7 +29,7 @@ export default defineComponent({
   }
 })
 
-export type VcPrimitiveVoxelProps = {
+export interface VcPrimitiveVoxelProps {
   /**
    * The voxel provider that supplies the primitive with tile data.
    */

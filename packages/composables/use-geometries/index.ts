@@ -1,3 +1,4 @@
+import type { VcGeometryInstanceRef } from '@vue-cesium/components'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
@@ -6,10 +7,9 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-geometries\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import useCommon from '../use-common'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { VcGeometryInstanceRef } from '@vue-cesium/components'
+import useCommon from '../use-common'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state

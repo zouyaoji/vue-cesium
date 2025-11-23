@@ -1,16 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, reactive, computed, VNode } from 'vue'
-import { measurementsProps, defaultOptions, VcMeasurementsProps } from './defaultProps'
-import { camelize } from '@vue-cesium/utils/util'
-import { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
-import VcMeasurementDistance from './distance'
-import VcMeasurementPolyline from './polyline'
-import VcMeasurementHorizontal from './horizontal'
-import VcMeasurementVertical from './vertical'
-import VcMeasurementHeight from './height'
-import VcMeasurementPoint from './point'
-import VcMeasurementArea from './area'
-import VcMeasurementRectangle from './rectangle'
-import VcMeasurementRegular from './regular'
+import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
 import type {
   MeasurementActionCmpRef,
   VcComponentDistanceMeasurementOpts,
@@ -21,10 +9,24 @@ import type {
   VcRegularMeasurementOpts
 } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
+import type { VcMeasurementsProps } from './defaultProps'
 import { useLocale } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import { isEqual, cloneDeep, merge } from 'lodash-es'
+import { camelize } from '@vue-cesium/utils/util'
+import { cloneDeep, isEqual, merge } from 'lodash-es'
+import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import VcMeasurementArea from './area'
+import { defaultOptions, measurementsProps } from './defaultProps'
+import VcMeasurementDistance from './distance'
+import VcMeasurementHeight from './height'
+import VcMeasurementHorizontal from './horizontal'
+import VcMeasurementPoint from './point'
+import VcMeasurementPolyline from './polyline'
+import VcMeasurementRectangle from './rectangle'
+import VcMeasurementRegular from './regular'
+import VcMeasurementVertical from './vertical'
 
 const emits = {
   ...drawingEmit,
@@ -40,7 +42,7 @@ const emits = {
 export default defineComponent({
   name: 'VcMeasurements',
   props: measurementsProps,
-  emits: emits,
+  emits,
   setup(props: VcMeasurementsProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -197,21 +199,21 @@ export default defineComponent({
 })
 
 export {
-  VcMeasurementDistance,
-  VcMeasurementPolyline,
-  VcMeasurementHorizontal,
-  VcMeasurementVertical,
-  VcMeasurementHeight,
-  VcMeasurementPoint,
+  measurementsProps,
   VcMeasurementArea,
+  VcMeasurementDistance,
+  VcMeasurementHeight,
+  VcMeasurementHorizontal,
+  VcMeasurementPoint,
+  VcMeasurementPolyline,
   VcMeasurementRectangle,
   VcMeasurementRegular,
-  measurementsProps
+  VcMeasurementVertical
 }
 
 export type { VcMeasurementsProps } from './defaultProps'
 export type VcMeasurementsEmits = typeof emits
-export type VcMeasurementsSlots = {
+export interface VcMeasurementsSlots {
   /**
    * body slot content of the component
    */

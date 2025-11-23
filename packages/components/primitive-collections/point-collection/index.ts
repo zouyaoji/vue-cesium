@@ -1,13 +1,13 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import type { PropType, VNode, WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcPointProps } from '../point'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { cloneDeep, differenceBy } from 'lodash-unified'
-import { modelMatrix, debugShowBoundingVolume, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
+import { blendOption, debugShowBoundingVolume, enableMouseEvent, modelMatrix, show } from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
-import { VcPointProps } from '../point'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const pointCollectionProps = {
   ...modelMatrix,
@@ -57,21 +57,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyPoint = pointCollection._pointPrimitives.find(v => v && v.id === modify.oldOptions.id)
-              modifyPoint &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyPoint[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyPoint
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyPoint[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePoints: Array<Cesium.PointPrimitive> = []
@@ -80,7 +81,7 @@ export default defineComponent({
               deletePoint && deletePoints.push(deletePoint)
             }
 
-            deletePoints.forEach(v => {
+            deletePoints.forEach((v) => {
               pointCollection.remove(v)
             })
 
@@ -131,7 +132,7 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionPointProps = {
+export interface VcCollectionPointProps {
   /**
    * The point blending option. The default is used for rendering both opaque and translucent points. However, if either all of the points are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x.
    */

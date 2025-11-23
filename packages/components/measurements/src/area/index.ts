@@ -1,21 +1,5 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-06-24 16:56:24
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
- */
-import type { ComputedRef, PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
-import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import { MeasureUnits } from '@vue-cesium/shared'
-import type { VcGeometryPolylineProps } from '../../../geometries'
-import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import {
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type {
   MeasurementDecimals,
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
@@ -25,7 +9,23 @@ import {
   VcEditorOpts,
   VcPolylineDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:23
+ * @LastEditTime: 2022-06-24 16:56:24
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
+ */
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcMeasurementArea',
@@ -53,7 +53,7 @@ export default defineComponent({
   }
 })
 
-export type VcMeasurementAreaProps = {
+export interface VcMeasurementAreaProps {
   /**
    * Specify whether to respond to mouse pick events.
    */

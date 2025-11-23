@@ -1,17 +1,4 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-06-24 16:55:11
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
- */
-import { defineComponent, PropType, Ref } from 'vue'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import {
+import type {
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
   VcDrawingMouseEvt,
@@ -20,7 +7,21 @@ import {
   VcEditorOpts,
   VcPointDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcLabelProps, VcPointProps } from '../../../primitive-collections'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:22
+ * @LastEditTime: 2022-06-24 16:55:11
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
+ */
+import type { PropType, Ref } from 'vue'
+import type { VcLabelProps, VcPointProps } from '../../../primitive-collections'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcDrawingPoint',
@@ -37,7 +38,7 @@ export default defineComponent({
   }
 })
 
-export type VcDrawingPointProps = {
+export interface VcDrawingPointProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -100,7 +101,7 @@ export type VcDrawingPointProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

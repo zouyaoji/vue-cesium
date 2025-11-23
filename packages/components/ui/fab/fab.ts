@@ -1,13 +1,13 @@
-import { h, defineComponent, ref, computed, provide, ComponentPublicInstance } from 'vue'
-import type { VNode, ExtractPropTypes } from 'vue'
+import type { LooseDictionary } from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, VNode } from 'vue'
 import useModelToggle, { useModelToggleEmits } from '@vue-cesium/composables/private/use-model-toggle'
-import { hSlot, hMergeSlot } from '@vue-cesium/utils/private/render'
 import { fabKey } from '@vue-cesium/utils/config'
-import useFab from './use-fab'
+import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
+import { computed, defineComponent, h, provide, ref } from 'vue'
 import VcBtn from '../btn'
 import VcIcon from '../icon'
 import defaultProps from './defaultProps'
-import { LooseDictionary } from '@vue-cesium/utils/types'
+import useFab from './use-fab'
 
 export const fabProps = defaultProps
 export default defineComponent({
@@ -34,16 +34,16 @@ export default defineComponent({
 
     const classes = computed(
       () =>
-        'vc-fab z-fab row inline justify-center' +
-        ` vc-fab--align-${props.verticalActionsAlign} ${formClass.value}` +
-        (showing.value === true ? ' vc-fab--opened' : ' vc-fab--closed')
+        `vc-fab z-fab row inline justify-center`
+        + ` vc-fab--align-${props.verticalActionsAlign} ${formClass.value}${
+          showing.value === true ? ' vc-fab--opened' : ' vc-fab--closed'}`
     )
 
     const actionClass = computed(
       () =>
-        'vc-fab__actions flex no-wrap inline' +
-        ` vc-fab__actions--${props.direction}` +
-        ` vc-fab__actions--${showing.value === true ? 'opened' : 'closed'}`
+        'vc-fab__actions flex no-wrap inline'
+        + ` vc-fab__actions--${props.direction}`
+        + ` vc-fab__actions--${showing.value === true ? 'opened' : 'closed'}`
     )
 
     const iconHolderClass = computed(() => 'vc-fab__icon-holder ' + ` vc-fab__icon-holder--${showing.value === true ? 'opened' : 'closed'}`)
@@ -58,8 +58,8 @@ export default defineComponent({
     function getTriggerContent() {
       const child: Array<VNode> = []
 
-      props.hideIcon !== true &&
-        child.push(h('div', { class: iconHolderClass.value }, [getIcon('icon', 'icon'), getIcon('active-icon', 'activeIcon')]))
+      props.hideIcon !== true
+      && child.push(h('div', { class: iconHolderClass.value }, [getIcon('icon', 'icon'), getIcon('active-icon', 'activeIcon')]))
 
       if (props.label !== '' || slots.label !== void 0) {
         child[labelProps.value.action](h('div', labelProps.value.data, slots.label !== void 0 ? slots.label(slotScope.value) : [props.label]))
@@ -90,21 +90,21 @@ export default defineComponent({
           h(
             VcBtn,
             {
-              ref: triggerRef,
-              class: formClass.value,
+              'ref': triggerRef,
+              'class': formClass.value,
               ...props,
-              noWrap: true,
-              stack: props.stacked,
-              align: void 0,
-              icon: void 0,
-              label: void 0,
-              noCaps: true,
-              fab: true,
-              flat: props.flat,
-              size: props.size,
+              'noWrap': true,
+              'stack': props.stacked,
+              'align': void 0,
+              'icon': void 0,
+              'label': void 0,
+              'noCaps': true,
+              'fab': true,
+              'flat': props.flat,
+              'size': props.size,
               'aria-expanded': showing.value === true ? 'true' : 'false',
               'aria-haspopup': 'true',
-              onClick: toggle
+              'onClick': toggle
             },
             getTriggerContent
           ),
@@ -122,105 +122,105 @@ export interface VcFabProps {
    * Define the button HTML DOM type.
    * Default value: a
    */
-  type?: 'a' | 'submit' | 'button' | 'reset' | undefined
+  'type'?: 'a' | 'submit' | 'button' | 'reset' | undefined
   /**
    * Use 'outline' design for Fab button.
    */
-  outline?: boolean | undefined
+  'outline'?: boolean | undefined
   /**
    * Use 'push' design for Fab button.
    */
-  push?: boolean | undefined
+  'push'?: boolean | undefined
   /**
    * Use 'flat' design for Fab button.
    */
-  flat?: boolean | undefined
+  'flat'?: boolean | undefined
   /**
    * Remove shadow.
    */
-  unelevated?: boolean | undefined
+  'unelevated'?: boolean | undefined
   /**
    * Apply custom padding (vertical [horizontal]); Size in CSS units, including unit name or standard size name (none|xs|sm|md|lg|xl); Also removes the min width and height when set.
    */
-  padding?: string | undefined
+  'padding'?: string | undefined
   /**
    * Color name for component from the css color palette.
    */
-  color?: string | undefined
+  'color'?: string | undefined
   /**
    * Overrides text color (if needed); Color name from the css color palette.
    */
-  textColor?: string | undefined
+  'textColor'?: string | undefined
   /**
    * Apply the glossy effect over the button.
    */
-  glossy?: boolean | undefined
+  'glossy'?: boolean | undefined
   /**
    * Display label besides the FABs, as external content.
    */
-  externalLabel?: boolean | undefined
+  'externalLabel'?: boolean | undefined
   /**
    * The label that will be shown when Fab is extended.
    */
-  label?: string | number | undefined
+  'label'?: string | number | undefined
   /**
    * Position of the label around the icon.
    */
-  labelPosition?: 'top' | 'right' | 'bottom' | 'left' | undefined
+  'labelPosition'?: 'top' | 'right' | 'bottom' | 'left' | undefined
   /**
    * Hide the label; Useful for animation purposes where you toggle the visibility of the label.
    */
-  hideLabel?: boolean | undefined
+  'hideLabel'?: boolean | undefined
   /**
    * Class definitions to be attributed to the label container.
    */
-  labelClass?: any[] | string | any | undefined
+  'labelClass'?: any[] | string | any | undefined
   /**
    * Style definitions to be attributed to the label container.
    */
-  labelStyle?: any[] | string | any | undefined
+  'labelStyle'?: any[] | string | any | undefined
   /**
    * Apply a rectangle aspect to the FAB.
    */
-  square?: boolean | undefined
+  'square'?: boolean | undefined
   /**
    * Put component in disabled mode.
    */
-  disable?: boolean | undefined
+  'disable'?: boolean | undefined
   /**
    * Tabindex HTML attribute value.
    */
-  tabindex?: number | string | undefined
+  'tabindex'?: number | string | undefined
   /**
    * Controls state of fab actions (showing/hidden); Works best with v-model directive, otherwise use along listening to 'update:modelValue' event.
    */
-  modelValue?: boolean
+  'modelValue'?: boolean
   /**
    * Icon name following VueCesium convention; Make sure you have the icon library installed unless you are using 'img:' prefix.
    */
-  icon?: string | undefined
+  'icon'?: string | undefined
   /**
    * Icon name following VueCesium convention; Make sure you have the icon library installed unless you are using 'img:' prefix.
    */
-  activeIcon?: string | undefined
+  'activeIcon'?: string | undefined
   /**
    * Hide the icon (don't use any).
    */
-  hideIcon?: boolean | undefined
+  'hideIcon'?: boolean | undefined
   /**
    * Direction to expand Fab Actions to.
    * Default value: right
    */
-  direction?: 'up' | 'right' | 'down' | 'left' | undefined
+  'direction'?: 'up' | 'right' | 'down' | 'left' | undefined
   /**
    * The side of the Fab where Fab Actions will expand (only when direction is 'up' or 'down').
    * Default value: center
    */
-  verticalActionsAlign?: 'left' | 'center' | 'right' | undefined
+  'verticalActionsAlign'?: 'left' | 'center' | 'right' | undefined
   /**
    * By default, Fab Actions are hidden when user navigates to another route and this prop disables this behavior.
    */
-  persistent?: boolean | undefined
+  'persistent'?: boolean | undefined
   /**
    * Emitted when fab actions are shown/hidden; Captured by v-model directive.
    * @param value New state (showing/hidden)
@@ -230,38 +230,38 @@ export interface VcFabProps {
    * Emitted after component has triggered show()
    * @param evt JS event object
    */
-  onShow?: (evt: LooseDictionary) => void
+  'onShow'?: (evt: LooseDictionary) => void
   /**
    * Emitted when component triggers show() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeShow?: (evt: LooseDictionary) => void
+  'onBeforeShow'?: (evt: LooseDictionary) => void
   /**
    * Emitted after component has triggered hide()
    * @param evt JS event object
    */
-  onHide?: (evt: LooseDictionary) => void
+  'onHide'?: (evt: LooseDictionary) => void
   /**
    * Emitted when component triggers hide() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeHide?: (evt: LooseDictionary) => void
+  'onBeforeHide'?: (evt: LooseDictionary) => void
 }
 
 export interface VcFabSlots {
   /**
    * This is where VcFabActions may go into
    */
-  default: () => VNode[]
+  'default': () => VNode[]
   /**
    * Slot specifically designed for a VcTooltip
    */
-  tooltip: () => VNode[]
+  'tooltip': () => VNode[]
   /**
    * Slot for icon shown when FAB is closed; Suggestion: VcIcon
    * @param scope
    */
-  icon: (scope: {
+  'icon': (scope: {
     /**
      * FAB is opened
      */
@@ -281,7 +281,7 @@ export interface VcFabSlots {
    * Slot for label
    * @param scope
    */
-  label: (scope: {
+  'label': (scope: {
     /**
      * FAB is opened
      */

@@ -9,7 +9,7 @@
 import { getCesiumColor, getCesiumValue } from '@vue-cesium/utils/util'
 import VcBaseMaterialProperty from './VcBaseMaterialProperty'
 
-export type VcScanLineMaterialPropertyOptions = {
+export interface VcScanLineMaterialPropertyOptions {
   color?: Cesium.Color
   speed?: number
   globalAlpha?: number
@@ -43,12 +43,12 @@ export default class VcScanLineMaterialProperty extends VcBaseMaterialProperty {
   }
 
   equals(other: VcScanLineMaterialProperty) {
-    const reData =
-      this === other ||
-      (other instanceof VcScanLineMaterialProperty &&
-        Cesium.Property['equals'](this.color, other.color) &&
-        this.speed === other.speed &&
-        this.globalAlpha === other.globalAlpha)
+    const reData
+      = this === other
+        || (other instanceof VcScanLineMaterialProperty
+          && Cesium.Property['equals'](this.color, other.color)
+          && this.speed === other.speed
+          && this.globalAlpha === other.globalAlpha)
     return reData
   }
 }

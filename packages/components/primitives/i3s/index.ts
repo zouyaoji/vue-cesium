@@ -1,10 +1,11 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import type { VcPrimitiveTilesetProps } from '../tileset'
 import { usePrimitives } from '@vue-cesium/composables'
-import { url, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { enableMouseEvent, show, url } from '@vue-cesium/utils/cesium-props'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
-import { VcPrimitiveTilesetProps } from '../tileset'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const i3sDataProviderProps = {
   ...url,
@@ -35,7 +36,7 @@ export default defineComponent({
   }
 })
 
-export type VcPrimitiveI3sDataProviderProps = {
+export interface VcPrimitiveI3sDataProviderProps {
   /**
    * The url of the I3S dataset.
    */

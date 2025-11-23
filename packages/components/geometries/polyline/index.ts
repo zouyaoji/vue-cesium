@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polyline\index.ts
  */
-import { VcCartesian3Array, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcCartesian3Array, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { positions, width, colors, arcType, granularity, vertexFormat, ellipsoid } from '@vue-cesium/utils/cesium-props'
+import { arcType, colors, ellipsoid, granularity, positions, vertexFormat, width } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const polylineGeometryProps = {
   ...positions,
   ...width,
@@ -39,7 +40,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolylineProps = {
+export interface VcGeometryPolylineProps {
   /**
    * An array of VcCartesian3Array defining the positions in the polyline as a line strip
    */

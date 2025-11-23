@@ -6,24 +6,25 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polygon\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
 import {
-  polygonHierarchy,
-  height,
-  extrudedHeight,
-  vertexFormat,
-  stRotation,
-  ellipsoid,
-  granularity,
-  perPositionHeight,
-  closeTop,
+  arcType,
   closeBottom,
-  arcType
+  closeTop,
+  ellipsoid,
+  extrudedHeight,
+  granularity,
+  height,
+  perPositionHeight,
+  polygonHierarchy,
+  stRotation,
+  vertexFormat
 } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const polygonGeometryProps = {
   ...polygonHierarchy,
   ...height,
@@ -51,7 +52,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonProps = {
+export interface VcGeometryPolygonProps {
   /**
    * A polygon hierarchy that can include holes.
    */

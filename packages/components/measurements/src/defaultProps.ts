@@ -1,14 +1,21 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2023-02-09 17:59:27
- * @LastEditors: XIAOLIJUN
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
- */
-import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
+import type {
+  VcComponentDistanceMeasurementOpts,
+  VcDrawingActiveEvt,
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcHorizontalMeasurementOpts,
+  VcMeasurementOpts,
+  VcPointDrawing,
+  VcPolylineDrawing,
+  VcPolylineMeasurementOpts,
+  VcRegularMeasurementOpts,
+  VcSegmentDrawing
+} from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
-import { MeasureUnits } from '@vue-cesium/shared'
+import type { VcLabelProps } from '../../primitive-collections'
+import type { VcFabProps } from '../../ui'
 import {
   actionOptions,
   circleDrawingActionDefault,
@@ -24,23 +31,16 @@ import {
   segmentDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
-import type { VcFabProps } from '../../ui'
-import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import type { VcLabelProps } from '../../primitive-collections'
-import type {
-  VcComponentDistanceMeasurementOpts,
-  VcDrawingActiveEvt,
-  VcDrawingDrawEvt,
-  VcDrawingEditorEvt,
-  VcDrawingMouseEvt,
-  VcHorizontalMeasurementOpts,
-  VcMeasurementOpts,
-  VcPointDrawing,
-  VcPolylineDrawing,
-  VcPolylineMeasurementOpts,
-  VcRegularMeasurementOpts,
-  VcSegmentDrawing
-} from '@vue-cesium/utils/drawing-types'
+import { MeasureUnits } from '@vue-cesium/shared'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-13 09:21:13
+ * @LastEditTime: 2023-02-09 17:59:27
+ * @LastEditors: XIAOLIJUN
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
+ */
+import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 
 const distanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-distance'
@@ -322,9 +322,9 @@ export const measurementType = [
   'regular',
   'circle'
 ]
-const isValidMeasurementType = (measurements: string[]) => {
+function isValidMeasurementType(measurements: string[]) {
   let flag = true
-  measurements.forEach(measurement => {
+  measurements.forEach((measurement) => {
     if (!measurementType.includes(measurement)) {
       console.error(`VueCesium: unknown measurement type: ${measurement}`)
       flag = false
@@ -445,32 +445,32 @@ const measurementsProps = {
 const defaultOptions = getDefaultOptionByProps<VcMeasurementsProps>(measurementsProps)
 
 export {
-  measurementsProps,
+  areaMeasurementActionDefault,
+  areaMeasurementDefault,
+  circleMeasurementDefault,
+  componentDistanceMeasurementActionDefault,
+  componentDistanceMeasurementDefault,
   defaultOptions,
   distanceMeasurementActionDefault,
   distanceMeasurementDefault,
-  componentDistanceMeasurementActionDefault,
-  componentDistanceMeasurementDefault,
-  polylineMeasurementActionDefault,
-  polylineMeasurementDefault,
-  horizontalMeasurementActionDefault,
-  horizontalMeasurementDefault,
-  verticalMeasurementActionDefault,
-  verticalMeasurementDefault,
   heightMeasurementActionDefault,
   heightMeasurementDefault,
-  areaMeasurementActionDefault,
-  areaMeasurementDefault,
+  horizontalMeasurementActionDefault,
+  horizontalMeasurementDefault,
+  mainFabDefault,
+  measurementsProps,
   pointMeasurementActionDefault,
   pointMeasurementDefault,
+  polylineMeasurementActionDefault,
+  polylineMeasurementDefault,
   rectangleMeasurementActionDefault,
   rectangleMeasurementDefault,
   regularMeasurementDefault,
-  circleMeasurementDefault,
-  mainFabDefault
+  verticalMeasurementActionDefault,
+  verticalMeasurementDefault
 }
 
-export type VcMeasurementsProps = {
+export interface VcMeasurementsProps {
   /**
    * Specify the position of the VcMeasurements.
    * Default value: bottom-left
@@ -634,7 +634,7 @@ export type VcMeasurementsProps = {
    */
   onActiveEvt?: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

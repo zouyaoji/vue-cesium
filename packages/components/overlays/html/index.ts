@@ -1,13 +1,13 @@
-import type { CSSProperties, TeleportProps, PropType, WatchStopHandle, VNode } from 'vue'
-import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
 import type { VcCartesian2, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { $ } from '@vue-cesium/utils/private/vm'
+import type { CSSProperties, PropType, TeleportProps, VNode, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { position, pixelOffset, show } from '@vue-cesium/utils/cesium-props'
-import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import usePortal from '@vue-cesium/composables/private/use-portal'
+import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
+import { pixelOffset, position, show } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { $ } from '@vue-cesium/utils/private/vm'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref, watch } from 'vue'
 
 export const htmlOverlayProps = {
   ...position,
@@ -29,7 +29,7 @@ const emits = {
 export default defineComponent({
   name: 'VcOverlayHtml',
   props: htmlOverlayProps,
-  emits: emits,
+  emits,
   setup(props: VcOverlayHtmlProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -52,7 +52,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.position,
-        val => {
+        (val) => {
           position.value = makeCartesian3(val as any, $services.viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
         }
       )
@@ -61,7 +61,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.pixelOffset,
-        val => {
+        (val) => {
           offset.value = makeCartesian2(val) as Cesium.Cartesian2
         }
       )
@@ -70,7 +70,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           rootStyle.display = val ? 'block' : 'none'
         }
       )
@@ -108,8 +108,8 @@ export default defineComponent({
       if (position.value) {
         const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, {} as any)
         if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
-          rootStyle.left = canvasPosition.x + offset.value.x + 'px'
-          rootStyle.top = canvasPosition.y + offset.value.y + 'px'
+          rootStyle.left = `${canvasPosition.x + offset.value.x}px`
+          rootStyle.top = `${canvasPosition.y + offset.value.y}px`
 
           if (props.autoHidden && viewer.scene.mode !== Cesium.SceneMode.SCENE2D && viewer.scene.mode !== Cesium.SceneMode.MORPHING) {
             const cameraPosition = viewer.camera.position
@@ -119,14 +119,17 @@ export default defineComponent({
               cameraHeight += 1 * viewer.scene.globe.ellipsoid.maximumRadius
               if (Cesium.Cartesian3.distance(cameraPosition, position.value) > cameraHeight || !props.show) {
                 rootStyle.display = 'none'
-              } else {
+              }
+              else {
                 rootStyle.display = 'block'
               }
             }
-          } else {
+          }
+          else {
             rootStyle.display = 'block'
           }
-        } else if (!Cesium.defined(canvasPosition)) {
+        }
+        else if (!Cesium.defined(canvasPosition)) {
           rootStyle.display = 'none'
         }
 
@@ -146,28 +149,29 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: `vc-html-container${props.customClass ? ' ' + props.customClass : ''}`,
+            class: `vc-html-container${props.customClass ? ` ${props.customClass}` : ''}`,
             style: rootStyle,
-            onMouseenter: onMouseenter,
-            onMouseleave: onMouseleave,
-            onClick: onClick
+            onMouseenter,
+            onMouseleave,
+            onClick
           },
           hSlot(ctx.slots.default)
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
 
-    const onClick = evt => {
+    const onClick = (evt) => {
       ctx.emit('click', evt)
     }
 
-    const onMouseenter = evt => {
+    const onMouseenter = (evt) => {
       ctx.emit('mouseenter', evt)
     }
 
-    const onMouseleave = evt => {
+    const onMouseleave = (evt) => {
       ctx.emit('mouseleave', evt)
     }
 
@@ -178,7 +182,8 @@ export default defineComponent({
     const { showPortal, hidePortal, renderPortal } = usePortal(instance, rootRef, renderPortalContent)
     if (props.teleport && props.teleport.to && !props.teleport.disabled) {
       return renderPortal
-    } else {
+    }
+    else {
       return () => renderContent()
     }
   }
@@ -231,7 +236,7 @@ export interface VcOverlayHtmlProps {
 }
 
 export type VcOverlayHtmlRef = VcComponentPublicInstance<VcOverlayHtmlProps>
-export type VcOverlayHtmlSlots = {
+export interface VcOverlayHtmlSlots {
   /**
    * Slot for html element tag.
    */

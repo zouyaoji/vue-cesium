@@ -6,8 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\index.ts
  */
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-import { App } from 'vue'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import GraphicsBillboard from './billboard'
 import GraphicsBox from './box'
 import GraphicsCorridor from './corridor'
@@ -46,8 +46,8 @@ const components = [
   GraphicsWall
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -56,7 +56,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

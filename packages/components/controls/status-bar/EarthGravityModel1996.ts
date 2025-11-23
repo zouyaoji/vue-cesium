@@ -1,14 +1,11 @@
-interface EarthGravityModel1996 {
+class EarthGravityModel1996 {
   gridFileUrl: string
   data: unknown
   minimumHeight: number
   maximumHeight: number
-}
-
-class EarthGravityModel1996 {
   /**
    * The Earth Gravity Model 1996 (EGM96) geoid.
-   * @param {String} gridFileUrl The URL of the WW15MGH.DAC file.
+   * @param {string} gridFileUrl The URL of the WW15MGH.DAC file.
    */
   constructor(gridFileUrl) {
     this.gridFileUrl = gridFileUrl
@@ -23,7 +20,7 @@ class EarthGravityModel1996 {
   /**
    * Determines if this class will work in the current environment.  It will return false on older browsers without support
    * for typed arrays.
-   * @return {Boolean} True if this class may be used in this environment; otherwise, false.
+   * @return {boolean} True if this class may be used in this environment; otherwise, false.
    */
   isSupported() {
     return typeof Int16Array !== 'undefined' && typeof Uint8Array !== 'undefined'
@@ -31,20 +28,20 @@ class EarthGravityModel1996 {
 
   /**
    * Gets the height of EGM96 above the surface of the ellipsoid.
-   * @param {String} baseUrl The base URL for TerriaJS resources.
-   * @param {Number} longitude The longitude.
-   * @param {Number} latitude The latitude
-   * @return {Promise|Number} A promise, that, when it results The height of mean sea level above the ellipsoid at the specified location.  Negative numbers indicate that mean sea level
+   * @param {string} baseUrl The base URL for TerriaJS resources.
+   * @param {number} longitude The longitude.
+   * @param {number} latitude The latitude
+   * @return {Promise | number} A promise, that, when it results The height of mean sea level above the ellipsoid at the specified location.  Negative numbers indicate that mean sea level
    *                  is below the ellipsoid.
    */
   getHeight(longitude, latitude) {
-    return getHeightData(this).then(function (data) {
+    return getHeightData(this).then((data) => {
       return getHeightFromData(data, longitude, latitude)
     })
   }
 
   getHeights(cartographicArray) {
-    return getHeightData(this).then(function (data) {
+    return getHeightData(this).then((data) => {
       for (let i = 0; i < cartographicArray.length; ++i) {
         const cartographic = cartographicArray[i]
         cartographic.height = getHeightFromData(data, cartographic.longitude, cartographic.latitude)
@@ -83,7 +80,8 @@ function getHeightFromData(data, longitude, latitude) {
   let recordIndex = (720 * (CesiumMath.PI_OVER_TWO - latitude)) / Math.PI
   if (recordIndex < 0) {
     recordIndex = 0
-  } else if (recordIndex > 720) {
+  }
+  else if (recordIndex > 720) {
     recordIndex = 720
   }
 
@@ -91,7 +89,8 @@ function getHeightFromData(data, longitude, latitude) {
   let heightIndex = (1440 * longitude) / CesiumMath.TWO_PI
   if (heightIndex < 0) {
     heightIndex = 0
-  } else if (heightIndex > 1440) {
+  }
+  else if (heightIndex > 1440) {
     heightIndex = 1440
   }
 
@@ -115,13 +114,15 @@ function getHeightFromData(data, longitude, latitude) {
 function getHeightValue(data, recordIndex, heightIndex) {
   if (recordIndex > 720) {
     recordIndex = 720
-  } else if (recordIndex < 0) {
+  }
+  else if (recordIndex < 0) {
     recordIndex = 0
   }
 
   if (heightIndex > 1439) {
     heightIndex -= 1440
-  } else if (heightIndex < 0) {
+  }
+  else if (heightIndex < 0) {
     heightIndex += 1440
   }
 

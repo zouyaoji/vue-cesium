@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,13 +7,15 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import ImageryProviderAmap from './amap'
 import ImageryProviderArcgis from './arcgis/imagery'
+import TerrainProviderArcgis from './arcgis/terrain'
 import ImageryProviderBaidu from './baidu'
 import ImageryProviderBing from './bingmaps'
-import ImageryProviderGoogle from './google-earth'
+import TerrainProviderCesium from './cesium-terrain'
 import ImageryProviderGoogle2D from './google-2d'
+import ImageryProviderGoogle from './google-earth'
 import ImageryProviderGrid from './grid'
 import ImageryProviderIon from './ion'
 import ImageryProviderMapbox from './mapbox-style'
@@ -21,18 +24,15 @@ import ImageryProviderSingletile from './single-tile'
 import ImageryProviderSupermap from './supermap'
 import ImageryProviderTencent from './tencent'
 import ImageryProviderTianditu from './tianditu/imagery'
+import TerrainProviderTianditu from './tianditu/terrain'
 import ImageryProviderTileCoordinates from './tile-coordinates'
 import ImageryProviderTms from './tile-map-service'
+
 import ImageryProviderTiledcache from './tiled-cache'
 import ImageryProviderUrltemplate from './url-template'
+import TerrainProviderVrTheworld from './vr-theworld'
 import ImageryProviderWms from './wms'
 import ImageryProviderWmts from './wmts'
-
-import TerrainProviderCesium from './cesium-terrain'
-import TerrainProviderArcgis from './arcgis/terrain'
-import TerrainProviderVrTheworld from './vr-theworld'
-import TerrainProviderTianditu from './tianditu/terrain'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
   ImageryProviderAmap,
@@ -62,8 +62,8 @@ const components = [
   TerrainProviderTianditu
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -72,7 +72,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

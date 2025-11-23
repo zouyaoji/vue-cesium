@@ -1,20 +1,5 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-06-24 16:58:54
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
- */
-import type { ComputedRef, PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
-import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import type { VcGeometryPolylineProps } from '../../../geometries'
-import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import {
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type {
   MeasurementDecimals,
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
@@ -24,8 +9,23 @@ import {
   VcEditorOpts,
   VcSegmentDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { MeasureUnits } from '@vue-cesium/shared'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-26 11:14:41
+ * @LastEditTime: 2022-06-24 16:58:54
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
+ */
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcMeasurementRegular',
@@ -54,7 +54,7 @@ export default defineComponent({
   }
 })
 
-export type VcMeasurementRegularProps = {
+export interface VcMeasurementRegularProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -170,7 +170,7 @@ export type VcMeasurementRegularProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**

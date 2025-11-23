@@ -51,14 +51,14 @@ class CustomPrimitive {
     switch (this.commandType) {
       case 'Draw': {
         const vertexArray = Cesium.VertexArray.fromGeometry({
-          context: context,
+          context,
           geometry: this.geometry,
           attributeLocations: this.attributeLocations,
           bufferUsage: Cesium.BufferUsage.STATIC_DRAW
         })
 
         const shaderProgram = Cesium.ShaderProgram.fromCache({
-          context: context,
+          context,
           attributeLocations: this.attributeLocations,
           vertexShaderSource: this.vertexShaderSource,
           fragmentShaderSource: this.fragmentShaderSource
@@ -67,13 +67,13 @@ class CustomPrimitive {
         const renderState = Cesium.RenderState.fromCache(this.rawRenderState)
         return new Cesium.DrawCommand({
           owner: this,
-          vertexArray: vertexArray,
+          vertexArray,
           primitiveType: this.primitiveType,
           uniformMap: this.uniformMap,
           modelMatrix: Cesium.Matrix4.IDENTITY,
-          shaderProgram: shaderProgram,
+          shaderProgram,
           framebuffer: this.framebuffer,
-          renderState: renderState,
+          renderState,
           pass: Cesium.Pass.OPAQUE
         })
       }
@@ -92,7 +92,7 @@ class CustomPrimitive {
   setGeometry(context, geometry) {
     this.geometry = geometry
     const vertexArray = Cesium.VertexArray.fromGeometry({
-      context: context,
+      context,
       geometry: this.geometry,
       attributeLocations: this.attributeLocations,
       bufferUsage: Cesium.BufferUsage.STATIC_DRAW

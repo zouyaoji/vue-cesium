@@ -1,3 +1,4 @@
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
@@ -6,16 +7,16 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
  */
-import { defineComponent, getCurrentInstance, PropType, ref, h, createCommentVNode, WatchStopHandle, onUnmounted, watch } from 'vue'
-import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
-import { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
-import { makeColor } from '@vue-cesium/utils/cesium-helpers'
-import { VcPrimitiveClassification } from '@vue-cesium/components/primitives'
-import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
+import type { PropType, WatchStopHandle } from 'vue'
 import { VcGeometryPolygon } from '@vue-cesium/components/geometries'
-import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
+import { VcPrimitiveClassification } from '@vue-cesium/components/primitives'
 import { useCommon } from '@vue-cesium/composables'
+import { makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch } from 'vue'
 
 const emits = {
   ...commonEmits,
@@ -46,7 +47,7 @@ export default defineComponent({
     },
     ...polygonHierarchy
   },
-  emits: emits,
+  emits,
   setup(props: VcAnalysisFloodProps, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalysisFlood'
@@ -77,7 +78,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.minHeight,
-        val => {
+        (val) => {
           extrudedHeight.value = val
         }
       )
@@ -113,13 +114,15 @@ export default defineComponent({
         if (extrudedHeight.value <= props.maxHeight) {
           extrudedHeight.value += props.speed
           stoped = false
-        } else {
+        }
+        else {
           const listener = getInstanceListener(instance, 'stop')
           listener && emit('stop', childRef.value)
           stoped = true
           if (props.loop) {
             extrudedHeight.value = props.minHeight
-          } else {
+          }
+          else {
             flooding.value = false
           }
         }
@@ -181,7 +184,8 @@ export default defineComponent({
                 })
             )
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }

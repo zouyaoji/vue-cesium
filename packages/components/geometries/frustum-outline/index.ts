@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\frustum-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { frustum, origin, orientation } from '@vue-cesium/utils/cesium-props'
+import { frustum, orientation, origin } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const frustumOutlineGeometryProps = {
   ...frustum,
   ...origin,
@@ -31,7 +32,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryFrustumOutlineProps = {
+export interface VcGeometryFrustumOutlineProps {
   /**
    * The frustum.
    */

@@ -1,9 +1,10 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { usePrimitives } from '@vue-cesium/composables'
-import { clock, show, modelMatrix, shadows, maximumMemoryUsage, tileStyle, clippingPlanes, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { clippingPlanes, clock, enableMouseEvent, maximumMemoryUsage, modelMatrix, shadows, show, tileStyle } from '@vue-cesium/utils/cesium-props'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const timeDynamicPointCloudProps = {
   ...clock,
@@ -42,7 +43,7 @@ export default defineComponent({
   }
 })
 
-export type VcPrimitiveTimeDynamicPointCloudProps = {
+export interface VcPrimitiveTimeDynamicPointCloudProps {
   /**
    * A Clock instance that is used when determining the value for the time dimension.
    */

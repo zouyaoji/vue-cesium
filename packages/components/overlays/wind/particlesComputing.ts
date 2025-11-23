@@ -1,8 +1,8 @@
-import * as Util from './util'
-import calculateSpeedFrag from './glsl/calculateSpeed.frag'
-import updatePositionFrag from './glsl/updatePosition.frag'
-import postProcessingPositionFrag from './glsl/postProcessingPosition.frag'
 import CustomPrimitive from './customPrimitive'
+import calculateSpeedFrag from './glsl/calculateSpeed.frag'
+import postProcessingPositionFrag from './glsl/postProcessingPosition.frag'
+import updatePositionFrag from './glsl/updatePosition.frag'
+import * as Util from './util'
 
 class ParticlesComputing {
   windTextures: any
@@ -19,7 +19,7 @@ class ParticlesComputing {
 
   createWindTextures(context, data) {
     const windTextureOptions = {
-      context: context,
+      context,
       width: data.dimensions.lon,
       height: data.dimensions.lat * data.dimensions.lev,
       pixelFormat: !context?.webgl2 ? Cesium.PixelFormat.LUMINANCE : Cesium.PixelFormat.RED,
@@ -40,7 +40,7 @@ class ParticlesComputing {
 
   createParticlesTextures(context, particleSystemOptions, viewerParameters) {
     const particlesTextureOptions = {
-      context: context,
+      context,
       width: particleSystemOptions.particlesTextureSize,
       height: particleSystemOptions.particlesTextureSize,
       pixelFormat: Cesium.PixelFormat.RGBA,
@@ -78,7 +78,7 @@ class ParticlesComputing {
   }
 
   destroyParticlesTextures() {
-    Object.keys(this.particlesTextures).forEach(key => {
+    Object.keys(this.particlesTextures).forEach((key) => {
       this.particlesTextures[key].destroy()
     })
   }
@@ -124,37 +124,37 @@ class ParticlesComputing {
       calculateSpeed: new CustomPrimitive({
         commandType: 'Compute',
         uniformMap: {
-          U: function () {
+          U() {
             return that.windTextures.U
           },
-          V: function () {
+          V() {
             return that.windTextures.V
           },
-          currentParticlesPosition: function () {
+          currentParticlesPosition() {
             return that.particlesTextures.currentParticlesPosition
           },
-          dimension: function () {
+          dimension() {
             return dimension
           },
-          minimum: function () {
+          minimum() {
             return minimum
           },
-          maximum: function () {
+          maximum() {
             return maximum
           },
-          interval: function () {
+          interval() {
             return interval
           },
-          uSpeedRange: function () {
+          uSpeedRange() {
             return uSpeedRange
           },
-          vSpeedRange: function () {
+          vSpeedRange() {
             return vSpeedRange
           },
-          pixelSize: function () {
+          pixelSize() {
             return viewerParameters.pixelSize
           },
-          speedFactor: function () {
+          speedFactor() {
             return particleSystemOptions.speedFactor
           }
         },
@@ -162,7 +162,7 @@ class ParticlesComputing {
           sources: [calculateSpeedFragText]
         }),
         outputTexture: this.particlesTextures.particlesSpeed,
-        preExecute: function () {
+        preExecute() {
           // swap textures before binding
           const temp = that.particlesTextures.previousParticlesPosition
           that.particlesTextures.previousParticlesPosition = that.particlesTextures.currentParticlesPosition
@@ -177,10 +177,10 @@ class ParticlesComputing {
       updatePosition: new CustomPrimitive({
         commandType: 'Compute',
         uniformMap: {
-          currentParticlesPosition: function () {
+          currentParticlesPosition() {
             return that.particlesTextures.currentParticlesPosition
           },
-          particlesSpeed: function () {
+          particlesSpeed() {
             return that.particlesTextures.particlesSpeed
           }
         },
@@ -188,7 +188,7 @@ class ParticlesComputing {
           sources: [updatePositionFragText]
         }),
         outputTexture: this.particlesTextures.nextParticlesPosition,
-        preExecute: function () {
+        preExecute() {
           // keep the outputTexture up to date
           that.primitives.updatePosition.commandToExecute.outputTexture = that.particlesTextures.nextParticlesPosition
         }
@@ -197,26 +197,26 @@ class ParticlesComputing {
       postProcessingPosition: new CustomPrimitive({
         commandType: 'Compute',
         uniformMap: {
-          nextParticlesPosition: function () {
+          nextParticlesPosition() {
             return that.particlesTextures.nextParticlesPosition
           },
-          particlesSpeed: function () {
+          particlesSpeed() {
             return that.particlesTextures.particlesSpeed
           },
-          lonRange: function () {
+          lonRange() {
             return viewerParameters.lonRange
           },
-          latRange: function () {
+          latRange() {
             return viewerParameters.latRange
           },
-          randomCoefficient: function () {
+          randomCoefficient() {
             const randomCoefficient = Math.random()
             return randomCoefficient
           },
-          dropRate: function () {
+          dropRate() {
             return particleSystemOptions.dropRate
           },
-          dropRateBump: function () {
+          dropRateBump() {
             return particleSystemOptions.dropRateBump
           }
         },
@@ -224,7 +224,7 @@ class ParticlesComputing {
           sources: [postProcessingPositionFragText]
         }),
         outputTexture: this.particlesTextures.postProcessingPosition,
-        preExecute: function () {
+        preExecute() {
           // keep the outputTexture up to date
           that.primitives.postProcessingPosition.commandToExecute.outputTexture = that.particlesTextures.postProcessingPosition
         }

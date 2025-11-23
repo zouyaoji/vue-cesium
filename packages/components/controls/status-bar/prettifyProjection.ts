@@ -6,7 +6,7 @@ import proj4 from 'proj4'
 function prettifyProjection(longitude, latitude, proj4Projection, proj4longlat, projectionUnits) {
   const zone = 1 + Math.floor((longitude + 180) / 6)
 
-  const projection = proj4Projection + ' +zone=' + zone + (latitude < 0 ? ' +south' : '')
+  const projection = `${proj4Projection} +zone=${zone}${latitude < 0 ? ' +south' : ''}`
 
   const projPoint = proj4(proj4longlat, projection, [longitude, latitude])
 

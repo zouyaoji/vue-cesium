@@ -1,3 +1,11 @@
+import type {
+  AnyObject,
+  ProjectionTransforms,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,33 +15,25 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\url-template\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  AnyObject,
-  ProjectionTransforms,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcReadyObject,
-  VcRectangle
-} from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
-  url,
-  subdomains,
   credit,
-  minimumLevel,
-  maximumLevel,
-  rectangle,
-  tilingScheme,
   ellipsoid,
-  tileWidth,
-  tileHeight,
-  getFeatureInfoFormats,
   enablePickFeatures,
-  projectionTransforms
+  getFeatureInfoFormats,
+  maximumLevel,
+  minimumLevel,
+  projectionTransforms,
+  rectangle,
+  subdomains,
+  tileHeight,
+  tileWidth,
+  tilingScheme,
+  url
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const urltemplateImageryProviderProps = {
   ...url,
@@ -70,7 +70,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderUrltemplateProps = {
+export interface VcImageryProviderUrltemplateProps {
   /**
    * The URL template to use to request tiles.
    */

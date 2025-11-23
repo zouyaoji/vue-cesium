@@ -18,3 +18,7 @@ es
 lib
 
 .eslintcache
+tmp
+docs/.vitepress/cache
+
+docs

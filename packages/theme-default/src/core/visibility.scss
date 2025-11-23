@@ -134,7 +134,8 @@ textarea {
   z-index: $z-max !important;
 }
 
-$platforms: desktop, mobile, native-mobile, cordova, capacitor, electron, touch, within-iframe, platform-ios, platform-android;
+$platforms:
+  desktop, mobile, native-mobile, cordova, capacitor, electron, touch, within-iframe, platform-ios, platform-android;
 
 @each $type in $platforms {
   body:not(.#{$type}) .#{$type}-only,
@@ -251,7 +252,9 @@ body {
     pointer-events: none;
     border-radius: inherit;
     opacity: 0;
-    transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), opacity 0.4s cubic-bezier(0.25, 0.8, 0.5, 1);
+    transition:
+      background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
+      opacity 0.4s cubic-bezier(0.25, 0.8, 0.5, 1);
 
     &:before,
     &:after {
@@ -263,7 +266,9 @@ body {
       height: 100%;
       opacity: 0;
       border-radius: inherit;
-      transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), opacity 0.6s cubic-bezier(0.25, 0.8, 0.5, 1);
+      transition:
+        background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
+        opacity 0.6s cubic-bezier(0.25, 0.8, 0.5, 1);
     }
 
     &:before {

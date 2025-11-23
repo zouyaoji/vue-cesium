@@ -7,9 +7,10 @@
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\particleSystem.ts
  */
 
+import type { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
 import ParticlesComputing from './particlesComputing'
 import ParticlesRendering from './particlesRendering'
-import { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
+
 class ParticleSystem {
   context: any
   data: VcWindData
@@ -35,11 +36,11 @@ class ParticleSystem {
 
   canvasResize(context) {
     this.particlesComputing.destroyParticlesTextures()
-    Object.keys(this.particlesComputing.windTextures).forEach(key => {
+    Object.keys(this.particlesComputing.windTextures).forEach((key) => {
       this.particlesComputing.windTextures[key].destroy()
     })
 
-    Object.keys(this.particlesRendering.framebuffers).forEach(key => {
+    Object.keys(this.particlesRendering.framebuffers).forEach((key) => {
       this.particlesRendering.framebuffers[key].destroy()
     })
 
@@ -62,7 +63,7 @@ class ParticleSystem {
       pass: Cesium.Pass.OPAQUE
     })
 
-    Object.keys(this.particlesRendering.framebuffers).forEach(key => {
+    Object.keys(this.particlesRendering.framebuffers).forEach((key) => {
       clearCommand.framebuffer = this.particlesRendering.framebuffers[key]
       clearCommand.execute(this.context)
     })
@@ -79,7 +80,7 @@ class ParticleSystem {
       this.particlesRendering.primitives.segments.geometry = geometry
       const vertexArray = Cesium.VertexArray.fromGeometry({
         context: this.context,
-        geometry: geometry,
+        geometry,
         attributeLocations: this.particlesRendering.primitives.segments.attributeLocations,
         bufferUsage: Cesium.BufferUsage.STATIC_DRAW
       })
@@ -93,14 +94,14 @@ class ParticleSystem {
       maxParticlesChanged = true
     }
 
-    Object.keys(particleSystemOptions).forEach(key => {
+    Object.keys(particleSystemOptions).forEach((key) => {
       this.particleSystemOptions[key] = particleSystemOptions[key]
     })
     this.refreshParticles(maxParticlesChanged)
   }
 
   applyViewerParameters(viewerParameters) {
-    Object.keys(viewerParameters).forEach(key => {
+    Object.keys(viewerParameters).forEach((key) => {
       this.viewerParameters[key] = viewerParameters[key]
     })
     this.refreshParticles(false)

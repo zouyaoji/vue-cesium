@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,9 +7,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import Drawings from './src'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 Drawings.install = (app: App): void => {
   app.component(Drawings.name, Drawings)

@@ -1,3 +1,13 @@
+import type {
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts,
+  VcPointDrawing
+} from '@vue-cesium/utils/drawing-types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
@@ -7,21 +17,11 @@
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\pin\index.ts
  */
 import type { PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
+import type { VcBillboardProps, VcLabelProps, VcPointProps } from '../../../primitive-collections'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
-import type { VcBillboardProps, VcLabelProps, VcPointProps } from '../../../primitive-collections'
 import { drawingEmit } from '@vue-cesium/utils/emits'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import {
-  VcDrawingDrawEvt,
-  VcDrawingEditorEvt,
-  VcDrawingMouseEvt,
-  VcDrawingPreRenderDatas,
-  VcDrawTipOpts,
-  VcEditorOpts,
-  VcPointDrawing
-} from '@vue-cesium/utils/drawing-types'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcDrawingPin',
@@ -39,7 +39,7 @@ export default defineComponent({
   }
 })
 
-export type VcDrawingPinProps = {
+export interface VcDrawingPinProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -110,7 +110,7 @@ export type VcDrawingPinProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

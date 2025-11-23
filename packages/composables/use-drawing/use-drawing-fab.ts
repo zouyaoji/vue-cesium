@@ -6,21 +6,23 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-fab.ts
  */
-import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
+
+import type { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import type { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
+import type { ComputedRef, CSSProperties, VNode } from 'vue'
+import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
-import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
-import { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode, ComputedRef, nextTick } from 'vue'
-import usePosition from '../private/use-position'
+import { vcKey } from '@vue-cesium/utils/config'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { vcKey } from '@vue-cesium/utils/config'
+import { createCommentVNode, h, nextTick, provide, reactive, ref } from 'vue'
+import usePosition from '../private/use-position'
 import { useLocale } from '../use-locale'
-import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 
 export default function (
   props,
@@ -50,7 +52,7 @@ export default function (
   const primitiveCollection = ref(null)
   let visibilityState: VisibilityState
 
-  let selectedDrawingActionInstance: VcDrawingActionInstance = undefined
+  let selectedDrawingActionInstance: VcDrawingActionInstance
 
   /**
    *
@@ -159,10 +161,10 @@ export default function (
       visibilityState.restore(scene)
       if (defined(pickObj)) {
         if (
-          pickObj instanceof Cesium3DTileFeature ||
-          pickObj.primitive instanceof Cesium3DTileset ||
-          pickObj.primitive instanceof Model ||
-          (Cesium.S3MTilesLayer && pickObj.primitive instanceof Cesium.S3MTilesLayer)
+          pickObj instanceof Cesium3DTileFeature
+          || pickObj.primitive instanceof Cesium3DTileset
+          || pickObj.primitive instanceof Model
+          || (Cesium.S3MTilesLayer && pickObj.primitive instanceof Cesium.S3MTilesLayer)
         ) {
           position = scene.pickPosition(windowPosition, cartesianScratch)
           if (defined(position)) {
@@ -240,7 +242,8 @@ export default function (
     if (selectedDrawingActionInstance?.name === drawingOption?.name) {
       selectedDrawingActionInstance = undefined
       drawingActionInstances.value[index].actionOpts.color = restoreColor.value || 'red'
-    } else {
+    }
+    else {
       nextTick(() => {
         const cmp = drawingActionInstances.value[index].cmpRef.value
         cmp.startNew()
@@ -269,10 +272,11 @@ export default function (
     return drawingActionInstances.value.findIndex(v => v.name === drawingName)
   }
 
-  const onUpdateFab = value => {
+  const onUpdateFab = (value) => {
     if (value) {
       activate()
-    } else {
+    }
+    else {
       if (selectedDrawingActionInstance) {
         toggleAction(selectedDrawingActionInstance)
       }
@@ -283,7 +287,7 @@ export default function (
   }
 
   const clearAll = () => {
-    drawingActionInstances.value.forEach(drawingActionOpts => {
+    drawingActionInstances.value.forEach((drawingActionOpts) => {
       drawingActionOpts.cmpRef.value?.clear()
     })
 
@@ -339,7 +343,7 @@ export default function (
     if (canRender.value) {
       const fabActionChildren: Array<VNode> = []
       const drawingChildren: Array<VNode> = []
-      drawingActionInstances.value.forEach(drawingActionInstance => {
+      drawingActionInstances.value.forEach((drawingActionInstance) => {
         fabActionChildren.push(
           h(
             VcFabAction,
@@ -363,50 +367,50 @@ export default function (
           )
         )
 
-        drawingActionInstance.cmp &&
-          drawingChildren.push(
-            h(drawingActionInstance.cmp, {
-              ref: drawingActionInstance.cmpRef,
-              editable: props.editable,
-              clampToGround: props.clampToGround,
-              mode: props.mode,
-              onDrawEvt: (e, viewer) => {
-                emit('drawEvt', e, viewer)
-              },
-              onEditorEvt: (e, viewer) => {
-                emit('editorEvt', e, viewer)
-              },
-              onMouseEvt: (e, viewer) => {
-                emit('mouseEvt', e, viewer)
-              },
-              ...drawingActionInstance.cmpOpts
-            })
-          )
+        drawingActionInstance.cmp
+        && drawingChildren.push(
+          h(drawingActionInstance.cmp, {
+            ref: drawingActionInstance.cmpRef,
+            editable: props.editable,
+            clampToGround: props.clampToGround,
+            mode: props.mode,
+            onDrawEvt: (e, viewer) => {
+              emit('drawEvt', e, viewer)
+            },
+            onEditorEvt: (e, viewer) => {
+              emit('editorEvt', e, viewer)
+            },
+            onMouseEvt: (e, viewer) => {
+              emit('mouseEvt', e, viewer)
+            },
+            ...drawingActionInstance.cmpOpts
+          })
+        )
       })
 
-      drawingActionInstances.value.length &&
-        fabActionChildren.push(
-          h(
-            VcFabAction,
-            {
-              style: {
-                background: clearActionOpts.color,
-                color: clearActionOpts.textColor
-              },
-              class: 'vc-draw-button vc-draw-clear',
-              ...clearActionOpts,
-              onClick: clearAll
+      drawingActionInstances.value.length
+      && fabActionChildren.push(
+        h(
+          VcFabAction,
+          {
+            style: {
+              background: clearActionOpts.color,
+              color: clearActionOpts.textColor
             },
-            () =>
-              h(
-                VcTooltip,
-                {
-                  ...clearActionOpts.tooltip
-                },
-                () => h('strong', null, clearActionOpts.tooltip.tip || t(`vc.${cmpName}.clear.tip`))
-              )
-          )
+            class: 'vc-draw-button vc-draw-clear',
+            ...clearActionOpts,
+            onClick: clearAll
+          },
+          () =>
+            h(
+              VcTooltip,
+              {
+                ...clearActionOpts.tooltip
+              },
+              () => h('strong', null, clearActionOpts.tooltip.tip || t(`vc.${cmpName}.clear.tip`))
+            )
         )
+      )
 
       const root: Array<VNode> = []
       if (mounted.value) {
@@ -415,7 +419,7 @@ export default function (
             'div',
             {
               ref: containerRef,
-              class: 'vc-drawings-container ' + positionState.classes.value,
+              class: `vc-drawings-container ${positionState.classes.value}`,
               style: containerStyle
             },
             ctx.slots.body !== void 0
@@ -423,9 +427,9 @@ export default function (
               : h(
                   VcFab,
                   {
-                    ref: fabRef,
-                    class: 'vc-draw-button',
-                    style: {
+                    'ref': fabRef,
+                    'class': 'vc-draw-button',
+                    'style': {
                       background: mainFabOpts.color,
                       color: mainFabOpts.textColor
                     },
@@ -461,7 +465,8 @@ export default function (
       )
 
       return root
-    } else {
+    }
+    else {
       return createCommentVNode('v-if')
     }
   }

@@ -1,3 +1,5 @@
+import type { ComponentPublicInstance } from 'vue'
+import Spinner from './spinner'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -17,10 +19,9 @@ import SpinnerOval from './spinner-oval'
 import SpinnerPuff from './spinner-puff'
 import SpinnerRings from './spinner-rings'
 import SpinnerTail from './spinner-tail'
-import Spinner from './spinner'
-import { ComponentPublicInstance } from 'vue'
 
 export {
+  Spinner,
   SpinnerBall,
   SpinnerBars,
   SpinnerDots,
@@ -31,8 +32,7 @@ export {
   SpinnerOval,
   SpinnerPuff,
   SpinnerRings,
-  SpinnerTail,
-  Spinner
+  SpinnerTail
 }
 
 export interface VcSpinnerProps {

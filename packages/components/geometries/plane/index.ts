@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\plane\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const planeGeometryProps = {
   ...vertexFormat
 }
@@ -29,7 +30,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPlaneProps = {
+export interface VcGeometryPlaneProps {
   /**
    * The vertex attributes to be computed.
    */

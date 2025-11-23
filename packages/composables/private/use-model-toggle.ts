@@ -1,7 +1,8 @@
-import { watch, nextTick, onMounted, getCurrentInstance, Ref, ComputedRef } from 'vue'
+import type { AnyFunction } from '@vue-cesium/utils/types'
+import type { ComputedRef, Ref } from 'vue'
 
-import { vmHasRouter, vmHasListener } from '@vue-cesium/utils/private/vm'
-import { AnyFunction } from '@vue-cesium/utils/types'
+import { vmHasListener, vmHasRouter } from '@vue-cesium/utils/private/vm'
+import { getCurrentInstance, nextTick, onMounted, watch } from 'vue'
 
 export const useModelToggleProps = {
   modelValue: {
@@ -37,7 +38,8 @@ export default function ({
   function toggle(evt) {
     if (showing?.value === true) {
       hide(evt)
-    } else {
+    }
+    else {
       show(evt)
     }
   }
@@ -79,7 +81,8 @@ export default function ({
 
     if (handleShow !== void 0) {
       handleShow(evt)
-    } else {
+    }
+    else {
       emit('show', evt)
     }
   }
@@ -117,7 +120,8 @@ export default function ({
 
     if (handleHide !== void 0) {
       handleHide(evt)
-    } else {
+    }
+    else {
       emit('hide', evt)
     }
   }
@@ -127,7 +131,8 @@ export default function ({
       if (vmHasListener(vm, 'onUpdate:modelValue') === true) {
         emit('update:modelValue', false)
       }
-    } else if ((val === true) !== showing?.value) {
+    }
+    else if ((val === true) !== showing?.value) {
       const fn = val === true ? processShow : processHide
       fn(payload)
     }
@@ -146,10 +151,10 @@ export default function ({
     )
   }
 
-  processOnMount === true &&
-    onMounted(() => {
-      processModelChange(props.modelValue)
-    })
+  processOnMount === true
+  && onMounted(() => {
+    processModelChange(props.modelValue)
+  })
 
   // expose public methods
   const publicMethods = { show, hide, toggle }

@@ -36,7 +36,7 @@ const styles = `
   }
 `
 
-const createPrintView = options => {
+function createPrintView(options) {
   const { printWindow = window.open(), closeCallback, title } = options
   if (closeCallback) {
     printWindow.addEventListener('unload', () => {

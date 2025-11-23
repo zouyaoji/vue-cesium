@@ -1,0 +1,76 @@
+{
+  "name": "vue-cesium",
+  "version": "3.0.10",
+  "description": "Vue 3.x components for CesiumJS.",
+  "author": "zouyaoji <370681295@qq.com>",
+  "homepage": "https://github.com/zouyaoji/vue-cesium#readme",
+  "keywords": [
+    "vue-cesium",
+    "cesium",
+    "webgl",
+    "gis",
+    "vue",
+    "webgis"
+  ],
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "require": "./lib/index.js",
+      "import": "./es/index.mjs"
+    },
+    "./global": {
+      "types": "./global.d.ts"
+    },
+    "./es": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./lib": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js"
+    },
+    "./es/*.mjs": {
+      "types": "./es/*.d.ts",
+      "import": "./es/*.mjs"
+    },
+    "./es/*": {
+      "types": ["./es/*.d.ts", "./es/*/index.d.ts"],
+      "import": "./es/*.mjs"
+    },
+    "./lib/*.js": {
+      "types": "./lib/*.d.ts",
+      "require": "./lib/*.js"
+    },
+    "./lib/*": {
+      "types": ["./lib/*.d.ts", "./lib/*/index.d.ts"],
+      "require": "./lib/*.js"
+    },
+    "./*": "./*"
+  },
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "style": "dist/index.css",
+  "unpkg": "dist/index.full.js",
+  "jsdelivr": "dist/index.full.js",
+  "sideEffects": ["dist/*", "theme-default/*.css", "theme-default/src/*.scss", "es/components/*/style/*", "lib/components/*/style/*"],
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
+    "@turf/circle": "^6.5.0",
+    "@vue/shared": "^3.2.47",
+    "@zouyaoji/heatmap.js": "^2.0.8",
+    "compare-versions": "^6.1.1",
+    "echarts": "^6.0.0",
+    "kdbush": "^4.0.2",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "lodash-unified": "^1.0.3",
+    "mitt": "^3.0.1",
+    "proj4": "^2.20.2",
+    "urijs": "^1.19.11"
+  },
+  "browserslist": ["> 1%", "not ie 11", "not op_mini all"]
+}

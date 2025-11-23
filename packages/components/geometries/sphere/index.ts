@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\sphere\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { radius, stackPartitions, slicePartitions, vertexFormat } from '@vue-cesium/utils/cesium-props'
+import { radius, slicePartitions, stackPartitions, vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const sphereGeometryProps = {
   ...radius,
   ...stackPartitions,
@@ -32,7 +33,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometrySphereProps = {
+export interface VcGeometrySphereProps {
   /**
    * The radius of the sphere.
    */

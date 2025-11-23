@@ -1,32 +1,33 @@
-import { watch, ref, onMounted, onUnmounted, nextTick, reactive, VNode } from 'vue'
-import mitt, { Emitter } from 'mitt'
-import { useLocale } from '@vue-cesium/composables'
-import defaultProps from './defaultProps'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { dirname, isEmptyObj, hasOwn } from '@vue-cesium/utils/util'
-import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import type {
-  VcComponentInternalInstance,
-  VcCamera,
-  VcReadyObject,
-  VcComponentPublicInstance,
   AnyObject,
-  VcMittEvents,
-  VcTerrainProvider,
-  VcDatasource,
-  ViewerWidgetResizedEvent,
-  VcContextOptions,
-  VcViewerProvider,
+  DCConfig,
   Mars3dConfig,
-  DCConfig
+  VcCamera,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcContextOptions,
+  VcDatasource,
+  VcMittEvents,
+  VcReadyObject,
+  VcTerrainProvider,
+  VcViewerProvider,
+  ViewerWidgetResizedEvent
 } from '@vue-cesium/utils/types'
-import { compareCesiumVersion, setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
-import useLog from '@vue-cesium/composables/private/use-log'
-import { useEvents } from '@vue-cesium/composables'
-import { getMars3dConfig as getDefaultMars3dConfig } from './loadUtil'
-import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
-import { VcSkeletonProps } from '../../ui/skeleton'
+import type { Emitter } from 'mitt'
+import type { VNode } from 'vue'
+import type { VcSkeletonProps } from '../../ui/skeleton'
+import { useEvents, useLocale } from '@vue-cesium/composables'
 import useVcExtension from '@vue-cesium/composables/private/use-vc-extension'
+import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
+import { logger } from '@vue-cesium/utils'
+import { compareCesiumVersion, setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
+import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { dirname, hasOwn, isEmptyObj } from '@vue-cesium/utils/util'
+import mitt from 'mitt'
+import { nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import defaultProps from './defaultProps'
+import { getMars3dConfig as getDefaultMars3dConfig } from './loadUtil'
 
 export const viewerProps = defaultProps
 
@@ -45,13 +46,11 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   const globalConfig = useGlobalConfig()
 
-  const logger = useLog(vcInstance)
-
   vcInstance.mounted = false
   vcInstance.vcMitt = vcMitt
   vcInstance.cesiumClass = 'Viewer'
   vcInstance.children = []
-  const eventsState = useEvents(props, vcInstance, logger)
+  const eventsState = useEvents(props, vcInstance)
 
   const layout = reactive({
     toolbarContainerRC: undefined,
@@ -71,7 +70,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   // watch
   watch(
     () => props.selectionIndicator,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, SelectionIndicator } = Cesium
       let selectionIndicatorContainer
@@ -80,7 +79,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(selectionIndicatorContainer)
         viewer.selectionIndicator.destroy()
         viewer._selectionIndicator = undefined
-      } else if (!defined(viewer.selectionIndicator) || viewer.selectionIndicator.isDestroyed()) {
+      }
+      else if (!defined(viewer.selectionIndicator) || viewer.selectionIndicator.isDestroyed()) {
         selectionIndicatorContainer = document.createElement('div')
         selectionIndicatorContainer.className = 'cesium-viewer-selectionIndicatorContainer'
         viewerElement?.appendChild(selectionIndicatorContainer)
@@ -98,7 +98,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.infoBox,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, InfoBox } = Cesium
       const events = ['cameraClicked', 'closeClicked']
@@ -110,7 +110,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(infoBoxContainer)
         viewer.infoBox.destroy()
         viewer._infoBox = undefined
-      } else if (!defined(viewer.infoBox) || viewer.infoBox.isDestroyed()) {
+      }
+      else if (!defined(viewer.infoBox) || viewer.infoBox.isDestroyed()) {
         infoBoxContainer = document.createElement('div')
         infoBoxContainer.className = 'cesium-viewer-infoBoxContainer'
         viewerElement?.appendChild(infoBoxContainer)
@@ -132,7 +133,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.geocoder,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const { defined, Geocoder } = Cesium
@@ -142,7 +143,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         toolbar?.removeChild(geocoderContainer)
         viewer.geocoder.destroy()
         viewer._geocoder = undefined
-      } else if (!defined(viewer.geocoder) || viewer.geocoder.isDestroyed()) {
+      }
+      else if (!defined(viewer.geocoder) || viewer.geocoder.isDestroyed()) {
         geocoderContainer = document.createElement('div')
         geocoderContainer.className = 'cesium-viewer-geocoderContainer'
         toolbar?.appendChild(geocoderContainer)
@@ -170,17 +172,18 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.homeButton,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const { defined, HomeButton } = Cesium
       if (defined(viewer.homeButton) && !viewer.homeButton.isDestroyed() && !val) {
         viewer.homeButton.destroy()
         viewer._homeButton = undefined
-      } else if (!defined(viewer.homeButton) || viewer.homeButton.isDestroyed()) {
+      }
+      else if (!defined(viewer.homeButton) || viewer.homeButton.isDestroyed()) {
         const homeButton = new HomeButton(toolbar!, viewer.scene)
         if (defined(viewer.geocoder)) {
-          viewer._eventHelper?.add(homeButton.viewModel.command.afterExecute, function () {
+          viewer._eventHelper?.add(homeButton.viewModel.command.afterExecute, () => {
             const viewModel = viewer.geocoder.viewModel
             viewModel.searchText = ''
             viewModel.isSearchInProgress && (viewModel as any).search()
@@ -200,14 +203,15 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.sceneModePicker,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const { defined, DeveloperError, SceneModePicker } = Cesium
       if (defined(viewer.sceneModePicker) && !viewer.sceneModePicker.isDestroyed() && !val) {
         viewer.sceneModePicker.destroy()
         viewer._sceneModePicker = undefined
-      } else if (!defined(viewer.sceneModePicker) || viewer.sceneModePicker.isDestroyed()) {
+      }
+      else if (!defined(viewer.sceneModePicker) || viewer.sceneModePicker.isDestroyed()) {
         if (props.sceneModePicker && props.scene3DOnly) {
           throw new DeveloperError('options.sceneModePicker is not available when options.scene3DOnly is set to true.')
         }
@@ -227,14 +231,15 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.projectionPicker,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const { defined, ProjectionPicker } = Cesium
       if (defined(viewer.projectionPicker) && !viewer.projectionPicker.isDestroyed() && !val) {
         viewer.projectionPicker.destroy()
         viewer._projectionPicker = undefined
-      } else if (!defined(viewer.projectionPicker) || viewer.projectionPicker.isDestroyed()) {
+      }
+      else if (!defined(viewer.projectionPicker) || viewer.projectionPicker.isDestroyed()) {
         const projectionPicker = new ProjectionPicker(toolbar!, viewer.scene)
         viewer._projectionPicker = projectionPicker
         resizeToolbar(toolbar, projectionPicker)
@@ -249,7 +254,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.baseLayerPicker,
-    async val => {
+    async (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const {
@@ -269,16 +274,17 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           compareCesiumVersion(Cesium.VERSION, '1.104')
             ? await Cesium.TileMapServiceImageryProvider.fromUrl(url)
             : new Cesium.TileMapServiceImageryProvider({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // eslint-disable-next-line ts/ban-ts-comment
+                // @ts-expect-error
                 url
               })
         )
         viewer.imageryLayers.lowerToBottom(baseLayer)
-      } else if (!defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
-        const createBaseLayerPicker =
-          (!Cesium.defined(viewer.scene.globe) || props.globe !== false) &&
-          (!Cesium.defined(viewer.baseLayerPicker) || props.baseLayerPicker !== false)
+      }
+      else if (!defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
+        const createBaseLayerPicker
+          = (!Cesium.defined(viewer.scene.globe) || props.globe !== false)
+            && (!Cesium.defined(viewer.baseLayerPicker) || props.baseLayerPicker !== false)
 
         if (createBaseLayerPicker && defined(props.imageryProvider)) {
           throw new DeveloperError(`options.imageryProvider is not available when using the BaseLayerPicker widget.
@@ -301,9 +307,9 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           const terrainProviderViewModels = props.terrainProviderViewModels ?? createDefaultTerrainProviderViewModels()
           const baseLayerPicker = new BaseLayerPicker(toolbar!, {
             globe: viewer.scene.globe,
-            imageryProviderViewModels: imageryProviderViewModels,
+            imageryProviderViewModels,
             selectedImageryProviderViewModel: imageryProviderViewModels[0],
-            terrainProviderViewModels: terrainProviderViewModels,
+            terrainProviderViewModels,
             selectedTerrainProviderViewModel: terrainProviderViewModels[0]
           })
 
@@ -326,25 +332,28 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.navigationHelpButton,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const { defined, NavigationHelpButton } = Cesium
       if (defined(viewer.navigationHelpButton) && !viewer.navigationHelpButton.isDestroyed() && !val) {
         viewer.navigationHelpButton.destroy()
         viewer._navigationHelpButton = undefined
-      } else if (!defined(viewer.navigationHelpButton) || viewer.navigationHelpButton.isDestroyed()) {
+      }
+      else if (!defined(viewer.navigationHelpButton) || viewer.navigationHelpButton.isDestroyed()) {
         let showNavHelp = true
         try {
           if (defined(window.localStorage)) {
             const hasSeenNavHelp = window.localStorage.getItem('cesium-hasSeenNavHelp')
             if (defined(hasSeenNavHelp) && Boolean(hasSeenNavHelp)) {
               showNavHelp = false
-            } else {
+            }
+            else {
               window.localStorage.setItem('cesium-hasSeenNavHelp', 'true')
             }
           }
-        } catch (e) {
+        }
+        catch (e) {
           //
         }
         const navigationHelpButton = new NavigationHelpButton({
@@ -364,7 +373,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.animation,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, Animation, AnimationViewModel } = Cesium
       let animationContainer
@@ -373,7 +382,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(animationContainer)
         viewer.animation.destroy()
         viewer._animation = undefined
-      } else if (!defined(viewer.animation) || viewer.animation.isDestroyed()) {
+      }
+      else if (!defined(viewer.animation) || viewer.animation.isDestroyed()) {
         animationContainer = document.createElement('div')
         animationContainer.className = 'cesium-viewer-animationContainer'
         viewerElement?.appendChild(animationContainer)
@@ -393,7 +403,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.timeline,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, Timeline } = Cesium
       let timelineContainer
@@ -402,12 +412,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(timelineContainer)
         viewer.timeline.destroy()
         viewer._timeline = undefined
-      } else if (!defined(viewer.timeline) || viewer.timeline.isDestroyed()) {
+      }
+      else if (!defined(viewer.timeline) || viewer.timeline.isDestroyed()) {
         timelineContainer = document.createElement('div')
         timelineContainer.className = 'cesium-viewer-timelineContainer'
         viewerElement?.appendChild(timelineContainer)
         const timeline = new Timeline(timelineContainer, viewer.clock)
-        timeline.makeLabel = time => {
+        timeline.makeLabel = (time) => {
           return localeDateTimeFormatter(time)
         }
         timeline.addEventListener?.('settime', onTimelineScrubfunction, false)
@@ -425,7 +436,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.fullscreenButton,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, FullscreenButton } = Cesium
       let fullscreenContainer
@@ -434,7 +445,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(fullscreenContainer)
         viewer.fullscreenButton.destroy()
         viewer._fullscreenButton = undefined
-      } else if (!defined(viewer.fullscreenButton) || viewer.fullscreenButton.isDestroyed()) {
+      }
+      else if (!defined(viewer.fullscreenButton) || viewer.fullscreenButton.isDestroyed()) {
         fullscreenContainer = document.createElement('div')
         fullscreenContainer.className = 'cesium-viewer-fullscreenContainer'
         viewerElement?.appendChild(fullscreenContainer)
@@ -452,7 +464,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.fullscreenElement,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       const { defined } = Cesium
       if (!defined(viewer.fullscreenButton)) {
@@ -466,7 +478,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.vrButton,
-    val => {
+    (val) => {
       const { viewer, viewerElement } = vcInstance
       const { defined, VRButton } = Cesium
       let vrContainer
@@ -475,7 +487,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         viewerElement?.removeChild(vrContainer)
         viewer.vrButton.destroy()
         viewer._vrButton = undefined
-      } else if (!defined(viewer.vrButton) || viewer.vrButton.isDestroyed()) {
+      }
+      else if (!defined(viewer.vrButton) || viewer.vrButton.isDestroyed()) {
         vrContainer = document.createElement('div')
         vrContainer.className = 'cesium-viewer-vrContainer'
         viewerElement?.appendChild(vrContainer)
@@ -498,14 +511,14 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.useDefaultRenderLoop,
-    val => {
+    (val) => {
       vcInstance.viewer.useDefaultRenderLoop = val
     }
   )
 
   watch(
     () => props.sceneMode,
-    val => {
+    (val) => {
       const { SceneMode } = Cesium
       if (SceneMode.COLUMBUS_VIEW === val || SceneMode.MORPHING === val || SceneMode.SCENE2D === val || SceneMode.SCENE3D === val) {
         vcInstance.viewer.scene.mode = val
@@ -515,35 +528,35 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.shouldAnimate,
-    val => {
+    (val) => {
       vcInstance.viewer.clock.shouldAnimate = val
     }
   )
 
   watch(
     () => props.terrainExaggeration,
-    val => {
+    (val) => {
       vcInstance.viewer._terrainExaggeration = val
     }
   )
 
   watch(
     () => props.shadows,
-    val => {
+    (val) => {
       vcInstance.viewer.scene.shadowMap.enabled = val
     }
   )
 
   watch(
     () => props.terrainProvider,
-    val => {
+    (val) => {
       val && (vcInstance.viewer.terrainProvider = val)
     }
   )
 
   watch(
     () => props.camera,
-    val => {
+    (val) => {
       setViewerCamera(vcInstance.viewer, val)
     },
     { deep: true }
@@ -565,7 +578,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.showCredit,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       ;(viewer.cesiumWidget.creditContainer as HTMLElement).style.display = val ? 'inline' : 'none'
       viewer.viewerWidgetResized.raiseEvent({
@@ -578,7 +591,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   watch(
     () => props.debugShowFramesPerSecond,
-    val => {
+    (val) => {
       const { viewer } = vcInstance
       viewer.scene.debugShowFramesPerSecond = val
     }
@@ -618,24 +631,25 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     const url = buildModuleUrl('Assets/Textures/NaturalEarthII')
     const options: AnyObject = {}
-    props &&
-      Object.keys(props).forEach(vueProp => {
-        if (props[vueProp] === undefined || props[vueProp] === null) {
-          return
-        }
-        options[vueProp] = props[vueProp]
-      })
+    props
+    && Object.keys(props).forEach((vueProp) => {
+      if (props[vueProp] === undefined || props[vueProp] === null) {
+        return
+      }
+      options[vueProp] = props[vueProp]
+    })
 
     options.fullscreenElement = isEmptyObj(options.fullscreenElement) ? $(viewerRef) : options.fullscreenElement
 
     if (compareCesiumVersion(Cesium.VERSION, '1.104')) {
-      options.baseLayer =
-        isEmptyObj(options.baseLayer) && options.baseLayer !== false
+      options.baseLayer
+        = isEmptyObj(options.baseLayer) && options.baseLayer !== false
           ? ImageryLayer.fromProviderAsync(TileMapServiceImageryProvider.fromUrl(url), {})
           : options.baseLayer
-    } else {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    }
+    else {
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       options.imageryProvider = isEmptyObj(options.imageryProvider) ? new TileMapServiceImageryProvider({ url }) : options.imageryProvider
     }
 
@@ -643,20 +657,24 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     if (props.viewerCreator) {
       viewer = props.viewerCreator(vcInstance, $(viewerRef), options)
-    } else {
+    }
+    else {
       if (globalThis.mars3d) {
         vcInstance.map = new mars3d.Map($(viewerRef).id, {
           scene: options,
           control: options
         })
         viewer = vcInstance.map?._viewer
-      } else if (globalThis.DC) {
+      }
+      else if (globalThis.DC) {
         vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
         viewer = vcInstance.dcViewer?.delegate
-      } else if (globalThis.XE) {
+      }
+      else if (globalThis.XE) {
         vcInstance.earth = new globalThis.XE.Earth($(viewerRef), options)
         viewer = vcInstance.earth?.czm.viewer
-      } else {
+      }
+      else {
         viewer = new Viewer($(viewerRef) as HTMLElement, options)
       }
     }
@@ -672,7 +690,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     if (compareCesiumVersion(Cesium.VERSION, '1.83')) {
       if (compareCesiumVersion(Cesium.VERSION, '1.116')) {
         viewer.scene.verticalExaggeration = options.verticalExaggeration || options.terrainExaggeration
-      } else {
+      }
+      else {
         viewer.scene.globe['terrainExaggeration'] = options.verticalExaggeration || options.terrainExaggeration
       }
     }
@@ -682,36 +701,37 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     defined(options.camera) && setViewerCamera(viewer, options.camera)
 
     const listener = getInstanceListener(vcInstance, 'update:camera')
-    listener &&
-      viewer.camera.changed.addEventListener(() => {
-        const cartographic = viewer.camera.positionCartographic
-        let cameraNew: VcCamera
-        if (hasOwn(options.camera.position, 'lng')) {
-          cameraNew = {
-            position: {
-              lng: CesiumMath.toDegrees(cartographic.longitude),
-              lat: CesiumMath.toDegrees(cartographic.latitude),
-              height: cartographic.height
-            },
-            heading: CesiumMath.toDegrees(viewer.camera.heading || 360),
-            pitch: CesiumMath.toDegrees(viewer.camera.pitch || -90),
-            roll: CesiumMath.toDegrees(viewer.camera.roll || 0)
-          }
-        } else {
-          cameraNew = {
-            position: {
-              x: viewer.camera.position.x,
-              y: viewer.camera.position.y,
-              z: viewer.camera.position.z
-            },
-            heading: viewer.camera.heading || 2 * Math.PI,
-            pitch: viewer.camera.pitch || -Math.PI / 2,
-            roll: viewer.camera.roll || 0
-          }
+    listener
+    && viewer.camera.changed.addEventListener(() => {
+      const cartographic = viewer.camera.positionCartographic
+      let cameraNew: VcCamera
+      if (hasOwn(options.camera.position, 'lng')) {
+        cameraNew = {
+          position: {
+            lng: CesiumMath.toDegrees(cartographic.longitude),
+            lat: CesiumMath.toDegrees(cartographic.latitude),
+            height: cartographic.height
+          },
+          heading: CesiumMath.toDegrees(viewer.camera.heading || 360),
+          pitch: CesiumMath.toDegrees(viewer.camera.pitch || -90),
+          roll: CesiumMath.toDegrees(viewer.camera.roll || 0)
         }
+      }
+      else {
+        cameraNew = {
+          position: {
+            x: viewer.camera.position.x,
+            y: viewer.camera.position.y,
+            z: viewer.camera.position.z
+          },
+          heading: viewer.camera.heading || 2 * Math.PI,
+          pitch: viewer.camera.pitch || -Math.PI / 2,
+          roll: viewer.camera.roll || 0
+        }
+      }
 
-        emit('update:camera', cameraNew)
-      })
+      emit('update:camera', cameraNew)
+    })
 
     if (defined(viewer.animation)) {
       viewer.animation.viewModel.dateFormatter = localeDateTimeFormatter as Cesium.AnimationViewModel.DateFormatter
@@ -719,17 +739,17 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
 
     if (defined(viewer.timeline)) {
-      viewer.timeline.makeLabel = time => {
+      viewer.timeline.makeLabel = (time) => {
         return localeDateTimeFormatter(time)
       }
       viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
     }
 
-    if (process.env.NODE_ENV !== 'production') {
-      if ((props as any).logo) {
-        logger.warn("'logo' is deprecated. Use `showCredit` prop instead. ")
-      }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   if ((props as any).logo) {
+    //     logger.warn('\'logo\' is deprecated. Use `showCredit` prop instead. ')
+    //   }
+    // }
 
     !props.showCredit && ((viewer.cesiumWidget.creditContainer as HTMLElement).style.display = 'none')
 
@@ -748,11 +768,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       Object.assign(readyObj, {
         earth: vcInstance.earth
       })
-    } else if (globalThis.mars3d) {
+    }
+    else if (globalThis.mars3d) {
       Object.assign(readyObj, {
         map: vcInstance.map
       })
-    } else if (globalThis.DC) {
+    }
+    else if (globalThis.DC) {
       Object.assign(readyObj, {
         dcViewer: vcInstance.dcViewer
       })
@@ -820,11 +842,14 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     if (globalThis.XE) {
       earth && earth.destroy()
-    } else if (globalThis.mars3d) {
+    }
+    else if (globalThis.mars3d) {
       map && map.destroy()
-    } else if (globalThis.DC) {
+    }
+    else if (globalThis.DC) {
       dcViewer && dcViewer.destroy()
-    } else {
+    }
+    else {
       viewer && viewer.destroy()
     }
 
@@ -834,13 +859,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       const scripts = document.getElementsByTagName('script')
       const removeScripts: Array<HTMLScriptElement | HTMLLinkElement> = []
       for (const script of scripts) {
-        script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
-        script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
+        script.src.includes('/Cesium.js') && removeScripts.push(script)
+        script.src.includes('/Workers/zlib.min.js') && removeScripts.push(script)
         if (globalThis.XE) {
-          script.src.indexOf('/rxjs.umd.min.js') > -1 && removeScripts.push(script)
-          script.src.indexOf('/XbsjCesium.js') > -1 && removeScripts.push(script)
-          script.src.indexOf('/viewerCesiumNavigationMixin.js') > -1 && removeScripts.push(script)
-          script.src.indexOf('/XbsjEarth.js') > -1 && removeScripts.push(script)
+          script.src.includes('/rxjs.umd.min.js') && removeScripts.push(script)
+          script.src.includes('/XbsjCesium.js') && removeScripts.push(script)
+          script.src.includes('/viewerCesiumNavigationMixin.js') && removeScripts.push(script)
+          script.src.includes('/XbsjEarth.js') && removeScripts.push(script)
         }
 
         loadLibs.includes(script.src) && !removeScripts.includes(script) && removeScripts.push(script)
@@ -851,7 +876,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         link.href.includes('Widgets/widgets.css') && !removeScripts.includes(link) && removeScripts.push(link)
         loadLibs.includes(link.href) && !removeScripts.includes(link) && removeScripts.push(link)
       }
-      removeScripts.forEach(script => {
+      removeScripts.forEach((script) => {
         script.parentNode && script.parentNode.removeChild(script)
       })
       globalThis.Cesium && (globalThis.Cesium = undefined!)
@@ -903,13 +928,14 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         for (let i = 0, len = arrInclude.length; i < len; i++) {
           const key = arrInclude[i]
           if (keys[key]) {
-            //规避重复引入lib
+            // 规避重复引入lib
             continue
           }
           keys[key] = true
           loadLibs.push(...libsConfig[key])
         }
-      } else if (dcConfig) {
+      }
+      else if (dcConfig) {
         loadLibs.push(cesiumPath)
         loadLibs.push(cesiumPath.replace('dc.min.js', 'dc.min.css'))
 
@@ -924,13 +950,16 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         if (dcConfig.echarts) {
           loadLibs.push(dcConfig.echarts)
         }
-      } else if (cesiumPath.includes('/dc.base.min.js')) {
+      }
+      else if (cesiumPath.includes('/dc.base.min.js')) {
         loadLibs.push(cesiumPath)
         loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js'))
         loadLibs.push(cesiumPath.replace('/dc.base.min.js', '/dc.core.min.js').replace('/dc.core.min.js', '/dc.core.min.css'))
-      } else if (cesiumPath.includes('/XbsjEarth.js')) {
+      }
+      else if (cesiumPath.includes('/XbsjEarth.js')) {
         loadLibs.push(cesiumPath)
-      } else {
+      }
+      else {
         loadLibs.push(cesiumPath)
         loadLibs.push(`${dirName}/Widgets/widgets.css`)
       }
@@ -944,11 +973,12 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       }
 
       const scriptLoadPromises: Array<Promise<unknown>> = []
-      secondaryLibs.forEach(url => {
-        const cssExpr = new RegExp('\\.css')
+      secondaryLibs.forEach((url) => {
+        const cssExpr = /\.css/
         if (cssExpr.test(url)) {
           scriptLoadPromises.push(loadLink(url))
-        } else {
+        }
+        else {
           scriptLoadPromises.push(loadScript(url))
         }
       })
@@ -974,12 +1004,14 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
               listener && emit('cesiumReady', globalThis.DC)
               return globalThis.Cesium
             })
-          } else {
+          }
+          else {
             const listener = getInstanceListener(vcInstance, 'cesiumReady')
             listener && emit('cesiumReady', globalThis.Cesium)
             return globalThis.Cesium
           }
-        } else if (globalThis.XE) {
+        }
+        else if (globalThis.XE) {
           // 兼容 cesiumlab earthsdk
           return globalThis.XE.ready().then(() => {
             // resolve(globalThis.Cesium)
@@ -987,7 +1019,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
             listener && emit('cesiumReady', globalThis.Cesium)
             return globalThis.Cesium
           })
-        } else if (globalThis.DC) {
+        }
+        else if (globalThis.DC) {
           // 兼容  dc-sdk
           if (compareCesiumVersion(globalThis.DC.VERSION, '3.0.0')) {
             return globalThis.DC.ready({
@@ -999,7 +1032,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
               listener && emit('cesiumReady', globalThis.DC)
               return globalThis.Cesium
             })
-          } else {
+          }
+          else {
             globalThis.DC.use(globalThis.DcCore.default || globalThis.DcCore)
             globalThis.DC.baseUrl = `${dirName}/resources/`
             globalThis.DC.ready(() => {
@@ -1011,16 +1045,18 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
             })
             return globalThis.Cesium
           }
-        } else {
+        }
+        else {
           reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
         }
       })
-    } else {
+    }
+    else {
       return Promise.resolve(globalThis.Cesium)
     }
   }
 
-  const loadScript = src => {
+  const loadScript = (src) => {
     const $script = document.createElement('script')
     $script.async = false
     $script.src = src
@@ -1032,7 +1068,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     })
   }
 
-  const loadLink = src => {
+  const loadLink = (src) => {
     const $link = document.createElement('link')
     $link.rel = 'stylesheet'
     $link.href = src
@@ -1044,49 +1080,53 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     })
   }
 
-  const onViewerWidgetResized = e => {
+  const onViewerWidgetResized = (e) => {
     const { viewer } = vcInstance
     const toolbarElement = viewer._toolbar as HTMLElement
     if (
-      toolbarElement !== void 0 &&
-      getComputedStyle(toolbarElement).visibility !== 'hidden' &&
-      getComputedStyle(toolbarElement).display !== 'none'
+      toolbarElement !== void 0
+      && getComputedStyle(toolbarElement).visibility !== 'hidden'
+      && getComputedStyle(toolbarElement).display !== 'none'
     ) {
       layout.toolbarContainerRC = toolbarElement.getBoundingClientRect()
-    } else {
+    }
+    else {
       layout.toolbarContainerRC = undefined
     }
 
     const bottomContainer = viewer.bottomContainer as HTMLElement
     if (
-      bottomContainer !== void 0 &&
-      getComputedStyle(bottomContainer).visibility !== 'hidden' &&
-      getComputedStyle(bottomContainer).display !== 'none'
+      bottomContainer !== void 0
+      && getComputedStyle(bottomContainer).visibility !== 'hidden'
+      && getComputedStyle(bottomContainer).display !== 'none'
     ) {
       layout.bottomContainerRC = bottomContainer.getBoundingClientRect()
-    } else {
+    }
+    else {
       layout.bottomContainerRC = undefined
     }
 
     const timelineContainer = viewer.timeline?.container as HTMLElement
     if (
-      timelineContainer !== void 0 &&
-      getComputedStyle(timelineContainer).visibility !== 'hidden' &&
-      getComputedStyle(timelineContainer).display !== 'none'
+      timelineContainer !== void 0
+      && getComputedStyle(timelineContainer).visibility !== 'hidden'
+      && getComputedStyle(timelineContainer).display !== 'none'
     ) {
       layout.timelineContainerRC = timelineContainer.getBoundingClientRect()
-    } else {
+    }
+    else {
       layout.timelineContainerRC = undefined
     }
 
     const animationContainer = viewer.animation?.container as HTMLElement
     if (
-      animationContainer !== void 0 &&
-      getComputedStyle(animationContainer).visibility !== 'hidden' &&
-      getComputedStyle(animationContainer).display !== 'none'
+      animationContainer !== void 0
+      && getComputedStyle(animationContainer).visibility !== 'hidden'
+      && getComputedStyle(animationContainer).display !== 'none'
     ) {
       layout.animationContainerRC = animationContainer.getBoundingClientRect()
-    } else {
+    }
+    else {
       layout.animationContainerRC = undefined
     }
 
@@ -1126,9 +1166,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     if (props.UTCOffset) {
       date = JulianDate.addMinutes(date, props.UTCOffset, new JulianDate())
       const offset = new Date().getTimezoneOffset() - props.UTCOffset
-      TZCode = offset === 0 ? 'UTC' : 'UTC' + '+' + -(offset / 60)
-    } else {
-      TZCode = new Date().getTimezoneOffset() === 0 ? 'UTC' : 'UTC' + '+' + -(new Date().getTimezoneOffset() / 60)
+      TZCode = offset === 0 ? 'UTC' : `UTC` + `+${-(offset / 60)}`
+    }
+    else {
+      TZCode = new Date().getTimezoneOffset() === 0 ? 'UTC' : `UTC` + `+${-(new Date().getTimezoneOffset() / 60)}`
     }
     const jsDate = JulianDate.toDate(date)
     const timeString: string = jsDate
@@ -1215,13 +1256,13 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
     if (viewer._container) {
       const right = enabled || !defined(fullscreenButton) ? 0 : fullscreenButton.container.clientWidth
-      viewer._vrButton.container.style.right = right + 'px'
+      viewer._vrButton.container.style.right = `${right}px`
       viewer.forceResize()
     }
   }
 
   const resizeToolbar = function (parent, child) {
-    Array.prototype.slice.call(parent.children).forEach(element => {
+    Array.prototype.slice.call(parent.children).forEach((element) => {
       switch (element.className) {
         case 'cesium-viewer-geocoderContainer':
           element.customIndex = 1
@@ -1245,10 +1286,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       }
     })
     const arr: any[] = []
-    Array.prototype.slice.call(parent.children).forEach(element => {
+    Array.prototype.slice.call(parent.children).forEach((element) => {
       arr.push(element)
     })
-    arr.sort(function (a, b) {
+    arr.sort((a, b) => {
       return a.customIndex - b.customIndex
     })
     for (let i = 0; i < arr.length; i++) {
@@ -1328,14 +1369,15 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       logger.debug('viewer - onMounted')
       await globalConfig.value?.__viewerUnloadingPromise
       load()
-        .then(e => {
+        .then((e) => {
           createResolve(e)
         })
-        .catch(e => {
+        .catch((e) => {
           emit('unready', e)
           reject(e)
         })
-    } catch (e) {
+    }
+    catch (e) {
       emit('unready', e)
       reject(e)
     }
@@ -1364,350 +1406,350 @@ export interface VcViewerProps {
    * If set to false, the Animation widget will not be created.
    * Default value: false
    */
-  animation?: boolean
+  'animation'?: boolean
   /**
    * If set to false, the BaseLayerPicker widget will not be created.
    * Default value: false
    */
-  baseLayerPicker?: boolean
+  'baseLayerPicker'?: boolean
   /**
-   * 	If set to false, the FullscreenButton widget will not be created.
+   * If set to false, the FullscreenButton widget will not be created.
    * Default value: false
    */
-  fullscreenButton?: boolean
+  'fullscreenButton'?: boolean
   /**
    * If set to true, the VRButton widget will be created.
    * Default value: false
    */
-  vrButton?: boolean
+  'vrButton'?: boolean
   /**
    * If set to false, the Geocoder widget will not be created.
    * Default value: false
    */
-  geocoder?: boolean | Array<Cesium.GeocoderService>
+  'geocoder'?: boolean | Array<Cesium.GeocoderService>
   /**
    * If set to false, the HomeButton widget will not be created.
    * Default value: false
    */
-  homeButton?: boolean
+  'homeButton'?: boolean
   /**
    * If set to false, the InfoBox widget will not be created.
    * Default value: false
    */
-  infoBox?: boolean
+  'infoBox'?: boolean
   /**
    * If set to false, the SceneModePicker widget will not be created.
    * Default value: false
    */
-  sceneModePicker?: boolean
+  'sceneModePicker'?: boolean
   /**
    * If set to false, the SelectionIndicator widget will not be created.
    * Default value: false
    */
-  selectionIndicator?: boolean
+  'selectionIndicator'?: boolean
   /**
    * If set to false, the Timeline widget will not be created.
    * Default value: false
    */
-  timeline?: boolean
+  'timeline'?: boolean
   /**
    * If set to false, the navigation help button will not be created.
    * Default value: false
    */
-  navigationHelpButton?: boolean
+  'navigationHelpButton'?: boolean
   /**
    * True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.
    * Default value: false
    */
-  navigationInstructionsInitiallyVisible?: boolean
+  'navigationInstructionsInitiallyVisible'?: boolean
   /**
    * When true, each geometry instance will only be rendered in 3D to save GPU memory.
    * Default value: false
    */
-  scene3DOnly?: boolean
+  'scene3DOnly'?: boolean
   /**
    * true if the clock should attempt to advance simulation time by default, false otherwise. This option takes precedence over setting clockViewModel.
    * Default value: false
    */
-  shouldAnimate?: boolean
+  'shouldAnimate'?: boolean
   /**
    * The clock view model to use to control current time.
    */
-  clockViewModel?: Cesium.ClockViewModel
+  'clockViewModel'?: Cesium.ClockViewModel
   /**
    * The view model for the current base imagery layer, if not supplied the first available base layer is used. This value is only valid if `baseLayerPicker` is set to true.
    */
-  selectedImageryProviderViewModel?: Cesium.ProviderViewModel
+  'selectedImageryProviderViewModel'?: Cesium.ProviderViewModel
   /**
    * The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if `baseLayerPicker` is set to true.
    */
-  imageryProviderViewModels?: Array<Cesium.ProviderViewModel>
+  'imageryProviderViewModels'?: Array<Cesium.ProviderViewModel>
   /**
    * The view model for the current base terrain layer, if not supplied the first available base layer is used. This value is only valid if `baseLayerPicker` is set to true.
    */
-  selectedTerrainProviderViewModel?: Cesium.ProviderViewModel
+  'selectedTerrainProviderViewModel'?: Cesium.ProviderViewModel
   /**
    * The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if `baseLayerPicker` is set to true.
    */
-  terrainProviderViewModels?: Array<Cesium.ProviderViewModel>
+  'terrainProviderViewModels'?: Array<Cesium.ProviderViewModel>
   /**
    * The imagery provider to use. This value is only valid if `baseLayerPicker` is set to false.
    */
-  imageryProvider?: Cesium.ImageryProvider
+  'imageryProvider'?: Cesium.ImageryProvider
   /**
    * The bottommost imagery layer applied to the globe. If set to false, no imagery provider will be added. This value is only valid if `baseLayerPicker` is set to false.
    */
-  baseLayer?: Cesium.ImageryLayer | false
+  'baseLayer'?: Cesium.ImageryLayer | false
   /**
    * The terrain provider to use
    */
-  terrainProvider?: Cesium.TerrainProvider
+  'terrainProvider'?: Cesium.TerrainProvider
   /**
    * The skybox used to render the stars. When undefined, the default stars are used. If set to false, no skyBox, Sun, or Moon will be added.
    * Default value: undefined
    */
-  skyBox?: Cesium.SkyBox | false
+  'skyBox'?: Cesium.SkyBox | false
   /**
    * Blue sky, and the glow around the Earth's limb. Set to false to turn it off.
    */
-  skyAtmosphere?: Cesium.SkyAtmosphere | false
+  'skyAtmosphere'?: Cesium.SkyAtmosphere | false
   /**
    * The element or id to be placed into fullscreen mode when the full screen button is pressed.
    */
-  fullscreenElement?: string | Element
+  'fullscreenElement'?: string | Element
   /**
    * True if this widget should control the render loop, false otherwise.
    * Default value: true
    */
-  useDefaultRenderLoop?: boolean
+  'useDefaultRenderLoop'?: boolean
   /**
    * The target frame rate when using the default render loop.
    */
-  targetFrameRate?: number
+  'targetFrameRate'?: number
   /**
    * If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.
    * Default value: true
    */
-  showRenderLoopErrors?: boolean
+  'showRenderLoopErrors'?: boolean
   /**
    * If true, render at the browser's recommended resolution and ignore window.devicePixelRatio.
    * Default value: true
    */
-  useBrowserRecommendedResolution?: boolean
+  'useBrowserRecommendedResolution'?: boolean
   /**
    * If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.
    * Default value: true
    */
-  automaticallyTrackDataSourceClocks?: boolean
+  'automaticallyTrackDataSourceClocks'?: boolean
   /**
    * Context and WebGL creation properties corresponding to options passed to Scene.
    */
-  contextOptions?: VcContextOptions
+  'contextOptions'?: VcContextOptions
   /**
    * The initial scene mode.
    * Default value: 3
    */
-  sceneMode?: Cesium.SceneMode
+  'sceneMode'?: Cesium.SceneMode
   /**
    * The map projection to use in 2D and Columbus View modes.
    */
-  mapProjection?: Cesium.MapProjection
+  'mapProjection'?: Cesium.MapProjection
   /**
    * The globe to use in the scene. If set to false, no globe will be added.
    */
-  globe?: Cesium.Globe | false
+  'globe'?: Cesium.Globe | false
   /**
    * If true and the configuration supports it, use order independent translucency.
    * Default value: true
    */
-  orderIndependentTranslucency?: boolean
+  'orderIndependentTranslucency'?: boolean
   /**
    * The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.
    */
-  creditContainer?: string | Element
+  'creditContainer'?: string | Element
   /**
    * The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.
    */
-  creditViewport?: string | Element
+  'creditViewport'?: string | Element
   /**
    * The collection of data sources visualized by the widget. If this parameter is provided, the instance is assumed to be owned by the caller and will not be destroyed when the viewer is destroyed.
    */
-  dataSources?: Cesium.DataSourceCollection
+  'dataSources'?: Cesium.DataSourceCollection
   /**
    * A scalar used to exaggerate the terrain. Defaults to 1.0 (no exaggeration). A value of 2.0 scales the terrain by 2x. A value of 0.0 makes the terrain completely flat. Note that terrain exaggeration will not modify any other primitive as they are positioned relative to the ellipsoid.
    * Default value: 1.0
    */
-  terrainExaggeration?: number
+  'terrainExaggeration'?: number
   /**
    * Determines if shadows are cast by light sources.
    * Default value: false
    */
-  shadows?: boolean
+  'shadows'?: boolean
   /**
    * Determines if the terrain casts or receives shadows from light sources.
    * Default value: 3
    */
-  terrainShadows?: Cesium.ShadowMode
+  'terrainShadows'?: Cesium.ShadowMode
   /**
    * Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.
    * Default value: 1
    */
-  mapMode2D?: Cesium.MapMode2D
+  'mapMode2D'?: Cesium.MapMode2D
   /**
    * If set to true, the ProjectionPicker widget will be created.
    * Default value: false
    */
-  projectionPicker?: boolean
+  'projectionPicker'?: boolean
   /**
    * If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling reduces the CPU/GPU usage of your application and uses less battery on mobile, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering.
    * Default value: false
    */
-  requestRenderMode?: boolean
+  'requestRenderMode'?: boolean
   /**
    * If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.
    * Default value: 0.0
    */
-  maximumRenderTimeChange?: number
+  'maximumRenderTimeChange'?: number
   /**
    * Specify the web service address of the CesiumJS library used to initialize the `vc-viewer` component.
    */
-  cesiumPath?: string
+  'cesiumPath'?: string
   /**
    * Specify the default [Cesium ion](https://cesium.com/ion/) access token.
    */
-  accessToken?: string
+  'accessToken'?: string
   /**
    * Specify the viewer camera
    */
-  camera?: VcCamera
+  'camera'?: VcCamera
   /**
    * Specify whether to display the default Logo and loading data copyright information.
    * Default value: true
    */
-  showCredit?: boolean
+  'showCredit'?: boolean
   /**
    * Specify whether to display frames per second and time between frames.This property is for debugging only; it is not for production use.
    * Default value: false
    */
-  debugShowFramesPerSecond?: boolean
+  'debugShowFramesPerSecond'?: boolean
   /**
    * Specify whether to display navigation control. for supermap webgl iclient only.
    * Default value: false
    */
-  navigation?: boolean
+  'navigation'?: boolean
   /**
    * The time zone code used for timeline date formatting. By default, it is formatted as local time. If you want to display it as UTC universal time, set `UTCoffset` to `new Date().getTimezoneOffset()`
    */
-  TZCode?: string
+  'TZCode'?: string
   /**
    * The time difference (minutes) between local time and UTC time.
    */
-  UTCOffset?: number
+  'UTCOffset'?: number
   /**
    * Specify whether to remove the CesiumJS script tag when `vc-viewer` is destroyed.
    * Default value: true
    */
-  removeCesiumScript?: boolean
+  'removeCesiumScript'?: boolean
   /**
    * Specify whether to automatically sort imageLayers according to the layer's `sortOrder` property when adding imagelayer.
    * Default value: true
    */
-  autoSortImageryLayers?: boolean
+  'autoSortImageryLayers'?: boolean
   /**
    * Specifiy whether to trigger mouse events.
    * Default value: true
    */
-  enableMouseEvent?: boolean
+  'enableMouseEvent'?: boolean
   /**
    * Specify whether to show the skeleton background during `vc-viewer` initialization.
    * Default value: true
    */
-  skeleton?: boolean | VcSkeletonProps
+  'skeleton'?: boolean | VcSkeletonProps
   /**
    * x:y:z, where x is the amount of time to wait (in milliseconds), y is the touch event sensitivity (in pixels) and z is the mouse event sensitivity (in pixels).
    * Default value: 1000
    */
-  touchHoldArg?: string
+  'touchHoldArg'?: string
   /**
    * for mars3d only.
    */
-  mars3dConfig?: Mars3dConfig
+  'mars3dConfig'?: Mars3dConfig
   /**
    * for dc-sdk 3.0+ only.
    */
-  dcConfig?: DCConfig
+  'dcConfig'?: DCConfig
   /**
    * Specifies the container id of the viewer.
    */
-  containerId?: string
+  'containerId'?: string
   /**
    * Specify the initialization method of the viewer when loading non-standard third-party Cesium libraries.
    */
-  viewerCreator?: VcViewerCreatorFunction
+  'viewerCreator'?: VcViewerCreatorFunction
   /**
    * Triggers before the VcViewer is loaded.
    */
-  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  'onBeforeLoad'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the VcViewer is successfully loaded.
    */
-  onReady?: (readyObject: VcReadyObject) => void
+  'onReady'?: (readyObject: VcReadyObject) => void
   /**
    * Triggers when the component load failed.
    */
-  onUnready?: (e: any) => void
+  'onUnready'?: (e: any) => void
   /**
    * Triggers when the VcViewer is destroyed.
    */
-  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  'onDestroyed'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when CesiumJS is successfully loaded.
    */
-  onCesiumReady?: (payload: typeof Cesium) => void
+  'onCesiumReady'?: (payload: typeof Cesium) => void
   /**
    * Triggers when a component changes on vc-viewer.
    */
-  onViewerWidgetResized?: (payload: ViewerWidgetResizedEvent) => void
+  'onViewerWidgetResized'?: (payload: ViewerWidgetResizedEvent) => void
   /**
    * Triggers when the selected entity changes.
    */
-  onSelectedEntityChanged?: (entity: Cesium.Entity) => void
+  'onSelectedEntityChanged'?: (entity: Cesium.Entity) => void
   /**
    * Triggers when the tracked entity changes.
    */
-  onTrackedEntityChanged?: (entity: Cesium.Entity) => void
+  'onTrackedEntityChanged'?: (entity: Cesium.Entity) => void
   /**
    * Triggers when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.
    */
-  onLayerAdded?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
+  'onLayerAdded'?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
   /**
    * Triggers when a layer changes position in the collection. Event handlers are passed the layer that was moved, its new index after the move, and its old index prior to the move.
    */
-  onLayerMoved?: (imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number) => void
+  'onLayerMoved'?: (imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number) => void
   /**
    * Triggers when a layer is removed from the collection. Event handlers are passed the layer that was removed and the index from which it was removed.
    */
-  onLayerRemoved?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
+  'onLayerRemoved'?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
   /**
    * Triggers when a layer is shown or hidden by setting the ImageryLayer#show property. Event handlers are passed a reference to this layer, the index of the layer in the collection, and a flag that is true if the layer is now shown or false if it is now hidden.
    */
-  onLayerShownOrHidden?: (imageryLayer: Cesium.ImageryLayer, index: number, show: boolean) => void
+  'onLayerShownOrHidden'?: (imageryLayer: Cesium.ImageryLayer, index: number, show: boolean) => void
   /**
    * Triggers when a data source is added to the collection. Event handlers are passed the data source that was added.
    */
-  onDataSourceAdded?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
+  'onDataSourceAdded'?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
   /**
    * Triggers when a data source changes position in the collection. Event handlers are passed the data source that was moved, its new index after the move, and its old index prior to the move.
    */
-  onDataSourceMoved?: (dataSource: VcDatasource, newIndex: number, oldIndex: number) => void
+  'onDataSourceMoved'?: (dataSource: VcDatasource, newIndex: number, oldIndex: number) => void
   /**
    * Triggers when a data source is removed from the collection. Event handlers are passed the data source that was removed.
    */
-  onDataSourceRemoved?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
+  'onDataSourceRemoved'?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
   /**
    * Triggers when when entities are added or removed from the collection. The generated event is a EntityCollection.collectionChangedEventCallback.
    */
-  onCollectionChanged?: (
+  'onCollectionChanged'?: (
     collection: Cesium.EntityCollection,
     addedArray: Array<Cesium.Entity>,
     removedArray: Array<Cesium.Entity>,
@@ -1716,107 +1758,107 @@ export interface VcViewerProps {
   /**
    * Triggers at the completion of a scene transition.
    */
-  onMorphComplete?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
+  'onMorphComplete'?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
   /**
    * Triggers at the beginning of a scene transition.
    */
-  onMorphStart?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
+  'onMorphStart'?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
   /**
    * Triggers immediately after the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  onPostRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  'onPostRender'?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers after the scene is updated and immediately before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  onPreRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  'onPreRender'?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers immediately after the scene is updated and before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  onPostUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  'onPostUpdate'?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers before the scene is updated or rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  onPreUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  'onPreUpdate'?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers when an error is thrown inside the render function. The Scene instance and the thrown error are the only two parameters passed to the event handler. By default, errors are not rethrown after this event is raised, but that can be changed by setting the rethrowRenderErrors property.
    */
-  onRenderError?: (scene: Cesium.Scene, error: any) => void
+  'onRenderError'?: (scene: Cesium.Scene, error: any) => void
   /**
    * Triggers when the terrain provider is changed.
    */
-  onTerrainProviderChanged?: (provider: VcTerrainProvider) => void
+  'onTerrainProviderChanged'?: (provider: VcTerrainProvider) => void
   /**
    * Triggers when the camera has changed by percentageChanged.
    */
-  onChanged?: (percent: number) => void
+  'onChanged'?: (percent: number) => void
   /**
    * Triggers when the camera has stopped moving.
    */
-  onMoveEnd?: () => void
+  'onMoveEnd'?: () => void
   /**
    * Triggers when the camera starts to move.
    */
-  onMoveStart?: () => void
+  'onMoveStart'?: () => void
   /**
    * Triggers when Clock#stopTime is reached.
    */
-  onOnStop?: (clock: Cesium.Clock) => void
+  'onOnStop'?: (clock: Cesium.Clock) => void
   /**
    * Triggers when Clock#tick is called.
    */
-  onOnTick?: (clock: Cesium.Clock) => void
+  'onOnTick'?: (clock: Cesium.Clock) => void
   /**
    * Triggers when the terrain provider encounters an asynchronous error. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.
    */
-  onErrorEvent?: (tileProviderError: any) => void
+  'onErrorEvent'?: (tileProviderError: any) => void
   /**
    * Triggers when the user clicks the camera icon.
    */
-  onCameraClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
+  'onCameraClicked'?: (viewModel: Cesium.InfoBoxViewModel) => void
   /**
    * Triggers when the user closes the info box.
    */
-  onCloseClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
+  'onCloseClicked'?: (viewModel: Cesium.InfoBoxViewModel) => void
   /**
    * Triggers when the mouse left button clicked.
    */
-  onLeftClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onLeftClick'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button double clicked.
    */
-  onLeftDoubleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onLeftDoubleClick'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button down.
    */
-  onLeftDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onLeftDown'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button up.
    */
-  onLeftUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onLeftUp'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button clicked.
    */
-  onMiddleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onMiddleClick'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button down.
    */
-  onMiddleDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onMiddleDown'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button up.
    */
-  onMiddleUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onMiddleUp'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse move.
    */
-  onMouseMove?: (mouseClickEvent: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 }) => void
+  'onMouseMove'?: (mouseClickEvent: { startPosition: Cesium.Cartesian2, endPosition: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the start of a two-finger on a touch surface.
    */
-  onPinchStart?: (touch2StartEvent: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2 }) => void
+  'onPinchStart'?: (touch2StartEvent: { position1: Cesium.Cartesian2, position2: Cesium.Cartesian2 }) => void
   /**
    * Triggers when a change of a two-finger on a touch surface.
    */
-  onPinchMove?: (touchPinchMovementEvent: {
+  'onPinchMove'?: (touchPinchMovementEvent: {
     distance: {
       startPosition: Cesium.Cartesian2
       endPosition: Cesium.Cartesian2
@@ -1829,32 +1871,32 @@ export interface VcViewerProps {
   /**
    * Triggers when end of a two-finger on a touch surface.
    */
-  onPinchEnd?: () => void
+  'onPinchEnd'?: () => void
   /**
    * Triggers when the mouse right click.
    */
-  onRightClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onRightClick'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse right button down.
    */
-  onRightDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onRightDown'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse right button up.
    */
-  onRightUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  'onRightUp'?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse wheel.
    */
-  onWheel?: (delta: number) => void
+  'onWheel'?: (delta: number) => void
   /**
    * Triggers when an imagery layer is added, shown, hidden, moved, or removed.
    */
-  onImageryLayersUpdatedEvent?: () => void
+  'onImageryLayersUpdatedEvent'?: () => void
   /**
-   * 	Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.
+   * Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.
    */
-  onTileLoadProgressEvent?: (length: number) => void
-  onTouchEnd?: (evt: any) => void
+  'onTileLoadProgressEvent'?: (length: number) => void
+  'onTouchEnd'?: (evt: any) => void
   /**
    *  Triggers when the camera has changed by percentageChanged.
    */

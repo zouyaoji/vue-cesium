@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 11:35:50
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\plane\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type {
   VcCallbackPropertyFunction,
   VcCartesian2,
@@ -18,11 +9,22 @@ import type {
   VcPlane,
   VcReadyObject
 } from '@vue-cesium/utils/types'
-import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-06 11:35:50
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\plane\index.ts
+ */
+import type { PropType } from 'vue'
 import { useGraphics } from '@vue-cesium/composables'
-import { show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition, plane } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
+import { distanceDisplayCondition, fill, material, outline, outlineColor, outlineWidth, plane, shadows, show } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const planeGraphicsProps = {
   ...show,
   ...plane,
@@ -55,7 +57,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsPlaneProps = {
+export interface VcGraphicsPlaneProps {
   /**
    * A boolean Property specifying the visibility of the plane.
    * Default value: true

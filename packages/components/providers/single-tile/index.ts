@@ -1,3 +1,8 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import { useProviders } from '@vue-cesium/composables'
+import { credit, ellipsoid, rectangle, tileHeight, tileWidth, url } from '@vue-cesium/utils/cesium-props'
+import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,11 +12,6 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\single-tile\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
-import { useProviders } from '@vue-cesium/composables'
-import { url, rectangle, credit, ellipsoid, tileWidth, tileHeight } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { providerEmits } from '@vue-cesium/utils/emits'
 
 export const singletileImageryProviderProps = {
   ...url,
@@ -34,7 +34,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderSingletileProps = {
+export interface VcImageryProviderSingletileProps {
   /**
    * The url for the tile
    */

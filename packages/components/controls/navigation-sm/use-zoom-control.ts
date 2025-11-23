@@ -1,8 +1,8 @@
+import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import type { AnyFunction, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
-import { ref } from 'vue'
-import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
+import { ref } from 'vue'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
@@ -32,7 +32,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   let container: HTMLElement
 
   // methods
-  const handleZoomInMouseDown = e => {
+  const handleZoomInMouseDown = (e) => {
     const { defined, getTimestamp, SceneMode, ScreenSpaceEventType } = Cesium
     const { viewer } = $services
     $(zoomInTooltipRef)?.hide()
@@ -62,7 +62,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     unsubscribeFromClockTickZoomin = viewer.clock.onTick.addEventListener(zoominTickFunction)
   }
 
-  const handleZoomOutMouseDown = event => {
+  const handleZoomOutMouseDown = (event) => {
     $(zoomInTooltipRef)?.hide()
     $(zoomOutTooltipRef)?.hide()
     $(zoomBarTooltipRef)?.hide()
@@ -92,7 +92,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     unsubscribeFromClockTickZoomout = viewer.clock.onTick.addEventListener(zoomoutTickFunction)
   }
 
-  const handleZoomBarScrollMouseDown = event => {
+  const handleZoomBarScrollMouseDown = (event) => {
     $(zoomInTooltipRef)?.hide()
     $(zoomOutTooltipRef)?.hide()
     $(zoomBarTooltipRef)?.hide()
@@ -114,18 +114,21 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       if (zoomOffset > 0) {
         if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomOut()
-        } else {
+        }
+        else {
           handlezoom(-1)
         }
-      } else if (zoomOffset < 0) {
+      }
+      else if (zoomOffset < 0) {
         if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomIn()
-        } else {
+        }
+        else {
           handlezoom(1)
         }
       }
     }
-    zoomBarScrollMouseMoveFunction = e => {
+    zoomBarScrollMouseMoveFunction = (e) => {
       const zoombarTopMove = zoombarTop.value
       const clientRect = e.target.parentElement.getBoundingClientRect()
       const rectNavigation = container.getBoundingClientRect()
@@ -142,13 +145,16 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       if (zoomFlag > 0) {
         if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomOut()
-        } else {
+        }
+        else {
           handlezoom(-1)
         }
-      } else {
+      }
+      else {
         if (viewer.scene.mode === SceneMode.COLUMBUS_VIEW || viewer.scene.mode === SceneMode.SCENE2D) {
           camera.zoomIn()
-        } else {
+        }
+        else {
           handlezoom(1)
         }
       }
@@ -173,7 +179,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     unsubscribeFromClockTickZoomBar = viewer.clock.onTick.addEventListener(zoombarTickFunction)
   }
 
-  const handlezoom = i => {
+  const handlezoom = (i) => {
     const { Cartesian2, Cartesian3, defined, Ellipsoid, Math } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
@@ -202,12 +208,12 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
       const pickPosition = camera.pickEllipsoid(centerPixel, viewer.scene.globe.ellipsoid)
       if (
-        isObject(pickPosition) &&
-        defined(pickPosition) &&
-        !isNaN(pickPosition.x) &&
-        !isNaN(pickPosition.y) &&
-        !isNaN(pickPosition.z) &&
-        !(camera.positionCartographic.height < 0)
+        isObject(pickPosition)
+        && defined(pickPosition)
+        && !Number.isNaN(pickPosition.x)
+        && !Number.isNaN(pickPosition.y)
+        && !Number.isNaN(pickPosition.z)
+        && !(camera.positionCartographic.height < 0)
       ) {
         Cartesian3.normalize(pickPosition, pickPosition)
         const angle = Cartesian3.angleBetween(centerPositionNormal, pickPosition)
@@ -215,18 +221,18 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const axis = Cartesian3.cross(centerPositionNormal, pickPosition, new Cartesian3())
           camera.rotate(axis, angle)
           const listener = getInstanceListener(vcInstance, 'zoomEvt')
-          listener &&
-            emit('zoomEvt', {
-              type: i === 1 ? 'zoomIn' : 'zoomOut',
-              camera: viewer.camera,
-              status: 'end'
-            })
+          listener
+          && emit('zoomEvt', {
+            type: i === 1 ? 'zoomIn' : 'zoomOut',
+            camera: viewer.camera,
+            status: 'end'
+          })
         }
       }
     }
   }
 
-  const pickGlobe = mousePosition => {
+  const pickGlobe = (mousePosition) => {
     const { defined, Cartesian3 } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
@@ -240,19 +246,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const ray = camera.getPickRay(mousePosition)
       const rayIntersection = globe.pick(ray, scene)
       const pickDistance = defined(depthIntersection) ? Cartesian3.distance(depthIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
-      const rayDistance =
-        isObject(rayIntersection) && defined(rayIntersection) ? Cartesian3.distance(rayIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
+      const rayDistance
+        = isObject(rayIntersection) && defined(rayIntersection) ? Cartesian3.distance(rayIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
       return rayDistance > pickDistance ? depthIntersection : rayIntersection
     }
   }
 
-  const onTooltipBeforeShow = e => {
+  const onTooltipBeforeShow = (e) => {
     if (zoomBarScrollMouseMoveFunction !== undefined || zoominTickFunction !== undefined || zoomoutTickFunction !== undefined) {
       e.cancel = true
     }
   }
 
-  const load = el => {
+  const load = (el) => {
     container = el
     screenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(el)
     return true

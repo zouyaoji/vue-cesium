@@ -1,3 +1,21 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import { useProviders } from '@vue-cesium/composables'
+import {
+  credit,
+  ellipsoid,
+  enablePickFeatures,
+  layers,
+  maximumLevel,
+  rectangle,
+  tileDiscardPolicy,
+  tileHeight,
+  tileWidth,
+  tilingScheme,
+  token
+} from '@vue-cesium/utils/cesium-props'
+import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,24 +25,7 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\arcgis\imagery.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
-import { useProviders } from '@vue-cesium/composables'
-import {
-  token,
-  tileDiscardPolicy,
-  layers,
-  enablePickFeatures,
-  rectangle,
-  tilingScheme,
-  ellipsoid,
-  credit,
-  tileWidth,
-  tileHeight,
-  maximumLevel
-} from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { providerEmits } from '@vue-cesium/utils/emits'
+
 export const arcgisImageryProviderProps = {
   url: {
     type: [String, Object] as PropType<string | Cesium.Resource>,
@@ -59,7 +60,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderArcgisProps = {
+export interface VcImageryProviderArcgisProps {
   /**
    * The URL of the ArcGIS MapServer service.
    */

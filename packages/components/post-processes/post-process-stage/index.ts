@@ -1,3 +1,7 @@
+import type { VcBoundingRectangle, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { useCommon } from '@vue-cesium/composables/index'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-27 16:43:45
@@ -7,11 +11,7 @@
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcBoundingRectangle, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { useCommon } from '@vue-cesium/composables/index'
-import { kebabCase } from '@vue-cesium/utils/util'
 import defaultProps from './defaultProps'
-import { commonEmits } from '@vue-cesium/utils/emits'
 
 export const postProcessStageProps = defaultProps
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
   }
 })
 
-export type VcPostProcessStageProps = {
+export interface VcPostProcessStageProps {
   /**
    * The fragment shader to use. The default sampler2D uniforms are colorTexture and depthTexture. The color texture is the output of rendering the scene or the previous stage. The depth texture is the output from rendering the scene. The shader should contain one or both uniforms. There is also a vec2 varying named v_textureCoordinates that can be used to sample the textures.
    */

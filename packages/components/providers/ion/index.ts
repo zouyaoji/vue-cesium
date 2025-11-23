@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,13 +8,12 @@
  * @FilePath: \vue-cesium\packages\components\providers\ion\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { accessToken } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { providerEmits } from '@vue-cesium/utils/emits'
 import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import { accessToken } from '@vue-cesium/utils/cesium-props'
+import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const ionImageryProviderProps = {}
 export default defineComponent({
@@ -38,7 +38,8 @@ export default defineComponent({
       const options = providersState.transformProps(props)
       if (compareCesiumVersion(Cesium.VERSION, '1.104') && typeof Cesium[instance.cesiumClass].fromAssetId === 'function') {
         return await Cesium.IonImageryProvider.fromAssetId(options.assetId, options)
-      } else {
+      }
+      else {
         return new Cesium.IonImageryProvider(options)
       }
     }
@@ -47,7 +48,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderIonProps = {
+export interface VcImageryProviderIonProps {
   /**
    * An ion imagery asset ID.
    */

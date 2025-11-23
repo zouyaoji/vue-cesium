@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,12 +8,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\osm\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { ellipsoid, fileExtension, maximumLevel, minimumLevel, rectangle } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const osmImageryProviderProps = {
   url: {
@@ -42,7 +42,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderOsmProps = {
+export interface VcImageryProviderOsmProps {
   /**
    * The OpenStreetMap server url.
    * Default value: 'https://a.tile.openstreetmap.org'

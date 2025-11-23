@@ -1,14 +1,16 @@
-import type { VNode, WatchStopHandle, CSSProperties, PropType } from 'vue'
+import type { VcBtnRef, VcTooltipRef } from '@vue-cesium/components/ui'
+import type { VcViewerProps, VcViewerRef } from '@vue-cesium/components/viewer'
+import type { VcBtnTooltipProps, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties, PropType, VNode, WatchStopHandle } from 'vue'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
+import VcViewer from '@vue-cesium/components/viewer'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import { VcBtn, VcBtnRef, VcTooltip, VcTooltipRef } from '@vue-cesium/components/ui'
-import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcBtnTooltipProps, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref } from 'vue'
-import VcViewer, { VcViewerProps, VcViewerRef } from '@vue-cesium/components/viewer'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { commonEmits } from '@vue-cesium/utils/emits'
 import { compareCesiumVersion, makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { $ } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref } from 'vue'
 
 export const overviewProps = {
   position: {
@@ -248,13 +250,14 @@ export default defineComponent({
       if (showing.value) {
         css.width = props.width
         css.height = props.height
-      } else {
+      }
+      else {
         const reg = /(\d+)/g
         const regResult = reg.exec(props.border)
-        const boder = regResult?.length ? parseFloat(regResult[0]) : 0
+        const boder = regResult?.length ? Number.parseFloat(regResult[0]) : 0
         const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
-        css.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
-        css.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
+        css.width = `${Number.parseFloat(toggleBtnRefStyle.width) + Number.parseFloat(toggleBtnRefStyle.padding) + boder}px`
+        css.height = `${Number.parseFloat(toggleBtnRefStyle.height) + Number.parseFloat(toggleBtnRefStyle.padding) + boder}px`
       }
       Object.assign(rootStyle, css)
     }
@@ -266,7 +269,8 @@ export default defineComponent({
     const onToggle = () => {
       if (showing.value) {
         minimize()
-      } else {
+      }
+      else {
         restore()
       }
       showing.value = !showing.value
@@ -276,10 +280,10 @@ export default defineComponent({
     const minimize = () => {
       const reg = /(\d+)/g
       const regResult = reg.exec(props.border)
-      const boder = regResult?.length ? parseFloat(regResult[0]) : 0
+      const boder = regResult?.length ? Number.parseFloat(regResult[0]) : 0
       const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
-      rootStyle.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
-      rootStyle.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
+      rootStyle.width = `${Number.parseFloat(toggleBtnRefStyle.width) + Number.parseFloat(toggleBtnRefStyle.padding) + boder}px`
+      rootStyle.height = `${Number.parseFloat(toggleBtnRefStyle.height) + Number.parseFloat(toggleBtnRefStyle.padding) + boder}px`
     }
 
     const restore = () => {
@@ -300,12 +304,12 @@ export default defineComponent({
           VcBtn,
           {
             ref: toggleBtnRef,
-            class: 'toggle toggle-' + props.position + (!showing.value ? ' minimized ' : ''),
+            class: `toggle toggle-${props.position}${!showing.value ? ' minimized ' : ''}`,
             flat: true,
             dense: true,
             icon: toggleOpts.value.icon,
             size: toggleOpts.value.size,
-            style: { color: toggleOpts.value.color, background: toggleOpts.value.background, 'pointer-events': 'auto' },
+            style: { 'color': toggleOpts.value.color, 'background': toggleOpts.value.background, 'pointer-events': 'auto' },
             onClick: onToggle
           },
           () =>
@@ -337,7 +341,7 @@ export default defineComponent({
         'div',
         {
           ref: rootRef,
-          class: 'vc-overview-map ' + positionState.classes.value,
+          class: `vc-overview-map ${positionState.classes.value}`,
           style: rootStyle
         },
         children
@@ -346,81 +350,81 @@ export default defineComponent({
   }
 })
 
-export type VcOverviewMapProps = {
+export interface VcOverviewMapProps {
   /**
    * Specify the position of the VcOverviewMap.
    * Default value: bottom-right
    */
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  'position'?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
   /**
    * An array of two numbers to offset the VcOverviewMap horizontally and vertically in pixels.
    * Default value: [0, 0]
    */
-  offset?: [number, number]
+  'offset'?: [number, number]
   /**
    * Specify the width of the overviewmap component.
    * Default value: 150px
    */
-  width?: string
+  'width'?: string
   /**
    * Specify the height of the overviewmap component.
    * Default value: 150px
    */
-  height?: string
+  'height'?: string
   /**
    * Specify the border of the overviewmap component.
    * Default value: solid 4px rgb(255, 255, 255)
    */
-  border?: string
+  'border'?: string
   /**
    * Specify the border radius of the overviewmap component.
    */
-  borderRadius?: string
+  'borderRadius'?: string
   /**
    * Specify the toggle button options of the overviewmap component.
    */
-  toggleOpts?: VcBtnTooltipProps
+  'toggleOpts'?: VcBtnTooltipProps
   /**
    * Specify the vc-viewer component options in the overviewmap component.
    */
-  viewerOpts?: VcViewerProps
+  'viewerOpts'?: VcViewerProps
   /**
    * Specify the center rectangle color.
    * Default value: #ff000080
    */
-  centerRectColor?: VcColor
+  'centerRectColor'?: VcColor
   /**
    * Specify the width factor of center rectangle.
    * Default value: 2
    */
-  widthFactor?: number
+  'widthFactor'?: number
   /**
    * Specify the height factor of center rectangle.
    * Default value: 2
    */
-  heightFactor?: number
+  'heightFactor'?: number
   /**
    * Model of the component determining if VcOverviewMap should be expanded or not.
    * Default value: true
    */
-  modelValue?: boolean
+  'modelValue'?: boolean
   /**
    * Triggers before the VcOverviewMap is loaded.
    * @param instance
    */
-  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  'onBeforeLoad'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the VcOverviewMap is successfully loaded.
    */
-  onReady?: (readyObject: VcReadyObject) => void
+  'onReady'?: (readyObject: VcReadyObject) => void
   /**
    * Triggers when the component load failed.
    */
-  onUnready?: (e: any) => void
+  'onUnready'?: (e: any) => void
   /**
    * Triggers when the VcOverviewMap is destroyed.
    */
-  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  'onDestroyed'?: (instance: VcComponentInternalInstance) => void
   /**
    * Emitted when showing/hidden state changes; Is also used by v-model.
    * @param value New state (showing/hidden)

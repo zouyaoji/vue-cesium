@@ -1,10 +1,10 @@
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
-import VcViewer from '@vue-cesium/components/viewer'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcEntity from '@vue-cesium/components/entity'
-import { VcDatasourceCustom, VcDatasourceCzml, VcDatasourceGeojson, VcDatasourceKml } from '../index'
+import VcViewer from '@vue-cesium/components/viewer'
+import { mount } from '@vue/test-utils'
+import { describe, expect } from 'vitest'
 import { VcConfigProvider } from '../../config-provider'
-import { describe, expect, test } from 'vitest'
+import { VcDatasourceCustom, VcDatasourceCzml, VcDatasourceGeojson, VcDatasourceKml } from '../index'
 
 const customApp = {
   components: {
@@ -76,8 +76,8 @@ const customApp = {
   }
 }
 
-describe('VcDatasourceCustom', () => {
-  test('render test', async () => {
+describe('vcDatasourceCustom', () => {
+  it('render test', async () => {
     const wrapper = mount(customApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
@@ -117,8 +117,8 @@ const czmlApp = {
  `
 }
 
-describe('VcDatasourceCzml', () => {
-  test('render test', async () => {
+describe('vcDatasourceCzml', () => {
+  it('render test', async () => {
     const wrapper = mount(czmlApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
@@ -164,8 +164,8 @@ const geojsonApp = {
   }
 }
 
-describe('VcDatasourceGeojson', () => {
-  test('render test', async () => {
+describe('vcDatasourceGeojson', () => {
+  it('render test', async () => {
     const wrapper = mount(geojsonApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
@@ -201,8 +201,8 @@ const kmlApp = {
  `
 }
 
-describe('VcDatasourceKml', () => {
-  test('render test', async () => {
+describe('vcDatasourceKml', () => {
+  it('render test', async () => {
     const wrapper = mount(kmlApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance

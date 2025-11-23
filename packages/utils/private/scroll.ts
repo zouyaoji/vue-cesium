@@ -43,7 +43,7 @@ export function animVerticalScrollTo(el, to, duration = 0, prevTime?) {
     return
   }
 
-  requestAnimationFrame(nowTime => {
+  requestAnimationFrame((nowTime) => {
     const frameTime = nowTime - prevTime
     const newPos = pos + ((to - pos) / Math.max(frameTime, duration)) * frameTime
     setScroll(el, newPos)
@@ -64,7 +64,7 @@ export function animHorizontalScrollTo(el, to, duration = 0, prevTime?) {
     return
   }
 
-  requestAnimationFrame(nowTime => {
+  requestAnimationFrame((nowTime) => {
     const frameTime = nowTime - prevTime
     const newPos = pos + ((to - pos) / Math.max(frameTime, duration)) * frameTime
     setHorizontalScroll(el, newPos)
@@ -112,8 +112,8 @@ export function getScrollbarWidth() {
     return size
   }
 
-  const inner = document.createElement('p'),
-    outer = document.createElement('div')
+  const inner = document.createElement('p')
+  const outer = document.createElement('div')
 
   css(inner, {
     width: '100%',
@@ -153,14 +153,14 @@ export function hasScrollbar(el, onY = true) {
   }
 
   return onY
-    ? el.scrollHeight > el.clientHeight &&
-        (el.classList.contains('scroll') ||
-          el.classList.contains('overflow-auto') ||
-          ['auto', 'scroll'].includes(window.getComputedStyle(el)['overflow-y']))
-    : el.scrollWidth > el.clientWidth &&
-        (el.classList.contains('scroll') ||
-          el.classList.contains('overflow-auto') ||
-          ['auto', 'scroll'].includes(window.getComputedStyle(el)['overflow-x']))
+    ? el.scrollHeight > el.clientHeight
+    && (el.classList.contains('scroll')
+      || el.classList.contains('overflow-auto')
+      || ['auto', 'scroll'].includes(window.getComputedStyle(el)['overflow-y']))
+    : el.scrollWidth > el.clientWidth
+      && (el.classList.contains('scroll')
+        || el.classList.contains('overflow-auto')
+        || ['auto', 'scroll'].includes(window.getComputedStyle(el)['overflow-x']))
 }
 
 export default {

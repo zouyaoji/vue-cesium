@@ -1,9 +1,9 @@
-import { ref } from 'vue'
-import type { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import CameraFlightPath from './CameraFlightPath'
-import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import type { VcTooltipRef } from '@vue-cesium/components/ui'
+import type { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isObject } from '@vue-cesium/utils/util'
+import { ref } from 'vue'
+import CameraFlightPath from './CameraFlightPath'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   // state
@@ -42,8 +42,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // methods
   const handleMouseDown = (e: MouseEvent | TouchEvent) => {
-    if (e.stopPropagation) e.stopPropagation()
-    if (e.preventDefault) e.preventDefault()
+    if (e.stopPropagation)
+      e.stopPropagation()
+    if (e.preventDefault)
+      e.preventDefault()
 
     $(iconOuterTooltipRef)?.hide()
     $(iconInnerTooltipRef)?.hide()
@@ -61,7 +63,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     let clickLocation
     if (e instanceof MouseEvent) {
       clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top)
-    } else if (e instanceof TouchEvent) {
+    }
+    else if (e instanceof TouchEvent) {
       clickLocation = new Cartesian2(e.changedTouches[0].clientX - compassRectangle.left, e.changedTouches[0].clientY - compassRectangle.top)
     }
     const vector = Cartesian2.subtract(clickLocation, center, vectorScratch)
@@ -72,13 +75,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
     if (distanceFraction < norminalGyroRadius / nominalTotalRadius) {
       orbit(compassElement, vector)
-    } else if (distanceFraction < 1.0) {
+    }
+    else if (distanceFraction < 1.0) {
       rotate(compassElement, vector)
-    } else {
+    }
+    else {
       return true
     }
   }
-  const handleDoubleClick = e => {
+  const handleDoubleClick = (e) => {
     const { Cartesian2, Cartesian3, defined, Ellipsoid, Matrix4, Ray, SceneMode, Transforms } = Cesium
     const { viewer } = vcInstance
     const scene = viewer.scene
@@ -117,13 +122,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
 
     const listener = getInstanceListener(vcInstance, 'compassEvt')
-    listener &&
-      emit('compassEvt', {
-        type: 'reset',
-        camera: viewer.camera,
-        status: 'start',
-        target: e.currentTarget
-      })
+    listener
+    && emit('compassEvt', {
+      type: 'reset',
+      camera: viewer.camera,
+      status: 'start',
+      target: e.currentTarget
+    })
     const rotateFrame = Transforms.eastNorthUpToFixedFrame(center, viewer.scene.globe.ellipsoid)
     const lookVector = Cartesian3.subtract(center, camera.position, new Cartesian3())
     const flight = CameraFlightPath.createTween(scene, {
@@ -132,22 +137,22 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       up: Matrix4.multiplyByPointAsVector(rotateFrame, new Cartesian3(0.0, 1.0, 0.0), new Cartesian3()),
       duration: props.duration,
       complete: () => {
-        listener &&
-          emit('compassEvt', {
-            type: 'reset',
-            camera: viewer.camera,
-            status: 'end',
-            target: e.currentTarget
-          })
+        listener
+        && emit('compassEvt', {
+          type: 'reset',
+          camera: viewer.camera,
+          status: 'end',
+          target: e.currentTarget
+        })
       },
       cancel: () => {
-        listener &&
-          emit('compassEvt', {
-            type: 'reset',
-            camera: viewer.camera,
-            status: 'cancel',
-            target: e.currentTarget
-          })
+        listener
+        && emit('compassEvt', {
+          type: 'reset',
+          camera: viewer.camera,
+          status: 'cancel',
+          target: e.currentTarget
+        })
       }
     })
     ;(scene as any).tweens.add(flight)
@@ -165,12 +170,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         ;(unsubscribeFromPostRender as any) = undefined
       }
 
-      unsubscribeFromPostRender = vcInstance.viewer.scene.postRender.addEventListener(function () {
+      unsubscribeFromPostRender = vcInstance.viewer.scene.postRender.addEventListener(() => {
         if (heading.value !== vcInstance.viewer.scene.camera.heading) {
           heading.value = vcInstance.viewer.scene.camera.heading
         }
       })
-    } else {
+    }
+    else {
       if (unsubscribeFromPostRender) {
         unsubscribeFromPostRender()
         ;(unsubscribeFromPostRender as any) = undefined
@@ -212,13 +218,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         break
     }
     const listener = getInstanceListener(vcInstance, 'compassEvt')
-    listener &&
-      emit('compassEvt', {
-        type: 'orbit',
-        camera: scene.camera,
-        status: 'start',
-        target: compassElement
-      })
+    listener
+    && emit('compassEvt', {
+      type: 'orbit',
+      camera: scene.camera,
+      status: 'start',
+      target: compassElement
+    })
 
     // Remove existing event handlers, if any.
     document.removeEventListener('mousemove', orbitMouseMoveFunction, false)
@@ -247,7 +253,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (!defined(center)) {
       orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = true
-    } else {
+    }
+    else {
       orbitFrame = Transforms.eastNorthUpToFixedFrame(center || new Cesium.Cartesian3(), scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = false
     }
@@ -270,7 +277,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       if (orbitIsLook) {
         camera.look(Cartesian3.UNIT_Z, -x)
         camera.look(camera.right, -y)
-      } else {
+      }
+      else {
         camera.rotateLeft(x)
         camera.rotateUp(y)
       }
@@ -295,18 +303,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       let clickLocation
       if (e instanceof MouseEvent) {
         clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top)
-      } else if (e instanceof TouchEvent) {
+      }
+      else if (e instanceof TouchEvent) {
         clickLocation = new Cartesian2(e.changedTouches[0].clientX - compassRectangle.left, e.changedTouches[0].clientY - compassRectangle.top)
       }
       const vector = Cartesian2.subtract(clickLocation, center, vectorScratch)
       updateAngleAndOpacity(vector, compassRectangle.width)
-      listener &&
-        emit('compassEvt', {
-          type: 'orbit',
-          camera: scene.camera,
-          status: 'changing',
-          target: compassElement
-        })
+      listener
+      && emit('compassEvt', {
+        type: 'orbit',
+        camera: scene.camera,
+        status: 'changing',
+        target: compassElement
+      })
     }
 
     orbitMouseUpFunction = function (e) {
@@ -328,13 +337,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
       resetRotater()
 
-      listener &&
-        emit('compassEvt', {
-          type: 'orbit',
-          camera: scene.camera,
-          status: 'end',
-          target: compassElement
-        })
+      listener
+      && emit('compassEvt', {
+        type: 'orbit',
+        camera: scene.camera,
+        status: 'end',
+        target: compassElement
+      })
     }
 
     document.addEventListener('mousemove', orbitMouseMoveFunction, false)
@@ -370,13 +379,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     ;(rotateMouseUpFunction as any) = undefined
 
     const listener = getInstanceListener(vcInstance, 'compassEvt')
-    listener &&
-      emit('compassEvt', {
-        type: 'rotate',
-        camera: scene.camera,
-        status: 'start',
-        target: compassElement
-      })
+    listener
+    && emit('compassEvt', {
+      type: 'rotate',
+      camera: scene.camera,
+      status: 'start',
+      target: compassElement
+    })
 
     isRotating = true
     rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x)
@@ -391,7 +400,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (!defined(viewCenter)) {
       rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = true
-    } else {
+    }
+    else {
       rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter || new Cartesian3(), scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = false
     }
@@ -408,7 +418,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       let clickLocation
       if (e instanceof MouseEvent) {
         clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top)
-      } else if (e instanceof TouchEvent) {
+      }
+      else if (e instanceof TouchEvent) {
         clickLocation = new Cartesian2(e.changedTouches[0].clientX - compassRectangle.left, e.changedTouches[0].clientY - compassRectangle.top)
       }
       const vector = Cartesian2.subtract(clickLocation, center, vectorScratch)
@@ -424,13 +435,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const currentCameraAngle = Math.atan2(camera.position.y, camera.position.x)
       camera.rotateRight(newCameraAngle - currentCameraAngle)
       camera.lookAtTransform(oldTransform)
-      listener &&
-        emit('compassEvt', {
-          type: 'rotate',
-          camera: scene.camera,
-          status: 'changing',
-          target: compassElement
-        })
+      listener
+      && emit('compassEvt', {
+        type: 'rotate',
+        camera: scene.camera,
+        status: 'changing',
+        target: compassElement
+      })
     }
 
     rotateMouseUpFunction = function (e) {
@@ -442,13 +453,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       ;(rotateMouseMoveFunction as any) = undefined
       ;(rotateMouseUpFunction as any) = undefined
 
-      listener &&
-        emit('compassEvt', {
-          type: 'rotate',
-          camera: scene.camera,
-          status: 'end',
-          target: compassElement
-        })
+      listener
+      && emit('compassEvt', {
+        type: 'rotate',
+        camera: scene.camera,
+        status: 'end',
+        target: compassElement
+      })
     }
 
     document.addEventListener('mousemove', rotateMouseMoveFunction, false)
@@ -457,13 +468,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     document.addEventListener('touchend', rotateMouseUpFunction, false)
   }
 
-  const onTooltipBeforeShow = e => {
+  const onTooltipBeforeShow = (e) => {
     if (rotateMouseMoveFunction !== undefined || orbitMouseMoveFunction !== undefined) {
       e.cancel = true
     }
   }
 
-  const load = async viewer => {
+  const load = async (viewer) => {
     vcInstance.viewer = viewer
     viewerChange()
     return true

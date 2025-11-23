@@ -1,14 +1,15 @@
-import type { VNode, CSSProperties } from 'vue'
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
+import type { VcTooltipProps } from '@vue-cesium/components/ui'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcZoomEvt } from '@vue-cesium/utils/types'
-import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
-import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import type { CSSProperties, VNode } from 'vue'
+import { VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import useZoomControl from './use-zoom-control'
-import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
-import { isObject } from '@vue-cesium/utils/util'
+import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { isObject } from '@vue-cesium/utils/util'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
+import useZoomControl from './use-zoom-control'
 
 export const zoomControlSmProps = {
   ...positionProps,
@@ -35,7 +36,7 @@ const emits = {
 export default defineComponent({
   name: 'VcZoomControlSm',
   props: zoomControlSmProps,
-  emits: emits,
+  emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -62,7 +63,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -75,7 +76,7 @@ export default defineComponent({
       }
     )
     // computed
-    const zoombarStyle = computed(() => ({ top: zoomControlState.zoombarTop.value + 'px' }))
+    const zoombarStyle = computed(() => ({ top: `${zoomControlState.zoombarTop.value}px` }))
     // methods
     instance.createCesiumObject = async () => {
       return new Promise((resolve, reject) => {
@@ -87,7 +88,8 @@ export default defineComponent({
             const viewerElement = viewer._element
             isObject(rootEl) && viewerElement?.appendChild(rootEl)
             resolve(rootEl)
-          } else {
+          }
+          else {
             resolve(rootEl)
           }
         })
@@ -220,12 +222,13 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-zoom-control-sm ' + positionState.classes.value,
+            class: `vc-zoom-control-sm ${positionState.classes.value}`,
             style: rootStyle
           },
           children
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -233,7 +236,7 @@ export default defineComponent({
 })
 
 export type VcZoomControlSmEmits = typeof emits
-export type VcZoomControlSmProps = {
+export interface VcZoomControlSmProps {
   /**
    * Specify the position of the VcZoomControlSm.
    * Default value: top-right
@@ -256,7 +259,7 @@ export type VcZoomControlSmProps = {
   /**
    * Specify the compass prompt information.
    */
-  tooltip?: false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string })
+  tooltip?: false | (VcTooltipProps & { zoomInTip: string, zoomOutTip: string, zoomBarTip: string })
 }
 
 export type VcZoomControlSmRef = VcComponentPublicInstance<VcZoomControlSmProps>

@@ -1,7 +1,6 @@
-// eslint-disable-next-line vue/prefer-import-from-vue
-import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
-import { isUndefined, isNull, camelCase } from 'lodash-unified'
-import { AnyFunction, AnyObject } from './types'
+import type { AnyFunction, AnyObject } from './types'
+import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isFunction, isObject, isPlainObject, isString, looseEqual } from '@vue/shared'
+import { camelCase, isNull, isUndefined } from 'lodash-unified'
 
 export function getFileNameByPath(path: string): string {
   const posStart = path.lastIndexOf('/')
@@ -10,8 +9,10 @@ export function getFileNameByPath(path: string): string {
 }
 
 export function dirname(path: string): string {
-  if (typeof path !== 'string') path = path + ''
-  if (path.length === 0) return '.'
+  if (typeof path !== 'string')
+    path = `${path}`
+  if (path.length === 0)
+    return '.'
   let code = path.charCodeAt(0)
   const hasRoot = code === 47 /* / */
   let end = -1
@@ -23,13 +24,15 @@ export function dirname(path: string): string {
         end = i
         break
       }
-    } else {
+    }
+    else {
       // We saw the first non-path separator
       matchedSlash = false
     }
   }
 
-  if (end === -1) return hasRoot ? '/' : '.'
+  if (end === -1)
+    return hasRoot ? '/' : '.'
   if (hasRoot && end === 1) {
     // return '//';
     // Backwards-compat fix:
@@ -42,17 +45,19 @@ export function removeEmpty(obj: any): AnyObject {
   const proto = Object.getPrototypeOf(obj)
   const finalObj: AnyObject = {}
   Object.setPrototypeOf(finalObj, proto)
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     const className = getObjClassName(obj[key], true)
     if ((obj[key] && isArray(obj[key])) || obj[key] instanceof Element) {
       finalObj[key] = obj[key]
-    } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) {
+    }
+    else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) {
       // Do not process cesium objects
       const nestedObj = removeEmpty(obj[key])
       if (Object.keys(nestedObj).length) {
         finalObj[key] = nestedObj
       }
-    } else if (obj[key] !== '' && obj[key] !== undefined && obj[key] !== null) {
+    }
+    else if (obj[key] !== '' && obj[key] !== undefined && obj[key] !== null) {
       finalObj[key] = obj[key]
     }
   })
@@ -75,22 +80,25 @@ export function isEmptyObj(obj: unknown): boolean {
 export const kebabCase = hyphenate
 
 function myInstanceof(left, right) {
-  //基本数据类型直接返回false
-  if (typeof left !== 'object' || left === null) return false
-  //getProtypeOf是Object对象自带的一个方法，能够拿到参数的原型对象
+  // 基本数据类型直接返回false
+  if (typeof left !== 'object' || left === null)
+    return false
+  // getProtypeOf是Object对象自带的一个方法，能够拿到参数的原型对象
   let proto = Object.getPrototypeOf(left)
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
-    //查找到尽头，还没找到
-    if (proto === null) return false
-    //找到相同的原型对象
-    if (proto === right?.prototype) return true
+    // 查找到尽头，还没找到
+    if (proto === null)
+      return false
+    // 找到相同的原型对象
+    if (proto === right?.prototype)
+      return true
     proto = Object.getPrototypeOf(proto)
   }
 }
 
 export function getCesiumClassName(obj) {
-  let result = undefined
+  let result
   const constructorNames = Object.keys(Cesium)
   for (let i = 0; i < constructorNames.length; i++) {
     const className = constructorNames[i]
@@ -120,17 +128,19 @@ export function getObjClassName(obj: AnyObject, findCesiumClass = false): string
 
 /**
  * 验证是否是经纬度。
- * @param {Number} longitude
- * @param {Number} latitude
- * @returns {Boolean}
+ * @param {number} longitude
+ * @param {number} latitude
+ * @returns {boolean}
  */
 export function lnglatValidator(longitude: number, latitude: number) {
   // 经度，整数部分为0-180小数部分为0到6位
+  // eslint-disable-next-line regexp/no-unused-capturing-group
   const longreg = /^(-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,15})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,15}|180)$/
   if (!longreg.test(longitude.toString())) {
     return false
   } // 纬度,整数部分为0-90小数部分为0到6位
-  const latreg = /^(-|\+)?([0-8]?\d{1}\.\d{0,15}|90\.0{0,15}|[0-8]?\d{1}|90)$/
+  // eslint-disable-next-line regexp/no-unused-capturing-group
+  const latreg = /^(-|\+)?([0-8]?\d\.\d{0,15}|90\.0{0,15}|[0-8]?\d|90)$/
   if (!latreg.test(latitude.toString())) {
     return false
   }
@@ -155,33 +165,33 @@ export function inherit(base, derived) {
 
 export function getDefaultOptionByProps<T>(props, ignores: Array<string> = []) {
   const defaultOptions: T = {} as T
-  Object.keys(props).forEach(key => {
-    if (ignores.indexOf(key) === -1) {
+  Object.keys(props).forEach((key) => {
+    if (!ignores.includes(key)) {
       const value: {
         default?: AnyFunction<any> | AnyObject
       } = props[key]
       defaultOptions[key] = isFunction(value)
         ? undefined
         : isPlainObject(value)
-        ? isFunction(value.default)
-          ? value.default()
-          : value.default
-        : value
+          ? isFunction(value.default)
+            ? value.default()
+            : value.default
+          : value
     }
   })
 
   return defaultOptions
 }
 
-const addCustomProperty = (obj, options, ignores: Array<string> = []) => {
+function addCustomProperty(obj, options, ignores: Array<string> = []) {
   for (const prop in options) {
-    if (!obj[prop] && ignores.indexOf(prop) === -1) {
+    if (!obj[prop] && !ignores.includes(prop)) {
       obj[prop] = options[prop]
     }
   }
 }
 
-export const merge = <T extends Record<string, any>>(a: T, b: T) => {
+export function merge<T extends Record<string, any>>(a: T, b: T) {
   const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])] as (keyof T)[]
   const obj = {} as T
   for (const key of keys) {
@@ -191,33 +201,35 @@ export const merge = <T extends Record<string, any>>(a: T, b: T) => {
 }
 
 export function isArrayLike(obj) {
-  if (Array.isArray(obj)) return true
-  if (typeof obj !== 'object' || !obj) return false
+  if (Array.isArray(obj))
+    return true
+  if (typeof obj !== 'object' || !obj)
+    return false
   const length = obj.length
   return typeof length === 'number' && length >= 0
 }
 
 export function isNumber(v) {
-  return typeof v === 'number' && isFinite(v)
+  return typeof v === 'number' && Number.isFinite(v)
 }
 
 // reexport from lodash & vue shared
 export {
+  addCustomProperty,
+  camelCase,
+  camelize,
+  capitalize,
+  extend,
   hasOwn,
+  isArray,
+  isFunction,
   // isEmpty,
   // isEqual,
   isObject,
   isPlainObject,
-  isArray,
   isString,
-  capitalize,
-  camelize,
-  looseEqual,
-  extend,
   isUndefined,
-  isFunction,
-  camelCase,
-  addCustomProperty
+  looseEqual
 }
 
 export function getCesiumColor(inputColor, fallbackColor, timestamp?) {
@@ -229,12 +241,15 @@ export function getCesiumColor(inputColor, fallbackColor, timestamp?) {
     }
     if (typeof inputColor === 'string') {
       return Color.fromCssColorString(inputColor)
-    } else if (typeof inputColor === 'function') {
+    }
+    else if (typeof inputColor === 'function') {
       return getCesiumColor(inputColor(timestamp), fallbackColor)
-    } else {
+    }
+    else {
       return inputColor
     }
-  } else {
+  }
+  else {
     return fallbackColor
   }
 }
@@ -242,13 +257,18 @@ export function getCesiumColor(inputColor, fallbackColor, timestamp?) {
 export function getCesiumValue(value, valueType, timestamp) {
   const { JulianDate, Property } = Cesium
   const now = JulianDate.now()
-  if (!value) return value
+  if (!value)
+    return value
   if (valueType) {
-    if (value instanceof valueType) return value
+    if (value instanceof valueType) {
+      return value
+    }
     else {
-      if (value instanceof Property && (value as any)._value instanceof valueType) return (value as any)._value
+      if (value instanceof Property && (value as any)._value instanceof valueType)
+        return (value as any)._value
     }
   }
-  if (isFunction(value.getValue)) return value.getValue(timestamp || now)
+  if (isFunction(value.getValue))
+    return value.getValue(timestamp || now)
   return value
 }

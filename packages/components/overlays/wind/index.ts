@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 13:42:09
@@ -7,16 +8,15 @@
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\index.ts
  */
 import type { PropType, WatchStopHandle } from 'vue'
+import type { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
 import { useCommon } from '@vue-cesium/composables'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
+import { regularGrid } from './grid/regular'
 import ParticleSystem from './particleSystem'
 import { viewRectangleToLonLatRange } from './util'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
-import { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
-import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
-import { regularGrid } from './grid/regular'
 
 export const windmapOverlayProps = {
   show: {
@@ -68,8 +68,8 @@ export default defineComponent({
       const particlesTextureSize = Math.ceil(Math.sqrt(props.options.maxParticles))
       const maxParticles = particlesTextureSize * particlesTextureSize
       return {
-        particlesTextureSize: particlesTextureSize,
-        maxParticles: maxParticles,
+        particlesTextureSize,
+        maxParticles,
         particleHeight: props.options.particleHeight,
         fadeOpacity: props.options.fadeOpacity,
         dropRate: props.options.dropRate,
@@ -84,7 +84,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           primitiveCollection.show = val
         }
       )
@@ -93,7 +93,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.data,
-        val => {
+        (val) => {
           ;(instance.proxy as VcComponentPublicInstance).reload()
         }
       )
@@ -102,9 +102,10 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => particleSystemOptions.value,
-        val => {
+        (val) => {
           const particleSystem = instance.cesiumObject as ParticleSystem
-          if (!particleSystem) return
+          if (!particleSystem)
+            return
           particleSystem.applyParticleSystemOptions(val)
         },
         {
@@ -116,7 +117,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.viewerParameters,
-        val => {
+        (val) => {
           updateViewerParameters()
           const particleSystem = instance.cesiumObject as ParticleSystem
           particleSystem.applyViewerParameters(viewerParameters)
@@ -232,13 +233,14 @@ export default defineComponent({
       const camera = scene.camera
 
       if (
-        Cesium.defined(props.viewerParameters) &&
-        Cesium.defined(props.viewerParameters.latRange) &&
-        Cesium.defined(props.viewerParameters.lonRange)
+        Cesium.defined(props.viewerParameters)
+        && Cesium.defined(props.viewerParameters.latRange)
+        && Cesium.defined(props.viewerParameters.lonRange)
       ) {
         viewerParameters.lonRange = makeCartesian2(props.viewerParameters.lonRange)
         viewerParameters.latRange = makeCartesian2(props.viewerParameters.latRange)
-      } else {
+      }
+      else {
         const viewRectangle = camera.computeViewRectangle(scene.globe.ellipsoid)
         const lonLatRange = viewRectangleToLonLatRange(viewRectangle)
         ;(viewerParameters.lonRange as Cesium.Cartesian2).x = lonLatRange.lon.min
@@ -247,8 +249,8 @@ export default defineComponent({
         ;(viewerParameters.latRange as Cesium.Cartesian2).y = lonLatRange.lat.max
       }
 
-      const pixelSize =
-        Cesium.defined(props.viewerParameters) && Cesium.defined(props.viewerParameters.pixelSize)
+      const pixelSize
+        = Cesium.defined(props.viewerParameters) && Cesium.defined(props.viewerParameters.pixelSize)
           ? props.viewerParameters.pixelSize
           : camera.getPixelSize(globeBoundingSphere, scene.drawingBufferWidth, scene.drawingBufferHeight)
 

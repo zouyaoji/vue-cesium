@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\corridor-outline\index.ts
  */
-import { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { positions, width, ellipsoid, granularity, height, extrudedHeight, cornerType } from '@vue-cesium/utils/cesium-props'
+import { cornerType, ellipsoid, extrudedHeight, granularity, height, positions, width } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const corridorOutlineGeometryProps = {
   ...positions,
   ...width,
@@ -35,7 +36,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCorridorOutlineProps = {
+export interface VcGeometryCorridorOutlineProps {
   /**
    * An array of positions that define the center of the corridor.
    */

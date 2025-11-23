@@ -1,0 +1,32 @@
+{
+  "name": "@vue-cesium/metadata",
+  "version": "0.0.1",
+  "description": "Metadata for Vue Cesium",
+  "keywords": [
+    "vue-cesium"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "run-p \"build:*\"",
+    "build:contributor": "tsx src/contributor.ts",
+    "build:components": "tsx src/components.ts",
+    "dev": "DEV=1 pnpm run build"
+  },
+  "devDependencies": {
+    "@vue-cesium/build": "workspace:*",
+    "@types/lodash-es": "^4.17.6",
+    "chalk": "^5.6.2",
+    "consola": "^3.4.2",
+    "fast-glob": "^3.3.3",
+    "lodash-es": "^4.17.21",
+    "npm-run-all2": "^8.0.4",
+    "octokit": "2.1.0",
+    "tsx": "^4.20.6"
+  }
+}

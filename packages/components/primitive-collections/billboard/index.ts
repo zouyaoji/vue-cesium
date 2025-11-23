@@ -1,22 +1,13 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-11 10:04:36
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\primitive-collections\billboard\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
-  VcPickEvent,
   VcCartesian2,
   VcColor,
   VcComponentInternalInstance,
+  VcComponentPublicInstance,
   VcDistanceDisplayCondition,
   VcNearFarScalar,
+  VcPickEvent,
   VcPosition,
-  VcReadyObject,
-  VcComponentPublicInstance
+  VcReadyObject
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -24,6 +15,7 @@ import {
   color,
   disableDepthTestDistance,
   distanceDisplayCondition,
+  enableMouseEvent,
   eyeOffset,
   height,
   heightReference,
@@ -40,11 +32,19 @@ import {
   sizeInMeters,
   translucencyByDistance,
   verticalOrigin,
-  width,
-  enableMouseEvent
+  width
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-03-11 10:04:36
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitive-collections\billboard\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const billboardProps = {
   ...alignedAxis,
@@ -84,7 +84,7 @@ export default defineComponent({
   }
 })
 
-export type VcBillboardProps = {
+export interface VcBillboardProps {
   /**
    * Specify the aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector.
    */

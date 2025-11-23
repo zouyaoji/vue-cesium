@@ -1,7 +1,7 @@
-import { positionProps } from '@vue-cesium/composables/private/use-position'
 import type { VcColor } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
-import { VcTooltipProps } from '../../ui/tooltip'
+import type { VcTooltipProps } from '../../ui/tooltip'
+import { positionProps } from '@vue-cesium/composables/private/use-position'
 
 export default {
   geolocation: {
@@ -77,8 +77,8 @@ export default {
     type: Array as PropType<unknown> as PropType<[number, number, number]>,
     default: () => [0, 0, 3000]
   },
-  customAPI: Function as PropType<(errorCallback) => { lng: number; lat: number }>,
-  customApi: Function as PropType<(errorCallback) => { lng: number; lat: number }>,
+  customAPI: Function as PropType<(errorCallback) => { lng: number, lat: number }>,
+  customApi: Function as PropType<(errorCallback) => { lng: number, lat: number }>,
   description: Function as PropType<(position, detail) => string>,
   ...positionProps,
   icon: {

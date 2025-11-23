@@ -6,14 +6,15 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-providers\index.ts
  */
-import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import * as coordtransform from '@vue-cesium/utils/coordtransform'
-import useCommon from '../use-common'
-import type { SetupContext } from 'vue'
+
+import type { VcLayerImageryRef } from '@vue-cesium/components'
 import type { ProviderEmits } from '@vue-cesium/utils/emits'
-import { VcLayerImageryRef } from '@vue-cesium/components'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { SetupContext } from 'vue'
 import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import * as coordtransform from '@vue-cesium/utils/coordtransform'
+import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import useCommon from '../use-common'
 
 export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: VcComponentInternalInstance) {
   // state
@@ -31,29 +32,30 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
 
     if (compareCesiumVersion(Cesium.VERSION, '1.104') && typeof Cesium[vcInstance.cesiumClass].fromUrl === 'function') {
       return await Cesium[vcInstance.cesiumClass].fromUrl(options.url, options)
-    } else {
+    }
+    else {
       return new Cesium[vcInstance.cesiumClass](options)
     }
   }
 
   vcInstance.mount = async () => {
     const { viewer } = commonState.$services
-    if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
+    if (vcInstance.cesiumClass.includes('ImageryProvider')) {
       vcInstance.renderByParent = true
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
 
       // 1.104+ 版本废弃了 readyPromise
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       imageryProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', imageryProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
 
       if (props.projectionTransforms && props.projectionTransforms.from !== props.projectionTransforms.to) {
-        const ignoreTransforms =
-          vcInstance.proxy?.$options.name === 'VcImageryProviderBaidu' ||
-          (vcInstance.proxy?.$options.name === 'VcImageryProviderTianditu' && (imageryProvider as any)._epsgCode === '4490')
+        const ignoreTransforms
+          = vcInstance.proxy?.$options.name === 'VcImageryProviderBaidu'
+            || (vcInstance.proxy?.$options.name === 'VcImageryProviderTianditu' && (imageryProvider as any)._epsgCode === '4490')
         if (!ignoreTransforms) {
           const { WebMercatorTilingScheme, Cartographic, Math: CesiumMath } = Cesium
           const tilingScheme = new WebMercatorTilingScheme()
@@ -65,7 +67,8 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
           if (props.projectionTransforms.to.toUpperCase() === 'WGS84') {
             projectMethods = 'wgs84togcj02'
             unprojectMethods = 'gcj02towgs84'
-          } else if (props.projectionTransforms.to.toUpperCase() === 'GCJ02') {
+          }
+          else if (props.projectionTransforms.to.toUpperCase() === 'GCJ02') {
             projectMethods = 'gcj02towgs84'
             unprojectMethods = 'wgs84togcj02'
           }
@@ -88,11 +91,12 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       }
       const parentVM = getVcParentInstance(vcInstance).proxy as VcLayerImageryRef
       return parentVM && parentVM.__updateProvider?.(imageryProvider)
-    } else {
+    }
+    else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
@@ -103,13 +107,14 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
   }
   vcInstance.unmount = async () => {
     const { viewer } = commonState.$services
-    if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
+    if (vcInstance.cesiumClass.includes('ImageryProvider')) {
       const parentVM = getVcParentInstance(vcInstance).proxy as VcLayerImageryRef
       return parentVM && parentVM.__updateProvider?.(undefined)
-    } else {
+    }
+    else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)

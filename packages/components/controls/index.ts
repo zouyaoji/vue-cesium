@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,20 +7,19 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\index.ts
  */
-import { App } from 'vue'
+import type { App } from 'vue'
 import Compass from './compass'
-import ZoomControl from './zoom-control'
-import Print from './print'
-import MyLocation from './my-location'
-import StatusBar from './status-bar'
 import DistanceLegend from './distance-legend'
+import MyLocation from './my-location'
 import Navigation from './navigation'
+import NavigationSm from './navigation-sm'
 import CompassSm from './navigation-sm/compass-sm'
 import ZoomControlSm from './navigation-sm/zoom-control-sm'
-import NavigationSm from './navigation-sm'
-import OverviewMap from './vc-overview-map'
+import Print from './print'
 import SelectionIndicator from './selection-indicator'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import StatusBar from './status-bar'
+import OverviewMap from './vc-overview-map'
+import ZoomControl from './zoom-control'
 
 const components = [
   Compass,
@@ -36,8 +36,8 @@ const components = [
   SelectionIndicator
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -46,7 +46,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }
@@ -70,8 +70,8 @@ export * from './distance-legend'
 export * from './my-location'
 export * from './navigation'
 export * from './navigation-sm'
-export * from './navigation-sm/zoom-control-sm'
 export * from './navigation-sm/compass-sm'
+export * from './navigation-sm/zoom-control-sm'
 export * from './print'
 export * from './selection-indicator'
 export * from './status-bar'

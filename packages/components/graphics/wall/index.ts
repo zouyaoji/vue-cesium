@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 14:01:30
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\wall\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCallbackPropertyFunction,
   VcCartesian3Array,
@@ -19,21 +10,30 @@ import type {
 } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  show,
-  positions,
-  minimumHeights,
-  maximumHeights,
-  granularity,
+  distanceDisplayCondition,
   fill,
+  granularity,
   material,
+  maximumHeights,
+  minimumHeights,
   outline,
   outlineColor,
   outlineWidth,
+  positions,
   shadows,
-  distanceDisplayCondition
+  show
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-06 14:01:30
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\wall\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const wallGraphicsProps = {
   ...show,
@@ -63,7 +63,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsWallProps = {
+export interface VcGraphicsWallProps {
   /**
    * A boolean Property specifying the visibility of the wall.
    * Default value: true

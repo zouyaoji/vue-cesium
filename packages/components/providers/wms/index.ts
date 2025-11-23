@@ -1,3 +1,4 @@
+import type { AnyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,28 +8,27 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\wms\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { AnyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
-  url,
-  layers,
+  clock,
+  credit,
+  ellipsoid,
   enablePickFeatures,
   getFeatureInfoFormats,
-  rectangle,
-  tilingScheme,
-  ellipsoid,
-  tileWidth,
-  tileHeight,
-  minimumLevel,
+  layers,
   maximumLevel,
-  credit,
+  minimumLevel,
+  rectangle,
   subdomains,
-  clock,
-  times
+  tileHeight,
+  tileWidth,
+  tilingScheme,
+  times,
+  url
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const wmsImageryProviderProps = {
   ...url,
@@ -65,7 +65,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderWmsProps = {
+export interface VcImageryProviderWmsProps {
   /**
    * The URL of the WMS service. The URL supports the same keywords as the UrlTemplateImageryProvider.
    */

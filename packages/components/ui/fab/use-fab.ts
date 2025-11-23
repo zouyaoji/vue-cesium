@@ -57,9 +57,9 @@ export default function (props, showing) {
           data: {
             class: [
               props.labelClass,
-              'vc-fab__label vc-tooltip--style vc-fab__label--external' +
-                ` vc-fab__label--external-${props.labelPosition}` +
-                (hideLabel === true ? ' vc-fab__label--external-hidden' : '')
+              `vc-fab__label vc-tooltip--style vc-fab__label--external`
+              + ` vc-fab__label--external-${props.labelPosition}${
+                hideLabel === true ? ' vc-fab__label--external-hidden' : ''}`
             ],
             style: props.labelStyle
           }
@@ -71,8 +71,8 @@ export default function (props, showing) {
         data: {
           class: [
             props.labelClass,
-            `vc-fab__label vc-fab__label--internal vc-fab__label--internal-${props.labelPosition}` +
-              (props.hideLabel === true ? ' vc-fab__label--internal-hidden' : '')
+            `vc-fab__label vc-fab__label--internal vc-fab__label--internal-${props.labelPosition}${
+              props.hideLabel === true ? ' vc-fab__label--internal-hidden' : ''}`
           ],
           style: props.labelStyle
         }

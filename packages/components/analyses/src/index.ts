@@ -7,18 +7,20 @@
  * @FilePath: \vue-cesium\packages\components\analyses\src\index.ts
  */
 
-import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, reactive, ref, computed, VNode } from 'vue'
-import { useLocale } from '@vue-cesium/composables'
-import { defaultOptions, analysesProps, VcAnalysesProps } from './defaultProps'
-import type { AnalysisActionCmpRef, VcDrawingActionInstance, VcDrawingOpts, VcViewshedAnalysisOpts } from '@vue-cesium/utils/drawing-types'
-import { camelize } from '@vue-cesium/utils/util'
 import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import type { AnalysisActionCmpRef, VcDrawingActionInstance, VcDrawingOpts, VcViewshedAnalysisOpts } from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
+import type { VcAnalysesProps } from './defaultProps'
+import { useLocale } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { camelize } from '@vue-cesium/utils/util'
+import { cloneDeep, isEqual, merge } from 'lodash-es'
+import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import { analysesProps, defaultOptions } from './defaultProps'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import { cloneDeep, isEqual, merge } from 'lodash-es'
 
 const emits = {
   ...drawingEmit,
@@ -34,7 +36,7 @@ const emits = {
 export default defineComponent({
   name: 'VcAnalyses',
   props: analysesProps,
-  emits: emits,
+  emits,
   setup(props: VcAnalysesProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -102,7 +104,7 @@ export default defineComponent({
   }
 })
 
-export { VcAnalysisSightline, VcAnalysisViewshed, analysesProps }
+export { analysesProps, VcAnalysisSightline, VcAnalysisViewshed }
 
 export type { VcAnalysesProps } from './defaultProps'
 export type VcAnalysesEmits = typeof emits
@@ -146,7 +148,7 @@ export interface VcAnalysesRef extends VcComponentPublicInstance<VcAnalysesProps
   getSelectedDrawingActionInstance: () => VcDrawingActionInstance
 }
 
-export type VcAnalysesSlots = {
+export interface VcAnalysesSlots {
   /**
    * body slot content of the component
    */

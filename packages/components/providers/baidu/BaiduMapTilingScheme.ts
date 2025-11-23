@@ -1,6 +1,6 @@
+import * as coordtransform from '@vue-cesium/utils/coordtransform'
 import BaiduMapMercatorProjection from './BaiduMapMercatorProjection'
 import Point from './Point'
-import * as coordtransform from '@vue-cesium/utils/coordtransform'
 
 /**
  * A tiling scheme for geometry referenced to a BaiduMapMercatorProjection {@link https://cesium.com/docs/cesiumjs-ref-doc/WebMercatorTilingScheme.html}
@@ -26,7 +26,8 @@ class BaiduMapMercatorTilingScheme {
         if (options.projectionTransforms.to.toUpperCase() === 'WGS84') {
           result = coordtransform.wgs84togcj02(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
           result = coordtransform.gcj02tobd09(result[0], result[1])
-        } else {
+        }
+        else {
           result = coordtransform.gcj02tobd09(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
         }
       }
@@ -46,7 +47,8 @@ class BaiduMapMercatorTilingScheme {
         if (options.projectionTransforms.to.toUpperCase() === 'WGS84') {
           result = coordtransform.bd09togcj02(result.lng, result.lat)
           result = coordtransform.gcj02towgs84(result[0], result[1])
-        } else {
+        }
+        else {
           result = coordtransform.bd09togcj02(result.lng, result.lat)
         }
       }
@@ -66,7 +68,7 @@ class BaiduMapMercatorTilingScheme {
 
     this.resolutions = []
     for (let i = 0; i < 19; i++) {
-      this.resolutions[i] = 256 * Math.pow(2, 18 - i)
+      this.resolutions[i] = 256 * 2 ** (18 - i)
     }
   }
 

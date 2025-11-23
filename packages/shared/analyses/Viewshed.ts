@@ -7,7 +7,7 @@
  * @FilePath: \vue-cesium\packages\shared\analyses\Viewshed.ts
  */
 
-import { VcViewshedOpts } from '@vue-cesium/utils/drawing-types'
+import type { VcViewshedOpts } from '@vue-cesium/utils/drawing-types'
 import { DebugCameraPrimitive } from '../src'
 
 class Viewshed {
@@ -79,8 +79,9 @@ class Viewshed {
   get fovH() {
     return this._fovH
   }
+
   set fovH(e) {
-    if (isNaN(e) || void 0 === e || null == e || e < 0 || e >= Math.PI) {
+    if (Number.isNaN(e) || void 0 === e || e == null || e < 0 || e >= Math.PI) {
       throw new Error('fovH must be in the range [0, PI).')
     }
     this._fovH = Number(e)
@@ -91,8 +92,9 @@ class Viewshed {
   get fovV() {
     return this._fovV
   }
+
   set fovV(e) {
-    if (isNaN(e) || void 0 === e || null == e || e < 0 || e >= Math.PI) {
+    if (Number.isNaN(e) || void 0 === e || e == null || e < 0 || e >= Math.PI) {
       throw new Error('fovV must be in the range [0, PI).')
     }
 
@@ -104,6 +106,7 @@ class Viewshed {
   get near() {
     return this.frustum.near
   }
+
   set near(e) {
     this.frustum.near !== e && (this.frustum.near = e)
   }
@@ -111,6 +114,7 @@ class Viewshed {
   get far() {
     return this.far.near
   }
+
   set far(e) {
     this.frustum.far !== e && (this.frustum.far = e)
   }
@@ -118,6 +122,7 @@ class Viewshed {
   get position() {
     return this._position
   }
+
   set position(e) {
     if (e instanceof Cesium.Cartesian3) {
       this.setView({
@@ -134,8 +139,9 @@ class Viewshed {
   get offsetHeight() {
     return this._offsetHeight
   }
+
   set offsetHeight(e) {
-    if (isNaN(e) || null == e || null == e) {
+    if (Number.isNaN(e) || e == null || e == null) {
       throw new Error('Unacceptable offset.')
     }
 
@@ -153,46 +159,49 @@ class Viewshed {
   get heading() {
     return this._spotLightCamera.heading
   }
+
   set heading(e) {
-    this._spotLightCamera.heading !== e &&
-      this._spotLightCamera.setView({
-        destination: this._spotLightCamera.positionWC,
-        orientation: {
-          heading: e,
-          pitch: this._spotLightCamera.pitch,
-          roll: this._spotLightCamera.roll
-        }
-      })
+    this._spotLightCamera.heading !== e
+    && this._spotLightCamera.setView({
+      destination: this._spotLightCamera.positionWC,
+      orientation: {
+        heading: e,
+        pitch: this._spotLightCamera.pitch,
+        roll: this._spotLightCamera.roll
+      }
+    })
   }
 
   get pitch() {
     return this._spotLightCamera.pitch
   }
+
   set pitch(e) {
-    this._spotLightCamera.pitch !== e &&
-      this._spotLightCamera.setView({
-        destination: this._spotLightCamera.positionWC,
-        orientation: {
-          heading: this._spotLightCamera.heading,
-          pitch: e,
-          roll: this._spotLightCamera.roll
-        }
-      })
+    this._spotLightCamera.pitch !== e
+    && this._spotLightCamera.setView({
+      destination: this._spotLightCamera.positionWC,
+      orientation: {
+        heading: this._spotLightCamera.heading,
+        pitch: e,
+        roll: this._spotLightCamera.roll
+      }
+    })
   }
 
   get roll() {
     return this._spotLightCamera.roll
   }
+
   set roll(e) {
-    this._spotLightCamera.roll !== e &&
-      this._spotLightCamera.setView({
-        destination: this._spotLightCamera.positionWC,
-        orientation: {
-          heading: this._spotLightCamera.heading,
-          pitch: this._spotLightCamera.pitch,
-          roll: e
-        }
-      })
+    this._spotLightCamera.roll !== e
+    && this._spotLightCamera.setView({
+      destination: this._spotLightCamera.positionWC,
+      orientation: {
+        heading: this._spotLightCamera.heading,
+        pitch: this._spotLightCamera.pitch,
+        roll: e
+      }
+    })
   }
 
   get shadowMap() {
@@ -206,13 +215,15 @@ class Viewshed {
   get enabled() {
     return this._viewshedShadowMap.enabled
   }
+
   set enabled(e) {
     if (this._viewshedShadowMap.enabled !== e) {
       if (e) {
         // this._debugCameraPrimitive.show = true
         this._viewshedShadowMap.enabled = true
         this._viewshedShadowMap._pointLightRadius = this._spotLightCamera.frustum.far
-      } else {
+      }
+      else {
         // this._debugCameraPrimitive.show = false
         this._viewshedShadowMap.enabled = false
       }
@@ -227,6 +238,7 @@ class Viewshed {
   get visibleColor() {
     return this._visibleColor
   }
+
   set visibleColor(e: Cesium.Color) {
     this._visibleColor = e
     ;(this._viewshedShadowMap as any)._viewshedColors.visible = e
@@ -235,6 +247,7 @@ class Viewshed {
   get invisibleColor() {
     return this._invisibleColor
   }
+
   set invisibleColor(e: Cesium.Color) {
     this._invisibleColor = e
     ;(this._viewshedShadowMap as any)._viewshedColors.invisible = e
@@ -243,6 +256,7 @@ class Viewshed {
   get showGridLine() {
     return this._showGridLine
   }
+
   set showGridLine(e) {
     this._showGridLine = e
     this._debugCameraPrimitive.show = e
@@ -251,6 +265,7 @@ class Viewshed {
   get faceColor() {
     return this._debugCameraPrimitive.faceColor
   }
+
   set faceColor(e) {
     this._debugCameraPrimitive.faceColor = e
   }
@@ -258,6 +273,7 @@ class Viewshed {
   get lineColor() {
     return this._debugCameraPrimitive.lineColor
   }
+
   set lineColor(e) {
     this._debugCameraPrimitive.lineColor = e
   }
@@ -284,9 +300,9 @@ class Viewshed {
         Matrix4.multiplyByUniformScale(modelMatrix, this._spotLightCamera.frustum.far, modelMatrix)
         const frustum = this._spotLightCamera.frustum as Cesium.PerspectiveFrustum
         this._debugCameraPrimitive.fovV = frustum.aspectRatio <= 1 ? frustum.fov : 2 * Math.atan(Math.tan(0.5 * frustum.fov) / frustum.aspectRatio)
-        this._debugCameraPrimitive.fovH = 1 < frustum.aspectRatio ? frustum.fov : 2 * Math.atan(Math.tan(0.5 * frustum.fov) * frustum.aspectRatio)
-        this._debugCameraPrimitive.segmentH = parseInt(String(this._debugCameraPrimitive.fovH / (Math.PI / 30))) || 1
-        this._debugCameraPrimitive.segmentV = parseInt(String(this._debugCameraPrimitive.fovV / (Math.PI / 30))) || 1
+        this._debugCameraPrimitive.fovH = frustum.aspectRatio > 1 ? frustum.fov : 2 * Math.atan(Math.tan(0.5 * frustum.fov) * frustum.aspectRatio)
+        this._debugCameraPrimitive.segmentH = Number.parseInt(String(this._debugCameraPrimitive.fovH / (Math.PI / 30))) || 1
+        this._debugCameraPrimitive.segmentV = Number.parseInt(String(this._debugCameraPrimitive.fovV / (Math.PI / 30))) || 1
         this._debugCameraPrimitive.update(frameState)
       }
     }

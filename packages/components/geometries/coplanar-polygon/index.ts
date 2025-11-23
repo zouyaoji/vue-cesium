@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\coplanar-polygon\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { ellipsoid, polygonHierarchy, stRotation, vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
-import { polygonHierarchy, stRotation, vertexFormat, ellipsoid } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const polygonCoplanarProps = {
   ...polygonHierarchy,
   ...ellipsoid,
@@ -32,7 +33,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonCoplanarProps = {
+export interface VcGeometryPolygonCoplanarProps {
   /**
    * A polygon hierarchy that can include holes.
    */

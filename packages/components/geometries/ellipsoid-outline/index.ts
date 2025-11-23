@@ -6,24 +6,24 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\ellipsoid-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-
 import {
-  radii,
   innerRadii,
-  minimumClock,
   maximumClock,
-  minimumCone,
   maximumCone,
-  stackPartitions,
+  minimumClock,
+  minimumCone,
+  radii,
   slicePartitions,
+  stackPartitions,
   subdivisions
 } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 const ellipsoidOutlineProps = {
   ...radii,
   ...innerRadii,
@@ -49,7 +49,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryEllipsoidOutlineProps = {
+export interface VcGeometryEllipsoidOutlineProps {
   /**
    * The radii of the ellipsoid in the x, y, and z directions.
    */

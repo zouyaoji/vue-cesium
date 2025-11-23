@@ -7,15 +7,16 @@
  * @FilePath: \vue-cesium\packages\vue-cesium\all.ts
  */
 import installer from './defaults'
+
+export { default as makeInstaller } from './make-installer'
 export * from '@vue-cesium/components'
-export * from '@vue-cesium/directives'
 export * from '@vue-cesium/composables'
+export * from '@vue-cesium/directives'
+
 export * from '@vue-cesium/shared'
 
 // type define
 export * from '@vue-cesium/utils/emits'
-
-export { default as makeInstaller } from './make-installer'
 
 export const install = installer.install
 export const version = installer.version

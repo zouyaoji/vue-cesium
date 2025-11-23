@@ -5,19 +5,19 @@ class Point {
   lng: number
   constructor(lng, lat) {
     // 新增base64支持 - by jz
-    if (isNaN(lng)) {
+    if (Number.isNaN(lng)) {
       // lng = decode64(lng)
-      lng = isNaN(lng) ? 0 : lng
+      lng = Number.isNaN(lng) ? 0 : lng
     }
     if (isString(lng)) {
-      lng = parseFloat(lng)
+      lng = Number.parseFloat(lng)
     }
-    if (isNaN(lat)) {
+    if (Number.isNaN(lat)) {
       // lat = decode64(lat)
-      lat = isNaN(lat) ? 0 : lat
+      lat = Number.isNaN(lat) ? 0 : lat
     }
     if (isString(lat)) {
-      lat = parseFloat(lat)
+      lat = Number.parseFloat(lat)
     }
     this.lng = lng
     this.lat = lat

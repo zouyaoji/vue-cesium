@@ -1,20 +1,21 @@
-import { defineComponent, getCurrentInstance, ref, reactive, VNode, computed } from 'vue'
-import { drawingsProps, defaultOptions } from './defaultProps'
-import { camelize } from '@vue-cesium/utils/util'
 import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import type { DrawingActionCmpRef, VcDrawingActionInstance, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
+import type { VcDrawingsProps } from '..'
+import { useLocale } from '@vue-cesium/composables'
+import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { camelize } from '@vue-cesium/utils/util'
+import { cloneDeep, isEqual, merge } from 'lodash-es'
+import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import { defaultOptions, drawingsProps } from './defaultProps'
 import VcDrawingPin from './pin'
 import VcDrawingPoint from './point'
-import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
-import VcDrawingRegular from './regular'
+import VcDrawingPolyline from './polyline'
 import VcDrawingRectangle from './rectangle'
-import type { DrawingActionCmpRef, VcDrawingActionInstance, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
-import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
-import { useLocale } from '@vue-cesium/composables'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import { VcDrawingsProps } from '..'
-import { cloneDeep, isEqual, merge } from 'lodash-es'
+import VcDrawingRegular from './regular'
 
 const emits = {
   ...drawingEmit,
@@ -30,7 +31,7 @@ const emits = {
 export default defineComponent({
   name: 'VcDrawings',
   props: drawingsProps,
-  emits: emits,
+  emits,
   setup(props: VcDrawingsProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -113,7 +114,8 @@ export default defineComponent({
         case 'rectangle':
           if (rectangleDrawingOpts.regular) {
             return VcDrawingRegular
-          } else {
+          }
+          else {
             return VcDrawingRectangle
           }
         case 'circle':
@@ -132,11 +134,11 @@ export default defineComponent({
   }
 })
 
-export { VcDrawingPin, VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular, drawingsProps }
+export { drawingsProps, VcDrawingPin, VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular }
 
 export type { VcDrawingsProps } from './defaultProps'
 export type VcDrawingsEmits = typeof emits
-export type VcDrawingsSlots = {
+export interface VcDrawingsSlots {
   /**
    * body slot content of the component
    */

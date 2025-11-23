@@ -1,3 +1,5 @@
+import type { PropType } from 'vue'
+import type { VcTooltipProps } from '../../ui'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -7,8 +9,6 @@
  * @FilePath: \vue-cesium@next\packages\components\controls\print\defaultProps.ts
  */
 import { positionProps } from '@vue-cesium/composables/private/use-position'
-import type { PropType } from 'vue'
-import { VcTooltipProps } from '../../ui'
 
 export default {
   showCredit: {

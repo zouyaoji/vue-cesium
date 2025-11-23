@@ -7,19 +7,19 @@
  * @FilePath: \vue-cesium\packages\shared\shaders\materials\index.ts
  */
 import VcCircleWaveMaterial from './VcCircleWaveMaterial'
-import VcLineFlowMaterial from './VcLineFlowMaterial'
 import VcLineFlowColorMaterial from './VcLineFlowColorMaterial'
-import VcLineTrailMaterial from './VcLineTrailMaterial'
+import VcLineFlowMaterial from './VcLineFlowMaterial'
 import VcLineTrailColorMaterial from './VcLineTrailColorMaterial'
+import VcLineTrailMaterial from './VcLineTrailMaterial'
 import VcODLineMaterial from './VcODLineMaterial'
 import VcScanLineMaterial from './VcScanLineMaterial'
 
 export {
   VcCircleWaveMaterial,
-  VcLineFlowMaterial,
   VcLineFlowColorMaterial,
-  VcLineTrailMaterial,
+  VcLineFlowMaterial,
   VcLineTrailColorMaterial,
+  VcLineTrailMaterial,
   VcODLineMaterial,
   VcScanLineMaterial
 }

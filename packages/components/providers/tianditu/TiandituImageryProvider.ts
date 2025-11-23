@@ -1,6 +1,5 @@
-import TiandituMapsStyle from './TiandituMapsStyle'
 import Uri from 'urijs'
-import defer from '@vue-cesium/utils/defer'
+import TiandituMapsStyle from './TiandituMapsStyle'
 
 const TiandituMapsStyleUrl = {}
 const TiandituMapsStyleLayer = {}
@@ -33,15 +32,16 @@ class TiandituImageryProvider {
   _ready: boolean
   _resource: Cesium.Resource
   constructor(options) {
-    Object.keys(TiandituMapsStyle).forEach(key => {
-      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://{s}.tianditu.gov.cn/' + TiandituMapsStyle[key] + '/wmts'
+    Object.keys(TiandituMapsStyle).forEach((key) => {
+      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = `${options.protocol}://{s}.tianditu.gov.cn/${TiandituMapsStyle[key]}/wmts`
       TiandituMapsStyleLayer[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(0, 3)
       TiandituMapsStyleID[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(4)
       TiandituMapsStyleFormat[TiandituMapsStyle[key]] = 'tiles'
 
       if (TiandituMapsStyleID[TiandituMapsStyle[key]] === 'w') {
         TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '900913'
-      } else {
+      }
+      else {
         TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '4490'
       }
       switch (TiandituMapsStyle[key]) {
@@ -124,7 +124,7 @@ class TiandituImageryProvider {
     this._resource = resource
     this._token = options.token
     this._layer = options.layer ?? TiandituMapsStyleLayer[this._mapStyle]
-    this._style = options.style, 'default'
+    this._style = options.style ?? 'default'
     this._tileMatrixSetID = options.tileMatrixSetID ?? TiandituMapsStyleID[this._mapStyle]
     this._tileMatrixLabels = options.tileMatrixLabels ?? TiandituMapsStyleLabels[this._mapStyle]
     this._format = options.format ?? TiandituMapsStyleFormat[this._mapStyle]
@@ -256,13 +256,13 @@ function buildImageResource(this, x, y, level, request) {
   obj.tilematrixset = this._tileMatrixSetID
   obj.format = this._format
   const query = objectToQuery(obj)
-  url = uri.toString() + '?' + query
+  url = `${uri.toString()}?${query}`
   defined(this._proxy) && (url = this._proxy.getURL(url))
-  defined(this._token) && (url += '&tk=' + this._token)
+  defined(this._token) && (url += `&tk=${this._token}`)
 
   const resource = this._resource.getDerivedResource({
-    url: url,
-    request: request
+    url,
+    request
   })
   return resource
 }

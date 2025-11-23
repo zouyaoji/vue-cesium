@@ -1,69 +1,70 @@
+import type { CompareOperator } from 'compare-versions'
 import type {
   AnyFunction,
+  BoundingRectangleOption,
   Cartesian2Option,
   Cartesian3Option,
   Cartesian4Option,
-  PolygonHierarchyOption,
   CartographicInDegreeOption,
-  NearFarScalarOption,
-  DistanceDisplayConditionOption,
-  ColorInByteOption,
-  MaterialOption,
-  VcComponentInternalInstance,
-  RectangleInDegreeOption,
-  BoundingRectangleOption,
-  PlaneOption,
-  TranslationRotationScaleOption,
-  VcCamera,
-  HeadingPitchRollOption,
   CesiumAppearance,
-  VcPosition,
-  CesiumPosition,
-  VcRectangle,
-  CesiumRectangle,
-  VcColor,
-  CesiumColor,
-  VcAppearance,
-  CesiumDistanceDisplayCondition,
-  VcDistanceDisplayCondition,
-  VcCartesian2,
+  CesiumBoundingRectangle,
   CesiumCartesian2,
-  CesiumCartesian3Array,
-  VcCartesian3Array,
-  VcCartesian2Array,
   CesiumCartesian2Array,
+  CesiumCartesian3Array,
+  CesiumColor,
+  CesiumDistanceDisplayCondition,
+  CesiumMaterial,
+  CesiumMaterialProperty,
   CesiumNearFarScalar,
-  VcNearFarScalar,
-  VcPolygonHierarchy,
+  CesiumPlane,
   CesiumPolygonHierarchy,
+  CesiumPosition,
+  CesiumRectangle,
+  ColorInByteOption,
+  DistanceDisplayConditionOption,
+  HeadingPitchRollOption,
+  MaterialOption,
+  NearFarScalarOption,
+  PlaneOption,
+  PolygonHierarchyOption,
+  RectangleInDegreeOption,
+  TranslationRotationScaleOption,
+  VcAppearance,
+  VcBoundingRectangle,
+  VcCamera,
+  VcCartesian2,
+  VcCartesian2Array,
+  VcCartesian3Array,
+  VcColor,
+  VcComponentInternalInstance,
+  VcDistanceDisplayCondition,
+  VcHeadingPitchRange,
+  VcHeadingPitchRoll,
+  VcImageBasedLighting,
   VcMaterial,
   VcMaterialProperty,
-  CesiumMaterialProperty,
-  CesiumMaterial,
-  VcBoundingRectangle,
-  CesiumBoundingRectangle,
-  VcHeadingPitchRoll,
-  VcHeadingPitchRange,
+  VcNearFarScalar,
   VcPlane,
-  CesiumPlane,
-  VcImageBasedLighting
+  VcPolygonHierarchy,
+  VcPosition,
+  VcRectangle
 } from './types'
-import { compare, CompareOperator } from 'compare-versions'
-import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 import {
   VcCircleWaveMaterialProperty,
   VcLineFlowColorMaterialProperty,
   VcLineFlowMaterialProperty,
   VcLineTrailColorMaterialProperty,
   VcLineTrailMaterialProperty,
-  VcScanLineMaterialProperty,
-  VcODLineMaterialProperty
+  VcODLineMaterialProperty,
+  VcScanLineMaterialProperty
 } from '@vue-cesium/shared/extends/materials'
+import { compare } from 'compare-versions'
 import { cloneDeep } from 'lodash'
+import { hasOwn, isArray, isEmptyObj, isFunction, isPlainObject, isString, isUndefined } from './util'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
- * @param {Object} val
+ * @param {object} val
  * @returns {Cartesian2 | CallbackProperty} 返回 Cartesian2 或者 CallbackProperty
  * @example
  * const options = [100, 100]
@@ -97,8 +98,8 @@ export function makeCartesian2(val: VcCartesian2, isConstant = false): CesiumCar
 
 /**
  * 将对象或者数组转换为 Cesium.Cartesian3
- * @param {Object} val 传入的对象或数组
- * @param {Boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @param {object} val 传入的对象或数组
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  * @returns 返回 Cartesian3 或者 CallbackProperty
  * @example
  * const options = {
@@ -121,12 +122,12 @@ export function makeCartesian3(val: VcPosition, ellipsoid?: Cesium.Ellipsoid, is
   } = Cesium
 
   if (
-    val instanceof Cartesian3 ||
-    val instanceof CallbackProperty ||
-    val instanceof SampledPositionProperty ||
-    val instanceof CompositePositionProperty ||
-    val instanceof ConstantPositionProperty ||
-    val instanceof TimeIntervalCollectionPositionProperty
+    val instanceof Cartesian3
+    || val instanceof CallbackProperty
+    || val instanceof SampledPositionProperty
+    || val instanceof CompositePositionProperty
+    || val instanceof ConstantPositionProperty
+    || val instanceof TimeIntervalCollectionPositionProperty
   ) {
     return val
   }
@@ -137,7 +138,8 @@ export function makeCartesian3(val: VcPosition, ellipsoid?: Cesium.Ellipsoid, is
     if (hasOwn(val, 'x') && hasOwn(val, 'y') && hasOwn(val, 'z')) {
       const value = val as Cartesian3Option
       return new Cartesian3(value.x, value.y, value.z)
-    } else if (hasOwn(val, 'lng') && hasOwn(val, 'lat')) {
+    }
+    else if (hasOwn(val, 'lng') && hasOwn(val, 'lat')) {
       const value = val as CartographicInDegreeOption
       return Cartesian3.fromDegrees(value.lng!, value.lat!, value.height || 0, ellipsoid)
     }
@@ -175,7 +177,7 @@ export function makeCartesian3Array(vals: VcCartesian3Array, ellipsoid?: Cesium.
   if (isArray(vals)) {
     if (isArray(vals[0]) || isPlainObject(vals[0])) {
       const results: Array<any> = []
-      vals.forEach(val => {
+      vals.forEach((val) => {
         results.push(makeCartesian3(val, ellipsoid))
       })
       return results
@@ -205,7 +207,7 @@ export function makeCartesian2Array(vals: VcCartesian2Array, isConstant): Cesium
 
   if (isArray(vals)) {
     const points: Array<Cesium.Cartesian2> = []
-    vals.forEach(val => {
+    vals.forEach((val) => {
       points.push(makeCartesian2(val) as Cesium.Cartesian2)
     })
     return points
@@ -216,7 +218,7 @@ export function makeCartesian2Array(vals: VcCartesian2Array, isConstant): Cesium
 
 /**
  * 将对象或数组 转换为 Cesium.Quaternion
- * @param {Object} val
+ * @param {object} val
  * @example
  * const options = {x: 0, y: 0, z: 0, w: 0}
  * // const options = [0, 0, 0, 0]
@@ -250,10 +252,10 @@ export function makeQuaternion(
 
 /**
  * 解析 HierarchyJson
- * @param {Object} val
+ * @param {object} val
  */
 function parsePolygonHierarchyJson(val: Array<PolygonHierarchyOption>, ellipsoid?: Cesium.Ellipsoid) {
-  val.forEach(item => {
+  val.forEach((item) => {
     item.positions = makeCartesian3Array(item.positions, ellipsoid) as Array<Cesium.Cartesian3>
     if (item.holes) {
       parsePolygonHierarchyJson(item.holes, ellipsoid)
@@ -263,7 +265,7 @@ function parsePolygonHierarchyJson(val: Array<PolygonHierarchyOption>, ellipsoid
 
 /**
  * 普通数组或对象转 Cesium.PolygonHierarchy 对象。
- * @param {Object|Array} val
+ * @param {object | Array} val
  */
 export function makePolygonHierarchy(val: VcPolygonHierarchy, ellipsoid?: Cesium.Ellipsoid, isConstant = false): CesiumPolygonHierarchy | undefined {
   const { PolygonHierarchy, CallbackProperty } = Cesium
@@ -293,7 +295,7 @@ export function makePolygonHierarchy(val: VcPolygonHierarchy, ellipsoid?: Cesium
 
 /**
  * 对象或数组转 Cesium.NearFarScalar。
- * @param {Object} val
+ * @param {object} val
  * @returns {NearFarScalar}
  * @example
  * const options = {near: 1000, nearValue: 1.0, far: 10000, farValue: 0.5}
@@ -324,7 +326,7 @@ export function makeNearFarScalar(val: VcNearFarScalar, isConstant = false): Ces
 }
 /**
  * 对象或数组转 Cesium.DistanceDisplayCondition。
- * @param {Object} val
+ * @param {object} val
  * @returns {DistanceDisplayCondition}
  * @example
  * const options = [0, 1000]
@@ -356,7 +358,7 @@ export function makeDistanceDisplayCondition(val: VcDistanceDisplayCondition, is
 
 /**
  * 普通对象、数组或字符串转 Cesium.Color。
- * @param {String|Array|Object|Function} val
+ * @param {string | Array | object | Function} val
  * @returns {Color}
  * @example
  * const options = 'red'
@@ -384,7 +386,8 @@ export function makeColor(val: VcColor, isConstant = false): CesiumColor | undef
         value.blue ?? 255,
         value.alpha ?? 255
       )
-    } else if (hasOwn(val, 'x')) {
+    }
+    else if (hasOwn(val, 'x')) {
       const value = val as Cartesian4Option
       return new Color(value.x ?? 1, value.y ?? 1, value.z ?? 1, value.w ?? 1)
     }
@@ -404,19 +407,20 @@ export function makeColor(val: VcColor, isConstant = false): CesiumColor | undef
 export function makeColors(vals: VcColor[]): Cesium.Color[] {
   if (isArray(vals)) {
     const results: Cesium.Color[] = []
-    vals.forEach(val => {
+    vals.forEach((val) => {
       results.push(makeColor(val) as Cesium.Color)
     })
 
     return results
-  } else {
+  }
+  else {
     return vals
   }
 }
 
 /**
  * 普通对象或数组 [r, g, b, a] 或字符串转 MaterialProperty
- * @param {String|Array|Object} val
+ * @param {string | Array | object} val
  */
 export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false): CesiumMaterialProperty {
   const {
@@ -439,33 +443,33 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
   } = Cesium
 
   if (
-    val instanceof CallbackProperty ||
-    val instanceof Color ||
-    val instanceof CheckerboardMaterialProperty ||
-    val instanceof ColorMaterialProperty ||
-    val instanceof CompositeMaterialProperty ||
-    val instanceof GridMaterialProperty ||
-    val instanceof ImageMaterialProperty ||
-    val instanceof MaterialProperty ||
-    val instanceof PolylineArrowMaterialProperty ||
-    val instanceof PolylineDashMaterialProperty ||
-    val instanceof PolylineGlowMaterialProperty ||
-    val instanceof PolylineOutlineMaterialProperty ||
-    val instanceof StripeMaterialProperty ||
-    val instanceof VcCircleWaveMaterialProperty ||
-    val instanceof VcLineFlowMaterialProperty ||
-    val instanceof VcLineTrailMaterialProperty ||
-    val instanceof VcScanLineMaterialProperty ||
-    val instanceof VcODLineMaterialProperty
+    val instanceof CallbackProperty
+    || val instanceof Color
+    || val instanceof CheckerboardMaterialProperty
+    || val instanceof ColorMaterialProperty
+    || val instanceof CompositeMaterialProperty
+    || val instanceof GridMaterialProperty
+    || val instanceof ImageMaterialProperty
+    || val instanceof MaterialProperty
+    || val instanceof PolylineArrowMaterialProperty
+    || val instanceof PolylineDashMaterialProperty
+    || val instanceof PolylineGlowMaterialProperty
+    || val instanceof PolylineOutlineMaterialProperty
+    || val instanceof StripeMaterialProperty
+    || val instanceof VcCircleWaveMaterialProperty
+    || val instanceof VcLineFlowMaterialProperty
+    || val instanceof VcLineTrailMaterialProperty
+    || val instanceof VcScanLineMaterialProperty
+    || val instanceof VcODLineMaterialProperty
     // getObjClassName(val as any).indexOf('MaterialProperty') !== -1
   ) {
     return val as CesiumMaterialProperty
   }
   if (
-    (isString(val) && /(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val)) ||
-    val instanceof HTMLImageElement ||
-    val instanceof HTMLCanvasElement ||
-    val instanceof HTMLVideoElement
+    (isString(val) && /.*\.(?:jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val))
+    || val instanceof HTMLImageElement
+    || val instanceof HTMLCanvasElement
+    || val instanceof HTMLVideoElement
   ) {
     return new ImageMaterialProperty({
       image: val,
@@ -546,8 +550,8 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
         return new VcLineFlowMaterialProperty({
           image: value.fabric.uniforms.image ?? Material.DefaultImageId,
           color: makeColor(value.fabric.uniforms.color ?? new Color(1, 1, 1, 1)),
-          repeat: makeCartesian2(value.fabric.uniforms.repeat as VcCartesian2)  ?? new Cartesian2(1, 1),
-          axisY: value.fabric.uniforms.axisY ?? false ,
+          repeat: makeCartesian2(value.fabric.uniforms.repeat as VcCartesian2) ?? new Cartesian2(1, 1),
+          axisY: value.fabric.uniforms.axisY ?? false,
           mixt: value.fabric.uniforms.mixt ?? false,
           speed: value.fabric.uniforms.speed ?? 10,
           time: value.fabric.uniforms.time ?? -1
@@ -557,7 +561,7 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
         return new VcLineTrailMaterialProperty({
           image: value.fabric.uniforms.image ?? Material.DefaultImageId,
           color: makeColor(value.fabric.uniforms.color ?? new Color(1, 0, 0, 1)),
-          repeat: makeCartesian2(value.fabric.uniforms.repeat as VcCartesian2  ?? new Cartesian2(1, 1)),
+          repeat: makeCartesian2(value.fabric.uniforms.repeat as VcCartesian2 ?? new Cartesian2(1, 1)),
           axisY: value.fabric.uniforms.axisY ?? false,
           duration: value.fabric.uniforms.duration ?? 3000,
           loop: value.fabric.uniforms.loop ?? true
@@ -610,14 +614,14 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
 
 /**
  * 转 Material
- * @param {String|Array|Object} val
+ * @param {string | Array | object} val
  */
 export function makeMaterial(this, val: VcMaterial): CesiumMaterial {
   const vcInstance = this as VcComponentInternalInstance
   const cmpName = vcInstance?.proxy?.$options.name
   if (
-    cmpName &&
-    (cmpName.indexOf('Graphics') !== -1 || cmpName.indexOf('Datasource') !== -1 || cmpName === 'VcOverlayDynamic' || cmpName === 'VcEntity')
+    cmpName
+    && (cmpName.includes('Graphics') || cmpName.includes('Datasource') || cmpName === 'VcOverlayDynamic' || cmpName === 'VcEntity')
   ) {
     return makeMaterialProperty(val as VcMaterialProperty)
   }
@@ -626,12 +630,13 @@ export function makeMaterial(this, val: VcMaterial): CesiumMaterial {
     return val
   }
   if (isPlainObject(val) && hasOwn(val, 'fabric')) {
-    const f = obj => {
+    const f = (obj) => {
       for (const i in obj) {
         if (!isArray(obj[i]) && isPlainObject(obj[i])) {
           f(obj[i])
-        } else {
-          if (i.toLocaleLowerCase().indexOf('color') !== -1 && !isEmptyObj(obj[i])) {
+        }
+        else {
+          if (i.toLocaleLowerCase().includes('color') && !isEmptyObj(obj[i])) {
             const result = makeColor(obj[i])
             // Cesium 通过对象属性个数判断具体材质类型的，通过 Cesium.combine 移除 vue 传的一些属性
             obj[i] = combine(result, result, true)
@@ -664,13 +669,13 @@ export function makeAppearance(this: VcComponentInternalInstance, val: VcAppeara
   } = Cesium
 
   if (
-    val instanceof Appearance ||
-    val instanceof DebugAppearance ||
-    val instanceof MaterialAppearance ||
-    val instanceof PolylineColorAppearance ||
-    val instanceof EllipsoidSurfaceAppearance ||
-    val instanceof PerInstanceColorAppearance ||
-    val instanceof PolylineMaterialAppearance
+    val instanceof Appearance
+    || val instanceof DebugAppearance
+    || val instanceof MaterialAppearance
+    || val instanceof PolylineColorAppearance
+    || val instanceof EllipsoidSurfaceAppearance
+    || val instanceof PerInstanceColorAppearance
+    || val instanceof PolylineMaterialAppearance
     // getObjClassName(val as any).indexOf('Appearance') !== -1
   ) {
     return val as CesiumAppearance
@@ -694,7 +699,7 @@ export function makeAppearance(this: VcComponentInternalInstance, val: VcAppeara
 
 /**
  * 将对象 {west: number, south: number, east: number, north: number} 或者[west, south, east, north]数组 转 Cesium.Rectangle 对象。
- * @param {Object} val
+ * @param {object} val
  * @returns {Rectangle}
  */
 export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRectangle | Cesium.RectangleGraphics | undefined {
@@ -712,7 +717,8 @@ export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRecta
     if (hasOwn(val, 'west')) {
       const value = val as RectangleInDegreeOption
       return Rectangle.fromDegrees(value.west, value.south, value.east, value.north)
-    } else if (hasOwn(val, 'x')) {
+    }
+    else if (hasOwn(val, 'x')) {
       const value = val as Cartesian4Option
       return new Rectangle(value.x, value.y, value.z, value.w)
     }
@@ -727,7 +733,7 @@ export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRecta
 
 /**
  * 对象或数组转 Cesium.BoundingRectangle。
- * @param {Object} val
+ * @param {object} val
  * @returns {Cesium.BoundingRectangle}
  * @example
  * const options = [0, 0, 100, 100]
@@ -759,7 +765,7 @@ export function makeBoundingRectangle(val: VcBoundingRectangle, isConstant = fal
 
 /**
  * 普通对象 {normal: number, distance: number} 转 Cesium.Plane 对象。
- * @param {Object} val
+ * @param {object} val
  * @returns {Plane}
  */
 export function makePlane(val: VcPlane, isConstant = false): CesiumPlane {
@@ -852,7 +858,8 @@ export function captureScreenshot(viewer: Cesium.Viewer) {
         const cesiumCanvas = viewer.scene.canvas
         const canvas = cesiumCanvas
         resolve(canvas.toDataURL('image/png'))
-      } catch (e) {
+      }
+      catch (e) {
         reject(e)
       }
     })
@@ -865,7 +872,7 @@ export function captureScreenshot(viewer: Cesium.Viewer) {
 export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid) {
   const { Math: CesiumMath, Rectangle } = Cesium
 
-  let destination: Cesium.Cartesian3 | Cesium.Rectangle | undefined = undefined
+  let destination: Cesium.Cartesian3 | Cesium.Rectangle | undefined
   let orientation: HeadingPitchRollOption = {}
 
   if (hasOwn(camera, 'position')) {
@@ -877,26 +884,29 @@ export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid
         pitch: CesiumMath.toRadians(camera.pitch ?? -90),
         roll: CesiumMath.toRadians(camera.roll ?? 0)
       }
-    } else {
+    }
+    else {
       orientation = {
         heading: camera.heading ?? 2 * Math.PI,
         pitch: camera.pitch ?? -Math.PI / 2,
         roll: camera.roll ?? 0
       }
     }
-  } else if (hasOwn(camera, 'rectangle')) {
+  }
+  else if (hasOwn(camera, 'rectangle')) {
     const rectangle = camera.rectangle
     destination = makeRectangle(rectangle!) as Cesium.Rectangle
     if (
-      (hasOwn(rectangle!, 'west') && hasOwn(rectangle!, 'south') && hasOwn(rectangle!, 'east') && hasOwn(rectangle!, 'north')) ||
-      isArray(rectangle)
+      (hasOwn(rectangle!, 'west') && hasOwn(rectangle!, 'south') && hasOwn(rectangle!, 'east') && hasOwn(rectangle!, 'north'))
+      || isArray(rectangle)
     ) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading ?? 360),
         pitch: CesiumMath.toRadians(camera.pitch ?? -90),
         roll: CesiumMath.toRadians(camera.roll ?? 0)
       }
-    } else {
+    }
+    else {
       orientation = {
         heading: camera.heading ?? 2 * Math.PI,
         pitch: camera.pitch ?? -Math.PI / 2,
@@ -914,8 +924,8 @@ export function makeCameraOptions(camera: VcCamera, ellipsoid?: Cesium.Ellipsoid
 export function setViewerCamera(viewer: Cesium.Viewer, camera: VcCamera) {
   const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.setView({
-    destination: destination,
-    orientation: orientation
+    destination,
+    orientation
   })
 }
 
@@ -960,11 +970,11 @@ export function getHeadingPitchRoll(start: Cesium.Cartesian3, end: Cesium.Cartes
     return undefined
   }
 
-  //向量AB
+  // 向量AB
   const vector2 = Cesium.Cartesian3.subtract(end, start, new Cesium.Cartesian3())
-  //归一化
+  // 归一化
   const normal = Cesium.Cartesian3.normalize(vector2, new Cesium.Cartesian3())
-  //旋转矩阵 rotationMatrixFromPositionVelocity源码中有，并未出现在cesiumAPI中
+  // 旋转矩阵 rotationMatrixFromPositionVelocity源码中有，并未出现在cesiumAPI中
   const rotationMatrix3 = Cesium.Transforms.rotationMatrixFromPositionVelocity(start, normal, scene.globe.ellipsoid)
   const m = Cesium.Matrix4.fromRotationTranslation(rotationMatrix3, start)
   const m1 = Cesium.Transforms.eastNorthUpToFixedFrame(
@@ -1011,7 +1021,7 @@ export function calculateAreaByPostions(positions: Array<Cesium.Cartesian3>) {
   const { CoplanarPolygonGeometry, VertexFormat, defined, Cartesian3 } = Cesium
   const geometry = CoplanarPolygonGeometry.createGeometry(
     CoplanarPolygonGeometry.fromPositions({
-      positions: positions,
+      positions,
       vertexFormat: VertexFormat.POSITION_ONLY
     })
   )
@@ -1035,7 +1045,7 @@ export function calculateAreaByPostions(positions: Array<Cesium.Cartesian3>) {
   return area
 }
 
-const triangleArea = (vertexA, vertexB, vertexC) => {
+function triangleArea(vertexA, vertexB, vertexC) {
   const { Cartesian3 } = Cesium
   const vectorBA = Cartesian3.subtract(vertexA, vertexB, {} as any)
   const vectorBC = Cartesian3.subtract(vertexC, vertexB, {} as any)
@@ -1061,9 +1071,11 @@ export function makeJulianDate(val: string | Date | Cesium.JulianDate): Cesium.J
   const { JulianDate } = Cesium
   if (val instanceof JulianDate) {
     return val
-  } else if (isString(val)) {
+  }
+  else if (isString(val)) {
     return Cesium.JulianDate.fromDate(new Date(val))
-  } else if (val instanceof Date) {
+  }
+  else if (val instanceof Date) {
     return Cesium.JulianDate.fromDate(val)
   }
 
@@ -1074,10 +1086,12 @@ export function makeHeadingPitchRoll(val: VcHeadingPitchRoll): Cesium.HeadingPit
   const { HeadingPitchRoll, Math: CesiumMath } = Cesium
   if (val instanceof Cesium.HeadingPitchRoll) {
     return val
-  } else if (Array.isArray(val)) {
+  }
+  else if (Array.isArray(val)) {
     // 认为是经纬度数组
     return new HeadingPitchRoll(CesiumMath.toRadians(val[0]) || 0, CesiumMath.toRadians(val[1]) || 0, CesiumMath.toRadians(val[2]) || 0)
-  } else if (isPlainObject(val)) {
+  }
+  else if (isPlainObject(val)) {
     return new HeadingPitchRoll(val.heading || 0, val.pitch || 0, val.roll || 0)
   }
 
@@ -1088,9 +1102,11 @@ export function makeHeadingPitchRang(val: VcHeadingPitchRange): Cesium.HeadingPi
   const { HeadingPitchRange, Math: CesiumMath } = Cesium
   if (val instanceof Cesium.HeadingPitchRange) {
     return val
-  } else if (Array.isArray(val)) {
+  }
+  else if (Array.isArray(val)) {
     return new HeadingPitchRange(CesiumMath.toRadians(val[0]) || 0, CesiumMath.toRadians(val[1]) || 0, val[2] || 0)
-  } else if (isPlainObject(val)) {
+  }
+  else if (isPlainObject(val)) {
     return new HeadingPitchRange(val.heading || 0, val.pitch || 0, val.range || 0)
   }
 
@@ -1144,7 +1160,7 @@ export function heightToLevel(altitude: number) {
   const C = 91610.74
   const D = -40467.74
 
-  return Math.round(D + (A - D) / (1 + Math.pow(altitude / C, B)))
+  return Math.round(D + (A - D) / (1 + (altitude / C) ** B))
 }
 
 export function compareCesiumVersion(a, b, operator: CompareOperator = '>=') {

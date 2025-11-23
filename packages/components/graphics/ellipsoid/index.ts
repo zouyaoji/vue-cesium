@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-04 22:25:05
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\ellipsoid\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCallbackPropertyFunction,
   VcColor,
@@ -19,27 +10,37 @@ import type {
 } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  show,
-  radii,
-  innerRadii,
-  minimumClock,
-  maximumClock,
-  minimumCone,
-  maximumCone,
-  heightReference,
+  distanceDisplayCondition,
   fill,
+  heightReference,
+  innerRadii,
   material,
+  maximumClock,
+  maximumCone,
+  minimumClock,
+  minimumCone,
   outline,
   outlineColor,
   outlineWidth,
-  stackPartitions,
-  slicePartitions,
-  subdivisions,
+  radii,
   shadows,
-  distanceDisplayCondition
+  show,
+  slicePartitions,
+  stackPartitions,
+  subdivisions
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-04 22:25:05
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\ellipsoid\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const ellipsoidGraphicsProps = {
   ...show,
   ...radii,
@@ -74,7 +75,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsEllipsoidProps = {
+export interface VcGraphicsEllipsoidProps {
   /**
    * A boolean Property specifying the visibility of the ellipsoid.
    * Default value: truec
@@ -114,7 +115,7 @@ export type VcGraphicsEllipsoidProps = {
    */
   heightReference?: number | Cesium.HeightReference | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
   /**
-   * 	A numeric Property specifying the altitude of the ellipse's extruded face relative to the ellipsoid surface.
+   * A numeric Property specifying the altitude of the ellipse's extruded face relative to the ellipsoid surface.
    */
   extrudedHeight?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
   /**

@@ -1,3 +1,5 @@
+import { createGlobalNode, removeGlobalNode } from '@vue-cesium/utils/private/global-nodes'
+import { portalList } from '@vue-cesium/utils/private/portal'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
@@ -6,9 +8,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\private\use-portal.ts
  */
-import { h, ref, onUnmounted, Teleport } from 'vue'
-import { createGlobalNode, removeGlobalNode } from '@vue-cesium/utils/private/global-nodes'
-import { portalList } from '@vue-cesium/utils/private/portal'
+import { h, onUnmounted, ref, Teleport } from 'vue'
 
 function isOnGlobalDialog(vm) {
   vm = vm.parent
@@ -81,8 +81,8 @@ export default function (vm, innerRef, renderPortalContent, checkGlobalDialog?) 
       return onGlobalDialog === true
         ? renderPortalContent()
         : portalIsActive.value === true
-        ? [h(Teleport, { to: portalEl }, renderPortalContent())]
-        : void 0
+          ? [h(Teleport, { to: portalEl }, renderPortalContent())]
+          : void 0
     }
   }
 }

@@ -1,3 +1,6 @@
+export * from './analyses'
+export * from './extends'
+export * from './extends/materials'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
@@ -7,7 +10,4 @@
  * @FilePath: \vue-cesium\packages\shared\index.ts
  */
 export * from './src'
-export * from './extends'
-export * from './analyses'
 export * from './widgets'
-export * from './extends/materials'

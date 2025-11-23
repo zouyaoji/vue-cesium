@@ -1,8 +1,8 @@
+import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import type { VcCamera, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import { flyToCamera, heightToLevel } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
-import type { VcTooltipRef } from '@vue-cesium/components/ui'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
@@ -52,7 +52,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
           if (defined(viewer.trackedEntity)) {
             focus = new Cesium.Cartesian3()
-          } else {
+          }
+          else {
             focus = getCameraFocus(viewer.scene)
           }
 
@@ -70,7 +71,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               pitch: camera.pitch,
               roll: camera.roll
             }
-          } else {
+          }
+          else {
             orientation = {
               direction: camera.direction,
               up: camera.up
@@ -84,43 +86,44 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const target = e && e?.currentTarget
           const level = heightToLevel(camera.positionCartographic.height).toFixed(0)
           const listener = getInstanceListener(vcInstance, 'zoomEvt')
-          listener &&
-            emit('zoomEvt', {
-              type: type,
-              camera: viewer.camera,
-              status: 'start',
-              target: target,
-              level
-            })
+          listener
+          && emit('zoomEvt', {
+            type,
+            camera: viewer.camera,
+            status: 'start',
+            target,
+            level
+          })
           if (Cesium.defined(viewer.trackedEntity) || scene.mode === SceneMode.COLUMBUS_VIEW) {
             // sometimes flyTo does not work (jumps to wrong position) so just set the position without any animation
             // do not use flyTo when tracking an entity because during animatiuon the position of the entity may change
             camera.position = endPosition
-          } else {
+          }
+          else {
             camera.flyTo({
               destination: endPosition,
-              orientation: orientation,
+              orientation,
               duration: props.duration,
               convert: false,
               complete: () => {
-                listener &&
-                  emit('zoomEvt', {
-                    type: type,
-                    camera: viewer.camera,
-                    status: 'end',
-                    target,
-                    level
-                  })
+                listener
+                && emit('zoomEvt', {
+                  type,
+                  camera: viewer.camera,
+                  status: 'end',
+                  target,
+                  level
+                })
               },
               cancel: () => {
-                listener &&
-                  emit('zoomEvt', {
-                    type: type,
-                    camera: viewer.camera,
-                    status: 'cancel',
-                    target,
-                    level
-                  })
+                listener
+                && emit('zoomEvt', {
+                  type,
+                  camera: viewer.camera,
+                  status: 'cancel',
+                  target,
+                  level
+                })
               }
             })
           }
@@ -143,46 +146,47 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const trackedEntity = viewer.trackedEntity
       viewer.trackedEntity = undefined
       viewer.trackedEntity = trackedEntity
-    } else {
+    }
+    else {
       const listener = getInstanceListener(vcInstance, 'zoomEvt')
       const target = e?.currentTarget
       const level = heightToLevel(viewer.camera.positionCartographic.height).toFixed(0)
       // reset to a default position or view defined in the options
-      listener &&
-        emit('zoomEvt', {
+      listener
+      && emit('zoomEvt', {
+        type: 'zoomReset',
+        camera: viewer.camera,
+        status: 'start',
+        target,
+        level
+      })
+
+      const complete = () => {
+        listener
+        && emit('zoomEvt', {
           type: 'zoomReset',
           camera: viewer.camera,
-          status: 'start',
+          status: 'end',
           target,
           level
         })
-
-      const complete = () => {
-        listener &&
-          emit('zoomEvt', {
-            type: 'zoomReset',
-            camera: viewer.camera,
-            status: 'end',
-            target,
-            level
-          })
       }
       const cancel = () => {
-        listener &&
-          emit('zoomEvt', {
-            type: 'zoomReset',
-            camera: viewer.camera,
-            status: 'cancel',
-            target,
-            level
-          })
+        listener
+        && emit('zoomEvt', {
+          type: 'zoomReset',
+          camera: viewer.camera,
+          status: 'cancel',
+          target,
+          level
+        })
       }
 
       const resetView: VcCamera = props.defaultResetView
       const options = {
         duration: props.durationReset,
-        complete: complete,
-        cancel: cancel
+        complete,
+        cancel
       }
       flyToCamera(viewer, resetView, options)
     }

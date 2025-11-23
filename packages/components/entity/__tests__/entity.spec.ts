@@ -6,13 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\components\entity\__tests__\entity.spec.ts
  */
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
-import VcEntity from '../src'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcViewer from '@vue-cesium/components/viewer'
-import { VcConfigProvider } from '../../config-provider'
+import { mount } from '@vue/test-utils'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
-import { describe, expect, test } from 'vitest'
+import { describe, expect } from 'vitest'
+import { VcConfigProvider } from '../../config-provider'
+import VcEntity from '../src'
 
 const App = {
   components: {
@@ -63,8 +63,8 @@ const App = {
   }
 }
 
-describe('VcEntity', () => {
-  test('render test', async () => {
+describe('vcEntity', () => {
+  it('render test', async () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.entity).toBeDefined()
     const testVm = wrapper.vm.$refs.entity as VcComponentPublicInstance

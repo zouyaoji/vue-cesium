@@ -7,7 +7,7 @@
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\types.ts
  */
 
-import { VcCartesian2 } from '@vue-cesium/utils/types'
+import type { VcCartesian2 } from '@vue-cesium/utils/types'
 
 export interface ParticleSystemOptions {
   maxParticles?: number

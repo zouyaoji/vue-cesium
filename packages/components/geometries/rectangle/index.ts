@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\rectangle\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { rectangle, vertexFormat, ellipsoid, granularity, height, rotation, stRotation, extrudedHeight } from '@vue-cesium/utils/cesium-props'
+import { ellipsoid, extrudedHeight, granularity, height, rectangle, rotation, stRotation, vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const rectangleGeometryProps = {
   ...rectangle,
   ...vertexFormat,
@@ -36,7 +37,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryRectangleProps = {
+export interface VcGeometryRectangleProps {
   /**
    * A cartographic rectangle with north, south, east and west properties in radians.
    */

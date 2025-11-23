@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\box-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { dimensions } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const boxOutlineGeometryProps = {
   ...dimensions
 }
@@ -35,7 +36,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryBoxOutlineProps = {
+export interface VcGeometryBoxOutlineProps {
   /**
    * The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3, respectively.
    */

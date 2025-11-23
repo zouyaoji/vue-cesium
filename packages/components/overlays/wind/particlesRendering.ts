@@ -1,10 +1,10 @@
-import * as Util from './util'
-import segmentDrawVert from './glsl/segmentDraw.vert'
-import segmentDrawFrag from './glsl/segmentDraw.frag'
-import fullscreenVert from './glsl/fullscreen.vert'
-import trailDrawFrag from './glsl/trailDraw.frag'
-import screenDrawFrag from './glsl/screenDraw.frag'
 import CustomPrimitive from './customPrimitive'
+import fullscreenVert from './glsl/fullscreen.vert'
+import screenDrawFrag from './glsl/screenDraw.frag'
+import segmentDrawFrag from './glsl/segmentDraw.frag'
+import segmentDrawVert from './glsl/segmentDraw.vert'
+import trailDrawFrag from './glsl/trailDraw.frag'
+import * as Util from './util'
 
 class ParticlesRendering {
   textures: any
@@ -18,14 +18,14 @@ class ParticlesRendering {
 
   createRenderingTextures(context, data) {
     const colorTextureOptions = {
-      context: context,
+      context,
       width: context.drawingBufferWidth,
       height: context.drawingBufferHeight,
       pixelFormat: Cesium.PixelFormat.RGBA,
       pixelDatatype: Cesium.PixelDatatype.UNSIGNED_BYTE
     }
     const depthTextureOptions = {
-      context: context,
+      context,
       width: context.drawingBufferWidth,
       height: context.drawingBufferHeight,
       pixelFormat: Cesium.PixelFormat.DEPTH_COMPONENT,
@@ -170,25 +170,25 @@ class ParticlesRendering {
         geometry: this.createSegmentsGeometry(particleSystemOptions),
         primitiveType: Cesium.PrimitiveType.TRIANGLES,
         uniformMap: {
-          previousParticlesPosition: function () {
+          previousParticlesPosition() {
             return particlesComputing.particlesTextures.previousParticlesPosition
           },
-          currentParticlesPosition: function () {
+          currentParticlesPosition() {
             return particlesComputing.particlesTextures.currentParticlesPosition
           },
-          postProcessingPosition: function () {
+          postProcessingPosition() {
             return particlesComputing.particlesTextures.postProcessingPosition
           },
-          aspect: function () {
+          aspect() {
             return context.drawingBufferWidth / context.drawingBufferHeight
           },
-          pixelSize: function () {
+          pixelSize() {
             return viewerParameters.pixelSize
           },
-          lineWidth: function () {
+          lineWidth() {
             return particleSystemOptions.lineWidth
           },
-          particleHeight: function () {
+          particleHeight() {
             return particleSystemOptions.particleHeight
           }
         },
@@ -219,19 +219,19 @@ class ParticlesRendering {
         geometry: Util.getFullscreenQuad(),
         primitiveType: Cesium.PrimitiveType.TRIANGLES,
         uniformMap: {
-          segmentsColorTexture: function () {
+          segmentsColorTexture() {
             return that.textures.segmentsColor
           },
-          segmentsDepthTexture: function () {
+          segmentsDepthTexture() {
             return that.textures.segmentsDepth
           },
-          currentTrailsColor: function () {
+          currentTrailsColor() {
             return that.framebuffers.currentTrails.getColorTexture(0)
           },
-          trailsDepthTexture: function () {
+          trailsDepthTexture() {
             return that.framebuffers.currentTrails.depthTexture
           },
-          fadeOpacity: function () {
+          fadeOpacity() {
             return particleSystemOptions.fadeOpacity
           }
         },
@@ -254,7 +254,7 @@ class ParticlesRendering {
         }),
         framebuffer: this.framebuffers.nextTrails,
         autoClear: true,
-        preExecute: function () {
+        preExecute() {
           // swap framebuffers before binding
           const temp = that.framebuffers.currentTrails
           that.framebuffers.currentTrails = that.framebuffers.nextTrails
@@ -275,10 +275,10 @@ class ParticlesRendering {
         geometry: Util.getFullscreenQuad(),
         primitiveType: Cesium.PrimitiveType.TRIANGLES,
         uniformMap: {
-          trailsColorTexture: function () {
+          trailsColorTexture() {
             return that.framebuffers.nextTrails.getColorTexture(0)
           },
-          trailsDepthTexture: function () {
+          trailsDepthTexture() {
             return that.framebuffers.nextTrails.depthTexture
           }
         },

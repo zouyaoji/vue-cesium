@@ -13,7 +13,8 @@ class VisibilityState {
       const primitive = primitiveCollection.get(i)
       if (primitive instanceof PrimitiveCollection) {
         this.hidePrimitiveCollection(primitive)
-      } else {
+      }
+      else {
         this.states.push(primitive.show)
         primitive instanceof Cesium3DTileset || primitive instanceof Model || (primitive.show = false)
       }
@@ -27,7 +28,8 @@ class VisibilityState {
       const primitive = primitiveCollection.get(i)
       if (primitive instanceof PrimitiveCollection) {
         this.restorePrimitiveCollection(primitive)
-      } else {
+      }
+      else {
         primitive.show = this.states.get(this.count++)
       }
     }

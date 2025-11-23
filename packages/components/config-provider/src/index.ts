@@ -1,3 +1,4 @@
+import type { Language } from '@vue-cesium/locale'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,10 +7,10 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\config-provider\src\index.ts
  */
-import { defineComponent, PropType, renderSlot, VNode } from 'vue'
+import type { PropType, VNode } from 'vue'
 import { provideGlobalConfig } from '@vue-cesium/composables/use-global-config'
-import { Language } from '@vue-cesium/locale'
 import Chinese from '@vue-cesium/locale/lang/zh-hans'
+import { defineComponent, renderSlot } from 'vue'
 
 export default defineComponent({
   name: 'VcConfigProvider',
@@ -39,7 +40,7 @@ export default defineComponent({
   }
 })
 
-export type VcConfigProviderProps = {
+export interface VcConfigProviderProps {
   /**
    * Locale Object.
    */

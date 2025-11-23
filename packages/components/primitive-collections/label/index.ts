@@ -1,22 +1,13 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-11 10:47:57
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\primitive-collections\label\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import {
-  VcPickEvent,
+import type {
   VcCartesian2,
   VcColor,
   VcComponentInternalInstance,
+  VcComponentPublicInstance,
   VcDistanceDisplayCondition,
   VcNearFarScalar,
+  VcPickEvent,
   VcPosition,
-  VcReadyObject,
-  VcComponentPublicInstance
+  VcReadyObject
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -24,12 +15,14 @@ import {
   backgroundPadding,
   disableDepthTestDistance,
   distanceDisplayCondition,
+  enableMouseEvent,
   eyeOffset,
   fillColor,
   font,
   heightReference,
   horizontalOrigin,
   id,
+  labelStyle,
   outlineColor,
   outlineWidth,
   pixelOffset,
@@ -39,14 +32,21 @@ import {
   scaleByDistance,
   show,
   showBackground,
-  labelStyle,
   text,
   translucencyByDistance,
-  verticalOrigin,
-  enableMouseEvent
+  verticalOrigin
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-03-11 10:47:57
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitive-collections\label\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const labelProps = {
   ...backgroundColor,
@@ -92,7 +92,7 @@ export default defineComponent({
   }
 })
 
-export type VcLabelProps = {
+export interface VcLabelProps {
   /**
    * Specify the background color of this label.
    * Default value: { x: 0.165, y: 0.165, z: 0.165, w: 0.8 }

@@ -40,7 +40,7 @@ export function regularGrid(λaxis, φaxis) {
 
   const isCylinder = Math.floor(nx * Δλ) >= 360 // true if the grid forms a cylinder
 
-  //function iterator() {
+  // function iterator() {
   //    const i = 0;
   //    return {
   //        next: function() {
@@ -54,7 +54,7 @@ export function regularGrid(λaxis, φaxis) {
   //            return {value: [λ, φ, i++], done: false};
   //        },
   //    };
-  //}
+  // }
 
   /** @returns {{width: number, height: number}} dimensions of this grid */
   function dimensions() {
@@ -84,7 +84,7 @@ export function regularGrid(λaxis, φaxis) {
         return i + 1 // Terminate iteration and return next grid index.
       }
     }
-    return NaN // Iteration is finished.
+    return Number.NaN // Iteration is finished.
   }
 
   /**
@@ -93,18 +93,19 @@ export function regularGrid(λaxis, φaxis) {
    * @returns {number} index of closest grid point or NaN if further than Δλ/2 or Δφ/2 from the grid boundary.
    */
   function closest(λ, φ) {
+    // eslint-disable-next-line no-self-compare
     if (λ === λ && φ === φ) {
       const x = floorMod(λ - λ0, 360) / Δλ
       const y = (φ - φ0) / Δφ
       const rx = Math.round(x)
       const ry = Math.round(y)
 
-      if (0 <= ry && ry < ny && 0 <= rx && (rx < nx || (rx === nx && isCylinder))) {
+      if (ry >= 0 && ry < ny && rx >= 0 && (rx < nx || (rx === nx && isCylinder))) {
         const i = ry * nx + rx
         return rx === nx ? i - nx : i
       }
     }
-    return NaN
+    return Number.NaN
   }
 
   /**
@@ -131,6 +132,7 @@ export function regularGrid(λaxis, φaxis) {
    *          or [NaN, NaN, NaN, NaN, NaN, NaN] if all points are not found.
    */
   function closest4(λ, φ) {
+    // eslint-disable-next-line no-self-compare
     if (λ === λ && φ === φ) {
       const x = floorMod(λ - λ0, 360) / Δλ
       const y = (φ - φ0) / Δφ
@@ -141,7 +143,7 @@ export function regularGrid(λaxis, φaxis) {
       const Δx = x - fx
       const Δy = y - fy
 
-      if (0 <= fy && cy < ny && 0 <= fx && (cx < nx || (cx === nx && isCylinder))) {
+      if (fy >= 0 && cy < ny && fx >= 0 && (cx < nx || (cx === nx && isCylinder))) {
         const i00 = fy * nx + fx
         let i10 = i00 + 1
         const i01 = i00 + nx
@@ -153,7 +155,7 @@ export function regularGrid(λaxis, φaxis) {
         return [i00, i10, i01, i11, Δx, Δy]
       }
     }
-    return [NaN, NaN, NaN, NaN, NaN, NaN]
+    return [Number.NaN, Number.NaN, Number.NaN, Number.NaN, Number.NaN, Number.NaN]
   }
 
   // function webgl() {
@@ -167,11 +169,11 @@ export function regularGrid(λaxis, φaxis) {
   // }
 
   return {
-    dimensions: dimensions,
-    isCylindrical: isCylindrical,
-    forEach: forEach,
-    closest: closest,
-    closest4: closest4
+    dimensions,
+    isCylindrical,
+    forEach,
+    closest,
+    closest4
     // webgl: webgl,
   }
 }

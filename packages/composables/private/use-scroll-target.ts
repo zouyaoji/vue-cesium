@@ -1,6 +1,6 @@
-import { ref, watch, onBeforeUnmount } from 'vue'
-
 import { listenOpts } from '@vue-cesium/utils/private/event'
+
+import { onBeforeUnmount, ref, watch } from 'vue'
 
 export default function (props, configureScrollTarget) {
   const localScrollTarget = ref(null)

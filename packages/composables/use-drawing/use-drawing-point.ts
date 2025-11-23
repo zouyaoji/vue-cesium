@@ -7,19 +7,20 @@
  * @FilePath: \vue-cesium\packages\composables\use-drawing\use-drawing-point.ts
  */
 
+import type { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
+import type { VcPointDrawing } from '@vue-cesium/utils/drawing-types'
+import type { VcComponentInternalInstance, VcDrawingProvider } from '@vue-cesium/utils/types'
+import type { VNode, WatchStopHandle } from 'vue'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionBillboard, VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
-import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
-import { VcPointDrawing } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcDrawingProvider } from '@vue-cesium/utils/types'
-import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStopHandle, h } from 'vue'
-import useCommon from '../use-common'
-import useDrawingAction from './use-drawing-action'
-import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 import { platform } from '@vue-cesium/utils/platform'
+import { getCurrentInstance, h, nextTick, onUnmounted, ref, watch } from 'vue'
+import useCommon from '../use-common'
+import { useLocale } from '../use-locale'
+import useDrawingAction from './use-drawing-action'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -67,7 +68,7 @@ export default function (props, ctx, cmpName: string) {
   unwatchFns.push(
     watch(
       () => props.editable,
-      val => {
+      (val) => {
         const { drawingFabInstance, selectedDrawingActionInstance } = $services
         if (val && selectedDrawingActionInstance?.name === drawingType) {
           const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
@@ -209,7 +210,8 @@ export default function (props, ctx, cmpName: string) {
           viewer
         )
       })
-    } else {
+    }
+    else {
       drawStatus.value = DrawStatus.AfterDraw
       point.drawStatus = DrawStatus.AfterDraw
 
@@ -229,7 +231,8 @@ export default function (props, ctx, cmpName: string) {
         drawingFabInstanceVm.editingActionName = undefined
         canShowDrawTip.value = false
         type = editorType.value
-      } else {
+      }
+      else {
         if (props.mode === 1) {
           nextTick(() => {
             drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
@@ -261,7 +264,7 @@ export default function (props, ctx, cmpName: string) {
     }
   }
 
-  const handleMouseMove = movement => {
+  const handleMouseMove = (movement) => {
     const { viewer, getWorldPosition } = $services
     const scene = viewer.scene
     const { defined, SceneMode } = Cesium
@@ -344,7 +347,7 @@ export default function (props, ctx, cmpName: string) {
       const scratchCartesian3s = [new Cartesian3(), new Cartesian3(), new Cartesian3(), new Cartesian3(), new Cartesian3()]
       const normalScratch = new Cartesian3()
       const surfaceNormalScratch = new Cartesian3()
-      if (!(1e4 < distance)) {
+      if (!(distance > 1e4)) {
         const p0 = scratchCartesian3s[0]
         const p1 = scratchCartesian3s[1]
         const p2 = scratchCartesian3s[2]
@@ -417,7 +420,7 @@ export default function (props, ctx, cmpName: string) {
     return 0
   }
 
-  const onEditorClick = e => {
+  const onEditorClick = (e) => {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
 
@@ -434,10 +437,12 @@ export default function (props, ctx, cmpName: string) {
       canShowDrawTip.value = true
       restorePosition = Object.assign({}, renderDatas.value[editingPoint.value._vcPolylineIndx])
       drawingFabInstanceVm.editingActionName = drawingType
-    } else if (e === 'remove') {
+    }
+    else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
-    } else {
+    }
+    else {
       const index = mouseoverPoint.value._vcPolylineIndx
       const polyline = renderDatas.value[index]
       props.editorOpts?.[e]?.callback?.(index, polyline)
@@ -479,26 +484,26 @@ export default function (props, ctx, cmpName: string) {
         props.measureUnits?.angleUnits,
         props.locale,
         props.decimals?.lng
-      )}\n` +
-      `${t('vc.measurement.point.lat')}${angleFormatter(
+      )}\n`
+      + `${t('vc.measurement.point.lat')}${angleFormatter(
         positionCartographic.latitude,
         props.measureUnits?.angleUnits,
         props.locale,
         props.decimals?.lat
-      )}\n` +
-      `${t('vc.measurement.point.height')}${distanceFormatter(
+      )}\n`
+      + `${t('vc.measurement.point.height')}${distanceFormatter(
         point.height,
         props.measureUnits?.distanceUnits,
         props.locale,
         props.decimals?.height
-      )}\n` +
-      `${t('vc.measurement.point.slope')}${angleFormatter(point.slope, props.measureUnits?.slopeUnits, props.locale, props.decimals?.slope)}`
+      )}\n`
+      + `${t('vc.measurement.point.slope')}${angleFormatter(point.slope, props.measureUnits?.slopeUnits, props.locale, props.decimals?.slope)}`
     )
   }
 
   if (props.preRenderDatas && props.preRenderDatas.length) {
     const { viewer } = $services
-    props.preRenderDatas.forEach(preRenderData => {
+    props.preRenderDatas.forEach((preRenderData) => {
       const pointDrawing: VcPointDrawing = {
         drawStatus: DrawStatus.AfterDraw,
         show: true,
@@ -563,13 +568,14 @@ export default function (props, ctx, cmpName: string) {
             ...billboardOpts
           })
 
-          labelsOpts.text &&
-            labelsRender.push({
-              position: point.position,
-              id: createGuid(),
-              ...labelsOpts
-            })
-        } else {
+          labelsOpts.text
+          && labelsRender.push({
+            position: point.position,
+            id: createGuid(),
+            ...labelsOpts
+          })
+        }
+        else {
           labelsRender.push({
             position: point.position,
             id: createGuid(),
@@ -597,13 +603,13 @@ export default function (props, ctx, cmpName: string) {
       })
     )
 
-    cmpName === 'VcDrawingPin' &&
-      children.push(
-        h(VcCollectionBillboard, {
-          enableMouseEvent: props.enableMouseEvent,
-          billboards: billboardsRender
-        })
-      )
+    cmpName === 'VcDrawingPin'
+    && children.push(
+      h(VcCollectionBillboard, {
+        enableMouseEvent: props.enableMouseEvent,
+        billboards: billboardsRender
+      })
+    )
 
     if (props.drawtip?.show && canShowDrawTip.value) {
       const { viewer } = $services

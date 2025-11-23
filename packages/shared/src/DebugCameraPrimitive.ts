@@ -62,6 +62,7 @@ class DebugCameraPrimitive {
   get faceColor() {
     return this._faceColor
   }
+
   set faceColor(e) {
     this._faceColor = e
   }
@@ -69,6 +70,7 @@ class DebugCameraPrimitive {
   get lineColor() {
     return this._lineColor
   }
+
   set lineColor(e) {
     this._lineColor = e
   }
@@ -77,28 +79,29 @@ class DebugCameraPrimitive {
     if (this.show && frameState.passes.render) {
       const { clone, Matrix4, defined, BoundingSphere } = Cesium
 
-      ;(this.fovH === this._fovH &&
-        this.fovV === this._fovV &&
-        this.segmentH === this._segmentH &&
-        this.segmentV === this._segmentV &&
-        this.subSegmentH === this._subSegmentH &&
-        this.subSegmentV === this._subSegmentV) ||
-        ((this._fovH = this.fovH),
-        (this._fovV = this.fovV),
-        (this._segmentH = this.segmentH),
-        (this._segmentV = this.segmentV),
-        (this._subSegmentH = this.subSegmentH),
-        (this._subSegmentV = this.subSegmentV),
-        (this._modelMatrix = clone(Matrix4.IDENTITY)),
-        this._destroyVideoMemory())
+      // eslint-disable-next-line ts/no-unused-expressions
+      ;(this.fovH === this._fovH
+        && this.fovV === this._fovV
+        && this.segmentH === this._segmentH
+        && this.segmentV === this._segmentV
+        && this.subSegmentH === this._subSegmentH
+        && this.subSegmentV === this._subSegmentV)
+      || ((this._fovH = this.fovH),
+      (this._fovV = this.fovV),
+      (this._segmentH = this.segmentH),
+      (this._segmentV = this.segmentV),
+      (this._subSegmentH = this.subSegmentH),
+      (this._subSegmentV = this.subSegmentV),
+      (this._modelMatrix = clone(Matrix4.IDENTITY)),
+      this._destroyVideoMemory())
 
       if (
-        this.fovH !== this._fovH &&
-        this.fovV !== this._fovV &&
-        this.segmentH !== this._segmentH &&
-        this.segmentV !== this._segmentV &&
-        this.subSegmentH !== this._subSegmentH &&
-        this.subSegmentV !== this._subSegmentV
+        this.fovH !== this._fovH
+        && this.fovV !== this._fovV
+        && this.segmentH !== this._segmentH
+        && this.segmentV !== this._segmentV
+        && this.subSegmentH !== this._subSegmentH
+        && this.subSegmentV !== this._subSegmentV
       ) {
         this._fovH = this.fovH
         this._fovV = this.fovV
@@ -231,52 +234,52 @@ class DebugCameraPrimitive {
     })
 
     const uniformsFace = {
-      vcColor: function () {
+      vcColor() {
         return that._faceColor
       }
     }
 
     const uniformsLine = {
-      vcColor: function () {
+      vcColor() {
         return that._lineColor
       }
     }
 
     const shaderProgram = ShaderProgram.fromCache({
-      context: context,
+      context,
       vertexShaderSource: vs,
       fragmentShaderSource: fs,
-      attributeLocations: attributeLocations
+      attributeLocations
     })
 
     this._shaderprogram = shaderProgram
     const positionBuffer1 = Cesium['Buffer'].createVertexBuffer({
-      context: context,
+      context,
       typedArray: positionTypedArray1,
       usage: BufferUsage.STATIC_DRAW
     })
     const positionBuffer2 = Cesium['Buffer'].createVertexBuffer({
-      context: context,
+      context,
       typedArray: positionTypedArray2,
       usage: BufferUsage.STATIC_DRAW
     })
 
     const indexBuffer1 = Cesium['Buffer'].createIndexBuffer({
-      context: context,
+      context,
       typedArray: indexTypedArray1,
       usage: BufferUsage.STATIC_DRAW,
       indexDatatype: IndexDatatype.UNSIGNED_SHORT
     })
 
     const indexBuffer2 = Cesium['Buffer'].createIndexBuffer({
-      context: context,
+      context,
       typedArray: indexTypedArray2,
       usage: BufferUsage.STATIC_DRAW,
       indexDatatype: IndexDatatype.UNSIGNED_SHORT
     })
 
     const textureVA1 = new VertexArray({
-      context: context,
+      context,
       attributes: [
         {
           index: 0,
@@ -295,7 +298,7 @@ class DebugCameraPrimitive {
     })
 
     const textureVA2 = new VertexArray({
-      context: context,
+      context,
       attributes: [
         {
           index: 0,
@@ -317,8 +320,8 @@ class DebugCameraPrimitive {
     this._command = new DrawCommand({
       vertexArray: textureVA1,
       primitiveType: PrimitiveType.TRIANGLES,
-      renderState: renderState,
-      shaderProgram: shaderProgram,
+      renderState,
+      shaderProgram,
       uniformMap: uniformsFace,
       owner: this,
       pass: Pass.TRANSLUCENT,
@@ -330,8 +333,8 @@ class DebugCameraPrimitive {
     this._lineCommand = new DrawCommand({
       vertexArray: textureVA2,
       primitiveType: PrimitiveType.LINES,
-      renderState: renderState,
-      shaderProgram: shaderProgram,
+      renderState,
+      shaderProgram,
       uniformMap: uniformsLine,
       owner: this,
       pass: Pass.TRANSLUCENT,

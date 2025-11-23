@@ -1,4 +1,3 @@
-import defer from '@vue-cesium/utils/defer'
 import BaiduMapMercatorTilingScheme from './BaiduMapTilingScheme'
 
 class BaiduMapImageryProvider {
@@ -40,19 +39,24 @@ class BaiduMapImageryProvider {
     | 'bluish'
     | 'grayscale'
     | 'hardedge'
+
   constructor(options) {
     const { Resource, Credit, Event } = Cesium
     this._subdomains = options.subdomains ?? ['0', '1', '2', '3']
     if (options.url) {
       this._url = options.url
-    } else {
+    }
+    else {
       if (options.mapStyle === 'img') {
         this._url = `//maponline{s}.bdimg.com/starpic/u=x={x};y={y};z={z};v=009;type=sate&qt=satepc&app=webearth2&udt={udt}&fm=46&v=009`
-      } else if (options.mapStyle === 'vec') {
+      }
+      else if (options.mapStyle === 'vec') {
         this._url = `//maponline{s}.bdimg.com/tile/?qt={qt}&x={x}&y={y}&z={z}&styles={styles}&scaler={scale}&udt={udt}&from=jsapi3_0&showtext={showtext}`
-      } else if (options.mapStyle === 'traffic') {
+      }
+      else if (options.mapStyle === 'traffic') {
         this._url = `https://its.map.baidu.com/traffic/TrafficTileService?time={time}&label={labelStyle}&v=016&level={z}&x={x}&y={y}&scaler={scale}`
-      } else {
+      }
+      else {
         this._url = `//api.map.baidu.com/customimage/tile?&x={x}&y={y}&z={z}&udt={udt}&scale={scale}&ak={ak}&customid={mapStyle}`
       }
     }
@@ -208,8 +212,8 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{udt}', String(new Date().getTime()))
     .replace('{showtext}', this._showtext)
   const resource = this._resource.getDerivedResource({
-    url: url,
-    request: request
+    url,
+    request
   })
   return resource
 }

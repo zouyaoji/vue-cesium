@@ -1,6 +1,6 @@
-import { computed } from 'vue'
 import useAlign, { useAlignProps } from '@vue-cesium/composables/private/use-align'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
+import { computed } from 'vue'
 
 const padding = {
   none: 0,
@@ -80,7 +80,7 @@ export default function (props) {
       ? Object.assign({}, obj, {
           padding: props.padding
             .split(/\s+/)
-            .map(v => (v in padding ? padding[v] + 'px' : v))
+            .map(v => (v in padding ? `${padding[v]}px` : v))
             .join(' '),
           minWidth: '0',
           minHeight: '0'
@@ -95,10 +95,14 @@ export default function (props) {
   const tabIndex = computed(() => (isActionable.value === true ? props.tabindex || 0 : -1))
 
   const design = computed(() => {
-    if (props.flat === true) return 'flat'
-    if (props.outline === true) return 'outline'
-    if (props.push === true) return 'push'
-    if (props.unelevated === true) return 'unelevated'
+    if (props.flat === true)
+      return 'flat'
+    if (props.outline === true)
+      return 'outline'
+    if (props.push === true)
+      return 'push'
+    if (props.unelevated === true)
+      return 'unelevated'
     return 'standard'
   })
 
@@ -113,7 +117,7 @@ export default function (props) {
 
     if (props.loading === true && props.percentage !== void 0) {
       Object.assign(acc, {
-        role: 'progressbar',
+        'role': 'progressbar',
         'aria-valuemin': 0,
         'aria-valuemax': 100,
         'aria-valuenow': props.percentage
@@ -134,32 +138,34 @@ export default function (props) {
     if (props.color !== void 0) {
       if (props.flat === true || props.outline === true) {
         colors = `text-${props.textColor || props.color}`
-      } else {
+      }
+      else {
         colors = `bg-${props.color} text-${props.textColor || 'white'}`
       }
-    } else if (props.textColor) {
+    }
+    else if (props.textColor) {
       colors = `text-${props.textColor}`
     }
 
     return (
-      `vc-btn--${design.value} ` +
-      `vc-btn--${props.round === true ? 'round' : `rectangle${isRounded.value === true ? ' vc-btn--rounded' : ''}`}` +
-      (colors !== void 0 ? ' ' + colors : '') +
-      (isActionable.value === true ? ' vc-btn--actionable vc-focusable vc-hoverable' : props.disable === true ? ' disabled' : '') +
-      (props.fab === true ? ' vc-btn--fab' : props.fabMini === true ? ' vc-btn--fab-mini' : '') +
-      (props.noCaps === true ? ' vc-btn--no-uppercase' : '') +
-      (props.dense === true ? ' vc-btn--dense' : '') +
-      (props.stretch === true ? ' no-border-radius self-stretch' : '') +
-      (props.glossy === true ? ' glossy' : '')
+      `vc-btn--${design.value} `
+      + `vc-btn--${props.round === true ? 'round' : `rectangle${isRounded.value === true ? ' vc-btn--rounded' : ''}`}${
+        colors !== void 0 ? ` ${colors}` : ''
+      }${isActionable.value === true ? ' vc-btn--actionable vc-focusable vc-hoverable' : props.disable === true ? ' disabled' : ''
+      }${props.fab === true ? ' vc-btn--fab' : props.fabMini === true ? ' vc-btn--fab-mini' : ''
+      }${props.noCaps === true ? ' vc-btn--no-uppercase' : ''
+      }${props.dense === true ? ' vc-btn--dense' : ''
+      }${props.stretch === true ? ' no-border-radius self-stretch' : ''
+      }${props.glossy === true ? ' glossy' : ''}`
     )
   })
 
   const innerClasses = computed(
     () =>
-      alignClass.value +
-      (props.stack === true ? ' column' : ' row') +
-      (props.noWrap === true ? ' no-wrap text-no-wrap' : '') +
-      (props.loading === true ? ' vc-btn__content--hidden' : '')
+      alignClass.value
+      + (props.stack === true ? ' column' : ' row')
+      + (props.noWrap === true ? ' no-wrap text-no-wrap' : '')
+      + (props.loading === true ? ' vc-btn__content--hidden' : '')
   )
 
   return {

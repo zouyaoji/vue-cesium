@@ -7,6 +7,19 @@
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
  */
 
+import type {
+  VcDrawingActiveEvt,
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingOpts,
+  VcPointDrawing,
+  VcPolylineDrawing,
+  VcSegmentDrawing
+} from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import type { VcFabProps } from '../../ui'
 import {
   actionOptions,
   billboardOptsDefault,
@@ -22,20 +35,7 @@ import {
   regularDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
-import {
-  VcDrawingActiveEvt,
-  VcDrawingDrawEvt,
-  VcDrawingEditorEvt,
-  VcDrawingMouseEvt,
-  VcDrawingOpts,
-  VcPointDrawing,
-  VcPolylineDrawing,
-  VcSegmentDrawing
-} from '@vue-cesium/utils/drawing-types'
-import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType } from 'vue'
-import { VcFabProps } from '../../ui'
 
 const pointDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-point'
@@ -85,9 +85,9 @@ const mainFabDefault = Object.assign({}, actionOptions, {
 
 export const drawingType = ['pin', 'point', 'polyline', 'polygon', 'rectangle', 'regular', 'circle']
 
-const isValidDrawingType = (drawings: string[]) => {
+function isValidDrawingType(drawings: string[]) {
   let flag = true
-  drawings.forEach(drawing => {
+  drawings.forEach((drawing) => {
     if (!drawingType.includes(drawing)) {
       console.error(`VueCesium: unknown drawing type: ${drawing}`)
       flag = false
@@ -172,18 +172,18 @@ const drawingsProps = {
 const defaultOptions = getDefaultOptionByProps<VcDrawingsProps>(drawingsProps)
 
 export {
-  drawingsProps,
   defaultOptions,
-  pointDrawingActionDefault,
-  polylineDrawingActionDefault,
-  polygonDrawingActionDefault,
-  rectangleDrawingActionDefault,
+  drawingsProps,
+  mainFabDefault,
   pinDrawingActionDefault,
   pinDrawingDefault,
-  mainFabDefault
+  pointDrawingActionDefault,
+  polygonDrawingActionDefault,
+  polylineDrawingActionDefault,
+  rectangleDrawingActionDefault
 }
 
-export type VcDrawingsProps = {
+export interface VcDrawingsProps {
   /**
    * Specify the position of the VcDrawings.
    * Default value: bottom-left
@@ -313,7 +313,7 @@ export type VcDrawingsProps = {
    */
   onActiveEvt?: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing | VcPointDrawing>, viewer: Cesium.Viewer) => void
   /**

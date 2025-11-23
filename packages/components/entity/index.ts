@@ -6,8 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\entity\index.ts
  */
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-import { App } from 'vue'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import Entity from './src'
 
 Entity.install = (app: App): void => {

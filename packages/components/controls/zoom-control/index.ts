@@ -1,24 +1,24 @@
-import { CSSProperties, Teleport, VNode } from 'vue'
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
+import type { VcBtnRef } from '@vue-cesium/components/ui'
 import type {
+  VcBtnTooltipProps,
   VcCamera,
   VcComponentInternalInstance,
-  VcZoomEvt,
-  VcBtnTooltipProps,
+  VcComponentPublicInstance,
   VcReadyObject,
-  VcComponentPublicInstance
+  VcZoomEvt
 } from '@vue-cesium/utils/types'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { defaultProps, defaultOptions } from './defaultProps'
-import type { VcBtnRef } from '@vue-cesium/components/ui'
+import type { CSSProperties, VNode } from 'vue'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import useZoomControl from './use-zoom-control'
-import { kebabCase } from '@vue-cesium/utils/util'
+import usePosition from '@vue-cesium/composables/private/use-position'
+import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import { defaultOptions, defaultProps } from './defaultProps'
+import useZoomControl from './use-zoom-control'
 
 const emits = {
   ...commonEmits,
@@ -28,7 +28,7 @@ export const zoomControlProps = defaultProps
 export default defineComponent({
   name: 'VcZoomControl',
   props: zoomControlProps,
-  emits: emits,
+  emits,
   setup(props: VcZoomControlProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -54,7 +54,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -128,7 +128,8 @@ export default defineComponent({
           if (props.direction === 'horizontal') {
             width += zoomInClientRect.width
             height = zoomInClientRect.height > height ? zoomInClientRect.height : height
-          } else {
+          }
+          else {
             height += zoomInClientRect.height
             width = zoomInClientRect.width > width ? zoomInClientRect.width : width
           }
@@ -139,7 +140,8 @@ export default defineComponent({
           if (props.direction === 'horizontal') {
             width += zoomResetClientRect.width
             height = zoomResetClientRect.height > height ? zoomResetClientRect.height : height
-          } else {
+          }
+          else {
             height += zoomResetClientRect.height
             width = zoomResetClientRect.width > width ? zoomResetClientRect.width : width
           }
@@ -150,7 +152,8 @@ export default defineComponent({
           if (props.direction === 'horizontal') {
             width += zoomOutClientRect.width
             height = zoomOutClientRect.height > height ? zoomOutClientRect.height : height
-          } else {
+          }
+          else {
             height += zoomOutClientRect.height
             width = zoomOutClientRect.width > width ? zoomOutClientRect.width : width
           }
@@ -185,12 +188,14 @@ export default defineComponent({
         tooltipRef = zoomControlState.zoomInTooltipRef
         tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomInTip')
         onClick = zoomControlState.zoomIn
-      } else if (type === 'zoomOut') {
+      }
+      else if (type === 'zoomOut') {
         btnRef = zoomOutRef
         tooltipRef = zoomControlState.zoomOutTooltipRef
         tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomOutTip')
         onClick = zoomControlState.zoomOut
-      } else if (type === 'zoomReset') {
+      }
+      else if (type === 'zoomReset') {
         btnRef = zoomResetRef
         tooltipRef = zoomControlState.resetTooltipRef
         tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomResetTip')
@@ -216,7 +221,8 @@ export default defineComponent({
             () => h('strong', null, tip)
           )
         )
-      } else {
+      }
+      else {
         inner.push(createCommentVNode('v-if'))
       }
 
@@ -231,7 +237,7 @@ export default defineComponent({
           round: options.round,
           dense: true,
           style: { color: options.color, background: options.background },
-          onClick: onClick
+          onClick
         },
         () => hMergeSlot(ctx.slots.default, inner)
       )
@@ -251,7 +257,8 @@ export default defineComponent({
         children.push(h('li', null, getContent(zoomInOptions.value, 'zoomIn')))
         if (props.enableResetButton) {
           children.push(h('li', null, getContent(zoomResetOptions.value, 'zoomReset')))
-        } else {
+        }
+        else {
           children.push(createCommentVNode('v-if'))
         }
         children.push(h('li', null, getContent(zoomOutOptions.value, 'zoomOut')))
@@ -272,7 +279,8 @@ export default defineComponent({
           )
         )
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -281,7 +289,7 @@ export default defineComponent({
 
 export type VcZoomControlEmits = typeof emits
 
-export type VcZoomControlProps = {
+export interface VcZoomControlProps {
   /**
    * Specify the position of the VcZoomControl.
    * Default value: top-right
@@ -387,7 +395,7 @@ export type VcZoomControlProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when the VcZoomControl is operated.
+   * Triggers when the VcZoomControl is operated.
    */
   onZoomEvt?: (evt: VcZoomEvt) => void
 }

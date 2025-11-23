@@ -1,3 +1,4 @@
+import type { ProjectionTransforms, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,13 +8,12 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\supermap\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ProjectionTransforms, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { minimumLevel, maximumLevel, projectionTransforms } from '@vue-cesium/utils/cesium-props'
-import SuperMapImageryProvider from './SuperMapImageryProvider'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { maximumLevel, minimumLevel, projectionTransforms } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+import SuperMapImageryProvider from './SuperMapImageryProvider'
 
 export const supermapImageryProviderProps = {
   url: String,
@@ -60,7 +60,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderSupermapProps = {
+export interface VcImageryProviderSupermapProps {
   /**
    * The URL of the SuperMap iServer service.
    */

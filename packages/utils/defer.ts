@@ -24,7 +24,7 @@
 /**
  * An object which contains a promise object, and functions to resolve or reject the promise.
  *
- * @typedef {Object} defer.deferred
+ * @typedef {object} defer.deferred
  * @property {defer.resolve} resolve Resolves the promise when called.
  * @property {defer.reject} reject Rejects the promise when called.
  * @property {Promise} promise Promise object.
@@ -38,15 +38,15 @@
 function defer() {
   let resolve
   let reject
-  const promise = new Promise(function (res, rej) {
+  const promise = new Promise((res, rej) => {
     resolve = res
     reject = rej
   })
 
   return {
-    resolve: resolve,
-    reject: reject,
-    promise: promise
+    resolve,
+    reject,
+    promise
   }
 }
 

@@ -1,5 +1,5 @@
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-import { App } from 'vue'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import GeometryBox from './box'
 import GeometryBoxOutline from './box-outline'
 import GeometryCircle from './circle'
@@ -66,8 +66,8 @@ const components = [
   GeometryWallOutline
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -76,7 +76,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

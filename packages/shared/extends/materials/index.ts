@@ -8,20 +8,20 @@
  */
 import MaterialExtend from './MaterialExtend'
 import VcCircleWaveMaterialProperty from './VcCircleWaveMaterialProperty'
-import VcLineFlowMaterialProperty from './VcLineFlowMaterialProperty'
 import VcLineFlowColorMaterialProperty from './VcLineFlowColorMaterialProperty'
-import VcLineTrailMaterialProperty from './VcLineTrailMaterialProperty'
+import VcLineFlowMaterialProperty from './VcLineFlowMaterialProperty'
 import VcLineTrailColorMaterialProperty from './VcLineTrailColorMaterialProperty'
-import VcScanLineMaterialProperty from './VcScanLineMaterialProperty'
+import VcLineTrailMaterialProperty from './VcLineTrailMaterialProperty'
 import VcODLineMaterialProperty from './VcODLineMaterialProperty'
+import VcScanLineMaterialProperty from './VcScanLineMaterialProperty'
 
 export {
   MaterialExtend,
   VcCircleWaveMaterialProperty,
-  VcLineFlowMaterialProperty,
   VcLineFlowColorMaterialProperty,
-  VcLineTrailMaterialProperty,
+  VcLineFlowMaterialProperty,
   VcLineTrailColorMaterialProperty,
-  VcScanLineMaterialProperty,
-  VcODLineMaterialProperty
+  VcLineTrailMaterialProperty,
+  VcODLineMaterialProperty,
+  VcScanLineMaterialProperty
 }

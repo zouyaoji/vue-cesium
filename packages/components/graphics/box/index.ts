@@ -1,3 +1,28 @@
+import type {
+  VcCallbackPropertyFunction,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDistanceDisplayCondition,
+  VcMaterial,
+  VcPosition,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
+import { useGraphics } from '@vue-cesium/composables'
+import {
+  dimensions,
+  distanceDisplayCondition,
+  fill,
+  heightReference,
+  material,
+  outline,
+  outlineColor,
+  outlineWidth,
+  shadows,
+  show
+} from '@vue-cesium/utils/cesium-props'
+import { graphicsEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,31 +32,7 @@
  * @FilePath: \vue-cesium@next\packages\components\graphics\box\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import { useGraphics } from '@vue-cesium/composables'
-import {
-  show,
-  dimensions,
-  heightReference,
-  fill,
-  material,
-  outline,
-  outlineColor,
-  outlineWidth,
-  shadows,
-  distanceDisplayCondition
-} from '@vue-cesium/utils/cesium-props'
-import {
-  VcPosition,
-  VcCallbackPropertyFunction,
-  VcMaterial,
-  VcColor,
-  VcDistanceDisplayCondition,
-  VcReadyObject,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance
-} from '@vue-cesium/utils/types'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { graphicsEmits } from '@vue-cesium/utils/emits'
+
 export const boxGraphicsProps = {
   ...show,
   ...dimensions,
@@ -57,7 +58,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsBoxProps = {
+export interface VcGraphicsBoxProps {
   /**
    * A boolean Property specifying the visibility of the box.
    * Default value: true

@@ -6,10 +6,11 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\use-circle-scan.ts
  */
-import { VcViewerProvider } from '@vue-cesium/utils/types'
+import type { VcViewerProvider } from '@vue-cesium/utils/types'
 import shaderSource from '@vue-cesium/shared/shaders/CircleScan'
+
 export default function ($services: VcViewerProvider) {
-  const webgl = options => {
+  const webgl = (options) => {
     const { viewer } = $services
 
     const webgl2 = viewer.scene.context?.webgl2
@@ -31,10 +32,10 @@ export default function ($services: VcViewerProvider) {
     const _scratchCartesian4Center1 = new Cesium.Cartesian4()
     const _scratchCartesian3Normal = new Cesium.Cartesian3()
     const uniforms = {
-      u_scanCenterEC: function () {
+      u_scanCenterEC() {
         return Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center, _scratchCartesian4Center)
       },
-      u_scanPlaneNormalEC: function () {
+      u_scanPlaneNormalEC() {
         const temp = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center, _scratchCartesian4Center)
         const temp1 = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center1, _scratchCartesian4Center1)
         _scratchCartesian3Normal.x = temp1.x - temp.x
@@ -43,7 +44,7 @@ export default function ($services: VcViewerProvider) {
         Cesium.Cartesian3.normalize(_scratchCartesian3Normal, _scratchCartesian3Normal)
         return _scratchCartesian3Normal
       },
-      u_radius: function () {
+      u_radius() {
         return (options.radius * ((new Date().getTime() - _time) % options.interval)) / options.interval
       },
       u_scanColor: options.color

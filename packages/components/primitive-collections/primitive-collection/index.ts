@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,17 +7,16 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
  */
-import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { PropType, VNode, WatchStopHandle } from 'vue'
+import type { VcPolygonProps } from '../polygon'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { cloneDeep, differenceBy } from 'lodash-unified'
 import { PolygonPrimitive } from '@vue-cesium/shared'
+import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
-import { VcPolygonProps } from '../polygon'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const primitiveCollectionProps = {
   ...show,
@@ -68,21 +68,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyPolygon = primitiveCollection._primitives.find(v => v._id === modify.oldOptions.id)
-              modifyPolygon &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyPolygon[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyPolygon
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyPolygon[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePolygons: Array<PolygonPrimitive> = []
@@ -91,7 +92,7 @@ export default defineComponent({
               deletePolygon && deletePolygons.push(deletePolygon)
             }
 
-            deletePolygons.forEach(v => {
+            deletePolygons.forEach((v) => {
               primitiveCollection.remove(v)
             })
 
@@ -145,7 +146,7 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionPrimitiveProps = {
+export interface VcCollectionPrimitiveProps {
   /**
    * Determines if the primitives in the collection will be shown.
    * Default value: true

@@ -1,3 +1,4 @@
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,13 +8,12 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\grid\index.ts
  */
 import type { PropType } from 'vue'
-import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
-import { tilingScheme, ellipsoid, tileWidth, tileHeight, glowColor } from '@vue-cesium/utils/cesium-props'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { ellipsoid, glowColor, tileHeight, tileWidth, tilingScheme } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const gridImageryProviderProps = {
   ...tilingScheme,
@@ -61,7 +61,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderGridProps = {
+export interface VcImageryProviderGridProps {
   /**
    * The tiling scheme for which to draw tiles.
    */

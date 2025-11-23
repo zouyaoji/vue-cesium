@@ -12,7 +12,7 @@ import { RectangleExtend, ShadowMapShaderExtend } from '@vue-cesium/shared'
 const vcExtends = [RectangleExtend, ShadowMapShaderExtend]
 
 export default function useVcExtend(viewer: Cesium.Viewer) {
-  vcExtends.forEach(item => {
+  vcExtends.forEach((item) => {
     item.extend(viewer)
   })
 }

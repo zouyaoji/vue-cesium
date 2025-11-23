@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,12 +8,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\vr-theworld\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, ellipsoid } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const vrTheworldImageryProviderProps = {
   url: {
@@ -35,7 +35,7 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderVrTheworldProps = {
+export interface VcTerrainProviderVrTheworldProps {
   /**
    * The URL of the VR-TheWorld TileMap.
    */

@@ -6,13 +6,14 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\google-earth\index.ts
  */
-import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
-import { url, ellipsoid, credit, tileWidth, tileHeight, minimumLevel, maximumLevel, rectangle } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, ellipsoid, maximumLevel, minimumLevel, rectangle, tileHeight, tileWidth, url } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const googleImageryProviderProps = {
   key: String,
@@ -40,25 +41,25 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderGoogle2DProps = {
+export interface VcImageryProviderGoogle2DProps {
   /**
    * The Google api key to send with tile requests.
    */
   key: string
   /**
-   * 	The Google session token that tracks the current state of your map and viewport.
+   * The Google session token that tracks the current state of your map and viewport.
    */
   session: string
   /**
-   * 	The Google 2D maps endpoint.
+   * The Google 2D maps endpoint.
    */
   url: string | Cesium.Resource
   /**
    * The width of each tile in pixels.
    */
   tileWidth: number
-    /**
-   * T	The height of each tile in pixels.
+  /**
+   * The height of each tile in pixels.
    */
   tileHeight: number
   /**

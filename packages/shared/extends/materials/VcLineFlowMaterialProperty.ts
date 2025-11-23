@@ -56,7 +56,8 @@ export default class VcLineFlowMaterialProperty extends VcBaseMaterialProperty {
         this._time = new Date().getTime()
         result.time = (new Date().getTime() - this._time) / (this.duration * 1000)
       }
-    } else {
+    }
+    else {
       result.time = -1
     }
 
@@ -69,18 +70,18 @@ export default class VcLineFlowMaterialProperty extends VcBaseMaterialProperty {
   }
 
   equals(other: VcLineFlowMaterialProperty) {
-    const reData =
-      this === other ||
-      (other instanceof VcLineFlowMaterialProperty &&
-        Cesium.Property['equals'](this.color, other.color) &&
-        Cesium.Property['equals'](this.repeat, other.repeat) &&
-        this.image === other.image &&
-        this.axisY === other.axisY &&
-        this.speed === other.speed &&
-        this.hasImage2 === other.hasImage2 &&
-        this.image2 === other.image2 &&
-        this.image2 === other.image2 &&
-        Cesium.Property['equals'](this.color2, other.color2))
+    const reData
+      = this === other
+        || (other instanceof VcLineFlowMaterialProperty
+          && Cesium.Property['equals'](this.color, other.color)
+          && Cesium.Property['equals'](this.repeat, other.repeat)
+          && this.image === other.image
+          && this.axisY === other.axisY
+          && this.speed === other.speed
+          && this.hasImage2 === other.hasImage2
+          && this.image2 === other.image2
+          && this.image2 === other.image2
+          && Cesium.Property['equals'](this.color2, other.color2))
     return reData
   }
 }

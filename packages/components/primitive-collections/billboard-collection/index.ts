@@ -1,13 +1,13 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import type { PropType, VNode, WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcBillboardProps } from '../billboard'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { cloneDeep, differenceBy } from 'lodash-unified'
-import { scene, blendOption, show, enableMouseEvent, debugShowBoundingVolume, modelMatrix } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
+import { blendOption, debugShowBoundingVolume, enableMouseEvent, modelMatrix, scene, show } from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
-import { VcBillboardProps } from '../billboard'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const billboardCollectionProps = {
   ...scene,
@@ -52,22 +52,23 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               // TODO: 连续绘制 Pin 切换时 billboardCollection._billboards 中有undefined的对象。
               const modifyBillboard = billboardCollection._billboards.find(v => v?.id === modify.oldOptions.id)
-              modifyBillboard &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyBillboard[prop] = primitiveCollectionsState?.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyBillboard
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyBillboard[prop] = primitiveCollectionsState?.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteBillboards: Array<Cesium.Billboard> = []
@@ -76,7 +77,7 @@ export default defineComponent({
               deleteBillboard && deleteBillboards.push(deleteBillboard)
             }
 
-            deleteBillboards.forEach(v => {
+            deleteBillboards.forEach((v) => {
               billboardCollection.remove(v)
             })
             addBillboards(billboardCollection, addeds)
@@ -125,7 +126,7 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionBillboardProps = {
+export interface VcCollectionBillboardProps {
   /**
    * Must be passed in for billboards that use the height reference property or will be depth tested against the globe.
    */

@@ -1,20 +1,21 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
 import {
-  url,
-  format,
   credit,
-  minimumLevel,
-  maximumLevel,
-  rectangle,
-  tilingScheme,
   ellipsoid,
+  format,
+  maximumLevel,
+  minimumLevel,
+  rectangle,
+  tileHeight,
   tileWidth,
-  tileHeight
+  tilingScheme,
+  url
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const tiledcacheImageryProviderProps = {
   ...url,
@@ -83,13 +84,13 @@ export default defineComponent({
       const resource = (Resource as any).createIfNeeded(url)
       resource.url += `?dir=${dir}&scale={scale}&col={x}&row={y}&format=${format}`
 
-      const tilingScheme =
-        options.tilingScheme ??
-        new GeographicTilingScheme({
-          ellipsoid: options.ellipsoid ?? Ellipsoid.WGS84,
-          numberOfLevelZeroTilesX: 2,
-          numberOfLevelZeroTilesY: 1
-        })
+      const tilingScheme
+        = options.tilingScheme
+          ?? new GeographicTilingScheme({
+            ellipsoid: options.ellipsoid ?? Ellipsoid.WGS84,
+            numberOfLevelZeroTilesX: 2,
+            numberOfLevelZeroTilesY: 1
+          })
 
       const tileWidth = options.tileWidth ?? 256
       const tileHeight = options.tileHeight ?? 256
@@ -105,9 +106,9 @@ export default defineComponent({
 
       if (tileCount > 4) {
         throw new DeveloperError(
-          'The rectangle and minimumLevel indicate that there are ' +
-          tileCount +
-          ' tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.'
+          `The rectangle and minimumLevel indicate that there are ${
+            tileCount
+          } tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.`
         )
       }
 
@@ -118,12 +119,12 @@ export default defineComponent({
 
       return new UrlTemplateImageryProvider({
         url: resource,
-        credit: credit,
-        tilingScheme: tilingScheme,
-        tileWidth: tileWidth,
-        tileHeight: tileHeight,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
+        credit,
+        tilingScheme,
+        tileWidth,
+        tileHeight,
+        minimumLevel,
+        maximumLevel,
         rectangle: rectangle as Cesium.Rectangle,
         customTags: {
           scale: (imageryProvider, x, y, level) => {
@@ -136,15 +137,15 @@ export default defineComponent({
 
     const padWithZerosIfNecessary = (imageryProvider, key, value) => {
       if (
-        imageryProvider &&
-        imageryProvider.urlSchemeZeroPadding &&
-        Object.prototype.hasOwnProperty.call(imageryProvider.urlSchemeZeroPadding, key)
+        imageryProvider
+        && imageryProvider.urlSchemeZeroPadding
+        && Object.prototype.hasOwnProperty.call(imageryProvider.urlSchemeZeroPadding, key)
       ) {
         const paddingTemplate = imageryProvider.urlSchemeZeroPadding[key]
         if (typeof paddingTemplate === 'string') {
           const paddingTemplateWidth = paddingTemplate.length
           if (paddingTemplateWidth > 1) {
-            value = value.length >= paddingTemplateWidth ? value : new Array(paddingTemplateWidth - value.toString().length + 1).join('0') + value
+            value = value.length >= paddingTemplateWidth ? value : Array.from({ length: paddingTemplateWidth - value.toString().length + 1 }).join('0') + value
           }
         }
       }
@@ -154,7 +155,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderTiledcacheProps = {
+export interface VcImageryProviderTiledcacheProps {
   /**
    * Path to image tiles on server.
    * Default value: '.'

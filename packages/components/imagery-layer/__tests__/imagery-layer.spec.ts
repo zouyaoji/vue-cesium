@@ -6,12 +6,12 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\components\imagery-layer\__tests__\imagery-layer.spec.ts
  */
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
-import VcLayerImagery from '../src'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcViewer from '@vue-cesium/components/viewer'
+import { mount } from '@vue/test-utils'
+import { describe, expect } from 'vitest'
 import { VcConfigProvider } from '../../config-provider'
-import { describe, expect, test } from 'vitest'
+import VcLayerImagery from '../src'
 
 const App = {
   components: {
@@ -38,8 +38,8 @@ const App = {
   },
   methods: {
     onViewerReady({ Cesium, viewer }) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       this.imageryProvider = new Cesium.OpenStreetMapImageryProvider({
         url: 'https://a.tile.openstreetmap.org/',
         maximumLevel: 17
@@ -48,8 +48,8 @@ const App = {
   }
 }
 
-describe('VcLayerImagery', () => {
-  test('render test', async () => {
+describe('vcLayerImagery', () => {
+  it('render test', async () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.layer).toBeDefined()
     const testVm = wrapper.vm.$refs.layer as VcComponentPublicInstance

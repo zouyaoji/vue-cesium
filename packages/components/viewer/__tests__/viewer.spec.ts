@@ -1,10 +1,10 @@
-import { VcCamera, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { mount, config } from '@vue/test-utils'
-import VcViewer from '../src'
-import { VcConfigProvider } from '../../config-provider'
+import { mount } from '@vue/test-utils'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
-import { describe, expect, test } from 'vitest'
+import { describe, expect } from 'vitest'
+import { VcConfigProvider } from '../../config-provider'
+import VcViewer from '../src'
 
 const viewerApp = {
   components: {
@@ -20,8 +20,8 @@ const viewerApp = {
  `
 }
 
-describe('VcViewer', () => {
-  test('render test default', async () => {
+describe('vcViewer', () => {
+  it('render test default', async () => {
     const wrapper = mount(viewerApp)
     const testVm = wrapper.vm.$refs.viewer as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(testVm.$options.name || '')}`).exists()).toBe(true)

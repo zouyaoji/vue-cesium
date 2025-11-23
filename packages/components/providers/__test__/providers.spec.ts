@@ -1,8 +1,10 @@
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount } from '@vue/test-utils'
-import VcViewer from '@vue-cesium/components/viewer'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
-import { describe, expect, test } from 'vitest'
+import VcViewer from '@vue-cesium/components/viewer'
+import { mount } from '@vue/test-utils'
+import { describe, expect } from 'vitest'
+
+import { VcConfigProvider } from '../../config-provider'
 
 import {
   VcImageryProviderArcgis,
@@ -16,17 +18,15 @@ import {
   VcImageryProviderSupermap,
   VcImageryProviderTianditu,
   VcImageryProviderTileCoordinates,
-  VcImageryProviderTms,
   VcImageryProviderTiledcache,
+  VcImageryProviderTms,
   VcImageryProviderUrltemplate,
   VcImageryProviderWms,
   VcImageryProviderWmts,
-  VcTerrainProviderCesium,
-  VcTerrainProviderArcgis
+  VcTerrainProviderArcgis,
+  VcTerrainProviderCesium
   // VcTerrainProviderTianditu
 } from '../index'
-
-import { VcConfigProvider } from '../../config-provider'
 
 const arcgisApp = {
   components: {
@@ -48,8 +48,8 @@ const arcgisApp = {
   `
 }
 
-describe('VcImageryProviderArcgis', () => {
-  test('render test', async () => {
+describe('vcImageryProviderArcgis', () => {
+  it('render test', async () => {
     const wrapper = mount(arcgisApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -92,8 +92,8 @@ const baiduApp = {
   `
 }
 
-describe('VcImageryProviderBaidu', () => {
-  test('render test', async () => {
+describe('vcImageryProviderBaidu', () => {
+  it('render test', async () => {
     const wrapper = mount(baiduApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -135,8 +135,8 @@ const bingmapsApp = {
   `
 }
 
-describe('VcImageryProviderBing', () => {
-  test('render test', async () => {
+describe('vcImageryProviderBing', () => {
+  it('render test', async () => {
     const wrapper = mount(bingmapsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -174,8 +174,8 @@ const gridApp = {
   `
 }
 
-describe('VcImageryProviderGrid', () => {
-  test('render test', async () => {
+describe('vcImageryProviderGrid', () => {
+  it('render test', async () => {
     const wrapper = mount(gridApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -216,8 +216,8 @@ const cesiumIonApp = {
   `
 }
 
-describe('VcImageryProviderIon', () => {
-  test('render test', async () => {
+describe('vcImageryProviderIon', () => {
+  it('render test', async () => {
     const wrapper = mount(cesiumIonApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -260,8 +260,8 @@ const mapboxApp = {
   `
 }
 
-describe('VcImageryProviderMapbox', () => {
-  test('render test', async () => {
+describe('vcImageryProviderMapbox', () => {
+  it('render test', async () => {
     const wrapper = mount(mapboxApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -301,8 +301,8 @@ const osmApp = {
   `
 }
 
-describe('VcImageryProviderOsm', () => {
-  test('render test', async () => {
+describe('vcImageryProviderOsm', () => {
+  it('render test', async () => {
     const wrapper = mount(osmApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -340,8 +340,8 @@ const singletileApp = {
   `
 }
 
-describe('VcImageryProviderSingletile', () => {
-  test('render test', async () => {
+describe('vcImageryProviderSingletile', () => {
+  it('render test', async () => {
     const wrapper = mount(singletileApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -382,8 +382,8 @@ const supermapApp = {
   `
 }
 
-describe('VcImageryProviderSupermap', () => {
-  test('render test', async () => {
+describe('vcImageryProviderSupermap', () => {
+  it('render test', async () => {
     const wrapper = mount(supermapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -421,8 +421,8 @@ const tiandituApp = {
   `
 }
 
-describe('VcImageryProviderTianditu', () => {
-  test('render test', async () => {
+describe('vcImageryProviderTianditu', () => {
+  it('render test', async () => {
     const wrapper = mount(tiandituApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -460,8 +460,8 @@ const tileCoordinatesApp = {
   `
 }
 
-describe('VcImageryProviderTileCoordinates', () => {
-  test('render test', async () => {
+describe('vcImageryProviderTileCoordinates', () => {
+  it('render test', async () => {
     const wrapper = mount(tileCoordinatesApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -503,8 +503,8 @@ const tileMapApp = {
   `
 }
 
-describe('VcImageryProviderTms', () => {
-  test('render test', async () => {
+describe('vcImageryProviderTms', () => {
+  it('render test', async () => {
     const wrapper = mount(tileMapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -546,8 +546,8 @@ const tiledCacheApp = {
   `
 }
 
-describe('VcImageryProviderTiledcache', () => {
-  test('render test', async () => {
+describe('vcImageryProviderTiledcache', () => {
+  it('render test', async () => {
     const wrapper = mount(tiledCacheApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -588,8 +588,8 @@ const urlTemplateApp = {
   `
 }
 
-describe('VcImageryProviderUrltemplate', () => {
-  test('render test', async () => {
+describe('vcImageryProviderUrltemplate', () => {
+  it('render test', async () => {
     const wrapper = mount(urlTemplateApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -632,8 +632,8 @@ const wmsApp = {
   `
 }
 
-describe('VcImageryProviderWms', () => {
-  test('render test', async () => {
+describe('vcImageryProviderWms', () => {
+  it('render test', async () => {
     const wrapper = mount(wmsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -678,8 +678,8 @@ const wmtsApp = {
   `
 }
 
-describe('VcImageryProviderWmts', () => {
-  test('render test', async () => {
+describe('vcImageryProviderWmts', () => {
+  it('render test', async () => {
     const wrapper = mount(wmtsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -716,8 +716,8 @@ const cesiumTerrainApp = {
   `
 }
 
-describe('VcTerrainProviderCesium', () => {
-  test('render test', async () => {
+describe('vcTerrainProviderCesium', () => {
+  it('render test', async () => {
     const wrapper = mount(cesiumTerrainApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise
@@ -751,8 +751,8 @@ const arcgisTiledElevationApp = {
   `
 }
 
-describe('VcTerrainProviderArcgis', () => {
-  test('render test', async () => {
+describe('vcTerrainProviderArcgis', () => {
+  it('render test', async () => {
     const wrapper = mount(arcgisTiledElevationApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: VcReadyObject = await testVm.creatingPromise

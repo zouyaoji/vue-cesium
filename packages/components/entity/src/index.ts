@@ -1,5 +1,3 @@
-import type { PropType, VNode } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import type {
   AnyObject,
   EntityEmitType,
@@ -11,13 +9,8 @@ import type {
   VcPosition,
   VcReadyObject
 } from '@vue-cesium/utils/types'
-import { useCommon } from '@vue-cesium/composables/index'
-import { position, enableMouseEvent, show, viewFrom } from '@vue-cesium/utils/cesium-props'
-import { getInstanceListener } from '@vue-cesium/utils/private/vm'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits, pickEventEmits } from '@vue-cesium/utils/emits'
-import {
+import type { PropType, VNode } from 'vue'
+import type {
   VcGraphicsBillboardProps,
   VcGraphicsBoxProps,
   VcGraphicsCorridorProps,
@@ -37,6 +30,13 @@ import {
   VcGraphicsTilesetProps,
   VcGraphicsWallProps
 } from '../../graphics'
+import { useCommon } from '@vue-cesium/composables/index'
+import { enableMouseEvent, position, show, viewFrom } from '@vue-cesium/utils/cesium-props'
+import { commonEmits, pickEventEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 
 export const entityProps = {
   id: String,
@@ -72,7 +72,7 @@ export const entityProps = {
 const emits = {
   ...commonEmits,
   ...pickEventEmits,
-  definitionChanged: (property: Cesium.Property) => true,
+  'definitionChanged': (property: Cesium.Property) => true,
   'update:billboard': (payload: Cesium.BillboardGraphics) => true,
   'update:box': (payload: Cesium.BoxGraphics) => true,
   'update:corridor': (payload: Cesium.CorridorGraphics) => true,
@@ -95,7 +95,7 @@ const emits = {
 export default defineComponent({
   name: 'VcEntity',
   props: entityProps,
-  emits: emits,
+  emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -122,7 +122,8 @@ export default defineComponent({
       const listener = getInstanceListener(instance, emitType)
       if (listener) {
         emit(emitType, graphics)
-      } else {
+      }
+      else {
         instance.cesiumObject && (instance.cesiumObject[emitType.substring(7)] = graphics)
       }
       graphics && (graphics._vcParent = instance.cesiumObject)
@@ -151,7 +152,7 @@ export default defineComponent({
 
 export type VcEntityEmits = typeof emits
 
-export type VcEntityProps = {
+export interface VcEntityProps {
   /**
    * A unique identifier for this object. If none is provided, a GUID is generated.
    */

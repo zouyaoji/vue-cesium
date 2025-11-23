@@ -16,7 +16,7 @@ class PickedFeatures {
 
     /**
      * Gets or sets a value indicating whether the list of picked features is still loading.
-     * @type {Boolean}
+     * @type {boolean}
      */
     this.isLoading = true
 
@@ -36,7 +36,7 @@ class PickedFeatures {
     /**
      * Gets or sets a message describing an error that occurred while picking features.
      * If this property is undefined, no error occurred.
-     * @type {String}
+     * @type {string}
      */
     this.error = undefined
 

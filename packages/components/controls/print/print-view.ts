@@ -1,6 +1,7 @@
-import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref, h, createCommentVNode, VNode } from 'vue'
-import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
 import { useLocale } from '@vue-cesium/composables'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onMounted, onUnmounted, ref } from 'vue'
 
 const VcPrintView = defineComponent({
   name: 'VcPrintView',
@@ -84,12 +85,13 @@ const VcPrintView = defineComponent({
       )
       if (props.options?.credits.length && props.options?.showCredit) {
         child.push(h('h1', {}, t('vc.navigation.credit')))
-      } else {
+      }
+      else {
         child.push(createCommentVNode('v-if'))
       }
       if (props.options?.credits.length && props.options?.showCredit) {
         const inner: Array<VNode> = []
-        props.options?.credits.forEach(credit => {
+        props.options?.credits.forEach((credit) => {
           inner.push(
             h('li', {
               innerHTML: credit
@@ -97,7 +99,8 @@ const VcPrintView = defineComponent({
           )
         })
         child.push(h('ul', {}, inner))
-      } else {
+      }
+      else {
         child.push(createCommentVNode('v-if'))
       }
       return h('div', {}, child)

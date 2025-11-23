@@ -9,13 +9,13 @@
  * ParticleSystem
  */
 import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import useCommon from '../use-common'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { provide, ref } from 'vue'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 import { vcKey } from '@vue-cesium/utils/config'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isArray } from '@vue-cesium/utils/util'
-import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import { provide, ref } from 'vue'
+import useCommon from '../use-common'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -37,26 +37,30 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
       if (isArray(props.geometryInstances)) {
         instances.value.push(...props.geometryInstances)
         childCount.value += props.geometryInstances.length
-      } else {
+      }
+      else {
         childCount.value += 1
         instances.value.push(props.geometryInstances)
       }
     }
 
     if (
-      (vcInstance.cesiumClass === 'Cesium3DTileset' || vcInstance.cesiumClass === 'I3SDataProvider') &&
-      compareCesiumVersion(Cesium.VERSION, '1.104')
+      (vcInstance.cesiumClass === 'Cesium3DTileset' || vcInstance.cesiumClass === 'I3SDataProvider')
+      && compareCesiumVersion(Cesium.VERSION, '1.104')
     ) {
       try {
         if (Cesium.defined(props.assetId) && vcInstance.cesiumClass === 'Cesium3DTileset') {
           return await Cesium[vcInstance.cesiumClass].fromIonAssetId(props.assetId, options)
-        } else {
+        }
+        else {
           return await Cesium[vcInstance.cesiumClass].fromUrl(props.url, options)
         }
-      } catch (error) {
+      }
+      catch (error) {
         commonState.logger.error(`Failed to load tileset: ${error}`)
       }
-    } else {
+    }
+    else {
       return new Cesium[vcInstance.cesiumClass](options)
     }
   }
@@ -65,9 +69,9 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
     // 1.104+ 版本废弃了 readyPromise
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    primitive?.readyPromise?.then(e => {
+    // eslint-disable-next-line ts/ban-ts-comment
+    // @ts-expect-error
+    primitive?.readyPromise?.then((e) => {
       const listener = getInstanceListener(vcInstance, 'readyPromise')
       listener && emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy as VcComponentPublicInstance)
     })
@@ -99,7 +103,8 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
       const listener = getInstanceListener(vcInstance, 'update:geometryInstances')
       if (listener) {
         ctx.emit('update:geometryInstances', instances.value)
-      } else {
+      }
+      else {
         const primitive = vcInstance.cesiumObject as Cesium.Primitive
         ;(primitive as any).geometryInstances = index === 0 ? instance : instances.value
       }
@@ -107,7 +112,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     return true
   }
 
-  const removeGeometryInstances = instance => {
+  const removeGeometryInstances = (instance) => {
     const index = instances.value.indexOf(instance)
     instances.value.splice(index, 1)
     return true

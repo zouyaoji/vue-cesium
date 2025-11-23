@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\rectangle-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { rectangle, ellipsoid, granularity, height, rotation, extrudedHeight } from '@vue-cesium/utils/cesium-props'
+import { ellipsoid, extrudedHeight, granularity, height, rectangle, rotation } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const rectangleOutlineGeometryProps = {
   ...rectangle,
   ...ellipsoid,
@@ -34,7 +35,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryRectangleOutlineProps = {
+export interface VcGeometryRectangleOutlineProps {
   /**
    * A cartographic rectangle with north, south, east and west properties in radians.
    */

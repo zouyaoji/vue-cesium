@@ -6,8 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\index.ts
  */
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-import { App } from 'vue'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import Measurements from './src'
 
 Measurements.install = (app: App): void => {

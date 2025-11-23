@@ -87,7 +87,7 @@ export default class VcTimeline {
   _mainTicSpan: number
   _mouseMode: number
   _touchMode: number
-  _touchState: { centerX: number; spanX: number }
+  _touchState: { centerX: number, spanX: number }
   _mouseX: number
   _timelineDrag: number
   _timelineDragLocation: any
@@ -110,14 +110,14 @@ export default class VcTimeline {
   _onTouchEnd: (e: any) => void
   constructor(container: Element, clock: Cesium.Clock) {
     const { defined, DeveloperError } = Cesium
-    //>>includeStart('debug', pragmas.debug);
+    // >>includeStart('debug', pragmas.debug);
     if (!defined(container)) {
       throw new DeveloperError('container is required.')
     }
     if (!defined(clock)) {
       throw new DeveloperError('clock is required.')
     }
-    //>>includeEnd('debug');
+    // >>includeEnd('debug');
 
     container = getElement(container)
 
@@ -155,10 +155,10 @@ export default class VcTimeline {
     this._lastHeight = undefined
     this._lastWidth = undefined
 
-    this._topDiv.innerHTML =
-      '<div class="cesium-timeline-bar"></div><div class="cesium-timeline-trackContainer">' +
-      '<canvas class="cesium-timeline-tracks" width="10" height="1">' +
-      '</canvas></div><div class="cesium-timeline-needle"></div><span class="cesium-timeline-ruler"></span>'
+    this._topDiv.innerHTML
+      = '<div class="cesium-timeline-bar"></div><div class="cesium-timeline-trackContainer">'
+        + '<canvas class="cesium-timeline-tracks" width="10" height="1">'
+        + '</canvas></div><div class="cesium-timeline-needle"></div><span class="cesium-timeline-ruler"></span>'
     this._timeBarEle = this._topDiv.childNodes[0]
     this._trackContainer = this._topDiv.childNodes[1]
     this._trackListEle = this._topDiv.childNodes[1].childNodes[0]
@@ -258,7 +258,7 @@ export default class VcTimeline {
     this._trackContainer.style.height = `${height}px`
 
     let trackListHeight = 1
-    this._trackList.forEach(function (track) {
+    this._trackList.forEach((track) => {
       trackListHeight += track.height
     })
     this._trackListEle.style.height = `${trackListHeight.toString()}px`
@@ -273,7 +273,7 @@ export default class VcTimeline {
 
   zoomTo(startTime, stopTime) {
     const { defined, JulianDate, DeveloperError, ClockRange } = Cesium
-    //>>includeStart('debug', pragmas.debug);
+    // >>includeStart('debug', pragmas.debug);
     if (!defined(startTime)) {
       throw new DeveloperError('startTime is required.')
     }
@@ -283,7 +283,7 @@ export default class VcTimeline {
     if (JulianDate.lessThanOrEquals(stopTime, startTime)) {
       throw new DeveloperError('Start time must come before end time.')
     }
-    //>>includeEnd('debug');
+    // >>includeEnd('debug');
 
     this._startJulian = startTime
     this._endJulian = stopTime
@@ -302,12 +302,14 @@ export default class VcTimeline {
         this._timeBarSecondsSpan = clockSpan
         this._startJulian = this._clock.startTime
         this._endJulian = this._clock.stopTime
-      } else if (startOffset > 0) {
+      }
+      else if (startOffset > 0) {
         // if timeline start is before clock start, shift right
         this._endJulian = JulianDate.addSeconds(this._endJulian, startOffset, new JulianDate())
         this._startJulian = clockStart
         this._timeBarSecondsSpan = JulianDate.secondsDifference(this._endJulian, this._startJulian)
-      } else if (endOffset < 0) {
+      }
+      else if (endOffset < 0) {
         // if timeline end is after clock end, shift left
         this._startJulian = JulianDate.addSeconds(this._startJulian, endOffset, new JulianDate())
         this._endJulian = clockEnd
@@ -377,7 +379,8 @@ export default class VcTimeline {
     let centerSec = JulianDate.secondsDifference(this._scrubJulian, this._startJulian)
     if (amount > 1 || centerSec < 0 || centerSec > this._timeBarSecondsSpan) {
       centerSec = this._timeBarSecondsSpan * 0.5
-    } else {
+    }
+    else {
       centerSec += centerSec - this._timeBarSecondsSpan * 0.5
     }
     const centerSecFlip = this._timeBarSecondsSpan - centerSec
@@ -431,7 +434,8 @@ export default class VcTimeline {
       duration = minimumDuration
       this._timeBarSecondsSpan = minimumDuration
       this._endJulian = JulianDate.addSeconds(this._startJulian, minimumDuration, new JulianDate())
-    } else if (duration > maximumDuration) {
+    }
+    else if (duration > maximumDuration) {
       duration = maximumDuration
       this._timeBarSecondsSpan = maximumDuration
       this._endJulian = JulianDate.addSeconds(this._startJulian, maximumDuration, new JulianDate())
@@ -452,13 +456,16 @@ export default class VcTimeline {
     if (duration > 315360000) {
       // 3650+ days visible, epoch is start of the first visible century.
       epochJulian = JulianDate.fromDate(new Date(Date.UTC(Math.floor(gregorianDate.year / 100) * 100, 0)))
-    } else if (duration > 31536000) {
+    }
+    else if (duration > 31536000) {
       // 365+ days visible, epoch is start of the first visible decade.
       epochJulian = JulianDate.fromDate(new Date(Date.UTC(Math.floor(gregorianDate.year / 10) * 10, 0)))
-    } else if (duration > 86400) {
+    }
+    else if (duration > 86400) {
       // 1+ day(s) visible, epoch is start of the year.
       epochJulian = JulianDate.fromDate(new Date(Date.UTC(gregorianDate.year, 0)))
-    } else {
+    }
+    else {
       // Less than a day on timeline, epoch is midnight of the visible day.
       epochJulian = JulianDate.fromDate(new Date(Date.UTC(gregorianDate.year, gregorianDate.month, gregorianDate.day)))
     }
@@ -482,7 +489,7 @@ export default class VcTimeline {
     }
 
     function remainder(x, y) {
-      //return x % y;
+      // return x % y;
       return x - y * Math.round(x / y)
     }
 
@@ -498,21 +505,21 @@ export default class VcTimeline {
     minSize -= epsilon
 
     const renderState: any = {
-      startTime: startTime,
-      startJulian: startJulian,
-      epochJulian: epochJulian,
-      duration: duration,
-      timeBarWidth: timeBarWidth,
-      getAlpha: getAlpha
+      startTime,
+      startJulian,
+      epochJulian,
+      duration,
+      timeBarWidth,
+      getAlpha
     }
-    this._highlightRanges.forEach(function (highlightRange) {
+    this._highlightRanges.forEach((highlightRange) => {
       tics += highlightRange.render(renderState)
     })
 
     // Calculate tic mark label spacing in the TimeBar.
-    let mainTic = 0.0,
-      subTic = 0.0,
-      tinyTic = 0.0
+    let mainTic = 0.0
+    let subTic = 0.0
+    let tinyTic = 0.0
     // Ideal labeled tic as percentage of zoom interval
     let idealTic = sampleWidth / timeBarWidth
     if (idealTic > 1.0) {
@@ -521,8 +528,8 @@ export default class VcTimeline {
     }
     // Ideal labeled tic size in seconds
     idealTic *= this._timeBarSecondsSpan
-    let ticIndex = -1,
-      smallestIndex = -1
+    let ticIndex = -1
+    let smallestIndex = -1
 
     const ticScaleLen = timelineTicScales.length
     let i
@@ -570,8 +577,8 @@ export default class VcTimeline {
       }
     }
 
-    let lastTextLeft = -999999,
-      textWidth
+    let lastTextLeft = -999999
+    let textWidth
     if (timeBarWidth * (tinyTic / this._timeBarSecondsSpan) >= 3.0) {
       for (tic = getStartTic(tinyTic); tic <= endTime; tic = getNextTic(tic, tinyTic)) {
         tics += `<span class="cesium-timeline-ticTiny" style="left: ${Math.round(timeBarWidth * getAlpha(tic)).toString()}px;"></span>`
@@ -607,15 +614,17 @@ export default class VcTimeline {
         const labelLeft = ticLeft - (textWidth / 2 - 1)
         if (labelLeft > lastTextLeft) {
           lastTextLeft = labelLeft + textWidth + 5
-          tics +=
-            `<span class="cesium-timeline-ticMain" style="left: ${ticLeft.toString()}px;"></span>` +
-            `<span class="cesium-timeline-ticLabel" style="left: ${labelLeft.toString()}px;">${ticLabel}</span>`
-        } else {
+          tics
+            += `<span class="cesium-timeline-ticMain" style="left: ${ticLeft.toString()}px;"></span>`
+              + `<span class="cesium-timeline-ticLabel" style="left: ${labelLeft.toString()}px;">${ticLabel}</span>`
+        }
+        else {
           tics += `<span class="cesium-timeline-ticSub" style="left: ${ticLeft.toString()}px;"></span>`
         }
         tic = getNextTic(tic, mainTic)
       }
-    } else {
+    }
+    else {
       this._mainTicSpan = -1
     }
 
@@ -627,7 +636,7 @@ export default class VcTimeline {
     this._context.clearRect(0, 0, this._trackListEle.width, this._trackListEle.height)
 
     renderState.y = 0
-    this._trackList.forEach(function (track) {
+    this._trackList.forEach((track) => {
       track.render(widget._context, renderState)
       renderState.y += track.height
     })
@@ -643,11 +652,13 @@ function createMouseDownCallback(timeline) {
           timeline._scrubElement.style.backgroundPosition = '-16px 0'
         }
         timeline._onMouseMove(e)
-      } else {
+      }
+      else {
         timeline._mouseX = e.clientX
         if (e.button === 2) {
           timeline._mouseMode = timelineMouseMode.zoom
-        } else {
+        }
+        else {
           timeline._mouseMode = timelineMouseMode.slide
         }
       }
@@ -677,15 +688,18 @@ function createMouseMoveCallback(timeline) {
       if (x < 0) {
         timeline._timelineDragLocation = 0
         timeline._timelineDrag = -0.01 * timeline._timeBarSecondsSpan
-      } else if (x > timeline._topDiv.clientWidth) {
+      }
+      else if (x > timeline._topDiv.clientWidth) {
         timeline._timelineDragLocation = timeline._topDiv.clientWidth
         timeline._timelineDrag = 0.01 * timeline._timeBarSecondsSpan
-      } else {
+      }
+      else {
         // console.log('_setTimeBarTime')
         timeline._timelineDragLocation = undefined
         timeline._setTimeBarTime(x, (x * timeline._timeBarSecondsSpan) / timeline._topDiv.clientWidth)
       }
-    } else if (timeline._mouseMode === timelineMouseMode.slide) {
+    }
+    else if (timeline._mouseMode === timelineMouseMode.slide) {
       // console.log('createMouseMoveCallback slide')
       dx = timeline._mouseX - e.clientX
       timeline._mouseX = e.clientX
@@ -697,12 +711,13 @@ function createMouseMoveCallback(timeline) {
           JulianDate.addSeconds(timeline._endJulian, dsec, new JulianDate())
         )
       }
-    } else if (timeline._mouseMode === timelineMouseMode.zoom) {
+    }
+    else if (timeline._mouseMode === timelineMouseMode.zoom) {
       // console.log('createMouseMoveCallback zoom')
       dx = timeline._mouseX - e.clientX
       timeline._mouseX = e.clientX
       if (dx !== 0) {
-        timeline.zoomFrom(Math.pow(1.01, dx))
+        timeline.zoomFrom(1.01 ** dx)
       }
     }
   }
@@ -713,7 +728,7 @@ function createMouseWheelCallback(timeline) {
     let dy = e.wheelDeltaY || e.wheelDelta || -e.detail
     timelineWheelDelta = Math.max(Math.min(Math.abs(dy), timelineWheelDelta), 1)
     dy /= timelineWheelDelta
-    timeline.zoomFrom(Math.pow(1.05, -dy))
+    timeline.zoomFrom(1.05 ** -dy)
   }
 }
 
@@ -732,15 +747,18 @@ function createTouchStartCallback(timeline) {
         if (timeline._scrubElement) {
           timeline._scrubElement.style.backgroundPosition = len === 1 ? '-16px 0' : '0 0'
         }
-      } else {
+      }
+      else {
         timeline._touchMode = timelineTouchMode.singleTap
         timeline._touchState.centerX = e.touches[0].clientX - leftX
       }
-    } else if (len === 2) {
+    }
+    else if (len === 2) {
       timeline._touchMode = timelineTouchMode.slideZoom
       timeline._touchState.centerX = (e.touches[0].clientX + e.touches[1].clientX) * 0.5 - leftX
       timeline._touchState.spanX = Math.abs(e.touches[0].clientX - e.touches[1].clientX)
-    } else {
+    }
+    else {
       timeline._touchMode = timelineTouchMode.ignore
     }
   }
@@ -748,18 +766,20 @@ function createTouchStartCallback(timeline) {
 
 function createTouchEndCallback(timeline) {
   return function (e) {
-    const len = e.touches.length,
-      leftX = timeline._topDiv.getBoundingClientRect().left
+    const len = e.touches.length
+    const leftX = timeline._topDiv.getBoundingClientRect().left
     if (timeline._touchMode === timelineTouchMode.singleTap) {
       timeline._touchMode = timelineTouchMode.scrub
       timeline._onTouchMove(e)
-    } else if (timeline._touchMode === timelineTouchMode.scrub) {
+    }
+    else if (timeline._touchMode === timelineTouchMode.scrub) {
       timeline._onTouchMove(e)
     }
     timeline._mouseMode = timelineMouseMode.touchOnly
     if (len !== 1) {
       timeline._touchMode = len > 0 ? timelineTouchMode.ignore : timelineTouchMode.none
-    } else if (timeline._touchMode === timelineTouchMode.slideZoom) {
+    }
+    else if (timeline._touchMode === timelineTouchMode.slideZoom) {
       timeline._touchState.centerX = e.touches[0].clientX - leftX
     }
     if (timeline._scrubElement) {
@@ -770,13 +790,13 @@ function createTouchEndCallback(timeline) {
 
 function createTouchMoveCallback(timeline) {
   return function (e) {
-    let dx,
-      x,
-      len,
-      newCenter,
-      newSpan,
-      newStartTime,
-      zoom = 1
+    let dx
+    let x
+    let len
+    let newCenter
+    let newSpan
+    let newStartTime
+    let zoom = 1
     const leftX = timeline._topDiv.getBoundingClientRect().left
     if (timeline._touchMode === timelineTouchMode.singleTap) {
       timeline._touchMode = timelineTouchMode.slideZoom
@@ -790,12 +810,14 @@ function createTouchMoveCallback(timeline) {
           timeline._setTimeBarTime(x, (x * timeline._timeBarSecondsSpan) / timeline._topDiv.clientWidth)
         }
       }
-    } else if (timeline._touchMode === timelineTouchMode.slideZoom) {
+    }
+    else if (timeline._touchMode === timelineTouchMode.slideZoom) {
       len = e.touches.length
       if (len === 2) {
         newCenter = (e.touches[0].clientX + e.touches[1].clientX) * 0.5 - leftX
         newSpan = Math.abs(e.touches[0].clientX - e.touches[1].clientX)
-      } else if (len === 1) {
+      }
+      else if (len === 1) {
         newCenter = e.touches[0].clientX - leftX
         newSpan = 0
       }
@@ -808,11 +830,12 @@ function createTouchMoveCallback(timeline) {
           zoom = timeline._touchState.spanX / newSpan
           newStartTime = JulianDate.addSeconds(
             timeline._startJulian,
-            (timeline._touchState.centerX * timeline._timeBarSecondsSpan - newCenter * timeline._timeBarSecondsSpan * zoom) /
-              timeline._topDiv.clientWidth,
+            (timeline._touchState.centerX * timeline._timeBarSecondsSpan - newCenter * timeline._timeBarSecondsSpan * zoom)
+            / timeline._topDiv.clientWidth,
             new JulianDate()
           )
-        } else {
+        }
+        else {
           // Slide to newCenter
           dx = timeline._touchState.centerX - newCenter
           newStartTime = JulianDate.addSeconds(

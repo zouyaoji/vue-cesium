@@ -1,3 +1,10 @@
+import type {
+  ProjectionTransforms,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,19 +14,12 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\imagery.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  ProjectionTransforms,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcReadyObject,
-  VcRectangle
-} from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { url, minimumLevel, maximumLevel, rectangle, projectionTransforms } from '@vue-cesium/utils/cesium-props'
-import TiandituImageryProvider from './TiandituImageryProvider'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { maximumLevel, minimumLevel, projectionTransforms, rectangle, url } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+import TiandituImageryProvider from './TiandituImageryProvider'
 
 export const tiandituImageryProviderProps = {
   ...url,
@@ -107,7 +107,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderTiandituProps = {
+export interface VcImageryProviderTiandituProps {
   /**
    * The minimum tile level to request, or undefined if there is no minimum.
    * Default value: 0

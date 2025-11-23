@@ -1,3 +1,30 @@
+import type {
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDistanceDisplayCondition,
+  VcNearFarScalar,
+  VcPickEvent,
+  VcPosition,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
+import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
+import {
+  color,
+  disableDepthTestDistance,
+  distanceDisplayCondition,
+  enableMouseEvent,
+  id,
+  outlineColor,
+  outlineWidth,
+  pixelSize,
+  position,
+  scaleByDistance,
+  show,
+  translucencyByDistance
+} from '@vue-cesium/utils/cesium-props'
+import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,33 +34,6 @@
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\point\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  VcPickEvent,
-  VcColor,
-  VcComponentInternalInstance,
-  VcDistanceDisplayCondition,
-  VcNearFarScalar,
-  VcPosition,
-  VcReadyObject,
-  VcComponentPublicInstance
-} from '@vue-cesium/utils/types'
-import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import {
-  color,
-  disableDepthTestDistance,
-  distanceDisplayCondition,
-  id,
-  outlineColor,
-  outlineWidth,
-  pixelSize,
-  position,
-  scaleByDistance,
-  show,
-  translucencyByDistance,
-  enableMouseEvent
-} from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
 
 export const pointProps = {
   ...color,
@@ -63,7 +63,7 @@ export default defineComponent({
   }
 })
 
-export type VcPointProps = {
+export interface VcPointProps {
   /**
    * Specify the inner color of the point.
    * Default value: white

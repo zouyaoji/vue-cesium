@@ -1,8 +1,17 @@
 import { debounce } from 'lodash-unified'
+import EarthGravityModel1996 from './EarthGravityModel1996'
 import prettifyCoordinates from './prettifyCoordinates'
 import prettifyProjection from './prettifyProjection'
-import EarthGravityModel1996 from './EarthGravityModel1996'
-interface MouseCoords {
+
+interface MouseCoordsOption {
+  gridFileUrl: string
+  proj4Projection: string
+  projectionUnits: string
+  proj4longlat: string
+  decimal: number
+  rangeType: number
+}
+class MouseCoords {
   proj4Projection: string
   projectionUnits: string
   proj4longlat: string
@@ -20,16 +29,6 @@ interface MouseCoords {
   debounceSampleAccurateHeight: any
   decimal: number
   rangeType: number
-}
-interface MouseCoordsOption {
-  gridFileUrl: string
-  proj4Projection: string
-  projectionUnits: string
-  proj4longlat: string
-  decimal: number
-  rangeType: number
-}
-class MouseCoords {
   constructor(options: MouseCoordsOption) {
     const { Cartographic, knockout } = Cesium
     const gridFileUrl = options.gridFileUrl
@@ -82,7 +81,8 @@ class MouseCoords {
 
       if (globe.terrainProvider instanceof EllipsoidTerrainProvider) {
         intersection.height = undefined
-      } else {
+      }
+      else {
         const barycentric = Intersections2D.computeBarycentricCoordinates(
           intersection.longitude,
           intersection.latitude,
@@ -113,7 +113,8 @@ class MouseCoords {
       if (!(terrainProvider instanceof EllipsoidTerrainProvider)) {
         this.debounceSampleAccurateHeight(terrainProvider, intersection)
       }
-    } else {
+    }
+    else {
       this.elevation = ''
       this.utmZone = ''
       this.latitude = ''
@@ -137,7 +138,7 @@ class MouseCoords {
 
     const prettyCoordinate = prettifyCoordinates(longitude, latitude, {
       height: coordinates.height,
-      errorBar: errorBar,
+      errorBar,
       decimal: this.decimal,
       rangeType: this.rangeType
     })
@@ -161,13 +162,14 @@ class MouseCoords {
     const geoidHeightPromise = this.geoidModel ? this.geoidModel.getHeight(position.longitude, position.latitude) : undefined
     const terrainPromise = sampleTerrainMostDetailed(terrainProvider, [positionWithHeight])
     this.tileRequestInFlight = Promise.all([geoidHeightPromise, terrainPromise])
-      .then(result => {
+      .then((result) => {
         const geoidHeight = result[0] || 0.0
         this.tileRequestInFlight = undefined
         if (Cartographic.equals(position, this.lastHeightSamplePosition)) {
           position.height = positionWithHeight.height - geoidHeight
           this.cartographicToFields(position)
-        } else {
+        }
+        else {
           // Mouse moved since we started this request, so the result isn't useful.  Try again next time.
         }
       })
@@ -188,104 +190,105 @@ const scratchV2 = {}
 
 export function extendForMouseCoords() {
   const { Globe, GlobeSurfaceTile, BoundingSphere, Cartesian3, defined, DeveloperError, IntersectionTests, SceneMode } = Cesium
-  Globe.prototype.pickTriangle =
-    Globe.prototype.pickTriangle ||
-    function (this, ray, scene, cullBackFaces, result) {
+  Globe.prototype.pickTriangle
+    = Globe.prototype.pickTriangle
+      || function (this, ray, scene, cullBackFaces, result) {
       // >>includeStart('debug', pragmas.debug);
-      if (!defined(ray)) {
-        throw new DeveloperError('ray is required')
-      }
-      if (!defined(scene)) {
-        throw new DeveloperError('scene is required')
-      }
-      // >>includeEnd('debug');
-
-      cullBackFaces = cullBackFaces as any ?? true
-
-      const mode = scene.mode
-      const projection = scene.mapProjection
-
-      const sphereIntersections = scratchArray
-      sphereIntersections.length = 0
-
-      const tilesToRender = this._surface._tilesToRender
-      let length = tilesToRender.length
-
-      let tile
-      let i
-
-      for (i = 0; i < length; ++i) {
-        tile = tilesToRender[i]
-        const surfaceTile = tile.data
-
-        if (!defined(surfaceTile)) {
-          continue
+        if (!defined(ray)) {
+          throw new DeveloperError('ray is required')
         }
-
-        const boundingVolume = surfaceTile.pickBoundingSphere
-        if (mode !== SceneMode.SCENE3D) {
-          BoundingSphere.fromRectangleWithHeights2D(tile.rectangle, projection, surfaceTile.minimumHeight, surfaceTile.maximumHeight, boundingVolume)
-          Cartesian3.fromElements(boundingVolume.center.z, boundingVolume.center.x, boundingVolume.center.y, boundingVolume.center)
-        } else {
-          BoundingSphere.clone(surfaceTile.boundingSphere3D, boundingVolume)
+        if (!defined(scene)) {
+          throw new DeveloperError('scene is required')
         }
+        // >>includeEnd('debug');
 
-        const boundingSphereIntersection = IntersectionTests.raySphere(ray, boundingVolume, scratchSphereIntersectionResult)
-        if (defined(boundingSphereIntersection)) {
-          sphereIntersections.push(tile)
-        }
-      }
+        cullBackFaces = cullBackFaces as any ?? true
 
-      sphereIntersections.sort(createComparePickTileFunction(ray.origin))
+        const mode = scene.mode
+        const projection = scene.mapProjection
 
-      let intersection
-      length = sphereIntersections.length
-      for (i = 0; i < length; ++i) {
-        intersection = sphereIntersections[i].data.pickTriangle(ray, scene.mode, scene.mapProjection, cullBackFaces, result)
-        if (defined(intersection)) {
-          intersection.tile = sphereIntersections[i]
-          break
-        }
-      }
+        const sphereIntersections = scratchArray
+        sphereIntersections.length = 0
 
-      return intersection
-    }
+        const tilesToRender = this._surface._tilesToRender
+        let length = tilesToRender.length
 
-  GlobeSurfaceTile.prototype.pickTriangle =
-    GlobeSurfaceTile.prototype.pickTriangle ||
-    function (this: any, ray, mode, projection, cullBackFaces) {
-      const mesh = this.renderedMesh
-      if (!defined(mesh)) {
-        return undefined
-      }
+        let tile
+        let i
 
-      const vertices = mesh.vertices
-      const indices = mesh.indices
-      const encoding = mesh.encoding
+        for (i = 0; i < length; ++i) {
+          tile = tilesToRender[i]
+          const surfaceTile = tile.data
 
-      const length = indices.length
-      for (let i = 0; i < length; i += 3) {
-        const i0 = indices[i]
-        const i1 = indices[i + 1]
-        const i2 = indices[i + 2]
+          if (!defined(surfaceTile)) {
+            continue
+          }
 
-        const v0 = getPosition(encoding, mode, projection, vertices, i0, scratchV0)
-        const v1 = getPosition(encoding, mode, projection, vertices, i1, scratchV1)
-        const v2 = getPosition(encoding, mode, projection, vertices, i2, scratchV2)
+          const boundingVolume = surfaceTile.pickBoundingSphere
+          if (mode !== SceneMode.SCENE3D) {
+            BoundingSphere.fromRectangleWithHeights2D(tile.rectangle, projection, surfaceTile.minimumHeight, surfaceTile.maximumHeight, boundingVolume)
+            Cartesian3.fromElements(boundingVolume.center.z, boundingVolume.center.x, boundingVolume.center.y, boundingVolume.center)
+          }
+          else {
+            BoundingSphere.clone(surfaceTile.boundingSphere3D, boundingVolume)
+          }
 
-        const intersection = IntersectionTests.rayTriangle(ray, v0, v1, v2, cullBackFaces, new Cartesian3())
-        if (defined(intersection)) {
-          return {
-            intersection: intersection,
-            v0: v0,
-            v1: v1,
-            v2: v2
+          const boundingSphereIntersection = IntersectionTests.raySphere(ray, boundingVolume, scratchSphereIntersectionResult)
+          if (defined(boundingSphereIntersection)) {
+            sphereIntersections.push(tile)
           }
         }
+
+        sphereIntersections.sort(createComparePickTileFunction(ray.origin))
+
+        let intersection
+        length = sphereIntersections.length
+        for (i = 0; i < length; ++i) {
+          intersection = sphereIntersections[i].data.pickTriangle(ray, scene.mode, scene.mapProjection, cullBackFaces, result)
+          if (defined(intersection)) {
+            intersection.tile = sphereIntersections[i]
+            break
+          }
+        }
+
+        return intersection
       }
 
-      return undefined
-    }
+  GlobeSurfaceTile.prototype.pickTriangle
+    = GlobeSurfaceTile.prototype.pickTriangle
+      || function (this: any, ray, mode, projection, cullBackFaces) {
+        const mesh = this.renderedMesh
+        if (!defined(mesh)) {
+          return undefined
+        }
+
+        const vertices = mesh.vertices
+        const indices = mesh.indices
+        const encoding = mesh.encoding
+
+        const length = indices.length
+        for (let i = 0; i < length; i += 3) {
+          const i0 = indices[i]
+          const i1 = indices[i + 1]
+          const i2 = indices[i + 2]
+
+          const v0 = getPosition(encoding, mode, projection, vertices, i0, scratchV0)
+          const v1 = getPosition(encoding, mode, projection, vertices, i1, scratchV1)
+          const v2 = getPosition(encoding, mode, projection, vertices, i2, scratchV2)
+
+          const intersection = IntersectionTests.rayTriangle(ray, v0, v1, v2, cullBackFaces, new Cartesian3())
+          if (defined(intersection)) {
+            return {
+              intersection,
+              v0,
+              v1,
+              v2
+            }
+          }
+        }
+
+        return undefined
+      }
 }
 
 function createComparePickTileFunction(rayOrigin) {

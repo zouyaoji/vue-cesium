@@ -20,10 +20,18 @@ export function getFullscreenQuad() {
         //  v0----v1
         // prettier-ignore
         values: new Float32Array([
-          -1, -1, 0, // v0
-          1, -1, 0, // v1
-          1, 1, 0, // v2
-          -1, 1, 0, // v3
+          -1,
+          -1,
+          0, // v0
+          1,
+          -1,
+          0, // v1
+          1,
+          1,
+          0, // v2
+          -1,
+          1,
+          0 // v3
         ])
       }),
       st: new Cesium.GeometryAttribute({
@@ -51,9 +59,9 @@ export function createTexture(options, typedArray?) {
 
 export function createFramebuffer(context, colorTexture, depthTexture) {
   const framebuffer = new Cesium.Framebuffer({
-    context: context,
+    context,
     colorTextures: [colorTexture],
-    depthTexture: depthTexture
+    depthTexture
   })
   return framebuffer
 }
@@ -93,11 +101,13 @@ export function viewRectangleToLonLatRange(viewRectangle: Cesium.Rectangle) {
   if (width > Cesium.Math.THREE_PI_OVER_TWO) {
     longitudeMin = 0.0
     longitudeMax = Cesium.Math.TWO_PI
-  } else {
+  }
+  else {
     if (postiveEast - postiveWest < width) {
       longitudeMin = postiveWest
       longitudeMax = postiveWest + width
-    } else {
+    }
+    else {
       longitudeMin = postiveWest
       longitudeMax = postiveEast
     }

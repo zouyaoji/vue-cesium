@@ -1,4 +1,4 @@
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import useSpinner, { useSpinnerProps } from './use-spinner'
 
@@ -17,16 +17,16 @@ const svg = [
         h('stop', {
           'stop-color': 'currentColor',
           'stop-opacity': '0',
-          offset: '0%'
+          'offset': '0%'
         }),
         h('stop', {
           'stop-color': 'currentColor',
           'stop-opacity': '.631',
-          offset: '63.146%'
+          'offset': '63.146%'
         }),
         h('stop', {
           'stop-color': 'currentColor',
-          offset: '100%'
+          'offset': '100%'
         })
       ]
     )
@@ -34,16 +34,16 @@ const svg = [
   h(
     'g',
     {
-      transform: 'translate(1 1)',
-      fill: 'none',
+      'transform': 'translate(1 1)',
+      'fill': 'none',
       'fill-rule': 'evenodd'
     },
     [
       h(
         'path',
         {
-          d: 'M36 18c0-9.94-8.06-18-18-18',
-          stroke: 'url(#a)',
+          'd': 'M36 18c0-9.94-8.06-18-18-18',
+          'stroke': 'url(#a)',
           'stroke-width': '2'
         },
         [

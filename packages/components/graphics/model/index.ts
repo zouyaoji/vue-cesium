@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 11:11:16
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\model\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCallbackPropertyFunction,
   VcCartesian2,
@@ -18,30 +9,40 @@ import type {
 } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  show,
-  uri,
-  scale,
-  minimumPixelSize,
-  maximumScale,
-  incrementallyLoadTextures,
-  runAnimations,
+  articulations,
   clampAnimations,
-  shadows,
+  clippingPlanes,
+  color,
+  colorBlendAmount,
+  colorBlendMode,
+  distanceDisplayCondition,
   heightReference,
+  imageBasedLightingFactor,
+  incrementallyLoadTextures,
+  lightColor,
+  maximumScale,
+  minimumPixelSize,
+  nodeTransformations,
+  runAnimations,
+  scale,
+  shadows,
+  show,
   silhouetteColor,
   silhouetteSize,
-  color,
-  colorBlendMode,
-  colorBlendAmount,
-  imageBasedLightingFactor,
-  lightColor,
-  distanceDisplayCondition,
-  nodeTransformations,
-  articulations,
-  clippingPlanes
+  uri
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-06 11:11:16
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\model\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const modelGraphicsProps = {
   ...show,
   ...uri,
@@ -79,7 +80,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsModelProps = {
+export interface VcGraphicsModelProps {
   /**
    * A boolean Property specifying the visibility of the model.
    * Default value: true

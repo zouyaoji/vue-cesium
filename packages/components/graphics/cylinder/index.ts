@@ -1,12 +1,3 @@
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 11:35:06
- * @LastEditors: zouyaoji
- * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\cylinder\index.ts
- */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCallbackPropertyFunction,
   VcColor,
@@ -18,23 +9,33 @@ import type {
 } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  show,
-  length,
-  topRadius,
   bottomRadius,
-  heightReference,
+  distanceDisplayCondition,
   fill,
+  heightReference,
+  length,
   material,
+  numberOfVerticalLines,
   outline,
   outlineColor,
   outlineWidth,
-  numberOfVerticalLines,
-  slices,
   shadows,
-  distanceDisplayCondition
+  show,
+  slices,
+  topRadius
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { graphicsEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2022-04-08 11:35:06
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\cylinder\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const cylinderGraphicsProps = {
   ...show,
   ...length,
@@ -64,14 +65,14 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsCylinderProps = {
+export interface VcGraphicsCylinderProps {
   /**
    * A boolean Property specifying the visibility of the corridor.
    * Default value: true
    */
   show?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
   /**
-   * 	A numeric Property specifying the length of the cylinder.
+   * A numeric Property specifying the length of the cylinder.
    */
   length?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
   /**

@@ -1,5 +1,11 @@
-#
 packages:
-  - 'packages/**'
-  - website
+  - packages/*
+  - demo
+  - docs
+  - internal/*
   - '!**/__tests__/**'
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - unrs-resolver
+  - vue-demi

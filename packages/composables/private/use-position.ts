@@ -1,5 +1,6 @@
-import { computed, CSSProperties, PropType, ref } from 'vue'
-import { VcViewerProvider } from '@vue-cesium/utils/types'
+import type { VcViewerProvider } from '@vue-cesium/utils/types'
+import type { CSSProperties, PropType } from 'vue'
+import { computed, ref } from 'vue'
 
 export const positionProps = {
   position: {
@@ -18,10 +19,10 @@ export default function (props, $services: VcViewerProvider) {
     const pos = props.position
 
     return {
-      top: pos.indexOf('top') > -1,
-      right: pos.indexOf('right') > -1,
-      bottom: pos.indexOf('bottom') > -1,
-      left: pos.indexOf('left') > -1,
+      top: pos.includes('top'),
+      right: pos.includes('right'),
+      bottom: pos.includes('bottom'),
+      left: pos.includes('left'),
       vertical: pos === 'top' || pos === 'bottom',
       horizontal: pos === 'left' || pos === 'right'
     }
@@ -62,13 +63,15 @@ export default function (props, $services: VcViewerProvider) {
 
     if (side.top === true && top.value !== 0) {
       posY = `${top.value}px`
-    } else if (side.bottom === true && bottom.value !== 0) {
+    }
+    else if (side.bottom === true && bottom.value !== 0) {
       posY = `${-bottom.value}px`
     }
 
     if (side.left === true && left.value !== 0) {
       posX = `${dir * left.value}px`
-    } else if (side.right === true && right.value !== 0) {
+    }
+    else if (side.right === true && right.value !== 0) {
       posX = `${-dir * right.value}px`
     }
 
@@ -87,7 +90,8 @@ export default function (props, $services: VcViewerProvider) {
       if (right.value !== 0) {
         css['left'] = `${right.value}px`
       }
-    } else if (side.horizontal === true) {
+    }
+    else if (side.horizontal === true) {
       if (top.value !== 0) {
         css.top = `${top.value}px`
       }

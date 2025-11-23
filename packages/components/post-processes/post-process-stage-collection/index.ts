@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,14 +7,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-collection\index.ts
  */
-import type { WatchStopHandle, PropType, VNode } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { useCommon } from '@vue-cesium/composables/index'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import type { PropType, VNode, WatchStopHandle } from 'vue'
 import type { VcPostProcessStageProps } from '../post-process-stage'
+import { useCommon } from '@vue-cesium/composables/index'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const postProcessStageCollectionProps = {
   postProcesses: {
@@ -41,7 +41,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.postProcesses,
-        val => {
+        (val) => {
           if (instance.mounted) {
             ;(instance.proxy as VcComponentPublicInstance).reload?.()
           }
@@ -57,7 +57,7 @@ export default defineComponent({
 
     instance.mount = async () => {
       const { postProcessStages } = $services
-      props.postProcesses.forEach(postProcess => {
+      props.postProcesses.forEach((postProcess) => {
         const opts = commonState.transformProps(postProcess)
         stages.push(postProcessStages.add(new Cesium.PostProcessStage(opts as any)))
       })
@@ -66,7 +66,7 @@ export default defineComponent({
 
     instance.unmount = async () => {
       const { postProcessStages } = $services
-      stages.forEach(stage => {
+      stages.forEach((stage) => {
         postProcessStages.remove(stage)
       })
       stages.length = 0
@@ -93,7 +93,7 @@ export default defineComponent({
   }
 })
 
-export type VcPostProcessStageCollectionProps = {
+export interface VcPostProcessStageCollectionProps {
   /**
    * Specify the post-processing collection. The props are consistent with [`vc-post-process-stage`](https://zouyaoji.top/vue-cesium/#/en-US/component/post-processes/vc-post-process-stage#props).
    */
@@ -118,7 +118,7 @@ export type VcPostProcessStageCollectionProps = {
 
 export type VcPostProcessStageCollectionRef = VcComponentPublicInstance<VcPostProcessStageCollectionProps>
 
-export type VcPostProcessStageCollectionSlots = {
+export interface VcPostProcessStageCollectionSlots {
   /**
    * Slot for vc-post-process-stage-scan, vc-post-process-stage
    */

@@ -1,19 +1,19 @@
-import { h, ref, computed, onBeforeUnmount, getCurrentInstance, PropType } from 'vue'
+import useDark, { useDarkProps } from '@vue-cesium/composables/private/use-dark'
+
+import { useFormInject, useFormProps } from '@vue-cesium/composables/private/use-form'
 
 import { TouchPan } from '@vue-cesium/directives'
-
-import useDark, { useDarkProps } from '@vue-cesium/composables/private/use-dark'
-import { useFormProps, useFormInject } from '@vue-cesium/composables/private/use-form'
+import { position } from '@vue-cesium/utils/private/event'
 
 import { between } from '@vue-cesium/utils/private/format'
-import { position } from '@vue-cesium/utils/private/event'
-import { isNumber, isObject } from '@vue-cesium/utils/util'
 import { hDir } from '@vue-cesium/utils/private/render'
+import { isNumber, isObject } from '@vue-cesium/utils/util'
+import { computed, getCurrentInstance, h, onBeforeUnmount, ref } from 'vue'
 
 const markerPrefixClass = 'vc-slider__marker-labels'
 const defaultMarkerConvertFn = v => ({ value: v })
-const defaultMarkerLabelRenderFn = ({ marker }) =>
-  h(
+function defaultMarkerLabelRenderFn({ marker }) {
+  return h(
     'div',
     {
       key: marker.value,
@@ -22,6 +22,7 @@ const defaultMarkerLabelRenderFn = ({ marker }) =>
     },
     marker.label
   )
+}
 
 // PGDOWN, LEFT, DOWN, PGUP, RIGHT, UP
 export const keyCodes = [34, 37, 40, 33, 39, 38]
@@ -110,12 +111,12 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
   const dragging = ref(false)
 
   const axis = computed(() => (props.vertical === true ? '--v' : '--h'))
-  const labelSide = computed(() => '-' + (props.switchLabelSide === true ? 'switched' : 'standard'))
+  const labelSide = computed(() => `-${props.switchLabelSide === true ? 'switched' : 'standard'}`)
 
   const isReversed = computed(() => props.reverse === true)
 
-  const innerMin = computed(() => (isNaN(props.innerMin) === true || props.innerMin < props.min ? props.min : props.innerMin))
-  const innerMax = computed(() => (isNaN(props.innerMax) === true || props.innerMax > props.max ? props.max : props.innerMax))
+  const innerMin = computed(() => (Number.isNaN(props.innerMin) === true || props.innerMin < props.min ? props.min : props.innerMin))
+  const innerMax = computed(() => (Number.isNaN(props.innerMax) === true || props.innerMax > props.max ? props.max : props.innerMax))
 
   const editable = computed(() => props.disable !== true && props.readonly !== true && innerMin.value < innerMax.value)
 
@@ -139,7 +140,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
 
   const attributes = computed(() => {
     const acc = {
-      role: 'slider',
+      'role': 'slider',
       'aria-valuemin': innerMin.value,
       'aria-valuemax': innerMax.value,
       'aria-orientation': orientation.value,
@@ -148,7 +149,8 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
 
     if (props.disable === true) {
       acc['aria-disabled'] = 'true'
-    } else if (props.readonly === true) {
+    }
+    else if (props.readonly === true) {
       acc['aria-readonly'] = 'true'
     }
 
@@ -157,30 +159,30 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
 
   const classes = computed(
     () =>
-      `vc-slider vc-slider${axis.value} vc-slider--${active.value === true ? '' : 'in'}active inline no-wrap ` +
-      (props.vertical === true ? 'row' : 'column') +
-      (props.disable === true ? ' disabled' : ' vc-slider--enabled' + (editable.value === true ? ' vc-slider--editable' : '')) +
-      ((focus.value as any) === 'both' ? ' vc-slider--focus' : '') +
-      (props.label || props.labelAlways === true ? ' vc-slider--label' : '') +
-      (props.labelAlways === true ? ' vc-slider--label-always' : '') +
-      (isDark.value === true ? ' vc-slider--dark' : '') +
-      (props.dense === true ? ' vc-slider--dense vc-slider--dense' + axis.value : '')
+      `vc-slider vc-slider${axis.value} vc-slider--${active.value === true ? '' : 'in'}active inline no-wrap ${
+        props.vertical === true ? 'row' : 'column'
+      }${props.disable === true ? ' disabled' : ` vc-slider--enabled${editable.value === true ? ' vc-slider--editable' : ''}`
+      }${(focus.value as any) === 'both' ? ' vc-slider--focus' : ''
+      }${props.label || props.labelAlways === true ? ' vc-slider--label' : ''
+      }${props.labelAlways === true ? ' vc-slider--label-always' : ''
+      }${isDark.value === true ? ' vc-slider--dark' : ''
+      }${props.dense === true ? ` vc-slider--dense vc-slider--dense${axis.value}` : ''}`
   )
 
   function getPositionClass(name) {
-    const cls = 'vc-slider__' + name
+    const cls = `vc-slider__${name}`
     return `${cls} ${cls}${axis.value} ${cls}${axis.value}${labelSide.value}`
   }
   function getAxisClass(name) {
-    const cls = 'vc-slider__' + name
+    const cls = `vc-slider__${name}`
     return `${cls} ${cls}${axis.value}`
   }
 
   const selectionBarClass = computed(() => {
     const color = props.selectionColor || props.color
-    return 'vc-slider__selection absolute' + (color !== void 0 ? ` text-${color}` : '')
+    return `vc-slider__selection absolute${color !== void 0 ? ` text-${color}` : ''}`
   })
-  const markerClass = computed(() => getAxisClass('markers') + ' absolute overflow-hidden')
+  const markerClass = computed(() => `${getAxisClass('markers')} absolute overflow-hidden`)
   const trackContainerClass = computed(() => getAxisClass('track-container'))
   const pinClass = computed(() => getPositionClass('pin'))
   const labelClass = computed(() => getPositionClass('label'))
@@ -189,7 +191,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     () => getPositionClass('marker-labels-container') + (props.markerLabelsClass !== void 0 ? ` ${props.markerLabelsClass}` : '')
   )
 
-  const trackClass = computed(() => 'vc-slider__track relative-position no-outline' + (props.trackColor !== void 0 ? ` bg-${props.trackColor}` : ''))
+  const trackClass = computed(() => `vc-slider__track relative-position no-outline${props.trackColor !== void 0 ? ` bg-${props.trackColor}` : ''}`)
   const trackStyle = computed(() => {
     const acc = { [thicknessProp.value]: props.trackSize }
     if (props.trackImg !== void 0) {
@@ -198,7 +200,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     return acc
   })
 
-  const innerBarClass = computed(() => 'vc-slider__inner absolute' + (props.innerTrackColor !== void 0 ? ` bg-${props.innerTrackColor}` : ''))
+  const innerBarClass = computed(() => `vc-slider__inner absolute${props.innerTrackColor !== void 0 ? ` bg-${props.innerTrackColor}` : ''}`)
   const innerBarStyle = computed(() => {
     const acc = {
       [positionProp.value]: `${100 * innerMinRatio.value}%`,
@@ -220,7 +222,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     }
 
     if (decimals.value > 0) {
-      model = parseFloat(model.toFixed(decimals.value))
+      model = Number.parseFloat(model.toFixed(decimals.value))
     }
 
     return between(model, innerMin.value, innerMax.value)
@@ -231,11 +233,11 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
   }
 
   function getDraggingRatio(evt, dragging) {
-    const pos = position(evt),
-      val =
-        props.vertical === true
-          ? between((pos.top - dragging.top) / dragging.height, 0, 1)
-          : between((pos.left - dragging.left) / dragging.width, 0, 1)
+    const pos = position(evt)
+    const val
+      = props.vertical === true
+        ? between((pos.top - dragging.top) / dragging.height, 0, 1)
+        : between((pos.left - dragging.left) / dragging.width, 0, 1)
 
     return between(isReversed.value === true ? 1.0 - val : val, innerMinRatio.value, innerMaxRatio.value)
   }
@@ -260,9 +262,9 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
   const markerLabelClass = computed(() => {
     const prefix = ` ${markerPrefixClass}${axis.value}-`
     return (
-      markerPrefixClass +
-      `${prefix}${props.switchMarkerLabelsSide === true ? 'switched' : 'standard'}` +
-      `${prefix}${isReversed.value === true ? 'rtl' : 'ltr'}`
+      `${markerPrefixClass
+      }${prefix}${props.switchMarkerLabelsSide === true ? 'switched' : 'standard'}`
+      + `${prefix}${isReversed.value === true ? 'rtl' : 'ltr'}`
     )
   })
 
@@ -275,7 +277,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
       index,
       value: entry.value,
       label: entry.label || entry.value,
-      classes: markerLabelClass.value + (entry.classes !== void 0 ? ' ' + entry.classes : ''),
+      classes: markerLabelClass.value + (entry.classes !== void 0 ? ` ${entry.classes}` : ''),
       style: {
         ...getMarkerLabelStyle(entry.value),
         ...(entry.style || {})
@@ -313,7 +315,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     }
 
     if (typeof def === 'function') {
-      return markerTicks.value.map(value => {
+      return markerTicks.value.map((value) => {
         const item = def(value)
         return isObject(item) === true ? { ...item, value } : { value, label: item }
       })
@@ -326,7 +328,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     }
 
     return Object.keys(def)
-      .map(key => {
+      .map((key) => {
         const item = def[key]
         const value = Number(key)
         return isObject(item) === true ? { ...item, value } : { value, label: item }
@@ -344,7 +346,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     }
 
     const acc = {}
-    markerLabelsList.value.forEach(entry => {
+    markerLabelsList.value.forEach((entry) => {
       acc[entry.value] = entry
     })
     return acc
@@ -393,13 +395,15 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
       }
       active.value = false
       focus.value = false
-    } else if (event.isFirst === true) {
+    }
+    else if (event.isFirst === true) {
       dragging.value = getDragging(event.evt)
       updatePosition(event.evt)
       updateValue()
       active.value = true
       emit('pan', 'start')
-    } else {
+    }
+    else {
       updatePosition(event.evt)
       updateValue()
     }
@@ -461,9 +465,9 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
       () =>
         `vc-slider__thumb vc-slider__thumb${axis.value} vc-slider__thumb${axis.value}-${
           isReversed.value === true ? 'rtl' : 'ltr'
-        } absolute non-selectable` +
-        focusClass.value +
-        (thumb.thumbColor.value !== void 0 ? ` text-${thumb.thumbColor.value}` : '')
+        } absolute non-selectable${
+          focusClass.value
+        }${thumb.thumbColor.value !== void 0 ? ` text-${thumb.thumbColor.value}` : ''}`
     )
 
     const style = computed(() => ({
@@ -477,15 +481,15 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
 
     const textContainerStyle = computed(() => getTextContainerStyle(thumb.ratio.value))
 
-    const textClass = computed(() => 'vc-slider__text' + (thumb.labelTextColor.value !== void 0 ? ` text-${thumb.labelTextColor.value}` : ''))
+    const textClass = computed(() => `vc-slider__text${thumb.labelTextColor.value !== void 0 ? ` text-${thumb.labelTextColor.value}` : ''}`)
 
     return () => {
       const thumbContent = [
         h(
           'svg',
           {
-            class: 'vc-slider__thumb-shape absolute-full',
-            viewBox: '0 0 20 20',
+            'class': 'vc-slider__thumb-shape absolute-full',
+            'viewBox': '0 0 20 20',
             'aria-hidden': 'true'
           },
           [h('path', { d: props.thumbPath })]
@@ -499,7 +503,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
           h(
             'div',
             {
-              class: pinClass.value + ' absolute fit no-pointer-events' + pinColor.value
+              class: `${pinClass.value} absolute fit no-pointer-events${pinColor.value}`
             },
             [
               h(
@@ -543,32 +547,32 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
   function getContent(selectionBarStyle, trackContainerTabindex, trackContainerEvents, injectThumb) {
     const trackContent = []
 
-    props.innerTrackColor !== 'transparent' &&
-      trackContent.push(
-        h('div', {
-          key: 'inner',
-          class: innerBarClass.value,
-          style: innerBarStyle.value
-        })
-      )
+    props.innerTrackColor !== 'transparent'
+    && trackContent.push(
+      h('div', {
+        key: 'inner',
+        class: innerBarClass.value,
+        style: innerBarStyle.value
+      })
+    )
 
-    props.selectionColor !== 'transparent' &&
-      trackContent.push(
-        h('div', {
-          key: 'selection',
-          class: selectionBarClass.value,
-          style: selectionBarStyle.value
-        })
-      )
+    props.selectionColor !== 'transparent'
+    && trackContent.push(
+      h('div', {
+        key: 'selection',
+        class: selectionBarClass.value,
+        style: selectionBarStyle.value
+      })
+    )
 
-    props.markers !== false &&
-      trackContent.push(
-        h('div', {
-          key: 'marker',
-          class: markerClass.value,
-          style: markerStyle.value
-        })
-      )
+    props.markers !== false
+    && trackContent.push(
+      h('div', {
+        key: 'marker',
+        class: markerClass.value,
+        style: markerStyle.value
+      })
+    )
 
     injectThumb(trackContent)
 

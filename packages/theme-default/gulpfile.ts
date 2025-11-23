@@ -6,51 +6,86 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\theme-default\gulpfile.ts
  */
-/* eslint-disable no-console */
-
-import path from 'path'
+import path from 'node:path'
+import { Transform } from 'node:stream'
+import { vcOutput } from '@vue-cesium/build/utils/paths'
 import chalk from 'chalk'
-import { src, dest, series, parallel } from 'gulp'
-import gulpSass from 'gulp-sass'
-import dartSass from 'sass'
+import consola from 'consola'
+import cssnano from 'cssnano'
+import { dest, parallel, series, src } from 'gulp'
 import autoprefixer from 'gulp-autoprefixer'
-import cleanCSS from 'gulp-clean-css'
+import gulpPostcss from 'gulp-postcss'
 import rename from 'gulp-rename'
-import postcss from 'gulp-postcss'
+import gulpSass from 'gulp-sass'
+import postcss from 'postcss'
+import dartSass from 'sass'
 
-import { vcOutput } from '../../build/utils/paths'
 const distFolder = path.resolve(__dirname, 'dist')
 const distBundle = path.resolve(vcOutput, 'theme-default')
 
 /**
- * compile theme-chalk scss & minify
+ * compile theme-default scss & minify
  * not use sass.sync().on('error', sass.logError) to throw exception
  * @returns
  */
- function buildThemeChalk() {
+function buildThemeChalk() {
   const sass = gulpSass(dartSass)
-  const noElPrefixFile = /(index|base|display)/
+  const noElPrefixFile = /index|base|display/
   return src(path.resolve(__dirname, 'src/*.scss'))
     .pipe(sass.sync())
-    .pipe(postcss())
+    .pipe(gulpPostcss())
     .pipe(autoprefixer({ cascade: false }))
+    .pipe(compressWithCssnano())
     .pipe(
-      cleanCSS({}, details => {
-        console.log(
-          `${chalk.cyan(details.name)}: ${chalk.yellow(
-            details.stats.originalSize / 1000
-          )} KB -> ${chalk.green(details.stats.minifiedSize / 1000)} KB`
-        )
-      })
-    )
-    .pipe(
-      rename(path => {
+      rename((path) => {
         if (!noElPrefixFile.test(path.basename)) {
           path.basename = `vc-${path.basename}`
         }
       })
     )
     .pipe(dest(distFolder))
+}
+
+/**
+ * using `postcss` and `cssnano` to compress CSS
+ * @returns
+ */
+function compressWithCssnano() {
+  const processor = postcss([
+    cssnano({
+      preset: [
+        'default',
+        {
+          // avoid color transform
+          colormin: false,
+          // avoid font transform
+          minifyFontValues: false
+        }
+      ]
+    })
+  ])
+  return new Transform({
+    objectMode: true,
+    transform(chunk, _encoding, callback) {
+      const file = chunk
+      if (file.isNull()) {
+        callback(null, file)
+        return
+      }
+      if (file.isStream()) {
+        callback(new Error('Streaming not supported'))
+        return
+      }
+      const cssString = file.contents!.toString()
+      processor.process(cssString, { from: file.path }).then((result) => {
+        const name = path.basename(file.path)
+        // eslint-disable-next-line node/prefer-global/buffer
+        file.contents = Buffer.from(result.css)
+        consola.success(`${chalk.cyan(name)}: ${chalk.yellow(cssString.length / 1000)} KB -> ${chalk.green(result.css.length / 1000)} KB`)
+        callback(null, file)
+      })
+    }
+  })
 }
 
 /**
@@ -65,14 +100,9 @@ export function copyThemeChalkBundle() {
  */
 
 export function copyThemeChalkSource() {
-  return src(path.resolve(__dirname, 'src/**')).pipe(
-    dest(path.resolve(distBundle, 'src'))
-  )
+  return src(path.resolve(__dirname, 'src/**')).pipe(dest(path.resolve(distBundle, 'src')))
 }
 
-export const build = parallel(
-  copyThemeChalkSource,
-  series(buildThemeChalk, copyThemeChalkBundle)
-)
+export const build = parallel(copyThemeChalkSource, series(buildThemeChalk, copyThemeChalkBundle))
 
 export default build

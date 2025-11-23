@@ -9,7 +9,7 @@
 import { getCesiumColor, getCesiumValue } from '@vue-cesium/utils/util'
 import VcBaseMaterialProperty from './VcBaseMaterialProperty'
 
-export type VcLineFlowColorMaterialPropertyOptions = {
+export interface VcLineFlowColorMaterialPropertyOptions {
   color?: Cesium.Color
   startTime?: number
   speed?: number
@@ -56,15 +56,15 @@ export default class VcLineFlowColorMaterialProperty extends VcBaseMaterialPrope
   }
 
   equals(other: VcLineFlowColorMaterialProperty) {
-    const reData =
-      this === other ||
-      (other instanceof VcLineFlowColorMaterialProperty &&
-        Cesium.Property['equals'](this.color, other.color) &&
-        this.speed === other.speed &&
-        this.percent === other.percent &&
-        this.alpha === other.alpha &&
-        this.startTime === other.startTime &&
-        this.globalAlpha === other.globalAlpha)
+    const reData
+      = this === other
+        || (other instanceof VcLineFlowColorMaterialProperty
+          && Cesium.Property['equals'](this.color, other.color)
+          && this.speed === other.speed
+          && this.percent === other.percent
+          && this.alpha === other.alpha
+          && this.startTime === other.startTime
+          && this.globalAlpha === other.globalAlpha)
     return reData
   }
 }

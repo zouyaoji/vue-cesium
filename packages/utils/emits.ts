@@ -6,17 +6,18 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
  */
-import { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt } from './drawing-types'
+import type { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt } from './drawing-types'
 import type {
-  VcPickEvent,
-  VcReadyObject,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
+  VcDatasource,
   VcImageryProvider,
+  VcPickEvent,
   VcPrimitive,
-  VcTerrainProvider,
-  VcDatasource
+  VcReadyObject,
+  VcTerrainProvider
 } from './types'
+
 export const commonEmits = {
   beforeLoad: (instance: VcComponentInternalInstance) => true,
   ready: (readyObj: VcReadyObject) => true,
@@ -49,7 +50,7 @@ export const providerEmits = {
 export const primitiveEmits = {
   ...commonEmits,
   ...pickEventEmits,
-  readyPromise: (primitive: VcPrimitive, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true,
+  'readyPromise': (primitive: VcPrimitive, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true,
   'update:geometryInstances': (instances: Array<Cesium.GeometryInstance>) => true
 }
 
@@ -62,7 +63,7 @@ export const datasourceEmits = {
   ...commonEmits,
   ...pickEventEmits,
   definitionChanged: (property: Cesium.Property) => true,
-  clusterEvent: (entities: Array<Cesium.Entity>, cluster: { billboard: Cesium.Billboard; label: Cesium.Label; point: Cesium.PointPrimitive }) => true,
+  clusterEvent: (entities: Array<Cesium.Entity>, cluster: { billboard: Cesium.Billboard, label: Cesium.Label, point: Cesium.PointPrimitive }) => true,
   collectionChanged: (
     collection: Cesium.EntityCollection,
     addedArray: Array<Cesium.Entity>,

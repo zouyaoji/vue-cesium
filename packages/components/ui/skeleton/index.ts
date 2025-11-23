@@ -1,3 +1,9 @@
+import type { ComponentPublicInstance, PropType, VNode } from 'vue'
+
+import useDark, { useDarkProps } from '@vue-cesium/composables/private/use-dark'
+
+import { hSlot } from '@vue-cesium/utils/private/render'
+
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -6,13 +12,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\skeleton\index.ts
  */
-import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
-
-import type { PropType } from 'vue'
-
-import useDark, { useDarkProps } from '@vue-cesium/composables/private/use-dark'
-
-import { hSlot } from '@vue-cesium/utils/private/render'
+import { computed, defineComponent, h } from 'vue'
 
 export const skeletonTypes = [
   'text',
@@ -71,10 +71,10 @@ export default defineComponent({
 
     const classes = computed(
       () =>
-        `vc-skeleton vc-skeleton--${isDark.value === true ? 'dark' : 'light'} vc-skeleton--type-${props.type}` +
-        (props.animation !== 'none' ? ` vc-skeleton--anim vc-skeleton--anim-${props.animation}` : '') +
-        (props.square === true ? ' vc-skeleton--square' : '') +
-        (props.bordered === true ? ' vc-skeleton--bordered' : '')
+        `vc-skeleton vc-skeleton--${isDark.value === true ? 'dark' : 'light'} vc-skeleton--type-${props.type}${
+          props.animation !== 'none' ? ` vc-skeleton--anim vc-skeleton--anim-${props.animation}` : ''
+        }${props.square === true ? ' vc-skeleton--square' : ''
+        }${props.bordered === true ? ' vc-skeleton--bordered' : ''}`
     )
 
     return () =>

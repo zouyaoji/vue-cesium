@@ -1,5 +1,6 @@
 import defer from '@vue-cesium/utils/defer'
 import IndexedDBScheduler from './IndexedDBScheduler'
+
 class SuperMapImageryProvider {
   tablename: string
   _indexedDBScheduler: any
@@ -7,6 +8,7 @@ class SuperMapImageryProvider {
     isOpen: boolean
     clear: () => void
   }
+
   isSci: boolean
   isTileMap: boolean
   layersID: string
@@ -44,7 +46,7 @@ class SuperMapImageryProvider {
     const dbPromise = new IndexedDBScheduler({
       name: rootNodeUrlRealspace3D + this.tablename
     })
-    ;(dbPromise as any).then(e => {
+    ;(dbPromise as any).then((e) => {
       that._indexedDBScheduler = e
     })
     this._indexedDBSetting = {
@@ -56,11 +58,12 @@ class SuperMapImageryProvider {
     this.isSci = false
     this.isTileMap = false
     const forwardSlashUrl = appendForwardSlash(url)
-    if (forwardSlashUrl.indexOf('rest/maps') > -1) {
+    if (forwardSlashUrl.includes('rest/maps')) {
       this.isTileMap = true
       this.layersID = options.layersID
-    } else {
-      if (!(forwardSlashUrl.indexOf('rest/realspace') > -1)) {
+    }
+    else {
+      if (!(forwardSlashUrl.includes('rest/realspace'))) {
         throw new DeveloperError('The url type is not supported!')
       }
       this.isSci = true
@@ -194,15 +197,15 @@ class SuperMapImageryProvider {
 
     const url = buildImageResource.call(this, x, y, level)
     const resource = this._resource.getDerivedResource({
-      url: url,
-      request: request
+      url,
+      request
     })
     const that: any = this
     if (this._indexedDBSetting.isOpen) {
       if (defined(this._indexedDBScheduler)) {
         const promise = this._indexedDBScheduler.getElementFromDB(this.tablename, url)
         try {
-          return promise.then(value => {
+          return promise.then((value) => {
             if (defined(value)) {
               const image = new Image()
               image.src = value
@@ -210,11 +213,13 @@ class SuperMapImageryProvider {
             }
             return ImageryProvider.loadImage(that, resource)
           })
-        } catch {
+        }
+        catch {
           return ImageryProvider.loadImage(that, resource)
         }
       }
-    } else {
+    }
+    else {
       return ImageryProvider.loadImage(this as any, resource)
     }
   }
@@ -254,10 +259,28 @@ const ScaleTexts = [
   '3.544529914513652E-3'
 ]
 const Scales = [
-  1.690163571602655e-9, 3.3803271432053056e-9, 6.760654286410611e-9, 1.3521308572821242e-8, 2.7042617145642484e-8, 5.408523429128511e-8,
-  1.0817046858256998e-7, 2.1634093716513974e-7, 4.3268187433028044e-7, 8.653637486605571e-7, 0.0000017307274973211203, 0.0000034614549946422405,
-  0.0000069229099892844565, 0.000013845819978568952, 0.000027691639957137904, 0.0000553832799142758, 0.0001107665598285516, 0.0002215331196571032,
-  0.0004430662393142064, 0.0008861324786284128, 0.001772264957256826, 0.003544529914513652
+  1.690163571602655e-9,
+  3.3803271432053056e-9,
+  6.760654286410611e-9,
+  1.3521308572821242e-8,
+  2.7042617145642484e-8,
+  5.408523429128511e-8,
+  1.0817046858256998e-7,
+  2.1634093716513974e-7,
+  4.3268187433028044e-7,
+  8.653637486605571e-7,
+  0.0000017307274973211203,
+  0.0000034614549946422405,
+  0.0000069229099892844565,
+  0.000013845819978568952,
+  0.000027691639957137904,
+  0.0000553832799142758,
+  0.0001107665598285516,
+  0.0002215331196571032,
+  0.0004430662393142064,
+  0.0008861324786284128,
+  0.001772264957256826,
+  0.003544529914513652
 ]
 
 function buildImageResource(this, x, y, level) {
@@ -266,11 +289,13 @@ function buildImageResource(this, x, y, level) {
     if (this._coordUnit === 'DEGREE') {
       const scaleText = ScaleTexts[level + 1] || ScaleTexts[level]
       url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
-    } else if (this._coordUnit === 'METER') {
+    }
+    else if (this._coordUnit === 'METER') {
       const scaleText = ScaleTexts[level]
       url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
     }
-  } else {
+  }
+  else {
     url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{level}', level).replace('{fileExtension}', this._fileExtension)
   }
   return url
@@ -281,29 +306,32 @@ async function init(this) {
   if (this.isTileMap) {
     try {
       const res = await Resource.fetchJsonp({
-        url: this._options.url + '.jsonp',
+        url: `${this._options.url}.jsonp`,
         queryParameters: {
           f: 'json'
         }
       })
       onFulfilledTileMap.call(this, res)
-    } catch (e) {
+    }
+    catch (e) {
       onRejected.call(this)
     }
-  } else {
+  }
+  else {
     // r(c.CREDENTIAL) && (o = c.addToken(o)),
     try {
       const e = await Resource.fetchText({
-        url: this.url + 'config'
+        url: `${this.url}config`
       })
       onFulfilledRest3D.call(this, e)
-    } catch (e) {
+    }
+    catch (e) {
       onRejected.call(this)
     }
   }
 }
 function getMaximumLevelbyScale(scale) {
-  for (let t = Scales.length; t--; ) {
+  for (let t = Scales.length; t--;) {
     if (scale[t] <= scale) {
       return t
     }
@@ -319,7 +347,7 @@ function onFulfilledRest3D(this, xmlText) {
   const levels = options.levels
   const length = levels.length
   this._minimumLevel = levels[0] ?? 0
-  this._maximumLevel = levels[length - 1], length - 1
+  this._maximumLevel = levels[length - 1] ?? length - 1
   if (!defined(this._tilingScheme)) {
     this._tilingScheme = new GeographicTilingScheme({
       ellipsoid: this._options.ellipsoid
@@ -345,7 +373,7 @@ function onFulfilledRest3D(this, xmlText) {
   const tileCount = (window.Math.abs(neTile.x - swTile.x) + 1) * (window.Math.abs(neTile.y - swTile.y) + 1)
   tileCount > 4 && (this._minimumLevel = 0)
   this._tilingScheme = tilingScheme
-  this._urlTemplate = this._url + 'data/index/{y}/{x}.{fileExtension}?level={level}'
+  this._urlTemplate = `${this._url}data/index/{y}/{x}.{fileExtension}?level={level}`
   this._ready = true
   this._readyPromise.resolve(true)
 }
@@ -360,7 +388,7 @@ function parseConfigFromXmlText(this, xmlText) {
   const levelsNodes = queryNodes(levelsNode, 'Level', namespaceURI) || ([] as any)
   const levels: number[] = []
   for (let i = 0; i < levelsNodes.length; i++) {
-    levels.push(parseInt(levelsNodes[i].textContent, 10))
+    levels.push(Number.parseInt(levelsNodes[i].textContent, 10))
   }
   const boundsNode = queryFirstNode(rootNode, 'Bounds', namespaceURI)
   const left = queryNumericAttribute(boundsNode, 'Left', namespaceURI)
@@ -373,12 +401,12 @@ function parseConfigFromXmlText(this, xmlText) {
   const cacheName = queryStringValue(rootNode, 'CacheName', namespaceURI)
   this._name = cacheName || ''
   return {
-    left: left,
-    right: right,
-    top: top,
-    bottom: bottom,
-    fileExtentName: fileExtentName,
-    levels: levels,
+    left,
+    right,
+    top,
+    bottom,
+    fileExtentName,
+    levels,
     imageSizeWidth: cellWidth,
     imageSizeHeight: cellHeight
   }
@@ -391,8 +419,8 @@ function queryStringValue(xmlNode, attribute, namespaceURI) {
 function queryNumericAttribute(xmlNode, attribute, namespaceURI) {
   const node = queryFirstNode(xmlNode, attribute, namespaceURI)
   if (Cesium.defined(node)) {
-    const number = parseFloat(node.textContent)
-    return isNaN(number) ? undefined : number
+    const number = Number.parseFloat(node.textContent)
+    return Number.isNaN(number) ? undefined : number
   }
 }
 function queryFirstNode(xmlNode, attribute, namespaceURI) {
@@ -401,7 +429,7 @@ function queryFirstNode(xmlNode, attribute, namespaceURI) {
     const length = nodes.length
     for (let i = 0; i < length; i++) {
       const node = nodes[i]
-      if (node.localName === attribute && namespaceURI.indexOf(node.namespaceURI) !== -1) {
+      if (node.localName === attribute && namespaceURI.includes(node.namespaceURI)) {
         return node
       }
     }
@@ -415,7 +443,7 @@ function queryNodes(xmlNode, attribute, namespaceURI) {
     const length = nodeList.length
     for (let i = 0; i < length; i++) {
       const node = nodeList[i]
-      node.localName === attribute && namespaceURI.indexOf(node.namespaceURI) !== -1 && nodes.push(node)
+      node.localName === attribute && namespaceURI.includes(node.namespaceURI) && nodes.push(node)
     }
     return nodes
   }
@@ -438,10 +466,11 @@ function onFulfilledTileMap(this, response) {
     bounds.right = CesiumMath.clamp(bounds.right, -180, 180)
     bounds.top = CesiumMath.clamp(bounds.top, -90, 90)
     this._rectangle = Rectangle.fromDegrees(bounds.left, bounds.bottom, bounds.right, bounds.top)
-    this._urlTemplate =
-      this._url +
-      'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-180,"y":90}'
-  } else {
+    this._urlTemplate
+      = `${this._url
+      }tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-180,"y":90}`
+  }
+  else {
     const pointLB = new Cartesian3(bounds.left, bounds.bottom, 0)
     pointLB.x = Math.max(-20037508.342789244, pointLB.x)
     pointLB.y = Math.max(-20037508.342789244, pointLB.y)
@@ -452,12 +481,12 @@ function onFulfilledTileMap(this, response) {
     const f = this._tilingScheme.projection.unproject(pointLB)
     const p = this._tilingScheme.projection.unproject(pointRT)
     this._rectangle = new Rectangle(f.longitude, f.latitude, p.longitude, p.latitude)
-    this._urlTemplate =
-      this._url +
-      'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-20037508.342789248 ,"y":20037508.342789095}'
+    this._urlTemplate
+      = `${this._url
+      }tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-20037508.342789248 ,"y":20037508.342789095}`
   }
   this._urlTemplate = this._urlTemplate.replace('{transparent}', this._transparent)
-  this.layersID && (this._urlTemplate = this._urlTemplate + '&layersID=' + this.layersID)
+  this.layersID && (this._urlTemplate = `${this._urlTemplate}&layersID=${this.layersID}`)
   this._rectangle || (this._rectangle = this._options.rectangle ?? this._tilingScheme.rectangle)
   this._ready = true
   this._readyPromise.resolve(true)
@@ -465,7 +494,7 @@ function onFulfilledTileMap(this, response) {
 
 function onRejected(this) {
   const { TileProviderError, RuntimeError } = Cesium
-  const message = 'An error occurred while accessing ' + this._url + '.'
+  const message = `An error occurred while accessing ${this._url}.`
   previousError = TileProviderError.reportError(previousError, this, this._errorEvent, message, 0, 0, 0, new Error(message))
   this._readyPromise.reject(new RuntimeError(message))
 }

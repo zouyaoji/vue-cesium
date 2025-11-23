@@ -1,3 +1,10 @@
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { VcCompassProps } from '../compass'
+import type { VcDistanceLegendProps } from '../distance-legend'
+import type { VcMyLocationProps } from '../my-location'
+import type { VcPrintProps } from '../print'
+import type { VcStatusBarProps } from '../status-bar'
+import type { VcZoomControlProps } from '../zoom-control'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
@@ -8,19 +15,12 @@
  */
 import { positionProps } from '@vue-cesium/composables/private/use-position'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { ExtractPropTypes, PropType } from 'vue'
 import { defaultProps as compassDefaultProps } from '../compass/defaultProps'
-import { defaultProps as zoomDefaultProps } from '../zoom-control/defaultProps'
-import printDefaultProps from '../print/defaultProps'
-import locationDefaultProps from '../my-location/defaultProps'
-import statusBarDefaultProps from '../status-bar/defaultProps'
 import distancelegendDefaultProps from '../distance-legend/defaultProps'
-import { VcCompassProps } from '../compass'
-import { VcZoomControlProps } from '../zoom-control'
-import { VcPrintProps } from '../print'
-import { VcMyLocationProps } from '../my-location'
-import { VcStatusBarProps } from '../status-bar'
-import { VcDistanceLegendProps } from '../distance-legend'
+import locationDefaultProps from '../my-location/defaultProps'
+import printDefaultProps from '../print/defaultProps'
+import statusBarDefaultProps from '../status-bar/defaultProps'
+import { defaultProps as zoomDefaultProps } from '../zoom-control/defaultProps'
 
 export interface VcNavigationOtherOpts {
   position?: string
@@ -70,4 +70,4 @@ const defaultProps = {
 }
 export type VcNavigationProps = ExtractPropTypes<typeof defaultProps>
 const defaultOptions = getDefaultOptionByProps<VcNavigationProps>(defaultProps)
-export { defaultProps, defaultOptions }
+export { defaultOptions, defaultProps }

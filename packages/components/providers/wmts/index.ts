@@ -1,3 +1,22 @@
+import type { AnyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import { useProviders } from '@vue-cesium/composables'
+import {
+  clock,
+  credit,
+  ellipsoid,
+  format,
+  maximumLevel,
+  minimumLevel,
+  rectangle,
+  subdomains,
+  tileHeight,
+  tileWidth,
+  tilingScheme,
+  times,
+  url
+} from '@vue-cesium/utils/cesium-props'
+import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,25 +26,6 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\wmts\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { AnyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
-import { useProviders } from '@vue-cesium/composables'
-import {
-  url,
-  format,
-  clock,
-  times,
-  tileWidth,
-  tileHeight,
-  tilingScheme,
-  rectangle,
-  minimumLevel,
-  maximumLevel,
-  ellipsoid,
-  credit,
-  subdomains
-} from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { providerEmits } from '@vue-cesium/utils/emits'
 
 export const wmtsImageryProviderProps = {
   ...url,
@@ -69,7 +69,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderWmtsProps = {
+export interface VcImageryProviderWmtsProps {
   /**
    * The base URL for the WMTS GetTile operation (for KVP-encoded requests) or the tile-URL template (for RESTful requests). The tile-URL template should contain the following variables: {style}, {TileMatrixSet}, {TileMatrix}, {TileRow}, {TileCol}. The first two are optional if actual values are hardcoded or not required by the server. The {s} keyword may be used to specify subdomains.
    */

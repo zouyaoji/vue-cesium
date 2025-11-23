@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\circle-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { center, radius, ellipsoid, height, granularity, extrudedHeight, numberOfVerticalLines } from '@vue-cesium/utils/cesium-props'
+import { center, ellipsoid, extrudedHeight, granularity, height, numberOfVerticalLines, radius } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const circleOutlineGeometryProps = {
   ...center,
   ...radius,
@@ -35,7 +36,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCircleOutlineProps = {
+export interface VcGeometryCircleOutlineProps {
   /**
    * The circle's center point in the fixed frame.
    */

@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\cylinder-outline\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { length, topRadius, bottomRadius, slices, numberOfVerticalLines } from '@vue-cesium/utils/cesium-props'
+import { bottomRadius, length, numberOfVerticalLines, slices, topRadius } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const cylinderOutlineGeometryProps = {
   ...length,
   ...topRadius,
@@ -33,7 +34,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCylinderOutlineProps = {
+export interface VcGeometryCylinderOutlineProps {
   /**
    * The length of the cylinder.
    */
@@ -43,7 +44,7 @@ export type VcGeometryCylinderOutlineProps = {
    */
   topRadius: number
   /**
-   * 	The radius of the bottom of the cylinder.
+   * The radius of the bottom of the cylinder.
    */
   bottomRadius: number
   /**

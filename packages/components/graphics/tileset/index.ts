@@ -1,3 +1,8 @@
+import type { VcCallbackPropertyFunction, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { useGraphics } from '@vue-cesium/composables'
+import { maximumScreenSpaceError, show, uri } from '@vue-cesium/utils/cesium-props'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,11 +12,6 @@
  * @FilePath: \vue-cesium@next\packages\components\graphics\tileset\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcCallbackPropertyFunction, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { useGraphics } from '@vue-cesium/composables'
-import { show, uri, maximumScreenSpaceError } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
 
 export const tilesetGraphicsProps = {
   ...show,
@@ -32,7 +32,7 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsTilesetProps = {
+export interface VcGraphicsTilesetProps {
   /**
    * A boolean Property specifying the visibility of the tileset.
    * Default value: true

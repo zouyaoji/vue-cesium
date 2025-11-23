@@ -1,13 +1,13 @@
-import type { VNode, CSSProperties, PropType } from 'vue'
-import { defineComponent, getCurrentInstance, ref, computed, nextTick, watch, reactive, createCommentVNode, h } from 'vue'
-import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
+import type { VcTooltipProps } from '@vue-cesium/components/ui'
 import type { VcCompassEvt, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
+import type { CSSProperties, PropType, VNode } from 'vue'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import useCompass from './use-compass'
+import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
+import useCompass from './use-compass'
 
 export const compassSmProps = {
   enableCompassOuterRing: {
@@ -41,7 +41,7 @@ const emits = {
 export default defineComponent({
   name: 'VcCompassSm',
   props: compassSmProps,
-  emits: emits,
+  emits,
   setup(props: VcCompassSmProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -63,7 +63,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -78,8 +78,8 @@ export default defineComponent({
     // computed
     const tiltbarStyle = computed<CSSProperties>(() => {
       return {
-        left: compassState.tiltbarLeft.value + 'px',
-        top: compassState.tiltbarTop.value + 'px',
+        left: `${compassState.tiltbarLeft.value}px`,
+        top: `${compassState.tiltbarTop.value}px`,
         visibility: props.autoHidden ? 'hidden' : 'visible'
       }
     })
@@ -90,8 +90,8 @@ export default defineComponent({
     })
     const outerRingStyle = computed<CSSProperties>(() => {
       return {
-        transform: 'rotate(-' + compassState.heading.value + 'rad)',
-        WebkitTransform: 'rotate(-' + compassState.heading.value + 'rad)'
+        transform: `rotate(-${compassState.heading.value}rad)`,
+        WebkitTransform: `rotate(-${compassState.heading.value}rad)`
       }
     })
     // methods
@@ -104,7 +104,8 @@ export default defineComponent({
             const viewerElement = (viewer as any)._element
             viewerElement.appendChild($(rootRef))
             resolve($(rootRef))
-          } else {
+          }
+          else {
             resolve($(rootRef))
           }
         })
@@ -232,7 +233,7 @@ export default defineComponent({
           'div',
           {
             ref: rootRef,
-            class: 'vc-compass-sm ' + positionState.classes.value,
+            class: `vc-compass-sm ${positionState.classes.value}`,
             style: rootStyle,
             // onDblclick: compassState.handleDoubleClick,
             onMousedown: compassState.handleMouseDown,
@@ -242,7 +243,8 @@ export default defineComponent({
           },
           children
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -250,7 +252,7 @@ export default defineComponent({
 })
 
 export type VcCompassSmEmits = typeof emits
-export type VcCompassSmProps = {
+export interface VcCompassSmProps {
   /**
    * Specify the position of the VcCompassSm.
    * Default value: top-right

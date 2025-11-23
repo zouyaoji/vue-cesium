@@ -181,8 +181,8 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{y}', y)
     .replace('{z}', level)
   const resource = this._resource.getDerivedResource({
-    url: url,
-    request: request
+    url,
+    request
   })
   return resource
 }

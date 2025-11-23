@@ -1,3 +1,4 @@
+import type { VcPrimitiveClusterOptions } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2023-05-26 13:30:22
@@ -7,7 +8,6 @@
  * @FilePath: \vue-cesium\packages\shared\src\PrimitiveCluster.ts
  */
 import KDBush from 'kdbush'
-import { VcPrimitiveClusterOptions } from '@vue-cesium/utils/types'
 
 /**
  * 图元聚合
@@ -79,7 +79,7 @@ export default class PrimitiveCluster {
     /**
      * Determines if entities in this collection will be shown.
      *
-     * @type {Boolean}
+     * @type {boolean}
      * @default true
      */
     this.show = options.show ?? true
@@ -105,6 +105,7 @@ export default class PrimitiveCluster {
   get pixelRange() {
     return this._pixelRange
   }
+
   set pixelRange(value) {
     this._clusterDirty = this._clusterDirty || value !== this._pixelRange
     this._pixelRange = value
@@ -113,6 +114,7 @@ export default class PrimitiveCluster {
   get minimumClusterSize() {
     return this._minimumClusterSize
   }
+
   set minimumClusterSize(value) {
     this._clusterDirty = this._clusterDirty || value !== this._minimumClusterSize
     this._minimumClusterSize = value
@@ -125,6 +127,7 @@ export default class PrimitiveCluster {
   get clusterBillboards() {
     return this._clusterBillboards
   }
+
   set clusterBillboards(value) {
     this._clusterDirty = this._clusterDirty || value !== this._clusterBillboards
     this._clusterBillboards = value
@@ -133,6 +136,7 @@ export default class PrimitiveCluster {
   get clusterLabels() {
     return this._clusterLabels
   }
+
   set clusterLabels(value) {
     this._clusterDirty = this._clusterDirty || value !== this._clusterLabels
     this._clusterLabels = value
@@ -141,6 +145,7 @@ export default class PrimitiveCluster {
   get clusterPoints() {
     return this._clusterPoints
   }
+
   set clusterPoints(value) {
     this._clusterDirty = this._clusterDirty || value !== this._clusterPoints
     this._clusterPoints = value
@@ -394,7 +399,8 @@ function createGetEntity(this, entity, collectionProperty, CollectionConstructor
   if (unusedIndices.length > 0) {
     index = unusedIndices.pop()
     entityItem = collection.get(index)
-  } else {
+  }
+  else {
     entityItem = collection.add()
     index = collection.length - 1
   }
@@ -402,7 +408,7 @@ function createGetEntity(this, entity, collectionProperty, CollectionConstructor
   entityIndices[entityIndexProperty] = index
 
   const that = this
-  Promise.resolve().then(function () {
+  Promise.resolve().then(() => {
     that._clusterDirty = true
   })
 
@@ -438,20 +444,22 @@ function getBoundingBox(item, coord, pixelRange, entityCluster, result) {
   const labelBoundingBoxScratch = new BoundingRectangle()
   if (defined(item._labelCollection) && entityCluster._clusterLabels) {
     result = Label['getScreenSpaceBoundingBox'](item, coord, result)
-  } else if (defined(item._billboardCollection) && entityCluster._clusterBillboards) {
+  }
+  else if (defined(item._billboardCollection) && entityCluster._clusterBillboards) {
     result = Billboard['getScreenSpaceBoundingBox'](item, coord, result)
-  } else if (defined(item._pointPrimitiveCollection) && entityCluster._clusterPoints) {
+  }
+  else if (defined(item._pointPrimitiveCollection) && entityCluster._clusterPoints) {
     result = PointPrimitive['getScreenSpaceBoundingBox'](item, coord, result)
   }
 
   expandBoundingBox(result, pixelRange)
 
   if (
-    entityCluster._clusterLabels &&
-    !defined(item._labelCollection) &&
-    defined(item.id) &&
-    hasLabelIndex(entityCluster, item.id.id) &&
-    defined(item.id._label)
+    entityCluster._clusterLabels
+    && !defined(item._labelCollection)
+    && defined(item.id)
+    && hasLabelIndex(entityCluster, item.id.id)
+    && defined(item.id._label)
   ) {
     const labelIndex = entityCluster._collectionIndicesByEntity[item.id.id].labelIndex
     const label = entityCluster._labelCollection.get(labelIndex)
@@ -497,9 +505,9 @@ function addCluster(position, numPoints, ids, entityCluster) {
 function hasLabelIndex(entityCluster, entityId) {
   const { defined } = Cesium
   return (
-    defined(entityCluster) &&
-    defined(entityCluster._collectionIndicesByEntity[entityId]) &&
-    defined(entityCluster._collectionIndicesByEntity[entityId].labelIndex)
+    defined(entityCluster)
+    && defined(entityCluster._collectionIndicesByEntity[entityId])
+    && defined(entityCluster._collectionIndicesByEntity[entityId].labelIndex)
   )
 }
 
@@ -535,16 +543,16 @@ function getScreenSpacePositions(collection, points, scene, occluder, entityClus
 
     points.push({
       index: i,
-      collection: collection,
+      collection,
       clustered: false,
-      coord: coord
+      coord
     })
   }
 }
 
 function createDeclutterCallback(entityCluster) {
-  const { defined, LabelCollection, BillboardCollection, PointPrimitiveCollection, Billboard, Matrix4, Cartesian3, Cartesian2, BoundingRectangle } =
-    Cesium
+  const { defined, LabelCollection, BillboardCollection, PointPrimitiveCollection, Billboard, Matrix4, Cartesian3, Cartesian2, BoundingRectangle }
+    = Cesium
 
   const pointBoundinRectangleScratch = new BoundingRectangle()
   const totalBoundingRectangleScratch = new BoundingRectangle()
@@ -562,8 +570,8 @@ function createDeclutterCallback(entityCluster) {
     const pointCollection = entityCluster._pointCollection
 
     if (
-      (!defined(labelCollection) && !defined(billboardCollection) && !defined(pointCollection)) ||
-      (!entityCluster._clusterBillboards && !entityCluster._clusterLabels && !entityCluster._clusterPoints)
+      (!defined(labelCollection) && !defined(billboardCollection) && !defined(pointCollection))
+      || (!entityCluster._clusterBillboards && !entityCluster._clusterLabels && !entityCluster._clusterPoints)
     ) {
       return
     }
@@ -574,23 +582,26 @@ function createDeclutterCallback(entityCluster) {
 
     if (defined(clusteredLabelCollection)) {
       clusteredLabelCollection.removeAll()
-    } else {
+    }
+    else {
       clusteredLabelCollection = entityCluster._clusterLabelCollection = new LabelCollection({
-        scene: scene
+        scene
       })
     }
 
     if (defined(clusteredBillboardCollection)) {
       clusteredBillboardCollection.removeAll()
-    } else {
+    }
+    else {
       clusteredBillboardCollection = entityCluster._clusterBillboardCollection = new BillboardCollection({
-        scene: scene
+        scene
       })
     }
 
     if (defined(clusteredPointCollection)) {
       clusteredPointCollection.removeAll()
-    } else {
+    }
+    else {
       clusteredPointCollection = entityCluster._clusterPointCollection = new PointPrimitiveCollection()
     }
 
@@ -735,7 +746,7 @@ function createDeclutterCallback(entityCluster) {
         const position = Cartesian3.multiplyByScalar(clusterPosition, 1.0 / numPoints, clusterPosition)
         addCluster(position, numPoints, ids, entityCluster)
         newClusters.push({
-          position: position,
+          position,
           width: totalBBox.width,
           height: totalBBox.height,
           minimumWidth: bbox.width,
@@ -745,7 +756,8 @@ function createDeclutterCallback(entityCluster) {
         for (j = 0; j < neighborLength; ++j) {
           points[neighbors[j]].clustered = true
         }
-      } else {
+      }
+      else {
         addNonClusteredItem(item, entityCluster)
       }
     }

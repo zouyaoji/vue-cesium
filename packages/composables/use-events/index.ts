@@ -1,22 +1,43 @@
-import { AnyObject, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { kebabCase, capitalize, isArray } from '@vue-cesium/utils/util'
+import type { AnyObject, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { capitalize, isArray, kebabCase } from '@vue-cesium/utils/util'
 
-export default function (props, vcInstance: VcComponentInternalInstance, logger) {
+const viewerScreenSpaceEvents: Array<string> = [
+  'LEFT_CLICK',
+  'LEFT_DOUBLE_CLICK',
+  'LEFT_DOWN',
+  'LEFT_UP',
+  'MIDDLE_CLICK',
+  'MIDDLE_DOWN',
+  'MIDDLE_UP',
+  'MOUSE_MOVE',
+  'PINCH_END',
+  'PINCH_MOVE',
+  'PINCH_START',
+  'RIGHT_CLICK',
+  'RIGHT_DOWN',
+  'RIGHT_UP',
+  'WHEEL'
+]
+
+const pickEvents: Array<string> = ['mousedown', 'mouseup', 'click', 'clickout', 'dblclick', 'mousemove', 'mouseover', 'mouseout']
+
+export default function (props, vcInstance: VcComponentInternalInstance) {
   const bindEvents = (cesiumObject: AnyObject, cesiumEvents: Array<string>, register = true) => {
     const ev = cesiumEvents || vcInstance.cesiumEvents || []
-    ev &&
-      ev.forEach(eventName => {
-        if (cesiumObject[eventName]) {
-          const listener = getInstanceListener(vcInstance, eventName)
-          const methodName = register ? 'addEventListener' : 'removeEventListener'
-          listener && cesiumObject[eventName][methodName](listener)
-        } else if (process.env.NODE_ENV === 'development') {
-          // logger.warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
-        }
-      })
+    ev
+    && ev.forEach((eventName) => {
+      if (cesiumObject[eventName]) {
+        const listener = getInstanceListener(vcInstance, eventName)
+        const methodName = register ? 'addEventListener' : 'removeEventListener'
+        listener && cesiumObject[eventName][methodName](listener)
+      }
+      // else if (process.env.NODE_ENV === 'development') {
+      //   // logger.warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
+      // }
+    })
   }
-  const registerEvents = register => {
+  const registerEvents = (register) => {
     const { viewer, cesiumObject } = vcInstance
     if (cesiumObject === undefined || viewer === undefined) {
       return
@@ -26,7 +47,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     if (!viewer._vcPickScreenSpaceEventHandler || !viewer._vcViewerScreenSpaceEventHandler) {
       viewer._vcPickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
       viewer._vcViewerScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
-      viewerScreenSpaceEvents.forEach(type => {
+      viewerScreenSpaceEvents.forEach((type) => {
         const listener = getInstanceListener(vcInstance, type)
         listener && viewer._vcViewerScreenSpaceEventHandler.setInputAction(listener, ScreenSpaceEventType[type])
         // vc-viewer 率先绑定
@@ -36,20 +57,21 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
 
     bindEvents(cesiumObject, vcInstance.cesiumEvents || [], register)
 
-    vcInstance.cesiumMembersEvents?.forEach(eventName => {
-      const cesiumIntanceMember =
-        isArray(eventName.name) && eventName.name.length > 0 && cesiumObject[eventName.name[0]]
+    vcInstance.cesiumMembersEvents?.forEach((eventName) => {
+      const cesiumIntanceMember
+        = isArray(eventName.name) && eventName.name.length > 0 && cesiumObject[eventName.name[0]]
           ? cesiumObject[eventName.name[0]][eventName.name[1]]
           : cesiumObject[eventName.name as string]
       cesiumIntanceMember && bindEvents(cesiumIntanceMember, eventName.events, register)
     })
 
     if (props.enableMouseEvent) {
-      pickEvents.forEach(eventName => {
+      pickEvents.forEach((eventName) => {
         const listener = getInstanceListener(vcInstance, eventName)
         if (register) {
           listener && (cesiumObject[`vc${eventName}`] = listener)
-        } else {
+        }
+        else {
           listener && delete cesiumObject[`vc${eventName}`]
         }
       })
@@ -70,22 +92,27 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     const pickedFeatureAndCallbackNames: Array<any> = []
 
     let callbackName
-    if (eventName.indexOf('LEFT_DOUBLE_CLICK') !== -1) {
+    if (eventName.includes('LEFT_DOUBLE_CLICK')) {
       callbackName = 'dblclick'
-    } else if (eventName.indexOf('CLICK') !== -1) {
+    }
+    else if (eventName.includes('CLICK')) {
       callbackName = 'click'
-    } else if (eventName.indexOf('DOWN') !== -1) {
+    }
+    else if (eventName.includes('DOWN')) {
       callbackName = 'mousedown'
-    } else if (eventName.indexOf('UP') !== -1) {
+    }
+    else if (eventName.includes('UP')) {
       callbackName = 'mouseup'
-    } else if (eventName.indexOf('MOUSE_MOVE') !== -1) {
+    }
+    else if (eventName.includes('MOUSE_MOVE')) {
       callbackName = 'mousemove'
     }
 
     let callbackNameOut
     if (callbackName === 'mousemove') {
       callbackNameOut = 'mouseout'
-    } else if (callbackName === 'click') {
+    }
+    else if (callbackName === 'click') {
       callbackNameOut = 'clickout'
     }
 
@@ -100,7 +127,8 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       }
 
       this.pickedFeature = undefined
-    } else {
+    }
+    else {
       if (this.pickedFeature && this.pickedFeature.id !== pickedFeature.id) {
         pickedFeatureAndCallbackNames.push({
           // 拾取到对象，this.pickedFeature也有记录，两者不同，说明操作到另外一个对象上去了
@@ -130,20 +158,23 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     if (scene.mode === Cesium.SceneMode.SCENE3D) {
       const ray = scene.camera.getPickRay(position)
       intersection = scene.globe.pick(ray, scene)
-    } else {
+    }
+    else {
       intersection = scene.camera.pickEllipsoid(position, scene.globe.ellipsoid)
     }
 
     let button = -1
-    if (eventName.indexOf('LEFT') !== -1) {
+    if (eventName.includes('LEFT')) {
       button = 0
-    } else if (eventName.indexOf('MIDDLE') !== -1) {
+    }
+    else if (eventName.includes('MIDDLE')) {
       button = 1
-    } else if (eventName.indexOf('RIGHT') !== -1) {
+    }
+    else if (eventName.includes('RIGHT')) {
       button = 2
     }
     const eventSourceList: Array<any> = []
-    pickedFeatureAndCallbackNames.forEach(item => {
+    pickedFeatureAndCallbackNames.forEach((item) => {
       const callbackName = item.callbackName
       const pickedFeature = item.pickedFeature
       if (pickedFeature.id) {
@@ -155,7 +186,8 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
               cesiumObject: pickedFeature.id[0].entityCollection.owner,
               pickedFeature
             })
-          } else {
+          }
+          else {
             // 图元集群 PrimitiveCluster
             eventSourceList.push({
               callbackName,
@@ -163,7 +195,8 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
               pickedFeature
             })
           }
-        } else if (pickedFeature.id instanceof Cesium.Entity) {
+        }
+        else if (pickedFeature.id instanceof Cesium.Entity) {
           // 实体
           eventSourceList.push({
             callbackName,
@@ -178,7 +211,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           })
         }
       }
-      const getParentCollection = e => {
+      const getParentCollection = (e) => {
         eventSourceList.push({
           callbackName,
           cesiumObject: e,
@@ -215,12 +248,12 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       }
     })
 
-    eventSourceList.forEach(event => {
+    eventSourceList.forEach((event) => {
       if (event.callbackName) {
-        const fn =
-          event.cesiumObject[`vc${event.callbackName}`] ||
-          event.cesiumObject[`on${capitalize(event.callbackName)}`] ||
-          event.cesiumObject[kebabCase(`on${capitalize(event.callbackName)}`)]
+        const fn
+          = event.cesiumObject[`vc${event.callbackName}`]
+            || event.cesiumObject[`on${capitalize(event.callbackName)}`]
+            || event.cesiumObject[kebabCase(`on${capitalize(event.callbackName)}`)]
 
         if (Cesium.defined(fn)) {
           const payload = {
@@ -233,7 +266,8 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           }
           if (fn instanceof Cesium.CallbackProperty) {
             ;(fn as any)._callback(payload)
-          } else {
+          }
+          else {
             fn(payload)
           }
         }
@@ -247,25 +281,5 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     registerEvents
   }
 }
-
-const viewerScreenSpaceEvents: Array<string> = [
-  'LEFT_CLICK',
-  'LEFT_DOUBLE_CLICK',
-  'LEFT_DOWN',
-  'LEFT_UP',
-  'MIDDLE_CLICK',
-  'MIDDLE_DOWN',
-  'MIDDLE_UP',
-  'MOUSE_MOVE',
-  'PINCH_END',
-  'PINCH_MOVE',
-  'PINCH_START',
-  'RIGHT_CLICK',
-  'RIGHT_DOWN',
-  'RIGHT_UP',
-  'WHEEL'
-]
-
-const pickEvents: Array<string> = ['mousedown', 'mouseup', 'click', 'clickout', 'dblclick', 'mousemove', 'mouseover', 'mouseout']
 
 export { pickEvents, viewerScreenSpaceEvents }

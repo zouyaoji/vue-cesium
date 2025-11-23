@@ -1,14 +1,14 @@
-import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance, ComponentPublicInstance } from 'vue'
-import type { VNode } from 'vue'
+import type { LooseDictionary } from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, VNode } from 'vue'
+import { Ripple } from '@vue-cesium/directives'
+import { listenOpts, prevent, stop, stopAndPrevent } from '@vue-cesium/utils/private/event'
+import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
+import { hDir, hMergeSlot } from '@vue-cesium/utils/private/render'
+import { getTouchTarget } from '@vue-cesium/utils/private/touch'
+import { computed, defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, Transition } from 'vue'
 import VcIcon from '../icon'
 import { Spinner as VcSpinner } from '../spinner'
-import { Ripple } from '@vue-cesium/directives'
 import useBtn, { useBtnProps } from './use-btn'
-import { hMergeSlot, hDir } from '@vue-cesium/utils/private/render'
-import { stop, prevent, stopAndPrevent, listenOpts } from '@vue-cesium/utils/private/event'
-import { getTouchTarget } from '@vue-cesium/utils/private/touch'
-import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
-import { LooseDictionary } from '@vue-cesium/utils/types'
 
 const { passiveCapture } = listenOpts
 
@@ -37,9 +37,9 @@ export default defineComponent({
     const rootRef = ref<HTMLElement>()
     const blurTargetRef = ref<HTMLElement>()
 
-    let localTouchTargetEl: HTMLElement = null,
-      avoidMouseRipple,
-      mouseTimer
+    let localTouchTargetEl: HTMLElement = null
+    let avoidMouseRipple
+    let mouseTimer
 
     const hasLabel = computed(() => props.label !== void 0 && props.label !== null && props.label !== '')
 
@@ -67,7 +67,8 @@ export default defineComponent({
           onKeydown: onLoadingEvt,
           onKeyup: onLoadingEvt
         }
-      } else if (isActionable.value === true) {
+      }
+      else if (isActionable.value === true) {
         return {
           onClick,
           onKeydown,
@@ -86,7 +87,7 @@ export default defineComponent({
 
     const nodeProps = computed(() => ({
       ref: rootRef,
-      class: 'vc-btn vc-btn-item non-selectable no-outline ' + classes.value,
+      class: `vc-btn vc-btn-item non-selectable no-outline ${classes.value}`,
       style: style.value,
       ...attributes.value,
       ...onEvents.value
@@ -102,11 +103,11 @@ export default defineComponent({
         // focus button if it came from ENTER on form
         // prevent the new submit (already done)
         if (
-          props.type === 'submit' &&
-          el !== document.body &&
-          rootRef.value?.contains(el) === false &&
+          props.type === 'submit'
+          && el !== document.body
+          && rootRef.value?.contains(el) === false
           // required for iOS and desktop Safari
-          el?.contains(rootRef.value) === false
+          && el?.contains(rootRef.value) === false
         ) {
           rootRef.value.focus()
 
@@ -215,10 +216,10 @@ export default defineComponent({
       const blurTarget = blurTargetRef.value
 
       if (
-        destroying !== true &&
-        (touchTarget === rootRef.value || mouseTarget === rootRef.value) &&
-        blurTarget !== null &&
-        blurTarget !== document.activeElement
+        destroying !== true
+        && (touchTarget === rootRef.value || mouseTarget === rootRef.value)
+        && blurTarget !== null
+        && blurTarget !== document.activeElement
       ) {
         blurTarget.setAttribute('tabindex', '-1')
         blurTarget.focus()
@@ -263,15 +264,15 @@ export default defineComponent({
     return () => {
       let inner: Array<VNode> = []
 
-      props.icon !== void 0 &&
-        inner.push(
-          h(VcIcon, {
-            name: props.icon,
-            left: props.stack === false && hasLabel.value === true,
-            role: 'img',
-            'aria-hidden': 'true'
-          })
-        )
+      props.icon !== void 0
+      && inner.push(
+        h(VcIcon, {
+          'name': props.icon,
+          'left': props.stack === false && hasLabel.value === true,
+          'role': 'img',
+          'aria-hidden': 'true'
+        })
+      )
 
       hasLabel.value === true && inner.push(h('span', { class: 'block' }, [props.label]))
 
@@ -280,9 +281,9 @@ export default defineComponent({
       if (props.iconRight !== void 0 && props.round === false) {
         inner.push(
           h(VcIcon, {
-            name: props.iconRight,
-            right: props.stack === false && hasLabel.value === true,
-            role: 'img',
+            'name': props.iconRight,
+            'right': props.stack === false && hasLabel.value === true,
+            'role': 'img',
             'aria-hidden': 'true'
           })
         )
@@ -304,7 +305,7 @@ export default defineComponent({
             },
             [
               h('span', {
-                class: 'vc-btn__progress-indicator fit block' + (props.darkPercentage === true ? ' vc-btn__progress--dark' : ''),
+                class: `vc-btn__progress-indicator fit block${props.darkPercentage === true ? ' vc-btn__progress--dark' : ''}`,
                 style: percentageStyle.value
               })
             ]
@@ -316,34 +317,34 @@ export default defineComponent({
         h(
           'span',
           {
-            class: 'vc-btn__content text-center col items-center vc-anchor--skip ' + innerClasses.value
+            class: `vc-btn__content text-center col items-center vc-anchor--skip ${innerClasses.value}`
           },
           inner
         )
       )
 
-      props.loading !== null &&
-        child.push(
-          h(
-            Transition,
-            {
-              name: 'vc-transition--fade'
-            },
-            () =>
-              props.loading === true
-                ? [
-                    h(
-                      'span',
-                      {
-                        key: 'loading',
-                        class: 'absolute-full flex flex-center'
-                      },
-                      slots.loading !== void 0 ? slots.loading() : [h(VcSpinner)]
-                    )
-                  ]
-                : null
-          )
+      props.loading !== null
+      && child.push(
+        h(
+          Transition,
+          {
+            name: 'vc-transition--fade'
+          },
+          () =>
+            props.loading === true
+              ? [
+                  h(
+                    'span',
+                    {
+                      key: 'loading',
+                      class: 'absolute-full flex flex-center'
+                    },
+                    slots.loading !== void 0 ? slots.loading() : [h(VcSpinner)]
+                  )
+                ]
+              : null
         )
+      )
 
       return hDir('button', nodeProps.value, child, 'ripple', props.disable !== true && props.ripple !== false, () => directives.value)
     }

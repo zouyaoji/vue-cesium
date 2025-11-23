@@ -9,12 +9,12 @@
 
 import {
   VcCircleWaveMaterial,
-  VcLineFlowMaterial,
   VcLineFlowColorMaterial,
-  VcLineTrailMaterial,
+  VcLineFlowMaterial,
   VcLineTrailColorMaterial,
-  VcScanLineMaterial,
-  VcODLineMaterial
+  VcLineTrailMaterial,
+  VcODLineMaterial,
+  VcScanLineMaterial
 } from '@vue-cesium/shared/shaders/materials'
 
 let isExtended = false

@@ -1,25 +1,25 @@
-import type { PropType, VNode, WatchStopHandle } from 'vue'
-import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed } from 'vue'
 import type {
   AppearanceOption,
-  VcColorSegments,
   HeatmapConfiguration,
   MaterialOption,
+  VcColorSegments,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
   VcHeatMapData,
-  VcRectangle,
-  VcReadyObject
+  VcReadyObject,
+  VcRectangle
 } from '@vue-cesium/utils/types'
-import { useCommon } from '@vue-cesium/composables'
-import { show, rectangle } from '@vue-cesium/utils/cesium-props'
-import { makeColor, makeRectangle } from '@vue-cesium/utils/cesium-helpers'
-import h337 from '@zouyaoji/heatmap.js'
+import type { PropType, VNode, WatchStopHandle } from 'vue'
 import VcEntity from '@vue-cesium/components/entity'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import { VcPrimitiveGround } from '@vue-cesium/components/primitives'
-import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { useCommon } from '@vue-cesium/composables'
+import { makeColor, makeRectangle } from '@vue-cesium/utils/cesium-helpers'
+import { rectangle, show } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import h337 from '@zouyaoji/heatmap.js'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch } from 'vue'
 
 export const heatmapOverlayProps = {
   ...show,
@@ -105,7 +105,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => image,
-        val => {
+        (val) => {
           material.value.fabric.uniforms.image = val.value
           ;(appearance.value.options.material as MaterialOption).fabric.uniforms.image = val.value
         },
@@ -127,7 +127,8 @@ export default defineComponent({
           if (Array.isArray(newVal) && Array.isArray(oldVal)) {
             setData(newVal, heatmapInstance)
             image.value = heatmapInstance.getDataURL()
-          } else {
+          }
+          else {
             commonState.reload()
           }
         },
@@ -140,7 +141,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => [props.max, props.min],
-        vals => {
+        (vals) => {
           const heatmapInstance = instance.cesiumObject as h337.Heatmap<string, string, string>
           heatmapInstance.setDataMax(vals[0] || 0)
           heatmapInstance.setDataMin(vals[1] || 0)
@@ -152,7 +153,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => [props.type, props.projection, props.rectangle],
-        vals => {
+        (vals) => {
           commonState.reload()
         }
       )
@@ -161,7 +162,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.options,
-        val => {
+        (val) => {
           const heatmapInstance = instance.cesiumObject as h337.Heatmap<string, string, string>
           heatmapInstance.configure(val as any)
           image.value = heatmapInstance.getDataURL()
@@ -182,7 +183,7 @@ export default defineComponent({
       if (Cesium.defined(id)) {
         container.setAttribute('id', id)
       }
-      container.setAttribute('style', 'width: ' + config.value.width + 'px; height: ' + config.value.height + 'px; margin: 0px; display: none;')
+      container.setAttribute('style', `width: ${config.value.width}px; height: ${config.value.height}px; margin: 0px; display: none;`)
       document.body.appendChild(container)
       options.value.container = container
 
@@ -196,7 +197,7 @@ export default defineComponent({
       }
 
       const heatmapInstance = h337.create(options.value as unknown as h337.HeatmapConfiguration)
-      container.children[0].setAttribute('id', id + '-hm')
+      container.children[0].setAttribute('id', `${id}-hm`)
       if (Array.isArray(props.data)) {
         setData(props.data, heatmapInstance)
         material.value = {
@@ -241,7 +242,7 @@ export default defineComponent({
       return id
     }
 
-    const getConfig = bounds => {
+    const getConfig = (bounds) => {
       const rectangle = makeRectangle(bounds) as Cesium.Rectangle
       const swmb = project.value.project(new Cesium.Cartographic(rectangle.west, rectangle.south))
       const nemb = project.value.project(new Cesium.Cartographic(rectangle.east, rectangle.north))
@@ -260,17 +261,20 @@ export default defineComponent({
         if (height / factor < options.value.minCanvasSize) {
           factor = height / options.value.minCanvasSize
         }
-      } else if (height > width && height > options.value.maxCanvasSize) {
+      }
+      else if (height > width && height > options.value.maxCanvasSize) {
         factor = height / options.value.maxCanvasSize
         if (height / factor < options.value.minCanvasSize) {
           factor = width / options.value.minCanvasSize
         }
-      } else if (width < height && width < options.value.minCanvasSize) {
+      }
+      else if (width < height && width < options.value.minCanvasSize) {
         factor = width / options.value.minCanvasSize
         if (height / factor > options.value.maxCanvasSize) {
           factor = height / options.value.maxCanvasSize
         }
-      } else if (height < width && height < options.value.minCanvasSize) {
+      }
+      else if (height < width && height < options.value.minCanvasSize) {
         factor = height / options.value.minCanvasSize
         if (width / factor > options.value.maxCanvasSize) {
           factor = width / options.value.maxCanvasSize
@@ -344,7 +348,7 @@ export default defineComponent({
         heatmapInstance.setData({
           min: props.min,
           max: props.max,
-          data: datas
+          data: datas as any
         })
 
         image.value = heatmapInstance.getDataURL()
@@ -359,8 +363,8 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      rootRef: rootRef,
-      childRef: childRef
+      rootRef,
+      childRef
     })
 
     return () => {
@@ -377,7 +381,8 @@ export default defineComponent({
               }
             })
           )
-        } else if (props.type === 'primitive') {
+        }
+        else if (props.type === 'primitive') {
           child.push(
             h(VcPrimitiveGround, {
               ref: childRef,
@@ -391,7 +396,8 @@ export default defineComponent({
               })
             })
           )
-        } else if (props.type === 'imagery-layer' && image.value) {
+        }
+        else if (props.type === 'imagery-layer' && image.value) {
           child.push(
             h(VcLayerImagery, {
               ref: childRef,
@@ -413,7 +419,8 @@ export default defineComponent({
           },
           child
         )
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }

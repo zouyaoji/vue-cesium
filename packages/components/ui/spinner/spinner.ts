@@ -1,4 +1,4 @@
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import useSpinner, { useSpinnerProps } from './use-spinner'
 
@@ -21,19 +21,19 @@ export default defineComponent({
       h(
         'svg',
         {
-          class: classes.value + ' vc-spinner-mat',
+          class: `${classes.value} vc-spinner-mat`,
           width: cSize.value,
           height: cSize.value,
           viewBox: '25 25 50 50'
         },
         [
           h('circle', {
-            class: 'path',
-            cx: '50',
-            cy: '50',
-            r: '20',
-            fill: 'none',
-            stroke: 'currentColor',
+            'class': 'path',
+            'cx': '50',
+            'cy': '50',
+            'r': '20',
+            'fill': 'none',
+            'stroke': 'currentColor',
             'stroke-width': props.thickness,
             'stroke-miterlimit': '10'
           })

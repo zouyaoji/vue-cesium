@@ -9,7 +9,7 @@
 import { getCesiumColor, getCesiumValue } from '@vue-cesium/utils/util'
 import VcBaseMaterialProperty from './VcBaseMaterialProperty'
 
-export type VcODLineMaterialPropertyOptions = {
+export interface VcODLineMaterialPropertyOptions {
   color?: Cesium.Color
   bgColor?: Cesium.Color
   startTime?: number
@@ -51,12 +51,12 @@ export default class VcODLineMaterialProperty extends VcBaseMaterialProperty {
   }
 
   equals(other: VcODLineMaterialProperty) {
-    const reData =
-      this === other ||
-      (other instanceof VcODLineMaterialProperty &&
-        Cesium.Property['equals'](this.color, other.color) &&
-        this.speed === other.speed &&
-        this.globalAlpha === other.globalAlpha)
+    const reData
+      = this === other
+        || (other instanceof VcODLineMaterialProperty
+          && Cesium.Property['equals'](this.color, other.color)
+          && this.speed === other.speed
+          && this.globalAlpha === other.globalAlpha)
     return reData
   }
 }

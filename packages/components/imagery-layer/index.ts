@@ -6,8 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\index.ts
  */
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-import { App } from 'vue'
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
+import type { App } from 'vue'
 import ImageryLayer from './src'
 
 ImageryLayer.install = (app: App): void => {

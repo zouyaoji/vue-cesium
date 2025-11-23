@@ -6,10 +6,10 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-vue-cesium\index.ts
  */
-import { getCurrentInstance, inject } from 'vue'
-import { VcViewerProvider } from '@vue-cesium/utils/types'
-import useLog from '@vue-cesium/composables/private/use-log'
+import type { VcViewerProvider } from '@vue-cesium/utils/types'
+import { logger } from '@vue-cesium/utils'
 import { vcKey } from '@vue-cesium/utils/config'
+import { getCurrentInstance, inject } from 'vue'
 
 export default function useVueCesium(containerId?: string): VcViewerProvider {
   const instance = getCurrentInstance()
@@ -17,7 +17,6 @@ export default function useVueCesium(containerId?: string): VcViewerProvider {
   if ((!provides || !(vcKey in provides)) && !containerId) {
     containerId = 'cesiumContainer'
   }
-  const logger = useLog()
   if (instance) {
     if (containerId) {
       const $vc = instance.appContext.config.globalProperties?.$VueCesium?.[containerId]
@@ -25,10 +24,12 @@ export default function useVueCesium(containerId?: string): VcViewerProvider {
         logger.warn(`Failed to get $vc, reason: vc-viewer with containerId: ${containerId} was not found.`)
       }
       return $vc
-    } else {
+    }
+    else {
       return inject<VcViewerProvider>(vcKey)
     }
-  } else {
+  }
+  else {
     logger.warn('VueCesium useVueCesium() can only be used inside setup().')
   }
 }

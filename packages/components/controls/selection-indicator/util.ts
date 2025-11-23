@@ -88,12 +88,12 @@ export function pickImageryLayerFeatures(ray, scene, includeImageryIds = [], exc
   const promises = []
   const imageryLayers = []
 
-  pickImageryHelper(scene, pickedLocation, true, function (imagery) {
-    if (excludeImageryIds.indexOf(imagery.imageryLayer.vcId) !== -1) {
+  pickImageryHelper(scene, pickedLocation, true, (imagery) => {
+    if (excludeImageryIds.includes(imagery.imageryLayer.vcId)) {
       return
     }
 
-    if (includeImageryIds.length && includeImageryIds.indexOf(imagery.imageryLayer.vcId) === -1) {
+    if (includeImageryIds.length && !includeImageryIds.includes(imagery.imageryLayer.vcId)) {
       return
     }
 
@@ -108,7 +108,7 @@ export function pickImageryLayerFeatures(ray, scene, includeImageryIds = [], exc
   if (promises.length === 0) {
     return undefined
   }
-  return Promise.all(promises).then(function (results) {
+  return Promise.all(promises).then((results) => {
     const features = []
     for (let resultIndex = 0; resultIndex < results.length; ++resultIndex) {
       const result = results[resultIndex]

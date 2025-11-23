@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\frustum\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { frustum, origin, orientation, vertexFormat } from '@vue-cesium/utils/cesium-props'
+import { frustum, orientation, origin, vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const frustumGeometryProps = {
   ...frustum,
   ...origin,
@@ -32,7 +33,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryFrustumProps = {
+export interface VcGeometryFrustumProps {
   /**
    * The frustum.
    */

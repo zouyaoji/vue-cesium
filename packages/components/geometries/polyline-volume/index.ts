@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polyline-volume\index.ts
  */
-import { VcCartesian2Array, VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcCartesian2Array, VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { polylinePositions, shapePositions, ellipsoid, granularity, vertexFormat, cornerType } from '@vue-cesium/utils/cesium-props'
+import { cornerType, ellipsoid, granularity, polylinePositions, shapePositions, vertexFormat } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const polylineVolumeGeometryProps = {
   ...polylinePositions,
   ...shapePositions,
@@ -34,7 +35,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolylineVolumeProps = {
+export interface VcGeometryPolylineVolumeProps {
   /**
    * An array of VcCartesian3Array positions that define the center of the polyline volume.
    */

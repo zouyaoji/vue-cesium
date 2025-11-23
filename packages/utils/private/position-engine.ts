@@ -1,6 +1,6 @@
-import { getScrollbarWidth } from './scroll'
+import type { CSSProperties } from 'vue'
 import { platform } from '../platform'
-import { CSSProperties } from 'vue'
+import { getScrollbarWidth } from './scroll'
 
 let vpLeft, vpTop
 
@@ -39,7 +39,7 @@ const horizontalPos = {
   'end#ltr': 'right',
   'end#rtl': 'left'
 }
-;['left', 'middle', 'right'].forEach(pos => {
+;['left', 'middle', 'right'].forEach((pos) => {
   horizontalPos[`${pos}#ltr`] = pos
   horizontalPos[`${pos}#rtl`] = pos
 })
@@ -104,11 +104,11 @@ export function setPosition(cfg) {
     const { offsetLeft: left, offsetTop: top } = window.visualViewport
 
     if (left !== vpLeft) {
-      el.setProperty('--vc-pe-left', left + 'px')
+      el.setProperty('--vc-pe-left', `${left}px`)
       vpLeft = left
     }
     if (top !== vpTop) {
-      el.setProperty('--vc-pe-top', top + 'px')
+      el.setProperty('--vc-pe-top', `${top}px`)
       vpTop = top
     }
   }
@@ -123,10 +123,11 @@ export function setPosition(cfg) {
 
   if (cfg.absoluteOffset === void 0) {
     anchorProps = getAnchorProps(cfg.anchorEl, cfg.cover === true ? [0, 0] : cfg.offset)
-  } else {
-    const { top: anchorTop, left: anchorLeft } = cfg.anchorEl.getBoundingClientRect(),
-      top = anchorTop + cfg.absoluteOffset.top,
-      left = anchorLeft + cfg.absoluteOffset.left
+  }
+  else {
+    const { top: anchorTop, left: anchorLeft } = cfg.anchorEl.getBoundingClientRect()
+    const top = anchorTop + cfg.absoluteOffset.top
+    const left = anchorLeft + cfg.absoluteOffset.left
 
     anchorProps = { top, left, width: 1, height: 1, right: left + 1, center: top, middle: left, bottom: top + 1 }
   }
@@ -138,36 +139,36 @@ export function setPosition(cfg) {
   }
 
   if (cfg.fit === true || cfg.cover === true) {
-    elStyle.minWidth = anchorProps.width + 'px'
+    elStyle.minWidth = `${anchorProps.width}px`
     if (cfg.cover === true) {
-      elStyle.minHeight = anchorProps.height + 'px'
+      elStyle.minHeight = `${anchorProps.height}px`
     }
   }
 
   Object.assign(cfg.el.style, elStyle)
 
-  const targetProps = getTargetProps(cfg.el),
-    props: any = {
-      top: anchorProps[cfg.anchorOrigin.vertical] - targetProps[cfg.selfOrigin.vertical],
-      left: anchorProps[cfg.anchorOrigin.horizontal] - targetProps[cfg.selfOrigin.horizontal]
-    }
+  const targetProps = getTargetProps(cfg.el)
+  const props: any = {
+    top: anchorProps[cfg.anchorOrigin.vertical] - targetProps[cfg.selfOrigin.vertical],
+    left: anchorProps[cfg.anchorOrigin.horizontal] - targetProps[cfg.selfOrigin.horizontal]
+  }
 
   applyBoundaries(props, anchorProps, targetProps, cfg.anchorOrigin, cfg.selfOrigin)
 
   elStyle = {
-    top: props.top + 'px',
-    left: props.left + 'px'
+    top: `${props.top}px`,
+    left: `${props.left}px`
   }
 
   if (props.maxHeight !== void 0) {
-    elStyle.maxHeight = props.maxHeight + 'px'
+    elStyle.maxHeight = `${props.maxHeight}px`
 
     if (anchorProps.height > props.maxHeight) {
       elStyle.minHeight = elStyle.maxHeight
     }
   }
   if (props.maxWidth !== void 0) {
-    elStyle.maxWidth = props.maxWidth + 'px'
+    elStyle.maxWidth = `${props.maxWidth}px`
 
     if (anchorProps.width > props.maxWidth) {
       elStyle.minWidth = elStyle.maxWidth
@@ -186,24 +187,26 @@ export function setPosition(cfg) {
 }
 
 function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrigin) {
-  const currentHeight = targetProps.bottom,
-    currentWidth = targetProps.right,
-    margin = getScrollbarWidth(),
-    innerHeight = window.innerHeight - margin,
-    innerWidth = document.body.clientWidth
+  const currentHeight = targetProps.bottom
+  const currentWidth = targetProps.right
+  const margin = getScrollbarWidth()
+  const innerHeight = window.innerHeight - margin
+  const innerWidth = document.body.clientWidth
 
   if (props.top < 0 || props.top + currentHeight > innerHeight) {
     if (selfOrigin.vertical === 'center') {
       props.top = anchorProps[anchorOrigin.vertical] > innerHeight / 2 ? Math.max(0, innerHeight - currentHeight) : 0
       props.maxHeight = Math.min(currentHeight, innerHeight)
-    } else if (anchorProps[anchorOrigin.vertical] > innerHeight / 2) {
+    }
+    else if (anchorProps[anchorOrigin.vertical] > innerHeight / 2) {
       const anchorY = Math.min(
         innerHeight,
         anchorOrigin.vertical === 'center' ? anchorProps.center : anchorOrigin.vertical === selfOrigin.vertical ? anchorProps.bottom : anchorProps.top
       )
       props.maxHeight = Math.min(currentHeight, anchorY)
       props.top = Math.max(0, anchorY - currentHeight)
-    } else {
+    }
+    else {
       props.top = Math.max(
         0,
         anchorOrigin.vertical === 'center' ? anchorProps.center : anchorOrigin.vertical === selfOrigin.vertical ? anchorProps.top : anchorProps.bottom
@@ -216,25 +219,27 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
     props.maxWidth = Math.min(currentWidth, innerWidth)
     if (selfOrigin.horizontal === 'middle') {
       props.left = anchorProps[anchorOrigin.horizontal] > innerWidth / 2 ? Math.max(0, innerWidth - currentWidth) : 0
-    } else if (anchorProps[anchorOrigin.horizontal] > innerWidth / 2) {
+    }
+    else if (anchorProps[anchorOrigin.horizontal] > innerWidth / 2) {
       const anchorX = Math.min(
         innerWidth,
         anchorOrigin.horizontal === 'middle'
           ? anchorProps.middle
           : anchorOrigin.horizontal === selfOrigin.horizontal
-          ? anchorProps.right
-          : anchorProps.left
+            ? anchorProps.right
+            : anchorProps.left
       )
       props.maxWidth = Math.min(currentWidth, anchorX)
       props.left = Math.max(0, anchorX - props.maxWidth)
-    } else {
+    }
+    else {
       props.left = Math.max(
         0,
         anchorOrigin.horizontal === 'middle'
           ? anchorProps.middle
           : anchorOrigin.horizontal === selfOrigin.horizontal
-          ? anchorProps.left
-          : anchorProps.right
+            ? anchorProps.left
+            : anchorProps.right
       )
       props.maxWidth = Math.min(currentWidth, innerWidth - props.left)
     }

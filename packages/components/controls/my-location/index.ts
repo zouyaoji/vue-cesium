@@ -1,28 +1,27 @@
+import type { VcBtnRef, VcTooltipProps, VcTooltipRef } from '@vue-cesium/components/ui'
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcLocationEvt, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties, VNode } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
-import { CSSProperties, Teleport, VNode } from 'vue'
-import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import {
   VcBtn,
-  VcTooltip,
   VcIcon,
-  VcSpinnerPuff,
-  VcSpinnerOval,
-  VcSpinnerTail,
+  VcSpinnerBars,
   VcSpinnerIos,
   VcSpinnerOrbit,
-  VcSpinnerBars,
-  VcTooltipProps
+  VcSpinnerOval,
+  VcSpinnerPuff,
+  VcSpinnerTail,
+  VcTooltip
 } from '@vue-cesium/components/ui'
-import type { VcTooltipRef, VcBtnRef } from '@vue-cesium/components/ui'
-import type { VcLocationEvt, VcColor, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
-import { makeColor, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
-import { isArray, isFunction, isPlainObject } from '@vue-cesium/utils/util'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import defaultProps from './defaultProps'
+import usePosition from '@vue-cesium/composables/private/use-position'
+import { makeCartesian3, makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { isArray, isFunction, isPlainObject } from '@vue-cesium/utils/util'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import defaultProps from './defaultProps'
 
 const emits = {
   ...commonEmits,
@@ -32,7 +31,7 @@ export const myLocationProps = defaultProps
 export default defineComponent({
   name: 'VcMyLocation',
   props: myLocationProps,
-  emits: emits,
+  emits,
   setup(props: VcMyLocationProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -54,11 +53,11 @@ export default defineComponent({
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     let datasource: Cesium.CustomDataSource
-    let amapGeolocation: any = undefined
+    let amapGeolocation: any
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -83,13 +82,14 @@ export default defineComponent({
       const locationDsArray = viewer.dataSources.getByName('__vc-myLocation__')
       if (locationDsArray.length) {
         datasource = locationDsArray[0]
-      } else {
-        viewer.dataSources.add(new CustomDataSource('__vc-myLocation__')).then(ds => {
+      }
+      else {
+        viewer.dataSources.add(new CustomDataSource('__vc-myLocation__')).then((ds) => {
           datasource = ds
         })
       }
 
-      let promiseLoadAmap: Promise<unknown> | undefined = undefined
+      let promiseLoadAmap: Promise<unknown> | undefined
       if (props.amap && props.amap.key) {
         const options = props.amap.options
         promiseLoadAmap = new Promise((resolve, reject) => {
@@ -98,11 +98,11 @@ export default defineComponent({
             version: props.amap?.version,
             plugins: ['AMap.Geolocation']
           })
-            .then(Amap => {
+            .then((Amap) => {
               amapGeolocation = new Amap.Geolocation(options)
               resolve(amapGeolocation)
             })
-            .catch(e => {
+            .catch((e) => {
               commonState.logger.error(e)
               reject(e)
             })
@@ -114,7 +114,7 @@ export default defineComponent({
           resolve($(rootRef))
         })
       })
-      return Promise.all([promiseAppend, promiseLoadAmap]).then(e => {
+      return Promise.all([promiseAppend, promiseLoadAmap]).then((e) => {
         return e[0]
       })
     }
@@ -140,11 +140,11 @@ export default defineComponent({
         const scripts = document.getElementsByTagName('script')
         const removeScripts: HTMLScriptElement[] = []
         for (const script of scripts) {
-          if (script.src.indexOf('/webapi.amap.com/maps') > -1) {
+          if (script.src.includes('/webapi.amap.com/maps')) {
             removeScripts.push(script)
           }
         }
-        removeScripts.forEach(script => {
+        removeScripts.forEach((script) => {
           document.getElementsByTagName('body')[0].removeChild(script)
         })
       }
@@ -195,7 +195,8 @@ export default defineComponent({
       if (isFunction(customApi)) {
         const position = customApi(handleLocationError)
         zoomToMyLocation(position)
-      } else if (amapGeolocation && props.amap && props.amap.key) {
+      }
+      else if (amapGeolocation && props.amap && props.amap.key) {
         amapGeolocation.getCurrentPosition((status, result) => {
           if (status === 'complete') {
             let position: number[] = [result.position.lng, result.position.lat]
@@ -210,13 +211,15 @@ export default defineComponent({
               },
               result
             )
-          } else {
+          }
+          else {
             handleLocationError(t('vc.navigation.myLocation.fail'), result.message)
           }
         })
-      } else if (props.geolocation) {
+      }
+      else if (props.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          position => {
+          (position) => {
             zoomToMyLocation(
               {
                 lng: position.coords.longitude,
@@ -232,7 +235,8 @@ export default defineComponent({
             maximumAge: props.geolocation.maximumAge
           }
         )
-      } else {
+      }
+      else {
         handleLocationError(t('vc.navigation.myLocation.fail'))
       }
     }
@@ -257,8 +261,8 @@ export default defineComponent({
           ...detail
         },
         description:
-          props.description?.call(this, position, detail) ||
-          describeWithoutUnderscores({
+          props.description?.call(this, position, detail)
+          || describeWithoutUnderscores({
             [t('vc.navigation.myLocation.lng')]: longitude,
             [t('vc.navigation.myLocation.lat')]: latitude,
             [t('vc.navigation.myLocation.address')]: address
@@ -266,13 +270,13 @@ export default defineComponent({
       })
 
       const listener = getInstanceListener(instance, 'locationEvt')
-      listener &&
-        ctx.emit('locationEvt', {
-          type: 'location',
-          position,
-          detail,
-          entity: myPositionEntity
-        })
+      listener
+      && ctx.emit('locationEvt', {
+        type: 'location',
+        position,
+        detail,
+        entity: myPositionEntity
+      })
 
       const options: any = {
         duration: props.duration
@@ -284,12 +288,12 @@ export default defineComponent({
       if (viewer.scene.mode === SceneMode.SCENE2D || viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
         return viewer.flyTo(myPositionEntity, options).then(() => {
           positioning.value = false
-          listener &&
-            ctx.emit('locationEvt', {
-              type: 'zoomIn',
-              camera: viewer.camera,
-              status: 'end'
-            })
+          listener
+          && ctx.emit('locationEvt', {
+            type: 'zoomIn',
+            camera: viewer.camera,
+            status: 'end'
+          })
         })
       }
 
@@ -305,7 +309,7 @@ export default defineComponent({
       const positions = [Rectangle.center(rectangle)]
 
       // Perform an elevation query at the centre of the rectangle
-      return sampleTerrain(terrainProvider, level, positions).then(function (results) {
+      return sampleTerrain(terrainProvider, level, positions).then((results) => {
         // Add terrain elevation to camera altitude
         const finalDestinationCartographic: any = {
           longitude: destination.longitude,
@@ -313,33 +317,33 @@ export default defineComponent({
           height: destination.height + results[0].height
         }
         const finalDestination = viewer.scene.globe.ellipsoid.cartographicToCartesian(finalDestinationCartographic)
-        listener &&
-          ctx.emit('locationEvt', {
-            type: 'zoomIn',
-            camera: viewer.camera,
-            status: 'start'
-          })
+        listener
+        && ctx.emit('locationEvt', {
+          type: 'zoomIn',
+          camera: viewer.camera,
+          status: 'start'
+        })
 
         camera.flyTo({
           duration: props.duration,
           destination: finalDestination,
           complete: () => {
             positioning.value = false
-            listener &&
-              ctx.emit('locationEvt', {
-                type: 'zoomIn',
-                camera: viewer.camera,
-                status: 'end'
-              })
+            listener
+            && ctx.emit('locationEvt', {
+              type: 'zoomIn',
+              camera: viewer.camera,
+              status: 'end'
+            })
           },
           cancel: () => {
             positioning.value = false
-            listener &&
-              ctx.emit('locationEvt', {
-                type: 'zoomIn',
-                camera: viewer.camera,
-                status: 'cancel'
-              })
+            listener
+            && ctx.emit('locationEvt', {
+              type: 'zoomIn',
+              camera: viewer.camera,
+              status: 'cancel'
+            })
           }
         })
       })
@@ -359,17 +363,18 @@ export default defineComponent({
           let value = properties[key]
           if (typeof value === 'object') {
             value = describeWithoutUnderscores(value)
-          } else {
+          }
+          else {
             // value = formatPropertyValue(value)
           }
           key = key.replace(/_/g, ' ')
           if (Cesium.defined(value)) {
-            html += '<tr><th>' + key + '</th><td>' + value + '</td></tr>'
+            html += `<tr><th>${key}</th><td>${value}</td></tr>`
           }
         }
       }
       if (html.length > 0) {
-        html = '<table class="cesium-infoBox-defaultTable"><tbody>' + html + '</tbody></table>'
+        html = `<table class="cesium-infoBox-defaultTable"><tbody>${html}</tbody></table>`
       }
       return html
     }
@@ -398,7 +403,7 @@ export default defineComponent({
       }
     }
 
-    const onTooltipBeforeShow = e => {
+    const onTooltipBeforeShow = (e) => {
       if (positioning.value) {
         e.cancel = true
       }
@@ -428,7 +433,8 @@ export default defineComponent({
               () => h('strong', null, myLocationTip.value)
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -462,7 +468,8 @@ export default defineComponent({
         )
 
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -470,7 +477,7 @@ export default defineComponent({
 })
 
 export type VcMyLocationEmits = typeof emits
-export type VcMyLocationProps = {
+export interface VcMyLocationProps {
   /**
    * Specify the position of the VcDistanceLegend.
    * Default value: top-right
@@ -556,11 +563,11 @@ export type VcMyLocationProps = {
   /**
    * Specify a custom API for positioning.
    */
-  customAPI?: (errorCallback) => { lng: number; lat: number }
+  customAPI?: (errorCallback) => { lng: number, lat: number }
   /**
    * Specify a custom API for positioning.
    */
-  customApi?: (errorCallback) => { lng: number; lat: number }
+  customApi?: (errorCallback) => { lng: number, lat: number }
   /**
    * Specify the description of the location point
    */

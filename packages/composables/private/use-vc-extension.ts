@@ -12,13 +12,13 @@ const vcExtends = [RectangleExtend, ShadowMapShaderExtend, MaterialExtend]
 
 export default function useVcExtension() {
   const invokeExtensions = (viewer: Cesium.Viewer) => {
-    vcExtends.forEach(item => {
+    vcExtends.forEach((item) => {
       item.extend(viewer)
     })
   }
 
   const revokeExtensions = (viewer: Cesium.Viewer) => {
-    vcExtends.forEach(item => {
+    vcExtends.forEach((item) => {
       item.revoke(viewer)
     })
   }

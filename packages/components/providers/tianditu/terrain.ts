@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,12 +7,12 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders, useVueCesium } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const tiandituTerrainProviderProps = {
   url: {
@@ -68,7 +69,7 @@ export default defineComponent({
           const terrainUrls: Array<string> = []
 
           for (let i = 0; i < props.subdomains.length; i++) {
-            const url = props.url.replace('{s}', props.subdomains[i]) + 'mapservice/swdx?tk=' + props.token
+            const url = `${props.url.replace('{s}', props.subdomains[i])}mapservice/swdx?tk=${props.token}`
             terrainUrls.push(url)
           }
 
@@ -82,8 +83,8 @@ export default defineComponent({
     }
     instance.unmount = async () => {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       terrainProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(instance, 'readyPromise')
         listener && emit('readyPromise', terrainProvider, vc?.viewer, instance.proxy as VcComponentPublicInstance)
@@ -96,7 +97,7 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderTiandituProps = {
+export interface VcTerrainProviderTiandituProps {
   /**
    * Specify the service address.
    * Default value: https://{s}.tianditu.gov.cn

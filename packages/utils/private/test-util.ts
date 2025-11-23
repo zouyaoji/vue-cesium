@@ -78,8 +78,8 @@ export function createMouseEvent(type, options) {
 
 /**
  * 等待 ms 毫秒，返回 Promise
- * @param {Number} ms
+ * @param {number} ms
  */
-export const wait = function (ms = 50) {
+export function wait(ms = 50) {
   return new Promise(resolve => setTimeout(() => resolve(true), ms))
 }

@@ -1,17 +1,17 @@
-import { VNode, CSSProperties, Teleport } from 'vue'
-import { defineComponent, getCurrentInstance, nextTick, ref, reactive, h, createCommentVNode, watch } from 'vue'
-import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcStatusBarEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import MouseCoords, { extendForMouseCoords } from './MouseCoords'
-import throttle from '@vue-cesium/utils/private/throttle'
+import type { VcBtnRef, VcTooltipProps, VcTooltipRef } from '@vue-cesium/components/ui'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcStatusBarEvt } from '@vue-cesium/utils/types'
+import type { CSSProperties, VNode } from 'vue'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import type { VcBtnRef, VcTooltipRef } from '@vue-cesium/components/ui'
-import { VcBtn, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
-import defaultProps from './defaultProps'
-import { isPlainObject } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import usePosition from '@vue-cesium/composables/private/use-position'
 import { heightToLevel } from '@vue-cesium/utils/cesium-helpers'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import throttle from '@vue-cesium/utils/private/throttle'
+import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { isPlainObject } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import defaultProps from './defaultProps'
+import MouseCoords, { extendForMouseCoords } from './MouseCoords'
 
 const emits = {
   ...commonEmits,
@@ -21,7 +21,7 @@ export const statusBarProps = defaultProps
 export default defineComponent({
   name: 'VcStatusBar',
   props: statusBarProps,
-  emits: emits,
+  emits,
   setup(props: VcStatusBarProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -59,7 +59,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -139,7 +139,8 @@ export default defineComponent({
       if (props.showPerformanceInfo) {
         if (debugShowFramesPerSecond) {
           viewer.scene._performanceDisplay._container.style.display = 'block'
-        } else {
+        }
+        else {
           viewer.scene.debugShowFramesPerSecond = false
         }
 
@@ -179,7 +180,7 @@ export default defineComponent({
       Object.assign(rootStyle, css)
     }
 
-    const onScenePostRender = throttle(scene => {
+    const onScenePostRender = throttle((scene) => {
       performanceInfo.fps = scene._performanceDisplay?._fpsText.nodeValue
       performanceInfo.ms = scene._performanceDisplay?._msText.nodeValue
       scene._performanceDisplay._container.style.display = 'none'
@@ -200,22 +201,22 @@ export default defineComponent({
       cameraInfo.height = viewer.camera.positionCartographic.height.toFixed(2)
       cameraInfo.level = heightToLevel(Number(cameraInfo.height)).toFixed(0)
 
-
       const listener = getInstanceListener(instance, 'statusBarEvt')
-      listener &&
-        ctx.emit('statusBarEvt', {
-          type: 'statusBar',
-          mouseCoordsInfo: mouseCoordsInfo.value,
-          cameraInfo: cameraInfo,
-          performanceInfo: performanceInfo
-        })
+      listener
+      && ctx.emit('statusBarEvt', {
+        type: 'statusBar',
+        mouseCoordsInfo: mouseCoordsInfo.value,
+        cameraInfo,
+        performanceInfo
+      })
     }
 
-    const onMouseMove = e => {
+    const onMouseMove = (e) => {
       const { Cartesian2, SceneMode } = Cesium
       const { viewer } = $services
 
-      if (viewer.scene.mode === SceneMode.MORPHING) return
+      if (viewer.scene.mode === SceneMode.MORPHING)
+        return
 
       const clientX = e.type === 'mousemove' || e.type === 'wheel' ? e.clientX : e.changedTouches[0].clientX
       const clientY = e.type === 'mousemove' || e.type === 'wheel' ? e.clientY : e.changedTouches[0].clientY
@@ -236,13 +237,13 @@ export default defineComponent({
           mouseCoordsInfo.value?.updateCoordinatesFromCesium(viewer, position)
         }
         const listener = getInstanceListener(instance, 'statusBarEvt')
-        listener &&
-          ctx.emit('statusBarEvt', {
-            type: 'statusBar',
-            mouseCoordsInfo: mouseCoordsInfo.value,
-            cameraInfo: cameraInfo,
-            performanceInfo: performanceInfo
-          })
+        listener
+        && ctx.emit('statusBarEvt', {
+          type: 'statusBar',
+          mouseCoordsInfo: mouseCoordsInfo.value,
+          cameraInfo,
+          performanceInfo
+        })
       }
     }
 
@@ -293,7 +294,8 @@ export default defineComponent({
                 [h('span', {}, t('vc.navigation.statusBar.lat')), h('span', {}, mouseCoordsInfo.value?.latitude)]
               )
             )
-          } else {
+          }
+          else {
             inner.push(
               h(
                 'div',
@@ -365,10 +367,12 @@ export default defineComponent({
                 ]
               )
             )
-          } else {
+          }
+          else {
             inner.push(createCommentVNode('v-if'))
           }
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -455,7 +459,8 @@ export default defineComponent({
               ]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -476,7 +481,8 @@ export default defineComponent({
               [h('span', null, performanceInfo.fps)]
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -491,7 +497,8 @@ export default defineComponent({
               () => h('strong', null, (isPlainObject(props.tooltip) && props.tooltip.tip) || t('vc.navigation.statusBar.tip'))
             )
           )
-        } else {
+        }
+        else {
           inner.push(createCommentVNode('v-if'))
         }
 
@@ -508,7 +515,8 @@ export default defineComponent({
         )
 
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -641,5 +649,5 @@ export interface VcStatusBarRef extends VcComponentPublicInstance<VcStatusBarPro
   /**
    * Get the performance info.
    */
-  getPerformanceInfo: () => { fps: string; ms: string }
+  getPerformanceInfo: () => { fps: string, ms: string }
 }

@@ -31,7 +31,7 @@ export function changeGlobalNodesTarget(el) {
   if (el !== target) {
     target = el
 
-    globalNodes.forEach(el => {
+    globalNodes.forEach((el) => {
       if (el.contains(target) === false) {
         target.appendChild(el)
       }

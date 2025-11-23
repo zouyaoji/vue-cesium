@@ -1,3 +1,11 @@
+import type {
+  VcCartesian2,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcPosition,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 11:13:56
@@ -7,20 +15,12 @@
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\cloud\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  VcCartesian2,
-  VcColor,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcPosition,
-  VcReadyObject
-} from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import { color, position, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
 import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
+import { color, position, show } from '@vue-cesium/utils/cesium-props'
+import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const cumulusCloudProps = {
   brightness: {
@@ -62,7 +62,7 @@ export default defineComponent({
 })
 
 // export type VcCumulusCloudProps = ExtractPropTypes<typeof cumulusCloudProps>
-export type VcCumulusCloudProps = {
+export interface VcCumulusCloudProps {
   /**
    * Specify the brightness of the cloud. This can be used to give clouds a darker, grayer appearance.
    */

@@ -1,7 +1,7 @@
-import type { Mars3dConfig, DCConfig, VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
+import type { DCConfig, Mars3dConfig, VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
-import { VcSkeletonProps } from '../../ui'
-import { VcViewerCreatorFunction } from './useViewer'
+import type { VcSkeletonProps } from '../../ui'
+import type { VcViewerCreatorFunction } from './useViewer'
 
 export default {
   cesiumPath: String,

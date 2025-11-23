@@ -1,3 +1,11 @@
+import type {
+  DynamicOverlayOpts,
+  SampledPosition,
+  TrackViewOpts,
+  VcComponentInternalInstance,
+  VcHeadingPitchRange,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
@@ -6,19 +14,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
  */
-import { WatchStopHandle, PropType, toRaw, ComponentPublicInstance } from 'vue'
-import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, ref, watch } from 'vue'
-import {
-  DynamicOverlayOpts,
-  SampledPosition,
-  TrackViewOpts,
-  VcComponentInternalInstance,
-  VcHeadingPitchRange,
-  VcReadyObject
-} from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import { show } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import DynamicOverlay from '@vue-cesium/shared/src/DynamicOverlay'
 import {
   getPolylineSegmentHeading,
@@ -27,9 +24,12 @@ import {
   makeHeadingPitchRang,
   makeJulianDate
 } from '@vue-cesium/utils/cesium-helpers'
-import { cloneDeep, differenceBy, remove, find } from 'lodash-unified'
-import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { show } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy, find, remove } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, ref, toRaw, watch } from 'vue'
 
 export const dynamicOverlayProps = {
   ...show,
@@ -97,8 +97,8 @@ const emits = {
   'update:multiplier': (multiplier: number) => true,
   'update:startTime': (startTime: Cesium.JulianDate) => true,
   'update:stopTime': (stopTime: Cesium.JulianDate) => true,
-  onStop: (clock: Cesium.Clock) => true,
-  stopArrived: (e: {
+  'onStop': (clock: Cesium.Clock) => true,
+  'stopArrived': (e: {
     overlay: DynamicOverlay
     position: SampledPosition
     offset: Cesium.HeadingPitchRange
@@ -110,7 +110,7 @@ const emits = {
 export default defineComponent({
   name: 'VcOverlayDynamic',
   props: dynamicOverlayProps,
-  emits: emits,
+  emits,
   setup(props: VcOverlayDynamicProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -133,7 +133,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           const datasource = instance.cesiumObject as Cesium.CustomDataSource
           datasource && (datasource.show = val)
         }
@@ -143,7 +143,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.name,
-        val => {
+        (val) => {
           const datasource = instance.cesiumObject as Cesium.CustomDataSource
           datasource && (datasource.name = val)
         }
@@ -153,7 +153,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.startTime,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer) && val) {
             viewer.clock.startTime = makeJulianDate(val)
@@ -165,7 +165,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.stopTime,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer) && val) {
             viewer.clock.stopTime = makeJulianDate(val)
@@ -177,7 +177,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.currentTime,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer) && val) {
             viewer.clock.currentTime = makeJulianDate(val)
@@ -189,7 +189,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.multiplier,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer)) {
             viewer.clock.multiplier = val
@@ -201,7 +201,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clockStep,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer)) {
             viewer.clock.clockStep = val
@@ -212,7 +212,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clockRange,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer)) {
             viewer.clock.clockRange = val
@@ -224,7 +224,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.canAnimate,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer)) {
             viewer.clock.canAnimate = val
@@ -236,7 +236,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.shouldAnimate,
-        val => {
+        (val) => {
           const { viewer } = $services
           if (Cesium.defined(viewer)) {
             viewer.clock.shouldAnimate = val
@@ -272,22 +272,23 @@ export default defineComponent({
               if (JSON.stringify(options, testReplace) !== JSON.stringify(oldOptions, testReplace)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(v => {
+            modifies.forEach((v) => {
               const modifyEntity = datasource.entities.getById(v.oldOptions.id)
               if (Cesium.defined(modifyEntity)) {
                 if (v.oldOptions.id === v.newOptions.id) {
-                  modifyEntity &&
-                    Object.keys(v.newOptions).forEach(prop => {
-                      if (v.oldOptions[prop] !== v.newOptions[prop]) {
-                        modifyEntity[prop] = commonState.transformProp(prop, v.newOptions[prop])
-                      }
-                    })
-                } else {
+                  modifyEntity
+                  && Object.keys(v.newOptions).forEach((prop) => {
+                    if (v.oldOptions[prop] !== v.newOptions[prop]) {
+                      modifyEntity[prop] = commonState.transformProp(prop, v.newOptions[prop])
+                    }
+                  })
+                }
+                else {
                   // 改了 id
                   if (modifyEntity) {
                     datasource.entities.remove(modifyEntity)
@@ -304,21 +305,23 @@ export default defineComponent({
                   const sampledPositionAdds: any = differenceBy(newSampledPositions, oldSampledPositions, 'id')
                   const sampledPositionDeletes: any = differenceBy(oldSampledPositions, newSampledPositions, 'id')
 
-                  sampledPositionDeletes.forEach(sampledPosition => {
+                  sampledPositionDeletes.forEach((sampledPosition) => {
                     sampledPosition.time && dynamicOverlay._sampledPosition.removeSample(sampledPosition.time)
                   })
 
                   sampledPositionAdds.forEach((sampledPosition: SampledPosition) => {
                     if (sampledPosition.time) {
                       dynamicOverlay.addPosition(sampledPosition.position, sampledPosition.time)
-                    } else if (sampledPosition.interval) {
+                    }
+                    else if (sampledPosition.interval) {
                       dynamicOverlay.addPosition(sampledPosition.position, sampledPosition.interval || props.defaultInterval)
                     }
                   })
                 }
               }
             })
-          } else {
+          }
+          else {
             const adds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletedEntities: Array<Cesium.Entity> = []
@@ -326,7 +329,7 @@ export default defineComponent({
               const deleteEntity = datasource.entities.getById(deletes[i].id)
               deletedEntities.push(deleteEntity!)
             }
-            deletedEntities.forEach(v => {
+            deletedEntities.forEach((v) => {
               datasource.entities.remove(v)
               remove(overlays.value, overlay => overlay.id === v.id)
             })
@@ -429,7 +432,8 @@ export default defineComponent({
         entityOptionsTransform.sampledPositions.forEach((sampledPosition: SampledPosition) => {
           if (sampledPosition.time) {
             dynamicOverlay.addPosition(sampledPosition.position, sampledPosition.time)
-          } else if (sampledPosition.interval) {
+          }
+          else if (sampledPosition.interval) {
             sampledPosition.time = dynamicOverlay.addPosition(sampledPosition.position, sampledPosition.interval || props.defaultInterval)
           }
         })
@@ -523,7 +527,8 @@ export default defineComponent({
 
             if (position.equals(nextTickPosition) && lastOffset) {
               offset = lastOffset
-            } else {
+            }
+            else {
               offset.heading = Cesium.Math.toRadians(getPolylineSegmentHeading(position, nextTickPosition))
               offset.pitch = (trackView.value?.offset?.pitch || Cesium.Math.toRadians(-45.0)) + getPolylineSegmentPitch(position, nextTickPosition)
               offset.range = trackView.value?.offset?.range || 500
@@ -568,7 +573,8 @@ export default defineComponent({
           ) as any
         }
         trackView.value = null
-      } else {
+      }
+      else {
         trackView.value = trackViewOpts
       }
     }
@@ -576,11 +582,14 @@ export default defineComponent({
     const getOverlay = (e: number | string | DynamicOverlay) => {
       if (e instanceof DynamicOverlay) {
         return e
-      } else if (typeof e === 'string') {
+      }
+      else if (typeof e === 'string') {
         return find(overlays.value, v => v.id === e)
-      } else if (typeof e === 'number') {
+      }
+      else if (typeof e === 'number') {
         return overlays.value[e]
-      } else {
+      }
+      else {
         return overlays.value[0]
       }
     }
@@ -603,18 +612,21 @@ export default defineComponent({
         if (Array.isArray(overlays)) {
           if (overlays.length) {
             const targets: Array<Cesium.Entity> = []
-            overlays.forEach(viewOverlay => {
+            overlays.forEach((viewOverlay) => {
               const target = toRaw(getOverlay(viewOverlay)._entity)
               targets.push(target)
             })
             target = targets
-          } else {
+          }
+          else {
             target = instance.cesiumObject as Cesium.CustomDataSource
           }
-        } else {
+        }
+        else {
           target = toRaw(getOverlay(overlays)._entity)
         }
-      } else {
+      }
+      else {
         target = instance.cesiumObject as Cesium.CustomDataSource
       }
 
@@ -640,18 +652,21 @@ export default defineComponent({
         if (Array.isArray(overlays)) {
           if (overlays.length) {
             const targets: Array<Cesium.Entity> = []
-            overlays.forEach(viewOverlay => {
+            overlays.forEach((viewOverlay) => {
               const target = toRaw(getOverlay(viewOverlay)._entity)
               targets.push(target)
             })
             target = targets
-          } else {
+          }
+          else {
             target = instance.cesiumObject as Cesium.CustomDataSource
           }
-        } else {
+        }
+        else {
           target = toRaw(getOverlay(overlays)._entity)
         }
-      } else {
+      }
+      else {
         target = instance.cesiumObject as Cesium.CustomDataSource
       }
 
@@ -676,97 +691,97 @@ export interface VcOverlayDynamicProps {
    * Specify whether to display the CustomDataSource that hosts the dynamic overlays.
    * Default value: true
    */
-  show?: boolean
+  'show'?: boolean
   /**
    * Specify the name of the CustomDataSource.
    * Default value: __vc__overlay__dynamic__
    */
-  name?: string
+  'name'?: string
   /**
    * Specify the start time of the clock.
    */
-  startTime?: Cesium.JulianDate | string | Date
+  'startTime'?: Cesium.JulianDate | string | Date
   /**
    * Specify the stop time of the clock.
    */
-  stopTime?: Cesium.JulianDate | string | Date
+  'stopTime'?: Cesium.JulianDate | string | Date
   /**
    * Specify the current time.
    */
-  currentTime?: Cesium.JulianDate | string | Date
+  'currentTime'?: Cesium.JulianDate | string | Date
   /**
    * Determines how the clock should behave when Clock#startTime or Clock#stopTime is reached.
    * Default value: 0
    */
-  clockRange?: number | Cesium.ClockRange
+  'clockRange'?: number | Cesium.ClockRange
   /**
    * Determines if calls to Clock#tick are frame dependent or system clock dependent.
    * Default value: 1
    */
-  clockStep?: number | Cesium.ClockStep
+  'clockStep'?: number | Cesium.ClockStep
   /**
    * Indicates whether Clock#tick should attempt to advance time. The clock will only tick when both Clock#canAnimate and Clock#shouldAnimate are true.
    * Default value: true
    */
-  shouldAnimate?: boolean
+  'shouldAnimate'?: boolean
   /**
    * Indicates whether Clock#tick can advance time. This could be false if data is being buffered, for example. The clock will only tick when both Clock#canAnimate and Clock#shouldAnimate are true.
    * Default value: true
    */
-  canAnimate?: boolean
+  'canAnimate'?: boolean
   /**
    * Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards.
    * Default value: 1.0
    */
-  multiplier?: number
+  'multiplier'?: number
   /**
    * Specify the dynamicOverlays array.
    */
-  dynamicOverlays?: Array<DynamicOverlayOpts>
+  'dynamicOverlays'?: Array<DynamicOverlayOpts>
   /**
    * Specify the default refresh interval of the default position information, and it is available to change the position of the dynamic overlays in real time.
    * Default value: 3.0
    */
-  defaultInterval?: number
+  'defaultInterval'?: number
   /**
    * Specify the decision flag for the stopArrived event.
    * Default value: time
    */
-  stopArrivedFlag?: 'time' | 'position' | 'both' | 'or'
+  'stopArrivedFlag'?: 'time' | 'position' | 'both' | 'or'
   /**
    * Specify position accuracy.
    * Default value: 0.0000001
    */
-  positionPrecision?: number
+  'positionPrecision'?: number
   /**
    * Specify time accuracy.
    * 0.01
    */
-  timePrecision?: number
+  'timePrecision'?: number
   /**
    * Triggers before the VcOverlayDynamic is loaded.
    */
-  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  'onBeforeLoad'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the VcOverlayDynamic is successfully loaded.
    */
-  onReady?: (readyObject: VcReadyObject) => void
+  'onReady'?: (readyObject: VcReadyObject) => void
   /**
    * Triggers when the component load failed.
    */
-  onUnready?: (e: any) => void
+  'onUnready'?: (e: any) => void
   /**
    * Triggers when the VcOverlayDynamic is destroyed.
    */
-  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  'onDestroyed'?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when Clock#stopTime is reached.
    */
-  onOnStop?: (clock: Cesium.Clock) => void
+  'onOnStop'?: (clock: Cesium.Clock) => void
   /**
    * Triggers when a stop is reached.
    */
-  onStopArrived?: (e: {
+  'onStopArrived'?: (e: {
     overlay: DynamicOverlay
     position: SampledPosition
     offset: Cesium.HeadingPitchRange

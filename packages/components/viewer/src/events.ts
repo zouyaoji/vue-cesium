@@ -1,5 +1,5 @@
-import { viewerScreenSpaceEvents, pickEvents } from '@vue-cesium/composables/use-events'
-import { camelCase, capitalize } from '@vue-cesium/utils/util'
+import { pickEvents, viewerScreenSpaceEvents } from '@vue-cesium/composables/use-events'
+import { camelCase } from '@vue-cesium/utils/util'
 
 const viewerEvents = [
   {
@@ -67,4 +67,4 @@ const emits = viewerEvents.reduce((pre, cur) => {
   return pre.concat(cur.events)
 }, cmpEvents)
 
-export { viewerEvents, emits }
+export { emits, viewerEvents }

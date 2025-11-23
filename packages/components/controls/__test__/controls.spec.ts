@@ -1,21 +1,21 @@
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcViewer from '@vue-cesium/components/viewer'
-import { describe, expect, test } from 'vitest'
+import { mount } from '@vue/test-utils'
+import { describe, expect } from 'vitest'
 
+import { VcConfigProvider } from '../../config-provider'
 import {
   VcCompass,
   VcCompassSm,
-  VcZoomControl,
-  VcZoomControlSm,
-  VcPrint,
-  VcMyLocation,
-  VcStatusBar,
   VcDistanceLegend,
+  VcMyLocation,
   VcNavigation,
-  VcNavigationSm
+  VcNavigationSm,
+  VcPrint,
+  VcStatusBar,
+  VcZoomControl,
+  VcZoomControlSm
 } from '../index'
-import { VcConfigProvider } from '../../config-provider'
 
 const compassApp = {
   components: {
@@ -50,8 +50,8 @@ const compassApp = {
   }
 }
 
-describe('VcCompass', () => {
-  test('render test', async () => {
+describe('vcCompass', () => {
+  it('render test', async () => {
     const wrapperApp = mount(compassApp)
     const compassVm = wrapperApp.vm.$refs.compass as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await compassVm.creatingPromise
@@ -93,8 +93,8 @@ const compassSmApp = {
   `
 }
 
-describe('VcCompassSm', () => {
-  test('render test', async () => {
+describe('vcCompassSm', () => {
+  it('render test', async () => {
     const wrapperApp = mount(compassSmApp)
     const compassVm = wrapperApp.vm.$refs.compass as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await compassVm.creatingPromise
@@ -162,8 +162,8 @@ const zoomControlApp = {
   }
 }
 
-describe('VcZoomControl', () => {
-  test('render test', async () => {
+describe('vcZoomControl', () => {
+  it('render test', async () => {
     const wrapperApp = mount(zoomControlApp)
     const zoomControlVm = wrapperApp.vm.$refs.zoomControl as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await zoomControlVm.creatingPromise
@@ -204,8 +204,8 @@ const zoomControlSmApp = {
   `
 }
 
-describe('VcZoomControlSm', () => {
-  test('render test', async () => {
+describe('vcZoomControlSm', () => {
+  it('render test', async () => {
     const wrapperApp = mount(zoomControlSmApp)
     const zoomControlVm = wrapperApp.vm.$refs.zoomControl as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await zoomControlVm.creatingPromise
@@ -250,8 +250,8 @@ const printApp = {
   `
 }
 
-describe('VcPrint', () => {
-  test('render test', async () => {
+describe('vcPrint', () => {
+  it('render test', async () => {
     const wrapperApp = mount(printApp)
     const printVm = wrapperApp.vm.$refs.print as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await printVm.creatingPromise
@@ -297,8 +297,8 @@ const myLocationApp = {
   `
 }
 
-describe('VcMyLocation', () => {
-  test('render test', async () => {
+describe('vcMyLocation', () => {
+  it('render test', async () => {
     const wrapperApp = mount(myLocationApp)
     const myLocationVm = wrapperApp.vm.$refs.myLocation as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await myLocationVm.creatingPromise
@@ -333,8 +333,8 @@ const statusBarApp = {
   `
 }
 
-describe('VcStatusBar', () => {
-  test('render test', async () => {
+describe('vcStatusBar', () => {
+  it('render test', async () => {
     const wrapperApp = mount(statusBarApp)
     const statusBarVm = wrapperApp.vm.$refs.statusBar as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await statusBarVm.creatingPromise
@@ -366,8 +366,8 @@ const distanceLegendApp = {
   `
 }
 
-describe('VcDistanceLegend', () => {
-  test('render test', async () => {
+describe('vcDistanceLegend', () => {
+  it('render test', async () => {
     const wrapperApp = mount(distanceLegendApp)
     const distanceLegendVm = wrapperApp.vm.$refs.distanceLegend as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await distanceLegendVm.creatingPromise
@@ -399,8 +399,8 @@ const navigationApp = {
   `
 }
 
-describe('VcNavigation', () => {
-  test('render test', async () => {
+describe('vcNavigation', () => {
+  it('render test', async () => {
     const wrapperApp = mount(navigationApp)
     const navigationVm = wrapperApp.vm.$refs.navigation as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await navigationVm.creatingPromise
@@ -438,8 +438,8 @@ const navigationSmApp = {
   `
 }
 
-describe('VcNavigationSm', () => {
-  test('render test', async () => {
+describe('vcNavigationSm', () => {
+  it('render test', async () => {
     const wrapperApp = mount(navigationSmApp)
     const navigationVm = wrapperApp.vm.$refs.navigation as VcComponentPublicInstance
     const redyObj: VcReadyObject | undefined = await navigationVm.creatingPromise

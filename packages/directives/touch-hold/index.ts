@@ -1,3 +1,4 @@
+import { platform } from '@vue-cesium/utils/platform'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-11 22:57:24
@@ -9,7 +10,6 @@
 import { createDirective } from '@vue-cesium/utils/private/create'
 import { addEvt, cleanEvt, leftClick, noop, position, stopAndPrevent } from '@vue-cesium/utils/private/event'
 import { clearSelection } from '@vue-cesium/utils/private/selection'
-import { platform } from '@vue-cesium/utils/platform'
 
 export default createDirective({
   name: 'touch-hold',
@@ -58,7 +58,7 @@ export default createDirective({
           document.body.classList.add('non-selectable')
           clearSelection()
 
-          ctx.styleCleanup = withDelay => {
+          ctx.styleCleanup = (withDelay) => {
             ctx.styleCleanup = void 0
 
             const remove = () => {
@@ -68,7 +68,8 @@ export default createDirective({
             if (withDelay === true) {
               clearSelection()
               setTimeout(remove, 10)
-            } else {
+            }
+            else {
               remove()
             }
           }
@@ -106,7 +107,8 @@ export default createDirective({
 
         if (ctx.triggered === true) {
           evt !== void 0 && stopAndPrevent(evt)
-        } else {
+        }
+        else {
           clearTimeout(ctx.timer)
         }
 
@@ -119,7 +121,7 @@ export default createDirective({
 
     if (typeof binding.arg === 'string' && binding.arg.length > 0) {
       binding.arg.split(':').forEach((val, index) => {
-        const v = parseInt(val, 10)
+        const v = Number.parseInt(val, 10)
         v && (data[index] = v)
       })
     }
@@ -130,11 +132,11 @@ export default createDirective({
 
     modifiers.mouse === true && addEvt(ctx, 'main', [[el, 'mousedown', 'mouseStart', `passive${modifiers.mouseCapture === true ? 'Capture' : ''}`]])
 
-    platform().hasTouch === true &&
-      addEvt(ctx, 'main', [
-        [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
-        [el, 'touchend', 'noop', 'notPassiveCapture']
-      ])
+    platform().hasTouch === true
+    && addEvt(ctx, 'main', [
+      [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
+      [el, 'touchend', 'noop', 'notPassiveCapture']
+    ])
   },
 
   updated(el, binding) {

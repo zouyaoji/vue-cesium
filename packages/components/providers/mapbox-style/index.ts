@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,12 +8,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\mapbox-style\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { accessToken, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { accessToken, credit, ellipsoid, maximumLevel, minimumLevel, rectangle } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const mapboxImageryProviderProps = {
   url: {
@@ -49,7 +49,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderMapboxProps = {
+export interface VcImageryProviderMapboxProps {
   /**
    * The Mapbox server url.
    * Default value: 'https://api.mapbox.com/v4/'

@@ -6,12 +6,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\wall-outline\index.ts
  */
-import { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
+import type { VcCartesian3Array, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGeometries } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { positions, granularity, maximumHeights, minimumHeights, ellipsoid } from '@vue-cesium/utils/cesium-props'
+import { ellipsoid, granularity, maximumHeights, minimumHeights, positions } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const wallOutlineProps = {
   ...positions,
   ...granularity,
@@ -33,7 +34,7 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryWallOutlineProps = {
+export interface VcGeometryWallOutlineProps {
   /**
    * An array of Cartesian objects, which are the points of the wall.
    */

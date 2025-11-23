@@ -6,7 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\model\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType, VNode } from 'vue'
+
 import type {
   VcCartesian2,
   VcCartesian3Array,
@@ -17,43 +17,45 @@ import type {
   VcPickEvent,
   VcReadyObject
 } from '@vue-cesium/utils/types'
+import type { PropType, VNode } from 'vue'
 import { usePrimitives } from '@vue-cesium/composables'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 import {
-  url,
-  show,
-  modelMatrix,
-  scale,
-  minimumPixelSize,
-  maximumScale,
-  id,
   allowPicking,
-  incrementallyLoadTextures,
   asynchronous,
+  backFaceCulling,
   clampAnimations,
-  shadows,
+  clippingPlanes,
+  color,
+  colorBlendAmount,
+  colorBlendMode,
+  credit,
   debugShowBoundingVolume,
   debugWireframe,
-  heightReference,
-  scene,
   distanceDisplayCondition,
-  color,
-  colorBlendMode,
-  colorBlendAmount,
-  silhouetteColor,
-  silhouetteSize,
-  clippingPlanes,
+  enableMouseEvent,
+  heightReference,
+  id,
   imageBasedLightingFactor,
+  incrementallyLoadTextures,
   lightColor,
   luminanceAtZenith,
-  sphericalHarmonicCoefficients,
+  maximumScale,
+  minimumPixelSize,
+  modelMatrix,
+  scale,
+  scene,
+  shadows,
+  show,
+  silhouetteColor,
+  silhouetteSize,
   specularEnvironmentMaps,
-  credit,
-  backFaceCulling,
-  enableMouseEvent
+  sphericalHarmonicCoefficients,
+  url
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
-import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const modelPrimitiveProps = {
   ...url,
@@ -116,15 +118,15 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       const options: any = primitivesState?.transformProps(props)
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       return compareCesiumVersion(Cesium.VERSION, '1.104') ? await Cesium.Model.fromGltfAsync(options) : Cesium.Model.fromGltf(options)
     }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
 
-export type VcPrimitiveModelProps = {
+export interface VcPrimitiveModelProps {
   /**
    * The url to the .gltf file.
    */

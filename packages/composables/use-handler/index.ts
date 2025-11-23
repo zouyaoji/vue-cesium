@@ -1,7 +1,7 @@
-import { VcViewerProvider, AnyFunction } from '@vue-cesium/utils/types'
-import { ref } from 'vue'
+import type { AnyFunction, VcViewerProvider } from '@vue-cesium/utils/types'
 import { TouchHold } from '@vue-cesium/directives'
 import defer from '@vue-cesium/utils/defer'
+import { ref } from 'vue'
 
 interface HandlerActions {
   handleMouseClick?: AnyFunction<void>
@@ -29,7 +29,340 @@ export default function (
   const handler = ref<Cesium.ScreenSpaceEventHandler | undefined>(undefined)
   const isActive = ref(false)
 
-  //methods
+  // methods
+  const destroy = () => {
+    handler.value?.destroy()
+    handler.value = undefined
+  }
+
+  const onLeftClick = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 0
+    })
+  }
+
+  const onLeftClickShift = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 0,
+      shift: true
+    })
+  }
+
+  const onLeftClickCtrl = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 0,
+      ctrl: true
+    })
+  }
+
+  const onMiddleClick = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 1
+    })
+  }
+
+  const onMiddleClickShift = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 1,
+      shift: true
+    })
+  }
+
+  const onMiddleClickCtrl = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 1,
+      ctrl: true
+    })
+  }
+
+  let touchPromise
+  const onRightClick = (movement) => {
+    if (touchPromise) {
+      touchPromise?.promise?.then((flag) => {
+        flag
+        && handleMouseClick?.(movement, {
+          button: 2
+        })
+      })
+    }
+    else {
+      handleMouseClick?.(movement, {
+        button: 2
+      })
+    }
+  }
+
+  const onRightClickShift = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 2,
+      shift: true
+    })
+  }
+
+  const onRightClickCtrl = (movement) => {
+    handleMouseClick?.(movement, {
+      button: 2,
+      ctrl: true
+    })
+  }
+
+  const onLeftDown = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 0
+    })
+  }
+
+  const onLeftDownShift = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 0,
+      shift: true
+    })
+  }
+
+  const onLeftDownCtrl = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 0,
+      ctrl: true
+    })
+  }
+
+  const onMiddleDown = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 1
+    })
+  }
+
+  const onMiddleDownShift = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 1,
+      shift: true
+    })
+  }
+
+  const onMiddleDownCtrl = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 1,
+      ctrl: true
+    })
+  }
+
+  const onRightDown = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 2
+    })
+  }
+
+  const onRightDownShift = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 2,
+      shift: true
+    })
+  }
+
+  const onRightDownCtrl = (movement) => {
+    handleMouseDown?.(movement, {
+      button: 2,
+      ctrl: true
+    })
+  }
+
+  const onLeftUp = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 0
+    })
+  }
+
+  const onLeftUpShift = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 0,
+      shift: true
+    })
+  }
+
+  const onLeftUpCtrl = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 0,
+      ctrl: true
+    })
+  }
+
+  const onMiddleUp = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 1,
+      ctrl: true
+    })
+  }
+
+  const onMiddleUpShift = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 1,
+      shift: true
+    })
+  }
+
+  const onMiddleUpCtrl = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 1,
+      ctrl: true
+    })
+  }
+
+  const onRightUp = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 2
+    })
+  }
+
+  const onRightUpShift = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 2,
+      shift: true
+    })
+  }
+
+  const onRightUpCtrl = (movement) => {
+    handleMouseUp?.(movement, {
+      button: 2,
+      ctrl: true
+    })
+  }
+
+  const onDoubleClick = (movement) => {
+    handleDoubleClick?.(movement, {
+      button: 0
+    })
+  }
+
+  const onDoubleClickShift = (movement) => {
+    handleDoubleClick?.(movement, {
+      button: 0,
+      shift: true
+    })
+  }
+
+  const onDoubleClickCtrl = (movement) => {
+    handleDoubleClick?.(movement, {
+      button: 0,
+      ctrl: true
+    })
+  }
+
+  const onMouseMove = (movement) => {
+    handleMouseMove?.(movement)
+  }
+
+  const onMouseMoveShift = (movement) => {
+    handleMouseMove?.(movement, {
+      shift: true
+    })
+  }
+
+  const onMouseMoveCtrl = (movement) => {
+    handleMouseMove?.(movement, {
+      ctrl: true
+    })
+  }
+
+  const onMouseWheel = (e) => {
+    handleMouseWheel?.(e)
+  }
+
+  const onMouseWheelShift = (e) => {
+    handleMouseWheel?.(e, {
+      shift: true
+    })
+  }
+
+  const onMouseWheelCtrl = (e) => {
+    handleMouseWheel?.(e, {
+      ctrl: true
+    })
+  }
+
+  const onPinchStart = (e) => {
+    handlePinch?.(e, {
+      start: true
+    })
+  }
+
+  const onPinchStartShift = (e) => {
+    handlePinch?.(e, {
+      start: true,
+      shift: true
+    })
+  }
+
+  const onPinchStartCtrl = (e) => {
+    handlePinch?.(e, {
+      start: true,
+      ctrl: true
+    })
+  }
+
+  const onPinchEnd = (e) => {
+    handlePinch?.(e, {
+      end: true
+    })
+  }
+
+  const onPinchEndShift = (e) => {
+    handlePinch?.(e, {
+      end: true,
+      shift: true
+    })
+  }
+
+  const onPinchEndCtrl = (e) => {
+    handlePinch?.(e, {
+      end: true,
+      ctrl: true
+    })
+  }
+
+  const onPinchMove = (e) => {
+    handlePinch?.(e, {
+      move: true
+    })
+  }
+
+  const onPinchMoveShift = (e) => {
+    handlePinch?.(e, {
+      move: true,
+      shift: true
+    })
+  }
+
+  const onPinchMoveCtrl = (e) => {
+    handlePinch?.(e, {
+      move: true,
+      ctrl: true
+    })
+  }
+
+  const onTouchHold = (e) => {
+    if (e.touch) {
+      const movement = {
+        position: {
+          x: e.position.left,
+          y: e.position.top
+        }
+      }
+      handleDoubleClick?.(movement, {
+        button: 0
+      })
+    }
+
+    touchPromise.resolve(false)
+  }
+
+  const onTouchEnd = (e: TouchEvent) => {
+    touchPromise.resolve(true)
+  }
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchPromise = defer()
+  }
+
   const activate = () => {
     if (isActive.value) {
       return
@@ -185,338 +518,6 @@ export default function (
     const { viewer } = $services
     TouchHold.beforeUnmount(viewer.canvas)
     isActive.value = false
-  }
-
-  const destroy = () => {
-    handler.value?.destroy()
-    handler.value = undefined
-  }
-
-  const onLeftClick = movement => {
-    handleMouseClick?.(movement, {
-      button: 0
-    })
-  }
-
-  const onLeftClickShift = movement => {
-    handleMouseClick?.(movement, {
-      button: 0,
-      shift: true
-    })
-  }
-
-  const onLeftClickCtrl = movement => {
-    handleMouseClick?.(movement, {
-      button: 0,
-      ctrl: true
-    })
-  }
-
-  const onMiddleClick = movement => {
-    handleMouseClick?.(movement, {
-      button: 1
-    })
-  }
-
-  const onMiddleClickShift = movement => {
-    handleMouseClick?.(movement, {
-      button: 1,
-      shift: true
-    })
-  }
-
-  const onMiddleClickCtrl = movement => {
-    handleMouseClick?.(movement, {
-      button: 1,
-      ctrl: true
-    })
-  }
-
-  let touchPromise = undefined
-  const onRightClick = movement => {
-    if (touchPromise) {
-      touchPromise?.promise?.then(flag => {
-        flag &&
-          handleMouseClick?.(movement, {
-            button: 2
-          })
-      })
-    } else {
-      handleMouseClick?.(movement, {
-        button: 2
-      })
-    }
-  }
-
-  const onRightClickShift = movement => {
-    handleMouseClick?.(movement, {
-      button: 2,
-      shift: true
-    })
-  }
-
-  const onRightClickCtrl = movement => {
-    handleMouseClick?.(movement, {
-      button: 2,
-      ctrl: true
-    })
-  }
-
-  const onLeftDown = movement => {
-    handleMouseDown?.(movement, {
-      button: 0
-    })
-  }
-
-  const onLeftDownShift = movement => {
-    handleMouseDown?.(movement, {
-      button: 0,
-      shift: true
-    })
-  }
-
-  const onLeftDownCtrl = movement => {
-    handleMouseDown?.(movement, {
-      button: 0,
-      ctrl: true
-    })
-  }
-
-  const onMiddleDown = movement => {
-    handleMouseDown?.(movement, {
-      button: 1
-    })
-  }
-
-  const onMiddleDownShift = movement => {
-    handleMouseDown?.(movement, {
-      button: 1,
-      shift: true
-    })
-  }
-
-  const onMiddleDownCtrl = movement => {
-    handleMouseDown?.(movement, {
-      button: 1,
-      ctrl: true
-    })
-  }
-
-  const onRightDown = movement => {
-    handleMouseDown?.(movement, {
-      button: 2
-    })
-  }
-
-  const onRightDownShift = movement => {
-    handleMouseDown?.(movement, {
-      button: 2,
-      shift: true
-    })
-  }
-
-  const onRightDownCtrl = movement => {
-    handleMouseDown?.(movement, {
-      button: 2,
-      ctrl: true
-    })
-  }
-
-  const onLeftUp = movement => {
-    handleMouseUp?.(movement, {
-      button: 0
-    })
-  }
-
-  const onLeftUpShift = movement => {
-    handleMouseUp?.(movement, {
-      button: 0,
-      shift: true
-    })
-  }
-
-  const onLeftUpCtrl = movement => {
-    handleMouseUp?.(movement, {
-      button: 0,
-      ctrl: true
-    })
-  }
-
-  const onMiddleUp = movement => {
-    handleMouseUp?.(movement, {
-      button: 1,
-      ctrl: true
-    })
-  }
-
-  const onMiddleUpShift = movement => {
-    handleMouseUp?.(movement, {
-      button: 1,
-      shift: true
-    })
-  }
-
-  const onMiddleUpCtrl = movement => {
-    handleMouseUp?.(movement, {
-      button: 1,
-      ctrl: true
-    })
-  }
-
-  const onRightUp = movement => {
-    handleMouseUp?.(movement, {
-      button: 2
-    })
-  }
-
-  const onRightUpShift = movement => {
-    handleMouseUp?.(movement, {
-      button: 2,
-      shift: true
-    })
-  }
-
-  const onRightUpCtrl = movement => {
-    handleMouseUp?.(movement, {
-      button: 2,
-      ctrl: true
-    })
-  }
-
-  const onDoubleClick = movement => {
-    handleDoubleClick?.(movement, {
-      button: 0
-    })
-  }
-
-  const onDoubleClickShift = movement => {
-    handleDoubleClick?.(movement, {
-      button: 0,
-      shift: true
-    })
-  }
-
-  const onDoubleClickCtrl = movement => {
-    handleDoubleClick?.(movement, {
-      button: 0,
-      ctrl: true
-    })
-  }
-
-  const onMouseMove = movement => {
-    handleMouseMove?.(movement)
-  }
-
-  const onMouseMoveShift = movement => {
-    handleMouseMove?.(movement, {
-      shift: true
-    })
-  }
-
-  const onMouseMoveCtrl = movement => {
-    handleMouseMove?.(movement, {
-      ctrl: true
-    })
-  }
-
-  const onMouseWheel = e => {
-    handleMouseWheel?.(e)
-  }
-
-  const onMouseWheelShift = e => {
-    handleMouseWheel?.(e, {
-      shift: true
-    })
-  }
-
-  const onMouseWheelCtrl = e => {
-    handleMouseWheel?.(e, {
-      ctrl: true
-    })
-  }
-
-  const onPinchStart = e => {
-    handlePinch?.(e, {
-      start: true
-    })
-  }
-
-  const onPinchStartShift = e => {
-    handlePinch?.(e, {
-      start: true,
-      shift: true
-    })
-  }
-
-  const onPinchStartCtrl = e => {
-    handlePinch?.(e, {
-      start: true,
-      ctrl: true
-    })
-  }
-
-  const onPinchEnd = e => {
-    handlePinch?.(e, {
-      end: true
-    })
-  }
-
-  const onPinchEndShift = e => {
-    handlePinch?.(e, {
-      end: true,
-      shift: true
-    })
-  }
-
-  const onPinchEndCtrl = e => {
-    handlePinch?.(e, {
-      end: true,
-      ctrl: true
-    })
-  }
-
-  const onPinchMove = e => {
-    handlePinch?.(e, {
-      move: true
-    })
-  }
-
-  const onPinchMoveShift = e => {
-    handlePinch?.(e, {
-      move: true,
-      shift: true
-    })
-  }
-
-  const onPinchMoveCtrl = e => {
-    handlePinch?.(e, {
-      move: true,
-      ctrl: true
-    })
-  }
-
-  const onTouchHold = e => {
-    if (e.touch) {
-      const movement = {
-        position: {
-          x: e.position.left,
-          y: e.position.top
-        }
-      }
-      handleDoubleClick?.(movement, {
-        button: 0
-      })
-    }
-
-    touchPromise.resolve(false)
-  }
-
-  const onTouchEnd = (e: TouchEvent) => {
-    touchPromise.resolve(true)
-  }
-
-  const onTouchStart = (e: TouchEvent) => {
-    touchPromise = defer()
   }
 
   return {

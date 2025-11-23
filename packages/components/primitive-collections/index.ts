@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
@@ -6,20 +7,19 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\index.ts
  */
-import { App } from 'vue'
-import CollectionBillboard from './billboard-collection'
+import type { App } from 'vue'
 import Billboard from './billboard'
-import CollectionCloud from './cloud-collection'
+import CollectionBillboard from './billboard-collection'
 import CumulusCloud from './cloud'
-import CollectionLabel from './label-collection'
+import CollectionCloud from './cloud-collection'
 import Label from './label'
-import CollectionPoint from './point-collection'
+import CollectionLabel from './label-collection'
 import Point from './point'
-import CollectionPolyline from './polyline-collection'
-import Polyline from './polyline'
-import CollectionPrimitive from './primitive-collection'
+import CollectionPoint from './point-collection'
 import Polygon from './polygon'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import Polyline from './polyline'
+import CollectionPolyline from './polyline-collection'
+import CollectionPrimitive from './primitive-collection'
 
 const components = [
   CollectionBillboard,
@@ -36,8 +36,8 @@ const components = [
   Polygon
 ]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -46,7 +46,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }

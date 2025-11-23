@@ -7,8 +7,8 @@
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
  */
 
-import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import type { VcCesiumObject } from '@vue-cesium/utils/types'
+import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 
 class Feature {
   id: string
@@ -31,27 +31,34 @@ class Feature {
     let boundingSphere
     if (cesiumObject instanceof ClassificationPrimitive || cesiumObject instanceof GroundPolylinePrimitive) {
       boundingSphere = (cesiumObject as any)._primitive?._boundingSphereWC?.[0]
-    } else if (cesiumObject instanceof Primitive) {
+    }
+    else if (cesiumObject instanceof Primitive) {
       boundingSphere = (cesiumObject as any)._boundingSphereWC?.[0]
-    } else if (cesiumObject instanceof GroundPrimitive) {
+    }
+    else if (cesiumObject instanceof GroundPrimitive) {
       boundingSphere = (cesiumObject as any)._boundingVolumes?.[0]
-    } else if (cesiumObject instanceof Polyline) {
+    }
+    else if (cesiumObject instanceof Polyline) {
       boundingSphere = (cesiumObject as any)._boundingVolumeWC
-    } else if (cesiumObject instanceof Cesium.Entity) {
+    }
+    else if (cesiumObject instanceof Cesium.Entity) {
       boundingSphere = new Cesium.BoundingSphere()
       ;(viewer.dataSourceDisplay as any).getBoundingSphere(cesiumObject, true, boundingSphere)
     }
 
     return boundingSphere
   }
+
   static fromPickedFeature(cesiumObject, pickedFeature, viewer, screenPosition) {
     const feature = new Feature({ id: cesiumObject.id })
 
     if (cesiumObject.position) {
       feature.position = cesiumObject.position
-    } else if (cesiumObject instanceof Cesium.Model) {
+    }
+    else if (cesiumObject instanceof Cesium.Model) {
       feature.position = Cesium.Matrix4.getTranslation(cesiumObject.modelMatrix, new Cesium.Cartesian3())
-    } else if (cesiumObject instanceof Cesium.Cesium3DTileset) {
+    }
+    else if (cesiumObject instanceof Cesium.Cesium3DTileset) {
       let position = pickedFeature.content.tile.boundingSphere.center
       let positionProperty = pickedFeature?.getProperty?.('position')
       if (Cesium.defined(positionProperty)) {
@@ -62,7 +69,8 @@ class Feature {
         position = makeCartesian3(positionProperty) as Cesium.Cartesian3
       }
       feature.position = position
-    } else {
+    }
+    else {
       feature.position = Feature.getBoundingSphere(cesiumObject, viewer)?.center
     }
 

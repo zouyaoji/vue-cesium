@@ -1,26 +1,26 @@
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import useSpinner, { useSpinnerProps } from './use-spinner'
 
 const svg = [
   h('circle', {
-    cx: '50',
-    cy: '50',
-    r: '44',
-    fill: 'none',
+    'cx': '50',
+    'cy': '50',
+    'r': '44',
+    'fill': 'none',
     'stroke-width': '4',
     'stroke-opacity': '.5',
-    stroke: 'currentColor'
+    'stroke': 'currentColor'
   }),
   h(
     'circle',
     {
-      cx: '8',
-      cy: '54',
-      r: '6',
-      fill: 'currentColor',
+      'cx': '8',
+      'cy': '54',
+      'r': '6',
+      'fill': 'currentColor',
       'stroke-width': '3',
-      stroke: 'currentColor'
+      'stroke': 'currentColor'
     },
     [
       h('animateTransform', {

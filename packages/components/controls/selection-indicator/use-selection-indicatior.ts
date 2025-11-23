@@ -1,10 +1,11 @@
-import { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
-import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch, WatchStopHandle } from 'vue'
+import type { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import type { CSSProperties, WatchStopHandle } from 'vue'
+import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
+import { isArray } from '@vue-cesium/utils/util'
+import { nextTick, onUnmounted, reactive, ref, watch } from 'vue'
 import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
-import { isArray } from '@vue-cesium/utils/util'
 import { pickImageryLayerFeatures } from './util'
-import { compareCesiumVersion } from '@vue-cesium/utils/cesium-helpers'
 
 export default function (instance: VcComponentInternalInstance, props, $services: VcViewerProvider) {
   // state
@@ -26,23 +27,24 @@ export default function (instance: VcComponentInternalInstance, props, $services
     top: screenPositionY.value,
     left: screenPositionX.value,
     transform,
-    opacity: opacity
+    opacity
   })
   // watch
   unwatchFns.push(
-    watch(selectedFeature, val => {
+    watch(selectedFeature, (val) => {
       const selectedFeature: any = val
       const { defined } = Cesium
       if (defined(selectedFeature) && defined(selectedFeature?.position)) {
         const { viewer } = $services
         // Todo 高亮逻辑
-        position.value =
-          selectedFeature?.position instanceof Cesium.Cartesian3
+        position.value
+          = selectedFeature?.position instanceof Cesium.Cartesian3
             ? selectedFeature?.position
             : selectedFeature?.position?.getValue(viewer.clock.currentTime)
         animateAppear()
         instance.proxy?.$emit('pickEvt', selectedFeature)
-      } else {
+      }
+      else {
         animateDepart()
         instance.proxy?.$emit('pickEvt', selectedFeature)
       }
@@ -52,12 +54,13 @@ export default function (instance: VcComponentInternalInstance, props, $services
   )
 
   unwatchFns.push(
-    watch(pickedFeatures, val => {
+    watch(pickedFeatures, (val) => {
       const { defined, Entity } = Cesium
       const pickedFeatures = val
       if (!defined(pickedFeatures)) {
         selectedFeature.value = undefined
-      } else {
+      }
+      else {
         const fakeFeature = new Entity({
           id: '__Vc__Pick__Location__'
         })
@@ -87,7 +90,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     })
   )
   // methods
-  const featureHasInfo = feature => {
+  const featureHasInfo = (feature) => {
     const { defined } = Cesium
     return defined(feature.properties) || defined(feature.description)
   }
@@ -136,7 +139,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     ignoreSplitter,
     viewer
   ) => {
-    const { defined, } = Cesium
+    const { defined } = Cesium
     ignoreSplitter = ignoreSplitter ?? false
     const result = new PickedFeatures()
 
@@ -144,17 +147,19 @@ export default function (instance: VcComponentInternalInstance, props, $services
     result.pickPosition = pickPosition
 
     result.allFeaturesAvailablePromise = Promise.all(featurePromises)
-      .then(function (this, allFeatures) {
+      // eslint-disable-next-line prefer-arrow-callback
+      .then(function (this: any, allFeatures: any[]) {
         result.isLoading = false
 
         result.features = allFeatures.reduce(
+          // eslint-disable-next-line prefer-arrow-callback
           function (this, resultFeaturesSoFar, imageryLayerFeatures, i) {
             if (!defined(imageryLayerFeatures)) {
               return resultFeaturesSoFar
             }
 
             const features = imageryLayerFeatures.map(
-              function (feature) {
+              (feature) => {
                 if (defined(imageryLayers)) {
                   feature.imageryLayer = imageryLayers[i]
                 }
@@ -169,15 +174,15 @@ export default function (instance: VcComponentInternalInstance, props, $services
                   feature.position.height = defaultHeight
                 }
                 return Feature.fromImageryLayerFeature(feature, viewer)
-              }.bind(this)
+              }
             )
 
             return resultFeaturesSoFar.concat(features)
-          }.bind(this),
+          },
           existingFeatures ?? []
         )
       })
-      .catch(function () {
+      .catch(() => {
         result.isLoading = false
         result.error = 'An unknown error occurred while picking features.'
       })
@@ -215,28 +220,32 @@ export default function (instance: VcComponentInternalInstance, props, $services
         if (result) {
           if (Array.isArray(result)) {
             vectorFeatures.push(...result)
-          } else {
+          }
+          else {
             vectorFeatures.push(result)
           }
         }
-      } else {
+      }
+      else {
         const pickedFeature = picked
         if (pickedFeature.id) {
           if (isArray(pickedFeature.id) && pickedFeature.id[0] instanceof Cesium.Entity) {
             // 数据源集合（集群）
             isCluster = true
-            pickedFeature.id.forEach(entity => {
+            pickedFeature.id.forEach((entity) => {
               const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer, screenPosition)
               vectorFeatures.push(feature)
             })
             continue
-          } else if (pickedFeature.id instanceof Cesium.Entity) {
+          }
+          else if (pickedFeature.id instanceof Cesium.Entity) {
             // 实体 or 数据源
             const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer, screenPosition)
             vectorFeatures.push(feature)
             isCluster = false
             continue
-          } else {
+          }
+          else {
             isCluster = false
           }
         }
@@ -244,7 +253,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
         if (pickedFeature.primitive) {
           const feature = Feature.fromPickedFeature(pickedFeature.primitive, pickedFeature, viewer, screenPosition)
           vectorFeatures.push(feature)
-        } else if (pickedFeature.collection) {
+        }
+        else if (pickedFeature.collection) {
           // 图元集合
           const feature = Feature.fromPickedFeature(pickedFeature.collection, pickedFeature, viewer, screenPosition)
           vectorFeatures.push(feature)
@@ -267,9 +277,9 @@ export default function (instance: VcComponentInternalInstance, props, $services
         // Use url to uniquely identify providers because what else can we do?
         if (imageryProvider.url) {
           providerCoords[imageryProvider.url] = {
-            x: x,
-            y: y,
-            level: level
+            x,
+            y,
+            level
           }
         }
 
@@ -277,6 +287,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
         return featuresPromise
       }
 
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject(false)
     }
 
@@ -303,7 +314,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
       if (!defined(screenPosition)) {
         // rootStyle.left = offScreen
         // rootStyle.right = offScreen
-      } else {
+      }
+      else {
         const { viewer } = $services
         const container = viewer.container
         const containerWidth = container.clientWidth
@@ -316,8 +328,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
         screenPosition.x = Math.min(Math.max(screenPosition.x, -indicatorSize), containerWidth + indicatorSize) - halfSize
         screenPosition.y = Math.min(Math.max(screenPosition.y, -indicatorSize), containerHeight + indicatorSize) - halfSize
 
-        rootStyle.left = Math.floor(screenPosition.x + 0.25) + 'px'
-        rootStyle.top = Math.floor(screenPosition.y + 0.25) + 'px'
+        rootStyle.left = `${Math.floor(screenPosition.x + 0.25)}px`
+        rootStyle.top = `${Math.floor(screenPosition.y + 0.25)}px`
       }
     }
   }
@@ -349,14 +361,14 @@ export default function (instance: VcComponentInternalInstance, props, $services
       },
       duration: 0.8,
       easingFunction: EasingFunction.EXPONENTIAL_OUT,
-      update: function (value) {
+      update(value) {
         rootStyle.opacity = value.opacity
-        rootStyle.transform = 'scale(' + value.scale + ') rotate(' + value.rotate + 'deg)'
+        rootStyle.transform = `scale(${value.scale}) rotate(${value.rotate}deg)`
       },
-      complete: function () {
+      complete() {
         selectionIndicatorTween = undefined
       },
-      cancel: function () {
+      cancel() {
         selectionIndicatorTween = undefined
       }
     })
@@ -386,14 +398,14 @@ export default function (instance: VcComponentInternalInstance, props, $services
       },
       duration: 0.8,
       easingFunction: EasingFunction.EXPONENTIAL_OUT,
-      update: function (value) {
+      update(value) {
         rootStyle.opacity = value.opacity
-        rootStyle.transform = 'scale(' + value.scale + ') rotate(0deg)'
+        rootStyle.transform = `scale(${value.scale}) rotate(0deg)`
       },
-      complete: function () {
+      complete() {
         selectionIndicatorTween = undefined
       },
-      cancel: function () {
+      cancel() {
         selectionIndicatorTween = undefined
       }
     })

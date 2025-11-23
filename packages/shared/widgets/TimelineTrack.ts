@@ -28,18 +28,20 @@ export default class TimelineTrack {
     const spanStop = JulianDate.addSeconds(renderState.startJulian, renderState.duration, new JulianDate())
 
     if (JulianDate.lessThan(startInterval, spanStart) && JulianDate.greaterThan(stopInterval, spanStop)) {
-      //The track takes up the entire visible span.
+      // The track takes up the entire visible span.
       context.fillStyle = this.color.toCssColorString()
       context.fillRect(0, renderState.y, renderState.timeBarWidth, this.height)
-    } else if (JulianDate.lessThanOrEquals(startInterval, spanStop) && JulianDate.greaterThanOrEquals(stopInterval, spanStart)) {
-      //The track only takes up some of the visible span, compute that span.
+    }
+    else if (JulianDate.lessThanOrEquals(startInterval, spanStop) && JulianDate.greaterThanOrEquals(stopInterval, spanStart)) {
+      // The track only takes up some of the visible span, compute that span.
       let x
       let start, stop
       for (x = 0; x < renderState.timeBarWidth; ++x) {
         const currentTime = JulianDate.addSeconds(renderState.startJulian, (x / renderState.timeBarWidth) * renderState.duration, new JulianDate())
         if (!defined(start) && JulianDate.greaterThanOrEquals(currentTime, startInterval)) {
           start = x
-        } else if (!defined(stop) && JulianDate.greaterThanOrEquals(currentTime, stopInterval)) {
+        }
+        else if (!defined(stop) && JulianDate.greaterThanOrEquals(currentTime, stopInterval)) {
           stop = x
         }
       }

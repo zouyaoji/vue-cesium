@@ -6,16 +6,8 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\sightline\index.ts
  */
-import type { ComputedRef, PropType, Ref } from 'vue'
-import { defineComponent } from 'vue'
-import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
-import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import type { VcGeometryPolylineProps } from '../../../geometries'
-import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
-import { VcPointProps, VcPolygonProps } from '../../../primitive-collections'
-import { drawingEmit } from '@vue-cesium/utils/emits'
-import {
+
+import type {
   VcDrawingDrawEvt,
   VcDrawingEditorEvt,
   VcDrawingMouseEvt,
@@ -25,7 +17,16 @@ import {
   VcPolylineDrawing,
   VcSegmentDrawing
 } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcPointProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
+import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
+import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VcAnalysisSightline',
@@ -44,13 +45,14 @@ export default defineComponent({
     // state
     if (props.sightlineType === 'segment' || props.sightlineType === 'circle') {
       return useDrawingSegment(props, ctx, 'VcAnalysisSightline')
-    } else if (props.sightlineType === 'polyline') {
+    }
+    else if (props.sightlineType === 'polyline') {
       return useDrawingPolyline(props, ctx, 'VcAnalysisSightline')
     }
   }
 })
 
-export type VcAnalysisSightlineProps = {
+export interface VcAnalysisSightlineProps {
   /**
    * Specify whether to respond to mouse pick events.
    */
@@ -116,7 +118,7 @@ export type VcAnalysisSightlineProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * 	Triggers when drawing.
+   * Triggers when drawing.
    */
   onDrawEvt?: (evt: VcDrawingDrawEvt<VcPolylineDrawing | VcSegmentDrawing>, viewer: Cesium.Viewer) => void
   /**

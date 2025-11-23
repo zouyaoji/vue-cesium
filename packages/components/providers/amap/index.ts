@@ -1,3 +1,11 @@
+import type {
+  ProjectionTransforms,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcImageryProvider,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 15:40:44
@@ -7,19 +15,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\amap\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type {
-  ProjectionTransforms,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcImageryProvider,
-  VcReadyObject,
-  VcRectangle
-} from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { credit, minimumLevel, maximumLevel, rectangle, tilingScheme, projectionTransforms } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, maximumLevel, minimumLevel, projectionTransforms, rectangle, tilingScheme } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import AMapImageryProvider from './AMapImageryProvider'
 
 export const amapImageryProviderProps = {

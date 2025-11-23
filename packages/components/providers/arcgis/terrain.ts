@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,12 +7,13 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\arcgis\terrain.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, token } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 export const arcgisTerrainProviderProps = {
   url: {
     type: [String, Object] as PropType<string | Cesium.Resource>,
@@ -33,7 +35,7 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderArcgisProps = {
+export interface VcTerrainProviderArcgisProps {
   /**
    * The URL of the ArcGIS ImageServer service.
    */

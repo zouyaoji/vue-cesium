@@ -1,3 +1,4 @@
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -6,14 +7,14 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\index.ts
  */
-import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import type { PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
+import { commonEmits } from '@vue-cesium/utils/emits'
 import { computed, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch } from 'vue'
 import VcPostProcessStage from '../post-process-stage'
-import useRadar from './use-radar-scan'
 import useCircle from './use-circle-scan'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import useRadar from './use-radar-scan'
+
 const defaultOptions = {
   position: [0, 0],
   radius: 1500,
@@ -21,7 +22,7 @@ const defaultOptions = {
   color: [0, 0, 0, 255]
 }
 
-export type VcPostProcessStageScanOpts = {
+export interface VcPostProcessStageScanOpts {
   position?: VcPosition
   radius: number
   interval: number
@@ -63,7 +64,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => options,
-        val => {
+        (val) => {
           if (instance.mounted) {
             ;(instance.proxy as VcComponentPublicInstance).reload()
           }
@@ -78,7 +79,8 @@ export default defineComponent({
       let result
       if (props.type === 'radar') {
         result = useRadarState.webgl(opts)
-      } else if (props.type === 'circle') {
+      }
+      else if (props.type === 'circle') {
         result = useCircleState.webgl(opts)
       }
       fragmentShader.value = result.shaderSource
@@ -101,7 +103,7 @@ export default defineComponent({
   }
 })
 
-export type VcPostProcessStageScanProps = {
+export interface VcPostProcessStageScanProps {
   /**
    * Specify the scan type, optional values are'radar','circle'.
    */

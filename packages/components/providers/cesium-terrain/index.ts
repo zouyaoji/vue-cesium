@@ -6,13 +6,14 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { PropType } from 'vue'
+
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
-import { ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, ellipsoid } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const cesiumTerrainProviderProps = {
   url: [String, Object] as PropType<string | Promise<string> | Promise<Cesium.Resource> | Cesium.Resource>,
@@ -55,16 +56,18 @@ export default defineComponent({
 
       if (Cesium.defined(props.assetId) && typeof Cesium[instance.cesiumClass].fromIonAssetId === 'function') {
         return await Cesium.CesiumTerrainProvider.fromIonAssetId(props.assetId, options)
-      } else {
+      }
+      else {
         if (typeof Cesium[instance.cesiumClass].fromUrl === 'function') {
           return Cesium.defined(options.url)
             ? await Cesium.CesiumTerrainProvider.fromUrl(options.url, options)
             : await Cesium.createWorldTerrainAsync({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
-        } else {
+        }
+        else {
           return Cesium.defined(options.url)
             ? new Cesium.CesiumTerrainProvider(options as any)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // eslint-disable-next-line ts/ban-ts-comment
+            // @ts-expect-error
             : Cesium.createWorldTerrain({ requestVertexNormals: options.requestVertexNormals, requestWaterMask: options.requestWaterMask })
         }
       }
@@ -73,7 +76,7 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderCesiumProps = {
+export interface VcTerrainProviderCesiumProps {
   /**
    * The URL of the Cesium terrain server.
    */

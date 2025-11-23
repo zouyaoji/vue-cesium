@@ -1,15 +1,15 @@
-import { Teleport, VNode } from 'vue'
-import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h } from 'vue'
-import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcCompassEvt, VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { defaultProps, defaultOptions } from './defaultProps'
-import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import type { VcBtnRef } from '@vue-cesium/components/ui'
+import type { VcBtnTooltipProps, VcCompassEvt, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { CSSProperties, VNode } from 'vue'
+import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
-import useCompass from './use-compass'
+import usePosition from '@vue-cesium/composables/private/use-position'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { hMergeSlot } from '@vue-cesium/utils/private/render'
+import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, Teleport, watch } from 'vue'
+import { defaultOptions, defaultProps } from './defaultProps'
+import useCompass from './use-compass'
 
 const emits = {
   ...commonEmits,
@@ -19,7 +19,7 @@ export const compassProps = defaultProps
 export default defineComponent({
   name: 'VcCompass',
   props: compassProps,
-  emits: emits,
+  emits,
   setup(props: VcCompassProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -41,7 +41,7 @@ export default defineComponent({
     // watch
     watch(
       () => props,
-      val => {
+      (val) => {
         nextTick(() => {
           if (!instance.mounted) {
             return
@@ -65,8 +65,8 @@ export default defineComponent({
     })
     const outerCircleStyle = computed(() => {
       return {
-        transform: 'translate(-50%,-50%) rotate(-' + compassState.heading.value + 'rad)',
-        WebkitTransform: 'translate(-50%,-50%) rotate(-' + compassState.heading.value + 'rad)',
+        transform: `translate(-50%,-50%) rotate(-${compassState.heading.value}rad)`,
+        WebkitTransform: `translate(-50%,-50%) rotate(-${compassState.heading.value}rad)`,
         // transform: 'rotate(-' + heading.value + 'rad)',
         // WebkitTransform: 'rotate(-' + heading.value + 'rad)',
         opacity: undefined,
@@ -76,8 +76,8 @@ export default defineComponent({
     })
     const rotationMarkerStyle = computed(() => {
       return {
-        transform: 'rotate(-' + compassState.orbitCursorAngle.value + 'rad)',
-        WebkitTransform: 'rotate(-' + compassState.orbitCursorAngle.value + 'rad)',
+        transform: `rotate(-${compassState.orbitCursorAngle.value}rad)`,
+        WebkitTransform: `rotate(-${compassState.orbitCursorAngle.value}rad)`,
         opacity: compassState.orbitCursorOpacity.value,
         color: markerOptions.value.color
       }
@@ -250,7 +250,8 @@ export default defineComponent({
         )
 
         return !hasVcNavigation && props.teleportToViewer ? h(Teleport, { to: $services.viewer._element }, renderContent) : renderContent
-      } else {
+      }
+      else {
         return createCommentVNode('v-if')
       }
     }
@@ -258,7 +259,7 @@ export default defineComponent({
 })
 
 export type VcCompassEmits = typeof emits
-export type VcCompassProps = {
+export interface VcCompassProps {
   /**
    * Specify the position of the VcCompass.
    * Default value: top-right

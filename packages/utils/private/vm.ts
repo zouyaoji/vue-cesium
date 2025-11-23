@@ -6,10 +6,10 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\private\vm.ts
  */
-import { Ref } from 'vue'
-import { AnyFunction, VcComponentInternalInstance } from '../types'
-import { camelCase, capitalize } from '../util'
+import type { Ref } from 'vue'
+import type { AnyFunction, VcComponentInternalInstance } from '../types'
 import { findIndex } from 'lodash-unified'
+import { camelCase, capitalize } from '../util'
 
 // used directly by docs too
 export function getParentVm(vm) {
@@ -32,12 +32,13 @@ export function getParentVm(vm) {
 export function getNormalizedVNodes(vnodes) {
   const children = new Set()
 
-  vnodes.forEach(vnode => {
+  vnodes.forEach((vnode) => {
     if (typeof vnode.type === 'symbol' && Array.isArray(vnode.children) === true) {
-      vnode.children.forEach(child => {
+      vnode.children.forEach((child) => {
         children.add(child)
       })
-    } else {
+    }
+    else {
       children.add(vnode)
     }
   })
@@ -59,7 +60,7 @@ export function getInstanceListener(vcInstance: VcComponentInternalInstance, lis
     return undefined
   }
   const propKeys = Object.keys(props)
-  const index = findIndex(propKeys, o => {
+  const index = findIndex(propKeys, (o) => {
     return o.includes(`on${capitalize(listenerName)}`) || o.includes(`on${capitalize(camelCase(listenerName))}`)
   })
   const listener = props[propKeys[index]]

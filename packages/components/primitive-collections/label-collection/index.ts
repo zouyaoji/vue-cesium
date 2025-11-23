@@ -1,13 +1,13 @@
-import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType, VNode, WatchStopHandle } from 'vue'
+import type { VcLabelProps } from '../label'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { cloneDeep, differenceBy } from 'lodash-unified'
-import { modelMatrix, debugShowBoundingVolume, scene, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
+import { blendOption, debugShowBoundingVolume, enableMouseEvent, modelMatrix, scene, show } from '@vue-cesium/utils/cesium-props'
 import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
-import { VcLabelProps } from '../label'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
+import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const labelCollectionProps = {
   ...modelMatrix,
@@ -58,21 +58,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyLabel = labelCollection._labels.find(v => v.id === modify.oldOptions.id)
-              modifyLabel &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyLabel[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyLabel
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyLabel[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteLabels: Array<Cesium.Label> = []
@@ -81,7 +82,7 @@ export default defineComponent({
               deleteLabel && deleteLabels.push(deleteLabel)
             }
 
-            deleteLabels.forEach(v => {
+            deleteLabels.forEach((v) => {
               labelCollection.remove(v)
             })
 
@@ -132,7 +133,7 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionLabelProps = {
+export interface VcCollectionLabelProps {
   /**
    * Must be passed in for labels that use the height reference property or will be depth tested against the globe.
    */

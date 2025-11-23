@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcDatasource, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,14 +8,13 @@
  * @FilePath: \vue-cesium@next\packages\components\datasources\czml\index.ts
  */
 import type { PropType, VNode } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcDatasource, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcEntityProps } from '../../entity/src'
 import { useDatasources } from '@vue-cesium/composables'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, enableMouseEvent, sourceUri, credit } from '@vue-cesium/utils/cesium-props'
-import { VcEntityProps } from '../../entity/src'
+import { credit, enableMouseEvent, show, sourceUri } from '@vue-cesium/utils/cesium-props'
 import { datasourceEmits } from '@vue-cesium/utils/emits'
+import { hSlot } from '@vue-cesium/utils/private/render'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 
 export const czmlDatasourceProps = {
   ...show,
@@ -67,7 +67,7 @@ export default defineComponent({
   }
 })
 
-export type VcDatasourceCzmlProps = {
+export interface VcDatasourceCzmlProps {
   /**
    * Specify whether the data source is displayed.
    * Default value: true
@@ -156,7 +156,7 @@ export type VcDatasourceCzmlProps = {
    */
   onClusterEvent?: (
     entities: Array<Cesium.Entity>,
-    cluster: { billboard: Cesium.Billboard; label: Cesium.Label; point: Cesium.PointPrimitive }
+    cluster: { billboard: Cesium.Billboard, label: Cesium.Label, point: Cesium.PointPrimitive }
   ) => void
   /**
    * Triggers when entities are added or removed from the collection.datasource.entities

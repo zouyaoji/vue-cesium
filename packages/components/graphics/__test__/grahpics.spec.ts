@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
-import { describe, expect, test } from 'vitest'
-import VcViewer from '@vue-cesium/components/viewer'
+import type { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import VcEntity from '@vue-cesium/components/entity'
+import VcViewer from '@vue-cesium/components/viewer'
+import { mount } from '@vue/test-utils'
+import { describe, expect } from 'vitest'
+import { VcConfigProvider } from '../../config-provider'
+
 import {
   VcGraphicsBillboard,
   VcGraphicsBox,
@@ -23,8 +24,6 @@ import {
   VcGraphicsTileset,
   VcGraphicsWall
 } from '../index'
-
-import { VcConfigProvider } from '../../config-provider'
 
 const billboardApp = {
   components: {
@@ -53,8 +52,8 @@ const billboardApp = {
   `
 }
 
-describe('VcGraphicsBillboard', () => {
-  test('render test', async () => {
+describe('vcGraphicsBillboard', () => {
+  it('render test', async () => {
     const wrapper = mount(billboardApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -95,8 +94,8 @@ const boxApp = {
   `
 }
 
-describe('VcGraphicsBox', () => {
-  test('render test', async () => {
+describe('vcGraphicsBox', () => {
+  it('render test', async () => {
     const wrapper = mount(boxApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -144,14 +143,14 @@ const corridorApp = {
   `
 }
 
-describe('VcGraphicsCorridor', () => {
-  test('render test', async () => {
+describe('vcGraphicsCorridor', () => {
+  it('render test', async () => {
     const wrapper = mount(corridorApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
     let graphics = readyObj?.cesiumObject as Cesium.CorridorGraphics
     expect(graphics instanceof Cesium.CorridorGraphics).toBe(true)
-    expect(graphics.positions?.getValue(Cesium.JulianDate.now()) instanceof Array).toBe(true)
+    expect(Array.isArray(graphics.positions?.getValue(Cesium.JulianDate.now()))).toBe(true)
     expect(graphics.outline?.getValue(Cesium.JulianDate.now())).toEqual(true)
     await testVm.unload?.()
     graphics = testVm.getCesiumObject?.() as Cesium.CorridorGraphics
@@ -190,8 +189,8 @@ const cylinderApp = {
   `
 }
 
-describe('VcGraphicsCylinder', () => {
-  test('render test', async () => {
+describe('vcGraphicsCylinder', () => {
+  it('render test', async () => {
     const wrapper = mount(cylinderApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -233,8 +232,8 @@ const ellipseApp = {
   `
 }
 
-describe('VcGraphicsEllipse', () => {
-  test('render test', async () => {
+describe('vcGraphicsEllipse', () => {
+  it('render test', async () => {
     const wrapper = mount(ellipseApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -274,8 +273,8 @@ const ellipsoidApp = {
   `
 }
 
-describe('VcGraphicsEllipsoid', () => {
-  test('render test', async () => {
+describe('vcGraphicsEllipsoid', () => {
+  it('render test', async () => {
     const wrapper = mount(ellipsoidApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -315,8 +314,8 @@ const labelApp = {
   `
 }
 
-describe('VcGraphicsLabel', () => {
-  test('render test', async () => {
+describe('vcGraphicsLabel', () => {
+  it('render test', async () => {
     const wrapper = mount(labelApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -356,8 +355,8 @@ const modelApp = {
   `
 }
 
-describe('VcGraphicsModel', () => {
-  test('render test', async () => {
+describe('vcGraphicsModel', () => {
+  it('render test', async () => {
     const wrapper = mount(modelApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -412,30 +411,33 @@ const pathApp = {
   },
   methods: {
     onViewerReady({ Cesium, viewer }) {
-      //Enable lighting based on sun/moon positions
+      // Enable lighting based on sun/moon positions
       viewer.scene.globe.enableLighting = true
-      //Enable depth testing so things behind the terrain disappear.
+      // Enable depth testing so things behind the terrain disappear.
       viewer.scene.globe.depthTestAgainstTerrain = true
-      //Set the random number seed for consistent results.
+      // Set the random number seed for consistent results.
       Cesium.Math.setRandomNumberSeed(3)
       const start = Cesium.JulianDate.fromDate(new Date(2015, 2, 25, 16))
       const stop = Cesium.JulianDate.addSeconds(start, 360, new Cesium.JulianDate())
       viewer.clock.startTime = start.clone()
       viewer.clock.stopTime = stop.clone()
       viewer.clock.currentTime = start.clone()
-      viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP //Loop at the end
+      viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // Loop at the end
       viewer.clock.multiplier = 10
       // viewer.timeline.zoomTo(start, stop)
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       this.position = this.computeCirclularFlight(-112.110693, 36.0994841, 0.03, start)
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       this.availability = new Cesium.TimeIntervalCollection([
         new Cesium.TimeInterval({
-          start: start,
-          stop: stop
+          start,
+          stop
         })
       ])
-      // @ts-ignore
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
       this.orientation = new Cesium.VelocityOrientationProperty(this.position)
     },
     computeCirclularFlight(lon, lat, radius, start) {
@@ -449,7 +451,8 @@ const pathApp = {
           Cesium.Math.nextRandomNumber() * 500 + 1750
         )
         property.addSample(time, position)
-        // @ts-ignore
+        // eslint-disable-next-line ts/ban-ts-comment
+        // @ts-expect-error
         this.positions.push(position)
       }
       return property
@@ -457,8 +460,8 @@ const pathApp = {
   }
 }
 
-describe('VcGraphicsPath', () => {
-  test('render test', async () => {
+describe('vcGraphicsPath', () => {
+  it('render test', async () => {
     const wrapper = mount(pathApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -500,8 +503,8 @@ const planeApp = {
   `
 }
 
-describe('VcGraphicsPlane', () => {
-  test('render test', async () => {
+describe('vcGraphicsPlane', () => {
+  it('render test', async () => {
     const wrapper = mount(planeApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -536,8 +539,8 @@ const pointApp = {
   `
 }
 
-describe('VcGraphicsPoint', () => {
-  test('render test', async () => {
+describe('vcGraphicsPoint', () => {
+  it('render test', async () => {
     const wrapper = mount(pointApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -577,8 +580,8 @@ const polylineApp = {
   `
 }
 
-describe('VcGraphicsPolyline', () => {
-  test('render test', async () => {
+describe('vcGraphicsPolyline', () => {
+  it('render test', async () => {
     const wrapper = mount(polylineApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -621,8 +624,8 @@ const polygonApp = {
   `
 }
 
-describe('VcGraphicsPolygon', () => {
-  test('render test', async () => {
+describe('vcGraphicsPolygon', () => {
+  it('render test', async () => {
     const wrapper = mount(polygonApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -665,8 +668,8 @@ const polylineVolumeApp = {
   `
 }
 
-describe('VcGraphicsPolylineVolume', () => {
-  test('render test', async () => {
+describe('vcGraphicsPolylineVolume', () => {
+  it('render test', async () => {
     const wrapper = mount(polylineVolumeApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -710,8 +713,8 @@ const rectangleApp = {
   `
 }
 
-describe('VcGraphicsRectangle', () => {
-  test('render test', async () => {
+describe('vcGraphicsRectangle', () => {
+  it('render test', async () => {
     const wrapper = mount(rectangleApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -754,8 +757,8 @@ const wallApp = {
   `
 }
 
-describe('VcGraphicsWall', () => {
-  test('render test', async () => {
+describe('vcGraphicsWall', () => {
+  it('render test', async () => {
     const wrapper = mount(wallApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
@@ -793,8 +796,8 @@ const tilesetApp = {
   `
 }
 
-describe('VcGraphicsTileset', () => {
-  test('render test', async () => {
+describe('vcGraphicsTileset', () => {
+  it('render test', async () => {
     const wrapper = mount(tilesetApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
     const readyObj: VcReadyObject | undefined = await testVm.creatingPromise

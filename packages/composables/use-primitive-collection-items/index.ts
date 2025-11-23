@@ -14,7 +14,7 @@
  * Polyline
  */
 
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 
 export type CollectionItem = Cesium.Billboard | Cesium.Label | Cesium.PointPrimitive | Cesium.Polyline

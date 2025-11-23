@@ -1,5 +1,5 @@
+import type { PropType } from 'vue'
 import { clearColor, scissorRectangle } from '@vue-cesium/utils/cesium-props'
-import { PropType } from 'vue'
 
 const defaultProps = {
   fragmentShader: String,

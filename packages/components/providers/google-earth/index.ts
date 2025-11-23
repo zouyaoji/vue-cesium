@@ -1,3 +1,4 @@
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
@@ -7,12 +8,11 @@
  * @FilePath: \vue-cesium@next\packages\components\providers\google-earth\index.ts
  */
 import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { url, ellipsoid, tileDiscardPolicy, credit } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { credit, ellipsoid, tileDiscardPolicy, url } from '@vue-cesium/utils/cesium-props'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const googleImageryProviderProps = {
   ...url,
@@ -34,7 +34,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderGoogleProps = {
+export interface VcImageryProviderGoogleProps {
   /**
    * The url of the Google Earth Enterprise server hosting the imagery.
    */

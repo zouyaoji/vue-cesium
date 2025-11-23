@@ -1,3 +1,5 @@
+import type { VcBillboardProps, VcLabelProps, VcPointProps } from '@vue-cesium/components/primitive-collections'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2023-05-31 16:51:54
@@ -6,17 +8,16 @@
  * @LastEditTime: 2023-08-16 22:46:10
  * @FilePath: \vue-cesium\packages\components\primitives\primitive-cluster\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, PropType, watch, WatchStopHandle } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType, WatchStopHandle } from 'vue'
 import { usePrimitives } from '@vue-cesium/composables'
-import { VcBillboardProps, VcLabelProps, VcPointProps } from '@vue-cesium/components/primitive-collections'
 
-import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
-import { primitiveEmits } from '@vue-cesium/utils/emits'
 import { PrimitiveCluster } from '@vue-cesium/shared'
+import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
+import { primitiveEmits } from '@vue-cesium/utils/emits'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { cloneDeep, differenceBy } from 'lodash-unified'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 
 export const primitiveClusterProps = {
   ...show,
@@ -63,7 +64,7 @@ export default defineComponent({
   props: primitiveClusterProps,
   emits: {
     ...primitiveEmits,
-    clusterEvent: (ids: string[], cluster: { billboard: Cesium.Billboard; label: Cesium.Label; point: Cesium.PointPrimitive }) => true
+    clusterEvent: (ids: string[], cluster: { billboard: Cesium.Billboard, label: Cesium.Label, point: Cesium.PointPrimitive }) => true
   },
   setup(props, ctx) {
     // state
@@ -77,7 +78,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.show,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.show = val
         }
@@ -87,7 +88,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.enabled,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.enabled = val
         }
@@ -97,7 +98,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.minimumClusterSize,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.minimumClusterSize = val
         }
@@ -107,7 +108,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clusterBillboards,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.clusterBillboards = val
           instance.proxy['reload']()
@@ -118,7 +119,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clusterLabels,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.clusterLabels = val
           instance.proxy['reload']()
@@ -129,7 +130,7 @@ export default defineComponent({
     unwatchFns.push(
       watch(
         () => props.clusterBillboards,
-        val => {
+        (val) => {
           const primitiveCluster = instance.cesiumObject as PrimitiveCluster
           primitiveCluster.clusterPoints = val
           instance.proxy['reload']()
@@ -157,21 +158,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyBillboard = billboardCollection._billboards.find(v => v?.id === modify.oldOptions.id)
-              modifyBillboard &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyBillboard[prop] = primitivesState?.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyBillboard
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyBillboard[prop] = primitivesState?.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteBillboards: Array<Cesium.Billboard> = []
@@ -180,7 +182,7 @@ export default defineComponent({
               deleteBillboard && deleteBillboards.push(deleteBillboard)
             }
 
-            deleteBillboards.forEach(v => {
+            deleteBillboards.forEach((v) => {
               billboardCollection.remove(v)
             })
             addBillboards(billboardCollection, addeds)
@@ -217,21 +219,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyLabel = labelCollection._labels.find(v => v.id === modify.oldOptions.id)
-              modifyLabel &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyLabel[prop] = primitivesState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyLabel
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyLabel[prop] = primitivesState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteLabels: Array<Cesium.Label> = []
@@ -240,7 +243,7 @@ export default defineComponent({
               deleteLabel && deleteLabels.push(deleteLabel)
             }
 
-            deleteLabels.forEach(v => {
+            deleteLabels.forEach((v) => {
               labelCollection.remove(v)
             })
 
@@ -280,21 +283,22 @@ export default defineComponent({
               if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
                 modifies.push({
                   newOptions: options,
-                  oldOptions: oldOptions
+                  oldOptions
                 })
               }
             }
 
-            modifies.forEach(modify => {
+            modifies.forEach((modify) => {
               const modifyPoint = pointCollection._pointPrimitives.find(v => v && v.id === modify.oldOptions.id)
-              modifyPoint &&
-                Object.keys(modify.newOptions).forEach(prop => {
-                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyPoint[prop] = primitivesState.transformProp(prop, modify.newOptions[prop])
-                  }
-                })
+              modifyPoint
+              && Object.keys(modify.newOptions).forEach((prop) => {
+                if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                  modifyPoint[prop] = primitivesState.transformProp(prop, modify.newOptions[prop])
+                }
+              })
             })
-          } else {
+          }
+          else {
             const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePoints: Array<Cesium.PointPrimitive> = []
@@ -303,7 +307,7 @@ export default defineComponent({
               deletePoint && deletePoints.push(deletePoint)
             }
 
-            deletePoints.forEach(v => {
+            deletePoints.forEach((v) => {
               pointCollection.remove(v)
             })
 
@@ -405,7 +409,7 @@ export default defineComponent({
   }
 })
 
-export type VcPrimitiveClusterProps = {
+export interface VcPrimitiveClusterProps {
   /**
    * Determines if this primitive will be shown.
    * Default value: true

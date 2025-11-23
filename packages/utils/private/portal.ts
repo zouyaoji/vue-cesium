@@ -23,7 +23,8 @@ export function closePortalMenus(vm, evt) {
       if (vm.$props.separateClosePopup === true) {
         return getParentVm(vm)
       }
-    } else if (vm.__vcPortalInnerRef !== void 0) {
+    }
+    else if (vm.__vcPortalInnerRef !== void 0) {
       // treat it as point of separation if parent is QPopupProxy
       // (so mobile matches desktop behavior)
       // and hide it too
@@ -32,7 +33,8 @@ export function closePortalMenus(vm, evt) {
       if (parent !== void 0 && parent.$options.name === 'VcPopupProxy') {
         vm.hide(evt)
         return parent
-      } else {
+      }
+      else {
         return vm
       }
     }

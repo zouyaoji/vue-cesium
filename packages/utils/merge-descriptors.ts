@@ -44,7 +44,7 @@ function merge(dest, src, redefine) {
     redefine = true
   }
 
-  Object.getOwnPropertyNames(src).forEach(function forEachOwnPropertyName(name) {
+  Object.getOwnPropertyNames(src).forEach((name) => {
     if (!redefine && hasOwnProperty.call(dest, name)) {
       // Skip desriptor
       return
@@ -59,8 +59,8 @@ function merge(dest, src, redefine) {
 }
 
 /**
- * @param {...Object} args
- * @returns {Object}
+ * @param {...object} args
+ * @returns {object}
  */
 export function mergeDescriptors(...args: any[]) {
   let redefine: boolean

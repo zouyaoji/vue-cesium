@@ -55,14 +55,14 @@ export default class VcLineTrailMaterialProperty extends VcBaseMaterialProperty 
   }
 
   equals(other: VcLineTrailMaterialProperty) {
-    const reData =
-      this === other ||
-      (other instanceof VcLineTrailMaterialProperty &&
-        Cesium.Property['equals'](this.color, other.color) &&
-        Cesium.Property['equals'](this.repeat, other.repeat) &&
-        this.image === other.image &&
-        this.axisY === other.axisY &&
-        this.duration === other.duration)
+    const reData
+      = this === other
+        || (other instanceof VcLineTrailMaterialProperty
+          && Cesium.Property['equals'](this.color, other.color)
+          && Cesium.Property['equals'](this.repeat, other.repeat)
+          && this.image === other.image
+          && this.axisY === other.axisY
+          && this.duration === other.duration)
     return reData
   }
 }

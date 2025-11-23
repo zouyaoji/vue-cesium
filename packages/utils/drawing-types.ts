@@ -7,14 +7,6 @@
  * @FilePath: \vue-cesium\packages\utils\drawing-types.ts
  */
 
-import {
-  VcDrawingPin,
-  VcDrawingPoint,
-  VcDrawingPolygon,
-  VcDrawingPolyline,
-  VcDrawingRectangle,
-  VcDrawingRegular
-} from '@vue-cesium/components/drawings/src'
 import type {
   VcBillboardProps,
   VcFabActionRef,
@@ -25,8 +17,18 @@ import type {
   VcPolygonProps,
   VcPrimitiveProps
 } from '@vue-cesium/components'
+import type { VcAnalysisSightline, VcAnalysisViewshed } from '@vue-cesium/components/analyses/src'
 
-import {
+import type {
+  VcDrawingPin,
+  VcDrawingPoint,
+  VcDrawingPolygon,
+  VcDrawingPolyline,
+  VcDrawingRectangle,
+  VcDrawingRegular
+} from '@vue-cesium/components/drawings/src'
+
+import type {
   VcMeasurementArea,
   VcMeasurementDistance,
   VcMeasurementHeight,
@@ -34,39 +36,37 @@ import {
   VcMeasurementPoint,
   VcMeasurementPolyline,
   VcMeasurementRectangle,
-  VcMeasurementVertical,
-  VcMeasurementRegular
+  VcMeasurementRegular,
+  VcMeasurementVertical
 } from '@vue-cesium/components/measurements/src'
-
-import { VcAnalysisSightline, VcAnalysisViewshed } from '@vue-cesium/components/analyses/src'
+import type { MeasureUnits } from '@vue-cesium/shared'
 import type { CSSProperties, Ref } from 'vue'
-import type { VcPickEvent, VcBtnTooltipProps, VcCartesian3Array, VcPosition, VcColor, AppearanceOption, VcActionTooltipProps } from './types'
-import { MeasureUnits } from '@vue-cesium/shared'
+import type { AppearanceOption, VcActionTooltipProps, VcBtnTooltipProps, VcCartesian3Array, VcColor, VcPickEvent, VcPosition } from './types'
 
 export type DrawingActionOpts = VcActionTooltipProps
 
-export type DrawgingActionCmp =
-  | typeof VcDrawingPin
-  | typeof VcDrawingPoint
-  | typeof VcDrawingPolygon
-  | typeof VcDrawingPolyline
-  | typeof VcDrawingRegular
-  | typeof VcDrawingRectangle
+export type DrawgingActionCmp
+  = | typeof VcDrawingPin
+    | typeof VcDrawingPoint
+    | typeof VcDrawingPolygon
+    | typeof VcDrawingPolyline
+    | typeof VcDrawingRegular
+    | typeof VcDrawingRectangle
 
 export type DrawingActionCmpRef = Ref<
   typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon | typeof VcDrawingRegular | typeof VcDrawingRectangle
 >
 
-export type MeasurementActionCmp =
-  | typeof VcMeasurementArea
-  | typeof VcMeasurementDistance
-  | typeof VcMeasurementHeight
-  | typeof VcMeasurementHorizontal
-  | typeof VcMeasurementPoint
-  | typeof VcMeasurementPolyline
-  | typeof VcMeasurementRectangle
-  | typeof VcMeasurementRegular
-  | typeof VcMeasurementVertical
+export type MeasurementActionCmp
+  = | typeof VcMeasurementArea
+    | typeof VcMeasurementDistance
+    | typeof VcMeasurementHeight
+    | typeof VcMeasurementHorizontal
+    | typeof VcMeasurementPoint
+    | typeof VcMeasurementPolyline
+    | typeof VcMeasurementRectangle
+    | typeof VcMeasurementRegular
+    | typeof VcMeasurementVertical
 
 export type MeasurementActionCmpRef = Ref<
   | typeof VcMeasurementDistance
@@ -244,25 +244,24 @@ export interface VcDrawingOpts {
   autoUpdateLabelPosition?: boolean
 }
 
-export type MeasurementType =
-  | 'distance'
-  | 'component-distance'
-  | 'polyline'
-  | 'horizontal'
-  | 'vertical'
-  | 'height'
-  | 'area'
-  | 'point'
-  | 'rectangle'
-  | 'regular'
-  | 'circle'
+export type MeasurementType
+  = | 'distance'
+    | 'component-distance'
+    | 'polyline'
+    | 'horizontal'
+    | 'vertical'
+    | 'height'
+    | 'area'
+    | 'point'
+    | 'rectangle'
+    | 'regular'
+    | 'circle'
 
 export type DrawingType = 'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle' | 'regular' | 'circle'
 
 export type AnalysisType = 'sightline' | 'viewshed'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type VcDrawingDrawEvt<T = {}> = {
+export type VcDrawingDrawEvt<T = object> = {
   index?: number
   name: MeasurementType | DrawingType | AnalysisType
   renderDatas: Ref<Array<VcPointDrawing | VcPolylineDrawing | VcSegmentDrawing>>
@@ -337,7 +336,7 @@ export interface VcViewshedAnalysisOpts extends VcDrawingOpts {
 
 export type VcDrawingPreRenderDatas = Array<VcCartesian3Array | VcPosition>
 
-export type MeasurementDecimals = {
+export interface MeasurementDecimals {
   distance?: number
   angle?: number
   area?: number
@@ -347,7 +346,7 @@ export type MeasurementDecimals = {
   slope?: number
 }
 
-export type VcViewshedOpts = {
+export interface VcViewshedOpts {
   fovH?: number
   fovV?: number
   invisibleColor?: VcColor

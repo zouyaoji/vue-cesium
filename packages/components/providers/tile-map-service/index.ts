@@ -6,8 +6,6 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tile-map-service\index.ts
  */
-import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   ProjectionTransforms,
   VcComponentInternalInstance,
@@ -15,21 +13,23 @@ import type {
   VcReadyObject,
   VcRectangle
 } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
 import {
-  fileExtension,
   credit,
-  minimumLevel,
-  maximumLevel,
-  rectangle,
-  tilingScheme,
   ellipsoid,
-  tileWidth,
+  fileExtension,
+  maximumLevel,
+  minimumLevel,
+  projectionTransforms,
+  rectangle,
   tileHeight,
-  projectionTransforms
+  tileWidth,
+  tilingScheme
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 
 export const tmsImageryProviderProps = {
   url: [String, Object] as PropType<string | Promise<string> | Promise<Cesium.Resource> | Cesium.Resource>,
@@ -58,7 +58,7 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderTmsProps = {
+export interface VcImageryProviderTmsProps {
   /**
    * Path to image tiles on server.
    * Default value: '.'
@@ -75,7 +75,7 @@ export type VcImageryProviderTmsProps = {
    */
   credit?: string | Cesium.Credit
   /**
-   * 	The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.
+   * The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.
    * Default value: 0
    */
   minimumLevel?: number

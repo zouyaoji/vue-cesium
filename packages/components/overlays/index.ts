@@ -1,3 +1,4 @@
+import type { SFCWithInstall } from '@vue-cesium/utils/types'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
@@ -6,19 +7,18 @@
  * @Description:
  * @FilePath: \vue-cesium\packages\components\overlays\index.ts
  */
-import { App } from 'vue'
-import OverlayHtml from './html'
-import OverlayHeatmap from './heatmap'
-import OverlayEcharts from './echarts'
-import OverlayWind from './wind'
+import type { App } from 'vue'
 import OverlayDynamic from './dynamic'
+import OverlayEcharts from './echarts'
+import OverlayHeatmap from './heatmap'
+import OverlayHtml from './html'
 import OverlayTyphoon from './typhoon'
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+import OverlayWind from './wind'
 
 const components = [OverlayHtml, OverlayHeatmap, OverlayEcharts, OverlayWind, OverlayDynamic, OverlayTyphoon]
 
-const install = (app: App): void => {
-  components.forEach(cmp => {
+function install(app: App): void {
+  components.forEach((cmp) => {
     app.component(cmp.name, cmp)
   })
 }
@@ -27,7 +27,7 @@ export default {
   install
 }
 
-components.forEach(cmp => {
+components.forEach((cmp) => {
   cmp['install'] = (app: App): void => {
     app.component(cmp.name, cmp)
   }
@@ -44,5 +44,5 @@ export * from './dynamic'
 export * from './echarts'
 export * from './heatmap'
 export * from './html'
-export * from './wind'
 export * from './typhoon'
+export * from './wind'

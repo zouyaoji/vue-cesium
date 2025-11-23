@@ -20,7 +20,7 @@ function printWindow(windowToPrint) {
   const deferred = defer()
   let printInProgressCount = 0
 
-  const timeout = setTimeout(function () {
+  const timeout = setTimeout(() => {
     deferred.reject(false)
   }, 10000)
 
@@ -35,11 +35,12 @@ function printWindow(windowToPrint) {
   }
 
   if (windowToPrint.matchMedia) {
-    windowToPrint.matchMedia('print').addListener(function (evt) {
+    windowToPrint.matchMedia('print').addListener((evt) => {
       cancelTimeout()
       if (evt.matches) {
         ++printInProgressCount
-      } else {
+      }
+      else {
         --printInProgressCount
         resolveIfZero()
       }

@@ -1,10 +1,10 @@
-import { ref, watch, onMounted, onBeforeUnmount, nextTick, getCurrentInstance } from 'vue'
-
-import { clearSelection } from '@vue-cesium/utils/private/selection'
-import { addEvt, cleanEvt, prevent } from '@vue-cesium/utils/private/event'
-import { getTouchTarget } from '@vue-cesium/utils/private/touch'
-import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
 import { platform } from '@vue-cesium/utils/platform'
+
+import { addEvt, cleanEvt, prevent } from '@vue-cesium/utils/private/event'
+import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
+import { clearSelection } from '@vue-cesium/utils/private/selection'
+import { getTouchTarget } from '@vue-cesium/utils/private/touch'
+import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 export const useAnchorProps = {
   target: {
@@ -102,13 +102,15 @@ export default function ({
       if (context === true) {
         if (platform().isPhone === true) {
           evts = [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
-        } else {
+        }
+        else {
           evts = [
             [anchorEl.value, 'click', 'hide', 'passive'],
             [anchorEl.value, 'contextmenu', 'contextClick', 'notPassive']
           ]
         }
-      } else {
+      }
+      else {
         evts = [
           [anchorEl.value, 'click', 'toggle', 'passive'],
           [anchorEl.value, 'keyup', 'toggleKey', 'passive']
@@ -134,15 +136,18 @@ export default function ({
   function pickAnchorEl() {
     if (props.target === false || props.target === '') {
       anchorEl.value = null!
-    } else if (props.target === true) {
+    }
+    else if (props.target === true) {
       setAnchorEl(proxy?.$el.parentNode)
-    } else {
+    }
+    else {
       let el = props.target as any
 
       if (typeof props.target === 'string') {
         try {
           el = document.querySelector(props.target)
-        } catch (err) {
+        }
+        catch (err) {
           el = void 0
         }
       }
@@ -150,7 +155,8 @@ export default function ({
       if (el !== void 0 && el !== null) {
         anchorEl.value = el.$el || el
         configureAnchorEl()
-      } else {
+      }
+      else {
         anchorEl.value = null!
         console.error(`Anchor: target "${props.target}" not found`)
       }
@@ -159,7 +165,7 @@ export default function ({
 
   watch(
     () => props.contextMenu,
-    val => {
+    (val) => {
       if (anchorEl.value !== null) {
         unconfigureAnchorEl()
         configureAnchorEl(val)
@@ -180,11 +186,12 @@ export default function ({
 
   watch(
     () => props.noParentEvent,
-    val => {
+    (val) => {
       if (anchorEl.value !== null) {
         if (val === true) {
           unconfigureAnchorEl()
-        } else {
+        }
+        else {
           configureAnchorEl()
         }
       }

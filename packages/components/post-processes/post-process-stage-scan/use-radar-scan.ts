@@ -6,10 +6,11 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\use-radar-scan.ts
  */
-import { VcViewerProvider } from '@vue-cesium/utils/types'
+import type { VcViewerProvider } from '@vue-cesium/utils/types'
 import shaderSource from '@vue-cesium/shared/shaders/RadarScan'
+
 export default function ($services: VcViewerProvider) {
-  const webgl = options => {
+  const webgl = (options) => {
     const { viewer } = $services
 
     const webgl2 = $services.viewer.scene.context?.webgl2
@@ -41,10 +42,10 @@ export default function ($services: VcViewerProvider) {
     const _scratchCartesian3Normal = new Cesium.Cartesian3()
     const _scratchCartesian3Normal1 = new Cesium.Cartesian3()
     const uniforms = {
-      u_scanCenterEC: function () {
+      u_scanCenterEC() {
         return Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center, _scratchCartesian4Center)
       },
-      u_scanPlaneNormalEC: function () {
+      u_scanPlaneNormalEC() {
         const temp = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center, _scratchCartesian4Center)
         const temp1 = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center1, _scratchCartesian4Center1)
         _scratchCartesian3Normal.x = temp1.x - temp.x
@@ -54,7 +55,7 @@ export default function ($services: VcViewerProvider) {
         return _scratchCartesian3Normal
       },
       u_radius: options.radius,
-      u_scanLineNormalEC: function () {
+      u_scanLineNormalEC() {
         const temp = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center, _scratchCartesian4Center)
         const temp1 = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center1, _scratchCartesian4Center1)
         const temp2 = Cesium.Matrix4.multiplyByVector(viewer.camera.viewMatrix, _Cartesian4Center2, _scratchCartesian4Center2)

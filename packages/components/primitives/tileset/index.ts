@@ -1,5 +1,3 @@
-import type { PropType } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcCartesian2,
   VcComponentInternalInstance,
@@ -9,30 +7,33 @@ import type {
   VcPosition,
   VcReadyObject
 } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
-  show,
-  modelMatrix,
-  shadows,
-  maximumScreenSpaceError,
-  clippingPlanes,
+  backFaceCulling,
   classificationType,
+  clippingPlanes,
+  customShader,
+  debugShowBoundingVolume,
+  debugWireframe,
   ellipsoid,
+  enableMouseEvent,
+  imageBasedLighting,
   imageBasedLightingFactor,
   lightColor2,
   luminanceAtZenith,
-  sphericalHarmonicCoefficients,
+  maximumScreenSpaceError,
+  modelMatrix,
+  outlineColor,
+  shadows,
+  show,
   specularEnvironmentMaps,
-  backFaceCulling,
-  debugWireframe,
-  debugShowBoundingVolume,
-  customShader,
-  enableMouseEvent,
-  imageBasedLighting,
-  outlineColor
+  sphericalHarmonicCoefficients
 } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+import { kebabCase } from '@vue-cesium/utils/util'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+
 const emits = {
   ...primitiveEmits,
   allTilesLoaded: () => true,
@@ -49,18 +50,18 @@ export const tilesetPrimitiveProps = {
   ...show,
   ...modelMatrix,
   modelUpAxis: {
-    type: Number,
+    type: Number
     // default: 1 // Cesium.Axis.Y
   },
   modelForwardAxis: {
-    type: Number,
+    type: Number
     // default: 0 // Cesium.Axis.X
   },
   ...shadows,
   ...maximumScreenSpaceError,
   // Deprecated
   maximumMemoryUsage: {
-    type: Number,
+    type: Number
     // default: 512
   },
   cacheBytes: {
@@ -204,7 +205,7 @@ export const tilesetPrimitiveProps = {
   },
   splitDirection: {
     type: Number as PropType<Cesium.SplitDirection>,
-    default: 0 //Cesium.SplitDirection.NONE
+    default: 0 // Cesium.SplitDirection.NONE
   },
   projectTo2D: {
     type: Boolean,
@@ -272,17 +273,17 @@ export const tilesetPrimitiveProps = {
 export default defineComponent({
   name: 'VcPrimitiveTileset',
   props: tilesetPrimitiveProps,
-  emits: emits,
+  emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'Cesium3DTileset'
     instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
     const primitivesStates = usePrimitives(props, ctx, instance)
-      ; (instance.proxy as VcComponentPublicInstance).creatingPromise.then(obj => {
-        const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
-        instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
-      })
+      ; (instance.proxy as VcComponentPublicInstance).creatingPromise.then((obj) => {
+      const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
+      instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
+    })
 
     const updateTile = (tile: Cesium.Cesium3DTile) => {
       const content = tile.content
@@ -291,7 +292,7 @@ export default defineComponent({
       for (let i = 0; i < content.featuresLength; i++) {
         const feature = content.getFeature(i)
         if (props.properties && props.properties.length) {
-          props.properties.forEach(property => {
+          props.properties.forEach((property) => {
             if (feature.hasProperty(property['key']) && feature.getProperty(property['key']) === property['keyValue']) {
               feature.setProperty(property['propertyName'], property['propertyValue'])
             }
@@ -300,12 +301,13 @@ export default defineComponent({
       }
       // sets fragmentShader
       if (props.fragmentShader && model && model._sourcePrograms && model._rendererResources) {
-        Object.keys(model._sourcePrograms).forEach(key => {
+        Object.keys(model._sourcePrograms).forEach((key) => {
           const program = model._sourcePrograms[key]
           const sourceShaders = model._rendererResources.sourceShaders
           if (props.replaceFS) {
             sourceShaders[program.fragmentShader] = props.fragmentShader
-          } else {
+          }
+          else {
             const oldFS = sourceShaders[program.fragmentShader]
             const webgl2 = primitivesStates.$services.viewer.scene.context?.webgl2
             sourceShaders[program.fragmentShader] = oldFS.replace(
@@ -324,7 +326,7 @@ export default defineComponent({
 })
 
 export type VcPrimitiveTilesetEmits = typeof emits
-export type VcPrimitiveTilesetProps = {
+export interface VcPrimitiveTilesetProps {
   /**
    * The url to a tileset JSON file.
    */

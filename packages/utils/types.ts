@@ -1,18 +1,24 @@
-import type { Emitter } from 'mitt'
-import type { Ref, Plugin, CSSProperties, ComponentInternalInstance, ComponentPublicInstance } from 'vue'
-import type { VcDrawingActionInstance } from './drawing-types'
-import type h337 from '@zouyaoji/heatmap.js'
+import type MouseCoords from '@vue-cesium/components/controls/status-bar/MouseCoords'
+import type { VcPointProps } from '@vue-cesium/components/primitive-collections'
+import type AMapImageryProvider from '@vue-cesium/components/providers/amap/AMapImageryProvider'
 import type BaiduMapImageryProvider from '@vue-cesium/components/providers/baidu/BaiduMapImageryProvider'
 import type SuperMapImageryProvider from '@vue-cesium/components/providers/supermap/SuperMapImageryProvider'
+import type TencentImageryProvider from '@vue-cesium/components/providers/tencent/TencentImageryProvider'
 import type { VcBtnProps, VcFabActionProps, VcTooltipProps } from '@vue-cesium/components/ui'
-import type MouseCoords from '@vue-cesium/components/controls/status-bar/MouseCoords'
-import AMapImageryProvider from '@vue-cesium/components/providers/amap/AMapImageryProvider'
-import TencentImageryProvider from '@vue-cesium/components/providers/tencent/TencentImageryProvider'
-import { VcPointProps } from '@vue-cesium/components/primitive-collections'
-import { VcCircleWaveMaterialProperty } from '@vue-cesium/shared'
+import type { VcCircleWaveMaterialProperty } from '@vue-cesium/shared'
+import type h337 from '@zouyaoji/heatmap.js'
+import type { Emitter } from 'mitt'
+import type { ComponentInternalInstance, ComponentPublicInstance, CSSProperties, Plugin, Ref } from 'vue'
+import type { VcDrawingActionInstance } from './drawing-types'
 
 interface AnyObject {
   [propName: string]: any
+}
+
+export interface VcMittEvents {
+  ready: VcReadyObject
+  [key: string]: any
+  [key: symbol]: any
 }
 
 export type LooseDictionary = { [index in string]: any }
@@ -259,9 +265,9 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   renderByParent?: boolean
   vcMitt: Emitter<VcMittEvents>
   cesiumObject?: VcCesiumObject
-  createCesiumObject?(): Promise<unknown>
-  mount?(): Promise<boolean | undefined>
-  unmount?(): Promise<boolean | undefined>
+  createCesiumObject?: () => Promise<unknown>
+  mount?: () => Promise<boolean | undefined>
+  unmount?: () => Promise<boolean | undefined>
   children: Array<VcComponentInternalInstance>
   alreadyListening: string[]
   removeCallbacks: Array<AnyFunction<any>>
@@ -297,7 +303,7 @@ interface VcDrawingProvider extends VcViewerProvider {
   selectedDrawingActionInstance?: VcDrawingActionInstance
   drawingFabInstance?: VcComponentInternalInstance
   drawingHandlerActive: boolean
-  getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
+  getWorldPosition: (scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3) => Cesium.Cartesian3
 }
 
 interface ViewerWidgetResizedEvent {
@@ -306,37 +312,32 @@ interface ViewerWidgetResizedEvent {
   target: HTMLElement
 }
 
-export type ProjectionTransforms = false | { from: 'WGS84' | 'BD09' | 'GCJ02'; to: 'WGS84' | 'BD09' | 'GCJ02' }
+export type ProjectionTransforms = false | { from: 'WGS84' | 'BD09' | 'GCJ02', to: 'WGS84' | 'BD09' | 'GCJ02' }
 
 export type CommonEmitType = 'beforeLoad' | 'ready' | 'destroyed'
 
-export type EntityEmitType =
-  | CommonEmitType
-  | 'update:billboard'
-  | 'update:box'
-  | 'update:corridor'
-  | 'update:cylinder'
-  | 'update:ellipse'
-  | 'update:ellipsoid'
-  | 'update:ellipse'
-  | 'update:label'
-  | 'update:model'
-  | 'update:path'
-  | 'update:plane'
-  | 'update:point'
-  | 'update:polygon'
-  | 'update:polyline'
-  | 'update:polylineVolume'
-  | 'update:rectangle'
-  | 'update:tileset'
-  | 'update:wall'
+export type EntityEmitType
+  = | CommonEmitType
+    | 'update:billboard'
+    | 'update:box'
+    | 'update:corridor'
+    | 'update:cylinder'
+    | 'update:ellipse'
+    | 'update:ellipsoid'
+    | 'update:ellipse'
+    | 'update:label'
+    | 'update:model'
+    | 'update:path'
+    | 'update:plane'
+    | 'update:point'
+    | 'update:polygon'
+    | 'update:polyline'
+    | 'update:polylineVolume'
+    | 'update:rectangle'
+    | 'update:tileset'
+    | 'update:wall'
 
 export type VcColorSegments = [number, VcColor]
-
-export type VcMittEvents = {
-  ready: VcReadyObject
-  [key: string]: any
-}
 
 export type AnyFunction<T = void> = (...args: any[]) => T
 
@@ -350,21 +351,20 @@ export type StyleValue = string | CSSProperties | Array<StyleValue>
 
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type VcComponentPublicInstance<T = {}> = ComponentPublicInstance<
+export type VcComponentPublicInstance<T = object> = ComponentPublicInstance<
   T & {
     /**
      * Load components manually.
      */
-    load(): Promise<VcReadyObject | boolean>
+    load: () => Promise<VcReadyObject | boolean>
     /**
      * Destroy the loaded component manually.
      */
-    unload(): Promise<boolean>
+    unload: () => Promise<boolean>
     /**
      * Reload components manually.
      */
-    reload(): Promise<boolean>
+    reload: () => Promise<boolean>
     /**
      * Determine whether the component is created by this.
      */
@@ -376,7 +376,7 @@ export type VcComponentPublicInstance<T = {}> = ComponentPublicInstance<
     /**
      * Get the cesiumobject created by component.
      */
-    getCesiumObject(): VcCesiumObject
+    getCesiumObject: () => VcCesiumObject
   }
 >
 
@@ -387,105 +387,105 @@ export type CesiumCartesian2 = Cesium.Cartesian2 | Cesium.CallbackProperty
 export type VcCartesian2 = Cartesian2Option | Array<number> | VcCallbackPropertyFunction<Cesium.Cartesian2> | CesiumCartesian2
 
 export type CesiumCartesian2Array = Array<Cesium.Cartesian2> | Cesium.CallbackProperty
-export type VcCartesian2Array =
-  | Array<Cartesian2Option>
-  | Array<Array<number>>
-  | Array<number>
-  | VcCallbackPropertyFunction<Array<Cesium.Cartesian2>>
-  | CesiumCartesian2Array
+export type VcCartesian2Array
+  = | Array<Cartesian2Option>
+    | Array<Array<number>>
+    | Array<number>
+    | VcCallbackPropertyFunction<Array<Cesium.Cartesian2>>
+    | CesiumCartesian2Array
 
-export type CesiumPosition =
-  | Cesium.Cartesian3
-  | Cesium.CompositePositionProperty
-  | Cesium.ConstantPositionProperty
-  | Cesium.SampledPositionProperty
-  | Cesium.TimeIntervalCollectionPositionProperty
-  | Cesium.CallbackProperty
-export type VcPosition =
-  | Cartesian3Option
-  | CartographicInDegreeOption
-  | Array<number>
-  | VcCallbackPropertyFunction<Cesium.Cartesian3>
-  | CesiumPosition
+export type CesiumPosition
+  = | Cesium.Cartesian3
+    | Cesium.CompositePositionProperty
+    | Cesium.ConstantPositionProperty
+    | Cesium.SampledPositionProperty
+    | Cesium.TimeIntervalCollectionPositionProperty
+    | Cesium.CallbackProperty
+export type VcPosition
+  = | Cartesian3Option
+    | CartographicInDegreeOption
+    | Array<number>
+    | VcCallbackPropertyFunction<Cesium.Cartesian3>
+    | CesiumPosition
 
 export type CesiumPolygonHierarchy = Cesium.PolygonHierarchy | Cesium.CallbackProperty | PolygonHierarchyOption
-export type VcPolygonHierarchy =
-  | Array<Cesium.Cartesian3>
-  | Array<Cartesian3Option>
-  | Array<CartographicInDegreeOption>
-  | Array<Array<number>>
-  | Array<Array<number>>
-  | VcCallbackPropertyFunction<Cesium.PolygonHierarchy>
-  | CesiumPolygonHierarchy
+export type VcPolygonHierarchy
+  = | Array<Cesium.Cartesian3>
+    | Array<Cartesian3Option>
+    | Array<CartographicInDegreeOption>
+    | Array<Array<number>>
+    | Array<Array<number>>
+    | VcCallbackPropertyFunction<Cesium.PolygonHierarchy>
+    | CesiumPolygonHierarchy
 
 export type CesiumCartesian3Array = Array<Cesium.Cartesian3> | Cesium.CallbackProperty
-export type VcCartesian3Array =
-  | Array<Cesium.Cartesian3>
-  | Array<Cartesian3Option>
-  | Array<CartographicInDegreeOption>
-  | Array<number>
-  | Array<Array<number>>
-  | VcCallbackPropertyFunction<Array<Cesium.Cartesian3>>
-  | CesiumCartesian3Array
+export type VcCartesian3Array
+  = | Array<Cesium.Cartesian3>
+    | Array<Cartesian3Option>
+    | Array<CartographicInDegreeOption>
+    | Array<number>
+    | Array<Array<number>>
+    | VcCallbackPropertyFunction<Array<Cesium.Cartesian3>>
+    | CesiumCartesian3Array
 
 export type CesiumRectangle = Cesium.Rectangle | Cesium.CallbackProperty
 export type VcRectangle = RectangleInDegreeOption | Cartesian4Option | Array<number> | VcCallbackPropertyFunction<Cesium.Rectangle> | CesiumRectangle
 
 export type CesiumBoundingRectangle = Cesium.BoundingRectangle | Cesium.CallbackProperty
-export type VcBoundingRectangle =
-  | BoundingRectangleOption
-  | Array<number>
-  | VcCallbackPropertyFunction<Cesium.BoundingRectangle>
-  | CesiumBoundingRectangle
+export type VcBoundingRectangle
+  = | BoundingRectangleOption
+    | Array<number>
+    | VcCallbackPropertyFunction<Cesium.BoundingRectangle>
+    | CesiumBoundingRectangle
 
 export type CesiumColor = Cesium.Color | Cesium.CallbackProperty
 export type VcColor = string | Array<number> | ColorInByteOption | Cartesian4Option | VcCallbackPropertyFunction<Cesium.Color> | CesiumColor
 
-export type CesiumMaterialProperty =
-  | Cesium.CheckerboardMaterialProperty
-  | Cesium.ColorMaterialProperty
-  | Cesium.CompositeMaterialProperty
-  | Cesium.GridMaterialProperty
-  | Cesium.ImageMaterialProperty
-  | Cesium.MaterialProperty
-  | Cesium.PolylineArrowMaterialProperty
-  | Cesium.PolylineDashMaterialProperty
-  | Cesium.PolylineGlowMaterialProperty
-  | Cesium.PolylineOutlineMaterialProperty
-  | Cesium.StripeMaterialProperty
-  | Cesium.CallbackProperty
+export type CesiumMaterialProperty
+  = | Cesium.CheckerboardMaterialProperty
+    | Cesium.ColorMaterialProperty
+    | Cesium.CompositeMaterialProperty
+    | Cesium.GridMaterialProperty
+    | Cesium.ImageMaterialProperty
+    | Cesium.MaterialProperty
+    | Cesium.PolylineArrowMaterialProperty
+    | Cesium.PolylineDashMaterialProperty
+    | Cesium.PolylineGlowMaterialProperty
+    | Cesium.PolylineOutlineMaterialProperty
+    | Cesium.StripeMaterialProperty
+    | Cesium.CallbackProperty
 
-export type VcMaterialProperty =
-  | VcColor
-  | MaterialOption
-  | HTMLImageElement
-  | HTMLCanvasElement
-  | HTMLVideoElement
+export type VcMaterialProperty
+  = | VcColor
+    | MaterialOption
+    | HTMLImageElement
+    | HTMLCanvasElement
+    | HTMLVideoElement
   // | VcCallbackPropertyFunction<CesiumMaterialProperty>
   // | VcCallbackPropertyFunction<Cesium.Color>
-  | CesiumMaterialProperty
-  | VcCircleWaveMaterialProperty
+    | CesiumMaterialProperty
+    | VcCircleWaveMaterialProperty
 
 export type CesiumMaterial = Cesium.Material | CesiumMaterialProperty
 export type VcMaterial = string | Array<number> | MaterialOption | CesiumMaterial | Cesium.Color | VcMaterialProperty
 
-export type CesiumAppearance =
-  | Cesium.Appearance
-  | Cesium.MaterialAppearance
-  | Cesium.PolylineColorAppearance
-  | Cesium.PerInstanceColorAppearance
-  | Cesium.PolylineMaterialAppearance
-  | Cesium.EllipsoidSurfaceAppearance
-  | Cesium.DebugAppearance
+export type CesiumAppearance
+  = | Cesium.Appearance
+    | Cesium.MaterialAppearance
+    | Cesium.PolylineColorAppearance
+    | Cesium.PerInstanceColorAppearance
+    | Cesium.PolylineMaterialAppearance
+    | Cesium.EllipsoidSurfaceAppearance
+    | Cesium.DebugAppearance
 
 export type VcAppearance = AppearanceOption | CesiumAppearance
 
 export type CesiumDistanceDisplayCondition = Cesium.DistanceDisplayCondition | Cesium.CallbackProperty
-export type VcDistanceDisplayCondition =
-  | DistanceDisplayConditionOption
-  | Array<number>
-  | VcCallbackPropertyFunction<Cesium.DistanceDisplayCondition>
-  | CesiumDistanceDisplayCondition
+export type VcDistanceDisplayCondition
+  = | DistanceDisplayConditionOption
+    | Array<number>
+    | VcCallbackPropertyFunction<Cesium.DistanceDisplayCondition>
+    | CesiumDistanceDisplayCondition
 
 export type CesiumNearFarScalar = Cesium.NearFarScalar | Cesium.CallbackProperty
 export type VcNearFarScalar = NearFarScalarOption | Array<number> | VcCallbackPropertyFunction<Cesium.NearFarScalar> | CesiumNearFarScalar
@@ -507,144 +507,144 @@ export interface HeadingPitchRollOpts {
 }
 export type VcHeadingPitchRoll = HeadingPitchRollOpts | Array<number> | Cesium.HeadingPitchRoll
 
-export type TrackViewOpts = {
+export interface TrackViewOpts {
   mode: 'FP' | 'TP' | 'TRACKED' | 'FREE' | 'CUSTOM'
   offset?: HeadingPitchRangeOpts
   viewFrom?: [number, number, number]
 }
 
 // 对象类型
-export type VcGraphics =
-  | Cesium.BillboardGraphics
-  | Cesium.BoxGraphics
-  | Cesium.Cesium3DTilesetGraphics
-  | Cesium.CorridorGraphics
-  | Cesium.CylinderGraphics
-  | Cesium.EllipseGraphics
-  | Cesium.EllipsoidGraphics
-  | Cesium.LabelGraphics
-  | Cesium.ModelGraphics
-  | Cesium.PathGraphics
-  | Cesium.PlaneGraphics
-  | Cesium.PointGraphics
-  | Cesium.PolygonGraphics
-  | Cesium.PolylineGraphics
-  | Cesium.PolylineVolumeGraphics
-  | Cesium.RectangleGraphics
-  | Cesium.WallGraphics
+export type VcGraphics
+  = | Cesium.BillboardGraphics
+    | Cesium.BoxGraphics
+    | Cesium.Cesium3DTilesetGraphics
+    | Cesium.CorridorGraphics
+    | Cesium.CylinderGraphics
+    | Cesium.EllipseGraphics
+    | Cesium.EllipsoidGraphics
+    | Cesium.LabelGraphics
+    | Cesium.ModelGraphics
+    | Cesium.PathGraphics
+    | Cesium.PlaneGraphics
+    | Cesium.PointGraphics
+    | Cesium.PolygonGraphics
+    | Cesium.PolylineGraphics
+    | Cesium.PolylineVolumeGraphics
+    | Cesium.RectangleGraphics
+    | Cesium.WallGraphics
 
 export type VcDatasource = Cesium.CustomDataSource | Cesium.CzmlDataSource | Cesium.GeoJsonDataSource | Cesium.KmlDataSource
 
-export type VcGeometry =
-  | Cesium.GeometryInstance
-  | Cesium.BoxGeometry
-  | Cesium.BoxOutlineGeometry
-  | Cesium.CircleGeometry
-  | Cesium.CircleOutlineGeometry
-  | Cesium.CoplanarPolygonGeometry
-  | Cesium.CoplanarPolygonOutlineGeometry
-  | Cesium.CorridorGeometry
-  | Cesium.CorridorOutlineGeometry
-  | Cesium.CylinderGeometry
-  | Cesium.CylinderOutlineGeometry
-  | Cesium.EllipseGeometry
-  | Cesium.EllipseOutlineGeometry
-  | Cesium.EllipsoidGeometry
-  | Cesium.EllipsoidOutlineGeometry
-  | Cesium.FrustumGeometry
-  | Cesium.FrustumOutlineGeometry
-  | Cesium.GroundPolylineGeometry
-  | Cesium.PlaneGeometry
-  | Cesium.PlaneOutlineGeometry
-  | Cesium.PolygonGeometry
-  | Cesium.PolygonOutlineGeometry
-  | Cesium.PolylineGeometry
-  | Cesium.PolylineVolumeGeometry
-  | Cesium.PolylineVolumeOutlineGeometry
-  | Cesium.RectangleGeometry
-  | Cesium.RectangleOutlineGeometry
-  | Cesium.SimplePolylineGeometry
-  | Cesium.SphereGeometry
-  | Cesium.SphereOutlineGeometry
-  | Cesium.WallGeometry
-  | Cesium.WallOutlineGeometry
+export type VcGeometry
+  = | Cesium.GeometryInstance
+    | Cesium.BoxGeometry
+    | Cesium.BoxOutlineGeometry
+    | Cesium.CircleGeometry
+    | Cesium.CircleOutlineGeometry
+    | Cesium.CoplanarPolygonGeometry
+    | Cesium.CoplanarPolygonOutlineGeometry
+    | Cesium.CorridorGeometry
+    | Cesium.CorridorOutlineGeometry
+    | Cesium.CylinderGeometry
+    | Cesium.CylinderOutlineGeometry
+    | Cesium.EllipseGeometry
+    | Cesium.EllipseOutlineGeometry
+    | Cesium.EllipsoidGeometry
+    | Cesium.EllipsoidOutlineGeometry
+    | Cesium.FrustumGeometry
+    | Cesium.FrustumOutlineGeometry
+    | Cesium.GroundPolylineGeometry
+    | Cesium.PlaneGeometry
+    | Cesium.PlaneOutlineGeometry
+    | Cesium.PolygonGeometry
+    | Cesium.PolygonOutlineGeometry
+    | Cesium.PolylineGeometry
+    | Cesium.PolylineVolumeGeometry
+    | Cesium.PolylineVolumeOutlineGeometry
+    | Cesium.RectangleGeometry
+    | Cesium.RectangleOutlineGeometry
+    | Cesium.SimplePolylineGeometry
+    | Cesium.SphereGeometry
+    | Cesium.SphereOutlineGeometry
+    | Cesium.WallGeometry
+    | Cesium.WallOutlineGeometry
 
-export type VcImageryProvider =
-  | Cesium.ArcGisMapServerImageryProvider
-  | Cesium.BingMapsImageryProvider
-  | Cesium.OpenStreetMapImageryProvider
-  | Cesium.TileMapServiceImageryProvider
-  | Cesium.GoogleEarthEnterpriseImageryProvider
-  | Cesium.GoogleEarthEnterpriseMapsProvider
-  | Cesium.GridImageryProvider
-  | Cesium.IonImageryProvider
-  | Cesium.MapboxImageryProvider
-  | Cesium.MapboxStyleImageryProvider
-  | Cesium.SingleTileImageryProvider
-  | Cesium.TileCoordinatesImageryProvider
-  | Cesium.UrlTemplateImageryProvider
-  | Cesium.WebMapServiceImageryProvider
-  | Cesium.WebMapTileServiceImageryProvider
-  | BaiduMapImageryProvider
-  | SuperMapImageryProvider
-  | AMapImageryProvider
-  | TencentImageryProvider
+export type VcImageryProvider
+  = | Cesium.ArcGisMapServerImageryProvider
+    | Cesium.BingMapsImageryProvider
+    | Cesium.OpenStreetMapImageryProvider
+    | Cesium.TileMapServiceImageryProvider
+    | Cesium.GoogleEarthEnterpriseImageryProvider
+    | Cesium.GoogleEarthEnterpriseMapsProvider
+    | Cesium.GridImageryProvider
+    | Cesium.IonImageryProvider
+    | Cesium.MapboxImageryProvider
+    | Cesium.MapboxStyleImageryProvider
+    | Cesium.SingleTileImageryProvider
+    | Cesium.TileCoordinatesImageryProvider
+    | Cesium.UrlTemplateImageryProvider
+    | Cesium.WebMapServiceImageryProvider
+    | Cesium.WebMapTileServiceImageryProvider
+    | BaiduMapImageryProvider
+    | SuperMapImageryProvider
+    | AMapImageryProvider
+    | TencentImageryProvider
 
-export type VcTerrainProvider =
-  | Cesium.EllipsoidTerrainProvider
-  | Cesium.CesiumTerrainProvider
-  | Cesium.VRTheWorldTerrainProvider
-  | Cesium.GoogleEarthEnterpriseTerrainProvider
+export type VcTerrainProvider
+  = | Cesium.EllipsoidTerrainProvider
+    | Cesium.CesiumTerrainProvider
+    | Cesium.VRTheWorldTerrainProvider
+    | Cesium.GoogleEarthEnterpriseTerrainProvider
 
-export type VcPrimitive =
-  | Cesium.ClassificationPrimitive
-  | Cesium.DebugCameraPrimitive
-  | Cesium.DebugModelMatrixPrimitive
-  | Cesium.GroundPolylinePrimitive
-  | Cesium.GroundPrimitive
-  | Cesium.PointPrimitive
-  | Cesium.Primitive
-  | Cesium.Model
-  | Cesium.Cesium3DTileset
+export type VcPrimitive
+  = | Cesium.ClassificationPrimitive
+    | Cesium.DebugCameraPrimitive
+    | Cesium.DebugModelMatrixPrimitive
+    | Cesium.GroundPolylinePrimitive
+    | Cesium.GroundPrimitive
+    | Cesium.PointPrimitive
+    | Cesium.Primitive
+    | Cesium.Model
+    | Cesium.Cesium3DTileset
 
-export type VcPrimitiveCollection =
-  | Cesium.BillboardCollection
-  | Cesium.CloudCollection
-  | Cesium.LabelCollection
-  | Cesium.PointPrimitiveCollection
-  | Cesium.PolylineCollection
-  | Cesium.PrimitiveCollection
+export type VcPrimitiveCollection
+  = | Cesium.BillboardCollection
+    | Cesium.CloudCollection
+    | Cesium.LabelCollection
+    | Cesium.PointPrimitiveCollection
+    | Cesium.PolylineCollection
+    | Cesium.PrimitiveCollection
 
-export type VcCesiumObject =
-  | Cesium.Viewer
-  | Cesium.ImageryLayer
-  | VcImageryProvider
-  | VcTerrainProvider
-  | Cesium.Entity
-  | VcGraphics
-  | VcDatasource
-  | VcPrimitive
-  | VcPrimitiveCollection
-  | VcGeometry
-  | VcDrawingActionInstance[]
-  | Ref<VcComponentPublicInstance>
-  | Promise<HTMLElement> // controls
-  | Promise<Array<HTMLElement>> // vc-navigation
+export type VcCesiumObject
+  = | Cesium.Viewer
+    | Cesium.ImageryLayer
+    | VcImageryProvider
+    | VcTerrainProvider
+    | Cesium.Entity
+    | VcGraphics
+    | VcDatasource
+    | VcPrimitive
+    | VcPrimitiveCollection
+    | VcGeometry
+    | VcDrawingActionInstance[]
+    | Ref<VcComponentPublicInstance>
+    | Promise<HTMLElement> // controls
+    | Promise<Array<HTMLElement>> // vc-navigation
 
-export type VcCompassEvt = {
+export interface VcCompassEvt {
   type: 'reset' | 'orbit' | 'rotate' | 'rotateEast' | 'rotateWest' | 'rotateNorth' | 'rotateSouth' | 'tilt'
   camera: Cesium.Camera
   status: 'start' | 'cancel' | 'end' | 'changing'
   target?: HTMLElement
 }
 
-export type VcDistanceLegendEvt = {
+export interface VcDistanceLegendEvt {
   type: 'distanceLegend'
   distance: number
   status: 'changed'
 }
 
-export type VcLocationEvt = {
+export interface VcLocationEvt {
   type: 'location' | 'zoomIn'
   position?: {
     lng: number
@@ -657,13 +657,13 @@ export type VcLocationEvt = {
   status?: 'end' | 'start' | 'cancel'
 }
 
-export type VcPrintEvt = {
+export interface VcPrintEvt {
   type: 'capture'
   image: string
   status: 'end'
 }
 
-export type VcStatusBarEvt = {
+export interface VcStatusBarEvt {
   type: 'statusBar'
   mouseCoordsInfo: MouseCoords
   cameraInfo: {
@@ -679,7 +679,7 @@ export type VcStatusBarEvt = {
   }
 }
 
-export type VcZoomEvt = {
+export interface VcZoomEvt {
   type: 'zoomReset' | 'zoomIn' | 'zoomOut'
   camera: Cesium.Camera
   status: 'start' | 'end' | 'cancel'
@@ -689,25 +689,25 @@ export type VcZoomEvt = {
 
 export type MaybeRef<T> = T | Ref<T>
 
-export type VcContextOptions = {
+export interface VcContextOptions {
   webgl?: WebGLContextAttributes
   allowTextureFilterAnisotropic?: boolean
   requestWebgl2?: boolean
   getWebGLStub?: (canvas: HTMLCanvasElement, webglOptions: WebGLContextAttributes) => Cesium.WebGLConstants
 }
 
-export type VcHeatMapData = {
+export interface VcHeatMapData {
   x: number
   y: number
   value: number
 }
 
-export type Mars3dConfig = {
+export interface Mars3dConfig {
   include: string
   libs?: {
     'font-awesome': string[]
-    haoutil: string[]
-    turf: string[]
+    'haoutil': string[]
+    'turf': string[]
     'mars3d-space': string[]
     'mars3d-echarts': string[]
     'mars3d-mapv': string[]
@@ -715,12 +715,12 @@ export type Mars3dConfig = {
     'mars3d-wind': string[]
     'mars3d-tdt': string[]
     'mars3d-widget': string[]
-    mars3d: string[]
+    'mars3d': string[]
     [propName: string]: any
   }
 }
 
-export type DCConfig = {
+export interface DCConfig {
   baseUrl: string
   Cesium: string
   echarts?: string
@@ -733,14 +733,14 @@ export type DCConfig = {
 export type Arrayable<T> = T | T[]
 export type Awaitable<T> = Promise<T> | T
 
-export type VueClassObjectProp = {
+export interface VueClassObjectProp {
   [value: string]: any
 }
 export type VueClassProp = string | Array<VueClassProp> | VueClassObjectProp
 
 export type VueStyleObjectProp = Partial<CSSStyleDeclaration>
 
-export type VcTyphoonDatasource = {
+export interface VcTyphoonDatasource {
   name: string
   typhoonRoute: VcTyphoonRoute | VcTyphoonRouteForecast
   show: boolean
@@ -753,7 +753,7 @@ export type VcTyphoonDatasource = {
   type?: 'live' | 'forc'
 }
 
-export type VcTyphoonRoute = {
+export interface VcTyphoonRoute {
   begin_time: string
   ename: string
   end_time: string
@@ -765,7 +765,7 @@ export type VcTyphoonRoute = {
   tfbh: string
 }
 
-export type VcTyphoonRouteForecast = {
+export interface VcTyphoonRouteForecast {
   sets: string
   points: VcTyphoonPoint[]
   unshifted?: boolean
@@ -812,7 +812,7 @@ export type VcTyphoonPoint = {
   sets?: string
 } & VcPointProps
 
-export type VcPrimitiveClusterOptions = {
+export interface VcPrimitiveClusterOptions {
   show?: boolean
   enabled?: boolean
   pixelRange?: number
@@ -822,7 +822,7 @@ export type VcPrimitiveClusterOptions = {
   clusterPoints?: boolean
 }
 
-export type VcImageBasedLightingOpts = {
+export interface VcImageBasedLightingOpts {
   /**
    * Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.
    */
@@ -845,31 +845,31 @@ export type VcImageBasedLighting = VcImageBasedLightingOpts | Cesium.ImageBasedL
 
 export {
   AnyObject,
-  VcCamera,
-  VcReadyObject,
-  VcComponentInternalInstance,
-  VcViewerProvider,
-  VcDrawingProvider,
-  CesiumMembersEvent,
+  AppearanceOption,
+  BoundingRectangleOption,
   Cartesian2Option,
   Cartesian3Option,
   Cartesian4Option,
   CartographicInDegreeOption,
-  AppearanceOption,
-  PolygonHierarchyOption,
-  NearFarScalarOption,
-  DistanceDisplayConditionOption,
+  CesiumMembersEvent,
   ColorInByteOption,
-  MaterialOption,
-  RectangleInDegreeOption,
-  BoundingRectangleOption,
-  PlaneOption,
-  TranslationRotationScaleOption,
-  NavigationOption,
+  DistanceDisplayConditionOption,
+  DynamicOverlayOpts,
   HeadingPitchRollOption,
   HeatmapConfiguration,
-  DynamicOverlayOpts,
+  MaterialOption,
+  NavigationOption,
+  NearFarScalarOption,
+  PlaneOption,
+  PolygonHierarchyOption,
+  RectangleInDegreeOption,
   SampledPosition,
+  TranslationRotationScaleOption,
+  VcCamera,
+  VcComponentInternalInstance,
+  VcDrawingProvider,
   VcPickEvent,
+  VcReadyObject,
+  VcViewerProvider,
   ViewerWidgetResizedEvent
 }

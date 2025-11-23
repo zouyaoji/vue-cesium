@@ -2,7 +2,9 @@
 
 .vc-loading-bar {
   z-index: $z-max;
-  transition: transform 0.5s cubic-bezier(0, 0, 0.2, 1), opacity 0.5s;
+  transition:
+    transform 0.5s cubic-bezier(0, 0, 0.2, 1),
+    opacity 0.5s;
   background: $red;
 
   &--top {

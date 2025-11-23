@@ -1,57 +1,67 @@
-// Viewer
-import { VcViewer } from '@vue-cesium/components/viewer'
+import type { Plugin } from 'vue'
+// analyses
+import { VcAnalyses, VcAnalysisFlood } from '@vue-cesium/components/analyses'
+// config
+import VcConfigProvider from '@vue-cesium/components/config-provider'
 // controls
 import {
   VcCompass,
-  VcZoomControl,
-  VcPrint,
-  VcMyLocation,
-  VcStatusBar,
-  VcDistanceLegend,
-  VcNavigation,
   VcCompassSm,
-  VcZoomControlSm,
+  VcDistanceLegend,
+  VcMyLocation,
+  VcNavigation,
   VcNavigationSm,
   VcOverviewMap,
-  VcSelectionIndicator
+  VcPrint,
+  VcSelectionIndicator,
+  VcStatusBar,
+  VcZoomControl,
+  VcZoomControlSm
 } from '@vue-cesium/components/controls'
-// tools
-import VcMeasurements from '@vue-cesium/components/measurements'
-import VcDrawings from '@vue-cesium/components/drawings'
-// ImagerLayer
-import VcLayerImagery from '@vue-cesium/components/imagery-layer'
-import {
-  VcImageryProviderAmap,
-  VcImageryProviderArcgis,
-  VcImageryProviderBaidu,
-  VcImageryProviderBing,
-  VcImageryProviderGoogle,
-  VcImageryProviderGoogle2D,
-  VcImageryProviderGrid,
-  VcImageryProviderIon,
-  VcImageryProviderMapbox,
-  VcImageryProviderOsm,
-  VcImageryProviderSingletile,
-  VcImageryProviderSupermap,
-  VcImageryProviderTencent,
-  VcImageryProviderTianditu,
-  VcImageryProviderTileCoordinates,
-  VcImageryProviderTms,
-  VcImageryProviderTiledcache,
-  VcImageryProviderUrltemplate,
-  VcImageryProviderWms,
-  VcImageryProviderWmts,
-  VcTerrainProviderCesium,
-  VcTerrainProviderArcgis,
-  VcTerrainProviderVrTheworld,
-  VcTerrainProviderTianditu
-} from '@vue-cesium/components/providers'
-
 // Datasource
 import { VcDatasourceCustom, VcDatasourceCzml, VcDatasourceGeojson, VcDatasourceKml } from '@vue-cesium/components/datasources'
+import VcDrawings from '@vue-cesium/components/drawings'
 
 // Entity
 import VcEntity from '@vue-cesium/components/entity'
+
+// Geometries
+import {
+  VcGeometryBox,
+  VcGeometryBoxOutline,
+  VcGeometryCircle,
+  VcGeometryCircleOutline,
+  VcGeometryCorridor,
+  VcGeometryCorridorOutline,
+  VcGeometryCylinder,
+  VcGeometryCylinderOutline,
+  VcGeometryEllipse,
+  VcGeometryEllipseOutline,
+  VcGeometryEllipsoid,
+  VcGeometryEllipsoidOutline,
+  VcGeometryFrustum,
+  VcGeometryFrustumOutline,
+  VcGeometryGroundPolyline,
+  VcGeometryPlane,
+  VcGeometryPlaneOutline,
+  VcGeometryPolygon,
+  VcGeometryPolygonCoplanar,
+  VcGeometryPolygonCoplanarOutline,
+  VcGeometryPolygonOutline,
+  VcGeometryPolyline,
+  VcGeometryPolylineVolume,
+  VcGeometryPolylineVolumeOutline,
+  VcGeometryRectangle,
+  VcGeometryRectangleOutline,
+  VcGeometrySimplePolyline,
+  VcGeometrySphere,
+  VcGeometrySphereOutline,
+  VcGeometryWall,
+  VcGeometryWallOutline
+} from '@vue-cesium/components/geometries'
+
+// GeometryInstance
+import VcGeometryInstance from '@vue-cesium/components/geometry-instance'
 
 // Grapics
 import {
@@ -74,88 +84,85 @@ import {
   VcGraphicsWall
 } from '@vue-cesium/components/graphics'
 
-// Primitives
-import {
-  VcPrimitiveClassification,
-  VcPrimitiveGround,
-  VcPrimitiveGroundPolyline,
-  VcPrimitiveModel,
-  VcPrimitive,
-  VcPrimitiveTileset,
-  VcPrimitiveOsmBuildings,
-  VcPrimitiveTimeDynamicPointCloud,
-  VcPrimitiveI3sDataProvider,
-  VcPrimitiveVoxel,
-  VcPrimitiveParticle,
-  VcPrimitiveCluster
-} from '@vue-cesium/components/primitives'
+// ImagerLayer
+import VcLayerImagery from '@vue-cesium/components/imagery-layer'
+
+// tools
+import VcMeasurements from '@vue-cesium/components/measurements'
+
+// Overlay
+import { VcOverlayDynamic, VcOverlayEcharts, VcOverlayHeatmap, VcOverlayHtml, VcOverlayTyphoon, VcOverlayWind } from '@vue-cesium/components/overlays'
+
+import { VcPostProcessStage, VcPostProcessStageCollection, VcPostProcessStageScan } from '@vue-cesium/components/post-processes'
 
 // PrimitiveCollections
 import {
+  VcBillboard,
   VcCollectionBillboard,
   VcCollectionCloud,
   VcCollectionLabel,
   VcCollectionPoint,
   VcCollectionPolyline,
   VcCollectionPrimitive,
-  VcBillboard,
   VcCumulusCloud,
   VcLabel,
   VcPoint,
-  VcPolyline,
-  VcPolygon
+  VcPolygon,
+  VcPolyline
 } from '@vue-cesium/components/primitive-collections'
 
-// GeometryInstance
-import VcGeometryInstance from '@vue-cesium/components/geometry-instance'
-
-// Geometries
+// Primitives
 import {
-  VcGeometryBox,
-  VcGeometryBoxOutline,
-  VcGeometryCircle,
-  VcGeometryCircleOutline,
-  VcGeometryPolygonCoplanar,
-  VcGeometryPolygonCoplanarOutline,
-  VcGeometryCorridor,
-  VcGeometryCorridorOutline,
-  VcGeometryCylinder,
-  VcGeometryCylinderOutline,
-  VcGeometryEllipse,
-  VcGeometryEllipseOutline,
-  VcGeometryEllipsoid,
-  VcGeometryEllipsoidOutline,
-  VcGeometryFrustum,
-  VcGeometryFrustumOutline,
-  VcGeometryGroundPolyline,
-  VcGeometryPlane,
-  VcGeometryPlaneOutline,
-  VcGeometryPolygon,
-  VcGeometryPolygonOutline,
-  VcGeometryPolyline,
-  VcGeometryPolylineVolume,
-  VcGeometryPolylineVolumeOutline,
-  VcGeometryRectangle,
-  VcGeometryRectangleOutline,
-  VcGeometrySimplePolyline,
-  VcGeometrySphere,
-  VcGeometrySphereOutline,
-  VcGeometryWall,
-  VcGeometryWallOutline
-} from '@vue-cesium/components/geometries'
+  VcPrimitive,
+  VcPrimitiveClassification,
+  VcPrimitiveCluster,
+  VcPrimitiveGround,
+  VcPrimitiveGroundPolyline,
+  VcPrimitiveI3sDataProvider,
+  VcPrimitiveModel,
+  VcPrimitiveOsmBuildings,
+  VcPrimitiveParticle,
+  VcPrimitiveTileset,
+  VcPrimitiveTimeDynamicPointCloud,
+  VcPrimitiveVoxel
+} from '@vue-cesium/components/primitives'
 
-// Overlay
-import { VcOverlayHtml, VcOverlayHeatmap, VcOverlayWind, VcOverlayDynamic, VcOverlayEcharts, VcOverlayTyphoon } from '@vue-cesium/components/overlays'
-
-import { VcPostProcessStage, VcPostProcessStageScan, VcPostProcessStageCollection } from '@vue-cesium/components/post-processes'
+import {
+  VcImageryProviderAmap,
+  VcImageryProviderArcgis,
+  VcImageryProviderBaidu,
+  VcImageryProviderBing,
+  VcImageryProviderGoogle,
+  VcImageryProviderGrid,
+  VcImageryProviderIon,
+  VcImageryProviderMapbox,
+  VcImageryProviderOsm,
+  VcImageryProviderSingletile,
+  VcImageryProviderSupermap,
+  VcImageryProviderTencent,
+  VcImageryProviderTianditu,
+  VcImageryProviderTileCoordinates,
+  VcImageryProviderTiledcache,
+  VcImageryProviderTms,
+  VcImageryProviderUrltemplate,
+  VcImageryProviderWms,
+  VcImageryProviderWmts,
+  VcTerrainProviderArcgis,
+  VcTerrainProviderCesium,
+  VcTerrainProviderTianditu,
+  VcTerrainProviderVrTheworld
+} from '@vue-cesium/components/providers'
 
 // UI
 import {
-  VcBtn,
-  VcIcon,
-  VcTooltip,
   VcAjaxBar,
+  VcBtn,
+  VcFab,
+  VcFabAction,
+  VcIcon,
   VcSkeleton,
+  VcSlider,
+  VcSpinner,
   VcSpinnerBall,
   VcSpinnerBars,
   VcSpinnerDots,
@@ -167,19 +174,11 @@ import {
   VcSpinnerPuff,
   VcSpinnerRings,
   VcSpinnerTail,
-  VcSpinner,
-  VcFab,
-  VcFabAction,
-  VcSlider
+  VcTooltip
 } from '@vue-cesium/components/ui'
 
-// config
-import VcConfigProvider from '@vue-cesium/components/config-provider'
-
-// analyses
-import { VcAnalysisFlood, VcAnalyses } from '@vue-cesium/components/analyses'
-
-import type { Plugin } from 'vue'
+// Viewer
+import { VcViewer } from '@vue-cesium/components/viewer'
 
 export default [
   VcViewer,

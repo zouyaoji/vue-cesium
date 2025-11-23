@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-03-29 16:01:06
  * @FilePath: \vue-cesium@next\packages\composables\private\use-form.ts
  */
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 export const useFormProps = {
   name: String
@@ -24,7 +24,7 @@ export function useFormInject(formAttrs: any = {}) {
   return (child, action, className?: string) => {
     child[action](
       h('input', {
-        class: 'hidden' + (className || ''),
+        class: `hidden${className || ''}`,
         ...formAttrs.value
       })
     )

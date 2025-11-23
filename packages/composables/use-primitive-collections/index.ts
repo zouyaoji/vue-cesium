@@ -15,18 +15,18 @@
  * PolylineCollection
  */
 
-import { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
-import useCommon from '../use-common'
+import type { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import { vcKey } from '@vue-cesium/utils/config'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { provide } from 'vue'
-import { vcKey } from '@vue-cesium/utils/config'
+import useCommon from '../use-common'
 
-export type Collection =
-  | Cesium.PrimitiveCollection
-  | Cesium.BillboardCollection
-  | Cesium.LabelCollection
-  | Cesium.PointPrimitiveCollection
-  | Cesium.PolylineCollection
+export type Collection
+  = | Cesium.PrimitiveCollection
+    | Cesium.BillboardCollection
+    | Cesium.LabelCollection
+    | Cesium.PointPrimitiveCollection
+    | Cesium.PolylineCollection
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state

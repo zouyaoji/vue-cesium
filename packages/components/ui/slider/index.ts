@@ -1,12 +1,13 @@
-import { h, ref, computed, watch, getCurrentInstance, defineComponent, VNode, ComponentPublicInstance } from 'vue'
+import type { VueClassProp, VueStyleObjectProp } from '@vue-cesium/utils/types'
+import type { ComponentPublicInstance, VNode } from 'vue'
 
-import useSlider, { useSliderProps, useSliderEmits, keyCodes } from './use-slider'
-
-import { between } from '@vue-cesium/utils/private/format'
-import { stopAndPrevent } from '@vue-cesium/utils/private/event'
 import { useFormAttrs } from '@vue-cesium/composables/private/use-form'
+
 import { platform } from '@vue-cesium/utils/platform'
-import { VueClassProp, VueStyleObjectProp } from '@vue-cesium/utils/types'
+import { stopAndPrevent } from '@vue-cesium/utils/private/event'
+import { between } from '@vue-cesium/utils/private/format'
+import { computed, defineComponent, h, ref, watch } from 'vue'
+import useSlider, { keyCodes, useSliderEmits, useSliderProps } from './use-slider'
 
 const getNodeData = () => ({})
 
@@ -118,25 +119,25 @@ export default defineComponent({
 
       stopAndPrevent(evt)
 
-      const stepVal = ([34, 33].includes(evt.keyCode) ? 10 : 1) * state.step.value,
-        offset =
-          ([34, 37, 40].includes(evt.keyCode) ? -1 : 1) * (state.isReversed.value === true ? -1 : 1) * (props.vertical === true ? -1 : 1) * stepVal
+      const stepVal = ([34, 33].includes(evt.keyCode) ? 10 : 1) * state.step.value
+      const offset
+        = ([34, 37, 40].includes(evt.keyCode) ? -1 : 1) * (state.isReversed.value === true ? -1 : 1) * (props.vertical === true ? -1 : 1) * stepVal
 
-      model.value = between(parseFloat((model.value + offset).toFixed(state.decimals.value)), state.innerMin.value, state.innerMax.value)
+      model.value = between(Number.parseFloat((model.value + offset).toFixed(state.decimals.value)), state.innerMin.value, state.innerMax.value)
 
       updateValue()
     }
 
     return () => {
-      const content = methods.getContent(selectionBarStyle, state.tabindex, trackContainerEvents, node => {
+      const content = methods.getContent(selectionBarStyle, state.tabindex, trackContainerEvents, (node) => {
         node.push(getThumb())
       })
 
       return h(
         'div',
         {
-          ref: rootRef,
-          class: state.classes.value + (props.modelValue === null ? ' vc-slider--no-value' : ''),
+          'ref': rootRef,
+          'class': state.classes.value + (props.modelValue === null ? ' vc-slider--no-value' : ''),
           ...state.attributes.value,
           'aria-valuenow': props.modelValue
         },
@@ -164,174 +165,174 @@ interface SliderMarkerLabelObjectDefinition {
   [value: number]: string | SliderMarkerLabelDefinition
 }
 
-export type SliderMarkerLabels =
-  | boolean
-  | Array<SliderMarkerLabelDefinitionRequiredValue>
-  | SliderMarkerLabelObjectDefinition
-  | ((value: number) => string | SliderMarkerLabelDefinition)
+export type SliderMarkerLabels
+  = | boolean
+    | Array<SliderMarkerLabelDefinitionRequiredValue>
+    | SliderMarkerLabelObjectDefinition
+    | ((value: number) => string | SliderMarkerLabelDefinition)
 
 export interface VcSliderProps {
   /**
    * Used to specify the name of the control; Useful if dealing with forms submitted directly to a URL
    */
-  name?: string | undefined
+  'name'?: string | undefined
   /**
    * Minimum value of the model; Set track's minimum value
    */
-  min?: number | undefined
+  'min'?: number | undefined
   /**
    * Maximum value of the model; Set track's maximum value
    * Default value: 100
    */
-  max?: number | undefined
+  'max'?: number | undefined
   /**
    * Inner minimum value of the model; Use in case you need the model value to be inside of the track's min-max values; Needs to be higher or equal to 'min' prop; Defaults to 'min' prop
    */
-  innerMin?: number | undefined
+  'innerMin'?: number | undefined
   /**
    * Inner maximum value of the model; Use in case you need the model value to be inside of the track's min-max values; Needs to be lower or equal to 'max' prop; Defaults to 'max' prop
    */
-  innerMax?: number | undefined
+  'innerMax'?: number | undefined
   /**
    * Specify step amount between valid values (> 0.0); When step equals to 0 it defines infinite granularity
    * Default value: 1
    */
-  step?: number | undefined
+  'step'?: number | undefined
   /**
    * Snap on valid values, rather than sliding freely; Suggestion: use with 'step' prop
    */
-  snap?: boolean | undefined
+  'snap'?: boolean | undefined
   /**
    * Work in reverse (changes direction)
    */
-  reverse?: boolean | undefined
+  'reverse'?: boolean | undefined
   /**
    * Display in vertical direction
    */
-  vertical?: boolean | undefined
+  'vertical'?: boolean | undefined
   /**
    * Color name for component from the Quasar Color Palette
    */
-  color?: string | undefined
+  'color'?: string | undefined
   /**
    * Color name for the track (can be 'transparent' too) from the Quasar Color Palette
    */
-  trackColor?: string | undefined
+  'trackColor'?: string | undefined
   /**
    * Apply a pattern image on the track
    */
-  trackImg?: string | undefined
+  'trackImg'?: string | undefined
   /**
    * Color name for the inner track (can be 'transparent' too) from the Quasar Color Palette
    */
-  innerTrackColor?: string | undefined
+  'innerTrackColor'?: string | undefined
   /**
    * Apply a pattern image on the inner track
    */
-  innerTrackImg?: string | undefined
+  'innerTrackImg'?: string | undefined
   /**
    * Color name for the selection bar (can be 'transparent' too) from the Quasar Color Palette
    */
-  selectionColor?: string | undefined
+  'selectionColor'?: string | undefined
   /**
    * Apply a pattern image on the selection bar
    */
-  selectionImg?: string | undefined
+  'selectionImg'?: string | undefined
   /**
    * Popup a label when user clicks/taps on the slider thumb and moves it
    */
-  label?: boolean | undefined
+  'label'?: boolean | undefined
   /**
    * Color name for component from the Quasar Color Palette
    */
-  labelColor?: string | undefined
+  'labelColor'?: string | undefined
   /**
    * Color name for component from the Quasar Color Palette
    */
-  labelTextColor?: string | undefined
+  'labelTextColor'?: string | undefined
   /**
    * Switch the position of the label (top <-> bottom or left <-> right)
    */
-  switchLabelSide?: boolean | undefined
+  'switchLabelSide'?: boolean | undefined
   /**
    * Always display the label
    */
-  labelAlways?: boolean | undefined
+  'labelAlways'?: boolean | undefined
   /**
    * Display markers on the track, one for each possible value for the model or using a custom step (when specifying a Number)
    */
-  markers?: boolean | number | undefined
+  'markers'?: boolean | number | undefined
   /**
    * Configure the marker labels (or show the default ones if 'true'); Array of definition Objects or Object with key-value where key is the model and the value is the marker label definition
    * @param value The marker value to transform
    * @returns Marker definition Object or directly a String for the label of the marker
    */
-  markerLabels?: SliderMarkerLabels | undefined
+  'markerLabels'?: SliderMarkerLabels | undefined
   /**
    * CSS class(es) to apply to the marker labels container
    */
-  markerLabelsClass?: string | undefined
+  'markerLabelsClass'?: string | undefined
   /**
    * Switch the position of the marker labels (top <-> bottom or left <-> right)
    */
-  switchMarkerLabelsSide?: boolean | undefined
+  'switchMarkerLabelsSide'?: boolean | undefined
   /**
    * Track size (including CSS unit)
    * Default value: 4px
    */
-  trackSize?: string | undefined
+  'trackSize'?: string | undefined
   /**
    * Thumb size (including CSS unit)
    * Default value: 20px
    */
-  thumbSize?: string | undefined
+  'thumbSize'?: string | undefined
   /**
    * Color name for component from the Quasar Color Palette
    */
-  thumbColor?: string | undefined
+  'thumbColor'?: string | undefined
   /**
    * Set custom thumb svg path
    * Default value: M 4, 10 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0
    */
-  thumbPath?: string | undefined
+  'thumbPath'?: string | undefined
   /**
    * Notify the component that the background is a dark color
    */
-  dark?: boolean | undefined
+  'dark'?: boolean | undefined
   /**
    * Dense mode; occupies less space
    */
-  dense?: boolean | undefined
+  'dense'?: boolean | undefined
   /**
    * Put component in disabled mode
    */
-  disable?: boolean | undefined
+  'disable'?: boolean | undefined
   /**
    * Put component in readonly mode
    */
-  readonly?: boolean | undefined
+  'readonly'?: boolean | undefined
   /**
    * Tabindex HTML attribute value
    */
-  tabindex?: number | string | undefined
+  'tabindex'?: number | string | undefined
   /**
    * Model of the component (must be between min/max); Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive
    */
-  modelValue: number | null | undefined
+  'modelValue': number | null | undefined
   /**
    * Override default label value
    */
-  labelValue?: string | number | undefined
+  'labelValue'?: string | number | undefined
   /**
    * Emitted on lazy model value change (after user slides then releases the thumb)
    * @param value New model value
    */
-  onChange?: (value: any) => void
+  'onChange'?: (value: any) => void
   /**
    * Triggered when user starts panning on the component
    * @param phase Phase of panning
    */
-  onPan?: (phase: 'start' | 'end') => void
+  'onPan'?: (phase: 'start' | 'end') => void
   /**
    * Emitted when the component needs to change the model; Is also used by v-model
    * @param value New model value
@@ -339,7 +340,7 @@ export interface VcSliderProps {
   'onUpdate:modelValue'?: (value: number | null) => void
 }
 
-export type SliderMarkerLabelConfig = {
+export interface SliderMarkerLabelConfig {
   index: number
   value: number
   label: number | string

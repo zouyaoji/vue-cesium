@@ -1,56 +1,65 @@
 import { platform } from '@vue-cesium/utils/platform'
 import { createDirective } from '@vue-cesium/utils/private/create'
-import { addEvt, cleanEvt, position, leftClick, prevent, stop, stopAndPrevent, preventDraggable, noop } from '@vue-cesium/utils/private/event'
+import { addEvt, cleanEvt, leftClick, noop, position, prevent, preventDraggable, stop, stopAndPrevent } from '@vue-cesium/utils/private/event'
 import { clearSelection } from '@vue-cesium/utils/private/selection'
 import { getModifierDirections, shouldStart } from '@vue-cesium/utils/private/touch'
 
 function getChanges(evt, ctx, isFinal?: boolean) {
   const pos = position(evt)
-  let dir,
-    distX = pos.left - ctx.event.x,
-    distY = pos.top - ctx.event.y,
-    absX = Math.abs(distX),
-    absY = Math.abs(distY)
+  let dir
+  let distX = pos.left - ctx.event.x
+  let distY = pos.top - ctx.event.y
+  let absX = Math.abs(distX)
+  let absY = Math.abs(distY)
 
   const direction = ctx.direction
 
   if (direction.horizontal === true && direction.vertical !== true) {
     dir = distX < 0 ? 'left' : 'right'
-  } else if (direction.horizontal !== true && direction.vertical === true) {
+  }
+  else if (direction.horizontal !== true && direction.vertical === true) {
     dir = distY < 0 ? 'up' : 'down'
-  } else if (direction.up === true && distY < 0) {
+  }
+  else if (direction.up === true && distY < 0) {
     dir = 'up'
     if (absX > absY) {
       if (direction.left === true && distX < 0) {
         dir = 'left'
-      } else if (direction.right === true && distX > 0) {
+      }
+      else if (direction.right === true && distX > 0) {
         dir = 'right'
       }
     }
-  } else if (direction.down === true && distY > 0) {
+  }
+  else if (direction.down === true && distY > 0) {
     dir = 'down'
     if (absX > absY) {
       if (direction.left === true && distX < 0) {
         dir = 'left'
-      } else if (direction.right === true && distX > 0) {
+      }
+      else if (direction.right === true && distX > 0) {
         dir = 'right'
       }
     }
-  } else if (direction.left === true && distX < 0) {
+  }
+  else if (direction.left === true && distX < 0) {
     dir = 'left'
     if (absX < absY) {
       if (direction.up === true && distY < 0) {
         dir = 'up'
-      } else if (direction.down === true && distY > 0) {
+      }
+      else if (direction.down === true && distY > 0) {
         dir = 'down'
       }
     }
-  } else if (direction.right === true && distX > 0) {
+  }
+  else if (direction.right === true && distX > 0) {
     dir = 'right'
     if (absX < absY) {
       if (direction.up === true && distY < 0) {
         dir = 'up'
-      } else if (direction.down === true && distY > 0) {
+      }
+      else if (direction.down === true && distY > 0) {
         dir = 'down'
       }
     }
@@ -70,7 +79,8 @@ function getChanges(evt, ctx, isFinal?: boolean) {
       pos.left -= distX
       absX = 0
       distX = 0
-    } else {
+    }
+    else {
       pos.top -= distY
       absY = 0
       distY = 0
@@ -118,14 +128,15 @@ export default createDirective({
     function handleEvent(evt, mouseEvent) {
       if (modifiers.mouse === true && mouseEvent === true) {
         stopAndPrevent(evt)
-      } else {
+      }
+      else {
         modifiers.stop === true && stop(evt)
         modifiers.prevent === true && prevent(evt)
       }
     }
 
     const ctx: any = {
-      uid: 'qvtp_' + uid++,
+      uid: `qvtp_${uid++}`,
       handler: value,
       modifiers,
       direction: getModifierDirections(modifiers),
@@ -171,11 +182,11 @@ export default createDirective({
            * clone event only otherwise
            */
           if (
-            ctx.direction.all !== true &&
+            ctx.direction.all !== true
             // account for UMD too where modifiers will be lowercased to work
-            (mouseEvent !== true || (ctx.modifiers.mouseAllDir !== true && ctx.modifiers.mousealldir !== true))
+            && (mouseEvent !== true || (ctx.modifiers.mouseAllDir !== true && ctx.modifiers.mousealldir !== true))
           ) {
-            const clone = evt.type.indexOf('mouse') > -1 ? new MouseEvent(evt.type, evt) : new TouchEvent(evt.type, evt)
+            const clone = evt.type.includes('mouse') ? new MouseEvent(evt.type, evt) : new TouchEvent(evt.type, evt)
 
             evt.defaultPrevented === true && prevent(clone)
             evt.cancelBubble === true && stop(clone)
@@ -216,9 +227,9 @@ export default createDirective({
           return
         }
 
-        const pos = position(evt),
-          distX = pos.left - ctx.event.x,
-          distY = pos.top - ctx.event.y
+        const pos = position(evt)
+        const distX = pos.left - ctx.event.x
+        const distY = pos.top - ctx.event.y
 
         // prevent buggy browser behavior (like Blink-based engine ones on Windows)
         // where the mousemove event occurs even if there's no movement after mousedown
@@ -245,7 +256,7 @@ export default createDirective({
           document.body.classList.add('non-selectable')
           clearSelection()
 
-          ctx.styleCleanup = withDelayedFn => {
+          ctx.styleCleanup = (withDelayedFn) => {
             ctx.styleCleanup = void 0
 
             if (cursor !== void 0) {
@@ -264,10 +275,12 @@ export default createDirective({
                   remove()
                   withDelayedFn()
                 }, 50)
-              } else {
+              }
+              else {
                 remove()
               }
-            } else if (withDelayedFn !== void 0) {
+            }
+            else if (withDelayedFn !== void 0) {
               withDelayedFn()
             }
           }
@@ -281,7 +294,8 @@ export default createDirective({
           if (payload !== void 0) {
             if (ctx.handler(payload) === false) {
               ctx.end(evt)
-            } else {
+            }
+            else {
               if (ctx.styleCleanup === void 0 && ctx.event.isFirst === true) {
                 start()
               }
@@ -297,9 +311,9 @@ export default createDirective({
         }
 
         if (
-          ctx.direction.all === true ||
+          ctx.direction.all === true
           // account for UMD too where modifiers will be lowercased to work
-          (isMouseEvt === true && (ctx.modifiers.mouseAllDir === true || ctx.modifiers.mousealldir === true))
+          || (isMouseEvt === true && (ctx.modifiers.mouseAllDir === true || ctx.modifiers.mousealldir === true))
         ) {
           start()
           ctx.event.detected = true
@@ -307,21 +321,22 @@ export default createDirective({
           return
         }
 
-        const absX = Math.abs(distX),
-          absY = Math.abs(distY)
+        const absX = Math.abs(distX)
+        const absY = Math.abs(distY)
 
         if (absX !== absY) {
           if (
-            (ctx.direction.horizontal === true && absX > absY) ||
-            (ctx.direction.vertical === true && absX < absY) ||
-            (ctx.direction.up === true && absX < absY && distY < 0) ||
-            (ctx.direction.down === true && absX < absY && distY > 0) ||
-            (ctx.direction.left === true && absX > absY && distX < 0) ||
-            (ctx.direction.right === true && absX > absY && distX > 0)
+            (ctx.direction.horizontal === true && absX > absY)
+            || (ctx.direction.vertical === true && absX < absY)
+            || (ctx.direction.up === true && absX < absY && distY < 0)
+            || (ctx.direction.down === true && absX < absY && distY > 0)
+            || (ctx.direction.left === true && absX > absY && distX < 0)
+            || (ctx.direction.right === true && absX > absY && distX > 0)
           ) {
             ctx.event.detected = true
             ctx.move(evt)
-          } else {
+          }
+          else {
             ctx.end(evt, true)
           }
         }
@@ -341,7 +356,8 @@ export default createDirective({
           if (ctx.event.detected !== true && ctx.initialEvent !== void 0) {
             ctx.initialEvent.target.dispatchEvent(ctx.initialEvent.event)
           }
-        } else if (ctx.event.detected === true) {
+        }
+        else if (ctx.event.detected === true) {
           ctx.event.isFirst === true && ctx.handler(getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx).payload)
 
           const { payload } = getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx, true)
@@ -351,7 +367,8 @@ export default createDirective({
 
           if (ctx.styleCleanup !== void 0) {
             ctx.styleCleanup(fn)
-          } else {
+          }
+          else {
             fn()
           }
         }
@@ -371,11 +388,11 @@ export default createDirective({
       addEvt(ctx, 'main', [[el, 'mousedown', 'mouseStart', `passive${capture}`]])
     }
 
-    platform().hasTouch === true &&
-      addEvt(ctx, 'main', [
-        [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
-        [el, 'touchmove', 'noop', 'notPassiveCapture'] // cannot be passive (ex: iOS scroll)
-      ])
+    platform().hasTouch === true
+    && addEvt(ctx, 'main', [
+      [el, 'touchstart', 'touchStart', `passive${modifiers.capture === true ? 'Capture' : ''}`],
+      [el, 'touchmove', 'noop', 'notPassiveCapture'] // cannot be passive (ex: iOS scroll)
+    ])
   },
 
   updated(el, bindings) {

@@ -3,8 +3,11 @@
 @font-face {
   font-family: 'vc-icons';
   // src: url('#{$font-path}/iconfont.eot');
-  src: url('#{$font-path}/iconfont.woff2') format('woff2'), url('#{$font-path}/iconfont.woff') format('woff'),
-    url('#{$font-path}/iconfont.ttf') format('truetype'), /*url('#{$font-path}/iconfont.svg#vc-icons') format('svg')*/;
+  src:
+    url('#{$font-path}/iconfont.woff2') format('woff2'),
+    url('#{$font-path}/iconfont.woff') format('woff'),
+    url('#{$font-path}/iconfont.ttf') format('truetype'),
+    /*url('#{$font-path}/iconfont.svg#vc-icons') format('svg')*/;
 }
 
 .vc-icon {

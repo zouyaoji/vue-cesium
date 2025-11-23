@@ -1,0 +1,30 @@
+{
+  "name": "@vue-cesium/build",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "description": "Build Toolchain for Vue Cesium",
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "start": "node --require tsx/cjs node_modules/gulp-cli/bin/gulp -f gulpfile.ts",
+    "dev": "pnpm run stub",
+    "stub": "unbuild --stub"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@pnpm/types": "^1001.0.0",
+    "@vitejs/plugin-vue": "5.2.4",
+    "@vitejs/plugin-vue-jsx": "4.2.0",
+    "algoliasearch": "^5.44.0",
+    "gulp": "^5.0.1",
+    "gulp-cli": "^3.1.0",
+    "unbuild": "^3.6.1",
+    "vue": "^3.5.24",
+    "tsx": "^4.20.6"
+  }
+}

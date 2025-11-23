@@ -1,44 +1,44 @@
-import { hasOwn, isObject, isFunction, isArray } from './util'
+import type { PropType } from 'vue'
 
+import type {
+  ProjectionTransforms,
+  VcAppearance,
+  VcBoundingRectangle,
+  VcCallbackPropertyFunction,
+  VcCartesian2,
+  VcCartesian2Array,
+  VcCartesian3Array,
+  VcColor,
+  VcDistanceDisplayCondition,
+  VcImageBasedLighting,
+  VcMaterial,
+  VcNearFarScalar,
+  VcPlane,
+  VcPolygonHierarchy,
+  VcPosition,
+  VcRectangle
+} from './types'
 import {
-  makeDistanceDisplayCondition,
+  makeAppearance,
+  makeBoundingRectangle,
   makeCartesian2,
   makeCartesian2Array,
   makeCartesian3,
+  makeCartesian3Array,
   makeColor,
   makeColors,
-  makeNearFarScalar,
+  makeDistanceDisplayCondition,
+  makeImageBasedLighting,
   makeMaterial,
-  makeCartesian3Array,
-  makeRectangle,
-  makeBoundingRectangle,
+  makeNearFarScalar,
+  makeOptions,
   makePlane,
   makePolygonHierarchy,
-  makeTranslationRotationScale,
   makeQuaternion,
-  makeOptions,
-  makeAppearance,
-  makeImageBasedLighting
+  makeRectangle,
+  makeTranslationRotationScale
 } from './cesium-helpers'
-import type { PropType } from 'vue'
-import type {
-  VcPosition,
-  VcRectangle,
-  VcAppearance,
-  VcColor,
-  ProjectionTransforms,
-  VcCallbackPropertyFunction,
-  VcDistanceDisplayCondition,
-  VcCartesian2,
-  VcCartesian3Array,
-  VcCartesian2Array,
-  VcNearFarScalar,
-  VcPolygonHierarchy,
-  VcMaterial,
-  VcBoundingRectangle,
-  VcPlane,
-  VcImageBasedLighting
-} from './types'
+import { hasOwn, isArray, isFunction, isObject } from './util'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start
@@ -229,7 +229,7 @@ const pixelOffset = {
         y: 0
       }
     },
-    validator: v => {
+    validator: (v) => {
       if (isArray(v)) {
         return v.length === 2
       }
@@ -876,7 +876,7 @@ const articulations = {
 }
 
 /**
- * @const {Object} clippingPlanes mixin
+ * @const {object} clippingPlanes mixin
  */
 const clippingPlanes = {
   clippingPlanes: [Object, Function] as PropType<Cesium.ClippingPlaneCollection | VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection>>
@@ -1085,28 +1085,28 @@ const url = {
 }
 
 /**
- * @const {String} token mixin
+ * @const {string} token mixin
  */
 const token = {
   token: String
 }
 
 /**
- * @const {Object} tileDiscardPolicy mixin
+ * @const {object} tileDiscardPolicy mixin
  */
 const tileDiscardPolicy = {
   tileDiscardPolicy: Object as PropType<Cesium.DiscardMissingTileImagePolicy | Cesium.NeverTileDiscardPolicy>
 }
 
 /**
- * @const {String} layers mixin
+ * @const {string} layers mixin
  */
 const layers = {
   layers: String
 }
 
 /**
- * @const {Boolean} enablePickFeatures mixin
+ * @const {boolean} enablePickFeatures mixin
  */
 const enablePickFeatures = {
   enablePickFeatures: {
@@ -1128,14 +1128,14 @@ const rectangle = {
 }
 
 /**
- * @const {Object} tilingScheme mixin
+ * @const {object} tilingScheme mixin
  */
 const tilingScheme = {
   tilingScheme: Object as PropType<Cesium.GeographicTilingScheme | Cesium.WebMercatorTilingScheme>
 }
 
 /**
- * @const {Object} ellipsoid mixin
+ * @const {object} ellipsoid mixin
  */
 const ellipsoid = {
   ellipsoid: Object as PropType<Cesium.Ellipsoid>
@@ -1152,7 +1152,7 @@ const credit = {
 }
 
 /**
- * @const {Number} tileWidth mixin
+ * @const {number} tileWidth mixin
  */
 const tileWidth = {
   tileWidth: {
@@ -1162,7 +1162,7 @@ const tileWidth = {
 }
 
 /**
- * @const {Number} tileHeight mixin
+ * @const {number} tileHeight mixin
  */
 const tileHeight = {
   tileHeight: {
@@ -1172,14 +1172,14 @@ const tileHeight = {
 }
 
 /**
- * @const {Number} maximumLevel mixin
+ * @const {number} maximumLevel mixin
  */
 const maximumLevel = {
   maximumLevel: Number
 }
 
 /**
- * @const {Number} minimumLevel mixin
+ * @const {number} minimumLevel mixin
  */
 const minimumLevel = {
   minimumLevel: {
@@ -1189,7 +1189,7 @@ const minimumLevel = {
 }
 
 /**
- * @const {String} fileExtension mixin
+ * @const {string} fileExtension mixin
  */
 const fileExtension = {
   fileExtension: {
@@ -1199,14 +1199,14 @@ const fileExtension = {
 }
 
 /**
- * @const {String} accessToken mixin
+ * @const {string} accessToken mixin
  */
 const accessToken = {
   accessToken: String
 }
 
 /**
- * @const {String} format mixin
+ * @const {string} format mixin
  */
 const format = {
   format: {
@@ -1230,14 +1230,14 @@ const getFeatureInfoFormats = {
 }
 
 /**
- * @const {Object} clock mixin
+ * @const {object} clock mixin
  */
 const clock = {
   clock: Object as PropType<Cesium.Clock>
 }
 
 /**
- * @const {Object} times mixin
+ * @const {object} times mixin
  */
 const times = {
   times: Object as PropType<Cesium.TimeIntervalCollection>
@@ -1282,7 +1282,7 @@ const tileStyle = {
 }
 
 /**
- * @const {Boolean}
+ * @const {boolean}
  * allowPicking
  */
 const allowPicking = {
@@ -1293,7 +1293,7 @@ const allowPicking = {
 }
 
 /**
- * @const {Boolean}
+ * @const {boolean}
  * asynchronous
  */
 const asynchronous = {
@@ -1304,7 +1304,7 @@ const asynchronous = {
 }
 
 /**
- * @const {Boolean} debugShowShadowVolume mixin
+ * @const {boolean} debugShowShadowVolume mixin
  */
 const debugShowShadowVolume = {
   debugShowShadowVolume: {
@@ -1314,7 +1314,7 @@ const debugShowShadowVolume = {
 }
 
 /**
- * @const {Boolean} releaseGeometryInstances mixin
+ * @const {boolean} releaseGeometryInstances mixin
  */
 const releaseGeometryInstances = {
   releaseGeometryInstances: {
@@ -1324,7 +1324,7 @@ const releaseGeometryInstances = {
 }
 
 /**
- * @const {Boolean} interleave mixin
+ * @const {boolean} interleave mixin
  */
 const interleave = {
   interleave: {
@@ -1334,7 +1334,7 @@ const interleave = {
 }
 
 /**
- * @const {Object} appearance mixin
+ * @const {object} appearance mixin
  */
 const appearance = {
   appearance: {
@@ -1364,7 +1364,7 @@ const geometryInstances = {
 }
 
 /**
- * @const {Boolean}
+ * @const {boolean}
  * vertexCacheOptimize
  */
 const vertexCacheOptimize = {
@@ -1374,7 +1374,7 @@ const vertexCacheOptimize = {
   }
 }
 /**
- * @const {Boolean}
+ * @const {boolean}
  * compressVertices
  */
 const compressVertices = {
@@ -1385,14 +1385,14 @@ const compressVertices = {
 }
 
 /**
- * @const {Object} modelMatrix mixin
+ * @const {object} modelMatrix mixin
  */
 const modelMatrix = {
   modelMatrix: Object as PropType<Cesium.Matrix4>
 }
 
 /**
- * @const {Boolean} debugShowBoundingVolume mixin
+ * @const {boolean} debugShowBoundingVolume mixin
  */
 const debugShowBoundingVolume = {
   debugShowBoundingVolume: {
@@ -1402,14 +1402,14 @@ const debugShowBoundingVolume = {
 }
 
 /**
- * @const {Object} scene mixin
+ * @const {object} scene mixin
  */
 const scene = {
   scene: Object as PropType<Cesium.Scene>
 }
 
 /**
- * @const {Number} blendOption mixin
+ * @const {number} blendOption mixin
  */
 const blendOption = {
   blendOption: {
@@ -1426,7 +1426,7 @@ const id = {
 }
 
 /**
- * @const {Boolean} loop mixin
+ * @const {boolean} loop mixin
  */
 const loop = {
   loop: {
@@ -1436,7 +1436,7 @@ const loop = {
 }
 
 /**
- * @const {Boolean} debugWireframe mixin
+ * @const {boolean} debugWireframe mixin
  */
 const debugWireframe = {
   debugWireframe: {
@@ -1448,7 +1448,7 @@ const debugWireframe = {
 // geometry 相关
 
 /**
- * @const {Object} vertexFormat mixin
+ * @const {object} vertexFormat mixin
  */
 const vertexFormat = {
   vertexFormat: Object as PropType<Cesium.VertexFormat>
@@ -1470,14 +1470,14 @@ const center = {
 }
 
 /**
- * @const {Object} radius mixin
+ * @const {object} radius mixin
  */
 const radius = {
   radius: Number
 }
 
 /**
- * @const {Object} frustum mixin
+ * @const {object} frustum mixin
  */
 const frustum = {
   frustum: Object as PropType<Cesium.PerspectiveFrustum | Cesium.OrthographicFrustum>
@@ -1496,7 +1496,7 @@ const origin = {
 }
 
 /**
- * @const {Object} polygonHierarchy mixin
+ * @const {object} polygonHierarchy mixin
  */
 const polygonHierarchy = {
   polygonHierarchy: {
@@ -1608,7 +1608,7 @@ const lightColor2 = {
 }
 
 /**
- * @const {Number} luminanceAtZenith mixin
+ * @const {number} luminanceAtZenith mixin
  */
 const luminanceAtZenith = {
   luminanceAtZenith: {
@@ -1630,7 +1630,7 @@ const sphericalHarmonicCoefficients = {
 }
 
 /**
- * @const {String} specularEnvironmentMaps mixin
+ * @const {string} specularEnvironmentMaps mixin
  */
 const specularEnvironmentMaps = {
   specularEnvironmentMaps: String
@@ -1646,7 +1646,7 @@ const imageBasedLighting = {
 }
 
 /**
- * @const {Boolean} backFaceCulling mixin
+ * @const {boolean} backFaceCulling mixin
  */
 const backFaceCulling = {
   backFaceCulling: {
@@ -1683,7 +1683,7 @@ const sourceUri = {
 }
 
 /**
- * @const {Object} options mixin
+ * @const {object} options mixin
  */
 const options = {
   options: {
@@ -1743,166 +1743,166 @@ const enableMouseEvent = {
   }
 }
 export {
-  customShader,
-  maximumMemoryUsage,
-  tileStyle,
-  defaultColor,
-  viewFrom,
-  projectionTransforms,
-  sourceUri,
-  colors,
-  enableMouseEvent,
-  backFaceCulling,
-  imageBasedLighting,
-  specularEnvironmentMaps,
-  sphericalHarmonicCoefficients,
-  luminanceAtZenith,
-  maximumScreenSpaceError,
-  runAnimations,
-  articulations,
-  scissorRectangle,
-  clearColor,
-  glowColor,
-  options,
-  data,
-  imageSubRegion,
-  coordinates,
-  nodeTransformations,
-  hierarchy,
-  plane,
-  colorToAlpha,
-  cutoutRectangle,
-  polylinePositions,
-  shapePositions,
-  imageSize,
-  maximumImageSize,
-  minimumImageSize,
-  endColor,
-  startColor,
-  shape,
-  lightColor,
-  lightColor2,
-  imageBasedLightingFactor,
-  polygonHierarchy,
-  orientation,
-  origin,
-  frustum,
-  maximumCone,
-  minimumCone,
-  maximumClock,
-  minimumClock,
-  innerRadii,
-  radius,
-  center,
-  debugWireframe,
-  vertexFormat,
-  position,
-  loop,
-  geometryInstances,
-  depthFailAppearance,
-  appearance,
-  interleave,
-  releaseGeometryInstances,
-  debugShowShadowVolume,
-  id,
+  accessToken,
+  alignedAxis,
   allowPicking,
-  asynchronous,
-  vertexCacheOptimize,
-  compressVertices,
-  modelMatrix,
-  debugShowBoundingVolume,
-  scene,
-  blendOption,
-  maximumHeights,
-  minimumHeights,
+  appearance,
   arcType,
+  articulations,
+  asynchronous,
+  backFaceCulling,
+  backgroundColor,
+  backgroundPadding,
+  blendOption,
+  bottomRadius,
+  center,
+  clampAnimations,
   clampToGround,
+  classificationType,
+  clearColor,
+  clippingPlanes,
+  clock,
   closeBottom,
   closeTop,
-  perPositionHeight,
-  pixelSize,
-  clippingPlanes,
+  color,
   colorBlendAmount,
   colorBlendMode,
-  silhouetteSize,
-  silhouetteColor,
-  clampAnimations,
-  incrementallyLoadTextures,
-  maximumScale,
-  minimumPixelSize,
-  uri,
-  fillColor,
-  backgroundPadding,
-  backgroundColor,
-  showBackground,
-  labelStyle,
-  font,
-  text,
-  subdivisions,
-  slicePartitions,
-  stackPartitions,
-  radii,
-  stRotation,
-  semiMinorAxis,
-  semiMajorAxis,
-  slices,
-  numberOfVerticalLines,
-  bottomRadius,
-  topRadius,
-  length,
-  zIndex,
-  classificationType,
-  granularity,
+  colors,
+  colorToAlpha,
+  compressVertices,
+  coordinates,
   cornerType,
-  extrudedHeightReference,
-  extrudedHeight,
-  positions,
-  image,
-  scale,
-  pixelOffset,
-  eyeOffset,
-  horizontalOrigin,
-  verticalOrigin,
-  heightReference,
+  credit,
+  customShader,
+  cutoutRectangle,
+  data,
+  debugShowBoundingVolume,
+  debugShowShadowVolume,
+  debugWireframe,
+  defaultColor,
+  depthFailAppearance,
   depthFailColor,
-  color,
-  rotation,
-  alignedAxis,
-  sizeInMeters,
-  width,
-  height,
-  scaleByDistance,
-  translucencyByDistance,
-  pixelOffsetScaleByDistance,
-  disableDepthTestDistance,
-  dimensions,
-  fill,
   depthFailMaterial,
+  dimensions,
+  disableDepthTestDistance,
+  distanceDisplayCondition,
+  ellipsoid,
+  enableMouseEvent,
+  enablePickFeatures,
+  endColor,
+  extrudedHeight,
+  extrudedHeightReference,
+  eyeOffset,
+  fileExtension,
+  fill,
+  fillColor,
+  font,
+  format,
+  frustum,
+  geometryInstances,
+  getFeatureInfoFormats,
+  glowColor,
+  granularity,
+  height,
+  heightReference,
+  hierarchy,
+  horizontalOrigin,
+  id,
+  image,
+  imageBasedLighting,
+  imageBasedLightingFactor,
+  imageSize,
+  imageSubRegion,
+  incrementallyLoadTextures,
+  innerRadii,
+  interleave,
+  labelStyle,
+  layers,
+  length,
+  lightColor,
+  lightColor2,
+  loop,
+  luminanceAtZenith,
   material,
+  maximumClock,
+  maximumCone,
+  maximumHeights,
+  maximumImageSize,
+  maximumLevel,
+  maximumMemoryUsage,
+  maximumScale,
+  maximumScreenSpaceError,
+  minimumClock,
+  minimumCone,
+  minimumHeights,
+  minimumImageSize,
+  minimumLevel,
+  minimumPixelSize,
+  modelMatrix,
+  nodeTransformations,
+  numberOfVerticalLines,
+  options,
+  orientation,
+  origin,
   outline,
   outlineColor,
   outlineWidth,
-  shadows,
-  distanceDisplayCondition,
-  show,
-  times,
-  clock,
-  getFeatureInfoFormats,
-  subdomains,
-  format,
-  accessToken,
-  fileExtension,
-  minimumLevel,
-  maximumLevel,
-  tileHeight,
-  url,
-  token,
-  tileDiscardPolicy,
-  layers,
-  enablePickFeatures,
+  perPositionHeight,
+  pixelOffset,
+  pixelOffsetScaleByDistance,
+  pixelSize,
+  plane,
+  polygonHierarchy,
+  polylinePositions,
+  position,
+  positions,
+  projectionTransforms,
+  radii,
+  radius,
   rectangle,
+  releaseGeometryInstances,
+  rotation,
+  runAnimations,
+  scale,
+  scaleByDistance,
+  scene,
+  scissorRectangle,
+  semiMajorAxis,
+  semiMinorAxis,
+  shadows,
+  shape,
+  shapePositions,
+  show,
+  showBackground,
+  silhouetteColor,
+  silhouetteSize,
+  sizeInMeters,
+  slicePartitions,
+  slices,
+  sourceUri,
+  specularEnvironmentMaps,
+  sphericalHarmonicCoefficients,
+  stackPartitions,
+  startColor,
+  stRotation,
+  subdivisions,
+  subdomains,
+  text,
+  tileDiscardPolicy,
+  tileHeight,
+  tileStyle,
+  tileWidth,
   tilingScheme,
-  ellipsoid,
-  credit,
-  tileWidth
+  times,
+  token,
+  topRadius,
+  translucencyByDistance,
+  uri,
+  url,
+  vertexCacheOptimize,
+  vertexFormat,
+  verticalOrigin,
+  viewFrom,
+  width,
+  zIndex
 }
