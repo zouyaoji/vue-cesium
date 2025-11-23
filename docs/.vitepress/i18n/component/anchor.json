@@ -1,0 +1,30 @@
+{
+  "en-US": {
+    "basic-usage": "basic-usage",
+    "horizontal-mode": "horizontal-mode",
+    "scroll-container": "scroll-container",
+    "anchor-api": "anchor-api",
+    "anchor-attributes": "anchor-attributes",
+    "anchor-events": "anchor-events",
+    "Basic Usage": "Basic Usage",
+    "Horizontal Mode": "Horizontal Mode",
+    "Scroll Container": "Scroll Container",
+    "Anchor API": "Anchor API",
+    "Anchor Attributes": "Anchor Attributes",
+    "Anchor Events": "Anchor Events"
+  },
+  "zh-CN": {
+    "basic-usage": "基础用法",
+    "horizontal-mode": "水平模式",
+    "scroll-container": "滚动的容器",
+    "anchor-api": "锚点-api",
+    "anchor-attributes": "锚点属性",
+    "anchor-events": "锚点事件",
+    "Basic Usage": "基础用法",
+    "Horizontal Mode": "水平模式",
+    "Scroll Container": "滚动的容器",
+    "Anchor API": "锚点 API",
+    "Anchor Attributes": "锚点属性",
+    "Anchor Events": "锚点事件"
+  }
+}

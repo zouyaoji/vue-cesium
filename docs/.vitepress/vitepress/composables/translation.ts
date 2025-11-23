@@ -1,0 +1,68 @@
+import { useStorage } from '@vueuse/core'
+import { useData, useRoute, useRouter, withBase } from 'vitepress'
+import { computed } from 'vue'
+import translationLocale from '../../i18n/component/translation.json'
+import langs from '../../i18n/lang.json'
+import { PREFERRED_LANG_KEY } from '../constant'
+import { useLang } from './lang'
+
+export function useTranslation() {
+  const route = useRoute()
+  const router = useRouter()
+  const lang = useLang()
+  const { site } = useData()
+
+  const languageMap = {
+    'en-US': 'English',
+    'zh-CN': '中文',
+    'es-ES': 'Español',
+    'fr-FR': 'Français',
+    'ja-JP': '日本語'
+  }
+
+  const locale = computed(() => translationLocale[lang.value])
+  const langsRef = computed(() => {
+    const currentLang = lang.value
+
+    // When there is no zh-CN in the list, meaning this is the PR preview
+    // so we simply return the current list which contains only en-US
+    if (!langs.includes('zh-CN'))
+      return []
+    const langsCopy = langs.slice(0)
+    langsCopy.splice(langsCopy.indexOf(currentLang), 1)
+
+    // if current language is not zh-CN, then zh-CN needs to be moved to the head.
+    if (currentLang !== 'zh-CN') {
+      langsCopy.splice(langsCopy.indexOf('zh-CN'), 1)
+    }
+
+    return currentLang === 'zh-CN' ? langsCopy : ['zh-CN'].concat(langsCopy)
+  })
+
+  const language = useStorage(PREFERRED_LANG_KEY, 'en-US')
+
+  const getTargetUrl = (lang: string) => {
+    const firstSlash = route.path.indexOf('/', site.value.base.length)
+    return firstSlash === -1
+      ? `/${lang}/`
+      : `/${lang}/${route.path.slice(firstSlash + 1)}`
+  }
+
+  const switchLang = (targetLang: string) => {
+    if (lang.value === targetLang)
+      return
+    language.value = targetLang
+
+    const goTo: string = getTargetUrl(targetLang)
+    router.go(withBase(goTo))
+  }
+
+  return {
+    locale,
+    languageMap,
+    langs: langsRef,
+    lang,
+    getTargetUrl,
+    switchLang
+  }
+}

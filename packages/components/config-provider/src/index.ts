@@ -9,7 +9,7 @@ import type { Language } from '@vue-cesium/locale'
  */
 import type { PropType, VNode } from 'vue'
 import { provideGlobalConfig } from '@vue-cesium/composables/use-global-config'
-import Chinese from '@vue-cesium/locale/lang/zh-hans'
+import Chinese from '@vue-cesium/locale/lang/zh-cn'
 import { defineComponent, renderSlot } from 'vue'
 
 export default defineComponent({

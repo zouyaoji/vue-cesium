@@ -1,0 +1,12 @@
+{
+  "en-US": {
+    "published-by": "Published by",
+    "open-link": "Open link",
+    "select-version": "Select a version"
+  },
+  "zh-CN": {
+    "published-by": "发布者",
+    "open-link": "打开链接",
+    "select-version": "选择版本"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "en-US": {
+    "configuration": {
+      "text": "Configuration",
+      "children": [
+        {
+          "link": "/config-provider",
+          "text": "Config Provider"
+        }
+      ]
+    },
+    "basic": {
+      "text": "Basic",
+      "children": [
+        {
+          "link": "/map",
+          "text": "Map"
+        }
+      ]
+    },
+    "controls": {
+      "text": "Controls",
+      "children": [
+        {
+          "link": "/control-navigation",
+          "text": "Navigation"
+        },
+        {
+          "link": "/control-terrain",
+          "text": "Terrain"
+        }
+      ]
+    },
+    "layers": {
+      "text": "Layers",
+      "children": [
+        {
+          "link": "/layer-native",
+          "text": "NativeLayer"
+        },
+        {
+          "link": "/layer-gltf",
+          "text": "GLTFLayer"
+        }
+      ]
+    },
+    "others": {
+      "text": "Others",
+      "children": []
+    }
+  },
+  "zh-CN": {
+    "configuration": {
+      "text": "配置",
+      "children": [
+        {
+          "link": "/config-provider",
+          "text": "全局配置"
+        }
+      ]
+    }
+  }
+}

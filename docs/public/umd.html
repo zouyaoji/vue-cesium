@@ -1,0 +1,78 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2024-06-20 10:38:08
+ * @Description: Do not edit
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2024-06-20 11:07:26
+ * @FilePath: \vue-maplibre\docs\public\umd.html
+-->
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@meteosci/vue-maplibre@latest/dist/index.css" />
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/maplibre-gl"></script>
+
+    <title>Vue Maplibre demo</title>
+  </head>
+  <body>
+    <div id="app" style="height: 100vh">
+      <vm-map map-style="https://vue-maplibre.meteosci.com/map/styleWan.json"></vm-map>
+    </div>
+
+    <script type="module">
+      ;(async () => {
+        const THREE = await import('https://unpkg.com/three@latest/build/three.module.min.js')
+        window.THREE = THREE
+        // Now import VueMaplibre
+        await import('https://unpkg.com/@meteosci/vue-maplibre')
+
+        const App = {
+          data() {
+            return {
+              message: 'Hello Vue Maplibre'
+            }
+          }
+        }
+        const app = Vue.createApp(App)
+        app.use(VueMaplibre)
+        app.mount('#app')
+      })()
+    </script>
+  </body>
+</html>
+
+<!-- old version -->
+<!-- <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@meteosci/vue-maplibre@latest/dist/index.css" />
+    <script src="https://unpkg.com/three@0.147.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/maplibre-gl"></script>
+    <script src="https://unpkg.com/@meteosci/vue-maplibre"></script>
+
+    <title>Vue Maplibre demo1</title>
+  </head>
+  <body>
+    <div id="app" style="height: 100vh">
+      <vm-map map-style="https://demotiles.maplibre.org/style.json"></vm-map>
+    </div>
+    <script>
+      const App = {
+        data() {
+          return {
+            message: 'Hello Vue Maplibre'
+          }
+        }
+      }
+      const app = Vue.createApp(App)
+      app.use(VueMaplibre)
+      app.mount('#app')
+    </script>
+  </body>
+</html> -->

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "lib": ["ESNext", "DOM", "WebWorker"],
+    "paths": {
+      "vue-cesium": ["../packages/vue-cesium"],
+      "~/*": ["./.vitepress/vitepress/*"],
+      "vue": ["./node_modules/vue"]
+    },
+    "types": ["unplugin-icons/types/vue", "element-plus/global"],
+    "jsx": "preserve",
+    "jsxImportSource": "vue"
+  },
+  "include": ["**/*", ".vitepress/**/*", "../typings/global.d.ts"],
+  "exclude": ["node_modules"]
+}

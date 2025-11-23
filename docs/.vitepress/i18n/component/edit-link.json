@@ -1,0 +1,10 @@
+{
+  "en-US": {
+    "edit-on-github": "Edit this page on GitHub",
+    "edit-on-crowdin": "Edit this page on Crowdin"
+  },
+  "zh-CN": {
+    "edit-on-github": "在 GitHub 上编辑此页面 ",
+    "edit-on-crowdin": "在 Crowdin 上编辑此页面 "
+  }
+}

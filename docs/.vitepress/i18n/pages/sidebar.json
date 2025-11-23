@@ -1,0 +1,36 @@
+{
+  "en-US": [
+    {
+      "text": "Guide",
+      "link": "/guide/installation",
+      "activeMatch": "/guide/"
+    },
+    {
+      "text": "Component",
+      "link": "/component/config-provider",
+      "activeMatch": "/component/"
+    },
+    {
+      "text": "Discussions",
+      "link": "https://github.com/zouyaoji/vue-cesium/discussions",
+      "activeMatch": "/resource/"
+    }
+  ],
+  "zh-CN": [
+    {
+      "text": "指南",
+      "link": "/guide/installation",
+      "activeMatch": "/guide/"
+    },
+    {
+      "text": "组件",
+      "link": "/component/config-provider",
+      "activeMatch": "/component/"
+    },
+    {
+      "text": "讨论",
+      "link": "https://github.com/zouyaoji/vue-cesium/discussions",
+      "activeMatch": "/resource/"
+    }
+  ]
+}

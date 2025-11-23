@@ -1,0 +1,84 @@
+<script setup lang="ts">
+import { useRouter, withBase } from 'vitepress'
+import { useTranslation } from '../../composables/translation'
+
+const router = useRouter()
+const { getTargetUrl, switchLang, languageMap, langs, lang, locale }
+  = useTranslation()
+
+function toTranslation() {
+  router.go(withBase(`/${lang.value}/guide/translation`))
+}
+</script>
+
+<template>
+  <div class="translation-container">
+    <ClientOnly>
+      <ElDropdown popper-class="translation-popup" role="navigation">
+        <ElIcon :size="24" :aria-label="locale.language">
+          <i-ri-translate-2 />
+        </ElIcon>
+        <template #dropdown>
+          <ElDropdownMenu>
+            <a v-for="l in langs" :key="l" :href="getTargetUrl(l)">
+              <ElDropdownItem
+                class="language" :class="{ selected: l === lang }"
+                @click.stop="switchLang(l)"
+              >
+                {{ languageMap[l] }}
+              </ElDropdownItem>
+            </a>
+            <!-- <a :href="`/${lang}/guide/translation`">
+              <ElDropdownItem
+                class="language selected"
+                @click.stop="toTranslation"
+              >
+                {{ locale.help }}
+              </ElDropdownItem>
+            </a> -->
+          </ElDropdownMenu>
+        </template>
+      </ElDropdown>
+    </ClientOnly>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+@use '../../styles/mixins' as *;
+
+.translation-container {
+  display: none;
+  height: 24px;
+  padding: 0 12px;
+  cursor: pointer;
+
+  @include respond-to('md') {
+    display: block;
+  }
+}
+</style>
+
+<style lang="scss">
+.el-dropdown__popper.translation-popup {
+  --el-bg-color-overlay: var(--bg-color);
+  --el-popper-border-radius: 8px;
+  --el-border-color-light: transparent;
+
+  padding: 7px 0;
+  min-width: 192px;
+  transition: background-color 0.5s;
+
+  .el-popper__arrow {
+    display: none;
+  }
+
+  .language {
+    padding: 0 16px;
+    line-height: 28px;
+
+    &.selected {
+      --el-text-color-regular: var(--brand-color);
+    }
+  }
+}
+</style>

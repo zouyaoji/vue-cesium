@@ -6,7 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\locale\index.ts
  */
-import defaultLang from './lang/zh-hans'
+import defaultLang from './lang/zh-cn'
 
 export interface TranslatePair {
   [key: string]: string | string[] | TranslatePair

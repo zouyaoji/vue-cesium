@@ -1,0 +1,26 @@
+{
+  "en-US": {
+    "view-source": "View source",
+    "hide-source": "Hide source",
+    "edit-in-editor": "Edit in Playground",
+    "edit-on-github": "Edit on GitHub",
+    "edit-in-codepen": "Edit in Codepen.io",
+    "copy-code": "Copy code",
+    "switch-button-option-text": "Switch to Options API",
+    "switch-button-setup-text": "Switch to Composition API",
+    "copy-success": "Copied!",
+    "copy-error": "This browser does not support automatic copy！"
+  },
+  "zh-CN": {
+    "view-source": "查看源代码",
+    "hide-source": "隐藏源代码",
+    "edit-in-editor": "在 Playground 中编辑",
+    "edit-on-github": "在 GitHub 中编辑",
+    "edit-in-codepen": "在 Codepen.io 中编辑",
+    "copy-code": "复制代码",
+    "switch-button-option-text": "切换到选项式 API",
+    "switch-button-setup-text": "切换到组合式 API",
+    "copy-success": "已复制",
+    "copy-error": "此浏览器不支持自动复制"
+  }
+}

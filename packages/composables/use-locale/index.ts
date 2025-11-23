@@ -1,7 +1,7 @@
 import type { Language } from '@vue-cesium/locale'
 import type { MaybeRef } from '@vue-cesium/utils/types'
 import type { Ref } from 'vue'
-import Chinese from '@vue-cesium/locale/lang/zh-hans'
+import Chinese from '@vue-cesium/locale/lang/zh-cn'
 import { get } from 'lodash-unified'
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji

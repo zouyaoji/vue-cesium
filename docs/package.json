@@ -1,0 +1,39 @@
+{
+  "name": "@vue-cesium/docs",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "pnpm gen-llms && NODE_ENV=production && vitepress build .",
+    "serve": "NODE_ENV=production vitepress serve . --port 5001",
+    "gen-llms": "tsx .vitepress/build/generate-llms.ts"
+  },
+  "dependencies": {
+    "@docsearch/js": "^4.3.2",
+    "@element-plus/icons-vue": "^2.3.2",
+    "@vue/shared": "^3.5.24",
+    "@vueuse/core": "^14.0.0",
+    "clipboard-copy": "^4.0.1",
+    "element-plus": "^2.11.8",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "vue-cesium": "npm:vue-cesium@latest"
+  },
+  "devDependencies": {
+    "@iconify-json/ri": "^1.2.6",
+    "@mdit-vue/shared": "^3.0.2",
+    "@vitejs/plugin-vue-jsx": "^5.1.2",
+    "@vue-cesium/build": "workspace:*",
+    "chalk": "^5.6.2",
+    "consola": "^3.4.2",
+    "fast-glob": "^3.3.3",
+    "markdown-it-container": "^4.0.0",
+    "unocss": "^66.5.9",
+    "unplugin-icons": "^22.5.0",
+    "unplugin-vue-components": "^30.0.0",
+    "vite-plugin-inspect": "0.8.9",
+    "vite-plugin-mkcert": "^1.17.9",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-group-icons": "^1.6.5",
+    "vue": "^3.5.24"
+  }
+}

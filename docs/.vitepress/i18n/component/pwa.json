@@ -1,0 +1,14 @@
+{
+  "en-US": {
+    "message": "New content available, click on refresh button to update.",
+    "refresh": "Refresh",
+    "always-refresh": "Always Refresh",
+    "close": "Close"
+  },
+  "zh-CN": {
+    "message": "有更新的内容，点击刷新按钮以更新。",
+    "refresh": "刷新",
+    "always-refresh": "总是刷新",
+    "close": "关闭"
+  }
+}
