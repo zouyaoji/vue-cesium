@@ -26,6 +26,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@turf/circle": "^7.3.0",
+    "@vue/shared": "^3.5.24",
     "@zouyaoji/heatmap.js": "^2.0.8",
     "compare-versions": "^6.1.1",
     "echarts": "^6.0.0",
