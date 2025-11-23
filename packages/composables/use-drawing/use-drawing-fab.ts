@@ -369,7 +369,7 @@ export default function (
 
         drawingActionInstance.cmp
         && drawingChildren.push(
-          h(drawingActionInstance.cmp, {
+          h(drawingActionInstance.cmp as any, {
             ref: drawingActionInstance.cmpRef,
             editable: props.editable,
             clampToGround: props.clampToGround,

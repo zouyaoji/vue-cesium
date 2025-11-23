@@ -328,7 +328,7 @@ export default defineComponent({
       )
       children.push(
         h(
-          VcViewer,
+          VcViewer as any,
           {
             ref: viewerRef,
             ...viewerOpts.value,
