@@ -11,15 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.7.0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20.19.0
           registry-url: https://registry.npmjs.com/
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.7.0
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
 
       - name: Get version
         run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
