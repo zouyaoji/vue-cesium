@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.2.11
+
+_2025-11-23_
+
+#### Bug fixes
+
+- Fixed an issue caused by some defaultValue methods not being fully updated.
+
 ### 3.2.10
 
 _2025-11-22_
