@@ -160,7 +160,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
   const classes = computed(
     () =>
       `vc-slider vc-slider${axis.value} vc-slider--${active.value === true ? '' : 'in'}active inline no-wrap ${
-        props.vertical === true ? 'row' : 'column'
+        props.vertical === true ? 'vc-row' : 'vc-column'
       }${props.disable === true ? ' disabled' : ` vc-slider--enabled${editable.value === true ? ' vc-slider--editable' : ''}`
       }${(focus.value as any) === 'both' ? ' vc-slider--focus' : ''
       }${props.label || props.labelAlways === true ? ' vc-slider--label' : ''
@@ -324,7 +324,7 @@ export default function ({ updateValue, updatePosition, getDragging, formAttrs }
     const filterFn = (entry: any) => entry.value >= props.min && entry.value <= props.max
 
     if (Array.isArray(def) === true) {
-      return def.map(item => (isObject(item) === true ? item : { value: item })).filter(filterFn)
+      return def.map(item => (isObject(item) === true ? item : { value: item })).filter((item: any) => filterFn(item))
     }
 
     return Object.keys(def)

@@ -317,7 +317,7 @@ export default defineComponent({
         h(
           'span',
           {
-            class: `vc-btn__content text-center col items-center vc-anchor--skip ${innerClasses.value}`
+            class: `vc-btn__content text-center vc-col items-center vc-anchor--skip ${innerClasses.value}`
           },
           inner
         )
@@ -337,7 +337,7 @@ export default defineComponent({
                     'span',
                     {
                       key: 'loading',
-                      class: 'absolute-full flex flex-center'
+                      class: 'absolute-full vc-flex vc-flex-center'
                     },
                     slots.loading !== void 0 ? slots.loading() : [h(VcSpinner)]
                   )

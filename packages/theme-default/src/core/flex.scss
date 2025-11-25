@@ -2,24 +2,26 @@
 
 @import '../helpers/string.scss';
 
+$flex-prefix: 'vc' !default;
+
 @mixin fg($name, $size) {
   $noProcNotZero: $size > 0;
 
   @media (min-width: $size) {
-    #{str-fe(".col<name>", $name, $noProcNotZero)} {
+    #{str-fe(".#{$flex-prefix}-col<name>", $name, $noProcNotZero)} {
       &,
       &-auto,
       &-grow,
       &-shrink {
-        .row > &,
-        .flex > & {
+        .#{$flex-prefix}-row > &,
+        .#{$flex-prefix}-flex > & {
           width: auto;
           min-width: 0;
           max-width: 100%;
         }
 
-        .column > &,
-        .flex > & {
+        .#{$flex-prefix}-column > &,
+        .#{$flex-prefix}-flex > & {
           height: auto;
           min-height: 0;
           max-height: 100%;
@@ -46,12 +48,12 @@
     @for $i from 0 through $flex-cols {
       $ic: quote('' + $i);
 
-      #{str-fe(".col<name>-<i>", $name, $noProcNotZero, $ic)} {
-        @extend .col#{$name}-auto;
+      #{str-fe(".#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
+        @extend .#{$flex-prefix}-col#{$name}-auto;
       }
 
-      .row {
-        #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
+      .#{$flex-prefix}-row {
+        #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: auto;
           width: toFixed(percentage(math.div($i, $flex-cols)), 10000);
         }
@@ -63,15 +65,15 @@
         }
       }
 
-      .column {
-        #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
+      .#{$flex-prefix}-column {
+        #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: toFixed(percentage(math.div($i, $flex-cols)), 10000);
           width: auto;
         }
       }
 
       @if $size == 0 and $i == $flex-cols {
-        .row > .col-all {
+        .#{$flex-prefix}-row > .col-all {
           height: auto;
           flex: 0 0 100%;
         }
@@ -80,9 +82,9 @@
   }
 }
 
-.row,
-.column,
-.flex {
+.#{$flex-prefix}-row,
+.#{$flex-prefix}-column,
+.#{$flex-prefix}-flex {
   display: flex;
   flex-wrap: wrap;
 
@@ -91,11 +93,11 @@
   }
 }
 
-.row.reverse {
+.#{$flex-prefix}-row.reverse {
   flex-direction: row-reverse;
 }
 
-.column {
+.#{$flex-prefix}-column {
   flex-direction: column;
 
   &.reverse {
@@ -225,7 +227,7 @@
   }
 }
 
-.flex-center {
+.#{$flex-prefix}-flex-center {
   @extend .items-center;
 
   @extend .justify-center;

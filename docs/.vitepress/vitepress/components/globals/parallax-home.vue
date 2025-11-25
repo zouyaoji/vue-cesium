@@ -6,8 +6,8 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { isDark } from '~/composables/dark'
 import homeLocale from '../../../i18n/pages/home.json'
 import { useLang } from '../../composables/lang'
-import HomeCards from '../home/home-cards.vue'
 import VPLink from '../common/vp-link.vue'
+import HomeCards from '../home/home-cards.vue'
 import HomeSponsors from '../home/home-sponsors.vue'
 
 import HomeFooter from './vp-footer.vue'
@@ -55,7 +55,7 @@ const screenLayer = computed(() => ({
   width: '80%',
   height: '80%',
   transform: `translateX(${parallax.tilt * 10 + 80}px) translateY(${parallax.roll * 10 + 50
-    }px)`
+  }px)`
 }))
 
 const peopleLayer = computed(() => ({
@@ -65,7 +65,7 @@ const peopleLayer = computed(() => ({
   right: 0,
   bottom: 0,
   transform: `translateX(${parallax.tilt * 25 + 25}px) translateY(${parallax.roll * 25
-    }px) scale(1)`
+  }px) scale(1)`
 }))
 
 // center layer
@@ -74,7 +74,7 @@ const leftLayer = computed(() => ({
   width: '20%',
   height: '20%',
   transform: `translateX(${parallax.tilt * 12 + 205}px) translateY(${parallax.roll * 12 + 210
-    }px)`
+  }px)`
 }))
 
 const leftBottomLayer = computed(() => ({
@@ -84,7 +84,7 @@ const leftBottomLayer = computed(() => ({
   left: 0,
   bottom: 0,
   transform: `translateX(${parallax.tilt * 30 - 10}px) translateY(${parallax.roll * 30
-    }px)`
+  }px)`
 }))
 
 const rightLayer = computed(() => ({
@@ -94,7 +94,7 @@ const rightLayer = computed(() => ({
   top: 0,
   right: 0,
   transform: `translateX(${parallax.tilt * 25 + 5}px) translateY(${parallax.roll * 25
-    }px)`
+  }px)`
 }))
 
 const handleScroll = useThrottleFn(() => {
