@@ -281,7 +281,7 @@ importers:
         version: 0.2.0
       vue-cesium:
         specifier: npm:vue-cesium@latest
-        version: 3.2.10(@types/lodash-es@4.17.12)(vue@3.5.24(typescript@5.9.3))
+        version: 3.2.11(@types/lodash-es@4.17.12)(vue@3.5.24(typescript@5.9.3))
     devDependencies:
       '@iconify-json/ri':
         specifier: ^1.2.6
@@ -2501,26 +2501,14 @@ packages:
     resolution: {integrity: sha512-qaGV9ltJP0EO25YfFUPhxRVK0evXFIAGicsVXuRim4Ed9cjPxYhNnNJ49SFmbeLgtxpslIkX317IgpfcHPVj/A==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  '@turf/circle@6.5.0':
-    resolution: {integrity: sha512-oU1+Kq9DgRnoSbWFHKnnUdTmtcRUMmHoV9DjTXu9vOLNV5OWtAAh1VZ+mzsioGGzoDNT/V5igbFOkMfBQc0B6A==}
-
   '@turf/circle@7.3.0':
     resolution: {integrity: sha512-aOkYxDABFyv9qtz8vB2GyYF6kmROgplnaR1IHpWSfHnoFH3/2mIlhhGdY17x+FSN4b7SYLskKRDSCTG4p90VEA==}
-
-  '@turf/destination@6.5.0':
-    resolution: {integrity: sha512-4cnWQlNC8d1tItOz9B4pmJdWpXqS0vEvv65bI/Pj/genJnsL7evI0/Xw42RvEGROS481MPiU80xzvwxEvhQiMQ==}
 
   '@turf/destination@7.3.0':
     resolution: {integrity: sha512-N3K/zs8htrLkJ43qvaaDupL7ePMuAuQ9lSuV4q0CmaeqhKUhrpyGbXEu68uUPHpEALC/Ozp8nFtkmizbRBy+QA==}
 
-  '@turf/helpers@6.5.0':
-    resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
-
   '@turf/helpers@7.3.0':
     resolution: {integrity: sha512-5kWdgwI6e2vGbkt2qOD+Z2BiKQ7dfKN/PtWRLCpvzyOO59rk19R53CHi8nUT/Y1vQLgWmT6eNpiKwsWwPZGIdg==}
-
-  '@turf/invariant@6.5.0':
-    resolution: {integrity: sha512-Wv8PRNCtPD31UVbdJE/KVAWKe7l6US+lJItRR/HOEW3eh+U/JwRCSUl/KZ7bmjM/C+zLNoreM2TU6OoLACs4eg==}
 
   '@turf/invariant@7.3.0':
     resolution: {integrity: sha512-AmDFmdhpbLZv0zlI4EF4bVFE0iYmKcOBI2m8DTcFFUQDRusgjc+NLCnX1RIENfYyeI2FKHg84E9vSt6XytUDvw==}
@@ -4556,9 +4544,6 @@ packages:
 
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
-
-  echarts@5.6.0:
-    resolution: {integrity: sha512-oTbVTsXfKuEhxftHqL5xprgLoc0k7uScAwtryCgWF6hPYFLRwOUHiFmHGCBKP5NPFNkDVopOieyUqYGH8Fa3kA==}
 
   echarts@6.0.0:
     resolution: {integrity: sha512-Tte/grDQRiETQP4xz3iZWSvoHrkCQtwqd6hs+mifXcjrCuo2iKWbajFObuLJVBlDIJlOzgQPd1hsaKt/3+OMkQ==}
@@ -8932,10 +8917,10 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
-  vue-cesium@3.2.10:
-    resolution: {integrity: sha512-Hq456LUm38WnXBy27y/5/uNDh4AOz5i8qPC/k0/qqNJ7pU+A/XSrTTVvKnsvE6wwDf3bFRhJ6v1FqGoSRPbTEg==}
+  vue-cesium@3.2.11:
+    resolution: {integrity: sha512-lSd8Mu5grnYmKGFRUh55iEdLyYXYCuCu7l2Fo06ZUoAErTJuoEgAL67pPli/wLh2/0w05lHa4uQqpKfw3qO7Zg==}
     peerDependencies:
-      vue: ^3.2.47
+      vue: ^3.5.0
 
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
@@ -9200,9 +9185,6 @@ packages:
   yocto-queue@1.2.2:
     resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
     engines: {node: '>=12.20'}
-
-  zrender@5.6.1:
-    resolution: {integrity: sha512-OFXkDJKcrlx5su2XbzJvj/34Q3m6PvyCZkVPHGYpcCJ52ek4U/ymZyfuV1nKE23AyBJ51E/6Yr0mhZ7xGTO4ag==}
 
   zrender@6.0.0:
     resolution: {integrity: sha512-41dFXEEXuJpNecuUQq6JlbybmnHaqqpGlbH1yxnA5V9MMP4SbohSVZsJIwz+zdjQXSSlR1Vc34EgH1zxyTDvhg==}
@@ -11334,22 +11316,12 @@ snapshots:
       '@tufjs/canonical-json': 1.0.0
       minimatch: 9.0.5
 
-  '@turf/circle@6.5.0':
-    dependencies:
-      '@turf/destination': 6.5.0
-      '@turf/helpers': 6.5.0
-
   '@turf/circle@7.3.0':
     dependencies:
       '@turf/destination': 7.3.0
       '@turf/helpers': 7.3.0
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
-
-  '@turf/destination@6.5.0':
-    dependencies:
-      '@turf/helpers': 6.5.0
-      '@turf/invariant': 6.5.0
 
   '@turf/destination@7.3.0':
     dependencies:
@@ -11358,16 +11330,10 @@ snapshots:
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
 
-  '@turf/helpers@6.5.0': {}
-
   '@turf/helpers@7.3.0':
     dependencies:
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
-
-  '@turf/invariant@6.5.0':
-    dependencies:
-      '@turf/helpers': 6.5.0
 
   '@turf/invariant@7.3.0':
     dependencies:
@@ -13918,11 +13884,6 @@ snapshots:
   ecdsa-sig-formatter@1.0.11:
     dependencies:
       safe-buffer: 5.2.1
-
-  echarts@5.6.0:
-    dependencies:
-      tslib: 2.3.0
-      zrender: 5.6.1
 
   echarts@6.0.0:
     dependencies:
@@ -19362,14 +19323,14 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
-  vue-cesium@3.2.10(@types/lodash-es@4.17.12)(vue@3.5.24(typescript@5.9.3)):
+  vue-cesium@3.2.11(@types/lodash-es@4.17.12)(vue@3.5.24(typescript@5.9.3)):
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
-      '@turf/circle': 6.5.0
+      '@turf/circle': 7.3.0
       '@vue/shared': 3.5.24
       '@zouyaoji/heatmap.js': 2.0.8
       compare-versions: 6.1.1
-      echarts: 5.6.0
+      echarts: 6.0.0
       kdbush: 4.0.2
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -19667,10 +19628,6 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.2.2: {}
-
-  zrender@5.6.1:
-    dependencies:
-      tslib: 2.3.0
 
   zrender@6.0.0:
     dependencies:
