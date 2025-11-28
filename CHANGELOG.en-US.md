@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.2.12
+
+_2025-11-28_
+
+#### Bug 修复
+
+- Added vc prefix to CSS classes of related components to avoid polluting other CSS libraries, such as TailwindCSS.
+
 ### 3.2.11
 
 _2025-11-23_
