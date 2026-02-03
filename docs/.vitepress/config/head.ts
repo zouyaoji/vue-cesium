@@ -5,7 +5,7 @@ export const head: HeadConfig[] = [
     'link',
     {
       rel: 'icon',
-      href: '/images/vue-maplibre-logo-mini.svg',
+      href: '/images/vue-cesium-logo-small.svg',
       type: 'image/svg+xm'
     }
   ],
@@ -13,7 +13,7 @@ export const head: HeadConfig[] = [
     'meta',
     {
       property: 'og:image',
-      content: '/images/vue-maplibre-logo.svg'
+      content: '/images/vue-cesium-logo-normal.svg'
     }
   ],
   [
@@ -34,14 +34,14 @@ export const head: HeadConfig[] = [
     'meta',
     {
       property: 'og:description',
-      content: 'A Vue3 based component library of MaplibreGL for developers.'
+      content: 'A Vue3 based component library of CesiumJS for developers.'
     }
   ],
   [
     'meta',
     {
       name: 'algolia-site-verification',
-      content: '872D530159005E01'
+      content: '22AA94BEB45D176A'
     }
   ],
   // 百度资源
@@ -57,7 +57,7 @@ export const head: HeadConfig[] = [
     'script',
     {
       async: 'true',
-      src: 'https://hm.baidu.com/hm.js?80cf722845bf724c5b85845b182669b3'
+      src: 'https://hm.baidu.com/hm.js?a1aaf3ccee748ca69bf8b776942b9e5b'
     }
   ],
   [
@@ -84,13 +84,13 @@ export const head: HeadConfig[] = [
     `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-NV0Y3PCY1J');`
+gtag('config', 'UA-113302031-1');`
   ],
   [
     'script',
     {
       async: 'true',
-      src: 'https://www.googletagmanager.com/gtag/js?id=G-0DRFCYSG8M'
+      src: 'https://www.googletagmanager.com/gtag/js?id=G-SG8EHTN8FR'
     }
   ],
   [
@@ -101,7 +101,7 @@ gtag('config', 'G-NV0Y3PCY1J');`
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-0DRFCYSG8M');
+      gtag('config', 'G-SG8EHTN8FR');
     `
   ],
   [
@@ -117,5 +117,12 @@ gtag('config', 'G-NV0Y3PCY1J');`
   var head = document.querySelector('head');
   head.appendChild(resource);
     `
+  ],
+  [
+    'script',
+    {
+      async: 'false',
+      src: 'https://unpkg.com/netcdfjs@0.7.0/dist/netcdfjs.min.js'
+    }
   ]
 ]

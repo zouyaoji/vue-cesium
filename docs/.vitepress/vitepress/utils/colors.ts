@@ -9,7 +9,7 @@ export function getCssVarName(namespace: string, type: string) {
 /**
  * get css var value by css var name
  * @param name
- * @returns
+ * @returns {import('vue').Ref<string>} The reactive value of the CSS variable
  */
 export function getCssVarValue(name: string) {
   const val = ref(

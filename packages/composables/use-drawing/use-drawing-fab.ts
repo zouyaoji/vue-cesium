@@ -55,10 +55,9 @@ export default function (
   let selectedDrawingActionInstance: VcDrawingActionInstance
 
   /**
-   *
+   * Handle mouse click events forwarded from the handler.
    * @param movement 屏幕坐标
-   * @param button 鼠标按键 0 左键, 1 中键, 2 右键
-   * @param shift
+   * @param {object} [options] optional event options forwarded by handler
    */
   const handleMouseClick = (movement: Cesium.ScreenSpaceEventParamsType.LEFT_CLICK, options?) => {
     const cmp = selectedDrawingActionInstance?.cmpRef.value

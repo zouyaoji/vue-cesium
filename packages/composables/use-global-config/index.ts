@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-02-09 16:19:57
- * @LastEditTime: 2023-10-23 17:23:48
+ * @LastEditTime: 2026-01-21 00:37:11
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\packages\composables\use-global-config\index.ts
+ * @FilePath: \vue-cesium\packages\composables\use-global-config\index.ts
  */
 import type { ConfigProviderContext } from '@vue-cesium/utils/config'
 import type { MaybeRef } from '@vue-cesium/utils/types'

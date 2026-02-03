@@ -130,7 +130,7 @@ export function getObjClassName(obj: AnyObject, findCesiumClass = false): string
  * 验证是否是经纬度。
  * @param {number} longitude
  * @param {number} latitude
- * @returns {boolean}
+ * @returns {boolean} Whether the longitude and latitude are valid
  */
 export function lnglatValidator(longitude: number, latitude: number) {
   // 经度，整数部分为0-180小数部分为0到6位

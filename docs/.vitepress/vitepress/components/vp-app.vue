@@ -92,10 +92,16 @@ onMounted(async () => {
 })
 
 const locale = computed(() => (lang.value === 'zh-CN' ? zhCn : en))
+
+const isDev = import.meta.env.MODE === 'development'
 </script>
 
 <template>
-  <VcConfigProvider :locale="locale">
+  <VcConfigProvider
+    :locale="locale"
+    :cesium-path="isDev ? '/CesiumUnminified/Cesium.js' : 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'"
+    access-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzkyNWNlYi0xMzgxLTQwOTYtOTRhYS02ZTM4YjYwYWVjMzYiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODAzNDEyMn0.0MtHA4jjYQAtYyKjnKnzNziwkSmtLq8qiQqqPtiAfnA"
+  >
     <div class="App">
       <VPSkipLink />
       <VPOverlay

@@ -27,7 +27,7 @@ const distBundle = path.resolve(vcOutput, 'theme-default')
 /**
  * compile theme-default scss & minify
  * not use sass.sync().on('error', sass.logError) to throw exception
- * @returns
+ * @returns {void} A task that builds theme chalk assets.
  */
 function buildThemeChalk() {
   const sass = gulpSass(dartSass)
@@ -49,7 +49,7 @@ function buildThemeChalk() {
 
 /**
  * using `postcss` and `cssnano` to compress CSS
- * @returns
+ * @returns {Transform} A stream transform that compresses CSS using PostCSS and cssnano.
  */
 function compressWithCssnano() {
   const processor = postcss([

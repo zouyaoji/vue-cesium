@@ -181,6 +181,10 @@ export default defineComponent({
     }
 
     const onScenePostRender = throttle((scene) => {
+      if (!canRender.value) {
+        return
+      }
+
       performanceInfo.fps = scene._performanceDisplay?._fpsText.nodeValue
       performanceInfo.ms = scene._performanceDisplay?._msText.nodeValue
       scene._performanceDisplay._container.style.display = 'none'

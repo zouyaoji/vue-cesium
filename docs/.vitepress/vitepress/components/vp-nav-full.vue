@@ -9,6 +9,9 @@ defineProps<{
   fullScreen: boolean
 }>()
 
+// declare emitted events for template $emit usage
+defineEmits(['close'])
+
 const { lock, cleanup } = useLockScreen()
 const fullscreen = ref()
 </script>

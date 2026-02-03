@@ -413,7 +413,7 @@ export type VcPolygonHierarchy
   = | Array<Cesium.Cartesian3>
     | Array<Cartesian3Option>
     | Array<CartographicInDegreeOption>
-    | Array<Array<number>>
+    | Array<number>
     | Array<Array<number>>
     | VcCallbackPropertyFunction<Cesium.PolygonHierarchy>
     | CesiumPolygonHierarchy
@@ -491,7 +491,7 @@ export type CesiumNearFarScalar = Cesium.NearFarScalar | Cesium.CallbackProperty
 export type VcNearFarScalar = NearFarScalarOption | Array<number> | VcCallbackPropertyFunction<Cesium.NearFarScalar> | CesiumNearFarScalar
 
 export type CesiumPlane = Cesium.Plane | Cesium.CallbackProperty | Cesium.PlaneGraphics
-export type VcPlane = PlaneOption | VcCallbackPropertyFunction<Cesium.Plane> | CesiumPlane
+export type VcPlane = PlaneOption | VcCallbackPropertyFunction<Cesium.Plane> | CesiumPlane | [VcPosition, number]
 
 export interface HeadingPitchRangeOpts {
   heading?: number

@@ -3,8 +3,8 @@
  * @Date: 2024-06-14 17:24:02
  * @Description: Do not edit
  * @LastEditors: zouyaoji 370681295@qq.com
- * @LastEditTime: 2024-06-18 14:03:03
- * @FilePath: \vue-maplibre\docs\examples\config-provider\usage.vue
+ * @LastEditTime: 2026-02-03 09:42:12
+ * @FilePath: \vue-cesium\docs\examples\config-provider\usage.vue
 -->
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -122,7 +122,7 @@ function toggleLanguage() {
 </script>
 
 <template>
-  <el-row ref="viewerContainerRef" class="demo-viewer">
+  <el-row ref="viewerContainerRef" class="demo-viewer demo-vc-config-provider">
     <vc-config-provider :locale="locale">
       <vc-viewer>
         <vc-navigation ref="navigationRef" :offset="[35, 35]" />
@@ -136,7 +136,7 @@ function toggleLanguage() {
     </vc-config-provider>
     <el-row class="demo-toolbar">
       <el-button type="danger" round @click="toggleLanguage">
-        切换语言
+        Switch Language
       </el-button>
     </el-row>
   </el-row>

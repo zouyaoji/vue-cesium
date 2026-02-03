@@ -1,3 +1,12 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2026-01-20 21:49:14
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @Description:
+ * @FilePath: \vue-cesium\packages\components\viewer\src\index.ts
+ */
+
 import type {
   VcCamera,
   VcComponentInternalInstance,
@@ -14,14 +23,7 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { commonEmits } from '@vue-cesium/utils/emits'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { isPlainObject, kebabCase } from '@vue-cesium/utils/util'
-/*
- * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2024-03-17 18:08:40
- * @LastEditors: zouyaoji 370681295@qq.com
- * @Description:
- * @FilePath: \vue-cesium\packages\components\viewer\src\index.ts
- */
+
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, provide, withDirectives } from 'vue'
 import { viewerEvents } from './events'
 import useViewer, { viewerProps } from './useViewer'

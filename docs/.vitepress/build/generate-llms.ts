@@ -44,7 +44,7 @@ async function generateLLms() {
     }
 
     // URL
-    let url = `https://vue-maplibre.meteosci.com/${markdown
+    let url = `https://zouyaoji.top/vue-cesium/${markdown
       .replace(/^docs\//, '')
       .replace(/\.(md|vue)$/, '')}`
     if (url.includes('/examples/')) {
@@ -112,9 +112,9 @@ async function generateLLms() {
   }
 
   const docsIndexContent = [
-    '# Vue Maplibre - A Vue 3 based component library',
+    '# Vue Cesium - A Vue 3 based component library',
     '',
-    '- Vue Maplibre is a Vue3 based component library of Maplibre GL for developers.',
+    '- Vue Cesium is a Vue3 based component library of Cesium for developers.',
     '',
     '## Documentation',
     '',

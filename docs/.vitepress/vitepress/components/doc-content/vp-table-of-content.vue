@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import sponsorLocale from '../../../i18n/component/sponsor.json'
 import { useLang } from '../../composables/lang'
 import { useToc } from '../../composables/use-toc'
+import GoogleAdsense from '../sponsors/google-adsense.vue'
 import SponsorRightBigLogoList from '../sponsors/right-big-logo-list.vue'
 import SponsorRightLogoSmallList from '../sponsors/right-logo-small-list.vue'
 import SponsorRightTextList from '../sponsors/right-richtext-list.vue'
@@ -23,18 +24,11 @@ const container = ref()
         Contents
       </h3>
       <el-anchor :offset="70" :bound="120">
-        <el-anchor-link
-          v-for="{ link, text, children } in headers"
-          :key="link"
-          :href="link"
-          :title="text"
-        >
+        <el-anchor-link v-for="{ link, text, children } in headers" :key="link" :href="link" :title="text">
           <div :title="removeTag(text)" v-html="text" />
           <template v-if="children" #sub-link>
             <el-anchor-link
-              v-for="{ link: childLink, text: childText } in children"
-              :key="childLink"
-              :href="childLink"
+              v-for="{ link: childLink, text: childText } in children" :key="childLink" :href="childLink"
               :title="text"
             >
               <div :title="removeTag(childText)" v-html="childText" />
@@ -53,6 +47,10 @@ const container = ref()
       <SponsorRightBigLogoList />
       <SponsorRightLogoSmallList />
       <SponsorRightTextList />
+      <GoogleAdsense
+        ad-slot="4608014562" :ad-style="{ display: 'inline-block', width: '235px', height: '235px' }"
+        style="position: fixed; right: 10px; bottom: 20px; width: 230px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+      />
     </nav>
     <div class="toc-content-mask" />
   </aside>
@@ -64,6 +62,7 @@ const container = ref()
     width: 100%;
   }
 }
+
 .el-anchor__item {
   .el-anchor__link > div {
     overflow: hidden;

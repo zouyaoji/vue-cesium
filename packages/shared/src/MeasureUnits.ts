@@ -40,11 +40,11 @@ const AngleUnits = Object.freeze({
 })
 
 class MeasureUnits {
-  distanceUnits: string
-  areaUnits: string
-  volumeUnits: string
-  angleUnits: string
-  slopeUnits: string
+  distanceUnits?: string
+  areaUnits?: string
+  volumeUnits?: string
+  angleUnits?: string
+  slopeUnits?: string
 
   constructor(options?) {
     options = options ?? {}

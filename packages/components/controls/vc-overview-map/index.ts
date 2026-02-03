@@ -252,7 +252,7 @@ export default defineComponent({
         css.height = props.height
       }
       else {
-        const reg = /(\d+)/g
+        const reg = /(\d+)/
         const regResult = reg.exec(props.border)
         const boder = regResult?.length ? Number.parseFloat(regResult[0]) : 0
         const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
@@ -278,7 +278,7 @@ export default defineComponent({
     }
 
     const minimize = () => {
-      const reg = /(\d+)/g
+      const reg = /(\d+)/
       const regResult = reg.exec(props.border)
       const boder = regResult?.length ? Number.parseFloat(regResult[0]) : 0
       const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)

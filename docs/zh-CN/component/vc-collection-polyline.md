@@ -1,0 +1,83 @@
+## VcCollectionPolyline
+
+加载线图元集合，相当于初始化一个 `Cesium.PolylineCollection` 实例。渲染海量线图元时建议用 `polylines` 属性表达。
+
+### 基础用法
+
+线图元集合组件的基础用法。
+
+:::demo 使用 `vc-collection-polyline` 标签在三维球上添加线图元集合。
+
+primitives/vc-collection-polyline/usage
+
+:::
+
+### 属性
+
+| 属性名                  | 类型           | 默认值  | 描述                                                                    |
+| ----------------------- | -------------- | ------- | ----------------------------------------------------------------------- |
+| modelMatrix             | Cesium.Matrix4 |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。            |
+| debugShowBoundingVolume | boolean        | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。           |
+| enableMouseEvent        | boolean        | `true`  | `optional` 指定鼠标事件是否生效。                                       |
+| polylines               | Array          | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-polyline` 组件属性相同。 |
+
+### 事件
+
+| 事件名     | 参数                                    | 描述                       |
+| ---------- | --------------------------------------- | -------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。           |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。       |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。           |
+| mousedown  | (evt: VcPickEvent)                      | 鼠标在该图元上按下时触发。 |
+| mouseup    | (evt: VcPickEvent)                      | 鼠标在该图元上弹起时触发。 |
+| click      | (evt: VcPickEvent)                      | 鼠标单击该图元时触发。     |
+| clickout   | (evt: VcPickEvent)                      | 鼠标单击该图元外部时触发。 |
+| dblclick   | (evt: VcPickEvent)                      | 鼠标左键双击该图元时触发。 |
+| mousemove  | (evt: VcPickEvent)                      | 鼠标在该图元上移动时触发。 |
+| mouseover  | (evt: VcPickEvent)                      | 鼠标移动到该图元时触发。   |
+| mouseout   | (evt: VcPickEvent)                      | 鼠标移出该图元时触发。     |
+
+### 插槽
+
+| 插槽名  | 描述                        | 子组件      |
+| ------- | --------------------------- | ----------- |
+| default | 用于挂载 vc-polyline 组件。 | vc-polyline |
+
+### VcPolyline
+
+加载线图元，相当于初始化一个 `Cesium.Polyline` 实例。
+
+**注意：** 需要作为 `vc-collection-polyline` 的子组件才能正常加载。
+
+### VcPolyline 属性
+
+| 属性名                   | 类型                              | 默认值 | 描述                                                        |
+| ------------------------ | --------------------------------- | ------ | ----------------------------------------------------------- |
+| distanceDisplayCondition | VcDistanceDisplayCondition\|Array |        | `optional` 指定 polyline 显示条件随相机距离改变的参数。     |
+| id                       | any                               |        | `optional` 指定与 polyline 关联的信息，拾取时返回该属性值。 |
+| loop                     | boolean                           | false  | `optional` 指定 polyline 是否首尾相连。                     |
+| material                 | VcMaterial\|Array\|string         |        | `optional` 指定 polyline 材质。                             |
+| positions                | Array                             |        | `optional` 指定 polyline 的位置。                           |
+| show                     | boolean                           | true   | `optional` 指定 polyline 是否显示。                         |
+| width                    | number                            | 1.0    | `optional` 指定 polyline 宽度。                             |
+| enableMouseEvent         | boolean                           | `true` | `optional` 指定鼠标事件是否生效。                           |
+
+### VcPolyline 事件
+
+| 事件名     | 参数                                    | 描述                       |
+| ---------- | --------------------------------------- | -------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。           |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。       |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。           |
+| mousedown  | (evt: VcPickEvent)                      | 鼠标在该图元上按下时触发。 |
+| mouseup    | (evt: VcPickEvent)                      | 鼠标在该图元上弹起时触发。 |
+| click      | (evt: VcPickEvent)                      | 鼠标单击该图元时触发。     |
+| clickout   | (evt: VcPickEvent)                      | 鼠标单击该图元外部时触发。 |
+| dblclick   | (evt: VcPickEvent)                      | 鼠标左键双击该图元时触发。 |
+| mousemove  | (evt: VcPickEvent)                      | 鼠标在该图元上移动时触发。 |
+| mouseover  | (evt: VcPickEvent)                      | 鼠标移动到该图元时触发。   |
+| mouseout   | (evt: VcPickEvent)                      | 鼠标移出该图元时触发。     |
+
+### 参考
+
+- 官方文档： **[PolylineCollection](https://cesium.com/docs/cesiumjs-ref-doc/PolylineCollection.html)**、**[Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html)**

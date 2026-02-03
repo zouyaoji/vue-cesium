@@ -144,20 +144,68 @@ ${linksText}`
 }
 
 function getExampleImports(componentId: string) {
-  const examplePath = path.resolve(docRoot, 'examples', componentId)
-  if (!fs.existsSync(examplePath))
+  const examplesDir = path.resolve(docRoot, 'examples')
+
+  // First try direct paths
+  const directPaths = [
+    path.resolve(examplesDir, componentId),
+    // strip vc- prefix, e.g. vc-viewer -> viewer
+    path.resolve(examplesDir, componentId.replace(/^vc-/, ''))
+  ]
+
+  // Dynamically scan all subdirectories in examples folder
+  let categoryPaths: string[] = []
+  if (fs.existsSync(examplesDir)) {
+    const categoryDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name)
+
+    categoryPaths = categoryDirs.map(category =>
+      path.resolve(examplesDir, category, componentId)
+    )
+  }
+
+  // Combine all possible paths
+  const possiblePaths = [...directPaths, ...categoryPaths]
+
+  let examplePath: string | undefined
+  for (const p of possiblePaths) {
+    if (!fs.existsSync(p))
+      continue
+    const entries = fs.readdirSync(p, { withFileTypes: true })
+    const hasVue = entries.some(e => e.isFile() && e.name.endsWith('.vue'))
+    if (!hasVue)
+      continue
+    examplePath = p
+    break
+  }
+
+  if (!examplePath)
     return []
+
   const files = fs.readdirSync(examplePath)
   const imports: string[] = []
+
+  // relative path from plugins folder to examplePath
+  const importBase = path.relative(
+    path.resolve(docRoot, '.vitepress', 'plugins'),
+    examplePath
+  ).replace(/\\/g, '/')
+
+  // component path relative to examples dir for naming
+  const componentPath = path
+    .relative(examplesDir, examplePath)
+    .replace(/\\/g, '/')
+    .replace(/\//g, '-')
 
   for (const item of files) {
     if (!/\.vue$/.test(item))
       continue
     const file = item.replace(/\.vue$/, '')
-    const name = camelize(`Ep-${componentId}-${file}`)
+    const name = camelize(`Ep-${componentPath}-${file}`)
 
     imports.push(
-      `import ${name} from '../../examples/${componentId}/${file}.vue'`
+      `import ${name} from '${importBase}/${file}.vue'`
     )
   }
 

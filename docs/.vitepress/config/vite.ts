@@ -1,6 +1,6 @@
-/* eslint-disable node/prefer-global/process */
 import type { Plugin, UserConfig } from 'vitepress'
 import path from 'node:path'
+import process from 'node:process'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import buildPkg from '@vue-cesium/build'
 import glob from 'fast-glob'
@@ -121,7 +121,7 @@ export function getViteConfig({ mode }: { mode: string }) {
       MarkdownTransform() as Plugin,
       Inspect(),
       groupIconVitePlugin() as Plugin,
-      env.HTTPS ? (mkcert() as Plugin) : undefined
+      ...(env.HTTPS ? [mkcert()] : [])
     ],
     optimizeDeps: {
       esbuildOptions: {

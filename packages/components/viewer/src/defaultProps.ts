@@ -187,7 +187,7 @@ export default {
   },
   removeCesiumScript: {
     type: Boolean,
-    default: true
+    default: false
   },
   autoSortImageryLayers: {
     type: Boolean,

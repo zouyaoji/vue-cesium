@@ -1,6 +1,8 @@
 ---
+
 title: Quick Start
 lang: en-US
+
 ---
 
 # Quick Start
@@ -73,4 +75,4 @@ We provide a [Vite Template](https://github.com/zouyaoji/vue-cesium-vite-starter
 ## Let's Get Started
 
 You can bootstrap your project from now on. For each components usage, please
-refer to [the individual component documentation](/en-US/component/config-provider.html).
+refer to [the individual component documentation](/en-US/component/vc-config-provider.html).

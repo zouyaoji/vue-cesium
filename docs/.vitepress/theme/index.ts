@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2025-11-28 14:55:53
+ * @Description: Do not edit
+ * @LastEditors: zouyaoji 370681295@qq.com
+ * @LastEditTime: 2026-01-31 22:53:54
+ * @FilePath: \vue-cesium\docs\.vitepress\theme\index.ts
+ */
 import type { Theme } from 'vitepress'
 import { isClient } from '@vueuse/core'
 import ElementPlus, {
@@ -12,9 +20,9 @@ import './style.css'
 import 'vitepress/dist/client/theme-default/styles/components/vp-code-group.css'
 import 'virtual:group-icons.css'
 // 本地
-// import '@vue-cesium/theme-default/src/index.scss'
+import '@vue-cesium/theme-default/src/index.scss'
 // npm
-import 'vue-cesium/dist/index.css'
+// import 'vue-cesium/dist/index.css'
 import './normalize.scss'
 import './demo.scss'
 

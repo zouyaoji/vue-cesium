@@ -1,15 +1,15 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-05 22:38:11
- * @LastEditTime: 2021-12-06 18:04:11
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2026-02-03 22:23:54
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium@next\build\indices.ts
+ * @FilePath: \vue-cesium\internal\build\indices.ts
  */
 'use strict'
 
 import fs from 'fs'
-import algoliasearch from 'algoliasearch'
+import { algoliasearch } from 'algoliasearch'
 import { slugify } from 'transliteration'
 import fg from 'fast-glob'
 const algoliaKey = process.env.ALGOLIA_KEY

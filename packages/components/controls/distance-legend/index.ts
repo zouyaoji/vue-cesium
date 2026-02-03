@@ -126,6 +126,9 @@ export default defineComponent({
     }
 
     const onScenePostRender = throttle((scene) => {
+      if (!canRender.value) {
+        return
+      }
       const { Cartesian2, defined, getTimestamp, EllipsoidGeodesic } = Cesium
       const now = getTimestamp()
       if (now < lastLegendUpdate + 250) {

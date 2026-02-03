@@ -2,6 +2,7 @@ import type { MarkdownRenderer } from 'vitepress'
 import fs from 'node:fs'
 import path from 'node:path'
 import buildPkg from '@vue-cesium/build'
+import { camelize } from '@vue/shared'
 
 const { docRoot } = buildPkg
 
@@ -35,12 +36,17 @@ function createDemoContainer(md: MarkdownRenderer): ContainerOpts {
         if (!source)
           throw new Error(`Incorrect source file: ${sourceFile}`)
 
+        // 生成组件名：examples/controls/vc-navigation/usage -> EpControlsVcNavigationUsage
+        // 保持与 markdown-transform.ts 中的逻辑一致
+        const componentPath = sourceFile.replaceAll('/', '-')
+        const componentName = camelize(`Ep-${componentPath}`)
+
         return `<Demo source="${encodeURIComponent(
           md.render(`\`\`\` vue\n${source}\`\`\``)
         )}" path="${sourceFile}" raw-source="${encodeURIComponent(
           source
         )}" description="${encodeURIComponent(md.render(description))}">
-  <template #source><ep-${sourceFile.replaceAll('/', '-')}/></template>`
+  <template #source><${componentName} /></template>`
       }
       else {
         return '</Demo>\n'

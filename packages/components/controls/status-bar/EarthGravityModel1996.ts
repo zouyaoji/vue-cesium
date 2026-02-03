@@ -7,11 +7,8 @@ class EarthGravityModel1996 {
    * The Earth Gravity Model 1996 (EGM96) geoid.
    * @param {string} gridFileUrl The URL of the WW15MGH.DAC file.
    */
-  constructor(gridFileUrl) {
+  constructor(gridFileUrl: string) {
     this.gridFileUrl = gridFileUrl
-    this.data = undefined
-
-    // These values were determined by inspecting the WW15MGH.DAC file.  We hard-code them here because
     // we need them available before that file finishes loading.
     this.minimumHeight = -106.99
     this.maximumHeight = 85.39
@@ -28,11 +25,10 @@ class EarthGravityModel1996 {
 
   /**
    * Gets the height of EGM96 above the surface of the ellipsoid.
-   * @param {string} baseUrl The base URL for TerriaJS resources.
    * @param {number} longitude The longitude.
-   * @param {number} latitude The latitude
-   * @return {Promise | number} A promise, that, when it results The height of mean sea level above the ellipsoid at the specified location.  Negative numbers indicate that mean sea level
-   *                  is below the ellipsoid.
+   * @param {number} latitude The latitude.
+   * @returns {Promise<number>|number} The height of mean sea level above the ellipsoid at the specified location. Negative numbers indicate that mean sea level
+   * is below the ellipsoid.
    */
   getHeight(longitude, latitude) {
     return getHeightData(this).then((data) => {

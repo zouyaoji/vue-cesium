@@ -1,4 +1,5 @@
-name: Deploy Doc Website
+name: Publish Docs Deploy
+
 on:
   workflow_run:
     workflows: ['Publish to NPM registry']
@@ -7,51 +8,67 @@ on:
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 16
-          registry-url: https://registry.npmjs.com/
+          node-version: 20
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
         with:
-          version: 8.4.0
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm i --frozen-lockfile
 
-      # - name: Build Website
-      #   run: pnpm website-build
+      - name: Build Metadata
+        run: cd internal/metadata && pnpm build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Build Indices
-      #   run: pnpm build:indices
-      #   env:
-      #     ALGOLIA_KEY: ${{secrets.ALGOLIA_KEY}}
+      - name: Build website
+        run: pnpm docs:build
+        env:
+          DOC_ENV: production
+          NODE_OPTIONS: --max-old-space-size=4096
 
-      # - name: Deploy
-      #   uses: JamesIves/github-pages-deploy-action@3.7.1
-      #   with:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     BRANCH: gh-pages
-      #     FOLDER: website-dist
-      #     GIT_CONFIG_NAME: zouyaoji
-      #     GIT_CONFIG_EMAIL: 370681295@qq.com
-      #     COMMIT_MESSAGE: website deploy
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: docs/.vitepress/dist
+          git-config-name: zouyaoji
+          git-config-email: 370681295@qq.com
+          commit-message: website deploy
 
-      # - name: Sync to Gitee
-      #   uses: x-dr/sync-repo-to-gitee@v1.0
-      #   env:
-      #     # 在 Settings->Secrets 配置 GITEE_KEY
-      #     SSH_KEY: ${{ secrets.GITEE_KEY }}
-      #   with:
-      #     # 注意替换为你的 GitHub 源仓库地址
-      #     github-repo: 'git@github.com:zouyaoji/vue-cesium.git'
-      #     # 注意替换为你的 Gitee 目标仓库地址
-      #     gitee-repo: 'git@gitee.com:zouyaoji/vue-cesium.git'
+      - name: Sync to Gitee
+        uses: x-dr/sync-repo-to-gitee@v1.0
+        env:
+          # 在 Settings->Secrets 配置 GITEE_KEY
+          SSH_KEY: ${{ secrets.GITEE_KEY }}
+        with:
+          # 注意替换为你的 GitHub 源仓库地址
+          github-repo: 'git@github.com:zouyaoji/vue-cesium.git'
+          # 注意替换为你的 Gitee 目标仓库地址
+          gitee-repo: 'git@gitee.com:zouyaoji/vue-cesium.git'

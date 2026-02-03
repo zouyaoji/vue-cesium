@@ -608,6 +608,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     listener && emit('beforeLoad', vcInstance)
     globalConfig.value.__scriptPromise = globalConfig.value.__scriptPromise || getCesiumScript()
     await globalConfig.value.__scriptPromise
+
+    // console.log('等待', globalConfig.value?.__viewerUnloadingPromise)
+    await globalConfig.value?.__viewerUnloadingPromise
+    // console.log('结束等待')
   }
   /**
    * 初始化 Viewer，成功返回 {Cesium, viewer, instance}， 失败返回false。
@@ -810,10 +814,6 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
 
     logger.debug('viewer---unloading')
-    let unloadingResolve
-    globalConfig.value.__viewerUnloadingPromise = new Promise((resolve, reject) => {
-      unloadingResolve = resolve
-    })
 
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
@@ -897,8 +897,6 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     listener && emit('destroyed', vcInstance)
     vcMitt.emit('destroyed', vcInstance)
     logger.debug('viewer---unloaded')
-    unloadingResolve(true)
-    globalConfig.value.__viewerUnloadingPromise = undefined
     isReady.value = false
     return true
   }
@@ -1367,7 +1365,9 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   onMounted(async () => {
     try {
       logger.debug('viewer - onMounted')
+      // console.log('等待', globalConfig.value?.__viewerUnloadingPromise)
       await globalConfig.value?.__viewerUnloadingPromise
+      // console.log('结束等待')
       load()
         .then((e) => {
           createResolve(e)
@@ -1385,8 +1385,16 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   onUnmounted(() => {
     logger.debug('viewer - onUnmounted')
+
+    let unloadingResolve
+    globalConfig.value.__viewerUnloadingPromise = new Promise((resolve, reject) => {
+      unloadingResolve = resolve
+    })
+
     unload().then(() => {
       vcMitt.all.clear()
+      unloadingResolve(true)
+      globalConfig.value.__viewerUnloadingPromise = undefined
     })
   })
 

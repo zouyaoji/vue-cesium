@@ -1,7 +1,7 @@
 import type { VcBtnRef, VcTooltipProps, VcTooltipRef } from '@vue-cesium/components/ui'
 import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcLocationEvt, VcReadyObject } from '@vue-cesium/utils/types'
 import type { CSSProperties, VNode } from 'vue'
-import AMapLoader from '@amap/amap-jsapi-loader'
+// import AMapLoader from '@amap/amap-jsapi-loader'
 import {
   VcBtn,
   VcIcon,
@@ -91,6 +91,7 @@ export default defineComponent({
 
       let promiseLoadAmap: Promise<unknown> | undefined
       if (props.amap && props.amap.key) {
+        const { default: AMapLoader } = await import('@amap/amap-jsapi-loader')
         const options = props.amap.options
         promiseLoadAmap = new Promise((resolve, reject) => {
           AMapLoader.load({

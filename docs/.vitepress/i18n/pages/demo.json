@@ -1,0 +1,12 @@
+{
+  "en-US": {
+    "unload": "Unload",
+    "load": "Load",
+    "reload": "Reload"
+  },
+  "zh-CN": {
+    "unload": "卸载",
+    "load": "加载",
+    "reload": "重新加载"
+  }
+}

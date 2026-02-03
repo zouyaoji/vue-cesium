@@ -66,7 +66,7 @@ class IndexedDBScheduler {
   /**
    *  创建 IndexedDB 浏对象仓库，IndexedDB 是浏览器提供的本地数据库
    * @param {string} storeName 对象仓库（表）名称
-   * @returns {Promise}
+   * @returns {Promise<boolean>} A promise that resolves to true when the object store is created successfully, otherwise false.
    */
   createObjectStore(storeName) {
     return new Promise((resolve, reject) => {
@@ -128,7 +128,7 @@ class IndexedDBScheduler {
    * @param {string} storeName 对象仓库（表）名称
    * @param {number} id 主键
    * @param {*} value 值
-   * @returns {Promise}
+   * @returns {Promise<boolean>} A promise that resolves to true if the record is written successfully, otherwise false.
    */
   putElementInDB(storeName, id, value) {
     return new Promise((resolve, reject) => {
@@ -191,7 +191,7 @@ class IndexedDBScheduler {
    * 向对象仓库读取数据。
    * @param {string} storeName 对象仓库（表）名称
    * @param {number} id 主键
-   * @returns {Promise}
+   * @returns {Promise<any>} A promise that resolves to the stored value or rejects with null if not found.
    */
   getElementFromDB(storeName, id) {
     return new Promise((resolve, reject) => {
@@ -224,7 +224,7 @@ class IndexedDBScheduler {
    * @param {string} storeName
    * @param {number} id
    * @param {*} value
-   * @returns {Promise}
+   * @returns {Promise<boolean>} A promise that resolves to true if the update succeeds, otherwise false.
    */
   updateElementInDB(storeName, id, value) {
     return new Promise((resolve, reject) => {
@@ -256,7 +256,7 @@ class IndexedDBScheduler {
    * 移除数据。
    * @param {string} storeName
    * @param {number} id
-   * @returns {Promise}
+   * @returns {Promise<boolean>} A promise that resolves to true if the removal succeeds, otherwise false.
    */
   removeElementFromDB(storeName, id) {
     return new Promise((resolve, reject) => {

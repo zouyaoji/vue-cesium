@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2023-06-05 11:08:29
+ * @LastEditTime: 2026-02-01 12:04:00
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\typings\global.d.ts
@@ -352,7 +352,7 @@ declare module 'vue' {
     VcGeometryEllipse: GlobalComponentConstructor<VcGeometryEllipseProps>
     VcGeometryEllipseOutline: GlobalComponentConstructor<VcGeometryEllipseOutlineProps>
     VcGeometryEllipsoid: GlobalComponentConstructor<VcGeometryEllipsoidProps>
-    VcGeometryEllipsoidOutline: GlobalComponentConstructor<VcGeometryEllipseOutlineRef>
+    VcGeometryEllipsoidOutline: GlobalComponentConstructor<VcGeometryEllipseOutlineProps>
     VcGeometryFrustum: GlobalComponentConstructor<VcGeometryFrustumProps>
     VcGeometryFrustumOutline: GlobalComponentConstructor<VcGeometryFrustumOutlineProps>
     VcGeometryGroundPolyline: GlobalComponentConstructor<VcGeometryGroundPolylineProps>

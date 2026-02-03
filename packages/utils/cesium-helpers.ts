@@ -59,12 +59,13 @@ import {
   VcScanLineMaterialProperty
 } from '@vue-cesium/shared/extends/materials'
 import { compare } from 'compare-versions'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-unified'
 import { hasOwn, isArray, isEmptyObj, isFunction, isPlainObject, isString, isUndefined } from './util'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
- * @param {object} val
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  * @returns {Cartesian2 | CallbackProperty} 返回 Cartesian2 或者 CallbackProperty
  * @example
  * const options = [100, 100]
@@ -98,9 +99,10 @@ export function makeCartesian2(val: VcCartesian2, isConstant = false): CesiumCar
 
 /**
  * 将对象或者数组转换为 Cesium.Cartesian3
- * @param {object} val 传入的对象或数组
+ * @param {object|Array|Function} val 传入的对象、数组或函数
+ * @param {Cesium.Ellipsoid} [ellipsoid] 可选的椭球体，默认为 WGS84
  * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
- * @returns 返回 Cartesian3 或者 CallbackProperty
+ * @returns {Cartesian3|CallbackProperty} 返回 Cartesian3 或者 CallbackProperty
  * @example
  * const options = {
  *  lng: 108,
@@ -158,8 +160,10 @@ export function makeCartesian3(val: VcPosition, ellipsoid?: Cesium.Ellipsoid, is
 
 /**
  * 将数组 [lng, lat, height, ……，lng, lat, height] 转换为 Cesium.Cartesian3 数组
- * @param {Array} val
- * @returns {Array<Cartesian3>}
+ * @param {Array|Function} vals
+ * @param {Cesium.Ellipsoid} [ellipsoid] 可选的椭球体，默认为 WGS84
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Array<Cartesian3>} 返回 Cartesian3 数组或 CallbackProperty
  */
 export function makeCartesian3Array(vals: VcCartesian3Array, ellipsoid?: Cesium.Ellipsoid, isConstant = false): CesiumCartesian3Array | undefined {
   const { CallbackProperty, Cartesian3, Ellipsoid } = Cesium
@@ -191,8 +195,9 @@ export function makeCartesian3Array(vals: VcCartesian3Array, ellipsoid?: Cesium.
 
 /**
  * 将形如 [lng, lat, ……，lng, lat] 数组转换为 Cesium.Cartesian2 数组
- * @param {Array} vals
- * @returns {Array<Cartesian2>}
+ * @param {Array|Function} vals
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Array<Cartesian2>} 返回 Cartesian2 数组或 CallbackProperty
  */
 export function makeCartesian2Array(vals: VcCartesian2Array, isConstant): CesiumCartesian2Array | undefined {
   const { CallbackProperty } = Cesium
@@ -218,7 +223,8 @@ export function makeCartesian2Array(vals: VcCartesian2Array, isConstant): Cesium
 
 /**
  * 将对象或数组 转换为 Cesium.Quaternion
- * @param {object} val
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  * @example
  * const options = {x: 0, y: 0, z: 0, w: 0}
  * // const options = [0, 0, 0, 0]
@@ -252,7 +258,8 @@ export function makeQuaternion(
 
 /**
  * 解析 HierarchyJson
- * @param {object} val
+ * @param {Array} val
+ * @param {Cesium.Ellipsoid} [ellipsoid] 可选的椭球体，默认为 WGS84
  */
 function parsePolygonHierarchyJson(val: Array<PolygonHierarchyOption>, ellipsoid?: Cesium.Ellipsoid) {
   val.forEach((item) => {
@@ -265,7 +272,9 @@ function parsePolygonHierarchyJson(val: Array<PolygonHierarchyOption>, ellipsoid
 
 /**
  * 普通数组或对象转 Cesium.PolygonHierarchy 对象。
- * @param {object | Array} val
+ * @param {object|Array|Function} val
+ * @param {Cesium.Ellipsoid} [ellipsoid] 可选的椭球体，默认为 WGS84
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  */
 export function makePolygonHierarchy(val: VcPolygonHierarchy, ellipsoid?: Cesium.Ellipsoid, isConstant = false): CesiumPolygonHierarchy | undefined {
   const { PolygonHierarchy, CallbackProperty } = Cesium
@@ -295,8 +304,9 @@ export function makePolygonHierarchy(val: VcPolygonHierarchy, ellipsoid?: Cesium
 
 /**
  * 对象或数组转 Cesium.NearFarScalar。
- * @param {object} val
- * @returns {NearFarScalar}
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {NearFarScalar} 返回 NearFarScalar 或 CallbackProperty
  * @example
  * const options = {near: 1000, nearValue: 1.0, far: 10000, farValue: 0.5}
  * // const options = [1000, 1.0, 10000, 1.5]
@@ -326,8 +336,9 @@ export function makeNearFarScalar(val: VcNearFarScalar, isConstant = false): Ces
 }
 /**
  * 对象或数组转 Cesium.DistanceDisplayCondition。
- * @param {object} val
- * @returns {DistanceDisplayCondition}
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {DistanceDisplayCondition} 返回 DistanceDisplayCondition 或 CallbackProperty
  * @example
  * const options = [0, 1000]
  * // const options = {near: 0, far: 1000}
@@ -358,8 +369,9 @@ export function makeDistanceDisplayCondition(val: VcDistanceDisplayCondition, is
 
 /**
  * 普通对象、数组或字符串转 Cesium.Color。
- * @param {string | Array | object | Function} val
- * @returns {Color}
+ * @param {string|Array|object|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Color} 返回 Color 或 CallbackProperty
  * @example
  * const options = 'red'
  * // const options = [1, 0, 0, 1.0] // r g b a
@@ -420,7 +432,8 @@ export function makeColors(vals: VcColor[]): Cesium.Color[] {
 
 /**
  * 普通对象或数组 [r, g, b, a] 或字符串转 MaterialProperty
- * @param {string | Array | object} val
+ * @param {string|Array|object|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  */
 export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false): CesiumMaterialProperty {
   const {
@@ -614,7 +627,7 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
 
 /**
  * 转 Material
- * @param {string | Array | object} val
+ * @param {string|Array|object} val
  */
 export function makeMaterial(this, val: VcMaterial): CesiumMaterial {
   const vcInstance = this as VcComponentInternalInstance
@@ -699,8 +712,9 @@ export function makeAppearance(this: VcComponentInternalInstance, val: VcAppeara
 
 /**
  * 将对象 {west: number, south: number, east: number, north: number} 或者[west, south, east, north]数组 转 Cesium.Rectangle 对象。
- * @param {object} val
- * @returns {Rectangle}
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Rectangle} 返回 Rectangle 或 CallbackProperty
  */
 export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRectangle | Cesium.RectangleGraphics | undefined {
   const { Rectangle, RectangleGraphics, CallbackProperty } = Cesium
@@ -733,8 +747,9 @@ export function makeRectangle(val: VcRectangle, isConstant = false): CesiumRecta
 
 /**
  * 对象或数组转 Cesium.BoundingRectangle。
- * @param {object} val
- * @returns {Cesium.BoundingRectangle}
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Cesium.BoundingRectangle} 返回 BoundingRectangle 或 CallbackProperty
  * @example
  * const options = [0, 0, 100, 100]
  * // const options = {x: 0, y: 0, width: 100, height: 100}
@@ -765,8 +780,9 @@ export function makeBoundingRectangle(val: VcBoundingRectangle, isConstant = fal
 
 /**
  * 普通对象 {normal: number, distance: number} 转 Cesium.Plane 对象。
- * @param {object} val
- * @returns {Plane}
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
+ * @returns {Plane} 返回 Plane 或 CallbackProperty
  */
 export function makePlane(val: VcPlane, isConstant = false): CesiumPlane {
   const { Cartesian3, Plane, PlaneGraphics, CallbackProperty } = Cesium
@@ -798,7 +814,8 @@ export function makePlane(val: VcPlane, isConstant = false): CesiumPlane {
 
 /**
  * 普通对象转平移、旋转、缩放变换对象。
- * @param {*} val
+ * @param {object|Array|Function} val
+ * @param {boolean} isConstant 传入function时生效，true 代表回调 function 每时每刻都返回值， false 代表改变才会返回值。默认false。
  */
 export function makeTranslationRotationScale(
   val: Cesium.TranslationRotationScale | Cesium.CallbackProperty | TranslationRotationScaleOption | AnyFunction<any> | Array<any>,

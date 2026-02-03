@@ -86,10 +86,10 @@ class DynamicOverlay {
   }
 
   /**
-   *
-   * @param position
-   * @param interval
-   * @returns
+   * Add a position to the sampled position property and returns the JulianDate of the added sample.
+   * @param position The position to add
+   * @param timeOrInterval A time (number of seconds) or an interval or date for the sample
+   * @returns {Cesium.JulianDate} The JulianDate corresponding to the added sample
    */
   addPosition(position: VcPosition, timeOrInterval: string | number | Cesium.JulianDate | Date) {
     this._removePosition()

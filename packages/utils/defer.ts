@@ -32,7 +32,7 @@
 
 /**
  * Creates a deferred object, containing a promise object, and functions to resolve or reject the promise.
- * @returns {defer.deferred}
+ * @returns {defer.deferred} An object containing a promise and its resolve and reject functions.
  * @private
  */
 function defer() {

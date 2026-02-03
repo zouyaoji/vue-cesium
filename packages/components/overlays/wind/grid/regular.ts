@@ -16,7 +16,7 @@ import { decimalize, floorMod } from './math'
  *
  * @param λaxis longitude axis
  * @param φaxis latitude axis
- * @returns {*}
+ * @returns {*} The created grid object with iterator and access methods.
  */
 export function regularGrid(λaxis, φaxis) {
   const nx = Math.floor(λaxis.size) // number of lon points

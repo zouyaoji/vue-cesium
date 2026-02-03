@@ -59,8 +59,9 @@ function merge(dest, src, redefine) {
 }
 
 /**
- * @param {...object} args
- * @returns {object}
+ * Merges property descriptors from multiple source objects into the first object.
+ * @param {...object} args Objects to merge, with the first as the destination.
+ * @returns {object} The destination object with merged descriptors.
  */
 export function mergeDescriptors(...args: any[]) {
   let redefine: boolean

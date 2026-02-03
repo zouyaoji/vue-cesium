@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2024-02-28 17:17:37
+ * @LastEditTime: 2026-02-01 17:17:06
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \vue-cesium\packages\utils\drawing-types.ts
+ * @FilePath: \vue-cesium\node_modules\@vue-cesium\utils\drawing-types.ts
  */
 
 import type {
@@ -242,6 +242,39 @@ export interface VcDrawingOpts {
   showLabel?: boolean
   showAngleLabel?: boolean
   autoUpdateLabelPosition?: boolean
+  preRenderDatas?: VcDrawingPreRenderDatas
+  /**
+   * Triggers when the mouse is pressed on this datasource.
+   */
+  onMousedown?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse bounces up on this datasource.
+   */
+  onMouseup?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks on this datasource.
+   */
+  onClick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks outside this datasource.
+   */
+  onClickout?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the left mouse button double-clicks this datasource.
+   */
+  onDblclick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves on this datasource.
+   */
+  onMousemove?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves over to this datasource.
+   */
+  onMouseover?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves out of this datasource.
+   */
+  onMouseout?: (evt: VcPickEvent) => void
 }
 
 export type MeasurementType

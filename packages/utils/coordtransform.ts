@@ -17,7 +17,7 @@ const ee = 0.00669342162296594323
  * 即 百度 转 谷歌、高德
  * @param bd_lng
  * @param bd_lat
- * @returns {*[]}
+ * @returns {number[]} An array containing longitude and latitude in GCJ-02 coordinate system.
  */
 function bd09togcj02(bd_lng: number, bd_lat: number) {
   var bd_lng = +bd_lng
@@ -36,7 +36,7 @@ function bd09togcj02(bd_lng: number, bd_lat: number) {
  * 即 谷歌、高德 转 百度
  * @param lng
  * @param lat
- * @returns {*[]}
+ * @returns {number[]} An array containing longitude and latitude in BD-09 coordinate system.
  */
 function gcj02tobd09(lng: number, lat: number) {
   var lat = +lat
@@ -52,7 +52,7 @@ function gcj02tobd09(lng: number, lat: number) {
  * WGS-84 转 GCJ-02
  * @param lng
  * @param lat
- * @returns {*[]}
+ * @returns {number[]} An array containing longitude and latitude in GCJ-02 coordinate system.
  */
 function wgs84togcj02(lng: number, lat: number) {
   var lat = +lat
@@ -79,7 +79,7 @@ function wgs84togcj02(lng: number, lat: number) {
  * GCJ-02 转换为 WGS-84
  * @param lng
  * @param lat
- * @returns {*[]}
+ * @returns {number[]} An array containing longitude and latitude in WGS-84 coordinate system.
  */
 function gcj02towgs84(lng: number, lat: number) {
   var lat = +lat
@@ -128,7 +128,7 @@ var transformlng = function transformlng(lng: number, lat: number) {
  * 判断是否在国内，不在国内则不做偏移
  * @param lng
  * @param lat
- * @returns {boolean}
+ * @returns {boolean} Returns true if the coordinates are outside China, otherwise false.
  */
 // eslint-disable-next-line vars-on-top
 var out_of_china = function out_of_china(lng: number, lat: number): boolean {

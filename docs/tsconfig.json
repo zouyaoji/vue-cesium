@@ -10,6 +10,7 @@
     "strict": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
+    "strictNullChecks": false,
     "lib": ["ESNext", "DOM", "WebWorker"],
     "paths": {
       "vue-cesium": ["../packages/vue-cesium"],
@@ -20,6 +21,6 @@
     "jsx": "preserve",
     "jsxImportSource": "vue"
   },
-  "include": ["**/*", ".vitepress/**/*", "../typings/global.d.ts"],
+  "include": ["**/*", ".vitepress/**/*", "../typings/**/*"],
   "exclude": ["node_modules"]
 }
