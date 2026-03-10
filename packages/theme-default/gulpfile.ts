@@ -33,7 +33,12 @@ function buildThemeChalk() {
   const sass = gulpSass(dartSass)
   const noElPrefixFile = /index|base|display/
   return src(path.resolve(__dirname, 'src/*.scss'))
-    .pipe(sass.sync())
+    .pipe(
+      sass.sync({
+        // Keep current SCSS syntax while suppressing known Dart Sass deprecation noise.
+        silenceDeprecations: ['import', 'global-builtin']
+      })
+    )
     .pipe(gulpPostcss())
     .pipe(autoprefixer({ cascade: false }))
     .pipe(compressWithCssnano())

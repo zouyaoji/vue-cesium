@@ -23,7 +23,9 @@
     "rootDir": ".",
     "types": ["node", "jest"],
     "paths": {
-      "@vue-cesium/*": ["package/*"]
+      "@vue-cesium/*": [
+        "packages/*"
+      ]
     }
   },
   "include": ["packages", "typings"],
