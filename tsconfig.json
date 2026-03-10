@@ -25,6 +25,12 @@
     "paths": {
       "@vue-cesium/*": [
         "packages/*"
+      ],
+      "vue": [
+        "node_modules/vue/dist/vue.d.ts"
+      ],
+      "@vue/shared": [
+        "node_modules/@vue/shared/dist/shared.d.ts"
       ]
     }
   },

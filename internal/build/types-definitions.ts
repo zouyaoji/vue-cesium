@@ -26,8 +26,8 @@ export const generateTypesDefinitions = async () => {
       baseUrl: projRoot,
       paths: {
         [`${PKG_PREFIX}/*`]: ['packages/*'],
-        vue: ['node_modules/vue'],
-        '@vue/shared': ['node_modules/@vue/shared']
+        vue: ['node_modules/vue/dist/vue.d.ts'],
+        '@vue/shared': ['node_modules/@vue/shared/dist/shared.d.ts']
       },
       skipLibCheck: true,
       noImplicitAny: false
