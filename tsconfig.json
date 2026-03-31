@@ -23,7 +23,15 @@
     "rootDir": ".",
     "types": ["node", "jest"],
     "paths": {
-      "@vue-cesium/*": ["package/*"]
+      "@vue-cesium/*": [
+        "packages/*"
+      ],
+      "vue": [
+        "node_modules/vue/dist/vue.d.ts"
+      ],
+      "@vue/shared": [
+        "node_modules/@vue/shared/dist/shared.d.ts"
+      ]
     }
   },
   "include": ["packages", "typings"],

@@ -88,6 +88,7 @@ async function buildFullEntry(minify: boolean) {
     {
       format: 'umd',
       file: path.resolve(vcOutput, 'dist', formatBundleFilename('index.full', minify, 'js')),
+      inlineDynamicImports: true,
       exports: 'named',
       name: PKG_CAMELCASE_NAME,
       globals: {
@@ -100,6 +101,7 @@ async function buildFullEntry(minify: boolean) {
     {
       format: 'esm',
       file: path.resolve(vcOutput, 'dist', formatBundleFilename('index.full', minify, 'mjs')),
+      inlineDynamicImports: true,
       sourcemap: minify,
       banner
     }
@@ -130,6 +132,7 @@ async function buildFullLocale(minify: boolean) {
         {
           format: 'umd',
           file: path.resolve(vcOutput, 'dist/locale', formatBundleFilename(filename, minify, 'js')),
+          inlineDynamicImports: true,
           exports: 'default',
           name: `${PKG_CAMELCASE_LOCAL_NAME}${name}`,
           sourcemap: minify,
@@ -138,6 +141,7 @@ async function buildFullLocale(minify: boolean) {
         {
           format: 'esm',
           file: path.resolve(vcOutput, 'dist/locale', formatBundleFilename(filename, minify, 'mjs')),
+          inlineDynamicImports: true,
           sourcemap: minify,
           banner
         }
