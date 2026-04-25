@@ -72,5 +72,9 @@
     "proj4": "^2.20.2",
     "urijs": "^1.19.11"
   },
-  "browserslist": ["> 1%", "not ie 11", "not op_mini all"]
+  "browserslist": ["> 1%", "not ie 11", "not op_mini all"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com/",
+    "access": "public"
+  }
 }

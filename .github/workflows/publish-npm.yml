@@ -11,15 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.19.0
-          registry-url: https://registry.npmjs.com/
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.7.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          registry-url: https://registry.npmjs.com/
 
       - name: Get version
         run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -40,6 +40,6 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Publish
-        run: npm publish dist/vue-cesium --tag beta --access public
+        run: npm publish ./dist/vue-cesium --tag beta --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
