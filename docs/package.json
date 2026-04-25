@@ -16,7 +16,7 @@
     "element-plus": "^2.11.8",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
-    "vue-cesium": "npm:vue-cesium@latest",
+    "vue-cesium": "npm:vue-cesium@beta",
     "vue-i18n": "^11.2.8"
   },
   "devDependencies": {
