@@ -27,19 +27,19 @@ jobs:
       - name: Get git head
         run: echo "GIT_HEAD=${GITHUB_SHA}" >> $GITHUB_ENV
 
-      - name: Build&publish
+      - name: Build
         run: |
           pnpm i --frozen-lockfile
           TAG_VERSION=${{ env.TAG_VERSION }} GIT_HEAD=${{ env.GIT_HEAD }} pnpm update:version
           pnpm build
-          echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > dist/vue-cesium/.npmrc
-          cd dist/vue-cesium
-          npm publish --tag beta --access public --registry https://registry.npmjs.com/
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
           TAG_VERSION: ${{env.TAG_VERSION}}
           GIT_HEAD: ${{env.GIT_HEAD}}
-          REGISTRY: https://registry.npmjs.com/
           FORCE_COLOR: 2
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Publish
+        run: npm publish dist/vue-cesium --tag beta --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
