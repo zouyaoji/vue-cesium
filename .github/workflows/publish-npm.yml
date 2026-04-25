@@ -22,16 +22,19 @@ jobs:
           version: 10.7.0
 
       - name: Get version
-        run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: echo \"TAG_VERSION=${GITHUB_REF#refs/*/}\" >> $GITHUB_ENV
 
       - name: Get git head
-        run: echo "GIT_HEAD=${GITHUB_SHA}" >> $GITHUB_ENV
-
-      - name: Gen npmrc
-        run: echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> ./.npmrc
+        run: echo \"GIT_HEAD=${GITHUB_SHA}\" >> $GITHUB_ENV
 
       - name: Build&publish
-        run: sh ./scripts/publish.sh
+        run: |
+          pnpm i --frozen-lockfile
+          pnpm update:version
+          pnpm build
+          echo \"//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}\" > dist/vue-cesium/.npmrc
+          cd dist/vue-cesium
+          npm publish --tag beta --access public --registry https://registry.npmjs.com/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
           TAG_VERSION: ${{env.TAG_VERSION}}
