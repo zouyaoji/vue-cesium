@@ -32,7 +32,7 @@ jobs:
           pnpm i --frozen-lockfile
           TAG_VERSION=${{ env.TAG_VERSION }} GIT_HEAD=${{ env.GIT_HEAD }} pnpm update:version
           pnpm build
-          echo \"//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}\" > dist/vue-cesium/.npmrc
+          echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > dist/vue-cesium/.npmrc
           cd dist/vue-cesium
           npm publish --tag beta --access public --registry https://registry.npmjs.com/
         env:
