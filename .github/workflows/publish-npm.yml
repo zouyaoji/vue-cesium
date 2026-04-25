@@ -30,7 +30,7 @@ jobs:
       - name: Build&publish
         run: |
           pnpm i --frozen-lockfile
-          pnpm update:version
+          TAG_VERSION=${{ env.TAG_VERSION }} GIT_HEAD=${{ env.GIT_HEAD }} pnpm update:version
           pnpm build
           echo \"//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}\" > dist/vue-cesium/.npmrc
           cd dist/vue-cesium
