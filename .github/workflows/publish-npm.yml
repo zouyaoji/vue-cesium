@@ -27,11 +27,15 @@ jobs:
       - name: Get git head
         run: echo "GIT_HEAD=${GITHUB_SHA}" >> $GITHUB_ENV
 
-      - name: Gen npmrc
-        run: echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> ./.npmrc
-
       - name: Build&publish
-        run: sh ./scripts/publish.sh
+        run: |
+          pnpm i --frozen-lockfile
+          pnpm update:version
+          pnpm build
+          # 核心修复：在发布子目录注入认证信息，确保 npm publish 能够读取到
+          echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > dist/vue-cesium/.npmrc
+          cd dist/vue-cesium
+          npm publish --tag beta --access public --registry https://registry.npmjs.com/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
           TAG_VERSION: ${{env.TAG_VERSION}}
