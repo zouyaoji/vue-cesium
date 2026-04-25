@@ -283,8 +283,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
       vue-cesium:
-        specifier: npm:vue-cesium@latest
-        version: 3.2.12(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3))
+        specifier: npm:vue-cesium@beta
+        version: 3.2.13-beta.12(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3))
       vue-i18n:
         specifier: ^11.2.8
         version: 11.2.8(vue@3.5.27(typescript@5.9.3))
@@ -7997,8 +7997,8 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
-  vue-cesium@3.2.12:
-    resolution: {integrity: sha512-HvtNOvprDTUYMLqK+rsgzueuZ+v9IXIBME7aa13a9COY/Hdrd0QEV/awlgfZIf2/NKE3o/uu/5bFUe9syovi2w==}
+  vue-cesium@3.2.13-beta.12:
+    resolution: {integrity: sha512-M01dtbL/b+eDOykvKuI1OBhs/sNup/U1NYxNlnURvDACyhjGEZvEkWypZ1lJ1gKnBc6U1Ijf7uHhUrk69HN9wg==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -16828,7 +16828,7 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
-  vue-cesium@3.2.12(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3)):
+  vue-cesium@3.2.13-beta.12(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3)):
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
       '@turf/circle': 7.3.3
