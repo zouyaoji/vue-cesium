@@ -7,9 +7,13 @@
  * @FilePath: \vue-cesium@next\packages\utils\private\global-nodes.ts
  */
 const globalNodes: Array<HTMLDivElement> = []
-let target = document.body
+let target: HTMLElement | null = typeof document !== 'undefined' ? document.body : null
 
 export function createGlobalNode(id?) {
+  if (typeof document === 'undefined')
+    return null
+  if (target === null)
+    target = document.body
   const el = document.createElement('div')
 
   if (id !== void 0) {

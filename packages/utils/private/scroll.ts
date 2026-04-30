@@ -1,6 +1,10 @@
 import { css, getElement } from './dom'
 
-const scrollTargets = [null, document, document.body, document.scrollingElement, document.documentElement]
+function getScrollTargets() {
+  if (typeof document === 'undefined')
+    return [null]
+  return [null, document, document.body, document.scrollingElement, document.documentElement]
+}
 
 export function getScrollTarget(el, targetEl) {
   let target = getElement(targetEl)
@@ -13,7 +17,7 @@ export function getScrollTarget(el, targetEl) {
     target = el.closest('.scroll,.scroll-y,.overflow-auto')
   }
 
-  return scrollTargets.includes(target) ? window : target
+  return getScrollTargets().includes(target) ? window : target
 }
 
 export function getScrollHeight(el) {

@@ -480,9 +480,9 @@ export function makeMaterialProperty(val: VcMaterialProperty, isConstant = false
   }
   if (
     (isString(val) && /.*\.(?:jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val))
-    || val instanceof HTMLImageElement
-    || val instanceof HTMLCanvasElement
-    || val instanceof HTMLVideoElement
+    || (typeof HTMLImageElement !== 'undefined' && val instanceof HTMLImageElement)
+    || (typeof HTMLCanvasElement !== 'undefined' && val instanceof HTMLCanvasElement)
+    || (typeof HTMLVideoElement !== 'undefined' && val instanceof HTMLVideoElement)
   ) {
     return new ImageMaterialProperty({
       image: val,

@@ -1,4 +1,4 @@
-@import './core/variables.scss';
+@use './core/variables' as *;
 
 .vc-spinner {
   vertical-align: middle;

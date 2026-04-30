@@ -1,4 +1,4 @@
-@import './core/variables.scss';
+@use './core/variables' as *;
 
 // 绘制组件
 .vc-drawings-container {

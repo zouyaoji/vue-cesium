@@ -1,6 +1,9 @@
 @use 'sass:math';
+@use 'sass:string';
 
-@import '../helpers/string.scss';
+@use './variables' as *;
+@use '../helpers/math' as *;
+@use '../helpers/string' as *;
 
 $flex-prefix: 'vc' !default;
 
@@ -46,7 +49,7 @@ $flex-prefix: 'vc' !default;
     }
 
     @for $i from 0 through $flex-cols {
-      $ic: quote('' + $i);
+      $ic: string.quote('' + $i);
 
       #{str-fe(".#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
         @extend .#{$flex-prefix}-col#{$name}-auto;
@@ -55,19 +58,19 @@ $flex-prefix: 'vc' !default;
       .#{$flex-prefix}-row {
         #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: auto;
-          width: toFixed(percentage(math.div($i, $flex-cols)), 10000);
+          width: toFixed(math.percentage(math.div($i, $flex-cols)), 10000);
         }
 
         @if $i != 0 or $name != '' {
           #{str-fe("> .offset<name>-<i>", $name, $noProcNotZero, $ic)} {
-            margin-left: toFixed(percentage(math.div($i, $flex-cols)), 10000);
+            margin-left: toFixed(math.percentage(math.div($i, $flex-cols)), 10000);
           }
         }
       }
 
       .#{$flex-prefix}-column {
         #{str-fe("> .#{$flex-prefix}-col<name>-<i>", $name, $noProcNotZero, $ic)} {
-          height: toFixed(percentage(math.div($i, $flex-cols)), 10000);
+          height: toFixed(math.percentage(math.div($i, $flex-cols)), 10000);
           width: auto;
         }
       }

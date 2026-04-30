@@ -9,7 +9,7 @@ const baseLayerPicker = ref(false)
 const fullscreenButton = ref(true)
 const infoBox = ref(true)
 const showCredit = ref(true)
-const fullscreenElement = document.body
+const fullscreenElement = typeof document !== 'undefined' ? document.body : null
 const viewerRef = ref()
 const viewerContainer = ref()
 const layerText = ref()

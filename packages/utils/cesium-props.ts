@@ -200,7 +200,7 @@ const horizontalOrigin = {
  * @const {String, Object, HTMLCanvasElement, Function} image mixin
  */
 const image = {
-  image: [String, Object, HTMLCanvasElement, Function] as PropType<
+  image: [String, Object, ...(typeof HTMLCanvasElement !== 'undefined' ? [HTMLCanvasElement] : []), Function] as PropType<
     string | HTMLImageElement | HTMLCanvasElement | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>
   >
 }

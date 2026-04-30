@@ -7,6 +7,18 @@
  * @FilePath: \vue-cesium@next\packages\utils\platform.ts
  */
 export function platform() {
+  if (typeof navigator === 'undefined') {
+    return {
+      isTablet: false,
+      isPhone: false,
+      isAndroid: false,
+      isPc: true,
+      isFireFox: false,
+      isChrome: false,
+      isIOS: false,
+      hasTouch: false
+    }
+  }
   const ua = navigator.userAgent
   const isWindowsPhone = /Windows Phone/.test(ua)
   const isSymbian = /SymbianOS/.test(ua) || isWindowsPhone
@@ -25,6 +37,6 @@ export function platform() {
     isFireFox,
     isChrome,
     isIOS,
-    hasTouch: 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
+    hasTouch: typeof window !== 'undefined' && ('ontouchstart' in window || window.navigator.maxTouchPoints > 0)
   }
 }

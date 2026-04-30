@@ -3,9 +3,55 @@ import { between } from '@vue-cesium/utils/private/format'
 
 import { computed, defineComponent, getCurrentInstance, h, onBeforeUnmount, onMounted, ref } from 'vue'
 
-const xhr = XMLHttpRequest
+const xhr = typeof XMLHttpRequest !== 'undefined'
+  ? XMLHttpRequest
+  : class {
+    open() {}
+    send() {}
+    addEventListener() {}
+    removeEventListener() {}
+    setRequestHeader() {}
+    getResponseHeader() {}
+    getAllResponseHeaders() {}
+    readyState = 0
+    response = null
+    responseText = ''
+    responseType = ''
+    responseURL = ''
+    status = 0
+    statusText = ''
+    timeout = 0
+    upload = null
+    withCredentials = false
+  }
+
+xhr.prototype.open = function (this: XMLHttpRequest, ...args: any[]) {
+  const stopStack: Array<() => void> = []
+
+  const loadStart = () => {
+    stack.forEach((entry) => {
+      if (entry.hijackFilter.value === null || entry.hijackFilter.value(args[1]) === true) {
+        entry.start()
+        stopStack.push(entry.stop)
+      }
+    })
+  }
+
+  const loadEnd = () => {
+    stopStack.forEach((stop) => {
+      stop()
+    })
+  }
+
+  this.addEventListener('loadstart', loadStart, { once: true })
+  this.addEventListener('loadend', loadEnd, { once: true });
+
+  // 使用更严格的类型断言确保 this 类型正确
+  (open as (this: XMLHttpRequest, ...args: any[]) => void).apply(this, args)
+}
+
 const send = xhr.prototype.send
-const open = xhr.prototype.open
+const open = xhr.prototype.open as (...args: any[]) => void
 const positionValues = ['top', 'right', 'bottom', 'left']
 
 let stack = []
@@ -86,7 +132,7 @@ function highjackAjax(stackEntry) {
     this.addEventListener('loadend', loadEnd, { once: true })
 
     // eslint-disable-next-line prefer-rest-params
-    open.apply(this, arguments as any)
+    Reflect.apply(open, this, arguments as any)
   }
 }
 

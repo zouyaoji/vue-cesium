@@ -1,5 +1,5 @@
-@import './core/variables.scss';
-@import './core/mixins.scss';
+@use './core/variables' as *;
+@use './core/mixins' as *;
 
 .vc-distance-legend {
   position: absolute;

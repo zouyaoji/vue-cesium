@@ -6,7 +6,7 @@ const viewerRef = ref()
 const animation = ref(true)
 const timeline = ref(true)
 const fullscreenButton = ref(true)
-const fullscreenElement = ref(document.body)
+const fullscreenElement = ref(typeof document !== 'undefined' ? document.body : null)
 const point = ref({
   pixelSize: 28,
   color: 'red'

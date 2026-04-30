@@ -86,7 +86,7 @@
     "@vitejs/plugin-vue": "5.2.4",
     "@vitejs/plugin-vue-jsx": "4.2.0",
     "@vue-cesium/build": "workspace:*",
-    "@vue/compiler-sfc": "^3.5.24",
+    "@vue/compiler-sfc": "^3.5.33",
     "@vue/test-utils": "2.4.6",
     "algoliasearch": "^5.44.0",
     "baseline-browser-mapping": "^2.10.0",
@@ -115,6 +115,7 @@
     "rollup-plugin-css-only": "^4.5.5",
     "rollup-plugin-esbuild": "^6.2.1",
     "rollup-plugin-filesize": "^10.0.0",
+    "sass": "^1.99.0",
     "transliteration": "^2.3.5",
     "ts-jest": "^29.4.5",
     "ts-morph": "^27.0.2",
@@ -123,7 +124,7 @@
     "typescript": "^5.9.3",
     "unplugin-vue-macros": "^2.14.5",
     "vitest": "^4.0.10",
-    "vue": "^3.5.24",
+    "vue": "^3.5.33",
     "vue-jest": "5.0.0-alpha.10",
     "vue-tsc": "^3.1.4"
   }

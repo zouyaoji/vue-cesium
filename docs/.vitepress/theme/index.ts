@@ -15,7 +15,6 @@ import ElementPlus, {
 import VueCesium from 'vue-cesium'
 import { define } from '../utils/types'
 import VPApp, { globals, NotFound } from '../vitepress'
-import 'uno.css'
 import './style.css'
 import 'vitepress/dist/client/theme-default/styles/components/vp-code-group.css'
 import 'virtual:group-icons.css'

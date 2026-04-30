@@ -81,7 +81,7 @@ export default {
     default: () => undefined
   },
   fullscreenElement: {
-    type: [String, Element] as PropType<string | Element>
+    type: [String, Object] as PropType<string | Element>
   },
   useDefaultRenderLoop: {
     type: Boolean,
@@ -114,8 +114,8 @@ export default {
     type: Boolean,
     default: true
   },
-  creditContainer: [String, Element] as PropType<string | Element>,
-  creditViewport: [String, Element] as PropType<string | Element>,
+  creditContainer: [String, Object] as PropType<string | Element>,
+  creditViewport: [String, Object] as PropType<string | Element>,
   dataSources: Object as PropType<Cesium.DataSourceCollection>,
   terrainExaggeration: {
     type: Number,

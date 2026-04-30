@@ -1,3 +1,6 @@
+@use 'sass:color';
+@use 'sass:map';
+
 $space-base: 16px !default;
 $space-x-base: $space-base !default;
 $space-y-base: $space-base !default;
@@ -106,16 +109,16 @@ $sizes: (
 $breakpoint-xs-min: 0 !default;
 $breakpoint-xs-max: $breakpoint-xs !default;
 
-$breakpoint-sm-min: map-get($sizes, 'sm') !default;
+$breakpoint-sm-min: map.get($sizes, 'sm') !default;
 $breakpoint-sm-max: $breakpoint-sm !default;
 
-$breakpoint-md-min: map-get($sizes, 'md') !default;
+$breakpoint-md-min: map.get($sizes, 'md') !default;
 $breakpoint-md-max: $breakpoint-md !default;
 
-$breakpoint-lg-min: map-get($sizes, 'lg') !default;
+$breakpoint-lg-min: map.get($sizes, 'lg') !default;
 $breakpoint-lg-max: $breakpoint-lg !default;
 
-$breakpoint-xl-min: map-get($sizes, 'xl') !default;
+$breakpoint-xl-min: map.get($sizes, 'xl') !default;
 $breakpoint-xl-max: 9999px !default;
 
 $primary: #1976d2 !default;
@@ -166,9 +169,9 @@ $z-tooltip: 9000 !default;
 $z-notify: 9500 !default;
 $z-max: 9998 !default;
 
-$elevation-umbra: rgba($shadow-color, 0.2) !default;
-$elevation-penumbra: rgba($shadow-color, 0.14) !default;
-$elevation-ambient: rgba($shadow-color, 0.12) !default;
+$elevation-umbra: color.change($shadow-color, $alpha: 0.2) !default;
+$elevation-penumbra: color.change($shadow-color, $alpha: 0.14) !default;
+$elevation-ambient: color.change($shadow-color, $alpha: 0.12) !default;
 $shadow-2:
   0 1px 5px $elevation-umbra,
   0 2px 2px $elevation-penumbra,

@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use './variables' as *;
+
 :root {
   @each $name, $size in $sizes {
     #{"--vc-size-"}#{$name}: #{$size};
@@ -41,63 +44,63 @@
 
 @each $space, $value in $spaces {
   .vc-pa-#{$space} {
-    padding: map-get($value, 'y') map-get($value, 'x');
+    padding: map.get($value, 'y') map.get($value, 'x');
   }
 
   .vc-pl-#{$space} {
-    padding-left: map-get($value, 'x');
+    padding-left: map.get($value, 'x');
   }
 
   .vc-pr-#{$space} {
-    padding-right: map-get($value, 'x');
+    padding-right: map.get($value, 'x');
   }
 
   .vc-pt-#{$space} {
-    padding-top: map-get($value, 'y');
+    padding-top: map.get($value, 'y');
   }
 
   .vc-pb-#{$space} {
-    padding-bottom: map-get($value, 'y');
+    padding-bottom: map.get($value, 'y');
   }
 
   .vc-px-#{$space} {
-    padding-left: map-get($value, 'x');
-    padding-right: map-get($value, 'x');
+    padding-left: map.get($value, 'x');
+    padding-right: map.get($value, 'x');
   }
 
   .vc-py-#{$space} {
-    padding-top: map-get($value, 'y');
-    padding-bottom: map-get($value, 'y');
+    padding-top: map.get($value, 'y');
+    padding-bottom: map.get($value, 'y');
   }
 
   .vc-ma-#{$space} {
-    margin: map-get($value, 'y') map-get($value, 'x');
+    margin: map.get($value, 'y') map.get($value, 'x');
   }
 
   .vc-ml-#{$space} {
-    margin-left: map-get($value, 'x');
+    margin-left: map.get($value, 'x');
   }
 
   .vc-mr-#{$space} {
-    margin-right: map-get($value, 'x');
+    margin-right: map.get($value, 'x');
   }
 
   .vc-mt-#{$space} {
-    margin-top: map-get($value, 'y');
+    margin-top: map.get($value, 'y');
   }
 
   .vc-mb-#{$space} {
-    margin-bottom: map-get($value, 'y');
+    margin-bottom: map.get($value, 'y');
   }
 
   .vc-mx-#{$space} {
-    margin-left: map-get($value, 'x');
-    margin-right: map-get($value, 'x');
+    margin-left: map.get($value, 'x');
+    margin-right: map.get($value, 'x');
   }
 
   .vc-my-#{$space} {
-    margin-top: map-get($value, 'y');
-    margin-bottom: map-get($value, 'y');
+    margin-top: map.get($value, 'y');
+    margin-bottom: map.get($value, 'y');
   }
 }
 

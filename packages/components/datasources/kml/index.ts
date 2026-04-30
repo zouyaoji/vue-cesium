@@ -25,7 +25,7 @@ export const kmlDatasourceProps = {
   },
   ...data,
   camera: Object as PropType<Cesium.Camera>,
-  canvas: HTMLCanvasElement,
+  canvas: Object as PropType<HTMLCanvasElement>,
   ...sourceUri,
   ...clampToGround,
   ...ellipsoid,
@@ -34,7 +34,7 @@ export const kmlDatasourceProps = {
     type: Boolean,
     default: false
   },
-  screenOverlayContainer: [Element, String]
+  screenOverlayContainer: [Object, String]
 }
 export default defineComponent({
   name: 'VcDatasourceKml',
