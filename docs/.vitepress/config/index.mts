@@ -52,6 +52,7 @@ languages.forEach((lang) => {
 
 function setupConfig(configEnv) {
   const config: UserConfig<any> = {
+    base: '/vue-cesium/',
     title: 'Vue for Cesium',
     description: 'A Vue3 based component library of CesiumJS for developers',
     lastUpdated: true,
