@@ -12,7 +12,6 @@ import ElementPlus, {
   ID_INJECTION_KEY,
   ZINDEX_INJECTION_KEY
 } from 'element-plus'
-import VueCesium from 'vue-cesium'
 import { define } from '../utils/types'
 import VPApp, { globals, NotFound } from '../vitepress'
 import './style.css'
@@ -30,7 +29,6 @@ export default define<Theme>({
   Layout: VPApp,
   enhanceApp: async ({ app, router }) => {
     app.use(ElementPlus)
-    app.use(VueCesium)
     app.provide(ID_INJECTION_KEY, { prefix: 1024, current: 0 })
     app.provide(ZINDEX_INJECTION_KEY, { current: 0 })
     Object.entries(globals).forEach(([name, Comp]) => {
@@ -38,6 +36,8 @@ export default define<Theme>({
     })
     if (!isClient)
       return
+    const VueCesium = (await import('vue-cesium')).default
+    app.use(VueCesium)
     const nprogress = await import('nprogress')
     router.onBeforeRouteChange = nprogress.start
     router.onAfterRouteChange = nprogress.done

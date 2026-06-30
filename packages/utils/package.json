@@ -16,6 +16,9 @@
     "type": "git",
     "url": "git://github.com:zouyaoji/vue-cesium.git"
   },
+  "dependencies": {
+    "@vue/shared": "^3.5.24"
+  },
   "peerDependencies": {
     "vue": "^3.5.0"
   }

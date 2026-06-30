@@ -44,7 +44,7 @@ export function getModifierDirections(mod) {
   return dir
 }
 
-export const getTouchTarget = platform().isIOS || (typeof navigator !== 'undefined' && navigator.vendor.toLowerCase().includes('apple')) ? () => document : target => target
+export const getTouchTarget = platform().isIOS || (typeof navigator !== 'undefined' && navigator.vendor?.toLowerCase().includes('apple')) ? () => document : target => target
 
 export function shouldStart(evt, ctx) {
   return (

@@ -3,17 +3,19 @@
   "private": true,
   "scripts": {
     "dev": "vitepress dev .",
-    "build": "pnpm gen-llms && NODE_ENV=production && vitepress build .",
-    "serve": "NODE_ENV=production vitepress serve . --port 5001",
+    "build": "node scripts/build.js",
+    "serve": "node scripts/serve.js",
     "gen-llms": "tsx .vitepress/build/generate-llms.ts"
   },
   "dependencies": {
+    "@docsearch/css": "^4.3.2",
     "@docsearch/js": "^4.3.2",
     "@element-plus/icons-vue": "^2.3.2",
     "@vue/shared": "^3.5.24",
     "@vueuse/core": "^14.0.0",
     "clipboard-copy": "^4.0.1",
     "element-plus": "^2.11.8",
+    "markdown-it": "^14.1.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "vue-cesium": "npm:vue-cesium@beta",

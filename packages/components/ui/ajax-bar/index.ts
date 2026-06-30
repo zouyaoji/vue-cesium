@@ -25,6 +25,11 @@ const xhr = typeof XMLHttpRequest !== 'undefined'
     withCredentials = false
   }
 
+const send = xhr.prototype.send
+
+// 注意：必须先保存原始 open，再覆盖 prototype.open，否则会造成自引用无限递归
+const open = xhr.prototype.open as (...args: any[]) => void
+
 xhr.prototype.open = function (this: XMLHttpRequest, ...args: any[]) {
   const stopStack: Array<() => void> = []
 
@@ -49,9 +54,6 @@ xhr.prototype.open = function (this: XMLHttpRequest, ...args: any[]) {
   // 使用更严格的类型断言确保 this 类型正确
   (open as (this: XMLHttpRequest, ...args: any[]) => void).apply(this, args)
 }
-
-const send = xhr.prototype.send
-const open = xhr.prototype.open as (...args: any[]) => void
 const positionValues = ['top', 'right', 'bottom', 'left']
 
 let stack = []
