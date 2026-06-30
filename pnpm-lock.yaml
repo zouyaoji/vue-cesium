@@ -293,7 +293,7 @@ importers:
         version: 0.2.0
       vue-cesium:
         specifier: npm:vue-cesium@beta
-        version: 3.2.13-beta.16(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3))
+        version: 3.2.13-beta.17(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3))
       vue-i18n:
         specifier: ^11.2.8
         version: 11.2.8(vue@3.5.27(typescript@5.9.3))
@@ -3348,6 +3348,9 @@ packages:
 
   '@vue/shared@3.5.33':
     resolution: {integrity: sha512-5vR2QIlmaLG77Ygd4pMP6+SGQ5yox9VhtnbDWTy9DzMzdmeLxZ1QqxrywEZ9sa1AVubfIJyaCG3ytyWU81ufcQ==}
+
+  '@vue/shared@3.5.39':
+    resolution: {integrity: sha512-l1rrBtBfTnmxvtsvdQDXltUUy8S1Y+ZaqdfUzmAnJkTd8Z8rv5v/ytW+TKiqEOWyHPoqtPlNFSs0lhRmYVSHVA==}
 
   '@vue/test-utils@2.4.6':
     resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
@@ -8090,8 +8093,8 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
-  vue-cesium@3.2.13-beta.16:
-    resolution: {integrity: sha512-krmXn4qFHZfersQ5k6VHTrTllQXGYyBpKiXeMlj2r2X3r0YqgjPwZ3rDdGkZ9JJH+Sn6Yvy/12B8zflGs9UlpQ==}
+  vue-cesium@3.2.13-beta.17:
+    resolution: {integrity: sha512-RKTMCI2m4iCfg9I4E2jz3dxFlvQvC7vRuWGFA0kB51CklK767AU6hYBd8Bp66I4y/OT2zfyOJkKP4i/DzzEvjw==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -11272,7 +11275,7 @@ snapshots:
       '@babel/parser': 7.29.0
       '@vue-macros/common': 1.16.1(vue@3.5.33(typescript@5.9.3))
       '@vue/compiler-core': 3.5.27
-      '@vue/shared': 3.5.33
+      '@vue/shared': 3.5.39
       magic-string: 0.30.21
       unplugin: 1.16.1
       vue: 3.5.33(typescript@5.9.3)
@@ -11356,7 +11359,7 @@ snapshots:
       '@babel/types': 7.29.0
       '@vue/babel-helper-vue-transform-on': 1.5.0
       '@vue/babel-plugin-resolve-type': 1.5.0(@babel/core@7.29.0)
-      '@vue/shared': 3.5.33
+      '@vue/shared': 3.5.39
     optionalDependencies:
       '@babel/core': 7.29.0
     transitivePeerDependencies:
@@ -11372,7 +11375,7 @@ snapshots:
       '@babel/types': 7.29.0
       '@vue/babel-helper-vue-transform-on': 2.0.1
       '@vue/babel-plugin-resolve-type': 2.0.1(@babel/core@7.29.0)
-      '@vue/shared': 3.5.33
+      '@vue/shared': 3.5.39
     optionalDependencies:
       '@babel/core': 7.29.0
     transitivePeerDependencies:
@@ -11490,7 +11493,7 @@ snapshots:
       '@volar/language-core': 2.4.28
       '@vue/compiler-dom': 3.5.27
       '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.33
+      '@vue/shared': 3.5.39
       alien-signals: 0.2.2
       minimatch: 9.0.5
       muggle-string: 0.4.1
@@ -11502,7 +11505,7 @@ snapshots:
     dependencies:
       '@volar/language-core': 2.4.27
       '@vue/compiler-dom': 3.5.27
-      '@vue/shared': 3.5.33
+      '@vue/shared': 3.5.39
       alien-signals: 3.1.2
       muggle-string: 0.4.1
       path-browserify: 1.0.1
@@ -11555,6 +11558,8 @@ snapshots:
   '@vue/shared@3.5.27': {}
 
   '@vue/shared@3.5.33': {}
+
+  '@vue/shared@3.5.39': {}
 
   '@vue/test-utils@2.4.6':
     dependencies:
@@ -17034,11 +17039,11 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
-  vue-cesium@3.2.13-beta.16(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3)):
+  vue-cesium@3.2.13-beta.17(@types/lodash-es@4.17.12)(vue@3.5.27(typescript@5.9.3)):
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
       '@turf/circle': 7.3.3
-      '@vue/shared': 3.5.27
+      '@vue/shared': 3.5.39
       '@zouyaoji/heatmap.js': 2.0.8
       compare-versions: 6.1.1
       echarts: 6.0.0

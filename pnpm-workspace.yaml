@@ -9,6 +9,8 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
   vue-demi: true
+minimumReleaseAgeExclude:
+  - vue-cesium@3.2.13-beta.17
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
