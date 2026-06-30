@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.135.0
+ * Version 1.138.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,29 +25,32 @@
 
 import {
   Cesium3DTilesTerrainGeometryProcessor_default
-} from "./chunk-7XEJGXX2.js";
-import "./chunk-34YXP222.js";
-import "./chunk-P2H75UV5.js";
+} from "./chunk-Y5MRBKQN.js";
+import "./chunk-WHLGBMBC.js";
+import "./chunk-D63Z7KKL.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-VVZ667H6.js";
-import "./chunk-LWJXCI3F.js";
-import "./chunk-KGLDJRSO.js";
-import "./chunk-6HBKE43B.js";
-import "./chunk-U7CX3HHE.js";
-import "./chunk-NGKF5NTR.js";
-import "./chunk-AOM3FHBN.js";
-import "./chunk-N52ZRKUE.js";
-import "./chunk-H7B7FU2U.js";
-import "./chunk-MXHRZHDF.js";
-import "./chunk-3GL53OCU.js";
-import "./chunk-EZ7NJXQN.js";
-import "./chunk-IGX772ZQ.js";
-import "./chunk-5T5SY63I.js";
-import "./chunk-RQRODXVN.js";
-import "./chunk-OE22564R.js";
-import "./chunk-W4PIP5PG.js";
-import "./chunk-75HAJIDT.js";
+} from "./chunk-LK7GEFGB.js";
+import "./chunk-N6XBJBI7.js";
+import "./chunk-6WDMPXQ7.js";
+import "./chunk-4R6FGUFP.js";
+import "./chunk-XLIJV3YZ.js";
+import "./chunk-EY5HOJFQ.js";
+import "./chunk-FDOLXORR.js";
+import "./chunk-M5DVYXJJ.js";
+import "./chunk-K2PLKJJG.js";
+import "./chunk-E4YDCSQK.js";
+import "./chunk-4O2ARYS7.js";
+import "./chunk-S2KVL7OJ.js";
+import "./chunk-LWZHJWYK.js";
+import "./chunk-EOSX23OS.js";
+import "./chunk-L4OFWHNI.js";
+import "./chunk-VRAAQ3FS.js";
+import "./chunk-7SLNBIZS.js";
+import "./chunk-LYBNPUEI.js";
+import "./chunk-BO22JHBX.js";
+import "./chunk-FS42VX2H.js";
+import "./chunk-7U5YNLF3.js";
 
 // packages/engine/Source/Workers/upsampleVerticesFromCesium3DTilesTerrain.js
 function upsampleVerticesFromCesium3DTilesTerrain(options, transferableObjects) {

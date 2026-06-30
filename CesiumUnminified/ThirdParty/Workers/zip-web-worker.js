@@ -547,10 +547,11 @@
         for (; p2 < a3.length; ) {
           const t4 = s.min(a3.length - p2, 32768);
           this.in && this.inBufferSize >= t4 || (this.in && Ke && Ke(this.in), this.in = qe(t4), this.inBufferSize = t4), c3.set(a3.subarray(p2, p2 + t4), this.in);
-          const i2 = l2(this.streamHandle, this.in, t4, h2, o2, 0);
-          if (!e2 && 0 > i2) throw new r("process error:" + i2);
-          const d2 = 16777215 & i2;
-          d2 && (f2.set(c3.subarray(h2, h2 + d2), 0), n3.enqueue(f2.slice(0, d2)));
+          const i2 = l2(this.streamHandle, this.in, t4, h2, o2, 0), d2 = 16777215 & i2;
+          if (d2 && (f2.set(c3.subarray(h2, h2 + d2), 0), n3.enqueue(f2.slice(0, d2))), !e2) {
+            const e3 = i2 >> 24 & 255, t5 = 128 & e3 ? e3 - 256 : e3;
+            if (0 > t5) throw new r("process error:" + t5);
+          }
           const w2 = u2(this.streamHandle);
           if (0 === w2) break;
           p2 += w2;
@@ -562,9 +563,11 @@
       try {
         const n3 = new i(Pe.buffer), s2 = this._process, a3 = this.out, c3 = this._scratch;
         for (; ; ) {
-          const i2 = s2(this.streamHandle, 0, 0, a3, o2, 4);
-          if (!e2 && 0 > i2) throw new r("process error:" + i2);
-          const l2 = 16777215 & i2, u2 = i2 >> 24 & 255;
+          const i2 = s2(this.streamHandle, 0, 0, a3, o2, 4), l2 = 16777215 & i2, u2 = i2 >> 24 & 255;
+          if (!e2) {
+            const e3 = 128 & u2 ? u2 - 256 : u2;
+            if (0 > e3) throw new r("process error:" + e3);
+          }
           if (l2 && (c3.set(n3.subarray(a3, a3 + l2), 0), t3.enqueue(c3.slice(0, l2))), 1 === u2 || 0 === l2) break;
         }
       } catch (e3) {

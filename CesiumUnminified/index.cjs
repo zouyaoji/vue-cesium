@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.135.0
+ * Version 1.138.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -2622,1392 +2622,6 @@ var require_URI = __commonJS({
       };
       return URI;
     });
-  }
-});
-
-// node_modules/meshoptimizer/meshopt_encoder.js
-var require_meshopt_encoder = __commonJS({
-  "node_modules/meshoptimizer/meshopt_encoder.js"(exports2, module2) {
-    var MeshoptEncoder = (function() {
-      "use strict";
-      var wasm2 = "b9H79Tebbbe9ok9Geueu9Geub9Gbb9Gruuuuuuueu9Gvuuuuueu9Gduueu9Gluuuueu9Gvuuuuub9Gouuuuuub9Gluuuub9GiuuueuiE8AdilveoveovrrwrrrDDoDrbqqbelve9Weiiviebeoweuec;G:Qdkr:PlCo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8F9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWV9mW4W2be8A9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWVbd8F9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWV9c9V919U9KbiE9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949wWV79P9V9UblY9TW79O9V9Wt9FW9U9J9V9KW69U9KW949c919M9MWVbv8E9TW79O9V9Wt9FW9U9J9V9KW69U9KW949c919M9MWV9c9V919U9Kbo8A9TW79O9V9Wt9FW9U9J9V9KW69U9KW949wWV79P9V9UbrE9TW79O9V9Wt9FW9U9J9V9KW69U9KW949tWG91W9U9JWbwa9TW79O9V9Wt9FW9U9J9V9KW69U9KW949tWG91W9U9JW9c9V919U9KbDL9TW79O9V9Wt9FW9U9J9V9KWS9P2tWV9p9JtbqK9TW79O9V9Wt9FW9U9J9V9KWS9P2tWV9r919HtbkL9TW79O9V9Wt9FW9U9J9V9KWS9P2tWVT949WbxY9TW79O9V9Wt9FW9U9J9V9KWS9P2tWVJ9V29VVbmE9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94J9H9J9OWbza9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94J9H9J9OW9ttV9P9WbHa9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94SWt9J9O9sW9T9H9WbOK9TW79O9V9Wt9F79W9Ht9P9H29t9VVt9sW9T9H9WbAl79IV9RbXDwebcekdKYq;i28Adbk:Bhdhud9:8Jjjjjbc;qw9Rgr8KjjjjbcbhwdnaeTmbabcbyd;C:kjjbaoaocb9iEgDc:GeV86bbarc;adfcbcjdz:xjjjb8AdnaiTmbarc;adfadalz:wjjjb8Akarc;abfalfcbcbcjdal9RalcFe0Ez:xjjjb8Aarc;abfarc;adfalz:wjjjb8AarcUf9cb83ibarc8Wf9cb83ibarcyf9cb83ibarcaf9cb83ibarcKf9cb83ibarczf9cb83ibar9cb83iwar9cb83ibcj;abal9Uc;WFbGcjdalca0Ehqdnaicd6mbavcd9imbaDTmbadcefhkaqci2gxal2hmarc;alfclfhParc;qlfceVhsarc;qofclVhzarc;qofcKfhHarc;qofczfhOcbhAincdhCcbhodnavci6mbaH9cb83ibaO9cb83ibar9cb83i;yoar9cb83i;qoadaAfgoybbhXcbhQincbhwcbhLdninaoalfhKaoybbgYaX7aLVhLawcP0meaKhoaYhXawcefgwaQfai6mbkkcbhXarc;qofhwincwh8AcwhEdnaLaX93gocFeGg3cs0mbclhEa3ci0mba3cb9hcethEkdnaocw4cFeGg3cs0mbclh8Aa3ci0mba3cb9hceth8Aka8AaEfh3awydbh5cwh8AcwhEdnaocz4cFeGg8Ecs0mbclhEa8Eci0mba8Ecb9hcethEka3a5fh3dnaocFFFFb0mbclh8AaocFFF8F0mbaocFFFr0ceth8Akawa3aEfa8AfBdbawclfhwaXcefgXcw9hmbkaKhoaYhXaQczfgQai6mbkcbhocehwazhLinawaoaLydbarc;qofaocdtfydb6EhoaLclfhLawcefgwcw9hmbkcihCkcbh3arc;qlfcbcjdz:xjjjb8Aarc;alfcwfcbBdbar9cb83i;alaoclth8Fadhaaqhhakh5inarc;qlfadcba3cufgoaoa30Eal2falz:wjjjb8Aaiahaiah6Ehgdnaqaia39Ra3aqfai6EgYcsfc9WGgoaY9nmbarc;qofaYfcbaoaY9Rz:xjjjb8Akada3al2fh8Jcbh8Kina8Ka8FVcl4hQarc;alfa8Kcdtfh8LaAh8Mcbh8Nina8NaAfhwdndndndndndna8KPldebidkasa8Mc98GgLfhoa5aLfh8Aarc;qlfawc98GgLfRbbhXcwhwinaoRbbawtaXVhXaocefhoawcwfgwca9hmbkaYTmla8Ncith8Ea8JaLfhEcbhKinaERbbhLcwhoa8AhwinawRbbaotaLVhLawcefhwaocwfgoca9hmbkarc;qofaKfaLaX7aQ93a8E486bba8Aalfh8AaEalfhEaLhXaKcefgKaY9hmbxlkkaYTmia8Mc9:Ghoa8NcitcwGhEarc;qlfawceVfRbbcwtarc;qlfawc9:GfRbbVhLarc;qofhwaghXinawa5aofRbbcwtaaaofRbbVg8AaL9RgLcetaLcztcz91cs47cFFiGaE486bbaoalfhoawcefhwa8AhLa3aXcufgX9hmbxikkaYTmda8Jawfhoarc;qlfawfRbbhLarc;qofhwaghXinawaoRbbg8AaL9RgLcetaLcKtcK91cr4786bbawcefhwaoalfhoa8AhLa3aXcufgX9hmbxdkkaYTmeka8LydbhEcbhKarc;qofhoincdhLcbhwinaLaoawfRbbcb9hfhLawcefgwcz9hmbkclhXcbhwinaXaoawfRbbcd0fhXawcefgwcz9hmbkcwh8Acbhwina8AaoawfRbbcP0fh8Aawcefgwcz9hmbkaLaXaLaX6Egwa8Aawa8A6Egwczawcz6EaEfhEaoczfhoaKczfgKaY6mbka8LaEBdbka8Mcefh8Ma8Ncefg8Ncl9hmbka8Kcefg8KaC9hmbkaaamfhaahaxfhha5amfh5a3axfg3ai6mbkcbhocehwaPhLinawaoaLydbarc;alfaocdtfydb6EhoaLclfhLawcefgXhwaCaX9hmbkaraAcd4fa8FcdVaoaocdSE86bbaAclfgAal6mbkkabaefh8Kabcefhoalcd4gecbaDEhkadcefhOarc;abfceVhHcbhmdndninaiam9nmearc;qofcbcjdz:xjjjb8Aa8Kao9Rak6mdadamal2gwfhxcbh8JaOawfhzaocbakz:xjjjbghakfh5aqaiam9Ramaqfai6Egscsfgocl4cifcd4hCaoc9WGg8LThPindndndndndndndndndndnaDTmbara8Jcd4fRbbgLciGPlbedlbkasTmdaxa8Jfhoarc;abfa8JfRbbhLarc;qofhwashXinawaoRbbg8AaL9RgLcetaLcKtcK91cr4786bbawcefhwaoalfhoa8AhLaXcufgXmbxikkasTmia8JcitcwGhEarc;abfa8JceVfRbbcwtarc;abfa8Jc9:GgofRbbVhLaxaofhoarc;qofhwashXinawao8Vbbg8AaL9RgLcetaLcztcz91cs47cFFiGaE486bbawcefhwaoalfhoa8AhLaXcufgXmbxdkkaHa8Jc98GgEfhoazaEfh8Aarc;abfaEfRbbhXcwhwinaoRbbawtaXVhXaocefhoawcwfgwca9hmbkasTmbaLcl4hYa8JcitcKGh3axaEfhEcbhKinaERbbhLcwhoa8AhwinawRbbaotaLVhLawcefhwaocwfgoca9hmbkarc;qofaKfaLaX7aY93a3486bba8Aalfh8AaEalfhEaLhXaKcefgKas9hmbkkaDmbcbhoxlka8LTmbcbhodninarc;qofaofgwcwf8Pibaw8Pib:e9qTmeaoczfgoa8L9pmdxbkkdnavmbcehoxikcbhEaChKaChYinarc;qofaEfgocwf8Pibhyao8Pibh8PcdhLcbhwinaLaoawfRbbcb9hfhLawcefgwcz9hmbkclhXcbhwinaXaoawfRbbcd0fhXawcefgwcz9hmbkcwh8Acbhwina8AaoawfRbbcP0fh8Aawcefgwcz9hmbkaLaXaLaX6Egoa8Aaoa8A6Egoczaocz6EaYfhYaocucbaya8P:e9cb9sEgwaoaw6EaKfhKaEczfgEa8L9pmdxbkkaha8Jcd4fgoaoRbbcda8JcetcoGtV86bbxikdnaKas6mbaYas6mbaha8Jcd4fgoaoRbbcia8JcetcoGtV86bba8Ka59Ras6mra5arc;qofasz:wjjjbasfh5xikaKaY9phokaha8Jcd4fgwawRbbaoa8JcetcoGtV86bbka8Ka59RaC6mla5cbaCz:xjjjbgAaCfhYdndna8LmbaPhoxekdna8KaY9RcK9pmbaPhoxekaocdtc:q1jjbfcj1jjbaDEg5ydxggcetc;:FFFeGh8Fcuh3cuagtcu7cFeGhacbh8Marc;qofhLinarc;qofa8MfhQczhEdndndnagPDbeeeeeeedekcucbaQcwf8PibaQ8Pib:e9cb9sEhExekcbhoa8FhEinaEaaaLaofRbb9nfhEaocefgocz9hmbkkcih8Ecbh8Ainczhwdndndna5a8AcdtfydbgKPDbeeeeeeedekcucbaQcwf8PibaQ8Pib:e9cb9sEhwxekaKcetc;:FFFeGhwcuaKtcu7cFeGhXcbhoinawaXaLaofRbb9nfhwaocefgocz9hmbkkdndnawaE6mbaKa39hmeawaE9hmea5a8EcdtfydbcwSmeka8Ah8EawhEka8Acefg8Aci9hmbkaAa8Mco4fgoaoRbba8Ea8Mci4coGtV86bbdndndna5a8Ecdtfydbg3PDdbbbbbbbebkdncwa39Tg8ETmbcua3tcu7hwdndna3ceSmbcbh8NaLhQinaQhoa8Eh8AcbhXinaoRbbgEawcFeGgKaEaK6EaXa3tVhXaocefhoa8Acufg8AmbkaYaX86bbaQa8EfhQaYcefhYa8Na8Efg8Ncz6mbxdkkcbh8NaLhQinaQhoa8Eh8AcbhXinaoRbbgEawcFeGgKaEaK6EaXcetVhXaocefhoa8Acufg8AmbkaYaX:T9cFe:d9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:9ca188bbaQa8EfhQaYcefhYa8Na8Efg8Ncz6mbkkcbhoinaYaLaofRbbgX86bbaYaXawcFeG9pfhYaocefgocz9hmbxikkdna3ceSmbinaYcb86bbaYcefhYxbkkinaYcb86bbaYcefhYxbkkaYaQ8Pbb83bbaYcwfaQcwf8Pbb83bbaYczfhYka8Mczfg8Ma8L9pgomeaLczfhLa8KaY9RcK9pmbkkaoTmlaYh5aYTmlka8Jcefg8Jal9hmbkarc;abfaxascufal2falz:wjjjb8Aasamfhma5hoa5mbkcbhwxdkdna8Kao9RakalfgwcKcaaDEgLawaL0EgX9pmbcbhwxdkdnawaL9pmbaocbaXaw9Rgwz:xjjjbawfhokaoarc;adfalz:wjjjbalfhodnaDTmbaoaraez:wjjjbaefhokaoab9Rhwxekcbhwkarc;qwf8Kjjjjbawk5babaeadaialcdcbyd;C:kjjbz:bjjjbk9reduaecd4gdaefgicaaica0Eabcj;abae9Uc;WFbGcjdaeca0Egifcufai9Uae2aiadfaicl4cifcd4f2fcefkmbcbabBd;C:kjjbk:Ese5u8Jjjjjbc;ae9Rgl8Kjjjjbcbhvdnaici9UgocHfae0mbabcbyd;m:kjjbgrc;GeV86bbalc;abfcFecjez:xjjjb8AalcUfgw9cu83ibalc8WfgD9cu83ibalcyfgq9cu83ibalcafgk9cu83ibalcKfgx9cu83ibalczfgm9cu83ibal9cu83iwal9cu83ibabaefc9WfhPabcefgsaofhednaiTmbcmcsarcb9kgzEhHcbhOcbhAcbhCcbhXcbhQindnaeaP9nmbcbhvxikaQcufhvadaCcdtfgLydbhKaLcwfydbhYaLclfydbh8AcbhEdndndninalc;abfavcsGcitfgoydlh3dndndnaoydbgoaK9hmba3a8ASmekdnaoa8A9hmba3aY9hmbaEcefhExekaoaY9hmea3aK9hmeaEcdfhEkaEc870mdaXcufhvaLaEciGcx2goc;i1jjbfydbcdtfydbh3aLaoc;e1jjbfydbcdtfydbh8AaLaoc;a1jjbfydbcdtfydbhKcbhodnindnalavcsGcdtfydba39hmbaohYxdkcuhYavcufhvaocefgocz9hmbkkaOa3aOSgvaYce9iaYaH9oVgoGfhOdndndncbcsavEaYaoEgvcs9hmbarce9imba3a3aAa3cefaASgvEgAcefSmecmcsavEhvkasavaEcdtc;WeGV86bbavcs9hmea3aA9Rgvcetavc8F917hvinaeavcFb0crtavcFbGV86bbaecefheavcje6hoavcr4hvaoTmbka3hAxvkcPhvasaEcdtcPV86bba3hAkavTmiavaH9omicdhocehEaQhYxlkavcufhvaEclfgEc;ab9hmbkkdnaLceaYaOSceta8AaOSEcx2gvc;a1jjbfydbcdtfydbgKTaLavc;e1jjbfydbcdtfydbg8AceSGaLavc;i1jjbfydbcdtfydbg3cdSGaOcb9hGazGg5ce9hmbaw9cu83ibaD9cu83ibaq9cu83ibak9cu83ibax9cu83ibam9cu83ibal9cu83iwal9cu83ibcbhOkcbhEaXcufgvhodnindnalaocsGcdtfydba8A9hmbaEhYxdkcuhYaocufhoaEcefgEcz9hmbkkcbhodnindnalavcsGcdtfydba39hmbaohExdkcuhEavcufhvaocefgocz9hmbkkaOaKaOSg8EfhLdndnaYcm0mbaYcefhYxekcbcsa8AaLSgvEhYaLavfhLkdndnaEcm0mbaEcefhExekcbcsa3aLSgvEhEaLavfhLkc9:cua8EEh8FcbhvaEaYcltVgacFeGhodndndninavc:W1jjbfRbbaoSmeavcefgvcz9hmbxdkka5aKaO9havcm0VVmbasavc;WeV86bbxekasa8F86bbaeaa86bbaecefhekdna8EmbaKaA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombkaKhAkdnaYcs9hmba8AaA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombka8AhAkdnaEcs9hmba3aA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombka3hAkalaXcdtfaKBdbaXcefcsGhvdndnaYPzbeeeeeeeeeeeeeebekalavcdtfa8ABdbaXcdfcsGhvkdndnaEPzbeeeeeeeeeeeeeebekalavcdtfa3BdbavcefcsGhvkcihoalc;abfaQcitfgEaKBdlaEa8ABdbaQcefcsGhYcdhEavhXaLhOxekcdhoalaXcdtfa3BdbcehEaXcefcsGhXaQhYkalc;abfaYcitfgva8ABdlava3Bdbalc;abfaQaEfcsGcitfgva3BdlavaKBdbascefhsaQaofcsGhQaCcifgCai6mbkkdnaeaP9nmbcbhvxekcbhvinaeavfavc:W1jjbfRbb86bbavcefgvcz9hmbkaeab9Ravfhvkalc;aef8KjjjjbavkZeeucbhddninadcefgdc8F0meceadtae6mbkkadcrfcFeGcr9Uci2cdfabci9U2cHfkmbcbabBd;m:kjjbk:Adewu8Jjjjjbcz9Rhlcbhvdnaicvfae0mbcbhvabcbRb;m:kjjbc;qeV86bbal9cb83iwabcefhoabaefc98fhrdnaiTmbcbhwcbhDindnaoar6mbcbskadaDcdtfydbgqalcwfawaqav9Rgvavc8F91gv7av9Rc507gwcdtfgkydb9Rgvc8E91c9:Gavcdt7awVhvinaoavcFb0gecrtavcFbGV86bbavcr4hvaocefhoaembkakaqBdbaqhvaDcefgDai9hmbkkdnaoar9nmbcbskaocbBbbaoab9RclfhvkavkBeeucbhddninadcefgdc8F0meceadtae6mbkkadcwfcFeGcr9Uab2cvfk:bvli99dui99ludnaeTmbcuadcetcuftcu7:Zhvdndncuaicuftcu7:ZgoJbbbZMgr:lJbbb9p9DTmbar:Ohwxekcjjjj94hwkcbhicbhDinalclfIdbgrJbbbbJbbjZalIdbgq:lar:lMalcwfIdbgk:lMgr:varJbbbb9BEgrNhxaqarNhrdndnakJbbbb9GTmbaxhqxekJbbjZar:l:tgqaq:maxJbbbb9GEhqJbbjZax:l:tgxax:marJbbbb9GEhrkdndnalcxfIdbgxJbbj:;axJbbj:;9GEgkJbbjZakJbbjZ9FEavNJbbbZJbbb:;axJbbbb9GEMgx:lJbbb9p9DTmbax:Ohmxekcjjjj94hmkdndnaqJbbj:;aqJbbj:;9GEgxJbbjZaxJbbjZ9FEaoNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:OhPxekcjjjj94hPkdndnarJbbj:;arJbbj:;9GEgqJbbjZaqJbbjZ9FEaoNJbbbZJbbb:;arJbbbb9GEMgr:lJbbb9p9DTmbar:Ohsxekcjjjj94hskdndnadcl9hmbabaifgzas86bbazcifam86bbazcdfaw86bbazcefaP86bbxekabaDfgzas87ebazcofam87ebazclfaw87ebazcdfaP87ebkalczfhlaiclfhiaDcwfhDaecufgembkkk;hlld99eud99eudnaeTmbdndncuaicuftcu7:ZgvJbbbZMgo:lJbbb9p9DTmbao:Ohixekcjjjj94hikaic;8FiGhrinabcofcicdalclfIdb:lalIdb:l9EgialcwfIdb:lalaicdtfIdb:l9EEgialcxfIdb:lalaicdtfIdb:l9EEgiarV87ebdndnJbbj:;JbbjZalaicdtfIdbJbbbb9DEgoalaicd7cdtfIdbJ;Zl:1ZNNgwJbbj:;awJbbj:;9GEgDJbbjZaDJbbjZ9FEavNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohqxekcjjjj94hqkabcdfaq87ebdndnalaicefciGcdtfIdbJ;Zl:1ZNaoNgwJbbj:;awJbbj:;9GEgDJbbjZaDJbbjZ9FEavNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohqxekcjjjj94hqkabaq87ebdndnaoalaicufciGcdtfIdbJ;Zl:1ZNNgoJbbj:;aoJbbj:;9GEgwJbbjZawJbbjZ9FEavNJbbbZJbbb:;aoJbbbb9GEMgo:lJbbb9p9DTmbao:Ohixekcjjjj94hikabclfai87ebabcwfhbalczfhlaecufgembkkk;3viDue99eu8Jjjjjbcjd9Rgo8Kjjjjbadcd4hrdndndndnavcd9hmbadcl6meaohwarhDinawc:CuBdbawclfhwaDcufgDmbkaeTmiadcl6mdarcdthqalhkcbhxinaohwakhDarhminawawydbgPcbaDIdbgs:8cL4cFeGc:cufasJbbbb9BEgzaPaz9kEBdbaDclfhDawclfhwamcufgmmbkakaqfhkaxcefgxaeSmixbkkaeTmdxekaeTmekarcdthkavce9hhqadcl6hdcbhxindndndnaqmbadmdc:CuhDalhwarhminaDcbawIdbgs:8cL4cFeGc:cufasJbbbb9BEgPaDaP9kEhDawclfhwamcufgmmbxdkkc:CuhDdndnavPleddbdkadmdaohwalhmarhPinawcbamIdbgs:8cL4cFeGgzc;:bazc;:b0Ec:cufasJbbbb9BEBdbamclfhmawclfhwaPcufgPmbxdkkadmecbhwarhminaoawfcbalawfIdbgs:8cL4cFeGgPc8AaPc8A0Ec:cufasJbbbb9BEBdbawclfhwamcufgmmbkkadmbcbhwarhPinaDhmdnavceSmbaoawfydbhmkdndnalawfIdbgscjjj;8iamai9RcefgmcLt9R::NJbbbZJbbb:;asJbbbb9GEMgs:lJbbb9p9DTmbas:Ohzxekcjjjj94hzkabawfazcFFFrGamcKtVBdbawclfhwaPcufgPmbkkabakfhbalakfhlaxcefgxae9hmbkkaocjdf8Kjjjjbk:Ylvdud99due99iudnaeTmbceaicufgvthocuaitcu7:Zhrcuavtcu7:Zhwcbhvadcl9hhDcbhqindndnalcwfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikdndnalIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohdxekcjjjj94hdkadai9Rcd9TgxaifhidndnalclfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohdxekcjjjj94hdkadai9Rcd9ThddndnalcxfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEawNJbbbZMgk:lJbbb9p9DTmbak:Ohmxekcjjjj94hmkadaifhiaoamVhmdndnaDmbabavfgPai86bbaPcifam86bbaPcdfad86bbaPcefax86bbxekabaqfgPai87ebaPcofam87ebaPclfad87ebaPcdfax87ebkalczfhlavclfhvaqcwfhqaecufgembkkk;YqdXui998Jjjjjbc:qd9Rgv8Kjjjjbavc:Sefcbc;Kbz:xjjjb8AcbhodnadTmbcbhoaiTmbdndnabaeSmbaehrxekavcuadcdtgwadcFFFFi0Ecbyd;q:kjjbHjjjjbbgrBd:SeavceBd:mdaraeawz:wjjjb8Akavc:GefcwfcbBdbav9cb83i:Geavc:Gefaradaiavc:Sefz:pjjjbavyd:GehDadci9Ugqcbyd;q:kjjbHjjjjbbheavc:Sefavyd:mdgkcdtfaeBdbavakcefgwBd:mdaecbaqz:xjjjbhxavc:SefawcdtfcuaicdtaicFFFFi0Ecbyd;q:kjjbHjjjjbbgmBdbavakcdfgPBd:mdalc;ebfhsaDheamhwinawalIdbasaeydbgzcwazcw6EcdtfIdbMUdbaeclfheawclfhwaicufgimbkavc:SefaPcdtfcuaqcdtadcFFFF970Ecbyd;q:kjjbHjjjjbbgPBdbdnadci6mbarheaPhwaqhiinawamaeydbcdtfIdbamaeclfydbcdtfIdbMamaecwfydbcdtfIdbMUdbaecxfheawclfhwaicufgimbkkakcifhoalc;ebfhHavc;qbfhOavheavyd:KehAavyd:OehCcbhzcbhwcbhXcehQinaehLcihkarawci2gKcdtfgeydbhsaeclfydbhdabaXcx2fgicwfaecwfydbgYBdbaiclfadBdbaiasBdbaxawfce86bbaOaYBdwaOadBdlaOasBdbaPawcdtfcbBdbdnazTmbcihkaLhiinaOakcdtfaiydbgeBdbakaeaY9haeas9haead9hGGfhkaiclfhiazcufgzmbkkaXcefhXcbhzinaCaAarazaKfcdtfydbcdtgifydbcdtfgYheaDaifgdydbgshidnasTmbdninaeydbawSmeaeclfheaicufgiTmdxbkkaeaYascdtfc98fydbBdbadadydbcufBdbkazcefgzci9hmbkdndnakTmbcuhwJbbbbh8Acbhdavyd:KehYavyd:OehKindndnaDaOadcdtfydbcdtgzfydbgembadcefhdxekadcs0hiamazfgsIdbhEasalcbadcefgdaiEcdtfIdbaHaecwaecw6EcdtfIdbMg3Udba3aE:th3aecdthiaKaYazfydbcdtfheinaPaeydbgzcdtfgsa3asIdbMgEUdbaEa8Aa8AaE9DgsEh8AazawasEhwaeclfheaic98fgimbkkadak9hmbkawcu9hmekaQaq9pmdindnaxaQfRbbmbaQhwxdkaqaQcefgQ9hmbxikkakczakcz6EhzaOheaLhOawcu9hmbkkaocdtavc:Seffc98fhedninaoTmeaeydbcbyd;u:kjjbH:bjjjbbaec98fheaocufhoxbkkavc:qdf8Kjjjjbk;IlevucuaicdtgvaicFFFFi0Egocbyd;q:kjjbHjjjjbbhralalyd9GgwcdtfarBdbalawcefBd9GabarBdbaocbyd;q:kjjbHjjjjbbhralalyd9GgocdtfarBdbalaocefBd9GabarBdlcuadcdtadcFFFFi0Ecbyd;q:kjjbHjjjjbbhralalyd9GgocdtfarBdbalaocefBd9GabarBdwabydbcbavz:xjjjb8Aadci9UhDdnadTmbabydbhoaehladhrinaoalydbcdtfgvavydbcefBdbalclfhlarcufgrmbkkdnaiTmbabydbhlabydlhrcbhvaihoinaravBdbarclfhralydbavfhvalclfhlaocufgombkkdnadci6mbabydlhrabydwhvcbhlinaecwfydbhoaeclfydbhdaraeydbcdtfgwawydbgwcefBdbavawcdtfalBdbaradcdtfgdadydbgdcefBdbavadcdtfalBdbaraocdtfgoaoydbgocefBdbavaocdtfalBdbaecxfheaDalcefgl9hmbkkdnaiTmbabydlheabydbhlinaeaeydbalydb9RBdbalclfhlaeclfheaicufgimbkkkQbabaeadaic;K1jjbz:ojjjbkQbabaeadaic;m:jjjbz:ojjjbk9DeeuabcFeaicdtz:xjjjbhlcbhbdnadTmbindnalaeydbcdtfgiydbcu9hmbaiabBdbabcefhbkaeclfheadcufgdmbkkabk:Vvioud9:du8Jjjjjbc;Wa9Rgl8Kjjjjbcbhvalcxfcbc;Kbz:xjjjb8AalcuadcitgoadcFFFFe0Ecbyd;q:kjjbHjjjjbbgrBdxalceBd2araeadaicezNjjjbalcuaoadcjjjjoGEcbyd;q:kjjbHjjjjbbgwBdzadcdthednadTmbabhiinaiavBdbaiclfhiadavcefgv9hmbkkawaefhDalabBdwalawBdl9cbhqindnadTmbaq9cq9:hkarhvaDhiadheinaiav8Pibak1:NcFrG87ebavcwfhvaicdfhiaecufgembkkalclfaq:NceGcdtfydbhxalclfaq9ce98gq:NceGcdtfydbhmalc;Wbfcbcjaz:xjjjb8AaDhvadhidnadTmbinalc;Wbfav8VebcdtfgeaeydbcefBdbavcdfhvaicufgimbkkcbhvcbhiinalc;WbfavfgeydbhoaeaiBdbaoaifhiavclfgvcja9hmbkadhvdndnadTmbinalc;WbfaDamydbgicetf8VebcdtfgeaeydbgecefBdbaxaecdtfaiBdbamclfhmavcufgvmbkaq9cv9smdcbhvinabawydbcdtfavBdbawclfhwadavcefgv9hmbxdkkaq9cv9smekkclhvdninavc98Smealcxfavfydbcbyd;u:kjjbH:bjjjbbavc98fhvxbkkalc;Waf8Kjjjjbk:Jwliuo99iud9:cbhv8Jjjjjbca9Rgoczfcwfcbyd:8:kjjbBdbaocb8Pd:0:kjjb83izaocwfcbyd;i:kjjbBdbaocb8Pd;a:kjjb83ibaicd4hrdndnadmbJFFuFhwJFFuuhDJFFuuhqJFFuFhkJFFuuhxJFFuFhmxekarcdthPaehsincbhiinaoczfaifgzasaifIdbgwazIdbgDaDaw9EEUdbaoaifgzawazIdbgDaDaw9DEUdbaiclfgicx9hmbkasaPfhsavcefgvad9hmbkaoIdKhDaoIdwhwaoIdChqaoIdlhkaoIdzhxaoIdbhmkdnadTmbJbbbbJbFu9hJbbbbamax:tgmamJbbbb9DEgmakaq:tgkakam9DEgkawaD:tgwawak9DEgw:vawJbbbb9BEhwdnalmbarcdthoindndnaeclfIdbaq:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:S9cC:ghHdndnaeIdbax:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikaHai:S:ehHdndnaecwfIdbaD:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabaHai:T9cy:g:e83ibaeaofheabcwfhbadcufgdmbxdkkarcdthoindndnaeIdbax:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cv9:9c;j:KM;j:KM;j:Kd:dhOdndnaeclfIdbaq:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cq9:9cM;j:KM;j:KM;jl:daO:ehOdndnaecwfIdbaD:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabaOai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cC9:9c:KM;j:KM;j:KMD:d:e83ibaeaofheabcwfhbadcufgdmbkkk9teiucbcbyd;y:kjjbgeabcifc98GfgbBd;y:kjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd;y:kjjbgeabcrfc94GfgbBd;y:kjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik9:eiuZbhedndncbyd;y:kjjbgdaecztgi9nmbcuheadai9RcFFifcz4nbcuSmekadhekcbabae9Rcifc98Gcbyd;y:kjjbfgdBd;y:kjjbdnadZbcztge9nmbadae9RcFFifcz4nb8Akkk;Qddbcjwk;mdbbbbdbbblbbbwbbbbbbbebbbdbbblbbbwbbbbbbbbbbbbbbbb4:h9w9N94:P:gW:j9O:ye9Pbbbbbbebbbdbbbebbbdbbbbbbbdbbbbbbbebbbbbbb:l29hZ;69:9kZ;N;76Z;rg97Z;z;o9xZ8J;B85Z;:;u9yZ;b;k9HZ:2;Z9DZ9e:l9mZ59A8KZ:r;T3Z:A:zYZ79OHZ;j4::8::Y:D9V8:bbbb9s:49:Z8R:hBZ9M9M;M8:L;z;o8:;8:PG89q;x:J878R:hQ8::M:B;e87bbbbbbjZbbjZbbjZ:E;V;N8::Y:DsZ9i;H;68:xd;R8:;h0838:;W:NoZbbbb:WV9O8:uf888:9i;H;68:9c9G;L89;n;m9m89;D8Ko8:bbbbf:8tZ9m836ZS:2AZL;zPZZ818EZ9e:lxZ;U98F8:819E;68:FFuuFFuuFFuuFFuFFFuFFFuFbc;mqkzebbbebbbdbbb9G:vbb";
-      var wasmpack = new Uint8Array([
-        32,
-        0,
-        65,
-        2,
-        1,
-        106,
-        34,
-        33,
-        3,
-        128,
-        11,
-        4,
-        13,
-        64,
-        6,
-        253,
-        10,
-        7,
-        15,
-        116,
-        127,
-        5,
-        8,
-        12,
-        40,
-        16,
-        19,
-        54,
-        20,
-        9,
-        27,
-        255,
-        113,
-        17,
-        42,
-        67,
-        24,
-        23,
-        146,
-        148,
-        18,
-        14,
-        22,
-        45,
-        70,
-        69,
-        56,
-        114,
-        101,
-        21,
-        25,
-        63,
-        75,
-        136,
-        108,
-        28,
-        118,
-        29,
-        73,
-        115
-      ]);
-      if (typeof WebAssembly !== "object") {
-        return {
-          supported: false
-        };
-      }
-      var instance;
-      var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
-        instance = result.instance;
-        instance.exports.__wasm_call_ctors();
-        instance.exports.meshopt_encodeVertexVersion(0);
-        instance.exports.meshopt_encodeIndexVersion(1);
-      });
-      function unpack(data) {
-        var result = new Uint8Array(data.length);
-        for (var i = 0; i < data.length; ++i) {
-          var ch = data.charCodeAt(i);
-          result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
-        }
-        var write = 0;
-        for (var i = 0; i < data.length; ++i) {
-          result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
-        }
-        return result.buffer.slice(0, write);
-      }
-      function assert(cond) {
-        if (!cond) {
-          throw new Error("Assertion failed");
-        }
-      }
-      function bytes(view) {
-        return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-      }
-      function reorder(fun, indices, vertices, optf) {
-        var sbrk = instance.exports.sbrk;
-        var ip = sbrk(indices.length * 4);
-        var rp = sbrk(vertices * 4);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        var indices8 = bytes(indices);
-        heap.set(indices8, ip);
-        if (optf) {
-          optf(ip, ip, indices.length, vertices);
-        }
-        var unique = fun(rp, ip, indices.length, vertices);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var remap = new Uint32Array(vertices);
-        new Uint8Array(remap.buffer).set(heap.subarray(rp, rp + vertices * 4));
-        indices8.set(heap.subarray(ip, ip + indices.length * 4));
-        sbrk(ip - sbrk(0));
-        for (var i = 0; i < indices.length; ++i) indices[i] = remap[indices[i]];
-        return [remap, unique];
-      }
-      function spatialsort(fun, positions, count, stride) {
-        var sbrk = instance.exports.sbrk;
-        var ip = sbrk(count * 4);
-        var sp = sbrk(count * stride);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(positions), sp);
-        fun(ip, sp, count, stride);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var remap = new Uint32Array(count);
-        new Uint8Array(remap.buffer).set(heap.subarray(ip, ip + count * 4));
-        sbrk(ip - sbrk(0));
-        return remap;
-      }
-      function encode(fun, bound, source, count, size, level, version) {
-        var sbrk = instance.exports.sbrk;
-        var tp = sbrk(bound);
-        var sp = sbrk(count * size);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(source), sp);
-        var res = fun(tp, bound, sp, count, size, level, version);
-        var target = new Uint8Array(res);
-        target.set(heap.subarray(tp, tp + res));
-        sbrk(tp - sbrk(0));
-        return target;
-      }
-      function maxindex(source) {
-        var result = 0;
-        for (var i = 0; i < source.length; ++i) {
-          var index = source[i];
-          result = result < index ? index : result;
-        }
-        return result;
-      }
-      function index32(source, size) {
-        assert(size == 2 || size == 4);
-        if (size == 4) {
-          return new Uint32Array(source.buffer, source.byteOffset, source.byteLength / 4);
-        } else {
-          var view = new Uint16Array(source.buffer, source.byteOffset, source.byteLength / 2);
-          return new Uint32Array(view);
-        }
-      }
-      function filter(fun, source, count, stride, bits, insize, mode2) {
-        var sbrk = instance.exports.sbrk;
-        var tp = sbrk(count * stride);
-        var sp = sbrk(count * insize);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(source), sp);
-        fun(tp, count, stride, bits, sp, mode2);
-        var target = new Uint8Array(count * stride);
-        target.set(heap.subarray(tp, tp + count * stride));
-        sbrk(tp - sbrk(0));
-        return target;
-      }
-      return {
-        ready,
-        supported: true,
-        reorderMesh: function(indices, triangles, optsize) {
-          var optf = triangles ? optsize ? instance.exports.meshopt_optimizeVertexCacheStrip : instance.exports.meshopt_optimizeVertexCache : void 0;
-          return reorder(instance.exports.meshopt_optimizeVertexFetchRemap, indices, maxindex(indices) + 1, optf);
-        },
-        reorderPoints: function(positions, positions_stride) {
-          assert(positions instanceof Float32Array);
-          assert(positions.length % positions_stride == 0);
-          assert(positions_stride >= 3);
-          return spatialsort(instance.exports.meshopt_spatialSortRemap, positions, positions.length / positions_stride, positions_stride * 4);
-        },
-        encodeVertexBuffer: function(source, count, size) {
-          assert(size > 0 && size <= 256);
-          assert(size % 4 == 0);
-          var bound = instance.exports.meshopt_encodeVertexBufferBound(count, size);
-          return encode(instance.exports.meshopt_encodeVertexBuffer, bound, source, count, size);
-        },
-        encodeVertexBufferLevel: function(source, count, size, level, version) {
-          assert(size > 0 && size <= 256);
-          assert(size % 4 == 0);
-          assert(level >= 0 && level <= 3);
-          assert(version === void 0 || version == 0 || version == 1);
-          var bound = instance.exports.meshopt_encodeVertexBufferBound(count, size);
-          return encode(instance.exports.meshopt_encodeVertexBufferLevel, bound, source, count, size, level, version || 0);
-        },
-        encodeIndexBuffer: function(source, count, size) {
-          assert(size == 2 || size == 4);
-          assert(count % 3 == 0);
-          var indices = index32(source, size);
-          var bound = instance.exports.meshopt_encodeIndexBufferBound(count, maxindex(indices) + 1);
-          return encode(instance.exports.meshopt_encodeIndexBuffer, bound, indices, count, 4);
-        },
-        encodeIndexSequence: function(source, count, size) {
-          assert(size == 2 || size == 4);
-          var indices = index32(source, size);
-          var bound = instance.exports.meshopt_encodeIndexSequenceBound(count, maxindex(indices) + 1);
-          return encode(instance.exports.meshopt_encodeIndexSequence, bound, indices, count, 4);
-        },
-        encodeGltfBuffer: function(source, count, size, mode2) {
-          var table2 = {
-            ATTRIBUTES: this.encodeVertexBuffer,
-            TRIANGLES: this.encodeIndexBuffer,
-            INDICES: this.encodeIndexSequence
-          };
-          assert(table2[mode2]);
-          return table2[mode2](source, count, size);
-        },
-        encodeFilterOct: function(source, count, stride, bits) {
-          assert(stride == 4 || stride == 8);
-          assert(bits >= 1 && bits <= 16);
-          return filter(instance.exports.meshopt_encodeFilterOct, source, count, stride, bits, 16);
-        },
-        encodeFilterQuat: function(source, count, stride, bits) {
-          assert(stride == 8);
-          assert(bits >= 4 && bits <= 16);
-          return filter(instance.exports.meshopt_encodeFilterQuat, source, count, stride, bits, 16);
-        },
-        encodeFilterExp: function(source, count, stride, bits, mode2) {
-          assert(stride > 0 && stride % 4 == 0);
-          assert(bits >= 1 && bits <= 24);
-          var table2 = {
-            Separate: 0,
-            SharedVector: 1,
-            SharedComponent: 2,
-            Clamped: 3
-          };
-          return filter(instance.exports.meshopt_encodeFilterExp, source, count, stride, bits, stride, mode2 ? table2[mode2] : 1);
-        },
-        encodeFilterColor: function(source, count, stride, bits) {
-          assert(stride == 4 || stride == 8);
-          assert(bits >= 2 && bits <= 16);
-          return filter(instance.exports.meshopt_encodeFilterColor, source, count, stride, bits, 16);
-        }
-      };
-    })();
-    if (typeof exports2 === "object" && typeof module2 === "object") module2.exports = MeshoptEncoder;
-    else if (typeof define === "function" && define["amd"])
-      define([], function() {
-        return MeshoptEncoder;
-      });
-    else if (typeof exports2 === "object") exports2["MeshoptEncoder"] = MeshoptEncoder;
-    else (typeof self !== "undefined" ? self : exports2).MeshoptEncoder = MeshoptEncoder;
-  }
-});
-
-// node_modules/meshoptimizer/meshopt_decoder.js
-var require_meshopt_decoder = __commonJS({
-  "node_modules/meshoptimizer/meshopt_decoder.js"(exports2, module2) {
-    var MeshoptDecoder3 = (function() {
-      "use strict";
-      var wasm_base = "b9H79Tebbbe8Fv9Gbb9Gvuuuuueu9Giuuub9Geueu9Giuuueuixkbeeeddddillviebeoweuec:W:Odkr;Neqo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9KW9J9V9KW9wWVtW949c919M9MWVbeY9TW79O9V9Wt9F9KW9J9V9KW69U9KW949c919M9MWVbdE9TW79O9V9Wt9F9KW9J9V9KW69U9KW949tWG91W9U9JWbiL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9p9JtblK9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9r919HtbvL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVT949WboY9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVJ9V29VVbrl79IV9Rbwq;BZkdbk;jYi5ud9:du8Jjjjjbcj;kb9Rgv8Kjjjjbc9:hodnalTmbcuhoaiRbbgrc;WeGc:Ge9hmbarcsGgwce0mbc9:hoalcufadcd4cbawEgDadfgrcKcaawEgqaraq0Egk6mbaicefhxcj;abad9Uc;WFbGcjdadca0EhmaialfgPar9Rgoadfhsavaoadz:jjjjbgzceVhHcbhOdndninaeaO9nmeaPax9RaD6mdamaeaO9RaOamfgoae6EgAcsfglc9WGhCabaOad2fhXaAcethQaxaDfhiaOaeaoaeao6E9RhLalcl4cifcd4hKazcj;cbfaAfhYcbh8AazcjdfhEaHh3incbhodnawTmbaxa8Acd4fRbbhokaocFeGh5cbh8Eazcj;cbfhqinaih8Fdndndndna5a8Ecet4ciGgoc9:fPdebdkaPa8F9RaA6mrazcj;cbfa8EaA2fa8FaAz:jjjjb8Aa8FaAfhixdkazcj;cbfa8EaA2fcbaAz:kjjjb8Aa8FhixekaPa8F9RaK6mva8FaKfhidnaCTmbaPai9RcK6mbaocdtc:q1jjbfcj1jjbawEhaczhrcbhlinargoc9Wfghaqfhrdndndndndndnaaa8Fahco4fRbbalcoG4ciGcdtfydbPDbedvivvvlvkar9cb83bbarcwf9cb83bbxlkarcbaiRbdai8Xbb9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:gg9cjjjjjz:dg8J9qE86bbaqaofgrcGfag9c8F1:NghcKtc8F91aicdfa8J9c8N1:Nfg8KRbbG86bbarcVfcba8KahcjeGcr4fghRbbag9cjjjjjl:dg8J9qE86bbarc7fcbaha8J9c8L1:NfghRbbag9cjjjjjd:dg8J9qE86bbarctfcbaha8J9c8K1:NfghRbbag9cjjjjje:dg8J9qE86bbarc91fcbaha8J9c8J1:NfghRbbag9cjjjj;ab:dg8J9qE86bbarc4fcbaha8J9cg1:NfghRbbag9cjjjja:dg8J9qE86bbarc93fcbaha8J9ch1:NfghRbbag9cjjjjz:dgg9qE86bbarc94fcbahag9ca1:NfghRbbai8Xbe9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:gg9cjjjjjz:dg8J9qE86bbarc95fag9c8F1:NgicKtc8F91aha8J9c8N1:NfghRbbG86bbarc96fcbahaicjeGcr4fgiRbbag9cjjjjjl:dg8J9qE86bbarc97fcbaia8J9c8L1:NfgiRbbag9cjjjjjd:dg8J9qE86bbarc98fcbaia8J9c8K1:NfgiRbbag9cjjjjje:dg8J9qE86bbarc99fcbaia8J9c8J1:NfgiRbbag9cjjjj;ab:dg8J9qE86bbarc9:fcbaia8J9cg1:NfgiRbbag9cjjjja:dg8J9qE86bbarcufcbaia8J9ch1:NfgiRbbag9cjjjjz:dgg9qE86bbaiag9ca1:NfhixikaraiRblaiRbbghco4g8Ka8KciSg8KE86bbaqaofgrcGfaiclfa8Kfg8KRbbahcl4ciGg8La8LciSg8LE86bbarcVfa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc7fa8Ka8Lfg8KRbbahciGghahciSghE86bbarctfa8Kahfg8KRbbaiRbeghco4g8La8LciSg8LE86bbarc91fa8Ka8Lfg8KRbbahcl4ciGg8La8LciSg8LE86bbarc4fa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc93fa8Ka8Lfg8KRbbahciGghahciSghE86bbarc94fa8Kahfg8KRbbaiRbdghco4g8La8LciSg8LE86bbarc95fa8Ka8Lfg8KRbbahcl4ciGg8La8LciSg8LE86bbarc96fa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc97fa8Ka8Lfg8KRbbahciGghahciSghE86bbarc98fa8KahfghRbbaiRbigico4g8Ka8KciSg8KE86bbarc99faha8KfghRbbaicl4ciGg8Ka8KciSg8KE86bbarc9:faha8KfghRbbaicd4ciGg8Ka8KciSg8KE86bbarcufaha8KfgrRbbaiciGgiaiciSgiE86bbaraifhixdkaraiRbwaiRbbghcl4g8Ka8KcsSg8KE86bbaqaofgrcGfaicwfa8Kfg8KRbbahcsGghahcsSghE86bbarcVfa8KahfghRbbaiRbeg8Kcl4g8La8LcsSg8LE86bbarc7faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarctfaha8KfghRbbaiRbdg8Kcl4g8La8LcsSg8LE86bbarc91faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc4faha8KfghRbbaiRbig8Kcl4g8La8LcsSg8LE86bbarc93faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc94faha8KfghRbbaiRblg8Kcl4g8La8LcsSg8LE86bbarc95faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc96faha8KfghRbbaiRbvg8Kcl4g8La8LcsSg8LE86bbarc97faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc98faha8KfghRbbaiRbog8Kcl4g8La8LcsSg8LE86bbarc99faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc9:faha8KfghRbbaiRbrgicl4g8Ka8KcsSg8KE86bbarcufaha8KfgrRbbaicsGgiaicsSgiE86bbaraifhixekarai8Pbb83bbarcwfaicwf8Pbb83bbaiczfhikdnaoaC9pmbalcdfhlaoczfhraPai9RcL0mekkaoaC6moaimexokaCmva8FTmvkaqaAfhqa8Ecefg8Ecl9hmbkdndndndnawTmbasa8Acd4fRbbgociGPlbedrbkaATmdaza8Afh8Fazcj;cbfhhcbh8EaEhaina8FRbbhraahocbhlinaoahalfRbbgqce4cbaqceG9R7arfgr86bbaoadfhoaAalcefgl9hmbkaacefhaa8Fcefh8FahaAfhha8Ecefg8Ecl9hmbxikkaATmeaza8Afhaazcj;cbfhhcbhoceh8EaYh8FinaEaofhlaa8Vbbhrcbhoinala8FaofRbbcwtahaofRbbgqVc;:FiGce4cbaqceG9R7arfgr87bbaladfhlaLaocefgofmbka8FaQfh8FcdhoaacdfhaahaQfhha8EceGhlcbh8EalmbxdkkaATmbcbaocl49Rh8Eaza8AfRbbhqcwhoa3hlinalRbbaotaqVhqalcefhlaocwfgoca9hmbkcbhhaEh8FaYhainazcj;cbfahfRbbhrcwhoaahlinalRbbaotarVhralaAfhlaocwfgoca9hmbkara8E93aq7hqcbhoa8Fhlinalaqao486bbalcefhlaocwfgoca9hmbka8Fadfh8FaacefhaahcefghaA9hmbkkaEclfhEa3clfh3a8Aclfg8Aad6mbkaXazcjdfaAad2z:jjjjb8AazazcjdfaAcufad2fadz:jjjjb8AaAaOfhOaihxaimbkc9:hoxdkcbc99aPax9RakSEhoxekc9:hokavcj;kbf8Kjjjjbaok:XseHu8Jjjjjbc;ae9Rgv8Kjjjjbc9:hodnaeci9UgrcHfal0mbcuhoaiRbbgwc;WeGc;Ge9hmbawcsGgDce0mbavc;abfcFecjez:kjjjb8AavcUf9cu83ibavc8Wf9cu83ibavcyf9cu83ibavcaf9cu83ibavcKf9cu83ibavczf9cu83ibav9cu83iwav9cu83ibaialfc9WfhqaicefgwarfhldnaeTmbcmcsaDceSEhkcbhxcbhmcbhrcbhicbhoindnalaq9nmbc9:hoxikdndnawRbbgDc;Ve0mbavc;abfaoaDcu7gPcl4fcsGcitfgsydlhzasydbhHdndnaDcsGgsak9pmbavaiaPfcsGcdtfydbaxasEhDaxasTgOfhxxekdndnascsSmbcehOasc987asamffcefhDxekalcefhDal8SbbgscFeGhPdndnascu9mmbaDhlxekalcvfhlaPcFbGhPcrhsdninaD8SbbgOcFbGastaPVhPaOcu9kmeaDcefhDascrfgsc8J9hmbxdkkaDcefhlkcehOaPce4cbaPceG9R7amfhDkaDhmkavc;abfaocitfgsaDBdbasazBdlavaicdtfaDBdbavc;abfaocefcsGcitfgsaHBdbasaDBdlaocdfhoaOaifhidnadcd9hmbabarcetfgsaH87ebasclfaD87ebascdfaz87ebxdkabarcdtfgsaHBdbascwfaDBdbasclfazBdbxekdnaDcpe0mbaxcefgOavaiaqaDcsGfRbbgscl49RcsGcdtfydbascz6gPEhDavaias9RcsGcdtfydbaOaPfgzascsGgOEhsaOThOdndnadcd9hmbabarcetfgHax87ebaHclfas87ebaHcdfaD87ebxekabarcdtfgHaxBdbaHcwfasBdbaHclfaDBdbkavaicdtfaxBdbavc;abfaocitfgHaDBdbaHaxBdlavaicefgicsGcdtfaDBdbavc;abfaocefcsGcitfgHasBdbaHaDBdlavaiaPfgicsGcdtfasBdbavc;abfaocdfcsGcitfgDaxBdbaDasBdlaocifhoaiaOfhiazaOfhxxekaxcbalRbbgHEgAaDc;:eSgDfhzaHcsGhCaHcl4hXdndnaHcs0mbazcefhOxekazhOavaiaX9RcsGcdtfydbhzkdndnaCmbaOcefhxxekaOhxavaiaH9RcsGcdtfydbhOkdndnaDTmbalcefhDxekalcdfhDal8SbegPcFeGhsdnaPcu9kmbalcofhAascFbGhscrhldninaD8SbbgPcFbGaltasVhsaPcu9kmeaDcefhDalcrfglc8J9hmbkaAhDxekaDcefhDkasce4cbasceG9R7amfgmhAkdndnaXcsSmbaDhsxekaDcefhsaD8SbbglcFeGhPdnalcu9kmbaDcvfhzaPcFbGhPcrhldninas8SbbgDcFbGaltaPVhPaDcu9kmeascefhsalcrfglc8J9hmbkazhsxekascefhskaPce4cbaPceG9R7amfgmhzkdndnaCcsSmbashlxekascefhlas8SbbgDcFeGhPdnaDcu9kmbascvfhOaPcFbGhPcrhDdninal8SbbgscFbGaDtaPVhPascu9kmealcefhlaDcrfgDc8J9hmbkaOhlxekalcefhlkaPce4cbaPceG9R7amfgmhOkdndnadcd9hmbabarcetfgDaA87ebaDclfaO87ebaDcdfaz87ebxekabarcdtfgDaABdbaDcwfaOBdbaDclfazBdbkavc;abfaocitfgDazBdbaDaABdlavaicdtfaABdbavc;abfaocefcsGcitfgDaOBdbaDazBdlavaicefgicsGcdtfazBdbavc;abfaocdfcsGcitfgDaABdbaDaOBdlavaiaHcz6aXcsSVfgicsGcdtfaOBdbaiaCTaCcsSVfhiaocifhokawcefhwaocsGhoaicsGhiarcifgrae6mbkkcbc99alaqSEhokavc;aef8Kjjjjbaok:clevu8Jjjjjbcz9Rhvdnaecvfal9nmbc9:skdnaiRbbc;:eGc;qeSmbcuskav9cb83iwaicefhoaialfc98fhrdnaeTmbdnadcdSmbcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcdtfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgiBdbalaiBdbawcefgwae9hmbxdkkcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcetfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgi87ebalaiBdbawcefgwae9hmbkkcbc99aoarSEk:Lvoeue99dud99eud99dndnadcl9hmbaeTmeindndnabcdfgd8Sbb:Yab8Sbbgi:Ygl:l:tabcefgv8Sbbgo:Ygr:l:tgwJbb;:9cawawNJbbbbawawJbbbb9GgDEgq:mgkaqaicb9iEalMgwawNakaqaocb9iEarMgqaqNMM:r:vglNJbbbZJbbb:;aDEMgr:lJbbb9p9DTmbar:Ohixekcjjjj94hikadai86bbdndnaqalNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkavad86bbdndnawalNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohdxekcjjjj94hdkabad86bbabclfhbaecufgembxdkkaeTmbindndnabclfgd8Ueb:Yab8Uebgi:Ygl:l:tabcdfgv8Uebgo:Ygr:l:tgwJb;:FSawawNJbbbbawawJbbbb9GgDEgq:mgkaqaicb9iEalMgwawNakaqaocb9iEarMgqaqNMM:r:vglNJbbbZJbbb:;aDEMgr:lJbbb9p9DTmbar:Ohixekcjjjj94hikadai87ebdndnaqalNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkavad87ebdndnawalNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohdxekcjjjj94hdkabad87ebabcwfhbaecufgembkkk;oiliui99iue99dnaeTmbcbhiabhlindndnJ;Zl81Zalcof8UebgvciV:Y:vgoal8Ueb:YNgrJb;:FSNJbbbZJbbb:;arJbbbb9GEMgw:lJbbb9p9DTmbaw:OhDxekcjjjj94hDkalclf8Uebhqalcdf8UebhkabaiavcefciGfcetfaD87ebdndnaoak:YNgwJb;:FSNJbbbZJbbb:;awJbbbb9GEMgx:lJbbb9p9DTmbax:OhDxekcjjjj94hDkabaiavciGfgkcd7cetfaD87ebdndnaoaq:YNgoJb;:FSNJbbbZJbbb:;aoJbbbb9GEMgx:lJbbb9p9DTmbax:OhDxekcjjjj94hDkabaiavcufciGfcetfaD87ebdndnJbbjZararN:tawawN:taoaoN:tgrJbbbbarJbbbb9GE:rJb;:FSNJbbbZMgr:lJbbb9p9DTmbar:Ohvxekcjjjj94hvkabakcetfav87ebalcwfhlaiclfhiaecufgembkkk9mbdnadcd4ae2gdTmbinababydbgecwtcw91:Yaece91cjjj98Gcjjj;8if::NUdbabclfhbadcufgdmbkkk:Tvirud99eudndnadcl9hmbaeTmeindndnabRbbgiabcefgl8Sbbgvabcdfgo8Sbbgrf9R:YJbbuJabcifgwRbbgdce4adVgDcd4aDVgDcl4aDVgD:Z:vgqNJbbbZMgk:lJbbb9p9DTmbak:Ohxxekcjjjj94hxkaoax86bbdndnaraif:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohoxekcjjjj94hokalao86bbdndnavaifar9R:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabai86bbdndnaDadcetGadceGV:ZaqNJbbbZMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkawad86bbabclfhbaecufgembxdkkaeTmbindndnab8Vebgiabcdfgl8Uebgvabclfgo8Uebgrf9R:YJbFu9habcofgw8Vebgdce4adVgDcd4aDVgDcl4aDVgDcw4aDVgD:Z:vgqNJbbbZMgk:lJbbb9p9DTmbak:Ohxxekcjjjj94hxkaoax87ebdndnaraif:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohoxekcjjjj94hokalao87ebdndnavaifar9R:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabai87ebdndnaDadcetGadceGV:ZaqNJbbbZMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkawad87ebabcwfhbaecufgembkkk9teiucbcbyd:K1jjbgeabcifc98GfgbBd:K1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabkk81dbcjwk8Kbbbbdbbblbbbwbbbbbbbebbbdbbblbbbwbbbbc:Kwkl8WNbb";
-      var wasm_simd = "b9H79TebbbeKl9Gbb9Gvuuuuueu9Giuuub9Geueuixkbbebeeddddilve9Weeeviebeoweuec:q:6dkr;Neqo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9KW9J9V9KW9wWVtW949c919M9MWVbdY9TW79O9V9Wt9F9KW9J9V9KW69U9KW949c919M9MWVblE9TW79O9V9Wt9F9KW9J9V9KW69U9KW949tWG91W9U9JWbvL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9p9JtboK9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9r919HtbrL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVT949WbwY9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVJ9V29VVbDl79IV9Rbqq;Ctklbzik9:evu8Jjjjjbcz9Rhbcbheincbhdcbhiinabcwfadfaicjuaead4ceGglE86bbaialfhiadcefgdcw9hmbkaec:q:yjjbfai86bbaecitc:q1jjbfab8Piw83ibaecefgecjd9hmbkk:183lYud97dur978Jjjjjbcj;kb9Rgv8Kjjjjbc9:hodnalTmbcuhoaiRbbgrc;WeGc:Ge9hmbarcsGgwce0mbc9:hoalcufadcd4cbawEgDadfgrcKcaawEgqaraq0Egk6mbaicefhxavaialfgmar9Rgoad;8qbbcj;abad9Uc;WFbGcjdadca0EhPdndndnadTmbaoadfhscbhzinaeaz9nmdamax9RaD6miabazad2fhHaxaDfhOaPaeaz9RazaPfae6EgAcsfgocl4cifcd4hCavcj;cbfaoc9WGgXcetfhQavcj;cbfaXci2fhLavcj;cbfaXfhKcbhYaoc;ab6h8AincbhodnawTmbaxaYcd4fRbbhokaocFeGhEcbh3avcj;cbfh5indndndndnaEa3cet4ciGgoc9:fPdebdkamaO9RaX6mwavcj;cbfa3aX2faOaX;8qbbaOaAfhOxdkavcj;cbfa3aX2fcbaX;8kbxekamaO9RaC6moaoclVcbawEhraOaCfhocbhidna8Ambamao9Rc;Gb6mbcbhlina5alfhidndndndndndnaOalco4fRbbgqciGarfPDbedibledibkaipxbbbbbbbbbbbbbbbbpklbxlkaiaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaiaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaiaopbbbpklbaoczfhoxekaiaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqcd4ciGarfPDbedibledibkaiczfpxbbbbbbbbbbbbbbbbpklbxlkaiczfaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaiczfaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaiczfaopbbbpklbaoczfhoxekaiczfaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqcl4ciGarfPDbedibledibkaicafpxbbbbbbbbbbbbbbbbpklbxlkaicafaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaicafaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaicafaopbbbpklbaoczfhoxekaicafaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqco4arfPDbedibledibkaic8Wfpxbbbbbbbbbbbbbbbbpklbxlkaic8Wfaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngicitc:q1jjbfpbibaic:q:yjjbfRbbgipsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Ngqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaiaoclffaqc:q:yjjbfRbbfhoxikaic8Wfaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngicitc:q1jjbfpbibaic:q:yjjbfRbbgipsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Ngqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaiaocwffaqc:q:yjjbfRbbfhoxdkaic8Wfaopbbbpklbaoczfhoxekaic8WfaopbbdaoRbbgicitc:q1jjbfpbibaic:q:yjjbfRbbgipsaoRbegqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaiaocdffaqc:q:yjjbfRbbfhokalc;abfhialcjefaX0meaihlamao9Rc;Fb0mbkkdnaiaX9pmbaici4hlinamao9RcK6mwa5aifhqdndndndndndnaOaico4fRbbalcoG4ciGarfPDbedibledibkaqpxbbbbbbbbbbbbbbbbpkbbxlkaqaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spkbbaaaoclffahc:q:yjjbfRbbfhoxikaqaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spkbbaaaocwffahc:q:yjjbfRbbfhoxdkaqaopbbbpkbbaoczfhoxekaqaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpkbbaaaocdffahc:q:yjjbfRbbfhokalcdfhlaiczfgiaX6mbkkaohOaoTmoka5aXfh5a3cefg3cl9hmbkdndndndnawTmbasaYcd4fRbbglciGPlbedwbkaXTmdavcjdfaYfhlavaYfpbdbhgcbhoinalavcj;cbfaofpblbg8JaKaofpblbg8KpmbzeHdOiAlCvXoQrLg8LaQaofpblbg8MaLaofpblbg8NpmbzeHdOiAlCvXoQrLgypmbezHdiOAlvCXorQLg8Ecep9Ta8Epxeeeeeeeeeeeeeeeeg8Fp9op9Hp9rg8Eagp9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8LaypmwDKYqk8AExm35Ps8E8Fg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8Ja8KpmwKDYq8AkEx3m5P8Es8Fg8Ja8Ma8NpmwKDYq8AkEx3m5P8Es8Fg8KpmbezHdiOAlvCXorQLg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8Ja8KpmwDKYqk8AExm35Ps8E8Fg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Ug8Fp9Abbbaladfgla8Fa8Ea8Epmlvorlvorlvorlvorp9Ug8Fp9Abbbaladfgla8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9Ug8Fp9Abbbaladfgla8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9AbbbaladfhlaoczfgoaX6mbxikkaXTmeavcjdfaYfhlavaYfpbdbhgcbhoinalavcj;cbfaofpblbg8JaKaofpblbg8KpmbzeHdOiAlCvXoQrLg8LaQaofpblbg8MaLaofpblbg8NpmbzeHdOiAlCvXoQrLgypmbezHdiOAlvCXorQLg8Ecep:nea8Epxebebebebebebebebg8Fp9op:bep9rg8Eagp:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8LaypmwDKYqk8AExm35Ps8E8Fg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8Ja8KpmwKDYq8AkEx3m5P8Es8Fg8Ja8Ma8NpmwKDYq8AkEx3m5P8Es8Fg8KpmbezHdiOAlvCXorQLg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8Ja8KpmwDKYqk8AExm35Ps8E8Fg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeg8Fp9Abbbaladfgla8Fa8Ea8Epmlvorlvorlvorlvorp:oeg8Fp9Abbbaladfgla8Fa8Ea8EpmwDqkwDqkwDqkwDqkp:oeg8Fp9Abbbaladfgla8Fa8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9AbbbaladfhlaoczfgoaX6mbxdkkaXTmbcbhocbalcl4gl9Rc8FGhiavcjdfaYfhravaYfpbdbh8Finaravcj;cbfaofpblbggaKaofpblbg8JpmbzeHdOiAlCvXoQrLg8KaQaofpblbg8LaLaofpblbg8MpmbzeHdOiAlCvXoQrLg8NpmbezHdiOAlvCXorQLg8Eaip:Rea8Ealp:Sep9qg8Ea8Fp9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Fa8Ka8NpmwDKYqk8AExm35Ps8E8Fg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Faga8JpmwKDYq8AkEx3m5P8Es8Fgga8La8MpmwKDYq8AkEx3m5P8Es8Fg8JpmbezHdiOAlvCXorQLg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Faga8JpmwDKYqk8AExm35Ps8E8Fg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9AbbbaradfhraoczfgoaX6mbkkaYclfgYad6mbkaHavcjdfaAad2;8qbbavavcjdfaAcufad2fad;8qbbaAazfhzc9:hoaOhxaOmbxlkkaeTmbaDalfhrcbhocuhlinaralaD9RglfaD6mdaPaeao9RaoaPfae6Eaofgoae6mbkaial9Rhxkcbc99amax9RakSEhoxekc9:hokavcj;kbf8Kjjjjbaokwbz:bjjjbk:TseHu8Jjjjjbc;ae9Rgv8Kjjjjbc9:hodnaeci9UgrcHfal0mbcuhoaiRbbgwc;WeGc;Ge9hmbawcsGgDce0mbavc;abfcFecje;8kbavcUf9cu83ibavc8Wf9cu83ibavcyf9cu83ibavcaf9cu83ibavcKf9cu83ibavczf9cu83ibav9cu83iwav9cu83ibaialfc9WfhqaicefgwarfhldnaeTmbcmcsaDceSEhkcbhxcbhmcbhrcbhicbhoindnalaq9nmbc9:hoxikdndnawRbbgDc;Ve0mbavc;abfaoaDcu7gPcl4fcsGcitfgsydlhzasydbhHdndnaDcsGgsak9pmbavaiaPfcsGcdtfydbaxasEhDaxasTgOfhxxekdndnascsSmbcehOasc987asamffcefhDxekalcefhDal8SbbgscFeGhPdndnascu9mmbaDhlxekalcvfhlaPcFbGhPcrhsdninaD8SbbgOcFbGastaPVhPaOcu9kmeaDcefhDascrfgsc8J9hmbxdkkaDcefhlkcehOaPce4cbaPceG9R7amfhDkaDhmkavc;abfaocitfgsaDBdbasazBdlavaicdtfaDBdbavc;abfaocefcsGcitfgsaHBdbasaDBdlaocdfhoaOaifhidnadcd9hmbabarcetfgsaH87ebasclfaD87ebascdfaz87ebxdkabarcdtfgsaHBdbascwfaDBdbasclfazBdbxekdnaDcpe0mbaxcefgOavaiaqaDcsGfRbbgscl49RcsGcdtfydbascz6gPEhDavaias9RcsGcdtfydbaOaPfgzascsGgOEhsaOThOdndnadcd9hmbabarcetfgHax87ebaHclfas87ebaHcdfaD87ebxekabarcdtfgHaxBdbaHcwfasBdbaHclfaDBdbkavaicdtfaxBdbavc;abfaocitfgHaDBdbaHaxBdlavaicefgicsGcdtfaDBdbavc;abfaocefcsGcitfgHasBdbaHaDBdlavaiaPfgicsGcdtfasBdbavc;abfaocdfcsGcitfgDaxBdbaDasBdlaocifhoaiaOfhiazaOfhxxekaxcbalRbbgHEgAaDc;:eSgDfhzaHcsGhCaHcl4hXdndnaHcs0mbazcefhOxekazhOavaiaX9RcsGcdtfydbhzkdndnaCmbaOcefhxxekaOhxavaiaH9RcsGcdtfydbhOkdndnaDTmbalcefhDxekalcdfhDal8SbegPcFeGhsdnaPcu9kmbalcofhAascFbGhscrhldninaD8SbbgPcFbGaltasVhsaPcu9kmeaDcefhDalcrfglc8J9hmbkaAhDxekaDcefhDkasce4cbasceG9R7amfgmhAkdndnaXcsSmbaDhsxekaDcefhsaD8SbbglcFeGhPdnalcu9kmbaDcvfhzaPcFbGhPcrhldninas8SbbgDcFbGaltaPVhPaDcu9kmeascefhsalcrfglc8J9hmbkazhsxekascefhskaPce4cbaPceG9R7amfgmhzkdndnaCcsSmbashlxekascefhlas8SbbgDcFeGhPdnaDcu9kmbascvfhOaPcFbGhPcrhDdninal8SbbgscFbGaDtaPVhPascu9kmealcefhlaDcrfgDc8J9hmbkaOhlxekalcefhlkaPce4cbaPceG9R7amfgmhOkdndnadcd9hmbabarcetfgDaA87ebaDclfaO87ebaDcdfaz87ebxekabarcdtfgDaABdbaDcwfaOBdbaDclfazBdbkavc;abfaocitfgDazBdbaDaABdlavaicdtfaABdbavc;abfaocefcsGcitfgDaOBdbaDazBdlavaicefgicsGcdtfazBdbavc;abfaocdfcsGcitfgDaABdbaDaOBdlavaiaHcz6aXcsSVfgicsGcdtfaOBdbaiaCTaCcsSVfhiaocifhokawcefhwaocsGhoaicsGhiarcifgrae6mbkkcbc99alaqSEhokavc;aef8Kjjjjbaok:clevu8Jjjjjbcz9Rhvdnaecvfal9nmbc9:skdnaiRbbc;:eGc;qeSmbcuskav9cb83iwaicefhoaialfc98fhrdnaeTmbdnadcdSmbcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcdtfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgiBdbalaiBdbawcefgwae9hmbxdkkcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcetfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgi87ebalaiBdbawcefgwae9hmbkkcbc99aoarSEk:2Pliur97eue978Jjjjjbc8W9Rhiaec98Ghldndnadcl9hmbdnalTmbcbhvabhdinadadpbbbgocKp:RecKp:Sep;6egraocwp:RecKp:Sep;6earp;Geaoczp:RecKp:Sep;6egwp;Gep;Kep;LegDpxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgkp9op9rp;Kegrpxbb;:9cbb;:9cbb;:9cbb;:9cararp;MeaDaDp;Meawaqawakp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFbbbFbbbFbbbFbbbp9oaopxbbbFbbbFbbbFbbbFp9op9qarawp;Meaqp;Kecwp:RepxbFbbbFbbbFbbbFbbp9op9qaDawp;Meaqp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qpkbbadczfhdavclfgval6mbkkalaeSmeaipxbbbbbbbbbbbbbbbbgqpklbaiabalcdtfgdaeciGglcdtgv;8qbbdnalTmbaiaipblbgocKp:RecKp:Sep;6egraocwp:RecKp:Sep;6earp;Geaoczp:RecKp:Sep;6egwp;Gep;Kep;LegDaqp:2egqarpxbbbjbbbjbbbjbbbjgkp9op9rp;Kegrpxbb;:9cbb;:9cbb;:9cbb;:9cararp;MeaDaDp;Meawaqawakp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFbbbFbbbFbbbFbbbp9oaopxbbbFbbbFbbbFbbbFp9op9qarawp;Meaqp;Kecwp:RepxbFbbbFbbbFbbbFbbp9op9qaDawp;Meaqp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qpklbkadaiav;8qbbskaipxFubbFubbFubbFubbgxpklbdnalTmbcbhvabhdinadczfgmampbbbgopxbbbbbbFFbbbbbbFFgkp9oadpbbbgDaopmbediwDqkzHOAKY8AEgwczp:Reczp:Sep;6egraipblbaDaopmlvorxmPsCXQL358E8Fp9op;6eawczp:Sep;6egwp;Gearp;Gep;Kep;Legopxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgPp9op9rp;Kegrpxb;:FSb;:FSb;:FSb;:FSararp;Meaoaop;MeawaqawaPp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFFbbFFbbFFbbFFbbp9oaoawp;Meaqp;Keczp:Rep9qgoarawp;Meaqp;KepxFFbbFFbbFFbbFFbbp9ogrpmwDKYqk8AExm35Ps8E8Fp9qpkbbadaDakp9oaoarpmbezHdiOAlvCXorQLp9qpkbbadcafhdavclfgval6mbkkalaeSmbaiczfpxbbbbbbbbbbbbbbbbgopklbaiaopklbaiabalcitfgdaeciGglcitgv;8qbbaiaxpkladnalTmbaiaipblzgopxbbbbbbFFbbbbbbFFgkp9oaipblbgDaopmbediwDqkzHOAKY8AEgwczp:Reczp:Sep;6egraipblaaDaopmlvorxmPsCXQL358E8Fp9op;6eawczp:Sep;6egwp;Gearp;Gep;Kep;Legopxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgPp9op9rp;Kegrpxb;:FSb;:FSb;:FSb;:FSararp;Meaoaop;MeawaqawaPp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFFbbFFbbFFbbFFbbp9oaoawp;Meaqp;Keczp:Rep9qgoarawp;Meaqp;KepxFFbbFFbbFFbbFFbbp9ogrpmwDKYqk8AExm35Ps8E8Fp9qpklzaiaDakp9oaoarpmbezHdiOAlvCXorQLp9qpklbkadaiav;8qbbkk;Iwllue97euo978Jjjjjbca9Rhidnaec98GglTmbcbhvabhoinaocKfpxbbjZbbjZbbjZbbjZpx;Zl81Z;Zl81Z;Zl81Z;Zl81ZaopbbbgraoczfgwpbbbgDpmlvorxmPsCXQL358E8Fgqczp:Segkpxibbbibbbibbbibbbp9qp;6ep;NegxaraDpmbediwDqkzHOAKY8AEgrczp:Reczp:Sep;6ep;MegDaDp;Meaxarczp:Sep;6ep;Megmamp;Meaxaqczp:Reczp:Sep;6ep;Megqaqp;Mep;Kep;Kep;Lepxbbbbbbbbbbbbbbbbp:4ep;Jepxb;:FSb;:FSb;:FSb;:FSgxp;Mepxbbn0bbn0bbn0bbn0grp;KepxFFbbFFbbFFbbFFbbgPp9oamaxp;Mearp;Keczp:Rep9qgmaDaxp;Mearp;KeaPp9oaqaxp;Mearp;Keczp:Rep9qgrpmwDKYqk8AExm35Ps8E8FgDp5eakclp:RegxpEi:T:j83ibawaDp5baxpEd:T:j83ibaocwfamarpmbezHdiOAlvCXorQLgrp5eaxpEe:T:j83ibaoarp5baxpEb:T:j83ibaocafhoavclfgval6mbkkdnalaeSmbaiczfpxbbbbbbbbbbbbbbbbgxpklbaiaxpklbaiabalcitfgoaeciGgvcitgw;8qbbdnavTmbaipxbbjZbbjZbbjZbbjZpx;Zl81Z;Zl81Z;Zl81Z;Zl81ZaipblbgraipblzgDpmlvorxmPsCXQL358E8Fgqczp:Segkpxibbbibbbibbbibbbp9qp;6ep;NegxaraDpmbediwDqkzHOAKY8AEgrczp:Reczp:Sep;6ep;MegDaDp;Meaxarczp:Sep;6ep;Megmamp;Meaxaqczp:Reczp:Sep;6ep;Megqaqp;Mep;Kep;Kep;Lepxbbbbbbbbbbbbbbbbp:4ep;Jepxb;:FSb;:FSb;:FSb;:FSgxp;Mepxbbn0bbn0bbn0bbn0grp;KepxFFbbFFbbFFbbFFbbgPp9oamaxp;Mearp;Keczp:Rep9qgmaDaxp;Mearp;KeaPp9oaqaxp;Mearp;Keczp:Rep9qgrpmwDKYqk8AExm35Ps8E8FgDp5eakclp:RegxpEi:T:j83iKaiaDp5baxpEd:T:j83izaiamarpmbezHdiOAlvCXorQLgrp5eaxpEe:T:j83iwaiarp5baxpEb:T:j83ibkaoaiaw;8qbbkk;uddiue978Jjjjjbc;ab9Rhidnadcd4ae2glc98GgvTmbcbheabhdinadadpbbbgocwp:Recwp:Sep;6eaocep:SepxbbjFbbjFbbjFbbjFp9opxbbjZbbjZbbjZbbjZp:Uep;Mepkbbadczfhdaeclfgeav6mbkkdnavalSmbaic8WfpxbbbbbbbbbbbbbbbbgopklbaicafaopklbaiczfaopklbaiaopklbaiabavcdtfgdalciGgecdtgv;8qbbdnaeTmbaiaipblbgocwp:Recwp:Sep;6eaocep:SepxbbjFbbjFbbjFbbjFp9opxbbjZbbjZbbjZbbjZp:Uep;Mepklbkadaiav;8qbbkk:CPvdue97euw97eu8Jjjjjbc8W9Rhiaec98Ghldndnadcl9hmbaipxbbbbbbbbbbbbbbbbgvpklbdnalTmbcbhoabhdinadpbbbhradpxbbuJbbuJbbuJbbuJaipblbarcKp:Tep9qgwcep:Seawp9qgDcdp:SeaDp9qgDclp:SeaDp9qgqp;6ep;NegDarcwp:RecKp:SegkarpxFbbbFbbbFbbbFbbbgxp9ogmp:Uep;6ep;Mepxbbn0bbn0bbn0bbn0gPp;Kecwp:RepxbFbbbFbbbFbbbFbbp9oaDamakp:Xearczp:RecKp:Segrp:Uep;6ep;MeaPp;Keaxp9op9qaDamakarp:Uep:Xep;6ep;MeaPp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qaDaqawcep:Rep9oawpxebbbebbbebbbebbbp9op9qp;6ep;MeaPp;KecKp:Rep9qpkbbadczfhdaoclfgoal6mbkkalaeSmeaiavpklaaicafabalcdtfgdaeciGglcdtgo;8qbbaiavpklbdnalTmbaipblahraipxbbuJbbuJbbuJbbuJaipblbarcKp:Tep9qgwcep:Seawp9qgDcdp:SeaDp9qgDclp:SeaDp9qgqp;6ep;NegDarcwp:RecKp:SegkarpxFbbbFbbbFbbbFbbbgxp9ogmp:Uep;6ep;Mepxbbn0bbn0bbn0bbn0gPp;Kecwp:RepxbFbbbFbbbFbbbFbbp9oaDamakp:Xearczp:RecKp:Segrp:Uep;6ep;MeaPp;Keaxp9op9qaDamakarp:Uep:Xep;6ep;MeaPp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qaDaqawcep:Rep9oawpxebbbebbbebbbebbbp9op9qp;6ep;MeaPp;KecKp:Rep9qpklakadaicafao;8qbbskaipxbbbbbbbbbbbbbbbbgvpklbdnalTmbcbhoabhdinadczfgspxbFu9hbFu9hbFu9hbFu9hadpbbbgDaspbbbgPpmlvorxmPsCXQL358E8Fgmczp:Teaipblbp9qgrcep:Searp9qgwcdp:Seawp9qgwclp:Seawp9qgwcwp:Seawp9qgqp;6ep;NegwaDaPpmbediwDqkzHOAKY8AEgDpxFFbbFFbbFFbbFFbbgPp9ogkaDczp:Segxp:Ueamczp:Reczp:Segmp:Xep;6ep;Mepxbbn0bbn0bbn0bbn0gDp;KeaPp9oawakaxamp:Uep:Xep;6ep;MeaDp;Keczp:Rep9qgxawaqarcep:Rep9oarpxebbbebbbebbbebbbp9op9qp;6ep;MeaDp;Keczp:Reawamakp:Uep;6ep;MeaDp;KeaPp9op9qgrpmwDKYqk8AExm35Ps8E8FpkbbadaxarpmbezHdiOAlvCXorQLpkbbadcafhdaoclfgoal6mbkkalaeSmbaiczfpxbbbbbbbbbbbbbbbbgrpklbaiarpklbaiabalcitfgdaeciGglcitgo;8qbbaiavpkladnalTmbaipxbFu9hbFu9hbFu9hbFu9haipblbgDaipblzgPpmlvorxmPsCXQL358E8Fgmczp:Teaipblap9qgrcep:Searp9qgwcdp:Seawp9qgwclp:Seawp9qgwcwp:Seawp9qgqp;6ep;NegwaDaPpmbediwDqkzHOAKY8AEgDpxFFbbFFbbFFbbFFbbgPp9ogkaDczp:Segxp:Ueamczp:Reczp:Segmp:Xep;6ep;Mepxbbn0bbn0bbn0bbn0gDp;KeaPp9oawakaxamp:Uep:Xep;6ep;MeaDp;Keczp:Rep9qgxawaqarcep:Rep9oarpxebbbebbbebbbebbbp9op9qp;6ep;MeaDp;Keczp:Reawamakp:Uep;6ep;MeaDp;KeaPp9op9qgrpmwDKYqk8AExm35Ps8E8FpklzaiaxarpmbezHdiOAlvCXorQLpklbkadaiao;8qbbkk9teiucbcbydj1jjbgeabcifc98GfgbBdj1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaikkkebcjwklz:Dbb";
-      var detector = new Uint8Array([
-        0,
-        97,
-        115,
-        109,
-        1,
-        0,
-        0,
-        0,
-        1,
-        4,
-        1,
-        96,
-        0,
-        0,
-        3,
-        3,
-        2,
-        0,
-        0,
-        5,
-        3,
-        1,
-        0,
-        1,
-        12,
-        1,
-        0,
-        10,
-        22,
-        2,
-        12,
-        0,
-        65,
-        0,
-        65,
-        0,
-        65,
-        0,
-        252,
-        10,
-        0,
-        0,
-        11,
-        7,
-        0,
-        65,
-        0,
-        253,
-        15,
-        26,
-        11
-      ]);
-      var wasmpack = new Uint8Array([
-        32,
-        0,
-        65,
-        2,
-        1,
-        106,
-        34,
-        33,
-        3,
-        128,
-        11,
-        4,
-        13,
-        64,
-        6,
-        253,
-        10,
-        7,
-        15,
-        116,
-        127,
-        5,
-        8,
-        12,
-        40,
-        16,
-        19,
-        54,
-        20,
-        9,
-        27,
-        255,
-        113,
-        17,
-        42,
-        67,
-        24,
-        23,
-        146,
-        148,
-        18,
-        14,
-        22,
-        45,
-        70,
-        69,
-        56,
-        114,
-        101,
-        21,
-        25,
-        63,
-        75,
-        136,
-        108,
-        28,
-        118,
-        29,
-        73,
-        115
-      ]);
-      if (typeof WebAssembly !== "object") {
-        return {
-          supported: false
-        };
-      }
-      var wasm2 = WebAssembly.validate(detector) ? unpack(wasm_simd) : unpack(wasm_base);
-      var instance;
-      var ready = WebAssembly.instantiate(wasm2, {}).then(function(result) {
-        instance = result.instance;
-        instance.exports.__wasm_call_ctors();
-      });
-      function unpack(data) {
-        var result = new Uint8Array(data.length);
-        for (var i = 0; i < data.length; ++i) {
-          var ch = data.charCodeAt(i);
-          result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
-        }
-        var write = 0;
-        for (var i = 0; i < data.length; ++i) {
-          result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
-        }
-        return result.buffer.slice(0, write);
-      }
-      function decode(instance2, fun, target, count, size, source, filter) {
-        var sbrk = instance2.exports.sbrk;
-        var count4 = count + 3 & ~3;
-        var tp = sbrk(count4 * size);
-        var sp = sbrk(source.length);
-        var heap = new Uint8Array(instance2.exports.memory.buffer);
-        heap.set(source, sp);
-        var res = fun(tp, count, size, sp, source.length);
-        if (res == 0 && filter) {
-          filter(tp, count4, size);
-        }
-        target.set(heap.subarray(tp, tp + count * size));
-        sbrk(tp - sbrk(0));
-        if (res != 0) {
-          throw new Error("Malformed buffer data: " + res);
-        }
-      }
-      var filters = {
-        NONE: "",
-        OCTAHEDRAL: "meshopt_decodeFilterOct",
-        QUATERNION: "meshopt_decodeFilterQuat",
-        EXPONENTIAL: "meshopt_decodeFilterExp",
-        COLOR: "meshopt_decodeFilterColor"
-      };
-      var decoders = {
-        ATTRIBUTES: "meshopt_decodeVertexBuffer",
-        TRIANGLES: "meshopt_decodeIndexBuffer",
-        INDICES: "meshopt_decodeIndexSequence"
-      };
-      var workers2 = [];
-      var requestId = 0;
-      function createWorker2(url2) {
-        var worker = {
-          object: new Worker(url2),
-          pending: 0,
-          requests: {}
-        };
-        worker.object.onmessage = function(event) {
-          var data = event.data;
-          worker.pending -= data.count;
-          worker.requests[data.id][data.action](data.value);
-          delete worker.requests[data.id];
-        };
-        return worker;
-      }
-      function initWorkers(count) {
-        var source = "self.ready = WebAssembly.instantiate(new Uint8Array([" + new Uint8Array(wasm2) + "]), {}).then(function(result) { result.instance.exports.__wasm_call_ctors(); return result.instance; });self.onmessage = " + workerProcess.name + ";" + decode.toString() + workerProcess.toString();
-        var blob = new Blob([source], { type: "text/javascript" });
-        var url2 = URL.createObjectURL(blob);
-        for (var i = workers2.length; i < count; ++i) {
-          workers2[i] = createWorker2(url2);
-        }
-        for (var i = count; i < workers2.length; ++i) {
-          workers2[i].object.postMessage({});
-        }
-        workers2.length = count;
-        URL.revokeObjectURL(url2);
-      }
-      function decodeWorker(count, size, source, mode2, filter) {
-        var worker = workers2[0];
-        for (var i = 1; i < workers2.length; ++i) {
-          if (workers2[i].pending < worker.pending) {
-            worker = workers2[i];
-          }
-        }
-        return new Promise(function(resolve2, reject) {
-          var data = new Uint8Array(source);
-          var id = ++requestId;
-          worker.pending += count;
-          worker.requests[id] = { resolve: resolve2, reject };
-          worker.object.postMessage({ id, count, size, source: data, mode: mode2, filter }, [data.buffer]);
-        });
-      }
-      function workerProcess(event) {
-        var data = event.data;
-        if (!data.id) {
-          return self.close();
-        }
-        self.ready.then(function(instance2) {
-          try {
-            var target = new Uint8Array(data.count * data.size);
-            decode(instance2, instance2.exports[data.mode], target, data.count, data.size, data.source, instance2.exports[data.filter]);
-            self.postMessage({ id: data.id, count: data.count, action: "resolve", value: target }, [target.buffer]);
-          } catch (error) {
-            self.postMessage({ id: data.id, count: data.count, action: "reject", value: error });
-          }
-        });
-      }
-      return {
-        ready,
-        supported: true,
-        useWorkers: function(count) {
-          initWorkers(count);
-        },
-        decodeVertexBuffer: function(target, count, size, source, filter) {
-          decode(instance, instance.exports.meshopt_decodeVertexBuffer, target, count, size, source, instance.exports[filters[filter]]);
-        },
-        decodeIndexBuffer: function(target, count, size, source) {
-          decode(instance, instance.exports.meshopt_decodeIndexBuffer, target, count, size, source);
-        },
-        decodeIndexSequence: function(target, count, size, source) {
-          decode(instance, instance.exports.meshopt_decodeIndexSequence, target, count, size, source);
-        },
-        decodeGltfBuffer: function(target, count, size, source, mode2, filter) {
-          decode(instance, instance.exports[decoders[mode2]], target, count, size, source, instance.exports[filters[filter]]);
-        },
-        decodeGltfBufferAsync: function(count, size, source, mode2, filter) {
-          if (workers2.length > 0) {
-            return decodeWorker(count, size, source, decoders[mode2], filters[filter]);
-          }
-          return ready.then(function() {
-            var target = new Uint8Array(count * size);
-            decode(instance, instance.exports[decoders[mode2]], target, count, size, source, instance.exports[filters[filter]]);
-            return target;
-          });
-        }
-      };
-    })();
-    if (typeof exports2 === "object" && typeof module2 === "object") module2.exports = MeshoptDecoder3;
-    else if (typeof define === "function" && define["amd"])
-      define([], function() {
-        return MeshoptDecoder3;
-      });
-    else if (typeof exports2 === "object") exports2["MeshoptDecoder"] = MeshoptDecoder3;
-    else (typeof self !== "undefined" ? self : exports2).MeshoptDecoder = MeshoptDecoder3;
-  }
-});
-
-// node_modules/meshoptimizer/meshopt_simplifier.js
-var require_meshopt_simplifier = __commonJS({
-  "node_modules/meshoptimizer/meshopt_simplifier.js"(exports2, module2) {
-    var MeshoptSimplifier = (function() {
-      "use strict";
-      var wasm2 = "b9H79Tebbbe:Gez9Geueu9Geub9Gbb9Gsuuuuuuuuuuuu99uueu9Gvuuuuub9Gruuuuuuub9Gouuuuuue999Gvuuuuueu9Gquuuuuuu99uueu9GPuuuuuuuuuuu99uueu9Gquuuuuuuu99ueu9Gruuuuuu99eu9Gwuuuuuu99ueu9Giuuue999Gluuuueu9GiuuueuiXCdilvorlwiDqkxmPbssbelve9Weiiviebeoweuec:G:Pdkr;7eko9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bbz9TW79O9V9Wt9F79P9T9W29P9M95br8E9TW79O9V9Wt9F79P9T9W29P9M959x9Pt9OcttV9P9I91tW7bw8A9TW79O9V9Wt9F79P9T9W29P9M959x9Pt9O9v9W9K9HtWbDQ9TW79O9V9Wt9F79P9T9W29P9M959t29V9W9W95bqX9TW79O9V9Wt9F79P9T9W29P9M959qV919UWbkQ9TW79O9V9Wt9F79P9T9W29P9M959q9V9P9Ut7bxX9TW79O9V9Wt9F79P9T9W29P9M959t9J9H2Wbma9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94SWt9J9O9sW9T9H9WbPl79IV9RbsDwebcekdOAq:d;OeCdbk:J1eo3ue99euE99Cue9:8Jjjjjbcj;sb9Rgs8Kjjjjbcbhzasc:Cefcbc;Kbz:rjjjb8AdnabaeSmbabaeadcdtz:qjjjb8AkdnamcdGTmbalcrfci4gHcbyd1:jjjbHjjjjbbheasc:Cefasyd;8egOcdtfaeBdbasaOcefBd;8eaecbaHz:rjjjbhAcbhlcbhednadTmbcbhlabheadhHinaAaeydbgOci4fgCaCRbbgCceaOcrGgOtV86bbaCcu7aO4ceGalfhlaeclfheaHcufgHmbkcualcdtalcFFFFi0Ehekaecbyd1:jjjbHjjjjbbhzasc:Cefasyd;8egecdtfazBdbasaecefBd;8ealcd4alfhOcehHinaHgecethHaeaO6mbkcbhXcuaecdtgOaecFFFFi0Ecbyd1:jjjbHjjjjbbhHasc:Cefasyd;8egCcdtfaHBdbasaCcefBd;8eaHcFeaOz:rjjjbhQdnadTmbaecufhLcbhKindndnaQabaXcdtfgYydbgCc:v;t;h;Ev2aLGgOcdtfgAydbgHcuSmbceheinazaHcdtfydbaCSmdaOaefhHaecefheaQaHaLGgOcdtfgAydbgHcu9hmbkkazaKcdtfaCBdbaAaKBdbaKhHaKcefhKkaYaHBdbaXcefgXad9hmbkkaQcbyd:m:jjjbH:bjjjbbasasyd;8ecufBd;8ekcbh8AcualcefgecdtaecFFFFi0Ecbyd1:jjjbHjjjjbbhKasc:Cefasyd;8egecdtfaKBdbasaKBdNeasaecefBd;8ecuadcitadcFFFFe0Ecbyd1:jjjbHjjjjbbhEasc:Cefasyd;8egecdtfaEBdbasaEBd:yeasaecefBd;8eascNefabadalcbz:cjjjbcualcdtgealcFFFFi0Eg3cbyd1:jjjbHjjjjbbhCasc:Cefasyd;8egHcdtfaCBdbasaHcefBd;8ea3cbyd1:jjjbHjjjjbbhYasc:Cefasyd;8egHcdtfaYBdbasaHcefBd;8eaCaYaialavazasc:Cefz:djjjbalcbyd1:jjjbHjjjjbbh5asc:Cefasyd;8egHcdtfa5BdbasaHcefBd;8ea3cbyd1:jjjbHjjjjbbhHasc:Cefasyd;8egOcdtfaHBdbasaOcefBd;8ea3cbyd1:jjjbHjjjjbbhOasc:Cefasyd;8egAcdtfaOBdbasaAcefBd;8eaHcFeaez:rjjjbh8EaOcFeaez:rjjjbh8FdnalTmbaEcwfhaindnaKa8AgOcefg8AcdtfydbgAaKaOcdtgefydbgHSmbaAaH9RhhaEaHcitfhga8Faefh8Ja8Eaefh8KcbhQindndnagaQcitfydbgLaO9hmba8KaOBdba8JaOBdbxekdnaKaLcdtg8LfgeclfydbgHaeydbgeSmbaEaecitgAfydbaOSmeaHae9Rh8Maecu7aHfhXaaaAfhHcbheinaXaeSmeaecefheaHydbhAaHcwfhHaAaO9hmbkaea8M6meka8Fa8LfgeaOaLaeydbcuSEBdba8KaLaOa8KydbcuSEBdbkaQcefgQah9hmbkka8Aal9hmbkaChHaYhOa8FhAa8EhQcbheindndnaeaHydbgL9hmbdnaeaOydbgL9hmbaQydbhLdnaAydbgXcu9hmbaLcu9hmba5aefcb86bbxikdnaXcuSmbaLcuSmbaeaXSmbaCaXcdtfydbaCaLcdtfydb9hmba5aefcd86bbxika5aefh8KdnaeaXSmbaeaLSmba8Kce86bbxika8Kcl86bbxdkdnaeaYaLcdtgXfydb9hmbdnaAydbg8KcuSmbaea8KSmbaQydbghcuSmbaeahSmba8FaXfydbggcuSmbagaLSmba8EaXfydbgXcuSmbaXaLSmbdnaCa8KcdtfydbgLaCaXcdtfydb9hmbaLaCahcdtfydbgXSmbaXaCagcdtfydb9hmba5aefcd86bbxlka5aefcl86bbxika5aefcl86bbxdka5aefcl86bbxeka5aefa5aLfRbb86bbkaHclfhHaOclfhOaAclfhAaQclfhQalaecefge9hmbkdnamcaGTmbaEcwfh8Jcbh8Nindndna5a8NfgyRbbg8Pc9:fPibebekdndndnaCa8Ncdtfydbgea8N9hmbdnaqmbcbhgxdkdnazTmbcbhga8NheinagaqazaecdtgefydbfRbbcdGce4VhgaYaefydbgea8N9hmbxikkcbhga8NheinagaqaefRbbcdGce4VhgaYaecdtfydbgea8N9hmbxdkka5aefRbbhexeka8NheindnaKaecdtgafgeclfydbgHaeydbgeSmbaHae9Rh8AaEaecitfh8MaCaafh8Lcbh8Kina8Ma8KcitfydbgXhednindnaKaecdtgLfgeclfydbgHaeydbgeSmbdnaCaEaecitgOfydbcdtfydba8LydbgQ9hmbcehexikaHae9Rhhaecu7aHfhAa8JaOfhHcbheinaAaeSmeaecefheaHydbhOaHcwfhHaCaOcdtfydbaQ9hmbkaeah6hexdkaYaLfydbgeaX9hmbkcbhekagaece7Vhga8Kcefg8Ka8A9hmbkkaYaafydbgea8N9hmbka8PciagceGEhekayae86bbka8Ncefg8Nal9hmbkkdnaqTmbdndnazTmbazheaChHalhOindnaqaeydbfRbbceGTmba5aHydbfcl86bbkaeclfheaHclfhHaOcufgOmbxdkkaChealhHindnaqRbbceGTmba5aeydbfcl86bbkaqcefhqaeclfheaHcufgHmbkkaChealhOa5hHindna5aeydbfRbbcl9hmbaHcl86bbkaeclfheaHcefhHaOcufgOmbkkamceGTmba5healhHindnaeRbbce9hmbaecl86bbkaecefheaHcufgHmbkkcbhIcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbhaasc:Cefasyd;8egecdtfaaBdbasaecefBd;8easc:qefcbBdbas9cb83i1eaaaialavazasc1efz:ejjjbh8RdndnaDmbcbh8Scbh8Lxekcbh8LawhecbhHindnaeIdbJbbbb9ETmbasa8LcdtfaHBdba8Lcefh8LkaeclfheaDaHcefgH9hmbkcua8Lal2gecdtaecFFFFi0Ecbyd1:jjjbHjjjjbbh8Sasc:Cefasyd;8egecdtfa8SBdbasaecefBd;8ealTmbdna8Lmbcbh8Lxekarcd4hXdnazTmba8Lcdth8KcbhLa8ShKinaoazaLcdtfydbaX2cdtfhQasheaKhHa8LhOinaHaQaeydbcdtgAfIdbawaAfIdbNUdbaeclfheaHclfhHaOcufgOmbkaKa8KfhKaLcefgLal9hmbxdkka8Lcdth8KcbhLa8ShKinaoaLaX2cdtfhQasheaKhHa8LhOinaHaQaeydbcdtgAfIdbawaAfIdbNUdbaeclfheaHclfhHaOcufgOmbkaKa8KfhKaLcefgLal9hmbkkcualc8S2gHalc;D;O;f8U0EgAcbyd1:jjjbHjjjjbbheasc:Cefasyd;8egOcdtfaeBdbasaOcefBd;8eaecbaHz:rjjjbhycbhqcbh8Ndna8LTmbcbhIaAcbyd1:jjjbHjjjjbbh8Nasc:Cefasyd;8egecdtfa8NBdbasaecefBd;8ea8NcbaHz:rjjjb8Acua8Lal2gecltgHaecFFFFb0Ecbyd1:jjjbHjjjjbbhqasc:Cefasyd;8egecdtfaqBdbasaecefBd;8eaqcbaHz:rjjjb8AamcjjjjdGTmbcualcltgealcFFFFb0Ecbyd1:jjjbHjjjjbbhIasc:Cefasyd;8egHcdtfaIBdbasaHcefBd;8eaIcbaez:rjjjb8AkdnadTmbcbhQabhHinaaaHclfydbgLcx2fgeIdbaaaHydbgKcx2fgOIdbgR:tg8UaaaHcwfydbgXcx2fgAIdlaOIdlg8V:tg8WNaAIdbaR:tg8XaeIdla8V:tg8YN:tg8Zh80aeIdwaOIdwg81:tgBa8XNaAIdwa81:tg83a8UN:tgUh8Xa8Ya83Na8WaBN:tg8Yh8Udna8Za8ZNa8Ya8YNaUaUNMM:rgBJbbbb9EgOTmba8ZaB:vh80aUaB:vh8Xa8YaB:vh8UkayaCaKcdtfydbgAc8S2fgea8UaB:rg8Wa8UNNg85aeIdbMUdbaea8Xa8Wa8XNg86Ng87aeIdlMUdlaea80a8Wa80Ng83Ng88aeIdwMUdwaea86a8UNg86aeIdxMUdxaea83a8UNg89aeIdzMUdzaea83a8XNg8:aeIdCMUdCaea8Ua8Wa80a81Na8UaRNa8Va8XNMM:mgZNg83Ng8UaeIdKMUdKaea8Xa83Ng8XaeId3MUd3aea80a83Ng80aeIdaMUdaaea83aZNg83aeId8KMUd8Kaea8WaeIdyMUdyayaCaLcdtfydbgLc8S2fgea85aeIdbMUdbaea87aeIdlMUdlaea88aeIdwMUdwaea86aeIdxMUdxaea89aeIdzMUdzaea8:aeIdCMUdCaea8UaeIdKMUdKaea8XaeId3MUd3aea80aeIdaMUdaaea83aeId8KMUd8Kaea8WaeIdyMUdyayaCaXcdtfydbgKc8S2fgea85aeIdbMUdbaea87aeIdlMUdlaea88aeIdwMUdwaea86aeIdxMUdxaea89aeIdzMUdzaea8:aeIdCMUdCaea8UaeIdKMUdKaea8XaeId3MUd3aea80aeIdaMUdaaea83aeId8KMUd8Kaea8WaeIdyMUdydnaITmbdnaOTmba8ZaB:vh8ZaUaB:vhUa8YaB:vh8YkaIaAcltfgeaBJbbbZNg8UaUNg8WaeIdlMUdlaea8Ua8ZNg8XaeIdwMUdwaea8Ua8YNg80aeIdbMUdbaea8UaR:ma8YNaUa8VN:ta81a8ZN:tNg8UaeIdxMUdxaIaLcltfgea8WaeIdlMUdlaea8XaeIdwMUdwaea80aeIdbMUdbaea8UaeIdxMUdxaIaKcltfgea8WaeIdlMUdlaea8XaeIdwMUdwaea80aeIdbMUdbaea8UaeIdxMUdxkaHcxfhHaQcifgQad6mbkkdnalTmbJ;n;m;m89J:v:;;w8ZamczGEh8YcbhOaChAaahHayheindnaOaAydb9hmbaecxfgQaQIdbJbbbbMUdbaeczfgQaQIdbJbbbbMUdbaecCfgQaQIdbJbbbbMUdbaea8YaecyfgQIdbg8ZNg8UaeIdbMUdbaeclfgLa8UaLIdbMUdbaecwfgLa8UaLIdbMUdbaecKfgLaLIdbaHIdbg8Xa8UN:tUdbaHcwfIdbh8Waec3fgLaLIdba8UaHclfIdbg80N:tUdbaecafgLaLIdba8Ua8WN:tUdbaec8KfgLIdbhUaQa8Za8UMUdbaLaUa8Ua8Wa8WNa8Xa8XNa80a80NMMNMUdbkaAclfhAaHcxfhHaec8SfhealaOcefgO9hmbkkdnadTmbcbhXabhKinabaXcdtfhLcbhHina5aLaHc:G1jjbfydbcdtfydbgOfRbbhedndna5aKaHfydbgAfRbbgQc99fcFeGcpe0mbaec99fcFeGc;:e6mekdnaQcufcFeGce0mba8EaAcdtfydbaO9hmekdnaecufcFeGce0mba8FaOcdtfydbaA9hmekJbbacJbbacJbbbZaecFeGceSEaQcFeGceSEh88aaaOcx2fgeIdwaaaAcx2fgQIdwgB:tg80:mh86aeIdlaQIdlg83:tg8Z:mh89aeIdbaQIdbgR:tgU:mh8:dnaaaLaHc:K1jjbfydbcdtfydbcx2fgeIdwaB:tg8Va80a80NaUaUNa8Za8ZNMMg8YNa8Va80NaeIdbaR:tg81aUNa8ZaeIdla83:tg85NMMg8Wa80N:tg8Xa8XNa81a8YNa8WaUN:tg8Ua8UNa85a8YNa8Wa8ZN:tg8Wa8WNMM:rg87Jbbbb9ETmba8Xa87:vh8Xa8Wa87:vh8Wa8Ua87:vh8Uka88a8Y:rNg8Ya8XaBNa8UaRNa83a8WNMM:mgZNg87aZNhZa8Xa87Nhna8Wa87Nhca8Ua87Nh9ca8Ya8XNg87a8WNhJa87a8UNh9ea8Ya8WNgTa8UNhSa8Xa87Nh87a8WaTNhTa8Ua8Ya8UNNh9hdnaUa85Na81a89NMg8Xa8XNa8Za8VNa85a86NMg8Ua8UNa80a81Na8Va8:NMg8Wa8WNMM:rg80Jbbbb9ETmba8Xa80:vh8Xa8Wa80:vh8Wa8Ua80:vh8UkayaCaAcdtfydbc8S2fgeaeIdba9ha8Ua88a80:rNg80a8UNNMgUMUdbaeaTa8Wa80a8WNg8VNMg81aeIdlMUdlaea87a8Xa80a8XNg8ZNMg85aeIdwMUdwaeaSa8Va8UNMg8VaeIdxMUdxaea9ea8Za8UNMg87aeIdzMUdzaeaJa8Za8WNMg8ZaeIdCMUdCaea9ca8Ua80a8XaBNa8UaRNa83a8WNMMgB:mNg80NMg8UaeIdKMUdKaeaca8Wa80NMg8WaeId3MUd3aeana8Xa80NMg8XaeIdaMUdaaeaZaBa80N:tg80aeId8KMUd8Kaea8YJbbbbMg8YaeIdyMUdyayaCaOcdtfydbc8S2fgeaUaeIdbMUdbaea81aeIdlMUdlaea85aeIdwMUdwaea8VaeIdxMUdxaea87aeIdzMUdzaea8ZaeIdCMUdCaea8UaeIdKMUdKaea8WaeId3MUd3aea8XaeIdaMUdaaea80aeId8KMUd8Kaea8YaeIdyMUdykaHclfgHcx9hmbkaKcxfhKaXcifgXad6mbka8LTmbcbhKinJbbbbh8YaaabaKcdtfgeclfydbgXcx2fgHIdwaaaeydbg8Kcx2fgOIdwg81:tg8Wa8WNaHIdbaOIdbg85:tg8Xa8XNaHIdlaOIdlg87:tg80a80NMMgRaaaecwfydbghcx2fgeIdwa81:tg8ZNa8Wa8Wa8ZNa8XaeIdba85:tgUNa80aeIdla87:tgBNMMg8UN:tJbbbbJbbjZaRa8Za8ZNaUaUNaBaBNMMg8VNa8Ua8UN:tg83:va83Jbbbb9BEg83Nh89a8Va8WNa8Za8UN:ta83Nh8:aRaBNa80a8UN:ta83NhZa8Va80NaBa8UN:ta83NhnaRaUNa8Xa8UN:ta83Nhca8Va8XNaUa8UN:ta83Nh9ca8XaBNaUa80N:tg8Ua8UNa80a8ZNaBa8WN:tg8Ua8UNa8WaUNa8Za8XN:tg8Ua8UNMM:rJbbbZNh8Ua8Sa8Ka8L2ggcdtfhHa8Saha8L2gEcdtfhOa8SaXa8L2g8JcdtfhAa81:mhJa87:mh9ea85:mhTcbhQa8LhLJbbbbhBJbbbbh83JbbbbhRJbbbbh8VJbbbbh81Jbbbbh85Jbbbbh87Jbbbbh88Jbbbbh86inascjdfaQfgecwfa8Ua8:aAIdbaHIdbg8Z:tg80Na89aOIdba8Z:tgUNMg8WNUdbaeclfa8Uana80NaZaUNMg8XNUdbaea8Ua9ca80NacaUNMg80NUdbaecxfa8UaJa8WNa9ea8XNa8ZaTa80NMMMg8ZNUdba8Ua8Wa8XNNa8VMh8Va8Ua8Wa80NNa81Mh81a8Ua8Xa80NNa85Mh85a8Ua8Za8ZNNa8YMh8Ya8Ua8Wa8ZNNaBMhBa8Ua8Xa8ZNNa83Mh83a8Ua80a8ZNNaRMhRa8Ua8Wa8WNNa87Mh87a8Ua8Xa8XNNa88Mh88a8Ua80a80NNa86Mh86aHclfhHaAclfhAaOclfhOaQczfhQaLcufgLmbka8Na8Kc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdya8NaXc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdya8Nahc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdyaqagcltfhLcbhHa8LhAinaLaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgQaOclfIdbaQIdbMUdbaecwfgQaOcwfIdbaQIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaAcufgAmbkaqa8JcltfhLcbhHa8LhAinaLaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgQaOclfIdbaQIdbMUdbaecwfgQaOcwfIdbaQIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaAcufgAmbkaqaEcltfhLcbhHa8LhAinaLaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgQaOclfIdbaQIdbMUdbaecwfgQaOcwfIdbaQIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaAcufgAmbkaKcifgKad6mbkkcbhOdndnamcwGg9imbJbbbbh85cbh6cbh9kcbh0xekcbh6a3cbyd1:jjjbHjjjjbbh0asc:Cefasyd;8egecdtfa0BdbasaecefBd;8ecua0alabadaCz:fjjjbgAcltaAcjjjjiGEcbyd1:jjjbHjjjjbbh9kasc:Cefasyd;8egecdtfa9kBdbasaecefBd;8ea9kaAa0aaalz:gjjjbJFFuuh85aATmba9kheaAhHinaeIdbg8Ua85a85a8U9EEh85aeclfheaHcufgHmbkaAh6kasydNeh9mdnalTmba9mclfhea9mydbhAa5hHalhQcbhOincbaeydbgLaA9RaHRbbcpeGEaOfhOaHcefhHaeclfheaLhAaQcufgQmbkaOce4hOkcuadaO9Rcifg9ncx2a9nc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbh8Pasc:Cefasyd;8egecdtfa8PBdbasaecefBd;8ecua9ncdta9ncFFFFi0Ecbyd1:jjjbHjjjjbbh9oasc:Cefasyd;8egecdtfa9oBdbasaecefBd;8ea3cbyd1:jjjbHjjjjbbhDasc:Cefasyd;8egecdtfaDBdbasaecefBd;8ealcbyd1:jjjbHjjjjbbh9pasc:Cefasyd;8egecdtfa9pBdbasaecefBd;8eaxaxNa8RJbbjZamclGEgnanN:vh88Jbbbbh86dnadak9nmbdna9nci6mbasyd:yeh9qa8Lclth9ra8Pcwfh9sJbbbbh87Jbbbbh86inascNefabadalaCz:cjjjbabh8Kcbh8Mcbh3inaba3cdtfhgcbheindnaCa8KaefydbgOcdtgXfydbgAaCagaec:W1jjbfydbcdtfydbgHcdtghfydbgQSmba5aHfRbbgKcv2a5aOfRbbgLfc;a1jjbfRbbg8JaLcv2aKfgEc;a1jjbfRbbg8AVcFeGTmbdnaQaA9nmbaEc;G1jjbfRbbcFeGmekdnaLcufcFeGce0mbaKTmba8EaXfydbaH9hmekdnaLTmbaKcufcFeGce0mba8FahfydbaO9hmeka8Pa8Mcx2fgAaHaOa8AcFeGgQEBdlaAaOaHaQEBdbaAaQa8JGcb9hBdwa8Mcefh8Mkaeclfgecx9hmbkdna3cifg3ad9pmba8Kcxfh8Ka8Mcifa9n9nmekka8MTmdcbhhinayaCa8Pahcx2fgKydbgQcdtgAfydbc8S2fgeIdwaaaKydlgLcx2fgHIdwg8XNaeIdzaHIdbg80NaeIdaMg8Ua8UMMa8XNaeIdlaHIdlg8ZNaeIdCa8XNaeId3Mg8Ua8UMMa8ZNaeIdba80NaeIdxa8ZNaeIdKMg8Ua8UMMa80NaeId8KMMM:lh8UJbbbbJbbjZaeIdyg8W:va8WJbbbb9BEh8WdndnaKydwg8KmbJFFuuh81xekJbbbbJbbjZayaCaLcdtfydbc8S2fgeIdygU:vaUJbbbb9BEaeIdwaaaQcx2fgHIdwgUNaeIdzaHIdbg8YNaeIdaMgBaBMMaUNaeIdlaHIdlgBNaeIdCaUNaeId3MgUaUMMaBNaeIdba8YNaeIdxaBNaeIdKMgUaUMMa8YNaeId8KMMM:lNh81ka8Wa8UNh8Vdna8LTmba8NaQc8S2fgHIdwa8XNaHIdza80NaHIdaMg8Ua8UMMa8XNaHIdla8ZNaHIdCa8XNaHId3Mg8Ua8UMMa8ZNaHIdba80NaHIdxa8ZNaHIdKMg8Ua8UMMa80NaHId8KMMMh8UaqaQa8L2ggcltfheaHIdyhUa8SaLa8L2gEcdtfgXhHa8LhOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbkdndna8KmbJbbbbh8Wxeka8NaLc8S2fgOIdwaaaQcx2fgeIdwg8YNaOIdzaeIdbgBNaOIdaMg8Wa8WMMa8YNaOIdlaeIdlg83NaOIdCa8YNaOId3Mg8Wa8WMMa83NaOIdbaBNaOIdxa83NaOIdKMg8Wa8WMMaBNaOId8KMMMh8Wa8SagcdtfhHaqaEcltfheaOIdyhRa8LhOinaHIdbgUaUaRNaecxfIdba8YaecwfIdbNaBaeIdbNa83aeclfIdbNMMMgUaUM:tNa8WMh8WaHclfhHaeczfheaOcufgOmbka8W:lh8Wka8Va8U:lMh8Va81a8WMh81dndndna5aQfRbbc9:fPdbedkdna8Fa8Ea8EaAfydbaLSEaYaAfydbgXcdtfydbgAcu9hmbaYaLcdtfydbhAka8NaXc8S2fgOIdwaaaAcx2fgeIdwg8XNaOIdzaeIdbg80NaOIdaMg8Ua8UMMa8XNaOIdlaeIdlg8ZNaOIdCa8XNaOId3Mg8Ua8UMMa8ZNaOIdba80NaOIdxa8ZNaOIdKMg8Ua8UMMa80NaOId8KMMMh8Ua8SaAa8L2ggcdtfhHaqaXa8L2gEcltfheaOIdyhUa8LhOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbkdndna8KmbJbbbbh8Wxeka8NaAc8S2fgOIdwaaaXcx2fgeIdwg80NaOIdzaeIdbg8ZNaOIdaMg8Wa8WMMa80NaOIdlaeIdlgUNaOIdCa80NaOId3Mg8Wa8WMMaUNaOIdba8ZNaOIdxaUNaOIdKMg8Wa8WMMa8ZNaOId8KMMMh8Wa8SaEcdtfhHaqagcltfheaOIdyh8Ya8LhOinaHIdbg8Xa8Xa8YNaecxfIdba80aecwfIdbNa8ZaeIdbNaUaeclfIdbNMMMg8Xa8XM:tNa8WMh8WaHclfhHaeczfheaOcufgOmbka8W:lh8Wka8Va8U:lMh8Va81a8WMh81xdkaYaAfydbgAaQSmbina8NaAc8S2fgHIdwa8XNaHIdza80NaHIdaMg8Ua8UMMa8XNaHIdla8ZNaHIdCa8XNaHId3Mg8Ua8UMMa8ZNaHIdba80NaHIdxa8ZNaHIdKMg8Ua8UMMa80NaHId8KMMMh8UaqaAa8L2cltfheaHIdyhUaXhHa8LhOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbka8Va8U:lMh8VaYaAcdtfydbgAaQ9hmbkka5aLfRbbci9hmba8KTmbaYaLcdtfydbgAaLSmba8SagcdtfhXaaaQcx2fgeIdbh8XaeIdwh80aeIdlh8Zina8NaAc8S2fgHIdwa80NaHIdza8XNaHIdaMg8Ua8UMMa80NaHIdla8ZNaHIdCa80NaHId3Mg8Ua8UMMa8ZNaHIdba8XNaHIdxa8ZNaHIdKMg8Ua8UMMa8XNaHId8KMMMh8UaqaAa8L2cltfheaHIdyhUaXhHa8LhOinaHIdbg8Wa8WaUNaecxfIdba80aecwfIdbNa8XaeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbka81a8U:lMh81aYaAcdtfydbgAaL9hmbkkaKa81a8Va81a8V9DgeEUdwaKaQaLaea8Kcb9hGgeEBdlaKaLaQaeEBdbahcefgha8M9hmbkascjdfcbcj;qbz:rjjjb8Aa9shea8MhHinascjdfaeydbcA4cF8FGgOcFAaOcFA6EcdtfgOaOydbcefBdbaecxfheaHcufgHmbkcbhecbhHinascjdfaefgOydbhAaOaHBdbaAaHfhHaeclfgecj;qb9hmbkcbhea9shHinascjdfaHydbcA4cF8FGgOcFAaOcFA6EcdtfgOaOydbgOcefBdba9oaOcdtfaeBdbaHcxfhHa8Maecefge9hmbkadak9RgOci9Uh9tdnalTmbcbheaDhHinaHaeBdbaHclfhHalaecefge9hmbkkcbh9ua9pcbalz:rjjjbh3aOcO9Uh9va9tce4h9wcbh8Acbh8Jdnina8Pa9oa8Jcdtfydbcx2fgEIdwg8Ua889Emea8Aa9t9pmeJFFuuh8Wdna9wa8M9pmba8Pa9oa9wcdtfydbcx2fIdwJbb;aZNh8Wkdna8Ua8W9ETmba8Ua869ETmba8Aa9v0mdkdna3aCaEydlghcdtg9xfydbgAfg9yRbba3aCaEydbg8Kcdtg9zfydbgefg9ARbbVmba5a8KfRbbh9Bdna9maecdtfgHclfydbgOaHydbgHSmbaOaH9RhQaaaAcx2fhKaaaecx2fhXa9qaHcitfhecbhHcehgdnindnaDaeydbcdtfydbgOaASmbaDaeclfydbcdtfydbgLaASmbaOaLSmbaaaLcx2fgLIdbaaaOcx2fgOIdbg8X:tg8UaXIdlaOIdlg80:tg8YNaXIdba8X:tgBaLIdla80:tg8WN:tg8Za8UaKIdla80:tg83NaKIdba8X:tgRa8WN:tg80Na8WaXIdwaOIdwgU:tg8VNa8YaLIdwaU:tg8XN:tg8Ya8WaKIdwaU:tg81Na83a8XN:tg8WNa8XaBNa8Va8UN:tgUa8XaRNa81a8UN:tg8UNMMa8Za8ZNa8Ya8YNaUaUNMMa80a80Na8Wa8WNa8Ua8UNMMN:rJbbj8:N9FmdkaecwfheaHcefgHaQ6hgaQaH9hmbkkagceGTmba9wcefh9wxekdndndndna9Bc9:fPdebdka8KheinaDaecdtgefahBdbaYaefydbgea8K9hmbxikkdna8Fa8Ea8Ea9zfydbahSEaYa9zfydbg8Kcdtfydbgecu9hmbaYa9xfydbhekaDa9zfahBdbaehhkaDa8KcdtfahBdbka9Ace86bba9yce86bbaEIdwg8Ua86a86a8U9DEh86a9ucefh9ucecda9BceSEa8Afh8Aka8Jcefg8Ja8M9hmbkka9uTmddnalTmbcbhLcbhXindnaDaXcdtgefydbgOaXSmbaCaOcdtfydbh8KdnaXaCaefydb9hghmbaya8Kc8S2fgeayaXc8S2fgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxaeaHIdzaeIdzMUdzaeaHIdCaeIdCMUdCaeaHIdKaeIdKMUdKaeaHId3aeId3MUd3aeaHIdaaeIdaMUdaaeaHId8KaeId8KMUd8KaeaHIdyaeIdyMUdyaITmbaIa8KcltfgeaIaXcltfgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxka8LTmba8NaOc8S2fgea8NaXc8S2ggfgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxaeaHIdzaeIdzMUdzaeaHIdCaeIdCMUdCaeaHIdKaeIdKMUdKaeaHId3aeId3MUd3aeaHIdaaeIdaMUdaaeaHId8KaeId8KMUd8KaeaHIdyaeIdyMUdya9raO2hKaqhHa8LhAinaHaKfgeaHaLfgOIdbaeIdbMUdbaeclfgQaOclfIdbaQIdbMUdbaecwfgQaOcwfIdbaQIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaAcufgAmbkahmbJbbbbJbbjZayagfgeIdyg8U:va8UJbbbb9BEaeIdwaaa8Kcx2fgHIdwg8UNaeIdzaHIdbg8WNaeIdaMg8Xa8XMMa8UNaeIdlaHIdlg8XNaeIdCa8UNaeId3Mg8Ua8UMMa8XNaeIdba8WNaeIdxa8XNaeIdKMg8Ua8UMMa8WNaeId8KMMM:lNg8Ua87a87a8U9DEh87kaLa9rfhLaXcefgXal9hmbkcbhHa8EheindnaeydbgOcuSmbdnaHaDaOcdtgAfydbgO9hmbcuhOa8EaAfydbgAcuSmbaDaAcdtfydbhOkaeaOBdbkaeclfhealaHcefgH9hmbkcbhHa8FheindnaeydbgOcuSmbdnaHaDaOcdtgAfydbgO9hmbcuhOa8FaAfydbgAcuSmbaDaAcdtfydbhOkaeaOBdbkaeclfhealaHcefgH9hmbkka87a86a8LEh87cbhHabhecbhOindnaCaDaeydbcdtfydbgLcdtfydbgAaCaDaeclfydbcdtfydbgKcdtfydbgQSmbaAaCaDaecwfydbcdtfydbg8KcdtfydbgXSmbaQaXSmbabaHcdtfgAaLBdbaAcwfa8KBdbaAclfaKBdbaHcifhHkaecxfheaOcifgOad6mbkdndna9imbaHhdxekdnaHak0mbaHhdxekdna85a879FmbaHhdxekJFFuuh85cbhdabhecbhOindna9ka0aeydbgAcdtfydbcdtfIdbg8Ua879ETmbaeclf8Pdbh9CabadcdtfgQaABdbaQclfa9C83dba8Ua85a85a8U9EEh85adcifhdkaecxfheaOcifgOaH6mbkkadak0mbxdkkascNefabadalaCz:cjjjbkdndnadak0mbadhOxekdna9imbadhOxekdna85a889FmbadhOxekcehLina85Jbb;aZNg8Ua88a8Ua889DEh8XJbbbbh8Udna6Tmba9khea6hHinaeIdbg8Wa8Ua8Wa8X9FEa8Ua8Wa8U9EEh8UaeclfheaHcufgHmbkkJFFuuh85cbhOabhecbhHindna9ka0aeydbgAcdtfydbcdtfIdbg8Wa8X9ETmbaeclf8Pdbh9CabaOcdtfgQaABdbaQclfa9C83dba8Wa85a85a8W9EEh85aOcifhOkaecxfheaHcifgHad6mbkdnaLaOad9hVceGmbadhOxdka8Ua86a86a8U9DEh86aOak9nmecbhLaOhda85a889FmbkkdnamcjjjjdGTmba9pcbalz:rjjjbhLdnaOTmbabheaOhHinaLaeydbgAfa5aAfRbbcl9h86bbaeclfheaHcufgHmbkkascNefabaOalaCz:cjjjbalTmbcbhQasyd:yehgindnaLaQfRbbTmbdna5aQfRbbgecl0mbceaetcQGmekdnaCaQcdtgKfydbgeaQSmbaaaQcx2fgHaaaecx2fge8Pdb83dbaHcwfaecwfydbBdbxekayaQc8S2fgeIdyg8Ua8UJL:3;rUNg8UMh88aeIdwa8UMhRaeIdla8UMh8VaeIdba8UMhUaeIdaa8UaaaQcx2fg8KIdwg89N:th81aeId3a8Ua8KIdlg8:N:th85aeIdKa8KIdbgZa8UN:th8YJbbbbhcaeIdCJbbbbMh87aeIdzJbbbbMhBaeIdxJbbbbMh83dndna8LTmbaQhAinJbbbba88a8NaAc8S2fgHIdyg8U:va8UJbbbb9BEh8UaqaAa8L2cltfheaHIdaa88Na81Mh81aHId3a88Na85Mh85aHIdKa88Na8YMh8YaHIdCa88Na87Mh87aHIdza88NaBMhBaHIdxa88Na83Mh83aHIdwa88NaRMhRaHIdla88Na8VMh8VaHIdba88NaUMhUa8LhHina81aecxfIdbg8ZaecwfIdbg8WNa8UN:th81a85a8ZaeclfIdbg8XNa8UN:th85a87a8Wa8XNa8UN:th87aUaeIdbg80a80Na8UN:thUa8Ya8Za80Na8UN:th8YaBa8Wa80Na8UN:thBa83a8Xa80Na8UN:th83aRa8Wa8WNa8UN:thRa8Va8Xa8XNa8UN:th8VaeczfheaHcufgHmbkaYaAcdtfydbgAaQ9hmbkaITmbaIaQcltfgeIdxhTaeIdwh9caeIdlhJaeIdbh8UxekJbbbbhTJbbbbh9cJbbbbhJJbbbbh8UkaBaU:vg8Xa8YNa81:ta87aBa83aU:vg8WN:tg81a8Va83a8WN:tg8Z:vg80a8Wa8YNa85:tg8VN:th85a9ca8Ua8XN:taJa8Ua8WN:tg83a80N:tg87aRaBa8XN:ta81a80N:tgB:vgR:mh81a83a8Z:vg9c:mhJdnJbbbba8Ua8UaU:vg9eN:ta83a9cN:ta87aRN:tg83:la88J:983:g81Ng8U9ETmba81a85NaJa8VNa9ea8YNaT:tMMa83:vhckaU:la8U9ETmba8Z:la8U9ETmbaB:la8U9ETmba9e:macNa8X:ma81acNa85aB:vMg85Na8W:maJacNa80:ma85Na8Va8Z:vMMg87Na8Y:maU:vMMMh88a9maKfgeclfydbgHaeydbge9RhXagaecitfhKJbbbbh8UdnaHaeSghmbJbbbbh8UaKheaXhAinaaaeclfydbcx2fgHIdwa89:tg8Wa8WNaHIdbaZ:tg8Wa8WNaHIdla8::tg8Wa8WNMMg8Waaaeydbcx2fgHIdwa89:tg8Xa8XNaHIdbaZ:tg8Xa8XNaHIdla8::tg8Xa8XNMMg8Xa8Ua8Ua8X9DEg8Ua8Ua8W9DEh8UaecwfheaAcufgAmbkka85a89:tg8Wa8WNa88aZ:tg8Wa8WNa87a8::tg8Wa8WNMMa8U:rg8Ua8UN9EmbdnahmbcbhAcehhdninaaaKclfydbcx2fgeIdbaaaKydbcx2fgHIdbg8X:tg8Ua8:aHIdlg80:tg8YNaZa8X:tgBaeIdla80:tg8WN:tg8Za8Ua87a80:tg83Na88a8X:tgRa8WN:tg80Na8Wa89aHIdwgU:tg8VNa8YaeIdwaU:tg8XN:tg8Ya8Wa85aU:tg81Na83a8XN:tg8WNa8XaBNa8Va8UN:tgUa8XaRNa81a8UN:tg8UNMMa8Za8ZNa8Ya8YNaUaUNMMa80a80Na8Wa8WNa8Ua8UNMMN:rJbbj8:N9FmeaKcwfhKaAcefgAaX6hhaXaA9hmbkkahceGmeka8Ka85Udwa8Ka87Udla8Ka88UdbkaQcefgQal9hmbkdndna8LTmba8LclthYa8Lcdth8KcbhKa8ShXindnaLaKfRbbTmba5aKfRbbclSmbJbbbbJbbjZa8NaKc8S2fIdyg8U:va8UJbbbb9BEh8UaaaCaKcdtfydbcx2fhHaqheaXhAa8LhQinaAa8UaecwfIdbaHIdwNaeIdbaHIdbNaeclfIdbaHIdlNMMaecxfIdbMNUdbaeczfheaAclfhAaQcufgQmbkkaqaYfhqaXa8KfhXaKcefgKal9hmbkarcd4hXavcd4hYasId:qeh8UasId:meh8WasId1eh8XazTmea8Lcdth8KcbhKindnaLaKfRbbTmbaiazaKcdtfydbgCaY2cdtfgeaaaKcx2fgHIdba8RNa8XMUdbaeaHIdla8RNa8WMUdlaeaHIdwa8RNa8UMUdwaoaCaX2cdtfhQashea8ShHa8LhCinaQaeydbcdtgAfaHIdbawaAfIdb:vUdbaeclfheaHclfhHaCcufgCmbkka8Sa8Kfh8SaKcefgKal9hmbxikkavcd4hCasId:qeh8UasId:meh8WasId1eh8XdnazTmbazheindna9pRbbTmbaiaeydbaC2cdtfgHaaIdba8RNa8XMUdbaHaaclfIdba8RNa8WMUdlaHaacwfIdba8RNa8UMUdwka9pcefh9paeclfheaacxfhaalcufglmbxikkaCcdtheindna9pRbbTmbaiaaIdba8RNa8XMUdbaiclfaaclfIdba8RNa8WMUdbaicwfaacwfIdba8RNa8UMUdbka9pcefh9paacxfhaaiaefhialcufglmbxdkka8Lcdth8KcbhKindnaLaKfRbbTmbaiaKaY2cdtfgeaaaKcx2fgHIdba8RNa8XMUdbaeaHIdla8RNa8WMUdlaeaHIdwa8RNa8UMUdwaoaKaX2cdtfhQashea8ShHa8LhCinaQaeydbcdtgAfaHIdbawaAfIdb:vUdbaeclfheaHclfhHaCcufgCmbkka8Sa8Kfh8SaKcefgKal9hmbkkdnamcjjjjlGTmbazmbaOTmbcbhLabheina5aeydbgAfRbbc3thKaecwfgXydbhHdndna8EaAcdtg8KfydbaeclfgYydbgCSmbcbhQa8FaCcdtfydbaA9hmekcjjjj94hQkaeaKaQVaAVBdba5aCfRbbc3thKdndna8EaCcdtfydbaHSmbcbhQa8FaHcdtfydbaC9hmekcjjjj94hQkaYaKaQVaCVBdba5aHfRbbc3thQdndna8EaHcdtfydbaASmbcbhCa8Fa8KfydbaH9hmekcjjjj94hCkaXaQaCVaHVBdbaecxfheaLcifgLaO6mbkkdnazTmbaOTmbaOheinabazabydbcdtfydbBdbabclfhbaecufgembkkdnaPTmbaPana86:rNUdbkasyd;8egecdtasc:Ceffc98fhHdninaeTmeaHydbcbyd:m:jjjbH:bjjjbbaHc98fhHaecufhexbkkascj;sbf8KjjjjbaOk;Yieouabydlhvabydbclfcbaicdtz:rjjjbhoadci9UhrdnadTmbdnalTmbaehwadhDinaoalawydbcdtfydbcdtfgqaqydbcefBdbawclfhwaDcufgDmbxdkkaehwadhDinaoawydbcdtfgqaqydbcefBdbawclfhwaDcufgDmbkkdnaiTmbcbhDaohwinawydbhqawaDBdbawclfhwaqaDfhDaicufgimbkkdnadci6mbinaecwfydbhwaeclfydbhDaeydbhidnalTmbalawcdtfydbhwalaDcdtfydbhDalaicdtfydbhikavaoaicdtfgqydbcitfaDBdbavaqydbcitfawBdlaqaqydbcefBdbavaoaDcdtfgqydbcitfawBdbavaqydbcitfaiBdlaqaqydbcefBdbavaoawcdtfgwydbcitfaiBdbavawydbcitfaDBdlawawydbcefBdbaecxfhearcufgrmbkkabydbcbBdbk:todDue99aicd4aifhrcehwinawgDcethwaDar6mbkcuaDcdtgraDcFFFFi0Ecbyd1:jjjbHjjjjbbhwaoaoyd9GgqcefBd9GaoaqcdtfawBdbawcFearz:rjjjbhkdnaiTmbalcd4hlaDcufhxcbhminamhDdnavTmbavamcdtfydbhDkcbadaDal2cdtfgDydlgwawcjjjj94SEgwcH4aw7c:F:b:DD2cbaDydbgwawcjjjj94SEgwcH4aw7c;D;O:B8J27cbaDydwgDaDcjjjj94SEgDcH4aD7c:3F;N8N27axGhwamcdthPdndndnavTmbakawcdtfgrydbgDcuSmeadavaPfydbal2cdtfgsIdbhzcehqinaqhrdnadavaDcdtfydbal2cdtfgqIdbaz9CmbaqIdlasIdl9CmbaqIdwasIdw9BmlkarcefhqakawarfaxGgwcdtfgrydbgDcu9hmbxdkkakawcdtfgrydbgDcuSmbadamal2cdtfgsIdbhzcehqinaqhrdnadaDal2cdtfgqIdbaz9CmbaqIdlasIdl9CmbaqIdwasIdw9BmikarcefhqakawarfaxGgwcdtfgrydbgDcu9hmbkkaramBdbamhDkabaPfaDBdbamcefgmai9hmbkkakcbyd:m:jjjbH:bjjjbbaoaoyd9GcufBd9GdnaeTmbaiTmbcbhDaehwinawaDBdbawclfhwaiaDcefgD9hmbkcbhDaehwindnaDabydbgrSmbawaearcdtfgrydbBdbaraDBdbkawclfhwabclfhbaiaDcefgD9hmbkkk:hrdvuv998Jjjjjbca9Rgoczfcwfcbyd11jjbBdbaocb8Pdj1jjb83izaocwfcbydN1jjbBdbaocb8Pd:m1jjb83ibdnadTmbaicd4hrdnabmbdnalTmbcbhwinaealawcdtfydbar2cdtfhDcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkawcefgwad9hmbxikkarcdthwcbhDincbhiinaoczfaifgqaeaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkaeawfheaDcefgDad9hmbxdkkdnalTmbcbhwinabawcx2fgiaealawcdtfydbar2cdtfgDIdbUdbaiaDIdlUdlaiaDIdwUdwcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkawcefgwad9hmbxdkkarcdthlcbhwaehDinabawcx2fgiaeawar2cdtfgqIdbUdbaiaqIdlUdlaiaqIdwUdwcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkaDalfhDawcefgwad9hmbkkJbbbbaoIdbaoIdzgx:tgkakJbbbb9DEgkaoIdlaoIdCgm:tgPaPak9DEgkaoIdwaoIdKgP:tgsasak9DEhsdnabTmbadTmbJbbbbJbbjZas:vasJbbbb9BEhkinabakabIdbax:tNUdbabclfgoakaoIdbam:tNUdbabcwfgoakaoIdbaP:tNUdbabcxfhbadcufgdmbkkdnavTmbavaPUdwavamUdlavaxUdbkask:ZlewudnaeTmbcbhvabhoinaoavBdbaoclfhoaeavcefgv9hmbkkdnaiTmbcbhrinadarcdtfhwcbhDinalawaDcdtgvc:G1jjbfydbcdtfydbcdtfydbhodnabalawavfydbcdtfydbgqcdtfgkydbgvaqSmbinakabavgqcdtfgxydbgvBdbaxhkaqav9hmbkkdnabaocdtfgkydbgvaoSmbinakabavgocdtfgxydbgvBdbaxhkaoav9hmbkkdnaqaoSmbabaqaoaqao0Ecdtfaqaoaqao6EBdbkaDcefgDci9hmbkarcifgrai6mbkkdnaembcbskcbhxindnalaxcdtgvfydbax9hmbaxhodnabavfgDydbgvaxSmbaDhqinaqabavgocdtfgkydbgvBdbakhqaoav9hmbkkaDaoBdbkaxcefgxae9hmbkcbhvabhocbhkindndnavalydbgq9hmbdnavaoydbgq9hmbaoakBdbakcefhkxdkaoabaqcdtfydbBdbxekaoabaqcdtfydbBdbkaoclfhoalclfhlaeavcefgv9hmbkakk;Jiilud99duabcbaecltz:rjjjbhvdnalTmbadhoaihralhwinarcwfIdbhDarclfIdbhqavaoydbcltfgkarIdbakIdbMUdbakclfgxaqaxIdbMUdbakcwfgxaDaxIdbMUdbakcxfgkakIdbJbbjZMUdbaoclfhoarcxfhrawcufgwmbkkdnaeTmbavhraehkinarcxfgoIdbhDaocbBdbararIdbJbbbbJbbjZaD:vaDJbbbb9BEgDNUdbarclfgoaDaoIdbNUdbarcwfgoaDaoIdbNUdbarczfhrakcufgkmbkkdnalTmbinavadydbcltfgrcxfgkaicwfIdbarcwfIdb:tgDaDNaiIdbarIdb:tgDaDNaiclfIdbarclfIdb:tgDaDNMMgDakIdbgqaqaD9DEUdbadclfhdaicxfhialcufglmbkkdnaeTmbavcxfhrinabarIdbUdbarczfhrabclfhbaecufgembkkk8MbabaeadaialavcbcbcbcbcbaoarawaDz:bjjjbk8MbabaeadaialavaoarawaDaqakaxamaPz:bjjjbkRbababaeadaialavaoarawaDaqakaxcjjjjdVamz:bjjjbk:p8Koque99due99iuq998Jjjjjbc;Wb9Rgq8Kjjjjbcbhkaqcxfcbc;Kbz:rjjjb8Aaqcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbgxBdxaqceBd2axaialavcbcbz:ejjjb8AaqcualcdtalcFFFFi0Egmcbyd1:jjjbHjjjjbbgiBdzaqcdBd2dndnJFF959eJbbjZawJbbjZawJbbjZ9DE:vawJ9VO:d869DEgw:lJbbb9p9DTmbaw:OhPxekcjjjj94hPkadci9Uhsarco9UhzdndnaombaPcd9imekdnalTmbaPcuf:YhwdnaoTmbcbhvaihHaxhOindndnaoavfRbbceGTmbavcjjjjlVhAxekdndnaOclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcqthAdndnaOcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXVhAdndnaOIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXcCtVhAkaHaABdbaHclfhHaOcxfhOalavcefgv9hmbxdkkaxhvaihOalhHindndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcCthAdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaXcqtaAVhAdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaOaAaXVBdbavcxfhvaOclfhOaHcufgHmbkkadTmbcbhkaehvcbhOinakaiavclfydbcdtfydbgHaiavcwfydbcdtfydbgA9haiavydbcdtfydbgXaH9haXaA9hGGfhkavcxfhvaOcifgOad6mbkkarci9UhQdndnaz:Z:rJbbbZMgw:lJbbb9p9DTmbaw:Ohvxekcjjjj94hvkaQ:ZhLcbhKc:bwhHdndninashYaHhXaPhrakg8AaQ9pmeaXar9Rcd9imeavaXcufavaX9iEarcefavar9kEhzdnalTmbazcuf:YhwdnaoTmbcbhOaihPaxhvindndnaoaOfRbbceGTmbaOcjjjjlVhHxekdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhHxekcjjjj94hHkaHcqthHdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskaHasVhHdndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskaHascCtVhHkaPaHBdbaPclfhPavcxfhvalaOcefgO9hmbxdkkaxhvaihOalhPindndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhHxekcjjjj94hHkaHcCthHdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskascqtaHVhHdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskaOaHasVBdbavcxfhvaOclfhOaPcufgPmbkkcbhOdnadTmbaehvcbhPinaOaiavclfydbcdtfydbgHaiavcwfydbcdtfydbgs9haiavydbcdtfydbgAaH9haAas9hGGfhOavcxfhvaPcifgPad6mbkkaYhsaOhkaXhHazhPdnaOaQ9nmbaOhsa8AhkazhHarhPkdndnaKcl0mbdnaY:Zgwa8A:ZgC:taz:YgEar:Y:tg3aEaX:Y:tg5aO:Zg8EaL:tNNNawaL:ta5NaCa8E:tNaCaL:ta3Na8Eaw:tNM:vaEMJbbbZMgw:lJbbb9p9DTmbaw:Ohvxdkcjjjj94hvxekaPaHfcd9ThvkaKcefgKcs9hmbxdkka8AhkarhPkdndndnakmbJbbjZhwcbhicdhvaDmexdkalcd4alfhHcehOinaOgvcethOavaH6mbkcbhOaqcuavcdtgravcFFFFi0Ecbyd1:jjjbHjjjjbbgzBdCaqciBd2aqamcbyd1:jjjbHjjjjbbgXBdKaqclBd2dndndndnalTmbaPcuf:YhwaoTmecbhOaihHaxhPindndnaoaOfRbbceGTmbaOcjjjjlVhsxekdndnaPclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskascqthsdndnaPcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkasaAVhsdndnaPIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkasaAcCtVhskaHasBdbaHclfhHaPcxfhPalaOcefgO9hmbxikkazcFearz:rjjjb8AcbhrcbhvxdkaxhOaihPalhHindndnaOIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohsxekcjjjj94hskascCthsdndnaOclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcqtasVhsdndnaOcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaPasaAVBdbaOcxfhOaPclfhPaHcufgHmbkkazcFearz:rjjjbhAavcufhocbhrcbhzindndndnaAaiazcdtgKfydbgHcm4aH7c:v;t;h;Ev2gvcs4av7aoGgPcdtfgsydbgOcuSmbcehvinaiaOcdtgOfydbaHSmdaPavfhOavcefhvaAaOaoGgPcdtfgsydbgOcu9hmbkkasazBdbarhvarcefhrxekaXaOfydbhvkaXaKfavBdbazcefgzal9hmbkcuarc8S2gOarc;D;O;f8U0EhvkcbhAaqavcbyd1:jjjbHjjjjbbgvBd3aqcvBd2avcbaOz:rjjjbhOdnadTmbaehiinJbbnnJbbjZaXaiydbgHcdtfydbgvaXaiclfydbgPcdtfydbgzSavaXaicwfydbgscdtfydbgKSGgoEh8FdnaxaPcx2fgPIdbaxaHcx2fgHIdbg8E:tgCaxascx2fgsIdlaHIdlg3:tgwNasIdba8E:tgEaPIdla3:tgaN:tgLaLNaaasIdwaHIdwg5:tghNawaPIdwa5:tgaN:tgwawNaaaENahaCN:tgCaCNMM:rgEJbbbb9ETmbaLaE:vhLaCaE:vhCawaE:vhwkaOavc8S2fgvavIdbawa8FaE:rNgEawNNgaMUdbavaCaEaCNghNggavIdlMUdlavaLaEaLNg8FNg8JavIdwMUdwavahawNghavIdxMUdxava8FawNg8KavIdzMUdzava8FaCNg8FavIdCMUdCavawaEaLa5Nawa8ENa3aCNMM:mg3Ng8ENgwavIdKMUdKavaCa8ENgCavId3MUd3avaLa8ENgLavIdaMUdaava8Ea3Ng8EavId8KMUd8KavaEavIdyMUdydnaombaOazc8S2fgvaaavIdbMUdbavagavIdlMUdlava8JavIdwMUdwavahavIdxMUdxava8KavIdzMUdzava8FavIdCMUdCavawavIdKMUdKavaCavId3MUd3avaLavIdaMUdaava8EavId8KMUd8KavaEavIdyMUdyaOaKc8S2fgvaaavIdbMUdbavagavIdlMUdlava8JavIdwMUdwavahavIdxMUdxava8KavIdzMUdzava8FavIdCMUdCavawavIdKMUdKavaCavId3MUd3avaLavIdaMUdaava8EavId8KMUd8KavaEavIdyMUdykaicxfhiaAcifgAad6mbkkcbhHaqcuarcdtgvarcFFFFi0Egicbyd1:jjjbHjjjjbbgPBdaaqcoBd2aqaicbyd1:jjjbHjjjjbbgiBd8KaqcrBd2aPcFeavz:rjjjbhzdnalTmbaXhPinJbbbbJbbjZaOaPydbgsc8S2fgvIdygw:vawJbbbb9BEavIdwaxcwfIdbgwNavIdzaxIdbgCNavIdaMgLaLMMawNavIdlaxclfIdbgLNavIdCawNavId3MgwawMMaLNavIdbaCNavIdxaLNavIdKMgwawMMaCNavId8KMMM:lNhwdndnazascdtgvfgsydbcuSmbaiavfIdbaw9ETmekasaHBdbaiavfawUdbkaPclfhPaxcxfhxalaHcefgH9hmbkkJbbbbhwdnarTmbinaiIdbgCawawaC9DEhwaiclfhiarcufgrmbkkakcd4akfhOcehiinaigvcethiavaO6mbkcbhiaqcuavcdtgOavcFFFFi0Ecbyd1:jjjbHjjjjbbgPBdyaPcFeaOz:rjjjbhsdnadTmbavcufhAcbhrcbhxindnaXaeaxcdtfgvydbcdtfydbgiaXavclfydbcdtfydbgOSmbaiaXavcwfydbcdtfydbgvSmbaOavSmbazavcdtfydbhHdndnazaOcdtfydbgvazaicdtfydbgi9pmbavaH9pmbaHhlaihoavhHxekdnaHai9pmbaHav9pmbaihlavhoxekavhlaHhoaihHkabarcx2fgvaHBdbavcwfaoBdbavclfalBdbdnasaoc:3F;N8N2alc:F:b:DD27aHc;D;O:B8J27aAGgOcdtfgvydbgicuSmbcehPinaPhvdnabaicx2fgiydbaH9hmbaiydlal9hmbaiydwaoSmikavcefhPasaOavfaAGgOcdtfgvydbgicu9hmbkkavarBdbarcefhrkaxcifgxad6mbkarci2hikdnaDmbcwhvxdkaw:rhwcwhvkaDawUdbkavcdthvdninavTmeavc98fgvaqcxffydbcbyd:m:jjjbH:bjjjbbxbkkaqc;Wbf8Kjjjjbaik:2ldwue9:8Jjjjjbc;Wb9Rgr8Kjjjjbcbhwarcxfcbc;Kbz:rjjjb8AdnabaeSmbabaeadcdtz:qjjjb8AkarcualcdtalcFFFFi0EgDcbyd1:jjjbHjjjjbbgqBdxarceBd2aqcbaialavcbarcxfz:djjjbcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbhkarcxfaryd2gxcdtgmfakBdbaraxcefgPBd2akaialavcbcbz:ejjjb8AarcxfaPcdtfaDcbyd1:jjjbHjjjjbbgvBdbaraxcdfgiBd2arcxfaicdtfcuavalaeadaqz:fjjjbgecltaecjjjjiGEcbyd1:jjjbHjjjjbbgiBdbaiaeavakalz:gjjjbdnadTmbaoaoNhocbhwabhlcbhkindnaiavalydbgecdtfydbcdtfIdbao9ETmbalclf8PdbhsabawcdtfgqaeBdbaqclfas83dbawcifhwkalcxfhlakcifgkad6mbkkaxcifhlamarcxffcwfhkdninalTmeakydbcbyd:m:jjjbH:bjjjbbakc98fhkalcufhlxbkkarc;Wbf8Kjjjjbawk:FCoDud99rue99iul998Jjjjjbc;Wb9Rgw8KjjjjbdndnarmbcbhDxekawcxfcbc;Kbz:rjjjb8Aawcuadcx2adc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbgqBdxawceBd2aqaeadaicbcbz:ejjjb8AawcuadcdtadcFFFFi0Egkcbyd1:jjjbHjjjjbbgxBdzawcdBd2adcd4adfhmceheinaegicetheaiam6mbkcbhPawcuaicdtgsaicFFFFi0Ecbyd1:jjjbHjjjjbbgzBdCawciBd2dndnar:ZgH:rJbbbZMgO:lJbbb9p9DTmbaO:Ohexekcjjjj94hekaicufhAc:bwhmcbhCadhXcbhQinaChLaeamgKcufaeaK9iEaPgDcefaeaD9kEhYdndnadTmbaYcuf:YhOaqhiaxheadhmindndnaiIdbaONJbbbZMg8A:lJbbb9p9DTmba8A:OhCxekcjjjj94hCkaCcCthCdndnaiclfIdbaONJbbbZMg8A:lJbbb9p9DTmba8A:OhExekcjjjj94hEkaEcqtaCVhCdndnaicwfIdbaONJbbbZMg8A:lJbbb9p9DTmba8A:OhExekcjjjj94hEkaeaCaEVBdbaicxfhiaeclfheamcufgmmbkazcFeasz:rjjjbh3cbh5cbhPindna3axaPcdtfydbgCcm4aC7c:v;t;h;Ev2gics4ai7aAGgmcdtfgEydbgecuSmbaeaCSmbcehiina3amaifaAGgmcdtfgEydbgecuSmeaicefhiaeaC9hmbkkaEaCBdba5aecuSfh5aPcefgPad9hmbxdkkazcFeasz:rjjjb8Acbh5kaDaYa5ar0giEhPaLa5aiEhCdna5arSmbaYaKaiEgmaP9Rcd9imbdndnaQcl0mbdnaX:ZgOaL:Zg8A:taY:Yg8EaD:Y:tg8Fa8EaK:Y:tgaa5:ZghaH:tNNNaOaH:taaNa8Aah:tNa8AaH:ta8FNahaO:tNM:va8EMJbbbZMgO:lJbbb9p9DTmbaO:Ohexdkcjjjj94hexekaPamfcd9Theka5aXaiEhXaQcefgQcs9hmekkdndnaCmbcihicbhDxekcbhiawakcbyd1:jjjbHjjjjbbg5BdKawclBd2aPcuf:Yh8AdndnadTmbaqhiaxheadhmindndnaiIdba8ANJbbbZMgO:lJbbb9p9DTmbaO:OhCxekcjjjj94hCkaCcCthCdndnaiclfIdba8ANJbbbZMgO:lJbbb9p9DTmbaO:OhExekcjjjj94hEkaEcqtaCVhCdndnaicwfIdba8ANJbbbZMgO:lJbbb9p9DTmbaO:OhExekcjjjj94hEkaeaCaEVBdbaicxfhiaeclfheamcufgmmbkazcFeasz:rjjjbh3cbhDcbhYindndndna3axaYcdtgKfydbgCcm4aC7c:v;t;h;Ev2gics4ai7aAGgmcdtfgEydbgecuSmbcehiinaxaecdtgefydbaCSmdamaifheaicefhia3aeaAGgmcdtfgEydbgecu9hmbkkaEaYBdbaDhiaDcefhDxeka5aefydbhika5aKfaiBdbaYcefgYad9hmbkcuaDc32giaDc;j:KM;jb0EhexekazcFeasz:rjjjb8AcbhDcbhekawaecbyd1:jjjbHjjjjbbgeBd3awcvBd2aecbaiz:rjjjbhEavcd4hKdnadTmbdnalTmbaKcdth3a5hCaqhealhmadhAinaEaCydbc32fgiaeIdbaiIdbMUdbaiaeclfIdbaiIdlMUdlaiaecwfIdbaiIdwMUdwaiamIdbaiIdxMUdxaiamclfIdbaiIdzMUdzaiamcwfIdbaiIdCMUdCaiaiIdKJbbjZMUdKaCclfhCaecxfheama3fhmaAcufgAmbxdkka5hmaqheadhCinaEamydbc32fgiaeIdbaiIdbMUdbaiaeclfIdbaiIdlMUdlaiaecwfIdbaiIdwMUdwaiaiIdxJbbbbMUdxaiaiIdzJbbbbMUdzaiaiIdCJbbbbMUdCaiaiIdKJbbjZMUdKamclfhmaecxfheaCcufgCmbkkdnaDTmbaEhiaDheinaiaiIdbJbbbbJbbjZaicKfIdbgO:vaOJbbbb9BEgONUdbaiclfgmaOamIdbNUdbaicwfgmaOamIdbNUdbaicxfgmaOamIdbNUdbaiczfgmaOamIdbNUdbaicCfgmaOamIdbNUdbaic3fhiaecufgembkkcbhCawcuaDcdtgYaDcFFFFi0Egicbyd1:jjjbHjjjjbbgeBdaawcoBd2awaicbyd1:jjjbHjjjjbbg3Bd8KaecFeaYz:rjjjbhxdnadTmbJbbjZJbbjZa8A:vaPceSEaoNgOaONh8AaKcdthPalheina8Aaec;81jjbalEgmIdwaEa5ydbgAc32fgiIdC:tgOaONamIdbaiIdx:tgOaONamIdlaiIdz:tgOaONMMNaqcwfIdbaiIdw:tgOaONaqIdbaiIdb:tgOaONaqclfIdbaiIdl:tgOaONMMMhOdndnaxaAcdtgifgmydbcuSmba3aifIdbaO9ETmekamaCBdba3aifaOUdbka5clfh5aqcxfhqaeaPfheadaCcefgC9hmbkkabaxaYz:qjjjb8AcrhikaicdthiinaiTmeaic98fgiawcxffydbcbyd:m:jjjbH:bjjjbbxbkkawc;Wbf8KjjjjbaDk:Ydidui99ducbhi8Jjjjjbca9Rglczfcwfcbyd11jjbBdbalcb8Pdj1jjb83izalcwfcbydN1jjbBdbalcb8Pd:m1jjb83ibdndnaembJbbjFhvJbbjFhoJbbjFhrxekadcd4cdthwincbhdinalczfadfgDabadfIdbgvaDIdbgoaoav9EEUdbaladfgDavaDIdbgoaoav9DEUdbadclfgdcx9hmbkabawfhbaicefgiae9hmbkalIdwalIdK:thralIdlalIdC:thoalIdbalIdz:thvkJbbbbavavJbbbb9DEgvaoaoav9DEgvararav9DEk9DeeuabcFeaicdtz:rjjjbhlcbhbdnadTmbindnalaeydbcdtfgiydbcu9hmbaiabBdbabcefhbkaeclfheadcufgdmbkkabk9teiucbcbyd:q:jjjbgeabcifc98GfgbBd:q:jjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd:q:jjjbgeabcrfc94GfgbBd:q:jjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik9:eiuZbhedndncbyd:q:jjjbgdaecztgi9nmbcuheadai9RcFFifcz4nbcuSmekadhekcbabae9Rcifc98Gcbyd:q:jjjbfgdBd:q:jjjbdnadZbcztge9nmbadae9RcFFifcz4nb8Akkk:Iedbcjwk1eFFuuFFuuFFuuFFuFFFuFFFuFbbbbbbbbebbbdbbbbbbbebbbebbbdbbbbbbbbbbbeeeeebebbebbebebbbeebbbbbbbbbbbbeeeeeebebbeeebeebbbbebebbbbbbbbbbbbbbbbbbc1Dkxebbbdbbb:GNbb";
-      var wasmpack = new Uint8Array([
-        32,
-        0,
-        65,
-        2,
-        1,
-        106,
-        34,
-        33,
-        3,
-        128,
-        11,
-        4,
-        13,
-        64,
-        6,
-        253,
-        10,
-        7,
-        15,
-        116,
-        127,
-        5,
-        8,
-        12,
-        40,
-        16,
-        19,
-        54,
-        20,
-        9,
-        27,
-        255,
-        113,
-        17,
-        42,
-        67,
-        24,
-        23,
-        146,
-        148,
-        18,
-        14,
-        22,
-        45,
-        70,
-        69,
-        56,
-        114,
-        101,
-        21,
-        25,
-        63,
-        75,
-        136,
-        108,
-        28,
-        118,
-        29,
-        73,
-        115
-      ]);
-      if (typeof WebAssembly !== "object") {
-        return {
-          supported: false
-        };
-      }
-      var instance;
-      var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
-        instance = result.instance;
-        instance.exports.__wasm_call_ctors();
-      });
-      function unpack(data) {
-        var result = new Uint8Array(data.length);
-        for (var i = 0; i < data.length; ++i) {
-          var ch = data.charCodeAt(i);
-          result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
-        }
-        var write = 0;
-        for (var i = 0; i < data.length; ++i) {
-          result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
-        }
-        return result.buffer.slice(0, write);
-      }
-      function assert(cond) {
-        if (!cond) {
-          throw new Error("Assertion failed");
-        }
-      }
-      function bytes(view) {
-        return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-      }
-      function reorder(fun, indices, vertices) {
-        var sbrk = instance.exports.sbrk;
-        var ip = sbrk(indices.length * 4);
-        var rp = sbrk(vertices * 4);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        var indices8 = bytes(indices);
-        heap.set(indices8, ip);
-        var unique = fun(rp, ip, indices.length, vertices);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var remap = new Uint32Array(vertices);
-        new Uint8Array(remap.buffer).set(heap.subarray(rp, rp + vertices * 4));
-        indices8.set(heap.subarray(ip, ip + indices.length * 4));
-        sbrk(ip - sbrk(0));
-        for (var i = 0; i < indices.length; ++i) indices[i] = remap[indices[i]];
-        return [remap, unique];
-      }
-      function maxindex(source) {
-        var result = 0;
-        for (var i = 0; i < source.length; ++i) {
-          var index = source[i];
-          result = result < index ? index : result;
-        }
-        return result;
-      }
-      function simplify(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, target_index_count, target_error, options) {
-        var sbrk = instance.exports.sbrk;
-        var te = sbrk(4);
-        var ti = sbrk(index_count * 4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var si = sbrk(index_count * 4);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        heap.set(bytes(indices), si);
-        var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, target_index_count, target_error, options, te);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var target = new Uint32Array(result);
-        bytes(target).set(heap.subarray(ti, ti + result * 4));
-        var error = new Float32Array(1);
-        bytes(error).set(heap.subarray(te, te + 4));
-        sbrk(te - sbrk(0));
-        return [target, error[0]];
-      }
-      function simplifyAttr(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, options) {
-        var sbrk = instance.exports.sbrk;
-        var te = sbrk(4);
-        var ti = sbrk(index_count * 4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var sa = sbrk(vertex_count * vertex_attributes_stride);
-        var sw = sbrk(attribute_weights.length * 4);
-        var si = sbrk(index_count * 4);
-        var vl = vertex_lock ? sbrk(vertex_count) : 0;
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        heap.set(bytes(vertex_attributes), sa);
-        heap.set(bytes(attribute_weights), sw);
-        heap.set(bytes(indices), si);
-        if (vertex_lock) {
-          heap.set(bytes(vertex_lock), vl);
-        }
-        var result = fun(
-          ti,
-          si,
-          index_count,
-          sp,
-          vertex_count,
-          vertex_positions_stride,
-          sa,
-          vertex_attributes_stride,
-          sw,
-          attribute_weights.length,
-          vl,
-          target_index_count,
-          target_error,
-          options,
-          te
-        );
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var target = new Uint32Array(result);
-        bytes(target).set(heap.subarray(ti, ti + result * 4));
-        var error = new Float32Array(1);
-        bytes(error).set(heap.subarray(te, te + 4));
-        sbrk(te - sbrk(0));
-        return [target, error[0]];
-      }
-      function simplifyUpdate(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, options) {
-        var sbrk = instance.exports.sbrk;
-        var te = sbrk(4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var sa = sbrk(vertex_count * vertex_attributes_stride);
-        var sw = sbrk(attribute_weights.length * 4);
-        var si = sbrk(index_count * 4);
-        var vl = vertex_lock ? sbrk(vertex_count) : 0;
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        heap.set(bytes(vertex_attributes), sa);
-        heap.set(bytes(attribute_weights), sw);
-        heap.set(bytes(indices), si);
-        if (vertex_lock) {
-          heap.set(bytes(vertex_lock), vl);
-        }
-        var result = fun(
-          si,
-          index_count,
-          sp,
-          vertex_count,
-          vertex_positions_stride,
-          sa,
-          vertex_attributes_stride,
-          sw,
-          attribute_weights.length,
-          vl,
-          target_index_count,
-          target_error,
-          options,
-          te
-        );
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        bytes(indices).set(heap.subarray(si, si + result * 4));
-        bytes(vertex_positions).set(heap.subarray(sp, sp + vertex_count * vertex_positions_stride));
-        bytes(vertex_attributes).set(heap.subarray(sa, sa + vertex_count * vertex_attributes_stride));
-        var error = new Float32Array(1);
-        bytes(error).set(heap.subarray(te, te + 4));
-        sbrk(te - sbrk(0));
-        return [result, error[0]];
-      }
-      function simplifyScale(fun, vertex_positions, vertex_count, vertex_positions_stride) {
-        var sbrk = instance.exports.sbrk;
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        var result = fun(sp, vertex_count, vertex_positions_stride);
-        sbrk(sp - sbrk(0));
-        return result;
-      }
-      function simplifyPoints(fun, vertex_positions, vertex_count, vertex_positions_stride, vertex_colors, vertex_colors_stride, color_weight, target_vertex_count) {
-        var sbrk = instance.exports.sbrk;
-        var ti = sbrk(target_vertex_count * 4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var sc = sbrk(vertex_count * vertex_colors_stride);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        if (vertex_colors) {
-          heap.set(bytes(vertex_colors), sc);
-        }
-        var result = fun(ti, sp, vertex_count, vertex_positions_stride, sc, vertex_colors_stride, color_weight, target_vertex_count);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var target = new Uint32Array(result);
-        bytes(target).set(heap.subarray(ti, ti + result * 4));
-        sbrk(ti - sbrk(0));
-        return target;
-      }
-      function simplifySloppy(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_lock, target_index_count, target_error) {
-        var sbrk = instance.exports.sbrk;
-        var te = sbrk(4);
-        var ti = sbrk(index_count * 4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var si = sbrk(index_count * 4);
-        var vl = vertex_lock ? sbrk(vertex_count) : 0;
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        heap.set(bytes(indices), si);
-        if (vertex_lock) {
-          heap.set(bytes(vertex_lock), vl);
-        }
-        var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, vl, target_index_count, target_error, te);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var target = new Uint32Array(result);
-        bytes(target).set(heap.subarray(ti, ti + result * 4));
-        var error = new Float32Array(1);
-        bytes(error).set(heap.subarray(te, te + 4));
-        sbrk(te - sbrk(0));
-        return [target, error[0]];
-      }
-      function simplifyPrune(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, target_error) {
-        var sbrk = instance.exports.sbrk;
-        var ti = sbrk(index_count * 4);
-        var sp = sbrk(vertex_count * vertex_positions_stride);
-        var si = sbrk(index_count * 4);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), sp);
-        heap.set(bytes(indices), si);
-        var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, target_error);
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var target = new Uint32Array(result);
-        bytes(target).set(heap.subarray(ti, ti + result * 4));
-        sbrk(ti - sbrk(0));
-        return target;
-      }
-      var simplifyOptions = {
-        LockBorder: 1,
-        Sparse: 2,
-        ErrorAbsolute: 4,
-        Prune: 8,
-        Regularize: 16,
-        Permissive: 32,
-        _InternalDebug: 1 << 30
-        // internal, don't use!
-      };
-      return {
-        ready,
-        supported: true,
-        compactMesh: function(indices) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          return reorder(instance.exports.meshopt_optimizeVertexFetchRemap, indices32, maxindex(indices) + 1);
-        },
-        simplify: function(indices, vertex_positions, vertex_positions_stride, target_index_count, target_error, flags) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(target_index_count >= 0 && target_index_count <= indices.length);
-          assert(target_index_count % 3 == 0);
-          assert(target_error >= 0);
-          var options = 0;
-          for (var i = 0; i < (flags ? flags.length : 0); ++i) {
-            assert(flags[i] in simplifyOptions);
-            options |= simplifyOptions[flags[i]];
-          }
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          var result = simplify(
-            instance.exports.meshopt_simplify,
-            indices32,
-            indices.length,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            target_index_count,
-            target_error,
-            options
-          );
-          result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
-          return result;
-        },
-        simplifyWithAttributes: function(indices, vertex_positions, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, flags) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(vertex_attributes instanceof Float32Array);
-          assert(vertex_attributes.length == vertex_attributes_stride * (vertex_positions.length / vertex_positions_stride));
-          assert(vertex_attributes_stride >= 0);
-          assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
-          assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
-          assert(target_index_count >= 0 && target_index_count <= indices.length);
-          assert(target_index_count % 3 == 0);
-          assert(target_error >= 0);
-          assert(Array.isArray(attribute_weights));
-          assert(vertex_attributes_stride >= attribute_weights.length);
-          assert(attribute_weights.length <= 32);
-          for (var i = 0; i < attribute_weights.length; ++i) {
-            assert(attribute_weights[i] >= 0);
-          }
-          var options = 0;
-          for (var i = 0; i < (flags ? flags.length : 0); ++i) {
-            assert(flags[i] in simplifyOptions);
-            options |= simplifyOptions[flags[i]];
-          }
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          var result = simplifyAttr(
-            instance.exports.meshopt_simplifyWithAttributes,
-            indices32,
-            indices.length,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            vertex_attributes,
-            vertex_attributes_stride * 4,
-            new Float32Array(attribute_weights),
-            vertex_lock,
-            target_index_count,
-            target_error,
-            options
-          );
-          result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
-          return result;
-        },
-        simplifyWithUpdate: function(indices, vertex_positions, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, flags) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(vertex_attributes instanceof Float32Array);
-          assert(vertex_attributes.length == vertex_attributes_stride * (vertex_positions.length / vertex_positions_stride));
-          assert(vertex_attributes_stride >= 0);
-          assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
-          assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
-          assert(target_index_count >= 0 && target_index_count <= indices.length);
-          assert(target_index_count % 3 == 0);
-          assert(target_error >= 0);
-          assert(Array.isArray(attribute_weights));
-          assert(vertex_attributes_stride >= attribute_weights.length);
-          assert(attribute_weights.length <= 32);
-          for (var i = 0; i < attribute_weights.length; ++i) {
-            assert(attribute_weights[i] >= 0);
-          }
-          var options = 0;
-          for (var i = 0; i < (flags ? flags.length : 0); ++i) {
-            assert(flags[i] in simplifyOptions);
-            options |= simplifyOptions[flags[i]];
-          }
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          var result = simplifyUpdate(
-            instance.exports.meshopt_simplifyWithUpdate,
-            indices32,
-            indices.length,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            vertex_attributes,
-            vertex_attributes_stride * 4,
-            new Float32Array(attribute_weights),
-            vertex_lock,
-            target_index_count,
-            target_error,
-            options
-          );
-          if (indices !== indices32) {
-            for (var i = 0; i < result[0]; ++i) {
-              indices[i] = indices32[i];
-            }
-          }
-          return result;
-        },
-        getScale: function(vertex_positions, vertex_positions_stride) {
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          return simplifyScale(
-            instance.exports.meshopt_simplifyScale,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4
-          );
-        },
-        simplifyPoints: function(vertex_positions, vertex_positions_stride, target_vertex_count, vertex_colors, vertex_colors_stride, color_weight) {
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(target_vertex_count >= 0 && target_vertex_count <= vertex_positions.length / vertex_positions_stride);
-          if (vertex_colors) {
-            assert(vertex_colors instanceof Float32Array);
-            assert(vertex_colors.length % vertex_colors_stride == 0);
-            assert(vertex_colors_stride >= 3);
-            assert(vertex_positions.length / vertex_positions_stride == vertex_colors.length / vertex_colors_stride);
-            return simplifyPoints(
-              instance.exports.meshopt_simplifyPoints,
-              vertex_positions,
-              vertex_positions.length / vertex_positions_stride,
-              vertex_positions_stride * 4,
-              vertex_colors,
-              vertex_colors_stride * 4,
-              color_weight,
-              target_vertex_count
-            );
-          } else {
-            return simplifyPoints(
-              instance.exports.meshopt_simplifyPoints,
-              vertex_positions,
-              vertex_positions.length / vertex_positions_stride,
-              vertex_positions_stride * 4,
-              void 0,
-              0,
-              0,
-              target_vertex_count
-            );
-          }
-        },
-        simplifySloppy: function(indices, vertex_positions, vertex_positions_stride, vertex_lock, target_index_count, target_error) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
-          assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
-          assert(target_index_count >= 0 && target_index_count <= indices.length);
-          assert(target_index_count % 3 == 0);
-          assert(target_error >= 0);
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          var result = simplifySloppy(
-            instance.exports.meshopt_simplifySloppy,
-            indices32,
-            indices.length,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            vertex_lock,
-            target_index_count,
-            target_error
-          );
-          result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
-          return result;
-        },
-        simplifyPrune: function(indices, vertex_positions, vertex_positions_stride, target_error) {
-          assert(
-            indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
-          );
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(target_error >= 0);
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          var result = simplifyPrune(
-            instance.exports.meshopt_simplifyPrune,
-            indices32,
-            indices.length,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            target_error
-          );
-          result = indices instanceof Uint32Array ? result : new indices.constructor(result);
-          return result;
-        }
-      };
-    })();
-    if (typeof exports2 === "object" && typeof module2 === "object") module2.exports = MeshoptSimplifier;
-    else if (typeof define === "function" && define["amd"])
-      define([], function() {
-        return MeshoptSimplifier;
-      });
-    else if (typeof exports2 === "object") exports2["MeshoptSimplifier"] = MeshoptSimplifier;
-    else (typeof self !== "undefined" ? self : exports2).MeshoptSimplifier = MeshoptSimplifier;
-  }
-});
-
-// node_modules/meshoptimizer/meshopt_clusterizer.js
-var require_meshopt_clusterizer = __commonJS({
-  "node_modules/meshoptimizer/meshopt_clusterizer.js"(exports2, module2) {
-    var MeshoptClusterizer = (function() {
-      var wasm2 = "b9H79TebbbeVx9Geueu9Geub9Gbb9Giuuueu9Gmuuuuuuuuuuu9999eu9Gvuuuuueu9Gwuuuuuuuub9Gxuuuuuuuuuuuueu9Gkuuuuuuuuuu99eu9Gouuuuuub9Gruuuuuuub9GluuuubiAOdilvorwDqqDkbiibeilve9Weiiviebeoweuec;G:Odkr;qeDo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9I919P29K9nW79O2Wt79c9V919U9KbeX9TW79O9V9Wt9F9I919P29K9nW79O2Wt7bo39TW79O9V9Wt9F9J9V9T9W91tWJ2917tWV9c9V919U9K7br39TW79O9V9Wt9F9J9V9T9W91tW9nW79O2Wt9c9V919U9K7bDE9TW79O9V9Wt9F9J9V9T9W91tW9t9W9OWVW9c9V919U9K7bqL9TW79O9V9Wt9F9V9Wt9P9T9P96W9nW79O2Wtbkl79IV9RbxDwebcekdszq:x9DOdbkIbabaec9:fgefcufae9Ugeabci9Uadfcufad9Ugbaeab0Ek:w8KDPue99eux99dui99euo99iu8Jjjjjbc:WD9Rgm8KjjjjbdndnalmbcbhPxekamc:Cwfcbc;Kbz:ojjjb8Adndnalcb9imbaoal9nmbamcuaocdtaocFFFFi0Egscbyd;u1jjbHjjjjbbgzBd:CwamceBd;8wamascbyd;u1jjbHjjjjbbgHBd:GwamcdBd;8wamcualcdtalcFFFFi0Ecbyd;u1jjbHjjjjbbgOBd:KwamciBd;8waihsalhAinazasydbcdtfcbBdbasclfhsaAcufgAmbkaihsalhAinazasydbcdtfgCaCydbcefBdbasclfhsaAcufgAmbkaihsalhCcbhXindnazasydbcdtgQfgAydbcb9imbaHaQfaXBdbaAaAydbgQcjjjj94VBdbaQaXfhXkasclfhsaCcufgCmbkalci9UhLdnalci6mbcbhsaihAinaAcwfydbhCaAclfydbhXaHaAydbcdtfgQaQydbgQcefBdbaOaQcdtfasBdbaHaXcdtfgXaXydbgXcefBdbaOaXcdtfasBdbaHaCcdtfgCaCydbgCcefBdbaOaCcdtfasBdbaAcxfhAaLascefgs9hmbkkaihsalhAindnazasydbcdtgCfgXydbgQcu9kmbaXaQcFFFFrGgQBdbaHaCfgCaCydbaQ9RBdbkasclfhsaAcufgAmbxdkkamcuaocdtgsaocFFFFi0EgAcbyd;u1jjbHjjjjbbgzBd:CwamceBd;8wamaAcbyd;u1jjbHjjjjbbgHBd:GwamcdBd;8wamcualcdtalcFFFFi0Ecbyd;u1jjbHjjjjbbgOBd:KwamciBd;8wazcbasz:ojjjbhXalci9UhLaihsalhAinaXasydbcdtfgCaCydbcefBdbasclfhsaAcufgAmbkdnaoTmbcbhsaHhAaXhCaohQinaAasBdbaAclfhAaCydbasfhsaCclfhCaQcufgQmbkkdnalci6mbcbhsaihAinaAcwfydbhCaAclfydbhQaHaAydbcdtfgKaKydbgKcefBdbaOaKcdtfasBdbaHaQcdtfgQaQydbgQcefBdbaOaQcdtfasBdbaHaCcdtfgCaCydbgCcefBdbaOaCcdtfasBdbaAcxfhAaLascefgs9hmbkkaoTmbcbhsaohAinaHasfgCaCydbaXasfydb9RBdbasclfhsaAcufgAmbkkamaLcbyd;u1jjbHjjjjbbgsBd:OwamclBd;8wascbaLz:ojjjbhYamcuaLcK2alcjjjjd0Ecbyd;u1jjbHjjjjbbg8ABd:SwamcvBd;8wJbbbbhEdnalci6g3mbarcd4hKaihAa8AhsaLhrJbbbbh5inavaAclfydbaK2cdtfgCIdlh8EavaAydbaK2cdtfgXIdlhEavaAcwfydbaK2cdtfgQIdlh8FaCIdwhaaXIdwhhaQIdwhgasaCIdbg8JaXIdbg8KMaQIdbg8LMJbbnn:vUdbasclfaXIdlaCIdlMaQIdlMJbbnn:vUdbaQIdwh8MaCIdwh8NaXIdwhyascxfa8EaE:tg8Eagah:tggNa8FaE:tg8Faaah:tgaN:tgEJbbbbJbbjZa8Ja8K:tg8Ja8FNa8La8K:tg8Ka8EN:tghahNaEaENaaa8KNaga8JN:tgEaENMM:rg8K:va8KJbbbb9BEg8ENUdbasczfaEa8ENUdbascCfaha8ENUdbascwfa8Maya8NMMJbbnn:vUdba5a8KMh5aAcxfhAascKfhsarcufgrmbka5aL:Z:vJbbbZNhEkamcuaLcdtalcFFFF970Ecbyd;u1jjbHjjjjbbgCBd:WwamcoBd;8waEaq:ZNhEdna3mbcbhsaChAinaAasBdbaAclfhAaLascefgs9hmbkkaE:rhhcuh8PamcuaLcltalcFFFFd0Ecbyd;u1jjbHjjjjbbgIBd:0wamcrBd;8wcbaIa8AaCaLz:djjjb8AJFFuuhyJFFuuh8RJFFuuh8Sdnalci6gXmbJFFuuh8Sa8AhsaLhAJFFuuh8RJFFuuhyinascwfIdbgEayayaE9EEhyasclfIdbgEa8Ra8RaE9EEh8RasIdbgEa8Sa8SaE9EEh8SascKfhsaAcufgAmbkkahJbbbZNhgamaocetgscuaocu9kEcbyd;u1jjbHjjjjbbgABd:4waAcFeasz:ojjjbhCdnaXmbcbhAJFFuuhEa8Ahscuh8PinascwfIdbay:tghahNasIdba8S:tghahNasclfIdba8R:tghahNMM:rghaEa8PcuSahaE9DVgXEhEaAa8PaXEh8PascKfhsaLaAcefgA9hmbkkamczfcbcjwz:ojjjb8Aamcwf9cb83ibam9cb83ibagaxNhRJbbjZak:th8Ncbh8UJbbbbh8VJbbbbh8WJbbbbh8XJbbbbh8YJbbbbh8ZJbbbbh80cbh81cbhPinJbbbbhEdna8UTmbJbbjZa8U:Z:vhEkJbbbbhhdna80a80Na8Ya8YNa8Za8ZNMMg8KJbbbb9BmbJbbjZa8K:r:vhhka8XaENh5a8WaENh8Fa8VaENhaa8PhQdndndndndna8UaPVTmbamydwgBTmea80ahNh8Ja8ZahNh8La8YahNh8Maeamydbcdtfh83cbh3JFFuuhEcvhXcuhQindnaza83a3cdtfydbcdtgsfydbgvTmbaOaHasfydbcdtfhAindndnaCaiaAydbgKcx2fgsclfydbgrcetf8Vebcs4aCasydbgLcetf8Vebcs4faCascwfydbglcetf8Vebcs4fgombcbhsxekcehsazaLcdtfydbgLceSmbcehsazarcdtfydbgrceSmbcehsazalcdtfydbglceSmbdnarcdSaLcdSfalcdSfcd6mbaocefhsxekaocdfhskdnasaX9kmba8AaKcK2fgLIdwa5:thhaLIdla8F:th8KaLIdbaa:th8EdndnakJbbbb9DTmba8E:lg8Ea8K:lg8Ka8Ea8K9EEg8Kah:lgha8Kah9EEag:vJbbjZMhhxekahahNa8Ea8ENa8Ka8KNMM:rag:va8NNJbbjZMJ9VO:d86JbbjZaLIdCa8JNaLIdxa8MNa8LaLIdzNMMakN:tghahJ9VO:d869DENhhkaKaQasaX6ahaE9DVgLEhQasaXaLEhXahaEaLEhEkaAclfhAavcufgvmbkka3cefg3aB9hmbkkaQcu9hmekama5Ud:ODama8FUd:KDamaaUd:GDamcuBd:qDamcFFF;7rBdjDaIcba8AaYamc:GDfakJbbbb9Damc:qDfamcjDfz:ejjjbamyd:qDhQdndnaxJbbbb9ETmba8UaD6mbaQcuSmeceh3amIdjDaR9EmixdkaQcu9hmekdna8UTmbdnamydlgza8Uci2fgsciGTmbadasfcba8Uazcu7fciGcefz:ojjjb8AkabaPcltfgzam8Pib83dbazcwfamcwf8Pib83dbaPcefhPkc3hzinazc98Smvamc:Cwfazfydbcbyd;y1jjbH:bjjjbbazc98fhzxbkkcbh3a8Uaq9pmbamydwaCaiaQcx2fgsydbcetf8Vebcs4aCascwfydbcetf8Vebcs4faCasclfydbcetf8Vebcs4ffaw9nmekcbhscbhAdna81TmbcbhAamczfhXinamczfaAcdtfaXydbgLBdbaXclfhXaAaYaLfRbbTfhAa81cufg81mbkkamydwhlamydbhXam9cu83i:GDam9cu83i:ODam9cu83i:qDam9cu83i:yDaAc;8eaAclfc:bd6Eh81inamcjDfasfcFFF;7rBdbasclfgscz9hmbka81cdthBdnalTmbaeaXcdtfhocbhrindnazaoarcdtfydbcdtgsfydbgvTmbaOaHasfydbcdtfhAcuhLcuhsinazaiaAydbgKcx2fgXclfydbcdtfydbazaXydbcdtfydbfazaXcwfydbcdtfydbfgXasaXas6gXEhsaKaLaXEhLaAclfhAavcufgvmbkaLcuSmba8AaLcK2fgAIdway:tgEaENaAIdba8S:tgEaENaAIdla8R:tgEaENMM:rhEcbhAindndnasamc:qDfaAfgvydbgX6mbasaX9hmeaEamcjDfaAfIdb9FTmekavasBdbamc:GDfaAfaLBdbamcjDfaAfaEUdbxdkaAclfgAcz9hmbkkarcefgral9hmbkkamczfaBfhLcbhscbhAindnamc:GDfasfydbgXcuSmbaLaAcdtfaXBdbaAcefhAkasclfgscz9hmbkaAa81fg81TmbJFFuuhhcuhKamczfhsa81hvcuhLina8AasydbgXcK2fgAIdway:tgEaENaAIdba8S:tgEaENaAIdla8R:tgEaENMM:rhEdndnazaiaXcx2fgAclfydbcdtfydbazaAydbcdtfydbfazaAcwfydbcdtfydbfgAaL6mbaAaL9hmeaEah9DTmekaEhhaAhLaXhKkasclfhsavcufgvmbkaKcuSmbaKhQkdnamaiaQcx2fgrydbarclfydbarcwfydbaCabaeadaPawaqa3z:fjjjbTmbaPcefhPJbbbbh8VJbbbbh8WJbbbbh8XJbbbbh8YJbbbbh8ZJbbbbh80kcbhXinaOaHaraXcdtfydbcdtgAfydbcdtfgKhsazaAfgvydbgLhAdnaLTmbdninasydbaQSmeasclfhsaAcufgATmdxbkkasaKaLcdtfc98fydbBdbavavydbcufBdbkaXcefgXci9hmbka8AaQcK2fgsIdbhEasIdlhhasIdwh8KasIdxh8EasIdzh5asIdCh8FaYaQfce86bba80a8FMh80a8Za5Mh8Za8Ya8EMh8Ya8Xa8KMh8Xa8WahMh8Wa8VaEMh8Vamydxh8Uxbkkamc:WDf8KjjjjbaPk;Vvivuv99lu8Jjjjjbca9Rgv8Kjjjjbdndnalcw0mbaiydbhoaeabcitfgralcdtcufBdlaraoBdbdnalcd6mbaiclfhoalcufhwarcxfhrinaoydbhDarcuBdbarc98faDBdbarcwfhraoclfhoawcufgwmbkkalabfhrxekcbhDavczfcwfcbBdbav9cb83izavcwfcbBdbav9cb83ibJbbjZhqJbbjZhkinadaiaDcdtfydbcK2fhwcbhrinavczfarfgoawarfIdbgxaoIdbgm:tgPakNamMgmUdbavarfgoaPaxam:tNaoIdbMUdbarclfgrcx9hmbkJbbjZaqJbbjZMgq:vhkaDcefgDal9hmbkcbhoadcbcecdavIdlgxavIdwgm9GEgravIdbgPam9GEaraPax9GEgscdtgrfhzavczfarfIdbhxaihralhwinaiaocdtfgDydbhHaDarydbgOBdbaraHBdbarclfhraoazaOcK2fIdbax9Dfhoawcufgwmbkaeabcitfhrdndnaocv6mbaoalc98f6mekaraiydbBdbaralcdtcufBdlaiclfhoalcufhwarcxfhrinaoydbhDarcuBdbarc98faDBdbarcwfhraoclfhoawcufgwmbkalabfhrxekaraxUdbararydlc98GasVBdlabcefaeadaiaoz:djjjbhwararydlciGawabcu7fcdtVBdlawaeadaiaocdtfalao9Rz:djjjbhrkavcaf8Kjjjjbark:;idiud99dndnabaecitfgwydlgDciGgqciSmbinabcbaDcd4gDalaqcdtfIdbawIdb:tgkJbbbb9FEgwaecefgefadaialavaoarz:ejjjbak:larIdb9FTmdabawaD7aefgecitfgwydlgDciGgqci9hmbkkabaecitfgeclfhbdnavmbcuhwindnaiaeydbgDfRbbmbadaDcK2fgqIdwalIdw:tgkakNaqIdbalIdb:tgkakNaqIdlalIdl:tgkakNMM:rgkarIdb9DTmbarakUdbaoaDBdbkaecwfheawcefgwabydbcd46mbxdkkcuhwindnaiaeydbgDfRbbmbadaDcK2fgqIdbalIdb:t:lgkaqIdlalIdl:t:lgxakax9EEgkaqIdwalIdw:t:lgxakax9EEgkarIdb9DTmbarakUdbaoaDBdbkaecwfheawcefgwabydbcd46mbkkk;llevudnabydwgxaladcetfgm8Vebcs4alaecetfgP8Vebgscs4falaicetfgz8Vebcs4ffaD0abydxaq9pVakVgDce9hmbavawcltfgxab8Pdb83dbaxcwfabcwfgx8Pdb83dbdnaxydbgqTmbaoabydbcdtfhxaqhsinalaxydbcetfcFFi87ebaxclfhxascufgsmbkkdnabydxglci2gsabydlgxfgkciGTmbarakfcbalaxcu7fciGcefz:ojjjb8Aabydxci2hsabydlhxabydwhqkab9cb83dwababydbaqfBdbabascifc98GaxfBdlaP8Vebhscbhxkdnascztcz91cu9kmbabaxcefBdwaPax87ebaoabydbcdtfaxcdtfaeBdbkdnam8Uebcu9kmbababydwgxcefBdwamax87ebaoabydbcdtfaxcdtfadBdbkdnaz8Uebcu9kmbababydwgxcefBdwazax87ebaoabydbcdtfaxcdtfaiBdbkarabydlfabydxci2faPRbb86bbarabydlfabydxci2fcefamRbb86bbarabydlfabydxci2fcdfazRbb86bbababydxcefBdxaDk8LbabaeadaialavaoarawaDaDaqJbbbbz:cjjjbk;Nkovud99euv99eul998Jjjjjbc:W;ae9Rgo8KjjjjbdndnadTmbavcd4hrcbhwcbhDindnaiaeclfydbar2cdtfgvIdbaiaeydbar2cdtfgqIdbgk:tgxaiaecwfydbar2cdtfgmIdlaqIdlgP:tgsNamIdbak:tgzavIdlaP:tgPN:tgkakNaPamIdwaqIdwgH:tgONasavIdwaH:tgHN:tgPaPNaHazNaOaxN:tgxaxNMM:rgsJbbbb9Bmbaoc:W:qefawcx2fgAakas:vUdwaAaxas:vUdlaAaPas:vUdbaoc8Wfawc8K2fgAaq8Pdb83dbaAav8Pdb83dxaAam8Pdb83dKaAcwfaqcwfydbBdbaAcCfavcwfydbBdbaAcafamcwfydbBdbawcefhwkaecxfheaDcifgDad6mbkab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbawTmeaocbBd8Sao9cb83iKao9cb83izaoczfaoc8Wfawci2cxaoc8Sfcbcrz1jjjbaoIdKhCaoIdChXaoIdzhQao9cb83iwao9cb83ibaoaoc:W:qefawcxaoc8Sfcbciz1jjjbJbbjZhkaoIdwgPJbbbbJbbjZaPaPNaoIdbgPaPNaoIdlgsasNMM:rgx:vaxJbbbb9BEgzNhxasazNhsaPazNhzaoc:W:qefheawhvinaecwfIdbaxNaeIdbazNasaeclfIdbNMMgPakaPak9DEhkaecxfheavcufgvmbkabaCUdwabaXUdlabaQUdbabaoId3UdxdndnakJ;n;m;m899FmbJbbbbhPaoc:W:qefheaoc8WfhvinaCavcwfIdb:taecwfIdbgHNaQavIdb:taeIdbgONaXavclfIdb:taeclfIdbgLNMMaxaHNazaONasaLNMM:vgHaPaHaP9EEhPavc8KfhvaecxfheawcufgwmbkabaxUd8KabasUdaabazUd3abaCaxaPN:tUdKabaXasaPN:tUdCabaQazaPN:tUdzabJbbjZakakN:t:rgkUdydndnaxJbbj:;axJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;axJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohexekcjjjj94hekabae86b8UdndnasJbbj:;asJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;asJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohvxekcjjjj94hvkabav86bRdndnazJbbj:;azJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;azJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohqxekcjjjj94hqkabaq86b8SdndnaecKtcK91:YJbb;:9c:vax:t:lavcKtcK91:YJbb;:9c:vas:t:laqcKtcK91:YJbb;:9c:vaz:t:lakMMMJbb;:9cNJbbjZMgk:lJbbb9p9DTmbak:Ohexekcjjjj94hekaecFbaecFb9iEhexekabcjjj;8iBdycFbhekabae86b8Vxekab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbkaoc:W;aef8Kjjjjbk;Iwwvul99iud99eue99eul998Jjjjjbcje9Rgr8Kjjjjbavcd4hwaicd4hDdndnaoTmbarc;abfcbaocdtgvz:ojjjb8Aarc;Gbfcbavz:ojjjb8AarhvarcafhiaohqinavcFFF97BdbaicFFF;7rBdbaiclfhiavclfhvaqcufgqmbkdnadTmbcbhkinaeakaD2cdtfgvIdwhxavIdlhmavIdbhPalakaw2cdtfIdbhsarc;abfhzarhiarc;GbfhHarcafhqcj1jjbhvaohOinasavcwfIdbaxNavIdbaPNavclfIdbamNMMgAMhCakhXdnaAas:tgAaqIdbgQ9DgLmbaHydbhXkaHaXBdbakhXdnaCaiIdbgK9EmbazydbhXaKhCkazaXBdbaiaCUdbaqaAaQaLEUdbavcxfhvaqclfhqaHclfhHaiclfhiazclfhzaOcufgOmbkakcefgkad9hmbkkadThkJbbbbhCcbhXarc;abfhvarc;Gbfhicbhqinalavydbgzaw2cdtfIdbalaiydbgHaw2cdtfIdbaeazaD2cdtfgzIdwaeaHaD2cdtfgHIdw:tgsasNazIdbaHIdb:tgsasNazIdlaHIdl:tgsasNMM:rMMgsaCasaC9EgzEhCaqaXazEhXaiclfhiavclfhvaoaqcefgq9hmbkaCJbbbZNhKxekadThkcbhXJbbbbhKkJbbbbhCdnaearc;abfaXcdtgifydbgqaD2cdtfgvIdwaearc;GbfaifydbgzaD2cdtfgiIdwgm:tgsasNavIdbaiIdbgY:tgAaANavIdlaiIdlgP:tgQaQNMM:rgxJbbbb9ETmbaxalaqaw2cdtfIdbMalazaw2cdtfIdb:taxaxM:vhCkasaCNamMhmaQaCNaPMhPaAaCNaYMhYdnakmbaDcdthvawcdthiindnalIdbg8AaecwfIdbam:tgCaCNaeIdbaY:tgsasNaeclfIdbaP:tgAaANMM:rgQMgEaK9ETmbJbbbbhxdnaQJbbbb9ETmbaEaK:taQaQM:vhxkaxaCNamMhmaxaANaPMhPaxasNaYMhYa8AaKaQMMJbbbZNhKkaeavfhealaifhladcufgdmbkkabaKUdxabamUdwabaPUdlabaYUdbarcjef8Kjjjjbkjeeiu8Jjjjjbcj8W9Rgr8Kjjjjbaici2hwdnaiTmbawceawce0EhDarhiinaiaeadRbbcdtfydbBdbadcefhdaiclfhiaDcufgDmbkkabarawaladaoz:hjjjbarcj8Wf8Kjjjjbk:Reeeu8Jjjjjbca9Rgo8Kjjjjbab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbdnadTmbaocbBd3ao9cb83iwao9cb83ibaoaeadaialaoc3falEavcbalEcrz1jjjbabao8Pib83dbabao8Piw83dwkaocaf8Kjjjjbk:3lequ8JjjjjbcjP9Rgl8Kjjjjbcbhvalcjxfcbaiz:ojjjb8AdndnadTmbcjehoaehrincuhwarhDcuhqavhkdninawakaoalcjxfaDcefRbbfRbb9RcFeGci6aoalcjxfaDRbbfRbb9RcFeGci6faoalcjxfaDcdfRbbfRbb9RcFeGci6fgxaq9mgmEhwdnammbaxce0mdkaxaqaxaq9kEhqaDcifhDadakcefgk9hmbkkaeawci2fgDcdfRbbhqaDcefRbbhxaDRbbhkaeavci2fgDcifaDawav9Rci2z:rjjjb8Aakalcjxffaocefgo86bbaxalcjxffao86bbaDcdfaq86bbaDcefax86bbaDak86bbaqalcjxffao86bbarcifhravcefgvad9hmbkalcFeaicetz:ojjjbhoadci2gDceaDce0EhqcbhxindnaoaeRbbgkcetfgw8UebgDcu9kmbawax87ebaocjlfaxcdtfabakcdtfydbBdbaxhDaxcefhxkaeaD86bbaecefheaqcufgqmbkaxcdthDxekcbhDkabalcjlfaDz:njjjb8AalcjPf8Kjjjjbk9teiucbcbyd;C1jjbgeabcifc98GfgbBd;C1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd;C1jjbgeabcrfc94GfgbBd;C1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik9:eiuZbhedndncbyd;C1jjbgdaecztgi9nmbcuheadai9RcFFifcz4nbcuSmekadhekcbabae9Rcifc98Gcbyd;C1jjbfgdBd;C1jjbdnadZbcztge9nmbadae9RcFFifcz4nb8Akk:;Deludndndnadch9pmbabaeSmdaeabadfgi9Rcbadcet9R0mekabaead;8qbbxekaeab7ciGhldndndnabae9pmbdnalTmbadhvabhixikdnabciGmbadhvabhixdkadTmiabaeRbb86bbadcufhvdnabcefgiciGmbaecefhexdkavTmiabaeRbe86beadc9:fhvdnabcdfgiciGmbaecdfhexdkavTmiabaeRbd86bdadc99fhvdnabcifgiciGmbaecifhexdkavTmiabaeRbi86biabclfhiaeclfheadc98fhvxekdnalmbdnaiciGTmbadTmlabadcufgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc9:fgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc99fgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc98fgdfaeadfRbb86bbkadcl6mbdnadc98fgocd4cefciGgiTmbaec98fhlabc98fhvinavadfaladfydbBdbadc98fhdaicufgimbkkaocx6mbaec9Wfhvabc9WfhoinaoadfgicxfavadfglcxfydbBdbaicwfalcwfydbBdbaiclfalclfydbBdbaialydbBdbadc9Wfgdci0mbkkadTmdadhidnadciGglTmbaecufhvabcufhoadhiinaoaifavaifRbb86bbaicufhialcufglmbkkadcl6mdaec98fhlabc98fhvinavaifgecifalaifgdcifRbb86bbaecdfadcdfRbb86bbaecefadcefRbb86bbaeadRbb86bbaic98fgimbxikkavcl6mbdnavc98fglcd4cefcrGgdTmbavadcdt9RhvinaiaeydbBdbaeclfheaiclfhiadcufgdmbkkalc36mbinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaiaeydzBdzaiaeydCBdCaiaeydKBdKaiaeyd3Bd3aecafheaicafhiavc9Gfgvci0mbkkavTmbdndnavcrGgdmbavhlxekavc94GhlinaiaeRbb86bbaicefhiaecefheadcufgdmbkkavcw6mbinaiaeRbb86bbaiaeRbe86beaiaeRbd86bdaiaeRbi86biaiaeRbl86blaiaeRbv86bvaiaeRbo86boaiaeRbr86braicwfhiaecwfhealc94fglmbkkabkk9Tdbcjwk9ubbjZbbbbbbbbbbbbbbjZbbbbbbbbbbbbbbjZ86;nAZ86;nAZ86;nAZ86;nA:;86;nAZ86;nAZ86;nAZ86;nA:;86;nAZ86;nAZ86;nAZ86;nA:;bc;uwkxebbbdbbb9GNbb";
-      var wasmpack = new Uint8Array([
-        32,
-        0,
-        65,
-        2,
-        1,
-        106,
-        34,
-        33,
-        3,
-        128,
-        11,
-        4,
-        13,
-        64,
-        6,
-        253,
-        10,
-        7,
-        15,
-        116,
-        127,
-        5,
-        8,
-        12,
-        40,
-        16,
-        19,
-        54,
-        20,
-        9,
-        27,
-        255,
-        113,
-        17,
-        42,
-        67,
-        24,
-        23,
-        146,
-        148,
-        18,
-        14,
-        22,
-        45,
-        70,
-        69,
-        56,
-        114,
-        101,
-        21,
-        25,
-        63,
-        75,
-        136,
-        108,
-        28,
-        118,
-        29,
-        73,
-        115
-      ]);
-      if (typeof WebAssembly !== "object") {
-        return {
-          supported: false
-        };
-      }
-      var instance;
-      var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
-        instance = result.instance;
-        instance.exports.__wasm_call_ctors();
-      });
-      function unpack(data) {
-        var result = new Uint8Array(data.length);
-        for (var i = 0; i < data.length; ++i) {
-          var ch = data.charCodeAt(i);
-          result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
-        }
-        var write = 0;
-        for (var i = 0; i < data.length; ++i) {
-          result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
-        }
-        return result.buffer.slice(0, write);
-      }
-      function assert(cond) {
-        if (!cond) {
-          throw new Error("Assertion failed");
-        }
-      }
-      function bytes(view) {
-        return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-      }
-      var BOUNDS_SIZE = 48;
-      var MESHLET_SIZE = 16;
-      function extractMeshlet(buffers, index) {
-        var vertex_offset = buffers.meshlets[index * 4 + 0];
-        var triangle_offset = buffers.meshlets[index * 4 + 1];
-        var vertex_count = buffers.meshlets[index * 4 + 2];
-        var triangle_count = buffers.meshlets[index * 4 + 3];
-        return {
-          vertices: buffers.vertices.subarray(vertex_offset, vertex_offset + vertex_count),
-          triangles: buffers.triangles.subarray(triangle_offset, triangle_offset + triangle_count * 3)
-        };
-      }
-      function buildMeshlets(indices, vertex_positions, vertex_count, vertex_positions_stride, max_vertices, max_triangles, cone_weight) {
-        var sbrk = instance.exports.sbrk;
-        var max_meshlets = instance.exports.meshopt_buildMeshletsBound(indices.length, max_vertices, max_triangles);
-        var meshletsp = sbrk(max_meshlets * MESHLET_SIZE);
-        var meshlet_verticesp = sbrk(max_meshlets * max_vertices * 4);
-        var meshlet_trianglesp = sbrk(max_meshlets * max_triangles * 3);
-        var indicesp = sbrk(indices.byteLength);
-        var verticesp = sbrk(vertex_positions.byteLength);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(indices), indicesp);
-        heap.set(bytes(vertex_positions), verticesp);
-        var count = instance.exports.meshopt_buildMeshlets(
-          meshletsp,
-          meshlet_verticesp,
-          meshlet_trianglesp,
-          indicesp,
-          indices.length,
-          verticesp,
-          vertex_count,
-          vertex_positions_stride,
-          max_vertices,
-          max_triangles,
-          cone_weight
-        );
-        heap = new Uint8Array(instance.exports.memory.buffer);
-        var meshletBytes = heap.subarray(meshletsp, meshletsp + count * MESHLET_SIZE);
-        var meshlets = new Uint32Array(meshletBytes.buffer, meshletBytes.byteOffset, meshletBytes.byteLength / 4).slice();
-        for (var i = 0; i < count; ++i) {
-          var vertex_offset = meshlets[i * 4 + 0];
-          var triangle_offset = meshlets[i * 4 + 1];
-          var vertex_count = meshlets[i * 4 + 2];
-          var triangle_count = meshlets[i * 4 + 3];
-          instance.exports.meshopt_optimizeMeshlet(
-            meshlet_verticesp + vertex_offset * 4,
-            meshlet_trianglesp + triangle_offset,
-            triangle_count,
-            vertex_count
-          );
-        }
-        var last_vertex_offset = meshlets[(count - 1) * 4 + 0];
-        var last_triangle_offset = meshlets[(count - 1) * 4 + 1];
-        var last_vertex_count = meshlets[(count - 1) * 4 + 2];
-        var last_triangle_count = meshlets[(count - 1) * 4 + 3];
-        var used_vertices = last_vertex_offset + last_vertex_count;
-        var used_triangles = last_triangle_offset + (last_triangle_count * 3 + 3 & ~3);
-        var result = {
-          meshlets,
-          vertices: new Uint32Array(heap.buffer, meshlet_verticesp, used_vertices).slice(),
-          triangles: new Uint8Array(heap.buffer, meshlet_trianglesp, used_triangles * 3).slice(),
-          meshletCount: count
-        };
-        sbrk(meshletsp - sbrk(0));
-        return result;
-      }
-      function extractBounds(boundsp) {
-        var bounds_floats = new Float32Array(instance.exports.memory.buffer, boundsp, BOUNDS_SIZE / 4);
-        return {
-          centerX: bounds_floats[0],
-          centerY: bounds_floats[1],
-          centerZ: bounds_floats[2],
-          radius: bounds_floats[3],
-          coneApexX: bounds_floats[4],
-          coneApexY: bounds_floats[5],
-          coneApexZ: bounds_floats[6],
-          coneAxisX: bounds_floats[7],
-          coneAxisY: bounds_floats[8],
-          coneAxisZ: bounds_floats[9],
-          coneCutoff: bounds_floats[10]
-        };
-      }
-      function computeMeshletBounds(buffers, vertex_positions, vertex_count, vertex_positions_stride) {
-        var sbrk = instance.exports.sbrk;
-        var results = [];
-        var verticesp = sbrk(vertex_positions.byteLength);
-        var meshlet_verticesp = sbrk(buffers.vertices.byteLength);
-        var meshlet_trianglesp = sbrk(buffers.triangles.byteLength);
-        var resultp = sbrk(BOUNDS_SIZE);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(vertex_positions), verticesp);
-        heap.set(bytes(buffers.vertices), meshlet_verticesp);
-        heap.set(bytes(buffers.triangles), meshlet_trianglesp);
-        for (var i = 0; i < buffers.meshletCount; ++i) {
-          var vertex_offset = buffers.meshlets[i * 4 + 0];
-          var triangle_offset = buffers.meshlets[i * 4 + 0 + 1];
-          var triangle_count = buffers.meshlets[i * 4 + 0 + 3];
-          instance.exports.meshopt_computeMeshletBounds(
-            resultp,
-            meshlet_verticesp + vertex_offset * 4,
-            meshlet_trianglesp + triangle_offset,
-            triangle_count,
-            verticesp,
-            vertex_count,
-            vertex_positions_stride
-          );
-          results.push(extractBounds(resultp));
-        }
-        sbrk(verticesp - sbrk(0));
-        return results;
-      }
-      function computeClusterBounds(indices, vertex_positions, vertex_count, vertex_positions_stride) {
-        var sbrk = instance.exports.sbrk;
-        var resultp = sbrk(BOUNDS_SIZE);
-        var indicesp = sbrk(indices.byteLength);
-        var verticesp = sbrk(vertex_positions.byteLength);
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(indices), indicesp);
-        heap.set(bytes(vertex_positions), verticesp);
-        instance.exports.meshopt_computeClusterBounds(resultp, indicesp, indices.length, verticesp, vertex_count, vertex_positions_stride);
-        var result = extractBounds(resultp);
-        sbrk(resultp - sbrk(0));
-        return result;
-      }
-      function computeSphereBounds(positions, count, positions_stride, radii, radii_stride) {
-        var sbrk = instance.exports.sbrk;
-        var resultp = sbrk(BOUNDS_SIZE);
-        var positionsp = sbrk(positions.byteLength);
-        var radiip = radii ? sbrk(radii.byteLength) : 0;
-        var heap = new Uint8Array(instance.exports.memory.buffer);
-        heap.set(bytes(positions), positionsp);
-        if (radii) {
-          heap.set(bytes(radii), radiip);
-        }
-        instance.exports.meshopt_computeSphereBounds(resultp, positionsp, count, positions_stride, radiip, radii ? radii_stride : 0);
-        var result = extractBounds(resultp);
-        sbrk(resultp - sbrk(0));
-        return result;
-      }
-      return {
-        ready,
-        supported: true,
-        buildMeshlets: function(indices, vertex_positions, vertex_positions_stride, max_vertices, max_triangles, cone_weight) {
-          assert(indices.length % 3 == 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          assert(max_vertices <= 256 || max_vertices > 0);
-          assert(max_triangles <= 512);
-          assert(max_triangles % 4 == 0);
-          cone_weight = cone_weight || 0;
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          return buildMeshlets(
-            indices32,
-            vertex_positions,
-            vertex_positions.length / vertex_positions_stride,
-            vertex_positions_stride * 4,
-            max_vertices,
-            max_triangles,
-            cone_weight
-          );
-        },
-        extractMeshlet: function(buffers, index) {
-          assert(index >= 0 && index < buffers.meshletCount);
-          return extractMeshlet(buffers, index);
-        },
-        computeClusterBounds: function(indices, vertex_positions, vertex_positions_stride) {
-          assert(indices.length % 3 == 0);
-          assert(indices.length / 3 <= 512);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
-          return computeClusterBounds(indices32, vertex_positions, vertex_positions.length / vertex_positions_stride, vertex_positions_stride * 4);
-        },
-        computeMeshletBounds: function(buffers, vertex_positions, vertex_positions_stride) {
-          assert(buffers.meshletCount != 0);
-          assert(vertex_positions instanceof Float32Array);
-          assert(vertex_positions.length % vertex_positions_stride == 0);
-          assert(vertex_positions_stride >= 3);
-          return computeMeshletBounds(buffers, vertex_positions, vertex_positions.length / vertex_positions_stride, vertex_positions_stride * 4);
-        },
-        computeSphereBounds: function(positions, positions_stride, radii, radii_stride) {
-          assert(positions instanceof Float32Array);
-          assert(positions.length % positions_stride == 0);
-          assert(positions_stride >= 3);
-          assert(!radii || radii instanceof Float32Array);
-          assert(!radii || radii.length % radii_stride == 0);
-          assert(!radii || radii_stride >= 1);
-          assert(!radii || positions.length / positions_stride == radii.length / radii_stride);
-          radii_stride = radii_stride || 0;
-          return computeSphereBounds(positions, positions.length / positions_stride, positions_stride * 4, radii, radii_stride * 4);
-        }
-      };
-    })();
-    if (typeof exports2 === "object" && typeof module2 === "object") module2.exports = MeshoptClusterizer;
-    else if (typeof define === "function" && define["amd"])
-      define([], function() {
-        return MeshoptClusterizer;
-      });
-    else if (typeof exports2 === "object") exports2["MeshoptClusterizer"] = MeshoptClusterizer;
-    else (typeof self !== "undefined" ? self : exports2).MeshoptClusterizer = MeshoptClusterizer;
-  }
-});
-
-// node_modules/meshoptimizer/index.js
-var require_meshoptimizer = __commonJS({
-  "node_modules/meshoptimizer/index.js"(exports2, module2) {
-    var MeshoptEncoder = require_meshopt_encoder();
-    var MeshoptDecoder3 = require_meshopt_decoder();
-    var MeshoptSimplifier = require_meshopt_simplifier();
-    var MeshoptClusterizer = require_meshopt_clusterizer();
-    module2.exports = { MeshoptEncoder, MeshoptDecoder: MeshoptDecoder3, MeshoptSimplifier, MeshoptClusterizer };
   }
 });
 
@@ -9412,8 +8026,8 @@ var require_commonjs = __commonJS({
 var require_protobuf = __commonJS({
   "node_modules/protobufjs/dist/minimal/protobuf.js"(exports, module) {
     /*!
-     * protobuf.js v7.5.4 (c) 2016, daniel wirtz
-     * compiled fri, 15 aug 2025 23:28:54 utc
+     * protobuf.js v8.0.0 (c) 2016, daniel wirtz
+     * compiled tue, 16 dec 2025 22:00:06 utc
      * licensed under the bsd-3-clause license
      * see: https://github.com/dcodeio/protobuf.js for details
      */
@@ -10644,7 +9258,7 @@ var require_protobuf = __commonJS({
           this.len = 0;
           return this;
         };
-        Writer2.prototype.reset = function reset() {
+        Writer2.prototype.reset = function reset2() {
           if (this.states) {
             this.head = this.states.head;
             this.tail = this.states.tail;
@@ -13364,6 +11978,7 @@ __export(Cesium_exports, {
   SunPostProcess: () => SunPostProcess_default,
   SupportedImageFormats: () => SupportedImageFormats_default,
   SvgPathBindingHandler: () => SvgPathBindingHandler_default,
+  Sync: () => Sync_default,
   TaskProcessor: () => TaskProcessor_default,
   Terrain: () => Terrain_default,
   TerrainData: () => TerrainData_default,
@@ -13371,6 +11986,7 @@ __export(Cesium_exports, {
   TerrainFillMesh: () => TerrainFillMesh_default,
   TerrainMesh: () => TerrainMesh_default,
   TerrainOffsetProperty: () => TerrainOffsetProperty_default,
+  TerrainPicker: () => TerrainPicker_default,
   TerrainProvider: () => TerrainProvider_default,
   TerrainQuantization: () => TerrainQuantization_default,
   TerrainState: () => TerrainState_default,
@@ -20338,8 +18954,9 @@ var BufferUsage = {
   STREAM_DRAW: WebGLConstants_default.STREAM_DRAW,
   STATIC_DRAW: WebGLConstants_default.STATIC_DRAW,
   DYNAMIC_DRAW: WebGLConstants_default.DYNAMIC_DRAW,
+  DYNAMIC_READ: WebGLConstants_default.DYNAMIC_READ,
   validate: function(bufferUsage) {
-    return bufferUsage === BufferUsage.STREAM_DRAW || bufferUsage === BufferUsage.STATIC_DRAW || bufferUsage === BufferUsage.DYNAMIC_DRAW;
+    return bufferUsage === BufferUsage.STREAM_DRAW || bufferUsage === BufferUsage.STATIC_DRAW || bufferUsage === BufferUsage.DYNAMIC_DRAW || bufferUsage === BufferUsage.DYNAMIC_READ;
   }
 };
 var BufferUsage_default = Object.freeze(BufferUsage);
@@ -20391,6 +19008,21 @@ function Buffer2(options) {
   this._buffer = buffer2;
   this.vertexArrayDestroyable = true;
 }
+Buffer2.createPixelBuffer = function(options) {
+  Check_default.defined("options.context", options.context);
+  if (!options.context._webgl2) {
+    throw new DeveloperError_default(
+      "A WebGL 2 context is required to create PixelBuffers."
+    );
+  }
+  return new Buffer2({
+    context: options.context,
+    bufferTarget: WebGLConstants_default.PIXEL_PACK_BUFFER,
+    typedArray: options.typedArray,
+    sizeInBytes: options.sizeInBytes,
+    usage: options.usage
+  });
+};
 Buffer2.createVertexBuffer = function(options) {
   Check_default.defined("options.context", options.context);
   return new Buffer2({
@@ -20455,6 +19087,16 @@ Object.defineProperties(Buffer2.prototype, {
 });
 Buffer2.prototype._getBuffer = function() {
   return this._buffer;
+};
+Buffer2.prototype._bind = function() {
+  const gl = this._gl;
+  const target = this._bufferTarget;
+  gl.bindBuffer(target, this._buffer);
+};
+Buffer2.prototype._unBind = function() {
+  const gl = this._gl;
+  const target = this._bufferTarget;
+  gl.bindBuffer(target, null);
 };
 Buffer2.prototype.copyFromArrayView = function(arrayView, offsetInBytes) {
   offsetInBytes = offsetInBytes ?? 0;
@@ -20835,33 +19477,6 @@ function isWebkit() {
 function webkitVersion() {
   return isWebkit() && webkitVersionResult;
 }
-var isInternetExplorerResult;
-var internetExplorerVersionResult;
-function isInternetExplorer() {
-  if (!defined_default(isInternetExplorerResult)) {
-    isInternetExplorerResult = false;
-    let fields;
-    if (theNavigator.appName === "Microsoft Internet Explorer") {
-      fields = /MSIE ([0-9]{1,}[\.0-9]{0,})/.exec(theNavigator.userAgent);
-      if (fields !== null) {
-        isInternetExplorerResult = true;
-        internetExplorerVersionResult = extractVersion(fields[1]);
-      }
-    } else if (theNavigator.appName === "Netscape") {
-      fields = /Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(
-        theNavigator.userAgent
-      );
-      if (fields !== null) {
-        isInternetExplorerResult = true;
-        internetExplorerVersionResult = extractVersion(fields[1]);
-      }
-    }
-  }
-  return isInternetExplorerResult;
-}
-function internetExplorerVersion() {
-  return isInternetExplorer() && internetExplorerVersionResult;
-}
 var isEdgeResult;
 var edgeVersionResult;
 function isEdge() {
@@ -21002,8 +19617,6 @@ var FeatureDetection = {
   safariVersion,
   isWebkit,
   webkitVersion,
-  isInternetExplorer,
-  internetExplorerVersion,
   isEdge,
   edgeVersion,
   isFirefox,
@@ -27500,23 +26113,25 @@ Transforms.rotationMatrixFromPositionVelocity = function(position, velocity, ell
   result[8] = up.z;
   return result;
 };
-var swizzleMatrix = new Matrix4_default(
-  0,
-  0,
-  1,
-  0,
-  1,
-  0,
-  0,
-  0,
-  0,
-  1,
-  0,
-  0,
-  0,
-  0,
-  0,
-  1
+Transforms.SWIZZLE_3D_TO_2D_MATRIX = Object.freeze(
+  new Matrix4_default(
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+  )
 );
 var scratchCartographic = new Cartographic_default();
 var scratchCartesian3Projection = new Cartesian3_default();
@@ -27566,7 +26181,7 @@ Transforms.basisTo2D = function(projection, matrix, result) {
   const toENU = Matrix4_default.inverseTransformation(fromENU, scratchToENU);
   const rotation = Matrix4_default.getMatrix3(matrix, scratchRotation);
   const local = Matrix4_default.multiplyByMatrix3(toENU, rotation, result);
-  Matrix4_default.multiply(swizzleMatrix, local, result);
+  Matrix4_default.multiply(Transforms.SWIZZLE_3D_TO_2D_MATRIX, local, result);
   Matrix4_default.setTranslation(result, projectedPosition2, result);
   return result;
 };
@@ -27605,7 +26220,7 @@ Transforms.ellipsoidTo2DModelMatrix = function(projection, center, result) {
     projectedPosition2,
     scratchFromENU
   );
-  Matrix4_default.multiply(swizzleMatrix, toENU, result);
+  Matrix4_default.multiply(Transforms.SWIZZLE_3D_TO_2D_MATRIX, toENU, result);
   Matrix4_default.multiply(translation3, result, result);
   return result;
 };
@@ -29450,6 +28065,7 @@ var ContextLimits = {
   _maximumTextureImageUnits: 0,
   _maximumRenderbufferSize: 0,
   _maximumTextureSize: 0,
+  _maximum3DTextureSize: 0,
   _maximumVaryingVectors: 0,
   _maximumVertexAttributes: 0,
   _maximumVertexTextureImageUnits: 0,
@@ -29470,11 +28086,13 @@ var ContextLimits = {
 Object.defineProperties(ContextLimits, {
   /**
    * The maximum number of texture units that can be used from the vertex and fragment
-   * shader with this WebGL implementation.  The minimum is eight.  If both shaders access the
-   * same texture unit, this counts as two texture units.
+   * shader with this WebGL implementation.
+   * If both shaders access the same texture unit, this counts as two texture units.
+   * The minimum in WebGL2 contexts is 32, or 8 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_COMBINED_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_COMBINED_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumCombinedTextureImageUnits: {
     get: function() {
@@ -29483,10 +28101,12 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The approximate maximum cube map width and height supported by this WebGL implementation.
-   * The minimum is 16, but most desktop and laptop implementations will support much larger sizes like 8,192.
+   * The minimum in WebGL2 contexts is 2048, but most desktop and laptop implementations will support much larger sizes like 8192.
+   * The minimum in WebGL1 contexts is 16.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_CUBE_MAP_TEXTURE_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_CUBE_MAP_TEXTURE_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumCubeMapSize: {
     get: function() {
@@ -29495,10 +28115,12 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The maximum number of <code>vec4</code>, <code>ivec4</code>, and <code>bvec4</code>
-   * uniforms that can be used by a fragment shader with this WebGL implementation.  The minimum is 16.
+   * uniforms that can be used by a fragment shader with this WebGL implementation.
+   * The minimum in WebGL2 contexts is 224, or 16 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_FRAGMENT_UNIFORM_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_FRAGMENT_UNIFORM_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumFragmentUniformVectors: {
     get: function() {
@@ -29506,10 +28128,12 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum number of texture units that can be used from the fragment shader with this WebGL implementation.  The minimum is eight.
+   * The maximum number of texture units that can be used from the fragment shader with this WebGL implementation.
+   * The minimum in WebGL2 contexts is 16, or 8 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumTextureImageUnits: {
     get: function() {
@@ -29518,10 +28142,12 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The maximum renderbuffer width and height supported by this WebGL implementation.
-   * The minimum is 16, but most desktop and laptop implementations will support much larger sizes like 8,192.
+   * The minimum in WebGL2 contexts is 2048, but most desktop and laptop implementations will support much larger sizes like 8192.
+   * The minimum in WebGL1 contexts is 1.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_RENDERBUFFER_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_RENDERBUFFER_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumRenderbufferSize: {
     get: function() {
@@ -29530,10 +28156,12 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The approximate maximum texture width and height supported by this WebGL implementation.
-   * The minimum is 64, but most desktop and laptop implementations will support much larger sizes like 8,192.
+   * The minimum in WebGL2 contexts is 2048, but most desktop and laptop implementations will support much larger sizes like 8192.
+   * The minimum in WebGL1 contexts is 64.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_TEXTURE_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_TEXTURE_SIZE</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumTextureSize: {
     get: function() {
@@ -29541,11 +28169,25 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum number of <code>vec4</code> varying variables supported by this WebGL implementation.
-   * The minimum is eight.  Matrices and arrays count as multiple <code>vec4</code>s.
+   * The approximate maximum texture width, height, and depth supported by this WebGL2 implementation.
+   * The minimum is 256, but most desktop and laptop implementations will support much larger sizes like 2048.
+   * 3D textures are not supported in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VARYING_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_3D_TEXTURE_SIZE</code>.
+   */
+  maximum3DTextureSize: {
+    get: function() {
+      return ContextLimits._maximum3DTextureSize;
+    }
+  },
+  /**
+   * The maximum number of <code>vec4</code> varying variables supported by this WebGL implementation.
+   * The minimum is 15 in WebGL2 contexts, or 8 in WebGL1 contexts. Matrices and arrays count as multiple <code>vec4</code>s.
+   * @memberof ContextLimits
+   * @type {number}
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VARYING_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumVaryingVectors: {
     get: function() {
@@ -29553,10 +28195,12 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum number of <code>vec4</code> vertex attributes supported by this WebGL implementation.  The minimum is eight.
+   * The maximum number of <code>vec4</code> vertex attributes supported by this WebGL implementation.
+   * The minimum is 16 in WebGL2 contexts, or 8 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VERTEX_ATTRIBS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VERTEX_ATTRIBS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumVertexAttributes: {
     get: function() {
@@ -29565,10 +28209,11 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The maximum number of texture units that can be used from the vertex shader with this WebGL implementation.
-   * The minimum is zero, which means the GL does not support vertex texture fetch.
+   * The minimum is 16 in WebGL2 contexts, or 0 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VERTEX_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VERTEX_TEXTURE_IMAGE_UNITS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumVertexTextureImageUnits: {
     get: function() {
@@ -29577,10 +28222,12 @@ Object.defineProperties(ContextLimits, {
   },
   /**
    * The maximum number of <code>vec4</code>, <code>ivec4</code>, and <code>bvec4</code>
-   * uniforms that can be used by a vertex shader with this WebGL implementation.  The minimum is 16.
+   * uniforms that can be used by a vertex shader with this WebGL implementation.
+   * The minimum is 256 in WebGL2 contexts, or 128 in WebGL1 contexts.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VERTEX_UNIFORM_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VERTEX_UNIFORM_VECTORS</code>.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glGet.xml|glGet in OpenGL ES 2.0} for WebGL1 contexts.
    */
   maximumVertexUniformVectors: {
     get: function() {
@@ -29588,10 +28235,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The minimum aliased line width, in pixels, supported by this WebGL implementation.  It will be at most one.
+   * The minimum aliased line width, in pixels, supported by this WebGL implementation. It will be at most one.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>ALIASED_LINE_WIDTH_RANGE</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>ALIASED_LINE_WIDTH_RANGE</code>.
    */
   minimumAliasedLineWidth: {
     get: function() {
@@ -29599,10 +28246,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum aliased line width, in pixels, supported by this WebGL implementation.  It will be at least one.
+   * The maximum aliased line width, in pixels, supported by this WebGL implementation. It will be at least one.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>ALIASED_LINE_WIDTH_RANGE</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>ALIASED_LINE_WIDTH_RANGE</code>.
    */
   maximumAliasedLineWidth: {
     get: function() {
@@ -29610,10 +28257,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The minimum aliased point size, in pixels, supported by this WebGL implementation.  It will be at most one.
+   * The minimum aliased point size, in pixels, supported by this WebGL implementation. It will be at most one.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>ALIASED_POINT_SIZE_RANGE</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>ALIASED_POINT_SIZE_RANGE</code>.
    */
   minimumAliasedPointSize: {
     get: function() {
@@ -29621,10 +28268,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum aliased point size, in pixels, supported by this WebGL implementation.  It will be at least one.
+   * The maximum aliased point size, in pixels, supported by this WebGL implementation. It will be at least one.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>ALIASED_POINT_SIZE_RANGE</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>ALIASED_POINT_SIZE_RANGE</code>.
    */
   maximumAliasedPointSize: {
     get: function() {
@@ -29632,10 +28279,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum supported width of the viewport.  It will be at least as large as the visible width of the associated canvas.
+   * The maximum supported width of the viewport. It will be at least as large as the visible width of the associated canvas.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VIEWPORT_DIMS</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VIEWPORT_DIMS</code>.
    */
   maximumViewportWidth: {
     get: function() {
@@ -29643,10 +28290,10 @@ Object.defineProperties(ContextLimits, {
     }
   },
   /**
-   * The maximum supported height of the viewport.  It will be at least as large as the visible height of the associated canvas.
+   * The maximum supported height of the viewport. It will be at least as large as the visible height of the associated canvas.
+   * @see {@link https://registry.khronos.org/OpenGL-Refpages/es3.0/html/glGet.xhtml|glGet in OpenGL ES 3.0} with <code>MAX_VIEWPORT_DIMS</code>.
    * @memberof ContextLimits
    * @type {number}
-   * @see {@link https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGet.xml|glGet} with <code>MAX_VIEWPORT_DIMS</code>.
    */
   maximumViewportHeight: {
     get: function() {
@@ -35897,6 +34544,66 @@ IntersectionTests.rayEllipsoid = function(ray, ellipsoid) {
   }
   return void 0;
 };
+var scratchRayIntervalX = new Interval_default();
+var scratchRayIntervalY = new Interval_default();
+var scratchRayIntervalZ = new Interval_default();
+IntersectionTests.rayAxisAlignedBoundingBox = function(ray, box, result) {
+  if (!defined_default(ray)) {
+    throw new DeveloperError_default("ray is required.");
+  }
+  if (!defined_default(box)) {
+    throw new DeveloperError_default("box is required.");
+  }
+  if (!defined_default(result)) {
+    result = new Interval_default();
+  }
+  const tx = rayIntervalAlongAABBAxis(
+    ray.origin.x,
+    ray.direction.x,
+    box.minimum.x,
+    box.maximum.x,
+    scratchRayIntervalX
+  );
+  const ty = rayIntervalAlongAABBAxis(
+    ray.origin.y,
+    ray.direction.y,
+    box.minimum.y,
+    box.maximum.y,
+    scratchRayIntervalY
+  );
+  const tz = rayIntervalAlongAABBAxis(
+    ray.origin.z,
+    ray.direction.z,
+    box.minimum.z,
+    box.maximum.z,
+    scratchRayIntervalZ
+  );
+  result.start = tx.start > ty.start ? tx.start : ty.start;
+  result.stop = tx.stop < ty.stop ? tx.stop : ty.stop;
+  if (tx.start > ty.stop || ty.start > tx.stop) {
+    return void 0;
+  }
+  if (result.start > tz.stop || tz.start > result.stop) {
+    return void 0;
+  }
+  if (tz.start > result.start) {
+    result.start = tz.start;
+  }
+  if (tz.stop < result.stop) {
+    result.stop = tz.stop;
+  }
+  return result;
+};
+function rayIntervalAlongAABBAxis(origin, direction2, min3, max3, result) {
+  result.start = (min3 - origin) / direction2;
+  result.stop = (max3 - origin) / direction2;
+  if (result.stop < result.start) {
+    const tmp2 = result.stop;
+    result.stop = result.start;
+    result.start = tmp2;
+  }
+  return result;
+}
 function addWithCancellationCheck2(left, right, tolerance) {
   const difference = left + right;
   if (Math_default.sign(left) !== Math_default.sign(right) && Math.abs(difference / Math.max(Math.abs(left), Math.abs(right))) < tolerance) {
@@ -40643,7 +39350,7 @@ var cascadeWeights_default = "\nuniform vec4 shadowMap_cascadeSplits[2];\n\nvec4
 var clipPolygons_default = "float getSignedDistance(vec2 uv, highp sampler2D clippingDistance) {\n    float signedDistance = texture(clippingDistance, uv).r;\n    return (signedDistance - 0.5) * 2.0;\n}\n\nvoid czm_clipPolygons(highp sampler2D clippingDistance, int extentsLength, vec2 clippingPosition, int regionIndex) {\n    // Position is completely outside of polygons bounds\n    vec2 rectUv = clippingPosition;\n    if (regionIndex < 0 || rectUv.x <= 0.0 || rectUv.y <= 0.0 || rectUv.x >= 1.0 || rectUv.y >= 1.0) {\n        #ifdef CLIPPING_INVERSE \n            discard;\n        #endif\n        return;\n    }\n\n    vec2 clippingDistanceTextureDimensions = vec2(textureSize(clippingDistance, 0));\n    vec2 sampleOffset = max(1.0 / clippingDistanceTextureDimensions, vec2(0.005));\n    float dimension = float(extentsLength);\n    if (extentsLength > 2) {\n       dimension = ceil(log2(float(extentsLength)));\n    }\n\n    vec2 textureOffset = vec2(mod(float(regionIndex), dimension), floor(float(regionIndex) / dimension)) / dimension;\n    vec2 uv = textureOffset + rectUv / dimension;\n\n    float signedDistance = getSignedDistance(uv, clippingDistance);\n\n    #ifdef CLIPPING_INVERSE\n    if (signedDistance > 0.0)  {\n        discard;\n    }\n    #else\n    if (signedDistance < 0.0)  {\n        discard;\n    }\n    #endif\n}\n";
 
 // packages/engine/Source/Shaders/Builtin/Functions/columbusViewMorph.js
-var columbusViewMorph_default = "/**\n * DOC_TBA\n *\n * @name czm_columbusViewMorph\n * @glslFunction\n */\nvec4 czm_columbusViewMorph(vec4 position2D, vec4 position3D, float time)\n{\n    // Just linear for now.\n    vec3 p = mix(position2D.xyz, position3D.xyz, time);\n    return vec4(p, 1.0);\n}\n";
+var columbusViewMorph_default = "/**\n * DOC_TBA\n *\n * @name czm_columbusViewMorph\n * @glslFunction\n */\nvec4 czm_columbusViewMorph(vec4 position2D, vec4 position3D, float time)\n{\n    // Just linear for now.\n    // We're manually doing the equivalent of a `mix` here because, some GPUs\n    // (NVidia GeForce 3070 Ti and Intel Arc A750, to name two), `mix` seems to\n    // use an alternate formulation that introduces jitter even when `time` is\n    // 0.0 or 1.0. That is, the value of `p` won't be exactly `position2D.xyz`\n    // when `time` is 0.0 and it won't be exactly `position3D.xyz` when `time` is\n    // 1.0. The \"textbook\" formulation here, while probably a bit slower,\n    // does not have this problem.\n    vec3 p = position2D.xyz * (1.0 - time) + position3D.xyz * time;\n    return vec4(p, 1.0);\n}\n";
 
 // packages/engine/Source/Shaders/Builtin/Functions/computeAtmosphereColor.js
 var computeAtmosphereColor_default = "/**\n * Compute the atmosphere color, applying Rayleigh and Mie scattering. This\n * builtin uses automatic uniforms so the atmophere settings are synced with the\n * state of the Scene, even in other contexts like Model.\n *\n * @name czm_computeAtmosphereColor\n * @glslFunction\n *\n * @param {vec3} positionWC Position of the fragment in world coords (low precision)\n * @param {vec3} lightDirection Light direction from the sun or other light source.\n * @param {vec3} rayleighColor The Rayleigh scattering color computed by a scattering function\n * @param {vec3} mieColor The Mie scattering color computed by a scattering function\n * @param {float} opacity The opacity computed by a scattering function.\n */\nvec4 czm_computeAtmosphereColor(\n    vec3 positionWC,\n    vec3 lightDirection,\n    vec3 rayleighColor,\n    vec3 mieColor,\n    float opacity\n) {\n    // Setup the primary ray: from the camera position to the vertex position.\n    vec3 cameraToPositionWC = positionWC - czm_viewerPositionWC;\n    vec3 cameraToPositionWCDirection = normalize(cameraToPositionWC);\n\n    float cosAngle = dot(cameraToPositionWCDirection, lightDirection);\n    float cosAngleSq = cosAngle * cosAngle;\n\n    float G = czm_atmosphereMieAnisotropy;\n    float GSq = G * G;\n\n    // The Rayleigh phase function.\n    float rayleighPhase = 3.0 / (50.2654824574) * (1.0 + cosAngleSq);\n    // The Mie phase function.\n    float miePhase = 3.0 / (25.1327412287) * ((1.0 - GSq) * (cosAngleSq + 1.0)) / (pow(1.0 + GSq - 2.0 * cosAngle * G, 1.5) * (2.0 + GSq));\n\n    // The final color is generated by combining the effects of the Rayleigh and Mie scattering.\n    vec3 rayleigh = rayleighPhase * rayleighColor;\n    vec3 mie = miePhase * mieColor;\n\n    vec3 color = (rayleigh + mie) * czm_atmosphereLightIntensity;\n\n    return vec4(color, opacity);\n}\n\n/**\n * Compute the atmosphere color, applying Rayleigh and Mie scattering. This\n * builtin uses automatic uniforms so the atmophere settings are synced with the\n * state of the Scene, even in other contexts like Model.\n *\n * @name czm_computeAtmosphereColor\n * @glslFunction\n *\n * @param {czm_ray} primaryRay Ray from the origin to sky fragment to in world coords (low precision)\n * @param {vec3} lightDirection Light direction from the sun or other light source.\n * @param {vec3} rayleighColor The Rayleigh scattering color computed by a scattering function\n * @param {vec3} mieColor The Mie scattering color computed by a scattering function\n * @param {float} opacity The opacity computed by a scattering function.\n */\nvec4 czm_computeAtmosphereColor(\n    czm_ray primaryRay,\n    vec3 lightDirection,\n    vec3 rayleighColor,\n    vec3 mieColor,\n    float opacity\n) {\n    vec3 direction = normalize(primaryRay.direction);\n\n    float cosAngle = dot(direction, lightDirection);\n    float cosAngleSq = cosAngle * cosAngle;\n\n    float G = czm_atmosphereMieAnisotropy;\n    float GSq = G * G;\n\n    // The Rayleigh phase function.\n    float rayleighPhase = 3.0 / (50.2654824574) * (1.0 + cosAngleSq);\n    // The Mie phase function.\n    float miePhase = 3.0 / (25.1327412287) * ((1.0 - GSq) * (cosAngleSq + 1.0)) / (pow(1.0 + GSq - 2.0 * cosAngle * G, 1.5) * (2.0 + GSq));\n\n    // The final color is generated by combining the effects of the Rayleigh and Mie scattering.\n    vec3 rayleigh = rayleighPhase * rayleighColor;\n    vec3 mie = miePhase * mieColor;\n\n    vec3 color = (rayleigh + mie) * czm_atmosphereLightIntensity;\n\n    return vec4(color, opacity);\n}\n\n";
@@ -41297,12 +40004,10 @@ function getBuiltinsAndAutomaticUniforms(shaderSource) {
   return builtinsSource.replace(root.glslSource, "");
 }
 function combineShader(shaderSource, isFragmentShader, context) {
-  let i;
-  let length2;
   let combinedSources = "";
   const sources = shaderSource.sources;
   if (defined_default(sources)) {
-    for (i = 0, length2 = sources.length; i < length2; ++i) {
+    for (let i = 0; i < sources.length; ++i) {
       combinedSources += `
 #line 0
 ${sources[i]}`;
@@ -41343,15 +40048,29 @@ ${sources[i]}`;
   }
   let result = "";
   const extensionsLength = extensions.length;
-  for (i = 0; i < extensionsLength; i++) {
+  for (let i = 0; i < extensionsLength; i++) {
     result += extensions[i];
   }
   if (isFragmentShader) {
-    result += "#ifdef GL_FRAGMENT_PRECISION_HIGH\n    precision highp float;\n    precision highp int;\n#else\n    precision mediump float;\n    precision mediump int;\n    #define highp mediump\n#endif\n\n";
+    result += `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    precision highp int;
+#else
+    precision mediump float;
+    precision mediump int;
+    #define highp mediump
+#endif
+`;
+  }
+  if (context.webgl2) {
+    result += `precision highp sampler3D;
+
+`;
   }
   const defines = shaderSource.defines;
   if (defined_default(defines)) {
-    for (i = 0, length2 = defines.length; i < length2; ++i) {
+    for (let i = 0, length2 = defines.length; i < length2; ++i) {
       const define2 = defines[i];
       if (define2.length !== 0) {
         result += `#define ${define2}
@@ -45053,6 +43772,7 @@ function Context(canvas, options) {
     gl.MAX_RENDERBUFFER_SIZE
   );
   ContextLimits_default._maximumTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+  ContextLimits_default._maximum3DTextureSize = gl.getParameter(gl.MAX_3D_TEXTURE_SIZE);
   ContextLimits_default._maximumVaryingVectors = gl.getParameter(
     gl.MAX_VARYING_VECTORS
   );
@@ -46110,6 +44830,51 @@ Context.prototype.endFrame = function() {
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
   }
 };
+Context.prototype.readPixelsToPBO = function(readState) {
+  const gl = this._gl;
+  readState = readState ?? Frozen_default.EMPTY_OBJECT;
+  const x = Math.max(readState.x ?? 0, 0);
+  const y = Math.max(readState.y ?? 0, 0);
+  const width = readState.width ?? this.drawingBufferWidth;
+  const height = readState.height ?? this.drawingBufferHeight;
+  const framebuffer = readState.framebuffer;
+  if (!this._webgl2) {
+    throw new DeveloperError_default(
+      "A WebGL 2 context is required to read pixels using a PBO."
+    );
+  }
+  Check_default.typeOf.number.greaterThan("readState.width", width, 0);
+  Check_default.typeOf.number.greaterThan("readState.height", height, 0);
+  let pixelDatatype = PixelDatatype_default.UNSIGNED_BYTE;
+  let pixelFormat = PixelFormat_default.RGBA;
+  if (defined_default(framebuffer) && framebuffer.numberOfColorAttachments > 0) {
+    pixelDatatype = framebuffer.getColorTexture(0).pixelDatatype;
+    pixelFormat = framebuffer.getColorTexture(0).pixelFormat;
+  }
+  const pixels = Buffer_default.createPixelBuffer({
+    context: this,
+    sizeInBytes: PixelFormat_default.textureSizeInBytes(
+      pixelFormat,
+      pixelDatatype,
+      width,
+      height
+    ),
+    usage: BufferUsage_default.DYNAMIC_READ
+  });
+  bindFramebuffer(this, framebuffer);
+  pixels._bind();
+  gl.readPixels(
+    x,
+    y,
+    width,
+    height,
+    pixelFormat,
+    PixelDatatype_default.toWebGLConstant(pixelDatatype, this),
+    0
+  );
+  pixels._unBind();
+  return pixels;
+};
 Context.prototype.readPixels = function(readState) {
   const gl = this._gl;
   readState = readState ?? Frozen_default.EMPTY_OBJECT;
@@ -46121,11 +44886,13 @@ Context.prototype.readPixels = function(readState) {
   Check_default.typeOf.number.greaterThan("readState.width", width, 0);
   Check_default.typeOf.number.greaterThan("readState.height", height, 0);
   let pixelDatatype = PixelDatatype_default.UNSIGNED_BYTE;
+  let pixelFormat = PixelFormat_default.RGBA;
   if (defined_default(framebuffer) && framebuffer.numberOfColorAttachments > 0) {
     pixelDatatype = framebuffer.getColorTexture(0).pixelDatatype;
+    pixelFormat = framebuffer.getColorTexture(0).pixelFormat;
   }
   const pixels = PixelFormat_default.createTypedArray(
-    PixelFormat_default.RGBA,
+    pixelFormat,
     pixelDatatype,
     width,
     height
@@ -47215,6 +45982,60 @@ SharedContext.prototype.isDestroyed = function() {
 };
 var SharedContext_default = SharedContext;
 
+// packages/engine/Source/Renderer/Sync.js
+function Sync(options) {
+  options = options ?? Frozen_default.EMPTY_OBJECT;
+  const context = options.context;
+  Check_default.defined("options.context", context);
+  if (!context._webgl2) {
+    throw new DeveloperError_default(
+      "A WebGL 2 context is required to use Sync operations."
+    );
+  }
+  const gl = context._gl;
+  const sync = gl.fenceSync(WebGLConstants_default.SYNC_GPU_COMMANDS_COMPLETE, 0);
+  this._gl = gl;
+  this._sync = sync;
+}
+Sync.create = function(options) {
+  return new Sync(options);
+};
+Sync.prototype.getStatus = function() {
+  const status = this._gl.getSyncParameter(
+    this._sync,
+    WebGLConstants_default.SYNC_STATUS
+  );
+  return status;
+};
+Sync.prototype.isDestroyed = function() {
+  return false;
+};
+Sync.prototype.destroy = function() {
+  this._gl.deleteSync(this._sync);
+  return destroyObject_default(this);
+};
+Sync.prototype.waitForSignal = async function(scheduleFunction, ttl) {
+  const self2 = this;
+  ttl = ttl ?? 10;
+  function waitForSignal0(resolve2, reject, ttl2) {
+    return () => {
+      const syncStatus = self2.getStatus();
+      const signaled = syncStatus === WebGLConstants_default.SIGNALED;
+      if (signaled) {
+        resolve2();
+      } else if (ttl2 <= 0) {
+        reject(new RuntimeError_default("Wait for signal timeout"));
+      } else {
+        scheduleFunction(waitForSignal0(resolve2, reject, ttl2 - 1));
+      }
+    };
+  }
+  return new Promise((resolve2, reject) => {
+    scheduleFunction(waitForSignal0(resolve2, reject, ttl));
+  });
+};
+var Sync_default = Sync;
+
 // packages/engine/Source/Renderer/Texture3D.js
 function Texture3D(options) {
   options = options ?? Frozen_default.EMPTY_OBJECT;
@@ -47228,7 +46049,7 @@ function Texture3D(options) {
     skipColorSpaceConversion = false,
     sampler = new Sampler_default()
   } = options;
-  if (!context.webgl2) {
+  if (!context.webgl2 && !defined_default(context.options.getWebGLStub)) {
     throw new DeveloperError_default(
       "WebGL1 does not support texture3D. Please use a WebGL2 context."
     );
@@ -47258,21 +46079,21 @@ function Texture3D(options) {
     );
   }
   Check_default.typeOf.number.greaterThan("width", width, 0);
-  if (width > ContextLimits_default.maximumTextureSize) {
+  if (width > ContextLimits_default.maximum3DTextureSize) {
     throw new DeveloperError_default(
-      `Width must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximumTextureSize}).  Check maximumTextureSize.`
+      `Width must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximum3DTextureSize}).  Check maximum3DTextureSize.`
     );
   }
   Check_default.typeOf.number.greaterThan("height", height, 0);
-  if (height > ContextLimits_default.maximumTextureSize) {
+  if (height > ContextLimits_default.maximum3DTextureSize) {
     throw new DeveloperError_default(
-      `Height must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximumTextureSize}).  Check maximumTextureSize.`
+      `Height must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximum3DTextureSize}).  Check maximum3DTextureSize.`
     );
   }
   Check_default.typeOf.number.greaterThan("depth", depth, 0);
-  if (depth > ContextLimits_default.maximumTextureSize) {
+  if (depth > ContextLimits_default.maximum3DTextureSize) {
     throw new DeveloperError_default(
-      `Depth must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximumTextureSize}).  Check maximumTextureSize.`
+      `Depth must be less than or equal to the maximum texture3D size (${ContextLimits_default.maximum3DTextureSize}).  Check maximum3DTextureSize.`
     );
   }
   if (!PixelFormat_default.validate(pixelFormat)) {
@@ -47428,6 +46249,92 @@ function loadBufferSource2(texture3D, source) {
       );
     }
   }
+}
+Texture3D.prototype.copyFrom = function(options) {
+  options = options ?? Frozen_default.EMPTY_OBJECT;
+  const { source, xOffset = 0, yOffset = 0, zOffset = 0 } = options;
+  Check_default.defined("options.source", source);
+  Check_default.defined("options.source.arrayBufferView", source.arrayBufferView);
+  if (PixelFormat_default.isCompressedFormat(this._pixelFormat)) {
+    throw new DeveloperError_default(
+      "Unsupported copyFrom with a compressed texture pixel format."
+    );
+  }
+  Check_default.typeOf.number.greaterThanOrEquals("xOffset", xOffset, 0);
+  Check_default.typeOf.number.greaterThanOrEquals("yOffset", yOffset, 0);
+  Check_default.typeOf.number.greaterThanOrEquals("zOffset", zOffset, 0);
+  Check_default.typeOf.number.lessThanOrEquals(
+    "xOffset + options.source.width",
+    xOffset + source.width,
+    this._width
+  );
+  Check_default.typeOf.number.lessThanOrEquals(
+    "yOffset + options.source.height",
+    yOffset + source.height,
+    this._height
+  );
+  Check_default.typeOf.number.lessThanOrEquals(
+    "zOffset + options.source.depth",
+    zOffset + source.depth,
+    this._depth
+  );
+  const context = this._context;
+  const gl = context._gl;
+  const target = this._textureTarget;
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(target, this._texture);
+  const { width, height, depth } = source;
+  let uploaded = false;
+  if (!this._initialized) {
+    if (xOffset === 0 && yOffset === 0 && zOffset === 0 && width === this._width && height === this._height && depth === this._depth) {
+      loadBufferSource2(this, source);
+      uploaded = true;
+    } else {
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      loadNull2(this);
+    }
+    this._initialized = true;
+  }
+  if (!uploaded) {
+    loadPartialBufferSource2(
+      this,
+      source.arrayBufferView,
+      xOffset,
+      yOffset,
+      zOffset,
+      width,
+      height,
+      depth
+    );
+  }
+  gl.bindTexture(target, null);
+};
+function loadPartialBufferSource2(texture3D, arrayBufferView, xOffset, yOffset, zOffset, width, height, depth) {
+  const context = texture3D._context;
+  const gl = context._gl;
+  const { pixelFormat, pixelDatatype } = texture3D;
+  const unpackAlignment = PixelFormat_default.alignmentInBytes(
+    pixelFormat,
+    pixelDatatype,
+    width
+  );
+  gl.pixelStorei(gl.UNPACK_ALIGNMENT, unpackAlignment);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+  gl.texSubImage3D(
+    texture3D._textureTarget,
+    0,
+    xOffset,
+    yOffset,
+    zOffset,
+    width,
+    height,
+    depth,
+    pixelFormat,
+    PixelDatatype_default.toWebGLConstant(pixelDatatype, context),
+    arrayBufferView
+  );
 }
 function nextMipSize2(currentSize) {
   const nextSize = Math.floor(currentSize / 2) | 0;
@@ -47655,6 +46562,7 @@ TexturePacker.prototype._findNode = function(node, { width, height }) {
     if (widthDifference === 0 && heightDifference === 0) {
       return node;
     }
+    const borderPadding = this._borderPadding;
     if (widthDifference > heightDifference) {
       node.childNode1 = new TextureNode({
         x: rectangle.x,
@@ -47662,12 +46570,15 @@ TexturePacker.prototype._findNode = function(node, { width, height }) {
         width,
         height: nodeHeight
       });
-      node.childNode2 = new TextureNode({
-        x: rectangle.x + width,
-        y: rectangle.y,
-        width: widthDifference,
-        height: nodeHeight
-      });
+      const widthDifferencePadded = widthDifference - borderPadding;
+      if (widthDifferencePadded > 0) {
+        node.childNode2 = new TextureNode({
+          x: rectangle.x + width + borderPadding,
+          y: rectangle.y,
+          width: widthDifferencePadded,
+          height: nodeHeight
+        });
+      }
       return this._findNode(node.childNode1, { width, height });
     }
     node.childNode1 = new TextureNode({
@@ -47676,12 +46587,15 @@ TexturePacker.prototype._findNode = function(node, { width, height }) {
       width: nodeWidth,
       height
     });
-    node.childNode2 = new TextureNode({
-      x: rectangle.x,
-      y: rectangle.y + height,
-      width: nodeWidth,
-      height: heightDifference
-    });
+    const heightDifferencePadded = heightDifference - borderPadding;
+    if (heightDifferencePadded > 0) {
+      node.childNode2 = new TextureNode({
+        x: rectangle.x,
+        y: rectangle.y + height + borderPadding,
+        width: nodeWidth,
+        height: heightDifferencePadded
+      });
+    }
     return this._findNode(node.childNode1, { width, height });
   }
   return this._findNode(node.childNode1, { width, height }) || this._findNode(node.childNode2, { width, height });
@@ -47926,20 +46840,13 @@ TextureAtlas.prototype._resize = function(context, queueOffset = 0) {
     areaQueued += width2 * height2;
     toPack.push(queue[i]);
   }
-  width = Math.max(maxWidth, width);
-  height = Math.max(maxHeight, height);
-  if (!context.webgl2) {
-    width = Math_default.nextPowerOfTwo(width);
-    height = Math_default.nextPowerOfTwo(height);
-  }
-  const areaDifference = areaQueued;
-  let scalingFactor = 1;
-  while (areaDifference / width / height >= 1) {
-    scalingFactor *= 2;
+  width = Math_default.nextPowerOfTwo(Math.max(maxWidth, width));
+  height = Math_default.nextPowerOfTwo(Math.max(maxHeight, height));
+  while (areaQueued >= width * height) {
     if (width > height) {
-      height *= scalingFactor;
+      height *= 2;
     } else {
-      width *= scalingFactor;
+      width *= 2;
     }
   }
   toPack.sort(
@@ -48103,26 +47010,55 @@ async function resolveImage(image, id) {
   }
   return image;
 }
-TextureAtlas.prototype.addImage = function(id, image) {
+TextureAtlas.prototype.addImage = function(id, image, width, height) {
   Check_default.typeOf.string("id", id);
   Check_default.defined("image", image);
   let promise = this._indexPromiseById.get(id);
+  let index = this._indexById.get(id);
   if (defined_default(promise)) {
     return promise;
   }
-  const index = this._nextIndex++;
+  if (defined_default(index)) {
+    return index;
+  }
+  index = this._nextIndex++;
   this._indexById.set(id, index);
   const resolveAndAddImage = async () => {
-    image = await resolveImage(image, id);
-    Check_default.defined("image", image);
-    if (this.isDestroyed() || !defined_default(image)) {
+    const resolvedImage = await resolveImage(image, id);
+    Check_default.defined("image", resolvedImage);
+    if (this.isDestroyed() || !defined_default(resolvedImage)) {
+      this._indexPromiseById.delete(id);
       return -1;
     }
-    return this._addImage(index, image);
+    if (defined_default(width)) {
+      resolvedImage.width = width;
+    }
+    if (defined_default(height)) {
+      resolvedImage.height = height;
+    }
+    const imageIndex = await this._addImage(index, resolvedImage);
+    this._indexPromiseById.delete(id);
+    return imageIndex;
   };
   promise = resolveAndAddImage();
   this._indexPromiseById.set(id, promise);
   return promise;
+};
+TextureAtlas.prototype.getCachedImageSubRegion = function(id, subRegion, imageIndex) {
+  const imagePromise = this._indexPromiseById.get(id);
+  for (const [index, parentIndex] of this._subRegions.entries()) {
+    if (imageIndex === parentIndex) {
+      const boundingRegion = this._rectangles[index];
+      if (boundingRegion.equals(subRegion)) {
+        if (imagePromise) {
+          return imagePromise.then(
+            (resolvedImageIndex) => resolvedImageIndex === -1 ? -1 : index
+          );
+        }
+        return index;
+      }
+    }
+  }
 };
 TextureAtlas.prototype.addImageSubRegion = function(id, subRegion) {
   Check_default.typeOf.string("id", id);
@@ -48131,23 +47067,14 @@ TextureAtlas.prototype.addImageSubRegion = function(id, subRegion) {
   if (!defined_default(imageIndex)) {
     throw new RuntimeError_default(`image with id "${id}" not found in the atlas.`);
   }
-  const indexPromise = this._indexPromiseById.get(id);
-  for (const [index2, parentIndex] of this._subRegions.entries()) {
-    if (imageIndex === parentIndex) {
-      const boundingRegion = this._rectangles[index2];
-      if (boundingRegion.equals(subRegion)) {
-        return indexPromise.then((resolvedImageIndex) => {
-          if (resolvedImageIndex === -1) {
-            return -1;
-          }
-          return index2;
-        });
-      }
-    }
+  let index = this.getCachedImageSubRegion(id, subRegion, imageIndex);
+  if (defined_default(index)) {
+    return index;
   }
-  const index = this._nextIndex++;
+  index = this._nextIndex++;
   this._subRegions.set(index, imageIndex);
   this._rectangles[index] = subRegion.clone();
+  const indexPromise = this._indexPromiseById.get(id) ?? Promise.resolve(imageIndex);
   return indexPromise.then((imageIndex2) => {
     if (imageIndex2 === -1) {
       return -1;
@@ -49563,10 +48490,6 @@ BillboardVisualizer.prototype.update = function(time) {
       item.textureValue = void 0;
     }
     billboard.show = show;
-    if (item.textureValue !== textureValue) {
-      billboard.image = textureValue;
-      item.textureValue = textureValue;
-    }
     billboard.position = position;
     billboard.color = Property_default.getValueOrDefault(
       billboardGraphics._color,
@@ -49658,6 +48581,10 @@ BillboardVisualizer.prototype.update = function(time) {
       time,
       defaultSplitDirection
     );
+    if (item.textureValue !== textureValue) {
+      billboard.image = textureValue;
+      item.textureValue = textureValue;
+    }
     const subRegion = Property_default.getValueOrUndefined(
       billboardGraphics._imageSubRegion,
       time,
@@ -52840,11 +51767,19 @@ AxisAlignedBoundingBox.intersectPlane = function(box, plane) {
   }
   return Intersect_default.INTERSECTING;
 };
+AxisAlignedBoundingBox.intersectAxisAlignedBoundingBox = function(box, other) {
+  Check_default.defined("box", box);
+  Check_default.defined("other", other);
+  return box.minimum.x <= other.maximum.x && box.maximum.x >= other.minimum.x && box.minimum.y <= other.maximum.y && box.maximum.y >= other.minimum.y && box.minimum.z <= other.maximum.z && box.maximum.z >= other.minimum.z;
+};
 AxisAlignedBoundingBox.prototype.clone = function(result) {
   return AxisAlignedBoundingBox.clone(this, result);
 };
 AxisAlignedBoundingBox.prototype.intersectPlane = function(plane) {
   return AxisAlignedBoundingBox.intersectPlane(this, plane);
+};
+AxisAlignedBoundingBox.prototype.intersectAxisAlignedBoundingBox = function(other) {
+  return AxisAlignedBoundingBox.intersectAxisAlignedBoundingBox(this, other);
 };
 AxisAlignedBoundingBox.prototype.equals = function(right) {
   return AxisAlignedBoundingBox.equals(this, right);
@@ -61704,13 +60639,10 @@ var PolylineColorAppearanceVS_default = "in vec3 position3DHigh;\nin vec3 positi
 var PolylineCommon_default = "void clipLineSegmentToNearPlane(\n    vec3 p0,\n    vec3 p1,\n    out vec4 positionWC,\n    out bool clipped,\n    out bool culledByNearPlane,\n    out vec4 clippedPositionEC)\n{\n    culledByNearPlane = false;\n    clipped = false;\n\n    vec3 p0ToP1 = p1 - p0;\n    float magnitude = length(p0ToP1);\n    vec3 direction = normalize(p0ToP1);\n\n    // Distance that p0 is behind the near plane. Negative means p0 is\n    // in front of the near plane.\n    float endPoint0Distance =  czm_currentFrustum.x + p0.z;\n\n    // Camera looks down -Z.\n    // When moving a point along +Z: LESS VISIBLE\n    //   * Points in front of the camera move closer to the camera.\n    //   * Points behind the camrea move farther away from the camera.\n    // When moving a point along -Z: MORE VISIBLE\n    //   * Points in front of the camera move farther away from the camera.\n    //   * Points behind the camera move closer to the camera.\n\n    // Positive denominator: -Z, becoming more visible\n    // Negative denominator: +Z, becoming less visible\n    // Nearly zero: parallel to near plane\n    float denominator = -direction.z;\n\n    if (endPoint0Distance > 0.0 && abs(denominator) < czm_epsilon7)\n    {\n        // p0 is behind the near plane and the line to p1 is nearly parallel to\n        // the near plane, so cull the segment completely.\n        culledByNearPlane = true;\n    }\n    else if (endPoint0Distance > 0.0)\n    {\n        // p0 is behind the near plane, and the line to p1 is moving distinctly\n        // toward or away from it.\n\n        // t = (-plane distance - dot(plane normal, ray origin)) / dot(plane normal, ray direction)\n        float t = endPoint0Distance / denominator;\n        if (t < 0.0 || t > magnitude)\n        {\n            // Near plane intersection is not between the two points.\n            // We already confirmed p0 is behind the naer plane, so now\n            // we know the entire segment is behind it.\n            culledByNearPlane = true;\n        }\n        else\n        {\n            // Segment crosses the near plane, update p0 to lie exactly on it.\n            p0 = p0 + t * direction;\n\n            // Numerical noise might put us a bit on the wrong side of the near plane.\n            // Don't let that happen.\n            p0.z = min(p0.z, -czm_currentFrustum.x);\n\n            clipped = true;\n        }\n    }\n\n    clippedPositionEC = vec4(p0, 1.0);\n    positionWC = czm_eyeToWindowCoordinates(clippedPositionEC);\n}\n\nvec4 getPolylineWindowCoordinatesEC(vec4 positionEC, vec4 prevEC, vec4 nextEC, float expandDirection, float width, bool usePrevious, out float angle)\n{\n    // expandDirection +1 is to the _left_ when looking from positionEC toward nextEC.\n\n#ifdef POLYLINE_DASH\n    // Compute the window coordinates of the points.\n    vec4 positionWindow = czm_eyeToWindowCoordinates(positionEC);\n    vec4 previousWindow = czm_eyeToWindowCoordinates(prevEC);\n    vec4 nextWindow = czm_eyeToWindowCoordinates(nextEC);\n\n    // Determine the relative screen space direction of the line.\n    vec2 lineDir;\n    if (usePrevious) {\n        lineDir = normalize(positionWindow.xy - previousWindow.xy);\n    }\n    else {\n        lineDir = normalize(nextWindow.xy - positionWindow.xy);\n    }\n    angle = atan(lineDir.x, lineDir.y) - 1.570796327; // precomputed atan(1,0)\n\n    // Quantize the angle so it doesn't change rapidly between segments.\n    angle = floor(angle / czm_piOverFour + 0.5) * czm_piOverFour;\n#endif\n\n    vec4 clippedPrevWC, clippedPrevEC;\n    bool prevSegmentClipped, prevSegmentCulled;\n    clipLineSegmentToNearPlane(prevEC.xyz, positionEC.xyz, clippedPrevWC, prevSegmentClipped, prevSegmentCulled, clippedPrevEC);\n\n    vec4 clippedNextWC, clippedNextEC;\n    bool nextSegmentClipped, nextSegmentCulled;\n    clipLineSegmentToNearPlane(nextEC.xyz, positionEC.xyz, clippedNextWC, nextSegmentClipped, nextSegmentCulled, clippedNextEC);\n\n    bool segmentClipped, segmentCulled;\n    vec4 clippedPositionWC, clippedPositionEC;\n    clipLineSegmentToNearPlane(positionEC.xyz, usePrevious ? prevEC.xyz : nextEC.xyz, clippedPositionWC, segmentClipped, segmentCulled, clippedPositionEC);\n\n    if (segmentCulled)\n    {\n        return vec4(0.0, 0.0, 0.0, 1.0);\n    }\n\n    vec2 directionToPrevWC = normalize(clippedPrevWC.xy - clippedPositionWC.xy);\n    vec2 directionToNextWC = normalize(clippedNextWC.xy - clippedPositionWC.xy);\n\n    // If a segment was culled, we can't use the corresponding direction\n    // computed above. We should never see both of these be true without\n    // `segmentCulled` above also being true.\n    if (prevSegmentCulled)\n    {\n        directionToPrevWC = -directionToNextWC;\n    }\n    else if (nextSegmentCulled)\n    {\n        directionToNextWC = -directionToPrevWC;\n    }\n\n    vec2 thisSegmentForwardWC, otherSegmentForwardWC;\n    if (usePrevious)\n    {\n        thisSegmentForwardWC = -directionToPrevWC;\n        otherSegmentForwardWC = directionToNextWC;\n    }\n    else\n    {\n        thisSegmentForwardWC = directionToNextWC;\n        otherSegmentForwardWC =  -directionToPrevWC;\n    }\n\n    vec2 thisSegmentLeftWC = vec2(-thisSegmentForwardWC.y, thisSegmentForwardWC.x);\n\n    vec2 leftWC = thisSegmentLeftWC;\n    float expandWidth = width * 0.5;\n\n    // When lines are split at the anti-meridian, the position may be at the\n    // same location as the next or previous position, and we need to handle\n    // that to avoid producing NaNs.\n    if (!czm_equalsEpsilon(prevEC.xyz - positionEC.xyz, vec3(0.0), czm_epsilon1) && !czm_equalsEpsilon(nextEC.xyz - positionEC.xyz, vec3(0.0), czm_epsilon1))\n    {\n        vec2 otherSegmentLeftWC = vec2(-otherSegmentForwardWC.y, otherSegmentForwardWC.x);\n\n        vec2 leftSumWC = thisSegmentLeftWC + otherSegmentLeftWC;\n        float leftSumLength = length(leftSumWC);\n        leftWC = leftSumLength < czm_epsilon6 ? thisSegmentLeftWC : (leftSumWC / leftSumLength);\n\n        // The sine of the angle between the two vectors is given by the formula\n        //         |a x b| = |a||b|sin(theta)\n        // which is\n        //     float sinAngle = length(cross(vec3(leftWC, 0.0), vec3(-thisSegmentForwardWC, 0.0)));\n        // Because the z components of both vectors are zero, the x and y coordinate will be zero.\n        // Therefore, the sine of the angle is just the z component of the cross product.\n        vec2 u = -thisSegmentForwardWC;\n        vec2 v = leftWC;\n        float sinAngle = abs(u.x * v.y - u.y * v.x);\n        expandWidth = clamp(expandWidth / sinAngle, 0.0, width * 2.0);\n    }\n\n    vec2 offset = leftWC * expandDirection * expandWidth * czm_pixelRatio;\n    return vec4(clippedPositionWC.xy + offset, -clippedPositionWC.z, 1.0) * (czm_projection * clippedPositionEC).w;\n}\n\nvec4 getPolylineWindowCoordinates(vec4 position, vec4 previous, vec4 next, float expandDirection, float width, bool usePrevious, out float angle)\n{\n    vec4 positionEC = czm_modelViewRelativeToEye * position;\n    vec4 prevEC = czm_modelViewRelativeToEye * previous;\n    vec4 nextEC = czm_modelViewRelativeToEye * next;\n    return getPolylineWindowCoordinatesEC(positionEC, prevEC, nextEC, expandDirection, width, usePrevious, angle);\n}\n";
 
 // packages/engine/Source/Scene/PolylineColorAppearance.js
-var defaultVertexShaderSource = `${PolylineCommon_default}
+var defaultVertexShaderSource = `#define CLIP_POLYLINE 
+${PolylineCommon_default}
 ${PolylineColorAppearanceVS_default}`;
 var defaultFragmentShaderSource = PerInstanceFlatColorAppearanceFS_default;
-if (!FeatureDetection_default.isInternetExplorer()) {
-  defaultVertexShaderSource = `#define CLIP_POLYLINE 
-${defaultVertexShaderSource}`;
-}
 function PolylineColorAppearance(options) {
   options = options ?? Frozen_default.EMPTY_OBJECT;
   const translucent = options.translucent ?? true;
@@ -61820,13 +60752,10 @@ var PolylineMaterialAppearanceVS_default = "in vec3 position3DHigh;\nin vec3 pos
 var PolylineFS_default = "#ifdef VECTOR_TILE\nuniform vec4 u_highlightColor;\n#endif\n\nin vec2 v_st;\n\nvoid main()\n{\n    czm_materialInput materialInput;\n\n    vec2 st = v_st;\n    st.t = czm_readNonPerspective(st.t, gl_FragCoord.w);\n\n    materialInput.s = st.s;\n    materialInput.st = st;\n    materialInput.str = vec3(st, 0.0);\n\n    czm_material material = czm_getMaterial(materialInput);\n    out_FragColor = vec4(material.diffuse + material.emission, material.alpha);\n#ifdef VECTOR_TILE\n    out_FragColor *= u_highlightColor;\n#endif\n\n    czm_writeLogDepth();\n}\n";
 
 // packages/engine/Source/Scene/PolylineMaterialAppearance.js
-var defaultVertexShaderSource2 = `${PolylineCommon_default}
+var defaultVertexShaderSource2 = `#define CLIP_POLYLINE 
+${PolylineCommon_default}
 ${PolylineMaterialAppearanceVS_default}`;
 var defaultFragmentShaderSource2 = PolylineFS_default;
-if (!FeatureDetection_default.isInternetExplorer()) {
-  defaultVertexShaderSource2 = `#define CLIP_POLYLINE 
-${defaultVertexShaderSource2}`;
-}
 function PolylineMaterialAppearance(options) {
   options = options ?? Frozen_default.EMPTY_OBJECT;
   const translucent = options.translucent ?? true;
@@ -66474,7 +65403,7 @@ Object.defineProperties(Entity.prototype, {
   },
   /**
    * Gets or sets the entity's tracking reference frame.
-   * @demo {@link https://sandcastle.cesium.com/index.html?src=Entity tracking.html|Cesium Sandcastle Entity tracking Demo}
+   * @demo {@link https://sandcastle.cesium.com/index.html?id=entity-tracking|Cesium Sandcastle Entity tracking Demo}
    *
    * @memberof Entity.prototype
    * @type {TrackingReferenceFrame}
@@ -67729,7 +66658,7 @@ CallbackPositionProperty.prototype.equals = function(other) {
 var CallbackPositionProperty_default = CallbackPositionProperty;
 
 // node_modules/dompurify/dist/purify.es.mjs
-/*! @license DOMPurify 3.3.0 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.3.0/LICENSE */
+/*! @license DOMPurify 3.3.1 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.3.1/LICENSE */
 var {
   entries,
   setPrototypeOf,
@@ -67969,7 +66898,7 @@ var _createHooksMap = function _createHooksMap2() {
 function createDOMPurify() {
   let window2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : getGlobal();
   const DOMPurify = (root) => createDOMPurify(root);
-  DOMPurify.version = "3.3.0";
+  DOMPurify.version = "3.3.1";
   DOMPurify.removed = [];
   if (!window2 || !window2.document || window2.document.nodeType !== NODE_TYPE.document || !window2.Element) {
     DOMPurify.isSupported = false;
@@ -68219,6 +67148,12 @@ function createDOMPurify() {
         FORBID_CONTENTS = clone2(FORBID_CONTENTS);
       }
       addToSet(FORBID_CONTENTS, cfg.FORBID_CONTENTS, transformCaseFunc);
+    }
+    if (cfg.ADD_FORBID_CONTENTS) {
+      if (FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS) {
+        FORBID_CONTENTS = clone2(FORBID_CONTENTS);
+      }
+      addToSet(FORBID_CONTENTS, cfg.ADD_FORBID_CONTENTS, transformCaseFunc);
     }
     if (KEEP_CONTENT) {
       ALLOWED_TAGS["#text"] = true;
@@ -69126,7 +68061,7 @@ Object.defineProperties(ImageBasedLighting.prototype, {
    * @memberof ImageBasedLighting.prototype
    *
    * @type {Cartesian3[]}
-   * @demo {@link https://sandcastle.cesium.com/index.html?src=Image-Based Lighting.html|Sandcastle Image Based Lighting Demo}
+   * @demo {@link https://sandcastle.cesium.com/index.html?id=image-based-lighting|Sandcastle Image Based Lighting Demo}
    * @see {@link https://graphics.stanford.edu/papers/envmap/envmap.pdf|An Efficient Representation for Irradiance Environment Maps}
    */
   sphericalHarmonicCoefficients: {
@@ -69147,7 +68082,7 @@ Object.defineProperties(ImageBasedLighting.prototype, {
    * A URL to a KTX2 file that contains a cube map of the specular lighting and the convoluted specular mipmaps.
    *
    * @memberof ImageBasedLighting.prototype
-   * @demo {@link https://sandcastle.cesium.com/index.html?src=Image-Based Lighting.html|Sandcastle Image Based Lighting Demo}
+   * @demo {@link https://sandcastle.cesium.com/index.html?id=image-based-lighting|Sandcastle Image Based Lighting Demo}
    * @type {string}
    * @see ImageBasedLighting#sphericalHarmonicCoefficients
    */
@@ -69316,7 +68251,7 @@ var import_urijs8 = __toESM(require_URI(), 1);
 
 // packages/engine/Source/Core/Ion.js
 var defaultTokenCredit;
-var defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhN2VkNDM5ZS1jMDk0LTQ3NDItOTM5ZS00MzU3M2M1MTc2ZTkiLCJpZCI6MjU5LCJpYXQiOjE3NjIxODg4MDB9.ZZG574sONzeHxsX8HJMaL_ZiGA3dh_HrOxL7DrKRcd4";
+var defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlZWVkZjhjNC01NjdhLTQwNTctOTExMy02MThlYjIxM2U4OTkiLCJpZCI6MjU5LCJpYXQiOjE3NzAwNTUxOTV9.aJTRjsRlsJwPC0Nfcq4xscYc2lPJcGFku_PVxp1ZPyQ";
 var Ion = {};
 Ion.defaultAccessToken = defaultAccessToken;
 Ion.defaultServer = new Resource_default({ url: "https://api.cesium.com/" });
@@ -79353,8 +78288,1416 @@ BufferLoader.prototype.unload = function() {
 };
 var BufferLoader_default = BufferLoader;
 
+// node_modules/meshoptimizer/meshopt_encoder.js
+var MeshoptEncoder = (function() {
+  var wasm2 = "b9H79Tebbbe9ok9Geueu9Geub9Gbb9Gruuuuuuueu9Gvuuuuueu9Gduueu9Gluuuueu9Gvuuuuub9Gouuuuuub9Gluuuub9GiuuueuiE8AdilveoveovrrwrrrDDoDrbqqbelve9Weiiviebeoweuec;G:Qdkr:PlCo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8F9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWV9mW4W2be8A9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWVbd8F9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949c919M9MWV9c9V919U9KbiE9TW79O9V9Wt9FW9U9J9V9KW9wWVtW949wWV79P9V9UblY9TW79O9V9Wt9FW9U9J9V9KW69U9KW949c919M9MWVbv8E9TW79O9V9Wt9FW9U9J9V9KW69U9KW949c919M9MWV9c9V919U9Kbo8A9TW79O9V9Wt9FW9U9J9V9KW69U9KW949wWV79P9V9UbrE9TW79O9V9Wt9FW9U9J9V9KW69U9KW949tWG91W9U9JWbwa9TW79O9V9Wt9FW9U9J9V9KW69U9KW949tWG91W9U9JW9c9V919U9KbDL9TW79O9V9Wt9FW9U9J9V9KWS9P2tWV9p9JtbqK9TW79O9V9Wt9FW9U9J9V9KWS9P2tWV9r919HtbkL9TW79O9V9Wt9FW9U9J9V9KWS9P2tWVT949WbxY9TW79O9V9Wt9FW9U9J9V9KWS9P2tWVJ9V29VVbmE9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94J9H9J9OWbza9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94J9H9J9OW9ttV9P9WbHa9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94SWt9J9O9sW9T9H9WbOK9TW79O9V9Wt9F79W9Ht9P9H29t9VVt9sW9T9H9WbAl79IV9RbXDwebcekdKYq:p28Adbk:Bhdhud9:8Jjjjjbc;qw9Rgr8KjjjjbcbhwdnaeTmbabcbyd;m:kjjbaoaocb9iEgDc:GeV86bbarc;adfcbcjdz:xjjjb8AdnaiTmbarc;adfadalz:wjjjb8Akarc;abfalfcbcbcjdal9RalcFe0Ez:xjjjb8Aarc;abfarc;adfalz:wjjjb8AarcUf9cb83ibarc8Wf9cb83ibarcyf9cb83ibarcaf9cb83ibarcKf9cb83ibarczf9cb83ibar9cb83iwar9cb83ibcj;abal9Uc;WFbGcjdalca0Ehqdnaicd6mbavcd9imbaDTmbadcefhkaqci2gxal2hmarc;alfclfhParc;qlfceVhsarc;qofclVhzarc;qofcKfhHarc;qofczfhOcbhAincdhCcbhodnavci6mbaH9cb83ibaO9cb83ibar9cb83i;yoar9cb83i;qoadaAfgoybbhXcbhQincbhwcbhLdninaoalfhKaoybbgYaX7aLVhLawcP0meaKhoaYhXawcefgwaQfai6mbkkcbhXarc;qofhwincwh8AcwhEdnaLaX93gocFeGg3cs0mbclhEa3ci0mba3cb9hcethEkdnaocw4cFeGg3cs0mbclh8Aa3ci0mba3cb9hceth8Aka8AaEfh3awydbh5cwh8AcwhEdnaocz4cFeGg8Ecs0mbclhEa8Eci0mba8Ecb9hcethEka3a5fh3dnaocFFFFb0mbclh8AaocFFF8F0mbaocFFFr0ceth8Akawa3aEfa8AfBdbawclfhwaXcefgXcw9hmbkaKhoaYhXaQczfgQai6mbkcbhocehwazhLinawaoaLydbarc;qofaocdtfydb6EhoaLclfhLawcefgwcw9hmbkcihCkcbh3arc;qlfcbcjdz:xjjjb8Aarc;alfcwfcbBdbar9cb83i;alaoclth8Fadhaaqhhakh5inarc;qlfadcba3cufgoaoa30Eal2falz:wjjjb8Aaiahaiah6Ehgdnaqaia39Ra3aqfai6EgYcsfc9WGgoaY9nmbarc;qofaYfcbaoaY9Rz:xjjjb8Akada3al2fh8Jcbh8Kina8Ka8FVcl4hQarc;alfa8Kcdtfh8LaAh8Mcbh8Nina8NaAfhwdndndndndndna8KPldebidkasa8Mc98GgLfhoa5aLfh8Aarc;qlfawc98GgLfRbbhXcwhwinaoRbbawtaXVhXaocefhoawcwfgwca9hmbkaYTmla8Ncith8Ea8JaLfhEcbhKinaERbbhLcwhoa8AhwinawRbbaotaLVhLawcefhwaocwfgoca9hmbkarc;qofaKfaLaX7aQ93a8E486bba8Aalfh8AaEalfhEaLhXaKcefgKaY9hmbxlkkaYTmia8Mc9:Ghoa8NcitcwGhEarc;qlfawceVfRbbcwtarc;qlfawc9:GfRbbVhLarc;qofhwaghXinawa5aofRbbcwtaaaofRbbVg8AaL9RgLcetaLcztcz91cs47cFFiGaE486bbaoalfhoawcefhwa8AhLa3aXcufgX9hmbxikkaYTmda8Jawfhoarc;qlfawfRbbhLarc;qofhwaghXinawaoRbbg8AaL9RgLcetaLcKtcK91cr4786bbawcefhwaoalfhoa8AhLa3aXcufgX9hmbxdkkaYTmeka8LydbhEcbhKarc;qofhoincdhLcbhwinaLaoawfRbbcb9hfhLawcefgwcz9hmbkclhXcbhwinaXaoawfRbbcd0fhXawcefgwcz9hmbkcwh8Acbhwina8AaoawfRbbcP0fh8Aawcefgwcz9hmbkaLaXaLaX6Egwa8Aawa8A6Egwczawcz6EaEfhEaoczfhoaKczfgKaY6mbka8LaEBdbka8Mcefh8Ma8Ncefg8Ncl9hmbka8Kcefg8KaC9hmbkaaamfhaahaxfhha5amfh5a3axfg3ai6mbkcbhocehwaPhLinawaoaLydbarc;alfaocdtfydb6EhoaLclfhLawcefgXhwaCaX9hmbkaraAcd4fa8FcdVaoaocdSE86bbaAclfgAal6mbkkabaefh8Kabcefhoalcd4gecbaDEhkadcefhOarc;abfceVhHcbhmdndninaiam9nmearc;qofcbcjdz:xjjjb8Aa8Kao9Rak6mdadamal2gwfhxcbh8JaOawfhzaocbakz:xjjjbghakfh5aqaiam9Ramaqfai6Egscsfgocl4cifcd4hCaoc9WGg8LThPindndndndndndndndndndnaDTmbara8Jcd4fRbbgLciGPlbedlbkasTmdaxa8Jfhoarc;abfa8JfRbbhLarc;qofhwashXinawaoRbbg8AaL9RgLcetaLcKtcK91cr4786bbawcefhwaoalfhoa8AhLaXcufgXmbxikkasTmia8JcitcwGhEarc;abfa8JceVfRbbcwtarc;abfa8Jc9:GgofRbbVhLaxaofhoarc;qofhwashXinawao8Vbbg8AaL9RgLcetaLcztcz91cs47cFFiGaE486bbawcefhwaoalfhoa8AhLaXcufgXmbxdkkaHa8Jc98GgEfhoazaEfh8Aarc;abfaEfRbbhXcwhwinaoRbbawtaXVhXaocefhoawcwfgwca9hmbkasTmbaLcl4hYa8JcitcKGh3axaEfhEcbhKinaERbbhLcwhoa8AhwinawRbbaotaLVhLawcefhwaocwfgoca9hmbkarc;qofaKfaLaX7aY93a3486bba8Aalfh8AaEalfhEaLhXaKcefgKas9hmbkkaDmbcbhoxlka8LTmbcbhodninarc;qofaofgwcwf8Pibaw8Pib:e9qTmeaoczfgoa8L9pmdxbkkdnavmbcehoxikcbhEaChKaChYinarc;qofaEfgocwf8Pibhyao8Pibh8PcdhLcbhwinaLaoawfRbbcb9hfhLawcefgwcz9hmbkclhXcbhwinaXaoawfRbbcd0fhXawcefgwcz9hmbkcwh8Acbhwina8AaoawfRbbcP0fh8Aawcefgwcz9hmbkaLaXaLaX6Egoa8Aaoa8A6Egoczaocz6EaYfhYaocucbaya8P:e9cb9sEgwaoaw6EaKfhKaEczfgEa8L9pmdxbkkaha8Jcd4fgoaoRbbcda8JcetcoGtV86bbxikdnaKas6mbaYas6mbaha8Jcd4fgoaoRbbcia8JcetcoGtV86bba8Ka59Ras6mra5arc;qofasz:wjjjbasfh5xikaKaY9phokaha8Jcd4fgwawRbbaoa8JcetcoGtV86bbka8Ka59RaC6mla5cbaCz:xjjjbgAaCfhYdndna8LmbaPhoxekdna8KaY9RcK9pmbaPhoxekaocdtc:q1jjbfcj1jjbaDEg5ydxggcetc;:FFFeGh8Fcuh3cuagtcu7cFeGhacbh8Marc;qofhLinarc;qofa8MfhQczhEdndndnagPDbeeeeeeedekcucbaQcwf8PibaQ8Pib:e9cb9sEhExekcbhoa8FhEinaEaaaLaofRbb9nfhEaocefgocz9hmbkkcih8Ecbh8Ainczhwdndndna5a8AcdtfydbgKPDbeeeeeeedekcucbaQcwf8PibaQ8Pib:e9cb9sEhwxekaKcetc;:FFFeGhwcuaKtcu7cFeGhXcbhoinawaXaLaofRbb9nfhwaocefgocz9hmbkkdndnawaE6mbaKa39hmeawaE9hmea5a8EcdtfydbcwSmeka8Ah8EawhEka8Acefg8Aci9hmbkaAa8Mco4fgoaoRbba8Ea8Mci4coGtV86bbdndndna5a8Ecdtfydbg3PDdbbbbbbbebkdncwa39Tg8ETmbcua3tcu7hwdndna3ceSmbcbh8NaLhQinaQhoa8Eh8AcbhXinaoRbbgEawcFeGgKaEaK6EaXa3tVhXaocefhoa8Acufg8AmbkaYaX86bbaQa8EfhQaYcefhYa8Na8Efg8Ncz6mbxdkkcbh8NaLhQinaQhoa8Eh8AcbhXinaoRbbgEawcFeGgKaEaK6EaXcetVhXaocefhoa8Acufg8AmbkaYaX:T9cFe:d9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:9ca188bbaQa8EfhQaYcefhYa8Na8Efg8Ncz6mbkkcbhoinaYaLaofRbbgX86bbaYaXawcFeG9pfhYaocefgocz9hmbxikkdna3ceSmbinaYcb86bbaYcefhYxbkkinaYcb86bbaYcefhYxbkkaYaQ8Pbb83bbaYcwfaQcwf8Pbb83bbaYczfhYka8Mczfg8Ma8L9pgomeaLczfhLa8KaY9RcK9pmbkkaoTmlaYh5aYTmlka8Jcefg8Jal9hmbkarc;abfaxascufal2falz:wjjjb8Aasamfhma5hoa5mbkcbhwxdkdna8Kao9RakalfgwcKcaaDEgLawaL0EgX9pmbcbhwxdkdnawaL9pmbaocbaXaw9Rgwz:xjjjbawfhokaoarc;adfalz:wjjjbalfhodnaDTmbaoaraez:wjjjbaefhokaoab9Rhwxekcbhwkarc;qwf8Kjjjjbawk5babaeadaialcdcbyd;m:kjjbz:bjjjbk9reduaecd4gdaefgicaaica0Eabcj;abae9Uc;WFbGcjdaeca0Egifcufai9Uae2aiadfaicl4cifcd4f2fcefkmbcbabBd;m:kjjbk:Ese5u8Jjjjjbc;ae9Rgl8Kjjjjbcbhvdnaici9UgocHfae0mbabcbyd;q:kjjbgrc;GeV86bbalc;abfcFecjez:xjjjb8AalcUfgw9cu83ibalc8WfgD9cu83ibalcyfgq9cu83ibalcafgk9cu83ibalcKfgx9cu83ibalczfgm9cu83ibal9cu83iwal9cu83ibabaefc9WfhPabcefgsaofhednaiTmbcmcsarcb9kgzEhHcbhOcbhAcbhCcbhXcbhQindnaeaP9nmbcbhvxikaQcufhvadaCcdtfgLydbhKaLcwfydbhYaLclfydbh8AcbhEdndndninalc;abfavcsGcitfgoydlh3dndndnaoydbgoaK9hmba3a8ASmekdnaoa8A9hmba3aY9hmbaEcefhExekaoaY9hmea3aK9hmeaEcdfhEkaEc870mdaXcufhvaLaEciGcx2goc;i1jjbfydbcdtfydbh3aLaoc;e1jjbfydbcdtfydbh8AaLaoc;a1jjbfydbcdtfydbhKcbhodnindnalavcsGcdtfydba39hmbaohYxdkcuhYavcufhvaocefgocz9hmbkkaOa3aOSgvaYce9iaYaH9oVgoGfhOdndndncbcsavEaYaoEgvcs9hmbarce9imba3a3aAa3cefaASgvEgAcefSmecmcsavEhvkasavaEcdtc;WeGV86bbavcs9hmea3aA9Rgvcetavc8F917hvinaeavcFb0crtavcFbGV86bbaecefheavcje6hoavcr4hvaoTmbka3hAxvkcPhvasaEcdtcPV86bba3hAkavTmiavaH9omicdhocehEaQhYxlkavcufhvaEclfgEc;ab9hmbkkdnaLceaYaOSceta8AaOSEcx2gvc;a1jjbfydbcdtfydbgKTaLavc;e1jjbfydbcdtfydbg8AceSGaLavc;i1jjbfydbcdtfydbg3cdSGaOcb9hGazGg5ce9hmbaw9cu83ibaD9cu83ibaq9cu83ibak9cu83ibax9cu83ibam9cu83ibal9cu83iwal9cu83ibcbhOkcbhEaXcufgvhodnindnalaocsGcdtfydba8A9hmbaEhYxdkcuhYaocufhoaEcefgEcz9hmbkkcbhodnindnalavcsGcdtfydba39hmbaohExdkcuhEavcufhvaocefgocz9hmbkkaOaKaOSg8EfhLdndnaYcm0mbaYcefhYxekcbcsa8AaLSgvEhYaLavfhLkdndnaEcm0mbaEcefhExekcbcsa3aLSgvEhEaLavfhLkc9:cua8EEh8FcbhvaEaYcltVgacFeGhodndndninavc:W1jjbfRbbaoSmeavcefgvcz9hmbxdkka5aKaO9havcm0VVmbasavc;WeV86bbxekasa8F86bbaeaa86bbaecefhekdna8EmbaKaA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombkaKhAkdnaYcs9hmba8AaA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombka8AhAkdnaEcs9hmba3aA9Rgvcetavc8F917hvinaeavcFb0gocrtavcFbGV86bbavcr4hvaecefheaombka3hAkalaXcdtfaKBdbaXcefcsGhvdndnaYPzbeeeeeeeeeeeeeebekalavcdtfa8ABdbaXcdfcsGhvkdndnaEPzbeeeeeeeeeeeeeebekalavcdtfa3BdbavcefcsGhvkcihoalc;abfaQcitfgEaKBdlaEa8ABdbaQcefcsGhYcdhEavhXaLhOxekcdhoalaXcdtfa3BdbcehEaXcefcsGhXaQhYkalc;abfaYcitfgva8ABdlava3Bdbalc;abfaQaEfcsGcitfgva3BdlavaKBdbascefhsaQaofcsGhQaCcifgCai6mbkkdnaeaP9nmbcbhvxekcbhvinaeavfavc:W1jjbfRbb86bbavcefgvcz9hmbkaeab9Ravfhvkalc;aef8KjjjjbavkZeeucbhddninadcefgdc8F0meceadtae6mbkkadcrfcFeGcr9Uci2cdfabci9U2cHfkmbcbabBd;q:kjjbk:Adewu8Jjjjjbcz9Rhlcbhvdnaicvfae0mbcbhvabcbRb;q:kjjbc;qeV86bbal9cb83iwabcefhoabaefc98fhrdnaiTmbcbhwcbhDindnaoar6mbcbskadaDcdtfydbgqalcwfawaqav9Rgvavc8F91gv7av9Rc507gwcdtfgkydb9Rgvc8E91c9:Gavcdt7awVhvinaoavcFb0gecrtavcFbGV86bbavcr4hvaocefhoaembkakaqBdbaqhvaDcefgDai9hmbkkdnaoar9nmbcbskaocbBbbaoab9RclfhvkavkBeeucbhddninadcefgdc8F0meceadtae6mbkkadcwfcFeGcr9Uab2cvfk:bvli99dui99ludnaeTmbcuadcetcuftcu7:Zhvdndncuaicuftcu7:ZgoJbbbZMgr:lJbbb9p9DTmbar:Ohwxekcjjjj94hwkcbhicbhDinalclfIdbgrJbbbbJbbjZalIdbgq:lar:lMalcwfIdbgk:lMgr:varJbbbb9BEgrNhxaqarNhrdndnakJbbbb9GTmbaxhqxekJbbjZar:l:tgqaq:maxJbbbb9GEhqJbbjZax:l:tgxax:marJbbbb9GEhrkdndnalcxfIdbgxJbbj:;axJbbj:;9GEgkJbbjZakJbbjZ9FEavNJbbbZJbbb:;axJbbbb9GEMgx:lJbbb9p9DTmbax:Ohmxekcjjjj94hmkdndnaqJbbj:;aqJbbj:;9GEgxJbbjZaxJbbjZ9FEaoNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:OhPxekcjjjj94hPkdndnarJbbj:;arJbbj:;9GEgqJbbjZaqJbbjZ9FEaoNJbbbZJbbb:;arJbbbb9GEMgr:lJbbb9p9DTmbar:Ohsxekcjjjj94hskdndnadcl9hmbabaifgzas86bbazcifam86bbazcdfaw86bbazcefaP86bbxekabaDfgzas87ebazcofam87ebazclfaw87ebazcdfaP87ebkalczfhlaiclfhiaDcwfhDaecufgembkkk;hlld99eud99eudnaeTmbdndncuaicuftcu7:ZgvJbbbZMgo:lJbbb9p9DTmbao:Ohixekcjjjj94hikaic;8FiGhrinabcofcicdalclfIdb:lalIdb:l9EgialcwfIdb:lalaicdtfIdb:l9EEgialcxfIdb:lalaicdtfIdb:l9EEgiarV87ebdndnJbbj:;JbbjZalaicdtfIdbJbbbb9DEgoalaicd7cdtfIdbJ;Zl:1ZNNgwJbbj:;awJbbj:;9GEgDJbbjZaDJbbjZ9FEavNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohqxekcjjjj94hqkabcdfaq87ebdndnalaicefciGcdtfIdbJ;Zl:1ZNaoNgwJbbj:;awJbbj:;9GEgDJbbjZaDJbbjZ9FEavNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohqxekcjjjj94hqkabaq87ebdndnaoalaicufciGcdtfIdbJ;Zl:1ZNNgoJbbj:;aoJbbj:;9GEgwJbbjZawJbbjZ9FEavNJbbbZJbbb:;aoJbbbb9GEMgo:lJbbb9p9DTmbao:Ohixekcjjjj94hikabclfai87ebabcwfhbalczfhlaecufgembkkk;3viDue99eu8Jjjjjbcjd9Rgo8Kjjjjbadcd4hrdndndndnavcd9hmbadcl6meaohwarhDinawc:CuBdbawclfhwaDcufgDmbkaeTmiadcl6mdarcdthqalhkcbhxinaohwakhDarhminawawydbgPcbaDIdbgs:8cL4cFeGc:cufasJbbbb9BEgzaPaz9kEBdbaDclfhDawclfhwamcufgmmbkakaqfhkaxcefgxaeSmixbkkaeTmdxekaeTmekarcdthkavce9hhqadcl6hdcbhxindndndnaqmbadmdc:CuhDalhwarhminaDcbawIdbgs:8cL4cFeGc:cufasJbbbb9BEgPaDaP9kEhDawclfhwamcufgmmbxdkkc:CuhDdndnavPleddbdkadmdaohwalhmarhPinawcbamIdbgs:8cL4cFeGgzc;:bazc;:b0Ec:cufasJbbbb9BEBdbamclfhmawclfhwaPcufgPmbxdkkadmecbhwarhminaoawfcbalawfIdbgs:8cL4cFeGgPc8AaPc8A0Ec:cufasJbbbb9BEBdbawclfhwamcufgmmbkkadmbcbhwarhPinaDhmdnavceSmbaoawfydbhmkdndnalawfIdbgscjjj;8iamai9RcefgmcLt9R::NJbbbZJbbb:;asJbbbb9GEMgs:lJbbb9p9DTmbas:Ohzxekcjjjj94hzkabawfazcFFFrGamcKtVBdbawclfhwaPcufgPmbkkabakfhbalakfhlaxcefgxae9hmbkkaocjdf8Kjjjjbk:Ylvdud99due99iudnaeTmbceaicufgvthocuaitcu7:Zhrcuavtcu7:Zhwcbhvadcl9hhDcbhqindndnalcwfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikdndnalIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohdxekcjjjj94hdkadai9Rcd9TgxaifhidndnalclfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEarNJbbbZMgk:lJbbb9p9DTmbak:Ohdxekcjjjj94hdkadai9Rcd9ThddndnalcxfIdbgkJbbbbakJbbbb9GEgkJbbjZakJbbjZ9FEawNJbbbZMgk:lJbbb9p9DTmbak:Ohmxekcjjjj94hmkadaifhiaoamVhmdndnaDmbabavfgPai86bbaPcifam86bbaPcdfad86bbaPcefax86bbxekabaqfgPai87ebaPcofam87ebaPclfad87ebaPcdfax87ebkalczfhlavclfhvaqcwfhqaecufgembkkk;YqdXui998Jjjjjbc:qd9Rgv8Kjjjjbavc:Sefcbc;Kbz:xjjjb8AcbhodnadTmbcbhoaiTmbdndnabaeSmbaehrxekavcuadcdtgwadcFFFFi0Ecbyd;u:kjjbHjjjjbbgrBd:SeavceBd:mdaraeawz:wjjjb8Akavc:GefcwfcbBdbav9cb83i:Geavc:Gefaradaiavc:Sefz:pjjjbavyd:GehDadci9Ugqcbyd;u:kjjbHjjjjbbheavc:Sefavyd:mdgkcdtfaeBdbavakcefgwBd:mdaecbaqz:xjjjbhxavc:SefawcdtfcuaicdtaicFFFFi0Ecbyd;u:kjjbHjjjjbbgmBdbavakcdfgPBd:mdalc;ebfhsaDheamhwinawalIdbasaeydbgzcwazcw6EcdtfIdbMUdbaeclfheawclfhwaicufgimbkavc:SefaPcdtfcuaqcdtadcFFFF970Ecbyd;u:kjjbHjjjjbbgPBdbdnadci6mbarheaPhwaqhiinawamaeydbcdtfIdbamaeclfydbcdtfIdbMamaecwfydbcdtfIdbMUdbaecxfheawclfhwaicufgimbkkakcifhoalc;ebfhHavc;qbfhOavheavyd:KehAavyd:OehCcbhzcbhwcbhXcehQinaehLcihkarawci2gKcdtfgeydbhsaeclfydbhdabaXcx2fgicwfaecwfydbgYBdbaiclfadBdbaiasBdbaxawfce86bbaOaYBdwaOadBdlaOasBdbaPawcdtfcbBdbdnazTmbcihkaLhiinaOakcdtfaiydbgeBdbakaeaY9haeas9haead9hGGfhkaiclfhiazcufgzmbkkaXcefhXcbhzinaCaAarazaKfcdtfydbcdtgifydbcdtfgYheaDaifgdydbgshidnasTmbdninaeydbawSmeaeclfheaicufgiTmdxbkkaeaYascdtfc98fydbBdbadadydbcufBdbkazcefgzci9hmbkdndnakTmbcuhwJbbbbh8Acbhdavyd:KehYavyd:OehKindndnaDaOadcdtfydbcdtgzfydbgembadcefhdxekadcs0hiamazfgsIdbhEasalcbadcefgdaiEcdtfIdbaHaecwaecw6EcdtfIdbMg3Udba3aE:th3aecdthiaKaYazfydbcdtfheinaPaeydbgzcdtfgsa3asIdbMgEUdbaEa8Aa8AaE9DgsEh8AazawasEhwaeclfheaic98fgimbkkadak9hmbkawcu9hmekaQaq9pmdindnaxaQfRbbmbaQhwxdkaqaQcefgQ9hmbxikkakczakcz6EhzaOheaLhOawcu9hmbkkaocdtavc:Seffc98fhedninaoTmeaeydbcbyd;y:kjjbH:bjjjbbaec98fheaocufhoxbkkavc:qdf8Kjjjjbk;IlevucuaicdtgvaicFFFFi0Egocbyd;u:kjjbHjjjjbbhralalyd9GgwcdtfarBdbalawcefBd9GabarBdbaocbyd;u:kjjbHjjjjbbhralalyd9GgocdtfarBdbalaocefBd9GabarBdlcuadcdtadcFFFFi0Ecbyd;u:kjjbHjjjjbbhralalyd9GgocdtfarBdbalaocefBd9GabarBdwabydbcbavz:xjjjb8Aadci9UhDdnadTmbabydbhoaehladhrinaoalydbcdtfgvavydbcefBdbalclfhlarcufgrmbkkdnaiTmbabydbhlabydlhrcbhvaihoinaravBdbarclfhralydbavfhvalclfhlaocufgombkkdnadci6mbabydlhrabydwhvcbhlinaecwfydbhoaeclfydbhdaraeydbcdtfgwawydbgwcefBdbavawcdtfalBdbaradcdtfgdadydbgdcefBdbavadcdtfalBdbaraocdtfgoaoydbgocefBdbavaocdtfalBdbaecxfheaDalcefgl9hmbkkdnaiTmbabydlheabydbhlinaeaeydbalydb9RBdbalclfhlaeclfheaicufgimbkkkQbabaeadaic;K1jjbz:ojjjbkQbabaeadaic;m:jjjbz:ojjjbk9DeeuabcFeaicdtz:xjjjbhlcbhbdnadTmbindnalaeydbcdtfgiydbcu9hmbaiabBdbabcefhbkaeclfheadcufgdmbkkabk:Vvioud9:du8Jjjjjbc;Wa9Rgl8Kjjjjbcbhvalcxfcbc;Kbz:xjjjb8AalcuadcitgoadcFFFFe0Ecbyd;u:kjjbHjjjjbbgrBdxalceBd2araeadaicezNjjjbalcuaoadcjjjjoGEcbyd;u:kjjbHjjjjbbgwBdzadcdthednadTmbabhiinaiavBdbaiclfhiadavcefgv9hmbkkawaefhDalabBdwalawBdl9cbhqindnadTmbaq9cq9:hkarhvaDhiadheinaiav8Pibak1:NcFrG87ebavcwfhvaicdfhiaecufgembkkalclfaq:NceGcdtfydbhxalclfaq9ce98gq:NceGcdtfydbhmalc;Wbfcbcjaz:xjjjb8AaDhvadhidnadTmbinalc;Wbfav8VebcdtfgeaeydbcefBdbavcdfhvaicufgimbkkcbhvcbhiinalc;WbfavfgeydbhoaeaiBdbaoaifhiavclfgvcja9hmbkadhvdndnadTmbinalc;WbfaDamydbgicetf8VebcdtfgeaeydbgecefBdbaxaecdtfaiBdbamclfhmavcufgvmbkaq9cv9smdcbhvinabawydbcdtfavBdbawclfhwadavcefgv9hmbxdkkaq9cv9smekkclhvdninavc98Smealcxfavfydbcbyd;y:kjjbH:bjjjbbavc98fhvxbkkalc;Waf8Kjjjjbk:Jwliuo99iud9:cbhv8Jjjjjbca9Rgoczfcwfcbyd:8:kjjbBdbaocb8Pd:0:kjjb83izaocwfcbyd;i:kjjbBdbaocb8Pd;a:kjjb83ibaicd4hrdndnadmbJFFuFhwJFFuuhDJFFuuhqJFFuFhkJFFuuhxJFFuFhmxekarcdthPaehsincbhiinaoczfaifgzasaifIdbgwazIdbgDaDaw9EEUdbaoaifgzawazIdbgDaDaw9DEUdbaiclfgicx9hmbkasaPfhsavcefgvad9hmbkaoIdKhDaoIdwhwaoIdChqaoIdlhkaoIdzhxaoIdbhmkdnadTmbJbbbbJbFu9hJbbbbamax:tgmamJbbbb9DEgmakaq:tgkakam9DEgkawaD:tgwawak9DEgw:vawJbbbb9BEhwdnalmbarcdthoindndnaeclfIdbaq:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:S9cC:ghHdndnaeIdbax:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikaHai:S:ehHdndnaecwfIdbaD:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabaHai:T9cy:g:e83ibaeaofheabcwfhbadcufgdmbxdkkarcdthoindndnaeIdbax:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cv9:9c;j:KM;j:KM;j:Kd:dhOdndnaeclfIdbaq:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cq9:9cM;j:KM;j:KM;jl:daO:ehOdndnaecwfIdbaD:tawNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabaOai:SgH9ca:gaH9cz:g9cjjj;4s:d:eaH9cFe:d:e9cF:bj;4:pj;ar:d9c:bd9:9c:p;G:d;4j:E;ar:d9cH9:9c;d;H:W:y:m:g;d;Hb:d9cC9:9c:KM;j:KM;j:KMD:d:e83ibaeaofheabcwfhbadcufgdmbkkk9teiucbcbyd;C:kjjbgeabcifc98GfgbBd;C:kjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd;C:kjjbgeabcrfc94GfgbBd;C:kjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaikTeeucbabcbyd;C:kjjbge9Rcifc98GaefgbBd;C:kjjbdnabZbcztge9nmbabae9RcFFifcz4nb8Akkk;Uddbcjwk;mdbbbbdbbblbbbwbbbbbbbebbbdbbblbbbwbbbbbbbbbbbbbbbb4:h9w9N94:P:gW:j9O:ye9Pbbbbbbebbbdbbbebbbdbbbbbbbdbbbbbbbebbbbbbb:l29hZ;69:9kZ;N;76Z;rg97Z;z;o9xZ8J;B85Z;:;u9yZ;b;k9HZ:2;Z9DZ9e:l9mZ59A8KZ:r;T3Z:A:zYZ79OHZ;j4::8::Y:D9V8:bbbb9s:49:Z8R:hBZ9M9M;M8:L;z;o8:;8:PG89q;x:J878R:hQ8::M:B;e87bbbbbbjZbbjZbbjZ:E;V;N8::Y:DsZ9i;H;68:xd;R8:;h0838:;W:NoZbbbb:WV9O8:uf888:9i;H;68:9c9G;L89;n;m9m89;D8Ko8:bbbbf:8tZ9m836ZS:2AZL;zPZZ818EZ9e:lxZ;U98F8:819E;68:FFuuFFuuFFuuFFuFFFuFFFuFbc;mqkCebbbebbbebbbdbbb9G:vbb";
+  var wasmpack = new Uint8Array([
+    32,
+    0,
+    65,
+    2,
+    1,
+    106,
+    34,
+    33,
+    3,
+    128,
+    11,
+    4,
+    13,
+    64,
+    6,
+    253,
+    10,
+    7,
+    15,
+    116,
+    127,
+    5,
+    8,
+    12,
+    40,
+    16,
+    19,
+    54,
+    20,
+    9,
+    27,
+    255,
+    113,
+    17,
+    42,
+    67,
+    24,
+    23,
+    146,
+    148,
+    18,
+    14,
+    22,
+    45,
+    70,
+    69,
+    56,
+    114,
+    101,
+    21,
+    25,
+    63,
+    75,
+    136,
+    108,
+    28,
+    118,
+    29,
+    73,
+    115
+  ]);
+  if (typeof WebAssembly !== "object") {
+    return {
+      supported: false
+    };
+  }
+  var instance;
+  var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
+    instance = result.instance;
+    instance.exports.__wasm_call_ctors();
+    instance.exports.meshopt_encodeVertexVersion(1);
+    instance.exports.meshopt_encodeIndexVersion(1);
+  });
+  function unpack(data) {
+    var result = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; ++i) {
+      var ch = data.charCodeAt(i);
+      result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
+    }
+    var write = 0;
+    for (var i = 0; i < data.length; ++i) {
+      result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
+    }
+    return result.buffer.slice(0, write);
+  }
+  function assert(cond) {
+    if (!cond) {
+      throw new Error("Assertion failed");
+    }
+  }
+  function bytes(view) {
+    return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
+  }
+  function reorder(fun, indices, vertices, optf) {
+    var sbrk = instance.exports.sbrk;
+    var ip = sbrk(indices.length * 4);
+    var rp = sbrk(vertices * 4);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    var indices8 = bytes(indices);
+    heap.set(indices8, ip);
+    if (optf) {
+      optf(ip, ip, indices.length, vertices);
+    }
+    var unique = fun(rp, ip, indices.length, vertices);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var remap = new Uint32Array(vertices);
+    new Uint8Array(remap.buffer).set(heap.subarray(rp, rp + vertices * 4));
+    indices8.set(heap.subarray(ip, ip + indices.length * 4));
+    sbrk(ip - sbrk(0));
+    for (var i = 0; i < indices.length; ++i) indices[i] = remap[indices[i]];
+    return [remap, unique];
+  }
+  function spatialsort(fun, positions, count, stride) {
+    var sbrk = instance.exports.sbrk;
+    var ip = sbrk(count * 4);
+    var sp = sbrk(count * stride);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(positions), sp);
+    fun(ip, sp, count, stride);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var remap = new Uint32Array(count);
+    new Uint8Array(remap.buffer).set(heap.subarray(ip, ip + count * 4));
+    sbrk(ip - sbrk(0));
+    return remap;
+  }
+  function encode(fun, bound, source, count, size, level, version) {
+    var sbrk = instance.exports.sbrk;
+    var tp = sbrk(bound);
+    var sp = sbrk(count * size);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(source), sp);
+    var res = fun(tp, bound, sp, count, size, level, version);
+    var target = new Uint8Array(res);
+    target.set(heap.subarray(tp, tp + res));
+    sbrk(tp - sbrk(0));
+    return target;
+  }
+  function maxindex(source) {
+    var result = 0;
+    for (var i = 0; i < source.length; ++i) {
+      var index = source[i];
+      result = result < index ? index : result;
+    }
+    return result;
+  }
+  function index32(source, size) {
+    assert(size == 2 || size == 4);
+    if (size == 4) {
+      return new Uint32Array(source.buffer, source.byteOffset, source.byteLength / 4);
+    } else {
+      var view = new Uint16Array(source.buffer, source.byteOffset, source.byteLength / 2);
+      return new Uint32Array(view);
+    }
+  }
+  function filter(fun, source, count, stride, bits, insize, mode2) {
+    var sbrk = instance.exports.sbrk;
+    var tp = sbrk(count * stride);
+    var sp = sbrk(count * insize);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(source), sp);
+    fun(tp, count, stride, bits, sp, mode2);
+    var target = new Uint8Array(count * stride);
+    target.set(heap.subarray(tp, tp + count * stride));
+    sbrk(tp - sbrk(0));
+    return target;
+  }
+  return {
+    ready,
+    supported: true,
+    reorderMesh: function(indices, triangles, optsize) {
+      var optf = triangles ? optsize ? instance.exports.meshopt_optimizeVertexCacheStrip : instance.exports.meshopt_optimizeVertexCache : void 0;
+      return reorder(instance.exports.meshopt_optimizeVertexFetchRemap, indices, maxindex(indices) + 1, optf);
+    },
+    reorderPoints: function(positions, positions_stride) {
+      assert(positions instanceof Float32Array);
+      assert(positions.length % positions_stride == 0);
+      assert(positions_stride >= 3);
+      return spatialsort(instance.exports.meshopt_spatialSortRemap, positions, positions.length / positions_stride, positions_stride * 4);
+    },
+    encodeVertexBuffer: function(source, count, size) {
+      assert(size > 0 && size <= 256);
+      assert(size % 4 == 0);
+      var bound = instance.exports.meshopt_encodeVertexBufferBound(count, size);
+      return encode(instance.exports.meshopt_encodeVertexBuffer, bound, source, count, size);
+    },
+    encodeVertexBufferLevel: function(source, count, size, level, version) {
+      assert(size > 0 && size <= 256);
+      assert(size % 4 == 0);
+      assert(level >= 0 && level <= 3);
+      assert(version === void 0 || version == 0 || version == 1);
+      var bound = instance.exports.meshopt_encodeVertexBufferBound(count, size);
+      return encode(instance.exports.meshopt_encodeVertexBufferLevel, bound, source, count, size, level, version === void 0 ? -1 : version);
+    },
+    encodeIndexBuffer: function(source, count, size) {
+      assert(size == 2 || size == 4);
+      assert(count % 3 == 0);
+      var indices = index32(source, size);
+      var bound = instance.exports.meshopt_encodeIndexBufferBound(count, maxindex(indices) + 1);
+      return encode(instance.exports.meshopt_encodeIndexBuffer, bound, indices, count, 4);
+    },
+    encodeIndexSequence: function(source, count, size) {
+      assert(size == 2 || size == 4);
+      var indices = index32(source, size);
+      var bound = instance.exports.meshopt_encodeIndexSequenceBound(count, maxindex(indices) + 1);
+      return encode(instance.exports.meshopt_encodeIndexSequence, bound, indices, count, 4);
+    },
+    encodeGltfBuffer: function(source, count, size, mode2, version) {
+      var table2 = {
+        ATTRIBUTES: this.encodeVertexBufferLevel,
+        TRIANGLES: this.encodeIndexBuffer,
+        INDICES: this.encodeIndexSequence
+      };
+      assert(table2[mode2]);
+      return table2[mode2](
+        source,
+        count,
+        size,
+        /* level= */
+        2,
+        version === void 0 ? 0 : version
+      );
+    },
+    encodeFilterOct: function(source, count, stride, bits) {
+      assert(stride == 4 || stride == 8);
+      assert(bits >= 2 && bits <= 16);
+      return filter(instance.exports.meshopt_encodeFilterOct, source, count, stride, bits, 16);
+    },
+    encodeFilterQuat: function(source, count, stride, bits) {
+      assert(stride == 8);
+      assert(bits >= 4 && bits <= 16);
+      return filter(instance.exports.meshopt_encodeFilterQuat, source, count, stride, bits, 16);
+    },
+    encodeFilterExp: function(source, count, stride, bits, mode2) {
+      assert(stride > 0 && stride % 4 == 0);
+      assert(bits >= 1 && bits <= 24);
+      var table2 = {
+        Separate: 0,
+        SharedVector: 1,
+        SharedComponent: 2,
+        Clamped: 3
+      };
+      return filter(instance.exports.meshopt_encodeFilterExp, source, count, stride, bits, stride, mode2 ? table2[mode2] : 1);
+    },
+    encodeFilterColor: function(source, count, stride, bits) {
+      assert(stride == 4 || stride == 8);
+      assert(bits >= 2 && bits <= 16);
+      return filter(instance.exports.meshopt_encodeFilterColor, source, count, stride, bits, 16);
+    }
+  };
+})();
+
+// node_modules/meshoptimizer/meshopt_decoder.mjs
+var MeshoptDecoder = (function() {
+  var wasm_base = "b9H79Tebbbe8Fv9Gbb9Gvuuuuueu9Giuuub9Geueu9Giuuueuixkbeeeddddillviebeoweuec:W:Odkr;Neqo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9KW9J9V9KW9wWVtW949c919M9MWVbeY9TW79O9V9Wt9F9KW9J9V9KW69U9KW949c919M9MWVbdE9TW79O9V9Wt9F9KW9J9V9KW69U9KW949tWG91W9U9JWbiL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9p9JtblK9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9r919HtbvL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVT949WboY9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVJ9V29VVbrl79IV9Rbwq;lZkdbk;jYi5ud9:du8Jjjjjbcj;kb9Rgv8Kjjjjbc9:hodnalTmbcuhoaiRbbgrc;WeGc:Ge9hmbarcsGgwce0mbc9:hoalcufadcd4cbawEgDadfgrcKcaawEgqaraq0Egk6mbaicefhxcj;abad9Uc;WFbGcjdadca0EhmaialfgPar9Rgoadfhsavaoadz:jjjjbgzceVhHcbhOdndninaeaO9nmeaPax9RaD6mdamaeaO9RaOamfgoae6EgAcsfglc9WGhCabaOad2fhXaAcethQaxaDfhiaOaeaoaeao6E9RhLalcl4cifcd4hKazcj;cbfaAfhYcbh8AazcjdfhEaHh3incbhodnawTmbaxa8Acd4fRbbhokaocFeGh5cbh8Eazcj;cbfhqinaih8Fdndndndna5a8Ecet4ciGgoc9:fPdebdkaPa8F9RaA6mrazcj;cbfa8EaA2fa8FaAz:jjjjb8Aa8FaAfhixdkazcj;cbfa8EaA2fcbaAz:kjjjb8Aa8FhixekaPa8F9RaK6mva8FaKfhidnaCTmbaPai9RcK6mbaocdtc:q1jjbfcj1jjbawEhaczhrcbhlinargoc9Wfghaqfhrdndndndndndnaaa8Fahco4fRbbalcoG4ciGcdtfydbPDbedvivvvlvkar9cb83bbarcwf9cb83bbxlkarcbaiRbdai8Xbb9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:gg9cjjjjjz:dg8J9qE86bbaqaofgrcGfag9c8F1:NghcKtc8F91aicdfa8J9c8N1:Nfg8KRbbG86bbarcVfcba8KahcjeGcr4fghRbbag9cjjjjjl:dg8J9qE86bbarc7fcbaha8J9c8L1:NfghRbbag9cjjjjjd:dg8J9qE86bbarctfcbaha8J9c8K1:NfghRbbag9cjjjjje:dg8J9qE86bbarc91fcbaha8J9c8J1:NfghRbbag9cjjjj;ab:dg8J9qE86bbarc4fcbaha8J9cg1:NfghRbbag9cjjjja:dg8J9qE86bbarc93fcbaha8J9ch1:NfghRbbag9cjjjjz:dgg9qE86bbarc94fcbahag9ca1:NfghRbbai8Xbe9c:c:qj:bw9:9c:q;c1:I1e:d9c:b:c:e1z9:gg9cjjjjjz:dg8J9qE86bbarc95fag9c8F1:NgicKtc8F91aha8J9c8N1:NfghRbbG86bbarc96fcbahaicjeGcr4fgiRbbag9cjjjjjl:dg8J9qE86bbarc97fcbaia8J9c8L1:NfgiRbbag9cjjjjjd:dg8J9qE86bbarc98fcbaia8J9c8K1:NfgiRbbag9cjjjjje:dg8J9qE86bbarc99fcbaia8J9c8J1:NfgiRbbag9cjjjj;ab:dg8J9qE86bbarc9:fcbaia8J9cg1:NfgiRbbag9cjjjja:dg8J9qE86bbarcufcbaia8J9ch1:NfgiRbbag9cjjjjz:dgg9qE86bbaiag9ca1:NfhixikaraiRblaiRbbghco4g8Ka8KciSg8KE86bbaqaofgrcGfaiclfa8Kfg8KRbbahcl4ciGg8La8LciSg8LE86bbarcVfa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc7fa8Ka8Lfg8KRbbahciGghahciSghE86bbarctfa8Kahfg8KRbbaiRbeghco4g8La8LciSg8LE86bbarc91fa8Ka8Lfg8KRbbahcl4ciGg8La8LciSg8LE86bbarc4fa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc93fa8Ka8Lfg8KRbbahciGghahciSghE86bbarc94fa8Kahfg8KRbbaiRbdghco4g8La8LciSg8LE86bbarc95fa8Ka8Lfg8KRbbahcl4ciGg8La8LciSg8LE86bbarc96fa8Ka8Lfg8KRbbahcd4ciGg8La8LciSg8LE86bbarc97fa8Ka8Lfg8KRbbahciGghahciSghE86bbarc98fa8KahfghRbbaiRbigico4g8Ka8KciSg8KE86bbarc99faha8KfghRbbaicl4ciGg8Ka8KciSg8KE86bbarc9:faha8KfghRbbaicd4ciGg8Ka8KciSg8KE86bbarcufaha8KfgrRbbaiciGgiaiciSgiE86bbaraifhixdkaraiRbwaiRbbghcl4g8Ka8KcsSg8KE86bbaqaofgrcGfaicwfa8Kfg8KRbbahcsGghahcsSghE86bbarcVfa8KahfghRbbaiRbeg8Kcl4g8La8LcsSg8LE86bbarc7faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarctfaha8KfghRbbaiRbdg8Kcl4g8La8LcsSg8LE86bbarc91faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc4faha8KfghRbbaiRbig8Kcl4g8La8LcsSg8LE86bbarc93faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc94faha8KfghRbbaiRblg8Kcl4g8La8LcsSg8LE86bbarc95faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc96faha8KfghRbbaiRbvg8Kcl4g8La8LcsSg8LE86bbarc97faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc98faha8KfghRbbaiRbog8Kcl4g8La8LcsSg8LE86bbarc99faha8LfghRbba8KcsGg8Ka8KcsSg8KE86bbarc9:faha8KfghRbbaiRbrgicl4g8Ka8KcsSg8KE86bbarcufaha8KfgrRbbaicsGgiaicsSgiE86bbaraifhixekarai8Pbb83bbarcwfaicwf8Pbb83bbaiczfhikdnaoaC9pmbalcdfhlaoczfhraPai9RcL0mekkaoaC6moaimexokaCmva8FTmvkaqaAfhqa8Ecefg8Ecl9hmbkdndndndnawTmbasa8Acd4fRbbgociGPlbedrbkaATmdaza8Afh8Fazcj;cbfhhcbh8EaEhaina8FRbbhraahocbhlinaoahalfRbbgqce4cbaqceG9R7arfgr86bbaoadfhoaAalcefgl9hmbkaacefhaa8Fcefh8FahaAfhha8Ecefg8Ecl9hmbxikkaATmeaza8Afhaazcj;cbfhhcbhoceh8EaYh8FinaEaofhlaa8Vbbhrcbhoinala8FaofRbbcwtahaofRbbgqVc;:FiGce4cbaqceG9R7arfgr87bbaladfhlaLaocefgofmbka8FaQfh8FcdhoaacdfhaahaQfhha8EceGhlcbh8EalmbxdkkaATmbcbaocl49Rh8Eaza8AfRbbhqcwhoa3hlinalRbbaotaqVhqalcefhlaocwfgoca9hmbkcbhhaEh8FaYhainazcj;cbfahfRbbhrcwhoaahlinalRbbaotarVhralaAfhlaocwfgoca9hmbkara8E93aq7hqcbhoa8Fhlinalaqao486bbalcefhlaocwfgoca9hmbka8Fadfh8FaacefhaahcefghaA9hmbkkaEclfhEa3clfh3a8Aclfg8Aad6mbkaXazcjdfaAad2z:jjjjb8AazazcjdfaAcufad2fadz:jjjjb8AaAaOfhOaihxaimbkc9:hoxdkcbc99aPax9RakSEhoxekc9:hokavcj;kbf8Kjjjjbaok:XseHu8Jjjjjbc;ae9Rgv8Kjjjjbc9:hodnaeci9UgrcHfal0mbcuhoaiRbbgwc;WeGc;Ge9hmbawcsGgDce0mbavc;abfcFecjez:kjjjb8AavcUf9cu83ibavc8Wf9cu83ibavcyf9cu83ibavcaf9cu83ibavcKf9cu83ibavczf9cu83ibav9cu83iwav9cu83ibaialfc9WfhqaicefgwarfhldnaeTmbcmcsaDceSEhkcbhxcbhmcbhrcbhicbhoindnalaq9nmbc9:hoxikdndnawRbbgDc;Ve0mbavc;abfaoaDcu7gPcl4fcsGcitfgsydlhzasydbhHdndnaDcsGgsak9pmbavaiaPfcsGcdtfydbaxasEhDaxasTgOfhxxekdndnascsSmbcehOasc987asamffcefhDxekalcefhDal8SbbgscFeGhPdndnascu9mmbaDhlxekalcvfhlaPcFbGhPcrhsdninaD8SbbgOcFbGastaPVhPaOcu9kmeaDcefhDascrfgsc8J9hmbxdkkaDcefhlkcehOaPce4cbaPceG9R7amfhDkaDhmkavc;abfaocitfgsaDBdbasazBdlavaicdtfaDBdbavc;abfaocefcsGcitfgsaHBdbasaDBdlaocdfhoaOaifhidnadcd9hmbabarcetfgsaH87ebasclfaD87ebascdfaz87ebxdkabarcdtfgsaHBdbascwfaDBdbasclfazBdbxekdnaDcpe0mbaxcefgOavaiaqaDcsGfRbbgscl49RcsGcdtfydbascz6gPEhDavaias9RcsGcdtfydbaOaPfgzascsGgOEhsaOThOdndnadcd9hmbabarcetfgHax87ebaHclfas87ebaHcdfaD87ebxekabarcdtfgHaxBdbaHcwfasBdbaHclfaDBdbkavaicdtfaxBdbavc;abfaocitfgHaDBdbaHaxBdlavaicefgicsGcdtfaDBdbavc;abfaocefcsGcitfgHasBdbaHaDBdlavaiaPfgicsGcdtfasBdbavc;abfaocdfcsGcitfgDaxBdbaDasBdlaocifhoaiaOfhiazaOfhxxekaxcbalRbbgHEgAaDc;:eSgDfhzaHcsGhCaHcl4hXdndnaHcs0mbazcefhOxekazhOavaiaX9RcsGcdtfydbhzkdndnaCmbaOcefhxxekaOhxavaiaH9RcsGcdtfydbhOkdndnaDTmbalcefhDxekalcdfhDal8SbegPcFeGhsdnaPcu9kmbalcofhAascFbGhscrhldninaD8SbbgPcFbGaltasVhsaPcu9kmeaDcefhDalcrfglc8J9hmbkaAhDxekaDcefhDkasce4cbasceG9R7amfgmhAkdndnaXcsSmbaDhsxekaDcefhsaD8SbbglcFeGhPdnalcu9kmbaDcvfhzaPcFbGhPcrhldninas8SbbgDcFbGaltaPVhPaDcu9kmeascefhsalcrfglc8J9hmbkazhsxekascefhskaPce4cbaPceG9R7amfgmhzkdndnaCcsSmbashlxekascefhlas8SbbgDcFeGhPdnaDcu9kmbascvfhOaPcFbGhPcrhDdninal8SbbgscFbGaDtaPVhPascu9kmealcefhlaDcrfgDc8J9hmbkaOhlxekalcefhlkaPce4cbaPceG9R7amfgmhOkdndnadcd9hmbabarcetfgDaA87ebaDclfaO87ebaDcdfaz87ebxekabarcdtfgDaABdbaDcwfaOBdbaDclfazBdbkavc;abfaocitfgDazBdbaDaABdlavaicdtfaABdbavc;abfaocefcsGcitfgDaOBdbaDazBdlavaicefgicsGcdtfazBdbavc;abfaocdfcsGcitfgDaABdbaDaOBdlavaiaHcz6aXcsSVfgicsGcdtfaOBdbaiaCTaCcsSVfhiaocifhokawcefhwaocsGhoaicsGhiarcifgrae6mbkkcbc99alaqSEhokavc;aef8Kjjjjbaok:clevu8Jjjjjbcz9Rhvdnaecvfal9nmbc9:skdnaiRbbc;:eGc;qeSmbcuskav9cb83iwaicefhoaialfc98fhrdnaeTmbdnadcdSmbcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcdtfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgiBdbalaiBdbawcefgwae9hmbxdkkcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcetfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgi87ebalaiBdbawcefgwae9hmbkkcbc99aoarSEk:Lvoeue99dud99eud99dndnadcl9hmbaeTmeindndnabcdfgd8Sbb:Yab8Sbbgi:Ygl:l:tabcefgv8Sbbgo:Ygr:l:tgwJbb;:9cawawNJbbbbawawJbbbb9GgDEgq:mgkaqaicb9iEalMgwawNakaqaocb9iEarMgqaqNMM:r:vglNJbbbZJbbb:;aDEMgr:lJbbb9p9DTmbar:Ohixekcjjjj94hikadai86bbdndnaqalNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkavad86bbdndnawalNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohdxekcjjjj94hdkabad86bbabclfhbaecufgembxdkkaeTmbindndnabclfgd8Ueb:Yab8Uebgi:Ygl:l:tabcdfgv8Uebgo:Ygr:l:tgwJb;:FSawawNJbbbbawawJbbbb9GgDEgq:mgkaqaicb9iEalMgwawNakaqaocb9iEarMgqaqNMM:r:vglNJbbbZJbbb:;aDEMgr:lJbbb9p9DTmbar:Ohixekcjjjj94hikadai87ebdndnaqalNJbbbZJbbb:;aqJbbbb9GEMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkavad87ebdndnawalNJbbbZJbbb:;awJbbbb9GEMgw:lJbbb9p9DTmbaw:Ohdxekcjjjj94hdkabad87ebabcwfhbaecufgembkkk::ioiue99dud99dud99dnaeTmbcbhiabhlindndnal8Uebgv:YgoJ:ji:1Salcof8UebgrciVgw:Y:vgDNJbbbZJbbb:;avcu9kEMgq:lJbbb9p9DTmbaq:Ohkxekcjjjj94hkkalclf8Uebhvalcdf8UebhxabaiarcefciGfcetfak87ebdndnax:YgqaDNJbbbZJbbb:;axcu9kEMgm:lJbbb9p9DTmbam:Ohxxekcjjjj94hxkabaiarciGfgkcd7cetfax87ebdndnav:YgmaDNJbbbZJbbb:;avcu9kEMgP:lJbbb9p9DTmbaP:Ohvxekcjjjj94hvkabaiarcufciGfcetfav87ebdndnawaw2:ZgPaPMaoaoN:taqaqN:tamamN:tgoJbbbbaoJbbbb9GE:raDNJbbbZMgD:lJbbb9p9DTmbaD:Ohrxekcjjjj94hrkabakcetfar87ebalcwfhlaiclfhiaecufgembkkk9mbdnadcd4ae2gdTmbinababydbgecwtcw91:Yaece91cjjj98Gcjjj;8if::NUdbabclfhbadcufgdmbkkk:Tvirud99eudndnadcl9hmbaeTmeindndnabRbbgiabcefgl8Sbbgvabcdfgo8Sbbgrf9R:YJbbuJabcifgwRbbgdce4adVgDcd4aDVgDcl4aDVgD:Z:vgqNJbbbZMgk:lJbbb9p9DTmbak:Ohxxekcjjjj94hxkaoax86bbdndnaraif:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohoxekcjjjj94hokalao86bbdndnavaifar9R:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabai86bbdndnaDadcetGadceGV:ZaqNJbbbZMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkawad86bbabclfhbaecufgembxdkkaeTmbindndnab8Vebgiabcdfgl8Uebgvabclfgo8Uebgrf9R:YJbFu9habcofgw8Vebgdce4adVgDcd4aDVgDcl4aDVgDcw4aDVgD:Z:vgqNJbbbZMgk:lJbbb9p9DTmbak:Ohxxekcjjjj94hxkaoax87ebdndnaraif:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohoxekcjjjj94hokalao87ebdndnavaifar9R:YaqNJbbbZMgk:lJbbb9p9DTmbak:Ohixekcjjjj94hikabai87ebdndnaDadcetGadceGV:ZaqNJbbbZMgq:lJbbb9p9DTmbaq:Ohdxekcjjjj94hdkawad87ebabcwfhbaecufgembkkk9teiucbcbyd:K1jjbgeabcifc98GfgbBd:K1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabkk81dbcjwk8Kbbbbdbbblbbbwbbbbbbbebbbdbbblbbbwbbbbc:Kwkl8WNbb";
+  var wasm_simd = "b9H79TebbbeKl9Gbb9Gvuuuuueu9Giuuub9Geueuixkbbebeeddddilve9Weeeviebeoweuec:q:6dkr;Neqo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9KW9J9V9KW9wWVtW949c919M9MWVbdY9TW79O9V9Wt9F9KW9J9V9KW69U9KW949c919M9MWVblE9TW79O9V9Wt9F9KW9J9V9KW69U9KW949tWG91W9U9JWbvL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9p9JtboK9TW79O9V9Wt9F9KW9J9V9KWS9P2tWV9r919HtbrL9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVT949WbwY9TW79O9V9Wt9F9KW9J9V9KWS9P2tWVJ9V29VVbDl79IV9Rbqq:Ctklbzik9:evu8Jjjjjbcz9Rhbcbheincbhdcbhiinabcwfadfaicjuaead4ceGglE86bbaialfhiadcefgdcw9hmbkaec:q:yjjbfai86bbaecitc:q1jjbfab8Piw83ibaecefgecjd9hmbkk:183lYud97dur978Jjjjjbcj;kb9Rgv8Kjjjjbc9:hodnalTmbcuhoaiRbbgrc;WeGc:Ge9hmbarcsGgwce0mbc9:hoalcufadcd4cbawEgDadfgrcKcaawEgqaraq0Egk6mbaicefhxavaialfgmar9Rgoad;8qbbcj;abad9Uc;WFbGcjdadca0EhPdndndnadTmbaoadfhscbhzinaeaz9nmdamax9RaD6miabazad2fhHaxaDfhOaPaeaz9RazaPfae6EgAcsfgocl4cifcd4hCavcj;cbfaoc9WGgXcetfhQavcj;cbfaXci2fhLavcj;cbfaXfhKcbhYaoc;ab6h8AincbhodnawTmbaxaYcd4fRbbhokaocFeGhEcbh3avcj;cbfh5indndndndnaEa3cet4ciGgoc9:fPdebdkamaO9RaX6mwavcj;cbfa3aX2faOaX;8qbbaOaAfhOxdkavcj;cbfa3aX2fcbaX;8kbxekamaO9RaC6moaoclVcbawEhraOaCfhocbhidna8Ambamao9Rc;Gb6mbcbhlina5alfhidndndndndndnaOalco4fRbbgqciGarfPDbedibledibkaipxbbbbbbbbbbbbbbbbpklbxlkaiaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaiaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaiaopbbbpklbaoczfhoxekaiaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqcd4ciGarfPDbedibledibkaiczfpxbbbbbbbbbbbbbbbbpklbxlkaiczfaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaiczfaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaiczfaopbbbpklbaoczfhoxekaiczfaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqcl4ciGarfPDbedibledibkaicafpxbbbbbbbbbbbbbbbbpklbxlkaicafaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaoclffahc:q:yjjbfRbbfhoxikaicafaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaaaocwffahc:q:yjjbfRbbfhoxdkaicafaopbbbpklbaoczfhoxekaicafaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaaaocdffahc:q:yjjbfRbbfhokdndndndndndnaqco4arfPDbedibledibkaic8Wfpxbbbbbbbbbbbbbbbbpklbxlkaic8Wfaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngicitc:q1jjbfpbibaic:q:yjjbfRbbgipsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Ngqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaiaoclffaqc:q:yjjbfRbbfhoxikaic8Wfaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngicitc:q1jjbfpbibaic:q:yjjbfRbbgipsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Ngqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spklbaiaocwffaqc:q:yjjbfRbbfhoxdkaic8Wfaopbbbpklbaoczfhoxekaic8WfaopbbdaoRbbgicitc:q1jjbfpbibaic:q:yjjbfRbbgipsaoRbegqcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpklbaiaocdffaqc:q:yjjbfRbbfhokalc;abfhialcjefaX0meaihlamao9Rc;Fb0mbkkdnaiaX9pmbaici4hlinamao9RcK6mwa5aifhqdndndndndndnaOaico4fRbbalcoG4ciGarfPDbedibledibkaqpxbbbbbbbbbbbbbbbbpkbbxlkaqaopbblaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLg8Ecdp:mea8EpmbzeHdOiAlCvXoQrLpxiiiiiiiiiiiiiiiip9og8Fpxiiiiiiiiiiiiiiiip8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spkbbaaaoclffahc:q:yjjbfRbbfhoxikaqaopbbwaopbbbg8Eclp:mea8EpmbzeHdOiAlCvXoQrLpxssssssssssssssssp9og8Fpxssssssssssssssssp8Jg8Ep5b9cjF;8;4;W;G;ab9:9cU1:Ngacitc:q1jjbfpbibaac:q:yjjbfRbbgapsa8Ep5e9cjF;8;4;W;G;ab9:9cU1:Nghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPa8Fa8Ep9spkbbaaaocwffahc:q:yjjbfRbbfhoxdkaqaopbbbpkbbaoczfhoxekaqaopbbdaoRbbgacitc:q1jjbfpbibaac:q:yjjbfRbbgapsaoRbeghcitc:q1jjbfpbibp9UpmbedilvorzHOACXQLpPpkbbaaaocdffahc:q:yjjbfRbbfhokalcdfhlaiczfgiaX6mbkkaohOaoTmoka5aXfh5a3cefg3cl9hmbkdndndndnawTmbasaYcd4fRbbglciGPlbedwbkaXTmdavcjdfaYfhlavaYfpbdbhgcbhoinalavcj;cbfaofpblbg8JaKaofpblbg8KpmbzeHdOiAlCvXoQrLg8LaQaofpblbg8MaLaofpblbg8NpmbzeHdOiAlCvXoQrLgypmbezHdiOAlvCXorQLg8Ecep9Ta8Epxeeeeeeeeeeeeeeeeg8Fp9op9Hp9rg8Eagp9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8LaypmwDKYqk8AExm35Ps8E8Fg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8Ja8KpmwKDYq8AkEx3m5P8Es8Fg8Ja8Ma8NpmwKDYq8AkEx3m5P8Es8Fg8KpmbezHdiOAlvCXorQLg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Uggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp9Uggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp9Uggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9Abbbaladfglaga8Ja8KpmwDKYqk8AExm35Ps8E8Fg8Ecep9Ta8Ea8Fp9op9Hp9rg8Ep9Ug8Fp9Abbbaladfgla8Fa8Ea8Epmlvorlvorlvorlvorp9Ug8Fp9Abbbaladfgla8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9Ug8Fp9Abbbaladfgla8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9Uggp9AbbbaladfhlaoczfgoaX6mbxikkaXTmeavcjdfaYfhlavaYfpbdbhgcbhoinalavcj;cbfaofpblbg8JaKaofpblbg8KpmbzeHdOiAlCvXoQrLg8LaQaofpblbg8MaLaofpblbg8NpmbzeHdOiAlCvXoQrLgypmbezHdiOAlvCXorQLg8Ecep:nea8Epxebebebebebebebebg8Fp9op:bep9rg8Eagp:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8LaypmwDKYqk8AExm35Ps8E8Fg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8Ja8KpmwKDYq8AkEx3m5P8Es8Fg8Ja8Ma8NpmwKDYq8AkEx3m5P8Es8Fg8KpmbezHdiOAlvCXorQLg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeggp9Abbbaladfglaga8Ea8Epmlvorlvorlvorlvorp:oeggp9Abbbaladfglaga8Ea8EpmwDqkwDqkwDqkwDqkp:oeggp9Abbbaladfglaga8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9Abbbaladfglaga8Ja8KpmwDKYqk8AExm35Ps8E8Fg8Ecep:nea8Ea8Fp9op:bep9rg8Ep:oeg8Fp9Abbbaladfgla8Fa8Ea8Epmlvorlvorlvorlvorp:oeg8Fp9Abbbaladfgla8Fa8Ea8EpmwDqkwDqkwDqkwDqkp:oeg8Fp9Abbbaladfgla8Fa8Ea8EpmxmPsxmPsxmPsxmPsp:oeggp9AbbbaladfhlaoczfgoaX6mbxdkkaXTmbcbhocbalcl4gl9Rc8FGhiavcjdfaYfhravaYfpbdbh8Finaravcj;cbfaofpblbggaKaofpblbg8JpmbzeHdOiAlCvXoQrLg8KaQaofpblbg8LaLaofpblbg8MpmbzeHdOiAlCvXoQrLg8NpmbezHdiOAlvCXorQLg8Eaip:Rea8Ealp:Sep9qg8Ea8Fp9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Fa8Ka8NpmwDKYqk8AExm35Ps8E8Fg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Faga8JpmwKDYq8AkEx3m5P8Es8Fgga8La8MpmwKDYq8AkEx3m5P8Es8Fg8JpmbezHdiOAlvCXorQLg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9Abbbaradfgra8Faga8JpmwDKYqk8AExm35Ps8E8Fg8Eaip:Rea8Ealp:Sep9qg8Ep9rg8Fp9Abbbaradfgra8Fa8Ea8Epmlvorlvorlvorlvorp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmwDqkwDqkwDqkwDqkp9rg8Fp9Abbbaradfgra8Fa8Ea8EpmxmPsxmPsxmPsxmPsp9rg8Fp9AbbbaradfhraoczfgoaX6mbkkaYclfgYad6mbkaHavcjdfaAad2;8qbbavavcjdfaAcufad2fad;8qbbaAazfhzc9:hoaOhxaOmbxlkkaeTmbaDalfhrcbhocuhlinaralaD9RglfaD6mdaPaeao9RaoaPfae6Eaofgoae6mbkaial9Rhxkcbc99amax9RakSEhoxekc9:hokavcj;kbf8Kjjjjbaokwbz:bjjjbk:TseHu8Jjjjjbc;ae9Rgv8Kjjjjbc9:hodnaeci9UgrcHfal0mbcuhoaiRbbgwc;WeGc;Ge9hmbawcsGgDce0mbavc;abfcFecje;8kbavcUf9cu83ibavc8Wf9cu83ibavcyf9cu83ibavcaf9cu83ibavcKf9cu83ibavczf9cu83ibav9cu83iwav9cu83ibaialfc9WfhqaicefgwarfhldnaeTmbcmcsaDceSEhkcbhxcbhmcbhrcbhicbhoindnalaq9nmbc9:hoxikdndnawRbbgDc;Ve0mbavc;abfaoaDcu7gPcl4fcsGcitfgsydlhzasydbhHdndnaDcsGgsak9pmbavaiaPfcsGcdtfydbaxasEhDaxasTgOfhxxekdndnascsSmbcehOasc987asamffcefhDxekalcefhDal8SbbgscFeGhPdndnascu9mmbaDhlxekalcvfhlaPcFbGhPcrhsdninaD8SbbgOcFbGastaPVhPaOcu9kmeaDcefhDascrfgsc8J9hmbxdkkaDcefhlkcehOaPce4cbaPceG9R7amfhDkaDhmkavc;abfaocitfgsaDBdbasazBdlavaicdtfaDBdbavc;abfaocefcsGcitfgsaHBdbasaDBdlaocdfhoaOaifhidnadcd9hmbabarcetfgsaH87ebasclfaD87ebascdfaz87ebxdkabarcdtfgsaHBdbascwfaDBdbasclfazBdbxekdnaDcpe0mbaxcefgOavaiaqaDcsGfRbbgscl49RcsGcdtfydbascz6gPEhDavaias9RcsGcdtfydbaOaPfgzascsGgOEhsaOThOdndnadcd9hmbabarcetfgHax87ebaHclfas87ebaHcdfaD87ebxekabarcdtfgHaxBdbaHcwfasBdbaHclfaDBdbkavaicdtfaxBdbavc;abfaocitfgHaDBdbaHaxBdlavaicefgicsGcdtfaDBdbavc;abfaocefcsGcitfgHasBdbaHaDBdlavaiaPfgicsGcdtfasBdbavc;abfaocdfcsGcitfgDaxBdbaDasBdlaocifhoaiaOfhiazaOfhxxekaxcbalRbbgHEgAaDc;:eSgDfhzaHcsGhCaHcl4hXdndnaHcs0mbazcefhOxekazhOavaiaX9RcsGcdtfydbhzkdndnaCmbaOcefhxxekaOhxavaiaH9RcsGcdtfydbhOkdndnaDTmbalcefhDxekalcdfhDal8SbegPcFeGhsdnaPcu9kmbalcofhAascFbGhscrhldninaD8SbbgPcFbGaltasVhsaPcu9kmeaDcefhDalcrfglc8J9hmbkaAhDxekaDcefhDkasce4cbasceG9R7amfgmhAkdndnaXcsSmbaDhsxekaDcefhsaD8SbbglcFeGhPdnalcu9kmbaDcvfhzaPcFbGhPcrhldninas8SbbgDcFbGaltaPVhPaDcu9kmeascefhsalcrfglc8J9hmbkazhsxekascefhskaPce4cbaPceG9R7amfgmhzkdndnaCcsSmbashlxekascefhlas8SbbgDcFeGhPdnaDcu9kmbascvfhOaPcFbGhPcrhDdninal8SbbgscFbGaDtaPVhPascu9kmealcefhlaDcrfgDc8J9hmbkaOhlxekalcefhlkaPce4cbaPceG9R7amfgmhOkdndnadcd9hmbabarcetfgDaA87ebaDclfaO87ebaDcdfaz87ebxekabarcdtfgDaABdbaDcwfaOBdbaDclfazBdbkavc;abfaocitfgDazBdbaDaABdlavaicdtfaABdbavc;abfaocefcsGcitfgDaOBdbaDazBdlavaicefgicsGcdtfazBdbavc;abfaocdfcsGcitfgDaABdbaDaOBdlavaiaHcz6aXcsSVfgicsGcdtfaOBdbaiaCTaCcsSVfhiaocifhokawcefhwaocsGhoaicsGhiarcifgrae6mbkkcbc99alaqSEhokavc;aef8Kjjjjbaok:clevu8Jjjjjbcz9Rhvdnaecvfal9nmbc9:skdnaiRbbc;:eGc;qeSmbcuskav9cb83iwaicefhoaialfc98fhrdnaeTmbdnadcdSmbcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcdtfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgiBdbalaiBdbawcefgwae9hmbxdkkcbhwindnaoar6mbc9:skaocefhlao8SbbgicFeGhddndnaicu9mmbalhoxekaocvfhoadcFbGhdcrhidninal8SbbgDcFbGaitadVhdaDcu9kmealcefhlaicrfgic8J9hmbxdkkalcefhokabawcetfadc8Etc8F91adcd47avcwfadceGcdtVglydbfgi87ebalaiBdbawcefgwae9hmbkkcbc99aoarSEk:2Pliur97eue978Jjjjjbc8W9Rhiaec98Ghldndnadcl9hmbdnalTmbcbhvabhdinadadpbbbgocKp:RecKp:Sep;6egraocwp:RecKp:Sep;6earp;Geaoczp:RecKp:Sep;6egwp;Gep;Kep;LegDpxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgkp9op9rp;Kegrpxbb;:9cbb;:9cbb;:9cbb;:9cararp;MeaDaDp;Meawaqawakp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFbbbFbbbFbbbFbbbp9oaopxbbbFbbbFbbbFbbbFp9op9qarawp;Meaqp;Kecwp:RepxbFbbbFbbbFbbbFbbp9op9qaDawp;Meaqp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qpkbbadczfhdavclfgval6mbkkalaeSmeaipxbbbbbbbbbbbbbbbbgqpklbaiabalcdtfgdaeciGglcdtgv;8qbbdnalTmbaiaipblbgocKp:RecKp:Sep;6egraocwp:RecKp:Sep;6earp;Geaoczp:RecKp:Sep;6egwp;Gep;Kep;LegDaqp:2egqarpxbbbjbbbjbbbjbbbjgkp9op9rp;Kegrpxbb;:9cbb;:9cbb;:9cbb;:9cararp;MeaDaDp;Meawaqawakp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFbbbFbbbFbbbFbbbp9oaopxbbbFbbbFbbbFbbbFp9op9qarawp;Meaqp;Kecwp:RepxbFbbbFbbbFbbbFbbp9op9qaDawp;Meaqp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qpklbkadaiav;8qbbskaipxFubbFubbFubbFubbgxpklbdnalTmbcbhvabhdinadczfgmampbbbgopxbbbbbbFFbbbbbbFFgkp9oadpbbbgDaopmbediwDqkzHOAKY8AEgwczp:Reczp:Sep;6egraipblbaDaopmlvorxmPsCXQL358E8Fp9op;6eawczp:Sep;6egwp;Gearp;Gep;Kep;Legopxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgPp9op9rp;Kegrpxb;:FSb;:FSb;:FSb;:FSararp;Meaoaop;MeawaqawaPp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFFbbFFbbFFbbFFbbp9oaoawp;Meaqp;Keczp:Rep9qgoarawp;Meaqp;KepxFFbbFFbbFFbbFFbbp9ogrpmwDKYqk8AExm35Ps8E8Fp9qpkbbadaDakp9oaoarpmbezHdiOAlvCXorQLp9qpkbbadcafhdavclfgval6mbkkalaeSmbaiczfpxbbbbbbbbbbbbbbbbgopklbaiaopklbaiabalcitfgdaeciGglcitgv;8qbbaiaxpkladnalTmbaiaipblzgopxbbbbbbFFbbbbbbFFgkp9oaipblbgDaopmbediwDqkzHOAKY8AEgwczp:Reczp:Sep;6egraipblaaDaopmlvorxmPsCXQL358E8Fp9op;6eawczp:Sep;6egwp;Gearp;Gep;Kep;Legopxbbbbbbbbbbbbbbbbp:2egqarpxbbbjbbbjbbbjbbbjgPp9op9rp;Kegrpxb;:FSb;:FSb;:FSb;:FSararp;Meaoaop;MeawaqawaPp9op9rp;Kegrarp;Mep;Kep;Kep;Jep;Negwp;Mepxbbn0bbn0bbn0bbn0gqp;KepxFFbbFFbbFFbbFFbbp9oaoawp;Meaqp;Keczp:Rep9qgoarawp;Meaqp;KepxFFbbFFbbFFbbFFbbp9ogrpmwDKYqk8AExm35Ps8E8Fp9qpklzaiaDakp9oaoarpmbezHdiOAlvCXorQLp9qpklbkadaiav;8qbbkk:Iwllue97euo978Jjjjjbca9Rhidnaec98GglTmbcbhvabhoinaocKfpx:ji:1S:ji:1S:ji:1S:ji:1SaopbbbgraoczfgwpbbbgDpmlvorxmPsCXQL358E8Fgqczp:Segkpxibbbibbbibbbibbbp9qgxp;6ep;Negmaxaxp:1ep;7egxaxp;KearaDpmbediwDqkzHOAKY8AEgxczp:Reczp:Sep;6egrarp;Meaxczp:Sep;6egDaDp;Meaqczp:Reczp:Sep;6egqaqp;Mep;Kep;Kep;Lepxbbbbbbbbbbbbbbbbp:4ep;Jep;Mepxbbn0bbn0bbn0bbn0gxp;KepxFFbbFFbbFFbbFFbbgPp9oamaDp;Meaxp;Keczp:Rep9qgDamarp;Meaxp;KeaPp9oamaqp;Meaxp;Keczp:Rep9qgxpmwDKYqk8AExm35Ps8E8Fgrp5eakclp:RegmpEi:T:j83ibawarp5bampEd:T:j83ibaocwfaDaxpmbezHdiOAlvCXorQLgxp5eampEe:T:j83ibaoaxp5bampEb:T:j83ibaocafhoavclfgval6mbkkdnalaeSmbaiczfpxbbbbbbbbbbbbbbbbgmpklbaiampklbaiabalcitfgoaeciGgvcitgw;8qbbdnavTmbaipx:ji:1S:ji:1S:ji:1S:ji:1SaipblbgraipblzgDpmlvorxmPsCXQL358E8Fgqczp:Segkpxibbbibbbibbbibbbp9qgxp;6ep;Negmaxaxp:1ep;7egxaxp;KearaDpmbediwDqkzHOAKY8AEgxczp:Reczp:Sep;6egrarp;Meaxczp:Sep;6egDaDp;Meaqczp:Reczp:Sep;6egqaqp;Mep;Kep;Kep;Lepxbbbbbbbbbbbbbbbbp:4ep;Jep;Mepxbbn0bbn0bbn0bbn0gxp;KepxFFbbFFbbFFbbFFbbgPp9oamaDp;Meaxp;Keczp:Rep9qgDamarp;Meaxp;KeaPp9oamaqp;Meaxp;Keczp:Rep9qgxpmwDKYqk8AExm35Ps8E8Fgrp5eakclp:RegmpEi:T:j83iKaiarp5bampEd:T:j83izaiaDaxpmbezHdiOAlvCXorQLgxp5eampEe:T:j83iwaiaxp5bampEb:T:j83ibkaoaiaw;8qbbkk;uddiue978Jjjjjbc;ab9Rhidnadcd4ae2glc98GgvTmbcbheabhdinadadpbbbgocwp:Recwp:Sep;6eaocep:SepxbbjFbbjFbbjFbbjFp9opxbbjZbbjZbbjZbbjZp:Uep;Mepkbbadczfhdaeclfgeav6mbkkdnavalSmbaic8WfpxbbbbbbbbbbbbbbbbgopklbaicafaopklbaiczfaopklbaiaopklbaiabavcdtfgdalciGgecdtgv;8qbbdnaeTmbaiaipblbgocwp:Recwp:Sep;6eaocep:SepxbbjFbbjFbbjFbbjFp9opxbbjZbbjZbbjZbbjZp:Uep;Mepklbkadaiav;8qbbkk:CPvdue97euw97eu8Jjjjjbc8W9Rhiaec98Ghldndnadcl9hmbaipxbbbbbbbbbbbbbbbbgvpklbdnalTmbcbhoabhdinadpbbbhradpxbbuJbbuJbbuJbbuJaipblbarcKp:Tep9qgwcep:Seawp9qgDcdp:SeaDp9qgDclp:SeaDp9qgqp;6ep;NegDarcwp:RecKp:SegkarpxFbbbFbbbFbbbFbbbgxp9ogmp:Uep;6ep;Mepxbbn0bbn0bbn0bbn0gPp;Kecwp:RepxbFbbbFbbbFbbbFbbp9oaDamakp:Xearczp:RecKp:Segrp:Uep;6ep;MeaPp;Keaxp9op9qaDamakarp:Uep:Xep;6ep;MeaPp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qaDaqawcep:Rep9oawpxebbbebbbebbbebbbp9op9qp;6ep;MeaPp;KecKp:Rep9qpkbbadczfhdaoclfgoal6mbkkalaeSmeaiavpklaaicafabalcdtfgdaeciGglcdtgo;8qbbaiavpklbdnalTmbaipblahraipxbbuJbbuJbbuJbbuJaipblbarcKp:Tep9qgwcep:Seawp9qgDcdp:SeaDp9qgDclp:SeaDp9qgqp;6ep;NegDarcwp:RecKp:SegkarpxFbbbFbbbFbbbFbbbgxp9ogmp:Uep;6ep;Mepxbbn0bbn0bbn0bbn0gPp;Kecwp:RepxbFbbbFbbbFbbbFbbp9oaDamakp:Xearczp:RecKp:Segrp:Uep;6ep;MeaPp;Keaxp9op9qaDamakarp:Uep:Xep;6ep;MeaPp;Keczp:RepxbbFbbbFbbbFbbbFbp9op9qaDaqawcep:Rep9oawpxebbbebbbebbbebbbp9op9qp;6ep;MeaPp;KecKp:Rep9qpklakadaicafao;8qbbskaipxbbbbbbbbbbbbbbbbgvpklbdnalTmbcbhoabhdinadczfgspxbFu9hbFu9hbFu9hbFu9hadpbbbgDaspbbbgPpmlvorxmPsCXQL358E8Fgmczp:Teaipblbp9qgrcep:Searp9qgwcdp:Seawp9qgwclp:Seawp9qgwcwp:Seawp9qgqp;6ep;NegwaDaPpmbediwDqkzHOAKY8AEgDpxFFbbFFbbFFbbFFbbgPp9ogkaDczp:Segxp:Ueamczp:Reczp:Segmp:Xep;6ep;Mepxbbn0bbn0bbn0bbn0gDp;KeaPp9oawakaxamp:Uep:Xep;6ep;MeaDp;Keczp:Rep9qgxawaqarcep:Rep9oarpxebbbebbbebbbebbbp9op9qp;6ep;MeaDp;Keczp:Reawamakp:Uep;6ep;MeaDp;KeaPp9op9qgrpmwDKYqk8AExm35Ps8E8FpkbbadaxarpmbezHdiOAlvCXorQLpkbbadcafhdaoclfgoal6mbkkalaeSmbaiczfpxbbbbbbbbbbbbbbbbgrpklbaiarpklbaiabalcitfgdaeciGglcitgo;8qbbaiavpkladnalTmbaipxbFu9hbFu9hbFu9hbFu9haipblbgDaipblzgPpmlvorxmPsCXQL358E8Fgmczp:Teaipblap9qgrcep:Searp9qgwcdp:Seawp9qgwclp:Seawp9qgwcwp:Seawp9qgqp;6ep;NegwaDaPpmbediwDqkzHOAKY8AEgDpxFFbbFFbbFFbbFFbbgPp9ogkaDczp:Segxp:Ueamczp:Reczp:Segmp:Xep;6ep;Mepxbbn0bbn0bbn0bbn0gDp;KeaPp9oawakaxamp:Uep:Xep;6ep;MeaDp;Keczp:Rep9qgxawaqarcep:Rep9oarpxebbbebbbebbbebbbp9op9qp;6ep;MeaDp;Keczp:Reawamakp:Uep;6ep;MeaDp;KeaPp9op9qgrpmwDKYqk8AExm35Ps8E8FpklzaiaxarpmbezHdiOAlvCXorQLpklbkadaiao;8qbbkk9teiucbcbydj1jjbgeabcifc98GfgbBdj1jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaikkkebcjwklz:Dbb";
+  var detector = new Uint8Array([
+    0,
+    97,
+    115,
+    109,
+    1,
+    0,
+    0,
+    0,
+    1,
+    4,
+    1,
+    96,
+    0,
+    0,
+    3,
+    3,
+    2,
+    0,
+    0,
+    5,
+    3,
+    1,
+    0,
+    1,
+    12,
+    1,
+    0,
+    10,
+    22,
+    2,
+    12,
+    0,
+    65,
+    0,
+    65,
+    0,
+    65,
+    0,
+    252,
+    10,
+    0,
+    0,
+    11,
+    7,
+    0,
+    65,
+    0,
+    253,
+    15,
+    26,
+    11
+  ]);
+  var wasmpack = new Uint8Array([
+    32,
+    0,
+    65,
+    2,
+    1,
+    106,
+    34,
+    33,
+    3,
+    128,
+    11,
+    4,
+    13,
+    64,
+    6,
+    253,
+    10,
+    7,
+    15,
+    116,
+    127,
+    5,
+    8,
+    12,
+    40,
+    16,
+    19,
+    54,
+    20,
+    9,
+    27,
+    255,
+    113,
+    17,
+    42,
+    67,
+    24,
+    23,
+    146,
+    148,
+    18,
+    14,
+    22,
+    45,
+    70,
+    69,
+    56,
+    114,
+    101,
+    21,
+    25,
+    63,
+    75,
+    136,
+    108,
+    28,
+    118,
+    29,
+    73,
+    115
+  ]);
+  if (typeof WebAssembly !== "object") {
+    return {
+      supported: false
+    };
+  }
+  var wasm2 = WebAssembly.validate(detector) ? unpack(wasm_simd) : unpack(wasm_base);
+  var instance;
+  var ready = WebAssembly.instantiate(wasm2, {}).then(function(result) {
+    instance = result.instance;
+    instance.exports.__wasm_call_ctors();
+  });
+  function unpack(data) {
+    var result = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; ++i) {
+      var ch = data.charCodeAt(i);
+      result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
+    }
+    var write = 0;
+    for (var i = 0; i < data.length; ++i) {
+      result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
+    }
+    return result.buffer.slice(0, write);
+  }
+  function decode(instance2, fun, target, count, size, source, filter) {
+    var sbrk = instance2.exports.sbrk;
+    var count4 = count + 3 & ~3;
+    var tp = sbrk(count4 * size);
+    var sp = sbrk(source.length);
+    var heap = new Uint8Array(instance2.exports.memory.buffer);
+    heap.set(source, sp);
+    var res = fun(tp, count, size, sp, source.length);
+    if (res == 0 && filter) {
+      filter(tp, count4, size);
+    }
+    target.set(heap.subarray(tp, tp + count * size));
+    sbrk(tp - sbrk(0));
+    if (res != 0) {
+      throw new Error("Malformed buffer data: " + res);
+    }
+  }
+  var filters = {
+    NONE: "",
+    OCTAHEDRAL: "meshopt_decodeFilterOct",
+    QUATERNION: "meshopt_decodeFilterQuat",
+    EXPONENTIAL: "meshopt_decodeFilterExp",
+    COLOR: "meshopt_decodeFilterColor"
+  };
+  var decoders = {
+    ATTRIBUTES: "meshopt_decodeVertexBuffer",
+    TRIANGLES: "meshopt_decodeIndexBuffer",
+    INDICES: "meshopt_decodeIndexSequence"
+  };
+  var workers2 = [];
+  var requestId = 0;
+  function createWorker2(url2) {
+    var worker = {
+      object: new Worker(url2),
+      pending: 0,
+      requests: {}
+    };
+    worker.object.onmessage = function(event) {
+      var data = event.data;
+      worker.pending -= data.count;
+      worker.requests[data.id][data.action](data.value);
+      delete worker.requests[data.id];
+    };
+    return worker;
+  }
+  function initWorkers(count) {
+    var source = "self.ready = WebAssembly.instantiate(new Uint8Array([" + new Uint8Array(wasm2) + "]), {}).then(function(result) { result.instance.exports.__wasm_call_ctors(); return result.instance; });self.onmessage = " + workerProcess.name + ";" + decode.toString() + workerProcess.toString();
+    var blob = new Blob([source], { type: "text/javascript" });
+    var url2 = URL.createObjectURL(blob);
+    for (var i = workers2.length; i < count; ++i) {
+      workers2[i] = createWorker2(url2);
+    }
+    for (var i = count; i < workers2.length; ++i) {
+      workers2[i].object.postMessage({});
+    }
+    workers2.length = count;
+    URL.revokeObjectURL(url2);
+  }
+  function decodeWorker(count, size, source, mode2, filter) {
+    var worker = workers2[0];
+    for (var i = 1; i < workers2.length; ++i) {
+      if (workers2[i].pending < worker.pending) {
+        worker = workers2[i];
+      }
+    }
+    return new Promise(function(resolve2, reject) {
+      var data = new Uint8Array(source);
+      var id = ++requestId;
+      worker.pending += count;
+      worker.requests[id] = { resolve: resolve2, reject };
+      worker.object.postMessage({ id, count, size, source: data, mode: mode2, filter }, [data.buffer]);
+    });
+  }
+  function workerProcess(event) {
+    var data = event.data;
+    if (!data.id) {
+      return self.close();
+    }
+    self.ready.then(function(instance2) {
+      try {
+        var target = new Uint8Array(data.count * data.size);
+        decode(instance2, instance2.exports[data.mode], target, data.count, data.size, data.source, instance2.exports[data.filter]);
+        self.postMessage({ id: data.id, count: data.count, action: "resolve", value: target }, [target.buffer]);
+      } catch (error) {
+        self.postMessage({ id: data.id, count: data.count, action: "reject", value: error });
+      }
+    });
+  }
+  return {
+    ready,
+    supported: true,
+    useWorkers: function(count) {
+      initWorkers(count);
+    },
+    decodeVertexBuffer: function(target, count, size, source, filter) {
+      decode(instance, instance.exports.meshopt_decodeVertexBuffer, target, count, size, source, instance.exports[filters[filter]]);
+    },
+    decodeIndexBuffer: function(target, count, size, source) {
+      decode(instance, instance.exports.meshopt_decodeIndexBuffer, target, count, size, source);
+    },
+    decodeIndexSequence: function(target, count, size, source) {
+      decode(instance, instance.exports.meshopt_decodeIndexSequence, target, count, size, source);
+    },
+    decodeGltfBuffer: function(target, count, size, source, mode2, filter) {
+      decode(instance, instance.exports[decoders[mode2]], target, count, size, source, instance.exports[filters[filter]]);
+    },
+    decodeGltfBufferAsync: function(count, size, source, mode2, filter) {
+      if (workers2.length > 0) {
+        return decodeWorker(count, size, source, decoders[mode2], filters[filter]);
+      }
+      return ready.then(function() {
+        var target = new Uint8Array(count * size);
+        decode(instance, instance.exports[decoders[mode2]], target, count, size, source, instance.exports[filters[filter]]);
+        return target;
+      });
+    }
+  };
+})();
+
+// node_modules/meshoptimizer/meshopt_simplifier.js
+var MeshoptSimplifier = (function() {
+  var wasm2 = "b9H79Tebbbe:6eO9Geueu9Geub9Gbb9Gsuuuuuuuuuuuu99uueu9Gvuuuuub9Gruuuuuuub9Gouuuuuue999Gvuuuuueu9Gzuuuuuuuuuuu99uuuub9Gquuuuuuu99uueu9GPuuuuuuuuuuu99uueu9Gquuuuuuuu99ueu9Gruuuuuu99eu9Gwuuuuuu99ueu9Giuuue999Gluuuueu9Gluuuub9GiuuueuiLQdilvorlwDiqkxmPszbHHbelve9Weiiviebeoweuec:G:Pdkr:Bdxo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bbz9TW79O9V9Wt9F79P9T9W29P9M95bw8E9TW79O9V9Wt9F79P9T9W29P9M959x9Pt9OcttV9P9I91tW7bD8A9TW79O9V9Wt9F79P9T9W29P9M959x9Pt9O9v9W9K9HtWbqQ9TW79O9V9Wt9F79P9T9W29P9M959t29V9W9W95bkX9TW79O9V9Wt9F79P9T9W29P9M959qV919UWbxQ9TW79O9V9Wt9F79P9T9W29P9M959q9V9P9Ut7bmX9TW79O9V9Wt9F79P9T9W29P9M959t9J9H2WbPa9TW79O9V9Wt9F9V9Wt9P9T9P96W9wWVtW94SWt9J9O9sW9T9H9Wbs59TW79O9V9Wt9F9NW9UWV9HtW9q9V79Pt9P9V9U9sW9T9H9Wbzl79IV9RbHDwebcekdCXqM;YeQdbk;A1er3ue99euE99Que9:r998Jjjjjbcj;sb9Rgs8Kjjjjbcbhzasc:Cefcbc;Kbz:tjjjb8AdnabaeSmbabaeadcdtzMjjjb8AkdnamcdGTmbalcrfci4cbyd1:jjjbHjjjjbbhHasc:Cefasyd;8egecdtfaHBdbasaecefBd;8ecbhlcbhednadTmbabheadhOinaHaeydbci4fcb86bbaeclfheaOcufgOmbkcbhlabheadhOinaHaeydbgAci4fgCaCRbbgCceaAcrGgAtV86bbaCcu7aA4ceGalfhlaeclfheaOcufgOmbkcualcdtalcFFFFi0Ehekaecbyd1:jjjbHjjjjbbhzasc:Cefasyd;8egecdtfazBdbasaecefBd;8ealcd4alfhOcehHinaHgecethHaeaO6mbkcbhXcuaecdtgOaecFFFFi0Ecbyd1:jjjbHjjjjbbhHasc:Cefasyd;8egAcdtfaHBdbasaAcefBd;8eaHcFeaOz:tjjjbhQdnadTmbaecufhLcbhKindndnaQabaXcdtfgYydbgAc:v;t;h;Ev2aLGgOcdtfgCydbgHcuSmbceheinazaHcdtfydbaASmdaOaefhHaecefheaQaHaLGgOcdtfgCydbgHcu9hmbkkazaKcdtfaABdbaCaKBdbaKhHaKcefhKkaYaHBdbaXcefgXad9hmbkkaQcbyd:m:jjjbH:bjjjbbasasyd;8ecufBd;8ekcbh8AcualcefgecdtaecFFFFi0Ecbyd1:jjjbHjjjjbbhXasc:Cefasyd;8egecdtfaXBdbasaXBdNeasaecefBd;8ecuadcitadcFFFFe0Ecbyd1:jjjbHjjjjbbhEasc:Cefasyd;8egecdtfaEBdbasaEBd:yeasaecefBd;8eascNefabadalcbz:cjjjbcualcdtgealcFFFFi0Eg3cbyd1:jjjbHjjjjbbhAasc:Cefasyd;8egHcdtfaABdbasaHcefBd;8ea3cbyd1:jjjbHjjjjbbhKasc:Cefasyd;8egHcdtfaKBdbasaHcefBd;8eaAaKaialavazasc:Cefz:djjjbalcbyd1:jjjbHjjjjbbh5asc:Cefasyd;8egHcdtfa5BdbasaHcefBd;8ea3cbyd1:jjjbHjjjjbbhHasc:Cefasyd;8egOcdtfaHBdbasaOcefBd;8ea3cbyd1:jjjbHjjjjbbhOasc:Cefasyd;8egCcdtfaOBdbasaCcefBd;8eaHcFeaez:tjjjbh8EaOcFeaez:tjjjbh8FdnalTmbaEcwfhaindnaXa8AgOcefg8AcdtfydbgCaXaOcdtgefydbgHSmbaCaH9RhhaEaHcitfhga8Faefh8Ja8Eaefh8KcbhQindndnagaQcitfydbgLaO9hmba8KaOBdba8JaOBdbxekdnaXaLcdtg8LfgeclfydbgHaeydbgeSmbaEaecitgCfydbaOSmeaHae9Rh8Maecu7aHfhYaaaCfhHcbheinaYaeSmeaecefheaHydbhCaHcwfhHaCaO9hmbkaea8M6meka8Fa8LfgeaOaLaeydbcuSEBdba8KaLaOa8KydbcuSEBdbkaQcefgQah9hmbkka8Aal9hmbkaAhHaKhOa8FhCa8EhQcbheindndnaeaHydbgL9hmbdnaeaOydbgL9hmbaQydbhLdnaCydbgYcu9hmbaLcu9hmba5aefcb86bbxikdnaYcuSmbaLcuSmbaeaYSmbaAaYcdtfydbaAaLcdtfydb9hmba5aefcd86bbxika5aefh8KdnaeaYSmbaeaLSmba8Kce86bbxika8Kcl86bbxdkdnaeaKaLcdtgYfydb9hmbdnaCydbg8KcuSmbaea8KSmbaQydbghcuSmbaeahSmba8FaYfydbggcuSmbagaLSmba8EaYfydbgYcuSmbaYaLSmbdnaAa8KcdtfydbgLaAaYcdtfydb9hmbaLaAahcdtfydbgYSmbaYaAagcdtfydb9hmba5aefcd86bbxlka5aefcl86bbxika5aefcl86bbxdka5aefcl86bbxeka5aefa5aLfRbb86bbkaHclfhHaOclfhOaCclfhCaQclfhQalaecefge9hmbkdnamcaGTmbaEcwfh8Jcbh8Nindndna5a8NfgyRbbg8Pc9:fPibebekdndndnaAa8Ncdtfydbgea8N9hmbdnaqmbcbhgxdkdnazTmbcbhga8NheinagaqazaecdtgefydbfRbbcdGce4VhgaKaefydbgea8N9hmbxikkcbhga8NheinagaqaefRbbcdGce4VhgaKaecdtfydbgea8N9hmbxdkka5aefRbbhexeka8NheindnaXaecdtgafgeclfydbgHaeydbgeSmbaHae9Rh8AaEaecitfh8MaAaafh8Lcbh8Kina8Ma8KcitfydbgYhednindnaXaecdtgLfgeclfydbgHaeydbgeSmbdnaAaEaecitgOfydbcdtfydba8LydbgQ9hmbcehexikaHae9Rhhaecu7aHfhCa8JaOfhHcbheinaCaeSmeaecefheaHydbhOaHcwfhHaAaOcdtfydbaQ9hmbkaeah6hexdkaKaLfydbgeaY9hmbkcbhekagaece7Vhga8Kcefg8Ka8A9hmbkkaKaafydbgea8N9hmbka8PciagceGEhekayae86bbka8Ncefg8Nal9hmbkkdnaqTmbdndnazTmbazheaAhHalhOindnaqaeydbfRbbceGTmba5aHydbfcl86bbkaeclfheaHclfhHaOcufgOmbxdkkaqheaAhHalhOindnaeRbbceGTmba5aHydbfcl86bbkaecefheaHclfhHaOcufgOmbkkaAhealhOa5hHindna5aeydbfRbbcl9hmbaHcl86bbkaeclfheaHcefhHaOcufgOmbkkamceGTmba5healhHindnaeRbbce9hmbaecl86bbkaecefheaHcufgHmbkkcbhIcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbhaasc:Cefasyd;8egecdtfaaBdbasaecefBd;8easc:qefcbBdbas9cb83i1eaaaialavazasc1efz:ejjjbh8RdndnaDmbcbhycbhCxekcbhCawhecbhHindnaeIdbJbbbb9ETmbasaCcdtfaHBdbaCcefhCkaeclfheaDaHcefgH9hmbkcuaCal2gecdtaecFFFFi0Ecbyd1:jjjbHjjjjbbhyasc:Cefasyd;8egecdtfayBdbasaecefBd;8ealTmbdnaCmbcbhCxekarcd4h8KdnazTmbaCcdthhcbhXayhYinaoazaXcdtfydba8K2cdtfhLasheaYhHaChOinaHaLaeydbcdtgQfIdbawaQfIdbNUdbaeclfheaHclfhHaOcufgOmbkaYahfhYaXcefgXal9hmbxdkkaCcdthhcbhXayhYinaoaXa8K2cdtfhLasheaYhHaChOinaHaLaeydbcdtgQfIdbawaQfIdbNUdbaeclfheaHclfhHaOcufgOmbkaYahfhYaXcefgXal9hmbkkcualc8S2gHalc;D;O;f8U0EgQcbyd1:jjjbHjjjjbbheasc:Cefasyd;8egOcdtfaeBdbasaOcefBd;8eaecbaHz:tjjjbh8ScbhDcbh8KdnaCTmbcbhIaQcbyd1:jjjbHjjjjbbh8Kasc:Cefasyd;8egecdtfa8KBdbasaecefBd;8ea8KcbaHz:tjjjb8AcuaCal2gecltgHaecFFFFb0Ecbyd1:jjjbHjjjjbbhDasc:Cefasyd;8egecdtfaDBdbasaecefBd;8eaDcbaHz:tjjjb8AamcjjjjdGTmbcualcltgealcFFFFb0Ecbyd1:jjjbHjjjjbbhIasc:Cefasyd;8egHcdtfaIBdbasaHcefBd;8eaIcbaez:tjjjb8AkdnadTmbcbhLabhHinaaaHclfydbgXcx2fgeIdbaaaHydbgYcx2fgOIdbgR:tg8UaaaHcwfydbghcx2fgQIdlaOIdlg8V:tg8WNaQIdbaR:tg8XaeIdla8V:tg8YN:tg8Zh80aeIdwaOIdwg81:tgBa8XNaQIdwa81:tg83a8UN:tgUh8Xa8Ya83Na8WaBN:tg8Yh8Udna8Za8ZNa8Ya8YNaUaUNMM:rgBJbbbb9EgOTmba8ZaB:vh80aUaB:vh8Xa8YaB:vh8Uka8SaAaYcdtfydbgQc8S2fgea8UaB:rg8Wa8UNNg85aeIdbMUdbaea8Xa8Wa8XNg86Ng87aeIdlMUdlaea80a8Wa80Ng83Ng88aeIdwMUdwaea86a8UNg86aeIdxMUdxaea83a8UNg89aeIdzMUdzaea83a8XNg8:aeIdCMUdCaea8Ua8Wa80a81Na8UaRNa8Va8XNMM:mgZNg83Ng8UaeIdKMUdKaea8Xa83Ng8XaeId3MUd3aea80a83Ng80aeIdaMUdaaea83aZNg83aeId8KMUd8Kaea8WaeIdyMUdya8SaAaXcdtfydbgXc8S2fgea85aeIdbMUdbaea87aeIdlMUdlaea88aeIdwMUdwaea86aeIdxMUdxaea89aeIdzMUdzaea8:aeIdCMUdCaea8UaeIdKMUdKaea8XaeId3MUd3aea80aeIdaMUdaaea83aeId8KMUd8Kaea8WaeIdyMUdya8SaAahcdtfydbgYc8S2fgea85aeIdbMUdbaea87aeIdlMUdlaea88aeIdwMUdwaea86aeIdxMUdxaea89aeIdzMUdzaea8:aeIdCMUdCaea8UaeIdKMUdKaea8XaeId3MUd3aea80aeIdaMUdaaea83aeId8KMUd8Kaea8WaeIdyMUdydnaITmbdnaOTmba8ZaB:vh8ZaUaB:vhUa8YaB:vh8YkaIaQcltfgeaBJbbbZNg8UaUNg8WaeIdlMUdlaea8Ua8ZNg8XaeIdwMUdwaea8Ua8YNg80aeIdbMUdbaea8UaR:ma8YNaUa8VN:ta81a8ZN:tNg8UaeIdxMUdxaIaXcltfgea8WaeIdlMUdlaea8XaeIdwMUdwaea80aeIdbMUdbaea8UaeIdxMUdxaIaYcltfgea8WaeIdlMUdlaea8XaeIdwMUdwaea80aeIdbMUdbaea8UaeIdxMUdxkaHcxfhHaLcifgLad6mbkkdnalTmbJ;n;m;m89J:v:;;w8ZamczGEh8YcbhOaAhQaahHa8SheindnaOaQydb9hmbaecxfgLaLIdbJbbbbMUdbaeczfgLaLIdbJbbbbMUdbaecCfgLaLIdbJbbbbMUdbaea8YaecyfgLIdbg8ZNg8UaeIdbMUdbaeclfgXa8UaXIdbMUdbaecwfgXa8UaXIdbMUdbaecKfgXaXIdbaHIdbg8Xa8UN:tUdbaHcwfIdbh8Waec3fgXaXIdba8UaHclfIdbg80N:tUdbaecafgXaXIdba8Ua8WN:tUdbaec8KfgXIdbhUaLa8Za8UMUdbaXaUa8Ua8Wa8WNa8Xa8XNa80a80NMMNMUdbkaQclfhQaHcxfhHaec8SfhealaOcefgO9hmbkkdnadTmbcbhhabhYinabahcdtfhXcbhHina5aXaHc:G1jjbfydbcdtfydbgOfRbbhedndna5aYaHfydbgQfRbbgLc99fcFeGcpe0mbaec99fcFeGc;:e6mekdnaLcufcFeGce0mba8EaQcdtfydbaO9hmekdnaecufcFeGce0mba8FaOcdtfydbaQ9hmekJbbacJbbacJbbbZaecFeGceSEaLcFeGceSEh88aaaOcx2fgeIdwaaaQcx2fgLIdwgB:tg80:mh86aeIdlaLIdlg83:tg8Z:mh89aeIdbaLIdbgR:tgU:mh8:dnaaaXaHc:K1jjbfydbcdtfydbcx2fgeIdwaB:tg8Va80a80NaUaUNa8Za8ZNMMg8YNa8Va80NaeIdbaR:tg81aUNa8ZaeIdla83:tg85NMMg8Wa80N:tg8Xa8XNa81a8YNa8WaUN:tg8Ua8UNa85a8YNa8Wa8ZN:tg8Wa8WNMM:rg87Jbbbb9ETmba8Xa87:vh8Xa8Wa87:vh8Wa8Ua87:vh8Uka88a8Y:rNg8Ya8XaBNa8UaRNa83a8WNMM:mgZNg87aZNhZa8Xa87Nhna8Wa87Nhca8Ua87Nh9ca8Ya8XNg87a8WNhJa87a8UNh9ea8Ya8WNgTa8UNhSa8Xa87Nh87a8WaTNhTa8Ua8Ya8UNNh9hdnaUa85Na81a89NMg8Xa8XNa8Za8VNa85a86NMg8Ua8UNa80a81Na8Va8:NMg8Wa8WNMM:rg80Jbbbb9ETmba8Xa80:vh8Xa8Wa80:vh8Wa8Ua80:vh8Uka8SaAaQcdtfydbc8S2fgeaeIdba9ha8Ua88a80:rNg80a8UNNMgUMUdbaeaTa8Wa80a8WNg8VNMg81aeIdlMUdlaea87a8Xa80a8XNg8ZNMg85aeIdwMUdwaeaSa8Va8UNMg8VaeIdxMUdxaea9ea8Za8UNMg87aeIdzMUdzaeaJa8Za8WNMg8ZaeIdCMUdCaea9ca8Ua80a8XaBNa8UaRNa83a8WNMMgB:mNg80NMg8UaeIdKMUdKaeaca8Wa80NMg8WaeId3MUd3aeana8Xa80NMg8XaeIdaMUdaaeaZaBa80N:tg80aeId8KMUd8Kaea8YJbbbbMg8YaeIdyMUdya8SaAaOcdtfydbc8S2fgeaUaeIdbMUdbaea81aeIdlMUdlaea85aeIdwMUdwaea8VaeIdxMUdxaea87aeIdzMUdzaea8ZaeIdCMUdCaea8UaeIdKMUdKaea8WaeId3MUd3aea8XaeIdaMUdaaea80aeId8KMUd8Kaea8YaeIdyMUdykaHclfgHcx9hmbkaYcxfhYahcifghad6mbkaCTmbcbhYinJbbbbh8YaaabaYcdtfgeclfydbghcx2fgHIdwaaaeydbggcx2fgOIdwg81:tg8Wa8WNaHIdbaOIdbg85:tg8Xa8XNaHIdlaOIdlg87:tg80a80NMMgRaaaecwfydbgEcx2fgeIdwa81:tg8ZNa8Wa8Wa8ZNa8XaeIdba85:tgUNa80aeIdla87:tgBNMMg8UN:tJbbbbJbbjZaRa8Za8ZNaUaUNaBaBNMMg8VNa8Ua8UN:tg83:va83Jbbbb9BEg83Nh89a8Va8WNa8Za8UN:ta83Nh8:aRaBNa80a8UN:ta83NhZa8Va80NaBa8UN:ta83NhnaRaUNa8Xa8UN:ta83Nhca8Va8XNaUa8UN:ta83Nh9ca8XaBNaUa80N:tg8Ua8UNa80a8ZNaBa8WN:tg8Ua8UNa8WaUNa8Za8XN:tg8Ua8UNMM:rJbbbZNh8UayagaC2g8LcdtfhHayaEaC2g8JcdtfhOayahaC2g8AcdtfhQa81:mhJa87:mh9ea85:mhTcbhLaChXJbbbbhBJbbbbh83JbbbbhRJbbbbh8VJbbbbh81Jbbbbh85Jbbbbh87Jbbbbh88Jbbbbh86inascjdfaLfgecwfa8Ua8:aQIdbaHIdbg8Z:tg80Na89aOIdba8Z:tgUNMg8WNUdbaeclfa8Uana80NaZaUNMg8XNUdbaea8Ua9ca80NacaUNMg80NUdbaecxfa8UaJa8WNa9ea8XNa8ZaTa80NMMMg8ZNUdba8Ua8Wa8XNNa8VMh8Va8Ua8Wa80NNa81Mh81a8Ua8Xa80NNa85Mh85a8Ua8Za8ZNNa8YMh8Ya8Ua8Wa8ZNNaBMhBa8Ua8Xa8ZNNa83Mh83a8Ua80a8ZNNaRMhRa8Ua8Wa8WNNa87Mh87a8Ua8Xa8XNNa88Mh88a8Ua80a80NNa86Mh86aHclfhHaQclfhQaOclfhOaLczfhLaXcufgXmbka8Kagc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdya8Kahc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdya8KaEc8S2fgea86aeIdbMUdbaea88aeIdlMUdlaea87aeIdwMUdwaea85aeIdxMUdxaea81aeIdzMUdzaea8VaeIdCMUdCaeaRaeIdKMUdKaea83aeId3MUd3aeaBaeIdaMUdaaea8YaeId8KMUd8Kaea8UaeIdyMUdyaDa8LcltfhXcbhHaChQinaXaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgLaOclfIdbaLIdbMUdbaecwfgLaOcwfIdbaLIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaQcufgQmbkaDa8AcltfhXcbhHaChQinaXaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgLaOclfIdbaLIdbMUdbaecwfgLaOcwfIdbaLIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaQcufgQmbkaDa8JcltfhXcbhHaChQinaXaHfgeascjdfaHfgOIdbaeIdbMUdbaeclfgLaOclfIdbaLIdbMUdbaecwfgLaOcwfIdbaLIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaQcufgQmbkaYcifgYad6mbkkcbhOdndnamcwGg9imbJbbbbhRcbh6cbh9kcbh0xekcbh6a3cbyd1:jjjbHjjjjbbh0asc:Cefasyd;8egecdtfa0BdbasaecefBd;8ecua0alabadaAz:fjjjbgQcltaQcjjjjiGEcbyd1:jjjbHjjjjbbh9kasc:Cefasyd;8egecdtfa9kBdbasaecefBd;8ea9kaQa0aaalz:gjjjbJFFuuhRaQTmba9kheaQhHinaeIdbg8UaRaRa8U9EEhRaeclfheaHcufgHmbkaQh6kasydNeh9mdnalTmba9mclfhea9mydbhQa5hHalhLcbhOincbaeydbgXaQ9RaHRbbcpeGEaOfhOaHcefhHaeclfheaXhQaLcufgLmbkaOce4hOkcuadaO9Rcifg9ncx2a9nc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbh9oasc:Cefasyd;8egecdtfa9oBdbasaecefBd;8ecua9ncdta9ncFFFFi0Ecbyd1:jjjbHjjjjbbh9pasc:Cefasyd;8egecdtfa9pBdbasaecefBd;8ea3cbyd1:jjjbHjjjjbbh8Pasc:Cefasyd;8egecdtfa8PBdbasaecefBd;8ealcbyd1:jjjbHjjjjbbh9qasc:Cefasyd;8egecdtfa9qBdbasaecefBd;8eaxaxNa8RJbbjZamclGEgnanN:vh88Jbbbbh86dnadak9nmbdna9nci6mbasyd:yeh9raCclth9sa9ocwfh9tJbbbbh87Jbbbbh86inascNefabadalaAz:cjjjbabhgcbh8Ncbh3inaba3cdtfh8LcbheindnaAagaefydbgOcdtghfydbgQaAa8Laec:W1jjbfydbcdtfydbgHcdtgEfydbgLSmba5aHfRbbgYcv2a5aOfRbbgXfc;a1jjbfRbbg8AaXcv2aYfg8Jc;a1jjbfRbbg8MVcFeGTmbdnaLaQ9nmba8Jc;G1jjbfRbbcFeGmekdnaXcufcFeGce0mbaYTmba8EahfydbaH9hmekdnaXTmbaYcufcFeGce0mba8FaEfydbaO9hmeka9oa8Ncx2fgQaHaOa8McFeGgLEBdlaQaOaHaLEBdbaQaLa8AGcb9hBdwa8Ncefh8Nkaeclfgecx9hmbkdna3cifg3ad9pmbagcxfhga8Ncifa9n9nmekka8NTmdcbh8Jina8SaAa9oa8Jcx2fghydbgLcdtgQfydbggc8S2fgeIdwaaahydlgXcx2fgHIdwg8XNaeIdzaHIdbg80NaeIdaMg8Ua8UMMa8XNaeIdlaHIdlg8ZNaeIdCa8XNaeId3Mg8Ua8UMMa8ZNaeIdba80NaeIdxa8ZNaeIdKMg8Ua8UMMa80NaeId8KMMM:lh8UJbbbbJbbjZaeIdyg8W:va8WJbbbb9BEh8Wdndnahydwg8LmbJFFuuh83xekJbbbbJbbjZa8SaAaXcdtfydbc8S2fgeIdygU:vaUJbbbb9BEaeIdwaaaLcx2fgHIdwgUNaeIdzaHIdbg8YNaeIdaMgBaBMMaUNaeIdlaHIdlgBNaeIdCaUNaeId3MgUaUMMaBNaeIdba8YNaeIdxaBNaeIdKMgUaUMMa8YNaeId8KMMM:lNh83ka8Wa8UNhBdnaCTmba8KaLc8S2fgOIdwa8XNaOIdza80NaOIdaMg8Ua8UMMa8XNaOIdla8ZNaOIdCa8XNaOId3Mg8Ua8UMMa8ZNaOIdba80NaOIdxa8ZNaOIdKMg8Ua8UMMa80NaOId8KMMMh8UayaXaC2gYcdtfhHaDaLaC2gEcltfheaOIdyhUaChOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbkdndna8LmbJbbbbh8Wxeka8KaXc8S2fgOIdwaaaLcx2fgeIdwg80NaOIdzaeIdbg8ZNaOIdaMg8Wa8WMMa80NaOIdlaeIdlgUNaOIdCa80NaOId3Mg8Wa8WMMaUNaOIdba8ZNaOIdxaUNaOIdKMg8Wa8WMMa8ZNaOId8KMMMh8WayaEcdtfhHaDaYcltfheaOIdyh8YaChOinaHIdbg8Xa8Xa8YNaecxfIdba80aecwfIdbNa8ZaeIdbNaUaeclfIdbNMMMg8Xa8XM:tNa8WMh8WaHclfhHaeczfheaOcufgOmbka8W:lh8WkaBa8U:lMhBa83a8WMh83dndndna5aLfRbbc9:fPddbekaKaQfydbgQaLSmbaAaXcdtfydbhEindndna8EaQcdtgYfydbgecuSmbaAaecdtfydbaESmekdna8FaYfydbgecuSmbaAaecdtfydbaESmekaXheka8KaQc8S2fgOIdwaaaecx2fgHIdwg8XNaOIdzaHIdbg80NaOIdaMg8Ua8UMMa8XNaOIdlaHIdlg8ZNaOIdCa8XNaOId3Mg8Ua8UMMa8ZNaOIdba80NaOIdxa8ZNaOIdKMg8Ua8UMMa80NaOId8KMMMh8UayaeaC2cdtfhHaDaQaC2cltfheaOIdyhUaChOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbkaBa8U:lMhBaKaYfydbgQaL9hmbkka5aXfRbbci9hmea8LTmeaKaXcdtfydbgQaXSmeindndna8EaQcdtgYfydbgecuSmbaAaecdtfydbagSmekdna8FaYfydbgecuSmbaAaecdtfydbagSmekaLheka8KaQc8S2fgOIdwaaaecx2fgHIdwg8XNaOIdzaHIdbg80NaOIdaMg8Ua8UMMa8XNaOIdlaHIdlg8ZNaOIdCa8XNaOId3Mg8Ua8UMMa8ZNaOIdba80NaOIdxa8ZNaOIdKMg8Ua8UMMa80NaOId8KMMMh8UayaeaC2cdtfhHaDaQaC2cltfheaOIdyhUaChOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbka83a8U:lMh83aKaYfydbgQaX9hmbxdkkdna8Fa8Ea8EaQfydbaXSEaKaQfydbgYcdtfydbgQcu9hmbaKaXcdtfydbhQka8KaYc8S2fgOIdwaaaQcx2fgeIdwg8XNaOIdzaeIdbg80NaOIdaMg8Ua8UMMa8XNaOIdlaeIdlg8ZNaOIdCa8XNaOId3Mg8Ua8UMMa8ZNaOIdba80NaOIdxa8ZNaOIdKMg8Ua8UMMa80NaOId8KMMMh8UayaQaC2ggcdtfhHaDaYaC2gEcltfheaOIdyhUaChOinaHIdbg8Wa8WaUNaecxfIdba8XaecwfIdbNa80aeIdbNa8ZaeclfIdbNMMMg8Wa8WM:tNa8UMh8UaHclfhHaeczfheaOcufgOmbkdndna8LmbJbbbbh8Wxeka8KaQc8S2fgOIdwaaaYcx2fgeIdwg80NaOIdzaeIdbg8ZNaOIdaMg8Wa8WMMa80NaOIdlaeIdlgUNaOIdCa80NaOId3Mg8Wa8WMMaUNaOIdba8ZNaOIdxaUNaOIdKMg8Wa8WMMa8ZNaOId8KMMMh8WayaEcdtfhHaDagcltfheaOIdyh8YaChOinaHIdbg8Xa8Xa8YNaecxfIdba80aecwfIdbNa8ZaeIdbNaUaeclfIdbNMMMg8Xa8XM:tNa8WMh8WaHclfhHaeczfheaOcufgOmbka8W:lh8WkaBa8U:lMhBa83a8WMh83kaha83aBa83aB9DgeEUdwahaLaXaea8Lcb9hGgeEBdlahaXaLaeEBdba8Jcefg8Ja8N9hmbkascjdfcbcj;qbz:tjjjb8Aa9thea8NhHinascjdfaeydbcA4cF8FGgOcFAaOcFA6EcdtfgOaOydbcefBdbaecxfheaHcufgHmbkcbhecbhHinascjdfaefgOydbhQaOaHBdbaQaHfhHaeclfgecj;qb9hmbkcbhea9thHinascjdfaHydbcA4cF8FGgOcFAaOcFA6EcdtfgOaOydbgOcefBdba9paOcdtfaeBdbaHcxfhHa8Naecefge9hmbkadak9RgOci9Uh9udnalTmbcbhea8PhHinaHaeBdbaHclfhHalaecefge9hmbkkcbh9va9qcbalz:tjjjbh9waOcO9Uh9xa9uce4h9ycbh3cbh8Adnina9oa9pa8Acdtfydbcx2fg8JIdwg8Ua889Emea3a9u9pmeJFFuuh8Wdna9ya8N9pmba9oa9pa9ycdtfydbcx2fIdwJbb;aZNh8Wkdna8Ua8W9ETmba8Ua869ETmba3a9x0mdkdna9waAa8Jydlg8Mcdtg9zfgEydbgQfg9ARbba9waAa8Jydbggcdtg9Bfydbgefg9CRbbVmba5agfRbbh9Ddna9maecdtfgHclfydbgOaHydbgHSmbaOaH9RhLaaaQcx2fhYaaaecx2fhha9raHcitfhecbhHceh8Ldnindna8PaeydbcdtfydbgOaQSmba8PaeclfydbcdtfydbgXaQSmbaOaXSmbaaaXcx2fgXIdbaaaOcx2fgOIdbg8X:tg8UahIdlaOIdlg80:tg8YNahIdba8X:tgBaXIdla80:tg8WN:tg8Za8UaYIdla80:tg83NaYIdba8X:tg8Va8WN:tg80Na8WahIdwaOIdwgU:tg81Na8YaXIdwaU:tg8XN:tg8Ya8WaYIdwaU:tg85Na83a8XN:tg8WNa8XaBNa81a8UN:tgUa8Xa8VNa85a8UN:tg8UNMMa8Za8ZNa8Ya8YNaUaUNMMa80a80Na8Wa8WNa8Ua8UNMMN:rJbbj8:N9FmdkaecwfheaHcefgHaL6h8LaLaH9hmbkka8LceGTmba9ycefh9yxekdndndndna9Dc9:fPdebdkagheinaEydbhOdndna8EaecdtgHfydbgecuSmbaAaecdtfydbaOSmekdna8FaHfydbgecuSmbaAaecdtfydbaOSmeka8Mheka8PaHfaeBdbaKaHfydbgeag9hmbxikkdna8Fa8Ea8Ea9Bfydba8MSEaKa9Bfydbggcdtfydbgecu9hmbaKa9zfydbheka8Pa9Bfa8MBdbaeh8Mka8Pagcdtfa8MBdbka9Cce86bba9Ace86bba8JIdwg8Ua86a86a8U9DEh86a9vcefh9vcecda9DceSEa3fh3ka8Acefg8Aa8N9hmbkka9vTmddnalTmbcbhXcbhhindna8PahcdtgefydbgOahSmbaAaOcdtfydbhgdnahaAaefydb9hgEmba8Sagc8S2fgea8Sahc8S2fgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxaeaHIdzaeIdzMUdzaeaHIdCaeIdCMUdCaeaHIdKaeIdKMUdKaeaHId3aeId3MUd3aeaHIdaaeIdaMUdaaeaHId8KaeId8KMUd8KaeaHIdyaeIdyMUdyaITmbaIagcltfgeaIahcltfgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxkaCTmba8KaOc8S2fgea8Kahc8S2g8LfgHIdbaeIdbMUdbaeaHIdlaeIdlMUdlaeaHIdwaeIdwMUdwaeaHIdxaeIdxMUdxaeaHIdzaeIdzMUdzaeaHIdCaeIdCMUdCaeaHIdKaeIdKMUdKaeaHId3aeId3MUd3aeaHIdaaeIdaMUdaaeaHId8KaeId8KMUd8KaeaHIdyaeIdyMUdya9saO2hYaDhHaChQinaHaYfgeaHaXfgOIdbaeIdbMUdbaeclfgLaOclfIdbaLIdbMUdbaecwfgLaOcwfIdbaLIdbMUdbaecxfgeaOcxfIdbaeIdbMUdbaHczfhHaQcufgQmbkaEmbJbbbbJbbjZa8Sa8LfgeIdyg8U:va8UJbbbb9BEaeIdwaaagcx2fgHIdwg8UNaeIdzaHIdbg8WNaeIdaMg8Xa8XMMa8UNaeIdlaHIdlg8XNaeIdCa8UNaeId3Mg8Ua8UMMa8XNaeIdba8WNaeIdxa8XNaeIdKMg8Ua8UMMa8WNaeId8KMMM:lNg8Ua87a87a8U9DEh87kaXa9sfhXahcefghal9hmbkcbhHa8EheindnaeydbgOcuSmbdnaHa8PaOcdtgQfydbgO9hmbcuhOa8EaQfydbgQcuSmba8PaQcdtfydbhOkaeaOBdbkaeclfhealaHcefgH9hmbkcbhHa8FheindnaeydbgOcuSmbdnaHa8PaOcdtgQfydbgO9hmbcuhOa8FaQfydbgQcuSmba8PaQcdtfydbhOkaeaOBdbkaeclfhealaHcefgH9hmbkka87a86aCEh87cbhHabhecbhOindnaAa8PaeydbcdtfydbgXcdtfydbgQaAa8PaeclfydbcdtfydbgYcdtfydbgLSmbaQaAa8PaecwfydbcdtfydbggcdtfydbghSmbaLahSmbabaHcdtfgQaXBdbaQcwfagBdbaQclfaYBdbaHcifhHkaecxfheaOcifgOad6mbkdndna9imbaHhdxekdnaHak0mbaHhdxekdnaRa879FmbaHhdxekJFFuuhRcbhdabhecbhOindna9ka0aeydbgQcdtfydbcdtfIdbg8Ua879ETmbaeclf8Pdbh9EabadcdtfgLaQBdbaLclfa9E83dba8UaRaRa8U9EEhRadcifhdkaecxfheaOcifgOaH6mbkkadak0mbxdkkascNefabadalaAz:cjjjbkdndnadak0mbadhhxekdna9imbadhhxekdnaRa889FmbadhhxekcehLinaRJbb;aZNg8Ua88a8Ua889DEh8XJbbbbh8Udna6Tmba9khea6hHinaeIdbg8Wa8Ua8Wa8X9FEa8Ua8Wa8U9EEh8UaeclfheaHcufgHmbkkJFFuuhRcbhhabhecbhHindna9ka0aeydbgOcdtfydbcdtfIdbg8Wa8X9ETmbaeclf8Pdbh9EabahcdtfgQaOBdbaQclfa9E83dba8WaRaRa8W9EEhRahcifhhkaecxfheaHcifgHad6mbkdnaLahad9hVceGmbadhhxdka8Ua86a86a8U9DEh86ahak9nmecbhLahhdaRa889FmbkkdnamcjjjjdGTmba9qcbalz:tjjjbh8LdnahTmbabheahhHina8LaeydbgOfce86bba8LaAaOcdtfydbfce86bbaeclfheaHcufgHmbkkascNefabahalaAz:cjjjbdndndnalTmbcbhQasyd:yehEindna8LaQfRbbTmbdna5aQfRbbgecl0mbceaetcQGmekdnaAaQcdtgXfydbgeaQSmbaaaQcx2fgHaaaecx2fge8Pdb83dbaHcwfaecwfydbBdbxeka8SaQc8S2fgLIdyg9ca9cJL:3;rUNg8UMh88aLIdwg9ha8UMhRaLIdlgxa8UMh8VaLIdbg9Fa8UMhUaLIdag9Ga8UaaaQcx2fggIdwg89N:th81aLId3g9Ha8UagIdlg8:N:th85aLIdKg9IagIdbgZa8UN:th8YJbbbbhcaLIdCg9JJbbbbMh87aLIdzg9KJbbbbMhBaLIdxgWJbbbbMh83dndnaCTmbaQhOinJbbbba88a8KaOc8S2fgHIdyg8U:va8UJbbbb9BEh8UaDaOaC2cltfheaHIdaa88Na81Mh81aHId3a88Na85Mh85aHIdKa88Na8YMh8YaHIdCa88Na87Mh87aHIdza88NaBMhBaHIdxa88Na83Mh83aHIdwa88NaRMhRaHIdla88Na8VMh8VaHIdba88NaUMhUaChHina81aecxfIdbg8ZaecwfIdbg8WNa8UN:th81a85a8ZaeclfIdbg8XNa8UN:th85a87a8Wa8XNa8UN:th87aUaeIdbg80a80Na8UN:thUa8Ya8Za80Na8UN:th8YaBa8Wa80Na8UN:thBa83a8Xa80Na8UN:th83aRa8Wa8WNa8UN:thRa8Va8Xa8XNa8UN:th8VaeczfheaHcufgHmbkaKaOcdtfydbgOaQ9hmbkaITmbaIaQcltfgeIdxhSaeIdwhJaeIdlh9eaeIdbh8UxekJbbbbhSJbbbbhJJbbbbh9eJbbbbh8UkaBaU:vg8Xa8YNa81:ta87aBa83aU:vg8WN:tg81a8Va83a8WN:tg8Z:vg80a8Wa8YNa85:tg8VN:th85aJa8Ua8XN:ta9ea8Ua8WN:tg83a80N:tg87aRaBa8XN:ta81a80N:tgB:vgR:mh81a83a8Z:vgJ:mh9ednJbbbba8Ua8UaU:vgTN:ta83aJN:ta87aRN:tg83:la88J:983:g81Ng8U9ETmba81a85Na9ea8VNaTa8YNaS:tMMa83:vhckaU:la8U9ETmba8Z:la8U9ETmbaB:la8U9ETmbaT:macNa8X:ma81acNa85aB:vMgBNa8W:ma9eacNa80:maBNa8Va8Z:vMMg87Na8Y:maU:vMMMh88a9maXfgeclfydbgHaeydbge9RhYaEaecitfhXJbbbbh8UdnaHaeSg8JmbJbbbbh8UaXheaYhOinaaaeclfydbcx2fgHIdwa89:tg8Wa8WNaHIdbaZ:tg8Wa8WNaHIdla8::tg8Wa8WNMMg8Waaaeydbcx2fgHIdwa89:tg8Xa8XNaHIdbaZ:tg8Xa8XNaHIdla8::tg8Xa8XNMMg8Xa8Ua8Ua8X9DEg8Ua8Ua8W9DEh8UaecwfheaOcufgOmbkkaBa89:tg8Wa8WNa88aZ:tg8Wa8WNa87a8::tg8Wa8WNMMa8U:rg8Ua8UN9EmbaLId8Khcdna8JmbcbhOcehLdninaaaXclfydbcx2fgeIdbaaaXydbcx2fgHIdbg8X:tg8Ua8:aHIdlg80:tg8YNaZa8X:tg83aeIdla80:tg8WN:tg8Za8Ua87a80:tgRNa88a8X:tg8Va8WN:tg80Na8Wa89aHIdwgU:tg81Na8YaeIdwaU:tg8XN:tg8Ya8WaBaU:tg85NaRa8XN:tg8WNa8Xa83Na81a8UN:tgUa8Xa8VNa85a8UN:tg8UNMMa8Za8ZNa8Ya8YNaUaUNMMa80a80Na8Wa8WNa8Ua8UNMMN:rJbbj8:N9FmeaXcwfhXaOcefgOaY6hLaYaO9hmbkkaLceGmekJbbbbJbbjZa9c:va9cJbbbb9BEg8Ua9haBNa9Ka88Na9GMg8Wa8WMMaBNaxa87Na9JaBNa9HMg8Wa8WMMa87Na9Fa88NaWa87Na9IMg8Wa8WMMa88NacMMM:lNa8Ua9ha89Na9KaZNa9GMg8Wa8WMMa89Naxa8:Na9Ja89Na9HMg8Wa8WMMa8:Na9FaZNaWa8:Na9IMg8Wa8WMMaZNacMMM:lNJbb;aZNJ:983:g81M9EmbagaBUdwaga87Udlaga88UdbkaQcefgQal9hmbkaCTmecbhLindna8LaLfRbbTmbaAaLcdtgefydbaL9hmba5aLfhEaaaLcx2fhOaKaefh8JayaLaC2cdtfh8AcbhgincuhQdnaERbbci9hmbaLhQa8JydbgeaLSmbayagcdtgHfhXa8AaHfIdbh8UaLhQinaQhHcuhQdnaXaeaC2cdtfIdba8U9CmbaHcuSmbaHhQa8Kaec8S2fIdya8KaHc8S2fIdy9ETmbaehQkaKaecdtfydbgeaL9hmbkkayagcdtfhXaDagcltfhYaLheinaXaeaC2cdtfJbbbbJbbjZa8KaeaQaQcuSEgHc8S2fIdyg8U:va8UJbbbb9BEaYaHaC2cltfgHIdwaOIdwNaHIdbaOIdbNaHIdlaOIdlNMMaHIdxMNUdbaKaecdtfydbgeaL9hmbkagcefggaC9hmbkkaLcefgLalSmixbkkaCmekcbhCkaiavaoarawaCalaaayazasa8Rasc1efa5a8Laqz:hjjjbkdnamcjjjjlGTmbazmbahTmbcbhQabheina5aeydbgAfRbbc3thLaecwfgKydbhHdndna8EaAcdtgYfydbaeclfgXydbgOSmbcbhCa8FaOcdtfydbaA9hmekcjjjj94hCkaeaLaCVaAVBdba5aOfRbbc3thLdndna8EaOcdtfydbaHSmbcbhCa8FaHcdtfydbaO9hmekcjjjj94hCkaXaLaCVaOVBdba5aHfRbbc3thCdndna8EaHcdtfydbaASmbcbhOa8FaYfydbaH9hmekcjjjj94hOkaKaCaOVaHVBdbaecxfheaQcifgQah6mbkkdnazTmbahTmbahheinabazabydbcdtfydbBdbabclfhbaecufgembkkdnaPTmbaPana86:rNUdbkasyd;8egecdtasc:Ceffc98fhHdninaeTmeaHydbcbyd:m:jjjbH:bjjjbbaHc98fhHaecufhexbkkascj;sbf8Kjjjjbahk;Yieouabydlhvabydbclfcbaicdtz:tjjjbhoadci9UhrdnadTmbdnalTmbaehwadhDinaoalawydbcdtfydbcdtfgqaqydbcefBdbawclfhwaDcufgDmbxdkkaehwadhDinaoawydbcdtfgqaqydbcefBdbawclfhwaDcufgDmbkkdnaiTmbcbhDaohwinawydbhqawaDBdbawclfhwaqaDfhDaicufgimbkkdnadci6mbinaecwfydbhwaeclfydbhDaeydbhidnalTmbalawcdtfydbhwalaDcdtfydbhDalaicdtfydbhikavaoaicdtfgqydbcitfaDBdbavaqydbcitfawBdlaqaqydbcefBdbavaoaDcdtfgqydbcitfawBdbavaqydbcitfaiBdlaqaqydbcefBdbavaoawcdtfgwydbcitfaiBdbavawydbcitfaDBdlawawydbcefBdbaecxfhearcufgrmbkkabydbcbBdbk:todDue99aicd4aifhrcehwinawgDcethwaDar6mbkcuaDcdtgraDcFFFFi0Ecbyd1:jjjbHjjjjbbhwaoaoyd9GgqcefBd9GaoaqcdtfawBdbawcFearz:tjjjbhkdnaiTmbalcd4hlaDcufhxcbhminamhDdnavTmbavamcdtfydbhDkcbadaDal2cdtfgDydlgwawcjjjj94SEgwcH4aw7c:F:b:DD2cbaDydbgwawcjjjj94SEgwcH4aw7c;D;O:B8J27cbaDydwgDaDcjjjj94SEgDcH4aD7c:3F;N8N27axGhwamcdthPdndndnavTmbakawcdtfgrydbgDcuSmeadavaPfydbal2cdtfgsIdbhzcehqinaqhrdnadavaDcdtfydbal2cdtfgqIdbaz9CmbaqIdlasIdl9CmbaqIdwasIdw9BmlkarcefhqakawarfaxGgwcdtfgrydbgDcu9hmbxdkkakawcdtfgrydbgDcuSmbadamal2cdtfgsIdbhzcehqinaqhrdnadaDal2cdtfgqIdbaz9CmbaqIdlasIdl9CmbaqIdwasIdw9BmikarcefhqakawarfaxGgwcdtfgrydbgDcu9hmbkkaramBdbamhDkabaPfaDBdbamcefgmai9hmbkkakcbyd:m:jjjbH:bjjjbbaoaoyd9GcufBd9GdnaeTmbaiTmbcbhDaehwinawaDBdbawclfhwaiaDcefgD9hmbkcbhDaehwindnaDabydbgrSmbawaearcdtfgrydbBdbaraDBdbkawclfhwabclfhbaiaDcefgD9hmbkkk:hrdvuv998Jjjjjbca9Rgoczfcwfcbyd11jjbBdbaocb8Pdj1jjb83izaocwfcbydN1jjbBdbaocb8Pd:m1jjb83ibdnadTmbaicd4hrdnabmbdnalTmbcbhwinaealawcdtfydbar2cdtfhDcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkawcefgwad9hmbxikkarcdthwcbhDincbhiinaoczfaifgqaeaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkaeawfheaDcefgDad9hmbxdkkdnalTmbcbhwinabawcx2fgiaealawcdtfydbar2cdtfgDIdbUdbaiaDIdlUdlaiaDIdwUdwcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkawcefgwad9hmbxdkkarcdthlcbhwaehDinabawcx2fgiaeawar2cdtfgqIdbUdbaiaqIdlUdlaiaqIdwUdwcbhiinaoczfaifgqaDaifIdbgkaqIdbgxaxak9EEUdbaoaifgqakaqIdbgxaxak9DEUdbaiclfgicx9hmbkaDalfhDawcefgwad9hmbkkJbbbbaoIdbaoIdzgx:tgkakJbbbb9DEgkaoIdlaoIdCgm:tgPaPak9DEgkaoIdwaoIdKgP:tgsasak9DEhsdnabTmbadTmbJbbbbJbbjZas:vasJbbbb9BEhkinabakabIdbax:tNUdbabclfgoakaoIdbam:tNUdbabcwfgoakaoIdbaP:tNUdbabcxfhbadcufgdmbkkdnavTmbavaPUdwavamUdlavaxUdbkask:ZlewudnaeTmbcbhvabhoinaoavBdbaoclfhoaeavcefgv9hmbkkdnaiTmbcbhrinadarcdtfhwcbhDinalawaDcdtgvc:G1jjbfydbcdtfydbcdtfydbhodnabalawavfydbcdtfydbgqcdtfgkydbgvaqSmbinakabavgqcdtfgxydbgvBdbaxhkaqav9hmbkkdnabaocdtfgkydbgvaoSmbinakabavgocdtfgxydbgvBdbaxhkaoav9hmbkkdnaqaoSmbabaqaoaqao0Ecdtfaqaoaqao6EBdbkaDcefgDci9hmbkarcifgrai6mbkkdnaembcbskcbhxindnalaxcdtgvfydbax9hmbaxhodnabavfgDydbgvaxSmbaDhqinaqabavgocdtfgkydbgvBdbakhqaoav9hmbkkaDaoBdbkaxcefgxae9hmbkcbhvabhocbhkindndnavalydbgq9hmbdnavaoydbgq9hmbaoakBdbakcefhkxdkaoabaqcdtfydbBdbxekaoabaqcdtfydbBdbkaoclfhoalclfhlaeavcefgv9hmbkakk;Jiilud99duabcbaecltz:tjjjbhvdnalTmbadhoaihralhwinarcwfIdbhDarclfIdbhqavaoydbcltfgkarIdbakIdbMUdbakclfgxaqaxIdbMUdbakcwfgxaDaxIdbMUdbakcxfgkakIdbJbbjZMUdbaoclfhoarcxfhrawcufgwmbkkdnaeTmbavhraehkinarcxfgoIdbhDaocbBdbararIdbJbbbbJbbjZaD:vaDJbbbb9BEgDNUdbarclfgoaDaoIdbNUdbarcwfgoaDaoIdbNUdbarczfhrakcufgkmbkkdnalTmbinavadydbcltfgrcxfgkaicwfIdbarcwfIdb:tgDaDNaiIdbarIdb:tgDaDNaiclfIdbarclfIdb:tgDaDNMMgDakIdbgqaqaD9DEUdbadclfhdaicxfhialcufglmbkkdnaeTmbavcxfhrinabarIdbUdbarczfhrabclfhbaecufgembkkk:moerudnaoTmbaecd4hzdnavTmbaicd4hHavcdthOcbhAindnaPaAfRbbTmbaAhednaDTmbaDaAcdtfydbhekdnasTmbasaefRbbceGmekdnamaAfRbbclSmbabaeaz2cdtfgiaraAcx2fgCIdbakNaxIdbMUdbaiaCIdlakNaxIdlMUdlaiaCIdwakNaxIdwMUdwkadaeaH2cdtfhXaqheawhiavhCinaXaeydbcdtgQfaiIdbalaQfIdb:vUdbaeclfheaiclfhiaCcufgCmbkkawaOfhwaAcefgAao9hmbxdkkdnasmbcbheaDhiindnaPaefRbbTmbaehCdnaDTmbaiydbhCkamaefRbbclSmbabaCaz2cdtfgCarIdbakNaxIdbMUdbaCarclfIdbakNaxIdlMUdlaCarcwfIdbakNaxIdwMUdwkaiclfhiarcxfhraoaecefge9hmbxdkkdnaDTmbindnaPRbbTmbasaDydbgefRbbceGmbamRbbclSmbabaeaz2cdtfgearIdbakNaxIdbMUdbaearclfIdbakNaxIdlMUdlaearcwfIdbakNaxIdwMUdwkaPcefhPaDclfhDamcefhmarcxfhraocufgombxdkkazcdthicbheindnaPaefRbbTmbasaefRbbceGmbamaefRbbclSmbabarIdbakNaxIdbMUdbabclfarclfIdbakNaxIdlMUdbabcwfarcwfIdbakNaxIdwMUdbkarcxfhrabaifhbaoaecefge9hmbkkk8MbabaeadaialavcbcbcbcbcbaoarawaDz:bjjjbk8MbabaeadaialavaoarawaDaqakaxamaPz:bjjjbkRbababaeadaialavaoarawaDaqakaxcjjjjdVamz:bjjjbk:d8Koque99due99duq998Jjjjjbc;Wb9Rgq8Kjjjjbcbhkaqcxfcbc;Kbz:tjjjb8Aaqcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbgxBdxaqceBd2axaialavcbcbz:ejjjb8AaqcualcdtalcFFFFi0Egmcbyd1:jjjbHjjjjbbgiBdzaqcdBd2dndnJFF959eJbbjZawJbbjZawJbbjZ9DE:vawJ9VO:d869DEgw:lJbbb9p9DTmbaw:OhPxekcjjjj94hPkadci9Uhsarco9UhzdndnaombaPcd9imekdnalTmbaPcuf:YhwdnaoTmbcbhvaihHaxhOindndnaoavfRbbceGTmbavcjjjjlVhAxekdndnaOclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcqthAdndnaOcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXVhAdndnaOIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXcCtVhAkaHaABdbaHclfhHaOcxfhOalavcefgv9hmbxdkkaxhvaihOalhHindndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcCthAdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaXcqtaAVhAdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaOaAaXVBdbavcxfhvaOclfhOaHcufgHmbkkadTmbcbhkaehvcbhOinakaiavclfydbcdtfydbgHaiavcwfydbcdtfydbgA9haiavydbcdtfydbgXaH9haXaA9hGGfhkavcxfhvaOcifgOad6mbkkarci9UhQdndnaz:Z:rJbbbZMgw:lJbbb9p9DTmbaw:Ohvxekcjjjj94hvkaQ:ZhLcbhKc:bwhzdninakaQ9pmeazaP9Rcd9imeavazcufavaz9iEaPcefavaP9kEhYdnalTmbaYcuf:YhwdnaoTmbcbhOaihHaxhvindndnaoaOfRbbceGTmbaOcjjjjlVhAxekdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcqthAdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXVhAdndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaAaXcCtVhAkaHaABdbaHclfhHavcxfhvalaOcefgO9hmbxdkkaxhvaihOalhHindndnavIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhAxekcjjjj94hAkaAcCthAdndnavclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaXcqtaAVhAdndnavcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaOaAaXVBdbavcxfhvaOclfhOaHcufgHmbkkcbhOdnadTmbaehvcbhHinaOaiavclfydbcdtfydbgAaiavcwfydbcdtfydbgX9haiavydbcdtfydbgraA9haraX9hGGfhOavcxfhvaHcifgHad6mbkkJbbbbh8Adnas:ZgCaL:taY:Ygwaz:Y:tgENak:Zg3aO:Zg5:tNa3aL:tawaP:Y:tg8ENa5aC:tNMg8FJbbbb9BmbaCa3:ta8EaEa5aL:tNNNa8F:vh8AkdndnaOaQ0mbaOhkaYhPxekaOhsaYhzkdndnaKcl0mbdna8AawMJbbbZMgw:lJbbb9p9DTmbaw:Ohvxdkcjjjj94hvxekaPazfcd9ThvkaKcefgKcs9hmbkkdndndnakmbJbbjZhwcbhicdhvaDmexdkalcd4alfhHcehOinaOgvcethOavaH6mbkcbhOaqcuavcdtgYavcFFFFi0Ecbyd1:jjjbHjjjjbbgKBdCaqciBd2aqamcbyd1:jjjbHjjjjbbgzBdKaqclBd2dndndndnalTmbaPcuf:YhwaoTmecbhOaihAaxhHindndnaoaOfRbbceGTmbaOcjjjjlVhXxekdndnaHclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaXcqthXdndnaHcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohrxekcjjjj94hrkaXarVhXdndnaHIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohrxekcjjjj94hrkaXarcCtVhXkaAaXBdbaAclfhAaHcxfhHalaOcefgO9hmbxikkaKcFeaYz:tjjjb8AcbhPcbhvxdkaxhOaihHalhAindndnaOIdbawNJbbbZMgC:lJbbb9p9DTmbaC:OhXxekcjjjj94hXkaXcCthXdndnaOclfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohrxekcjjjj94hrkarcqtaXVhXdndnaOcwfIdbawNJbbbZMgC:lJbbb9p9DTmbaC:Ohrxekcjjjj94hrkaHaXarVBdbaOcxfhOaHclfhHaAcufgAmbkkaKcFeaYz:tjjjbhravcufhocbhPcbhYindndndnaraiaYcdtgKfydbgAcm4aA7c:v;t;h;Ev2gvcs4av7aoGgHcdtfgXydbgOcuSmbcehvinaiaOcdtgOfydbaASmdaHavfhOavcefhvaraOaoGgHcdtfgXydbgOcu9hmbkkaXaYBdbaPhvaPcefhPxekazaOfydbhvkazaKfavBdbaYcefgYal9hmbkcuaPc8S2gOaPc;D;O;f8U0Ehvkcbhraqavcbyd1:jjjbHjjjjbbgvBd3aqcvBd2avcbaOz:tjjjbhOdnadTmbaehiinJbbnnJbbjZazaiydbgAcdtfydbgvazaiclfydbgHcdtfydbgYSavazaicwfydbgXcdtfydbgKSGgoEh8EdnaxaHcx2fgHIdbaxaAcx2fgAIdbg5:tgCaxaXcx2fgXIdlaAIdlg8A:tgwNaXIdba5:tg3aHIdla8A:tg8FN:tgLaLNa8FaXIdwaAIdwgE:tgaNawaHIdwaE:tg8FN:tgwawNa8Fa3NaaaCN:tgCaCNMM:rg3Jbbbb9ETmbaLa3:vhLaCa3:vhCawa3:vhwkaOavc8S2fgvavIdbawa8Ea3:rNg3awNNg8FMUdbavaCa3aCNgaNghavIdlMUdlavaLa3aLNg8ENggavIdwMUdwavaaawNgaavIdxMUdxava8EawNg8JavIdzMUdzava8EaCNg8EavIdCMUdCavawa3aLaENawa5Na8AaCNMM:mg8ANg5NgwavIdKMUdKavaCa5NgCavId3MUd3avaLa5NgLavIdaMUdaava5a8ANg5avId8KMUd8Kava3avIdyMUdydnaombaOaYc8S2fgva8FavIdbMUdbavahavIdlMUdlavagavIdwMUdwavaaavIdxMUdxava8JavIdzMUdzava8EavIdCMUdCavawavIdKMUdKavaCavId3MUd3avaLavIdaMUdaava5avId8KMUd8Kava3avIdyMUdyaOaKc8S2fgva8FavIdbMUdbavahavIdlMUdlavagavIdwMUdwavaaavIdxMUdxava8JavIdzMUdzava8EavIdCMUdCavawavIdKMUdKavaCavId3MUd3avaLavIdaMUdaava5avId8KMUd8Kava3avIdyMUdykaicxfhiarcifgrad6mbkkcbhAaqcuaPcdtgvaPcFFFFi0Egicbyd1:jjjbHjjjjbbgHBdaaqcoBd2aqaicbyd1:jjjbHjjjjbbgiBd8KaqcrBd2aHcFeavz:tjjjbhYdnalTmbazhHinJbbbbJbbjZaOaHydbgXc8S2fgvIdygw:vawJbbbb9BEavIdwaxcwfIdbgwNavIdzaxIdbgCNavIdaMgLaLMMawNavIdlaxclfIdbgLNavIdCawNavId3MgwawMMaLNavIdbaCNavIdxaLNavIdKMgwawMMaCNavId8KMMM:lNhwdndnaYaXcdtgvfgXydbcuSmbaiavfIdbaw9ETmekaXaABdbaiavfawUdbkaHclfhHaxcxfhxalaAcefgA9hmbkkJbbbbhwdnaPTmbinaiIdbgCawawaC9DEhwaiclfhiaPcufgPmbkkakcd4akfhOcehiinaigvcethiavaO6mbkcbhiaqcuavcdtgOavcFFFFi0Ecbyd1:jjjbHjjjjbbgHBdyaHcFeaOz:tjjjbhXdnadTmbavcufhrcbhPcbhxindnazaeaxcdtfgvydbcdtfydbgiazavclfydbcdtfydbgOSmbaiazavcwfydbcdtfydbgvSmbaOavSmbaYavcdtfydbhAdndnaYaOcdtfydbgvaYaicdtfydbgi9pmbavaA9pmbaAhlaihoavhAxekdnaAai9pmbaAav9pmbaihlavhoxekavhlaAhoaihAkabaPcx2fgvaABdbavcwfaoBdbavclfalBdbdnaXaoc:3F;N8N2alc:F:b:DD27aAc;D;O:B8J27arGgOcdtfgvydbgicuSmbcehHinaHhvdnabaicx2fgiydbaA9hmbaiydlal9hmbaiydwaoSmikavcefhHaXaOavfarGgOcdtfgvydbgicu9hmbkkavaPBdbaPcefhPkaxcifgxad6mbkaPci2hikdnaDmbcwhvxdkaw:rhwcwhvkaDawUdbkavcdthvdninavTmeavc98fgvaqcxffydbcbyd:m:jjjbH:bjjjbbxbkkaqc;Wbf8Kjjjjbaik:2ldwue9:8Jjjjjbc;Wb9Rgr8Kjjjjbcbhwarcxfcbc;Kbz:tjjjb8AdnabaeSmbabaeadcdtzMjjjb8AkarcualcdtalcFFFFi0EgDcbyd1:jjjbHjjjjbbgqBdxarceBd2aqcbaialavcbarcxfz:djjjbcualcx2alc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbhkarcxfaryd2gxcdtgmfakBdbaraxcefgPBd2akaialavcbcbz:ejjjb8AarcxfaPcdtfaDcbyd1:jjjbHjjjjbbgvBdbaraxcdfgiBd2arcxfaicdtfcuavalaeadaqz:fjjjbgecltaecjjjjiGEcbyd1:jjjbHjjjjbbgiBdbaiaeavakalz:gjjjbdnadTmbaoaoNhocbhwabhlcbhkindnaiavalydbgecdtfydbcdtfIdbao9ETmbalclf8PdbhsabawcdtfgqaeBdbaqclfas83dbawcifhwkalcxfhlakcifgkad6mbkkaxcifhlamarcxffcwfhkdninalTmeakydbcbyd:m:jjjbH:bjjjbbakc98fhkalcufhlxbkkarc;Wbf8Kjjjjbawk:XCoDud99vue99vuo998Jjjjjbc;Wb9Rgw8KjjjjbdndnarmbcbhDxekawcxfcbc;Kbz:tjjjb8Aawcuadcx2adc;v:Q;v:Qe0Ecbyd1:jjjbHjjjjbbgqBdxawceBd2aqaeadaicbcbz:ejjjb8AawcuadcdtadcFFFFi0Egkcbyd1:jjjbHjjjjbbgxBdzawcdBd2adcd4adfhmceheinaegicetheaiam6mbkcbhPawcuaicdtgsaicFFFFi0Ecbyd1:jjjbHjjjjbbgzBdCawciBd2dndnar:ZgH:rJbbbZMgO:lJbbb9p9DTmbaO:Ohexekcjjjj94hekaicufhAc:bwhDcbhCadhXcbhQinaeaDcufaeaD9iEaPcefaeaP9kEhLdndnadTmbaLcuf:YhOaqhiaxheadhmindndnaiIdbaONJbbbZMgK:lJbbb9p9DTmbaK:OhYxekcjjjj94hYkaYcCthYdndnaiclfIdbaONJbbbZMgK:lJbbb9p9DTmbaK:Oh8Axekcjjjj94h8Aka8AcqtaYVhYdndnaicwfIdbaONJbbbZMgK:lJbbb9p9DTmbaK:Oh8Axekcjjjj94h8AkaeaYa8AVBdbaicxfhiaeclfheamcufgmmbkazcFeasz:tjjjbhEcbh3cbh5indnaEaxa5cdtfydbgYcm4aY7c:v;t;h;Ev2gics4ai7aAGgmcdtfg8AydbgecuSmbaeaYSmbcehiinaEamaifaAGgmcdtfg8AydbgecuSmeaicefhiaeaY9hmbkka8AaYBdba3aecuSfh3a5cefg5ad9hmbxdkkazcFeasz:tjjjb8Acbh3kJbbbbh8EdnaX:ZgKaH:taL:YgOaD:Y:tg8FNaC:Zgaa3:Zgh:tNaaaH:taOaP:Y:tggNahaK:tNMg8JJbbbb9BmbaKaa:taga8FahaH:tNNNa8J:vh8EkaPaLa3ar0giEhPaCa3aiEhCdna3arSmbaLaDaiEgDaP9Rcd9imbdndnaQcl0mbdna8EaOMJbbbZMgO:lJbbb9p9DTmbaO:Ohexdkcjjjj94hexekaPaDfcd9Theka3aXaiEhXaQcefgQcs9hmekkdndnaCmbcihicbhDxekcbhiawakcbyd1:jjjbHjjjjbbg5BdKawclBd2aPcuf:YhKdndnadTmbaqhiaxheadhmindndnaiIdbaKNJbbbZMgO:lJbbb9p9DTmbaO:OhYxekcjjjj94hYkaYcCthYdndnaiclfIdbaKNJbbbZMgO:lJbbb9p9DTmbaO:Oh8Axekcjjjj94h8Aka8AcqtaYVhYdndnaicwfIdbaKNJbbbZMgO:lJbbb9p9DTmbaO:Oh8Axekcjjjj94h8AkaeaYa8AVBdbaicxfhiaeclfheamcufgmmbkazcFeasz:tjjjbhEcbhDcbh3indndndnaEaxa3cdtgLfydbgYcm4aY7c:v;t;h;Ev2gics4ai7aAGgmcdtfg8AydbgecuSmbcehiinaxaecdtgefydbaYSmdamaifheaicefhiaEaeaAGgmcdtfg8Aydbgecu9hmbkka8Aa3BdbaDhiaDcefhDxeka5aefydbhika5aLfaiBdba3cefg3ad9hmbkcuaDc32giaDc;j:KM;jb0EhexekazcFeasz:tjjjb8AcbhDcbhekawaecbyd1:jjjbHjjjjbbgeBd3awcvBd2aecbaiz:tjjjbh8Aavcd4hxdnadTmbdnalTmbaxcdthEa5hYaqhealhmadhAina8AaYydbc32fgiaeIdbaiIdbMUdbaiaeclfIdbaiIdlMUdlaiaecwfIdbaiIdwMUdwaiamIdbaiIdxMUdxaiamclfIdbaiIdzMUdzaiamcwfIdbaiIdCMUdCaiaiIdKJbbjZMUdKaYclfhYaecxfheamaEfhmaAcufgAmbxdkka5hmaqheadhYina8Aamydbc32fgiaeIdbaiIdbMUdbaiaeclfIdbaiIdlMUdlaiaecwfIdbaiIdwMUdwaiaiIdxJbbbbMUdxaiaiIdzJbbbbMUdzaiaiIdCJbbbbMUdCaiaiIdKJbbjZMUdKamclfhmaecxfheaYcufgYmbkkdnaDTmba8AhiaDheinaiaiIdbJbbbbJbbjZaicKfIdbgO:vaOJbbbb9BEgONUdbaiclfgmaOamIdbNUdbaicwfgmaOamIdbNUdbaicxfgmaOamIdbNUdbaiczfgmaOamIdbNUdbaicCfgmaOamIdbNUdbaic3fhiaecufgembkkcbhYawcuaDcdtgLaDcFFFFi0Egicbyd1:jjjbHjjjjbbgeBdaawcoBd2awaicbyd1:jjjbHjjjjbbgEBd8KaecFeaLz:tjjjbh3dnadTmbJbbjZJbbjZaK:vaPceSEaoNgOaONhKaxcdthxalheinaKaec;81jjbalEgmIdwa8Aa5ydbgAc32fgiIdC:tgOaONamIdbaiIdx:tgOaONamIdlaiIdz:tgOaONMMNaqcwfIdbaiIdw:tgOaONaqIdbaiIdb:tgOaONaqclfIdbaiIdl:tgOaONMMMhOdndna3aAcdtgifgmydbcuSmbaEaifIdbaO9ETmekamaYBdbaEaifaOUdbka5clfh5aqcxfhqaeaxfheadaYcefgY9hmbkkaba3aLzMjjjb8AcrhikaicdthiinaiTmeaic98fgiawcxffydbcbyd:m:jjjbH:bjjjbbxbkkawc;Wbf8KjjjjbaDk:Ydidui99ducbhi8Jjjjjbca9Rglczfcwfcbyd11jjbBdbalcb8Pdj1jjb83izalcwfcbydN1jjbBdbalcb8Pd:m1jjb83ibdndnaembJbbjFhvJbbjFhoJbbjFhrxekadcd4cdthwincbhdinalczfadfgDabadfIdbgvaDIdbgoaoav9EEUdbaladfgDavaDIdbgoaoav9DEUdbadclfgdcx9hmbkabawfhbaicefgiae9hmbkalIdwalIdK:thralIdlalIdC:thoalIdbalIdz:thvkJbbbbavavJbbbb9DEgvaoaoav9DEgvararav9DEk9DeeuabcFeaicdtz:tjjjbhlcbhbdnadTmbindnalaeydbcdtfgiydbcu9hmbaiabBdbabcefhbkaeclfheadcufgdmbkkabk;7idqui998Jjjjjbc;Wb9Rgl8Kjjjjbalcxfcbc;Kbz:tjjjb8Aadcd4adfhvcehoinaogrcethoarav6mbkalcuarcdtgoarcFFFFi0Ecbyd1:jjjbHjjjjbbgvBdxavcFeaoz:tjjjbhwdnadTmbaicd4hDarcufhqcbhkindndnawcbaeakaD2cdtfgrydlgiaicjjjj94SEgocH4ao7c:F:b:DD2cbarydbgxaxcjjjj94SEgocH4ao7c;D;O:B8J27cbarydwgmamcjjjj94SEgrcH4ar7c:3F;N8N27aqGgvcdtfgrydbgocuSmbam::hPai::hsax::hzcehiinaihrdnaeaoaD2cdtfgiIdbaz9CmbaiIdlas9CmbaiIdwaP9BmikarcefhiawavarfaqGgvcdtfgrydbgocu9hmbkkarakBdbakhokabakcdtfaoBdbakcefgkad9hmbkkcbhrdninarc98Smealcxfarfydbcbyd:m:jjjbH:bjjjbbarc98fhrxbkkalc;Wbf8Kjjjjbk9teiucbcbyd:q:jjjbgeabcifc98GfgbBd:q:jjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd:q:jjjbgeabcrfc94GfgbBd:q:jjjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaikTeeucbabcbyd:q:jjjbge9Rcifc98GaefgbBd:q:jjjbdnabZbcztge9nmbabae9RcFFifcz4nb8Akkk:Iedbcjwk1eFFuuFFuuFFuuFFuFFFuFFFuFbbbbbbbbebbbdbbbbbbbebbbebbbdbbbbbbbbbbbeeeeebebbebbebebbbeebbbbbbbbbbbbeeeeeebebbeeebeebbbbebebbbbbbbbbbbbbbbbbbc1Dkxebbbdbbb:GNbb";
+  var wasmpack = new Uint8Array([
+    32,
+    0,
+    65,
+    2,
+    1,
+    106,
+    34,
+    33,
+    3,
+    128,
+    11,
+    4,
+    13,
+    64,
+    6,
+    253,
+    10,
+    7,
+    15,
+    116,
+    127,
+    5,
+    8,
+    12,
+    40,
+    16,
+    19,
+    54,
+    20,
+    9,
+    27,
+    255,
+    113,
+    17,
+    42,
+    67,
+    24,
+    23,
+    146,
+    148,
+    18,
+    14,
+    22,
+    45,
+    70,
+    69,
+    56,
+    114,
+    101,
+    21,
+    25,
+    63,
+    75,
+    136,
+    108,
+    28,
+    118,
+    29,
+    73,
+    115
+  ]);
+  if (typeof WebAssembly !== "object") {
+    return {
+      supported: false
+    };
+  }
+  var instance;
+  var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
+    instance = result.instance;
+    instance.exports.__wasm_call_ctors();
+  });
+  function unpack(data) {
+    var result = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; ++i) {
+      var ch = data.charCodeAt(i);
+      result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
+    }
+    var write = 0;
+    for (var i = 0; i < data.length; ++i) {
+      result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
+    }
+    return result.buffer.slice(0, write);
+  }
+  function assert(cond) {
+    if (!cond) {
+      throw new Error("Assertion failed");
+    }
+  }
+  function bytes(view) {
+    return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
+  }
+  function genremap(fun, positions, vertices, stride) {
+    var sbrk = instance.exports.sbrk;
+    var rp = sbrk(vertices * 4);
+    var sp = sbrk(vertices * stride * 4);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(positions), sp);
+    fun(rp, sp, vertices, stride * 4);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var remap = new Uint32Array(vertices);
+    new Uint8Array(remap.buffer).set(heap.subarray(rp, rp + vertices * 4));
+    sbrk(rp - sbrk(0));
+    return remap;
+  }
+  function reorder(fun, indices, vertices) {
+    var sbrk = instance.exports.sbrk;
+    var ip = sbrk(indices.length * 4);
+    var rp = sbrk(vertices * 4);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    var indices8 = bytes(indices);
+    heap.set(indices8, ip);
+    var unique = fun(rp, ip, indices.length, vertices);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var remap = new Uint32Array(vertices);
+    new Uint8Array(remap.buffer).set(heap.subarray(rp, rp + vertices * 4));
+    indices8.set(heap.subarray(ip, ip + indices.length * 4));
+    sbrk(ip - sbrk(0));
+    for (var i = 0; i < indices.length; ++i) indices[i] = remap[indices[i]];
+    return [remap, unique];
+  }
+  function maxindex(source) {
+    var result = 0;
+    for (var i = 0; i < source.length; ++i) {
+      var index = source[i];
+      result = result < index ? index : result;
+    }
+    return result;
+  }
+  function simplify(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, target_index_count, target_error, options) {
+    var sbrk = instance.exports.sbrk;
+    var te = sbrk(4);
+    var ti = sbrk(index_count * 4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var si = sbrk(index_count * 4);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    heap.set(bytes(indices), si);
+    var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, target_index_count, target_error, options, te);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var target = new Uint32Array(result);
+    bytes(target).set(heap.subarray(ti, ti + result * 4));
+    var error = new Float32Array(1);
+    bytes(error).set(heap.subarray(te, te + 4));
+    sbrk(te - sbrk(0));
+    return [target, error[0]];
+  }
+  function simplifyAttr(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, options) {
+    var sbrk = instance.exports.sbrk;
+    var te = sbrk(4);
+    var ti = sbrk(index_count * 4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var sa = sbrk(vertex_count * vertex_attributes_stride);
+    var sw = sbrk(attribute_weights.length * 4);
+    var si = sbrk(index_count * 4);
+    var vl = vertex_lock ? sbrk(vertex_count) : 0;
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    heap.set(bytes(vertex_attributes), sa);
+    heap.set(bytes(attribute_weights), sw);
+    heap.set(bytes(indices), si);
+    if (vertex_lock) {
+      heap.set(bytes(vertex_lock), vl);
+    }
+    var result = fun(
+      ti,
+      si,
+      index_count,
+      sp,
+      vertex_count,
+      vertex_positions_stride,
+      sa,
+      vertex_attributes_stride,
+      sw,
+      attribute_weights.length,
+      vl,
+      target_index_count,
+      target_error,
+      options,
+      te
+    );
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var target = new Uint32Array(result);
+    bytes(target).set(heap.subarray(ti, ti + result * 4));
+    var error = new Float32Array(1);
+    bytes(error).set(heap.subarray(te, te + 4));
+    sbrk(te - sbrk(0));
+    return [target, error[0]];
+  }
+  function simplifyUpdate(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, options) {
+    var sbrk = instance.exports.sbrk;
+    var te = sbrk(4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var sa = sbrk(vertex_count * vertex_attributes_stride);
+    var sw = sbrk(attribute_weights.length * 4);
+    var si = sbrk(index_count * 4);
+    var vl = vertex_lock ? sbrk(vertex_count) : 0;
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    heap.set(bytes(vertex_attributes), sa);
+    heap.set(bytes(attribute_weights), sw);
+    heap.set(bytes(indices), si);
+    if (vertex_lock) {
+      heap.set(bytes(vertex_lock), vl);
+    }
+    var result = fun(
+      si,
+      index_count,
+      sp,
+      vertex_count,
+      vertex_positions_stride,
+      sa,
+      vertex_attributes_stride,
+      sw,
+      attribute_weights.length,
+      vl,
+      target_index_count,
+      target_error,
+      options,
+      te
+    );
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    bytes(indices).set(heap.subarray(si, si + result * 4));
+    bytes(vertex_positions).set(heap.subarray(sp, sp + vertex_count * vertex_positions_stride));
+    bytes(vertex_attributes).set(heap.subarray(sa, sa + vertex_count * vertex_attributes_stride));
+    var error = new Float32Array(1);
+    bytes(error).set(heap.subarray(te, te + 4));
+    sbrk(te - sbrk(0));
+    return [result, error[0]];
+  }
+  function simplifyScale(fun, vertex_positions, vertex_count, vertex_positions_stride) {
+    var sbrk = instance.exports.sbrk;
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    var result = fun(sp, vertex_count, vertex_positions_stride);
+    sbrk(sp - sbrk(0));
+    return result;
+  }
+  function simplifyPoints(fun, vertex_positions, vertex_count, vertex_positions_stride, vertex_colors, vertex_colors_stride, color_weight, target_vertex_count) {
+    var sbrk = instance.exports.sbrk;
+    var ti = sbrk(target_vertex_count * 4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var sc = sbrk(vertex_count * vertex_colors_stride);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    if (vertex_colors) {
+      heap.set(bytes(vertex_colors), sc);
+    }
+    var result = fun(ti, sp, vertex_count, vertex_positions_stride, sc, vertex_colors_stride, color_weight, target_vertex_count);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var target = new Uint32Array(result);
+    bytes(target).set(heap.subarray(ti, ti + result * 4));
+    sbrk(ti - sbrk(0));
+    return target;
+  }
+  function simplifySloppy(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, vertex_lock, target_index_count, target_error) {
+    var sbrk = instance.exports.sbrk;
+    var te = sbrk(4);
+    var ti = sbrk(index_count * 4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var si = sbrk(index_count * 4);
+    var vl = vertex_lock ? sbrk(vertex_count) : 0;
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    heap.set(bytes(indices), si);
+    if (vertex_lock) {
+      heap.set(bytes(vertex_lock), vl);
+    }
+    var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, vl, target_index_count, target_error, te);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var target = new Uint32Array(result);
+    bytes(target).set(heap.subarray(ti, ti + result * 4));
+    var error = new Float32Array(1);
+    bytes(error).set(heap.subarray(te, te + 4));
+    sbrk(te - sbrk(0));
+    return [target, error[0]];
+  }
+  function simplifyPrune(fun, indices, index_count, vertex_positions, vertex_count, vertex_positions_stride, target_error) {
+    var sbrk = instance.exports.sbrk;
+    var ti = sbrk(index_count * 4);
+    var sp = sbrk(vertex_count * vertex_positions_stride);
+    var si = sbrk(index_count * 4);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), sp);
+    heap.set(bytes(indices), si);
+    var result = fun(ti, si, index_count, sp, vertex_count, vertex_positions_stride, target_error);
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var target = new Uint32Array(result);
+    bytes(target).set(heap.subarray(ti, ti + result * 4));
+    sbrk(ti - sbrk(0));
+    return target;
+  }
+  var simplifyOptions = {
+    LockBorder: 1,
+    Sparse: 2,
+    ErrorAbsolute: 4,
+    Prune: 8,
+    Regularize: 16,
+    Permissive: 32,
+    _InternalDebug: 1 << 30
+    // internal, don't use!
+  };
+  return {
+    ready,
+    supported: true,
+    compactMesh: function(indices) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      return reorder(instance.exports.meshopt_optimizeVertexFetchRemap, indices32, maxindex(indices) + 1);
+    },
+    generatePositionRemap: function(vertex_positions, vertex_positions_stride) {
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      return genremap(
+        instance.exports.meshopt_generatePositionRemap,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride
+      );
+    },
+    simplify: function(indices, vertex_positions, vertex_positions_stride, target_index_count, target_error, flags) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(target_index_count >= 0 && target_index_count <= indices.length);
+      assert(target_index_count % 3 == 0);
+      assert(target_error >= 0);
+      var options = 0;
+      for (var i = 0; i < (flags ? flags.length : 0); ++i) {
+        assert(flags[i] in simplifyOptions);
+        options |= simplifyOptions[flags[i]];
+      }
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      var result = simplify(
+        instance.exports.meshopt_simplify,
+        indices32,
+        indices.length,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        target_index_count,
+        target_error,
+        options
+      );
+      result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
+      return result;
+    },
+    simplifyWithAttributes: function(indices, vertex_positions, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, flags) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(vertex_attributes instanceof Float32Array);
+      assert(vertex_attributes.length == vertex_attributes_stride * (vertex_positions.length / vertex_positions_stride));
+      assert(vertex_attributes_stride >= 0);
+      assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
+      assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
+      assert(target_index_count >= 0 && target_index_count <= indices.length);
+      assert(target_index_count % 3 == 0);
+      assert(target_error >= 0);
+      assert(Array.isArray(attribute_weights));
+      assert(vertex_attributes_stride >= attribute_weights.length);
+      assert(attribute_weights.length <= 32);
+      for (var i = 0; i < attribute_weights.length; ++i) {
+        assert(attribute_weights[i] >= 0);
+      }
+      var options = 0;
+      for (var i = 0; i < (flags ? flags.length : 0); ++i) {
+        assert(flags[i] in simplifyOptions);
+        options |= simplifyOptions[flags[i]];
+      }
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      var result = simplifyAttr(
+        instance.exports.meshopt_simplifyWithAttributes,
+        indices32,
+        indices.length,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        vertex_attributes,
+        vertex_attributes_stride * 4,
+        new Float32Array(attribute_weights),
+        vertex_lock,
+        target_index_count,
+        target_error,
+        options
+      );
+      result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
+      return result;
+    },
+    simplifyWithUpdate: function(indices, vertex_positions, vertex_positions_stride, vertex_attributes, vertex_attributes_stride, attribute_weights, vertex_lock, target_index_count, target_error, flags) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(vertex_attributes instanceof Float32Array);
+      assert(vertex_attributes.length == vertex_attributes_stride * (vertex_positions.length / vertex_positions_stride));
+      assert(vertex_attributes_stride >= 0);
+      assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
+      assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
+      assert(target_index_count >= 0 && target_index_count <= indices.length);
+      assert(target_index_count % 3 == 0);
+      assert(target_error >= 0);
+      assert(Array.isArray(attribute_weights));
+      assert(vertex_attributes_stride >= attribute_weights.length);
+      assert(attribute_weights.length <= 32);
+      for (var i = 0; i < attribute_weights.length; ++i) {
+        assert(attribute_weights[i] >= 0);
+      }
+      var options = 0;
+      for (var i = 0; i < (flags ? flags.length : 0); ++i) {
+        assert(flags[i] in simplifyOptions);
+        options |= simplifyOptions[flags[i]];
+      }
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      var result = simplifyUpdate(
+        instance.exports.meshopt_simplifyWithUpdate,
+        indices32,
+        indices.length,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        vertex_attributes,
+        vertex_attributes_stride * 4,
+        new Float32Array(attribute_weights),
+        vertex_lock,
+        target_index_count,
+        target_error,
+        options
+      );
+      if (indices !== indices32) {
+        for (var i = 0; i < result[0]; ++i) {
+          indices[i] = indices32[i];
+        }
+      }
+      return result;
+    },
+    getScale: function(vertex_positions, vertex_positions_stride) {
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      return simplifyScale(
+        instance.exports.meshopt_simplifyScale,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4
+      );
+    },
+    simplifyPoints: function(vertex_positions, vertex_positions_stride, target_vertex_count, vertex_colors, vertex_colors_stride, color_weight) {
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(target_vertex_count >= 0 && target_vertex_count <= vertex_positions.length / vertex_positions_stride);
+      if (vertex_colors) {
+        assert(vertex_colors instanceof Float32Array);
+        assert(vertex_colors.length % vertex_colors_stride == 0);
+        assert(vertex_colors_stride >= 3);
+        assert(vertex_positions.length / vertex_positions_stride == vertex_colors.length / vertex_colors_stride);
+        return simplifyPoints(
+          instance.exports.meshopt_simplifyPoints,
+          vertex_positions,
+          vertex_positions.length / vertex_positions_stride,
+          vertex_positions_stride * 4,
+          vertex_colors,
+          vertex_colors_stride * 4,
+          color_weight,
+          target_vertex_count
+        );
+      } else {
+        return simplifyPoints(
+          instance.exports.meshopt_simplifyPoints,
+          vertex_positions,
+          vertex_positions.length / vertex_positions_stride,
+          vertex_positions_stride * 4,
+          void 0,
+          0,
+          0,
+          target_vertex_count
+        );
+      }
+    },
+    simplifySloppy: function(indices, vertex_positions, vertex_positions_stride, vertex_lock, target_index_count, target_error) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(vertex_lock == null || vertex_lock instanceof Uint8Array);
+      assert(vertex_lock == null || vertex_lock.length == vertex_positions.length / vertex_positions_stride);
+      assert(target_index_count >= 0 && target_index_count <= indices.length);
+      assert(target_index_count % 3 == 0);
+      assert(target_error >= 0);
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      var result = simplifySloppy(
+        instance.exports.meshopt_simplifySloppy,
+        indices32,
+        indices.length,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        vertex_lock,
+        target_index_count,
+        target_error
+      );
+      result[0] = indices instanceof Uint32Array ? result[0] : new indices.constructor(result[0]);
+      return result;
+    },
+    simplifyPrune: function(indices, vertex_positions, vertex_positions_stride, target_error) {
+      assert(
+        indices instanceof Uint32Array || indices instanceof Int32Array || indices instanceof Uint16Array || indices instanceof Int16Array
+      );
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(target_error >= 0);
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      var result = simplifyPrune(
+        instance.exports.meshopt_simplifyPrune,
+        indices32,
+        indices.length,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        target_error
+      );
+      result = indices instanceof Uint32Array ? result : new indices.constructor(result);
+      return result;
+    }
+  };
+})();
+
+// node_modules/meshoptimizer/meshopt_clusterizer.js
+var MeshoptClusterizer = (function() {
+  var wasm2 = "b9H79Tebbbe96x9Geueu9Geub9Gbb9Giuuueu9Gmuuuuuuuuuuu9999eu9Gouuuuuueu9Gruuuuuuub9Gxuuuuuuuuuuuueu9Gxuuuuuuuuuuu99eu9GPuuuuuuuuuuuuu99b9Gouuuuuub9GluuuubiCAdilvorwDqooqkbiibeilve9Weiiviebeoweuecj:Pdkr;Zeqo9TW9T9VV95dbH9F9F939H79T9F9J9H229F9Jt9VV7bb8A9TW79O9V9Wt9F9I919P29K9nW79O2Wt79c9V919U9KbeY9TW79O9V9Wt9F9I919P29K9nW79O2Wt7S2W94bd39TW79O9V9Wt9F9I919P29K9nW79O2Wt79t9W9Ht9P9H2bo39TW79O9V9Wt9F9J9V9T9W91tWJ2917tWV9c9V919U9K7bw39TW79O9V9Wt9F9J9V9T9W91tW9nW79O2Wt9c9V919U9K7bqE9TW79O9V9Wt9F9J9V9T9W91tW9t9W9OWVW9c9V919U9K7bkL9TW79O9V9Wt9F9V9Wt9P9T9P96W9nW79O2Wtbxl79IV9RbmDwebcekdzHq:Y:beAdbkIbabaec9:fgefcufae9Ugeabci9Uadfcufad9Ugbaeab0Ek;z8JDPue99eux99due99euo99iu8Jjjjjbc:WD9Rgm8KjjjjbdndnalmbcbhPxekamc:Cwfcbc;Kbz:pjjjb8Adndnalcb9imbaoal9nmbamcuaocdtaocFFFFi0Egscbyd;01jjbHjjjjbbgzBd:CwamceBd;8wamascbyd;01jjbHjjjjbbgHBd:GwamcdBd;8wamcualcdtalcFFFFi0Ecbyd;01jjbHjjjjbbgOBd:KwamciBd;8waihsalhAinazasydbcdtfcbBdbasclfhsaAcufgAmbkaihsalhAinazasydbcdtfgCaCydbcefBdbasclfhsaAcufgAmbkaihsalhCcbhXindnazasydbcdtgQfgAydbcb9imbaHaQfaXBdbaAaAydbgQcjjjj94VBdbaQaXfhXkasclfhsaCcufgCmbkalci9UhLdnalci6mbcbhsaihAinaAcwfydbhCaAclfydbhXaHaAydbcdtfgQaQydbgQcefBdbaOaQcdtfasBdbaHaXcdtfgXaXydbgXcefBdbaOaXcdtfasBdbaHaCcdtfgCaCydbgCcefBdbaOaCcdtfasBdbaAcxfhAaLascefgs9hmbkkaihsalhAindnazasydbcdtgCfgXydbgQcu9kmbaXaQcFFFFrGgQBdbaHaCfgCaCydbaQ9RBdbkasclfhsaAcufgAmbxdkkamcuaocdtgsaocFFFFi0EgAcbyd;01jjbHjjjjbbgzBd:CwamceBd;8wamaAcbyd;01jjbHjjjjbbgHBd:GwamcdBd;8wamcualcdtalcFFFFi0Ecbyd;01jjbHjjjjbbgOBd:KwamciBd;8wazcbasz:pjjjbhXalci9UhLaihsalhAinaXasydbcdtfgCaCydbcefBdbasclfhsaAcufgAmbkdnaoTmbcbhsaHhAaXhCaohQinaAasBdbaAclfhAaCydbasfhsaCclfhCaQcufgQmbkkdnalci6mbcbhsaihAinaAcwfydbhCaAclfydbhQaHaAydbcdtfgKaKydbgKcefBdbaOaKcdtfasBdbaHaQcdtfgQaQydbgQcefBdbaOaQcdtfasBdbaHaCcdtfgCaCydbgCcefBdbaOaCcdtfasBdbaAcxfhAaLascefgs9hmbkkaoTmbcbhsaohAinaHasfgCaCydbaXasfydb9RBdbasclfhsaAcufgAmbkkamaLcbyd;01jjbHjjjjbbgsBd:OwamclBd;8wascbaLz:pjjjbhYamcuaLcK2alcjjjjd0Ecbyd;01jjbHjjjjbbg8ABd:SwamcvBd;8wJbbbbhEdnalci6g3mbarcd4hKaihAa8AhsaLhrJbbbbh5inavaAclfydbaK2cdtfgCIdlh8EavaAydbaK2cdtfgXIdlhEavaAcwfydbaK2cdtfgQIdlh8FaCIdwhaaXIdwhhaQIdwhgasaCIdbg8JaXIdbg8KMaQIdbg8LMJbbnn:vUdbasclfaXIdlaCIdlMaQIdlMJbbnn:vUdbaQIdwh8MaCIdwh8NaXIdwhyascxfa8EaE:tg8Eagah:tggNa8FaE:tg8Faaah:tgaN:tgEJbbbbJbbjZa8Ja8K:tg8Ja8FNa8La8K:tg8Ka8EN:tghahNaEaENaaa8KNaga8JN:tgEaENMM:rg8K:va8KJbbbb9BEg8ENUdbasczfaEa8ENUdbascCfaha8ENUdbascwfa8Maya8NMMJbbnn:vUdba5a8KMh5aAcxfhAascKfhsarcufgrmbka5aL:Z:vJbbbZNhEkamcuaLcdtalcFFFF970Ecbyd;01jjbHjjjjbbgCBd:WwamcoBd;8waq:Zhhdna3mbcbhsaChAinaAasBdbaAclfhAaLascefgs9hmbkkaEahNhhamcuaLcltalcFFFFd0Ecbyd;01jjbHjjjjbbg8PBd:0wamcrBd;8wcba8Pa8AaCaLcbz:djjjb8AJFFuuh8MJFFuuh8NJFFuuhydnalci6mbJFFuuhya8AhsaLhAJFFuuh8NJFFuuh8MinascwfIdbgEa8Ma8MaE9EEh8MasclfIdbgEa8Na8NaE9EEh8NasIdbgEayayaE9EEhyascKfhsaAcufgAmbkkah:rhEamaocetgscuaocu9kEcbyd;01jjbHjjjjbbgCBd:4wdndnaoal9nmbaihsalhAinaCasydbcetfcFFi87ebasclfhsaAcufgAmbxdkkaCcFeasz:pjjjb8AkaEJbbbZNh8JcuhIdnalci6mbcbhAJFFuuhEa8AhscuhIinascwfIdba8M:tghahNasIdbay:tghahNasclfIdba8N:tghahNMM:rghaEaIcuSahaE9DVgXEhEaAaIaXEhIascKfhsaLaAcefgA9hmbkkamczfcbcjwz:pjjjb8Aamcwf9cb83ibam9cb83iba8JaxNh8RJbbjZak:th8Lcbh8SJbbbbhRJbbbbh8UJbbbbh8VJbbbbh8WJbbbbh8XJbbbbh8Ycbh8ZcbhPinJbbbbhEdna8STmbJbbjZa8S:Z:vhEkJbbbbhhdna8Ya8YNa8Wa8WNa8Xa8XNMMg8KJbbbb9BmbJbbjZa8K:r:vhhka8VaENh8Ka8UaENh8EaRaENh5aIhLdndndndndna8SaPVTmbamydwg80Tmea8YahNh8Fa8XahNhaa8WahNhgaeamydbcdtfh81cbh3JFFuuhEcvhQcuhLindnaza81a3cdtfydbcdtgsfydbgvTmbaOaHasfydbcdtfhAindndnaCaiaAydbgKcx2fgsclfydbgrcetf8Vebcs4aCasydbgXcetf8Vebcs4faCascwfydbglcetf8Vebcs4fgombcbhsxekcehsazaXcdtfydbgXceSmbcehsazarcdtfydbgrceSmbcehsazalcdtfydbglceSmbdnarcdSaXcdSfalcdSfcd6mbaocefhsxekaocdfhskdnasaQ9kmba8AaKcK2fgXIdwa8K:tghahNaXIdba5:tghahNaXIdla8E:tghahNMM:ra8J:va8LNJbbjZMJ9VO:d86JbbjZaXIdCa8FNaXIdxagNaaaXIdzNMMakN:tghahJ9VO:d869DENghaEasaQ6ahaE9DVgXEhEaKaLaXEhLasaQaXEhQkaAclfhAavcufgvmbkka3cefg3a809hmbkkaLcu9hmekama8KUd:ODama8EUd:KDama5Ud:GDamcuBd:qDamcFFF;7rBdjDa8Pcba8AaYamc:GDfamc:qDfamcjDfz:ejjjbamyd:qDhLdndnaxJbbbb9ETmba8SaD6mbaLcuSmeceh3amIdjDa8R9EmixdkaLcu9hmekdna8STmbabaPcltfgzam8Pib83dbazcwfamcwf8Pib83dbaPcefhPkc3hzinazc98Smvamc:Cwfazfydbcbyd;41jjbH:bjjjbbazc98fhzxbkkcbh3a8Saq9pmbamydwaCaiaLcx2fgsydbcetf8Vebcs4aCascwfydbcetf8Vebcs4faCasclfydbcetf8Vebcs4ffaw9nmekcbhscbhAdna8ZTmbcbhAamczfhXinamczfaAcdtfaXydbgQBdbaXclfhXaAaYaQfRbbTfhAa8Zcufg8ZmbkkamydwhlamydbhXam9cu83i:GDam9cu83i:ODam9cu83i:qDam9cu83i:yDaAc;8eaAclfc:bd6Eh8ZinamcjDfasfcFFF;7rBdbasclfgscz9hmbka8Zcdth80dnalTmbaeaXcdtfhocbhrindnazaoarcdtfydbcdtgsfydbgvTmbaOaHasfydbcdtfhAcuhQcuhsinazaiaAydbgKcx2fgXclfydbcdtfydbazaXydbcdtfydbfazaXcwfydbcdtfydbfgXasaXas6gXEhsaKaQaXEhQaAclfhAavcufgvmbkaQcuSmba8AaQcK2fgAIdwa8M:tgEaENaAIdbay:tgEaENaAIdla8N:tgEaENMM:rhEcbhAindndnasamc:qDfaAfgvydbgX6mbasaX9hmeaEamcjDfaAfIdb9FTmekavasBdbamc:GDfaAfaQBdbamcjDfaAfaEUdbxdkaAclfgAcz9hmbkkarcefgral9hmbkkamczfa80fhQcbhscbhAindnamc:GDfasfydbgXcuSmbaQaAcdtfaXBdbaAcefhAkasclfgscz9hmbkaAa8Zfg8ZTmbJFFuuhhcuhKamczfhsa8ZhvcuhQina8AasydbgXcK2fgAIdwa8M:tgEaENaAIdbay:tgEaENaAIdla8N:tgEaENMM:rhEdndnazaiaXcx2fgAclfydbcdtfydbazaAydbcdtfydbfazaAcwfydbcdtfydbfgAaQ6mbaAaQ9hmeaEah9DTmekaEhhaAhQaXhKkasclfhsavcufgvmbkaKcuSmbaKhLkdnamaiaLcx2fgrydbarclfydbarcwfydbaCabaeadaPawaqa3z:fjjjbTmbaPcefhPJbbbbhRJbbbbh8UJbbbbh8VJbbbbh8WJbbbbh8XJbbbbh8YkcbhXinaOaHaraXcdtfydbcdtgAfydbcdtfgKhsazaAfgvydbgQhAdnaQTmbdninasydbaLSmeasclfhsaAcufgATmdxbkkasaKaQcdtfc98fydbBdbavavydbcufBdbkaXcefgXci9hmbka8AaLcK2fgsIdbhEasIdlhhasIdwh8KasIdxh8EasIdzh5asIdCh8FaYaLfce86bba8Ya8FMh8Ya8Xa5Mh8Xa8Wa8EMh8Wa8Va8KMh8Va8UahMh8UaRaEMhRamydxh8Sxbkkamc:WDf8KjjjjbaPk:joivuv99lu8Jjjjjbca9Rgo8Kjjjjbdndnalcw0mbaiydbhraeabcitfgwalcdtciVBdlawarBdbdnalcd6mbaiclfhralcufhDawcxfhwinarydbhqawcuBdbawc98faqBdbawcwfhwarclfhraDcufgDmbkkalabfhwxekcbhqaoczfcwfcbBdbao9cb83izaocwfcbBdbao9cb83ibJbbjZhkJbbjZhxinadaiaqcdtfydbcK2fhDcbhwinaoczfawfgraDawfIdbgmarIdbgP:tgsaxNaPMgPUdbaoawfgrasamaP:tNarIdbMUdbawclfgwcx9hmbkJbbjZakJbbjZMgk:vhxaqcefgqal9hmbkcbhradcbcecdaoIdlgmaoIdwgP9GEgwaoIdbgsaP9GEawasam9GEgzcdtgwfhHaoczfawfIdbhmaihwalhDinaiarcdtfgqydbhOaqawydbgABdbawaOBdbawclfhwaraHaAcK2fIdbam9DfhraDcufgDmbkdndnarcv6mbavc8X9kmbaralc98f6mekaiydbhraeabcitfgwalcdtciVBdlawarBdbaiclfhralcufhDawcxfhwinarydbhqawcuBdbawc98faqBdbawcwfhwarclfhraDcufgDmbkalabfhwxekaeabcitfgwamUdbawawydlc98GazVBdlabcefaeadaiaravcefgqz:djjjbhDawawydlciGaDabcu7fcdtVBdlaDaeadaiarcdtfalar9Raqz:djjjbhwkaocaf8Kjjjjbawk;yddvue99dninabaecitfgrydlgwcl6mednawciGgDci9hmbabaecitfhbcbhecehqindnaiabydbgDfRbbmbcbhqadaDcK2fgkIdwalIdw:tgxaxNakIdbalIdb:tgxaxNakIdlalIdl:tgxaxNMM:rgxaoIdb9DTmbaoaxUdbavaDBdbarydlhwkabcwfhbaecefgeawcd46mbkaqceGTmdarawciGBdlskdnabcbawcd4gwalaDcdtfIdbarIdb:tgxJbbbb9FEgkaw7aecefgwfgecitfydlabakawfgwcitfydlVci0mbaraDBdlkabawadaialavaoz:ejjjbax:laoIdb9Fmbkkkjlevudnabydwgxaladcetfgm8Vebcs4alaecetfgP8Vebgscs4falaicetfgz8Vebcs4ffaD0abydxaq9pVakVgDce9hmbavawcltfgxab8Pdb83dbaxcwfabcwfgx8Pdb83dbabydbhqdnaxydbgkTmbaoaqcdtfhxakhsinalaxydbcetfcFFi87ebaxclfhxascufgsmbkkabaqakfBdbabydxhxab9cb83dwababydlaxci2fBdlaP8Vebhscbhxkdnascztcz91cu9kmbabaxcefBdwaPax87ebaoabydbcdtfaxcdtfaeBdbkdnam8Uebcu9kmbababydwgxcefBdwamax87ebaoabydbcdtfaxcdtfadBdbkdnaz8Uebcu9kmbababydwgxcefBdwazax87ebaoabydbcdtfaxcdtfaiBdbkarabydlfabydxci2faPRbb86bbarabydlfabydxci2fcefamRbb86bbarabydlfabydxci2fcdfazRbb86bbababydxcefBdxaDk:zPrHue99eue99eue99eu8Jjjjjbc;W;Gb9Rgx8KjjjjbdndnalmbcbhmxekcbhPaxc:m;Gbfcbc;Kbz:pjjjb8Aaxcualci9UgscltascjjjjiGEcbyd;01jjbHjjjjbbgzBd:m9GaxceBd;S9GaxcuascK2gHcKfalcpFFFe0Ecbyd;01jjbHjjjjbbgOBd:q9GaxcdBd;S9Gdnalci6gAmbarcd4hCascdthXaOhQazhLinavaiaPcx2fgrydbaC2cdtfhKavarcwfydbaC2cdtfhYavarclfydbaC2cdtfh8AcbhraLhEinaQarfgmaKarfg3Idbg5a8Aarfg8EIdbg8Fa5a8F9DEg5UdbamaYarfgaIdbg8Fa5a8Fa59DEg8FUdbamcxfgma3Idbg5a8EIdbgha5ah9EEg5UdbamaaIdbgha5aha59EEg5UdbaEa8Fa5MJbbbZNUdbaEaXfhEarclfgrcx9hmbkaQcKfhQaLclfhLaPcefgPas9hmbkkaOaHfgr9cb83dbarczf9cb83dbarcwf9cb83dbaxcuascx2gralc:bjjjl0Ecbyd;01jjbHjjjjbbgCBdN9GaxciBd;S9GascdthgazarfhvaChHazhLcbhPinaxcbcj;Gbz:pjjjbhEaPas2cdthadnaAmbaLhrash3inaEarydbgmc8F91cjjjj94Vam7gmcQ4cx2fg8Ea8EydwcefBdwaEamcd4cFrGcx2fg8Ea8EydbcefBdbaEamcx4cFrGcx2fgmamydlcefBdlarclfhra3cufg3mbkkazaafh8AaCaafhXcbhmcbh3cbh8EcbhainaEamfgrydbhQara3BdbarcwfgKydbhYaKaaBdbarclfgrydbhKara8EBdbaQa3fh3aYaafhaaKa8Efh8Eamcxfgmcj;Gb9hmbkdnaAmbcbhravhminamarBdbamclfhmasarcefgr9hmbkaAmbavhrashminaEa8Aarydbg3cdtfydbg8Ec8F91a8E7cd4cFrGcx2fg8Ea8Eydbg8EcefBdbaXa8Ecdtfa3BdbarclfhramcufgmmbkaHhrashminaEa8Aarydbg3cdtfydbg8Ec8F91a8E7cx4cFrGcx2fg8Ea8Eydlg8EcefBdlava8Ecdtfa3BdbarclfhramcufgmmbkavhrashminaEa8Aarydbg3cdtfydbg8Ec8F91cjjjj94Va8E7cQ4cx2fg8Ea8Eydwg8EcefBdwaXa8Ecdtfa3BdbarclfhramcufgmmbkkaHagfhHaLagfhLaPcefgPci9hmbkaEaocetgrcuaocu9kEcbyd;01jjbHjjjjbbgKBd:y9GaEclBd;S9Gdndnaoal9nmbaihralhminaKarydbcetfcFFi87ebarclfhramcufgmmbxdkkaKcFearz:pjjjb8AkcbhmaEascbyd;01jjbHjjjjbbg8ABd:C9GaOaCaCascdtfaCascitfa8AascbazaKaiawaDaqakz:hjjjbcbh8Ednalci6gambcbh8Ea8Ahrash3ina8EarRbbfh8Earcefhra3cufg3mbkkaEcwf9cb83ibaE9cb83ibalawc9:fgrfcufar9UhrasaDfcufaD9Uh3dnaambara3ara30EhYcbhra8Ehacbhmincbh3dnarTmba8AarfRbbceSh3kamaEaiaCydbcx2fgQydbaQclfydbaQcwfydbaKabaeadamawaqa3a3ce7a8EaY9nVaaamfaY6VGz:fjjjbfhmaCclfhCaaa8AarfRbb9Rhaasarcefgr9hmbkaEydxTmbabamcltfgraE8Pib83dbarcwfaEcwf8Pib83dbamcefhmkczhrinarc98SmeaEc:m;Gbfarfydbcbyd;41jjbH:bjjjbbarc98fhrxbkkaxc;W;Gbf8Kjjjjbamk:YKDQue99lue99iul9:eur99lu8Jjjjjbc;qb9RgP8Kjjjjbaxhsaxhzdndnavax0gHmbdnavTmbcbhOaehzavhAinawaDazydbcx2fgCcwfydbcetfgX8VebhQawaCclfydbcetfgL8VebhKawaCydbcetfgC8VebhYaXce87ebaLce87ebaCce87ebaOaKcs4aYcs4faQcs4ffhOazclfhzaAcufgAmbkaehzavhAinawaDazydbcx2fgCcwfydbcetfcFFi87ebawaCclfydbcetfcFFi87ebawaCydbcetfcFFi87ebazclfhzaAcufgAmbkcehzaqhsaOaq0mekalce86bbalcefcbavcufz:pjjjb8AxekaPaiBdxaPadBdwaPaeBdlavakaqci9Ug8Aaka8Aak6EaHEgK9RhEaxaK9Rh3aKcufh5aKceth8EaKcdtgCc98fh8FavcitgOaC9Rarfc98fhaascufhhavcufhgaraOfh8JJbbjZas:Y:vh8KaravcdtgYfc94fh8LcbazceakaxSEg8Mcdtg8N9RhyJFFuuh8PcuhIcbh8Rcbh8SinaPclfa8ScdtfydbhQaPc8WfcKfcb8Pd:y1jjbgR83ibaPc8Wfczfcb8Pd:q1jjbg8U83ibaPc8Wfcwfcb8Pd11jjbg8V83ibaPcb8Pdj1jjbg8W83i8WaPczfcKfaR83ibaPczfczfa8U83ibaPczfcwfa8V83ibaPa8W83izaQaYfh8XcbhXinabaQaXcdtgLfydbcK2fhAcbhzinaPc8WfazfgCaAazfgOIdbg8YaCIdbg8Za8Ya8Z9DEUdbaCczfgCaOcxfIdbg8YaCIdbg8Za8Ya8Z9EEUdbazclfgzcx9hmbkaPIdnaPId8W:tg80aPId9iaPIdU:tg81NhBaba8XaXcu7cdtfydbcK2fhAcbhzaPId80h83aPId9ehUinaPczfazfgCaAazfgOIdbg8YaCIdbg8Za8Ya8Z9DEUdbaCczfgCaOcxfIdbg8YaCIdbg8Za8Ya8Z9EEUdbazclfgzcx9hmbkaraLfgzaUa83:tg8Ya81Na80a8YNaBMMUdbazaYfaPId8KaPIdC:tg8YaPIdyaPIdK:tg8ZNaPIdaaPIdz:tg80a8YNa80a8ZNMMUdbaXcefgXav9hmbkcbh85dnaHmbcbhAaQhza8JhCavhXinawaDazydbcx2fgOcwfydbcetfgL8Vebh8XawaOclfydbcetfg868Vebh85awaOydbcetfgO8Vebh87aLce87eba86ce87ebaOce87ebaCaAa85cs4a87cs4fa8Xcs4ffgABdbazclfhzaCclfhCaXcufgXmbkavhCinawaDaQydbcx2fgzcwfydbcetfcFFi87ebawazclfydbcetfcFFi87ebawazydbcetfcFFi87ebaQclfhQaCcufgCmbka8Jh85kdndndndndndndndndndna8Eav0mba8Eax0meavaK6mda5aE9pmDcehLaEhXa85Tmlxrka5ag9pmwa8Eax9nmdxlkdnavavaK9UgzaK29Raza320mba5aE9pmwa85Th88ceh86aEhLxvka5ag6mixrka5ag9pmokcbhLaghXa85mikJFFuuh8YcbhQa5hzindnazcefgCaK6mbaLavaC9RgOaK6GmbarazcdtfIdbg8ZaC:YNa8Lavaz9RcdtfIdbg80aO:YNMg81a8Y9Embdndna8KaOahf:YNgB:lJbbb9p9DTmbaB:OhAxekcjjjj94hAka80asaA2aO9R:YNh80dndna8Kazasf:YNgB:lJbbb9p9DTmbaB:OhOxekcjjjj94hOkamasaO2aC9R:Ya8ZNa80MNa81Mg8Za8Ya8Za8Y9DgOEh8YaCaQaOEhQkaza8MfgzaX6mbxlkka85Th88cbh86aghLkJFFuuh8YcbhQaEhCaahAa8FhOaKhzindnazazaK9UgXaK29RaXa320mbdna86TmbaCaCaK9UgXaK29RaXa320mekaraOfIdbg8Zaz:YNaAIdbg80aC:YNMg81a8Y9EmbazhXaCh8Xdna88mba85aOfydbgXh8Xkdndna8Ka8Xahf:YNgB:lJbbb9p9DTmbaB:Oh87xekcjjjj94h87ka80asa872a8X9R:YNh80dndna8KaXahf:YNgB:lJbbb9p9DTmbaB:Oh8Xxekcjjjj94h8Xkamasa8X2aX9R:Ya8ZNa80MNa81Mg8Za8Ya8Za8Y9DgXEh8YazaQaXEhQkaCa8M9RhCaAayfhAaOa8NfhOaza8MfgzcufaL6mbxdkkJFFuuh8YcbhQaEhCaahAa8FhOaKhzindnazaK6mbaLaCaK6GmbaraOfIdbg8Zaz:YNaAIdbg80aC:YNMg81a8Y9Embdndna8Ka85aOfydbg8Xahf:YNgB:lJbbb9p9DTmbaB:Oh86xekcjjjj94h86kamasa862a8X9R:YgBa8ZNa80aBNMNa81Mg8Za8Ya8Za8Y9Dg8XEh8YazaQa8XEhQkaCa8M9RhCaAayfhAaOa8NfhOaza8MfgzcufaX6mbkkaQTmba8Ya8P9DTmba8Yh8PaQh8Ra8ShIka8Scefg8Sci9hmbkdndnaoc8X9kmbaIcb9omeka8Acufh86cbhYindndndnavaY9RaxaYaxfav0Eg8XTmbcbhAaeaYcdtfgzhCa8XhXinawaDaCydbcx2fgOcwfydbcetfgQ8VebhbawaOclfydbcetfgL8VebhrawaOydbcetfgO8VebhKaQce87ebaLce87ebaOce87ebaAarcs4aKcs4fabcs4ffhAaCclfhCaXcufgXmbka8XhOinawaDazydbcx2fgCcwfydbcetfcFFi87ebawaCclfydbcetfcFFi87ebawaCydbcetfcFFi87ebazclfhzaOcufgOmbkaAaq0mekalaYfgzce86bbazcefcba8Xcufz:pjjjb8AxekalaYfgzce86bbazcefcba86z:pjjjb8Aa8Ah8Xka8XaYfgYav9pmdxbkkaravcdtg8XfhLdna8RTmbaPclfaIcdtfydbhza8RhCinaLazydbfcb86bbazclfhzaCcufgCmbkkdnava8R9nmbaPclfaIcdtfydba8Rcdtfhzava8R9RhCinaLazydbfce86bbazclfhzaCcufgCmbkkcbhYindnaYaISmbcbhzaraPclfaYcdtfydbgKa8Xz:ojjjbhCavhXa8RhOinaKaOazaLaCydbgQfRbbgAEcdtfaQBdbaCclfhCaOaAfhOazaA9RcefhzaXcufgXmbkkaYcefgYci9hmbkabaeadaiala8RaocefgCarawaDaqakaxamz:hjjjbabaea8Rcdtgzfadazfaiazfala8Rfava8R9RaCarawaDaqakaxamz:hjjjbkaPc;qbf8Kjjjjbk;Nkovud99euv99eul998Jjjjjbc:W;ae9Rgo8KjjjjbdndnadTmbavcd4hrcbhwcbhDindnaiaeclfydbar2cdtfgvIdbaiaeydbar2cdtfgqIdbgk:tgxaiaecwfydbar2cdtfgmIdlaqIdlgP:tgsNamIdbak:tgzavIdlaP:tgPN:tgkakNaPamIdwaqIdwgH:tgONasavIdwaH:tgHN:tgPaPNaHazNaOaxN:tgxaxNMM:rgsJbbbb9Bmbaoc:W:qefawcx2fgAakas:vUdwaAaxas:vUdlaAaPas:vUdbaoc8Wfawc8K2fgAaq8Pdb83dbaAav8Pdb83dxaAam8Pdb83dKaAcwfaqcwfydbBdbaAcCfavcwfydbBdbaAcafamcwfydbBdbawcefhwkaecxfheaDcifgDad6mbkab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbawTmeaocbBd8Sao9cb83iKao9cb83izaoczfaoc8Wfawci2cxaoc8Sfcbcrz:jjjjbaoIdKhCaoIdChXaoIdzhQao9cb83iwao9cb83ibaoaoc:W:qefawcxaoc8Sfcbciz:jjjjbJbbjZhkaoIdwgPJbbbbJbbjZaPaPNaoIdbgPaPNaoIdlgsasNMM:rgx:vaxJbbbb9BEgzNhxasazNhsaPazNhzaoc:W:qefheawhvinaecwfIdbaxNaeIdbazNasaeclfIdbNMMgPakaPak9DEhkaecxfheavcufgvmbkabaCUdwabaXUdlabaQUdbabaoId3UdxdndnakJ;n;m;m899FmbJbbbbhPaoc:W:qefheaoc8WfhvinaCavcwfIdb:taecwfIdbgHNaQavIdb:taeIdbgONaXavclfIdb:taeclfIdbgLNMMaxaHNazaONasaLNMM:vgHaPaHaP9EEhPavc8KfhvaecxfheawcufgwmbkabaxUd8KabasUdaabazUd3abaCaxaPN:tUdKabaXasaPN:tUdCabaQazaPN:tUdzabJbbjZakakN:t:rgkUdydndnaxJbbj:;axJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;axJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohexekcjjjj94hekabae86b8UdndnasJbbj:;asJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;asJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohvxekcjjjj94hvkabav86bRdndnazJbbj:;azJbbj:;9GEgPJbbjZaPJbbjZ9FEJbb;:9cNJbbbZJbbb:;azJbbbb9GEMgP:lJbbb9p9DTmbaP:Ohqxekcjjjj94hqkabaq86b8SdndnaecKtcK91:YJbb;:9c:vax:t:lavcKtcK91:YJbb;:9c:vas:t:laqcKtcK91:YJbb;:9c:vaz:t:lakMMMJbb;:9cNJbbjZMgk:lJbbb9p9DTmbak:Ohexekcjjjj94hekaecFbaecFb9iEhexekabcjjj;8iBdycFbhekabae86b8Vxekab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbkaoc:W;aef8Kjjjjbk;Iwwvul99iud99eue99eul998Jjjjjbcje9Rgr8Kjjjjbavcd4hwaicd4hDdndnaoTmbarc;abfcbaocdtgvz:pjjjb8Aarc;Gbfcbavz:pjjjb8AarhvarcafhiaohqinavcFFF97BdbaicFFF;7rBdbaiclfhiavclfhvaqcufgqmbkdnadTmbcbhkinaeakaD2cdtfgvIdwhxavIdlhmavIdbhPalakaw2cdtfIdbhsarc;abfhzarhiarc;GbfhHarcafhqc:G1jjbhvaohOinasavcwfIdbaxNavIdbaPNavclfIdbamNMMgAMhCakhXdnaAas:tgAaqIdbgQ9DgLmbaHydbhXkaHaXBdbakhXdnaCaiIdbgK9EmbazydbhXaKhCkazaXBdbaiaCUdbaqaAaQaLEUdbavcxfhvaqclfhqaHclfhHaiclfhiazclfhzaOcufgOmbkakcefgkad9hmbkkadThkJbbbbhCcbhXarc;abfhvarc;Gbfhicbhqinalavydbgzaw2cdtfIdbalaiydbgHaw2cdtfIdbaeazaD2cdtfgzIdwaeaHaD2cdtfgHIdw:tgsasNazIdbaHIdb:tgsasNazIdlaHIdl:tgsasNMM:rMMgsaCasaC9EgzEhCaqaXazEhXaiclfhiavclfhvaoaqcefgq9hmbkaCJbbbZNhKxekadThkcbhXJbbbbhKkJbbbbhCdnaearc;abfaXcdtgifydbgqaD2cdtfgvIdwaearc;GbfaifydbgzaD2cdtfgiIdwgm:tgsasNavIdbaiIdbgY:tgAaANavIdlaiIdlgP:tgQaQNMM:rgxJbbbb9ETmbaxalaqaw2cdtfIdbMalazaw2cdtfIdb:taxaxM:vhCkasaCNamMhmaQaCNaPMhPaAaCNaYMhYdnakmbaDcdthvawcdthiindnalIdbg8AaecwfIdbam:tgCaCNaeIdbaY:tgsasNaeclfIdbaP:tgAaANMM:rgQMgEaK9ETmbJbbbbhxdnaQJbbbb9ETmbaEaK:taQaQM:vhxkaxaCNamMhmaxaANaPMhPaxasNaYMhYa8AaKaQMMJbbbZNhKkaeavfhealaifhladcufgdmbkkabaKUdxabamUdwabaPUdlabaYUdbarcjef8Kjjjjbkjeeiu8Jjjjjbcj8W9Rgr8Kjjjjbaici2hwdnaiTmbawceawce0EhDarhiinaiaeadRbbcdtfydbBdbadcefhdaiclfhiaDcufgDmbkkabarawaladaoz1jjjbarcj8Wf8Kjjjjbk:Reeeu8Jjjjjbca9Rgo8Kjjjjbab9cb83dbabcyf9cb83dbabcaf9cb83dbabcKf9cb83dbabczf9cb83dbabcwf9cb83dbdnadTmbaocbBd3ao9cb83iwao9cb83ibaoaeadaialaoc3falEavcbalEcrz:jjjjbabao8Pib83dbabao8Piw83dwkaocaf8Kjjjjbk:3lequ8JjjjjbcjP9Rgl8Kjjjjbcbhvalcjxfcbaiz:pjjjb8AdndnadTmbcjehoaehrincuhwarhDcuhqavhkdninawakaoalcjxfaDcefRbbfRbb9RcFeGci6aoalcjxfaDRbbfRbb9RcFeGci6faoalcjxfaDcdfRbbfRbb9RcFeGci6fgxaq9mgmEhwdnammbaxce0mdkaxaqaxaq9kEhqaDcifhDadakcefgk9hmbkkaeawci2fgDcdfRbbhqaDcefRbbhxaDRbbhkaeavci2fgDcifaDawav9Rci2zMjjjb8Aakalcjxffaocefgo86bbaxalcjxffao86bbaDcdfaq86bbaDcefax86bbaDak86bbaqalcjxffao86bbarcifhravcefgvad9hmbkalcFeaicetz:pjjjbhoadci2gDceaDce0EhqcbhxindnaoaeRbbgkcetfgw8UebgDcu9kmbawax87ebaocjlfaxcdtfabakcdtfydbBdbaxhDaxcefhxkaeaD86bbaecefheaqcufgqmbkaxcdthDxekcbhDkabalcjlfaDz:ojjjb8AalcjPf8Kjjjjbk9teiucbcbyd;81jjbgeabcifc98GfgbBd;81jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaik;teeeudndnaeabVciGTmbabhixekdndnadcz9pmbabhixekabhiinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaeczfheaiczfhiadc9Wfgdcs0mbkkadcl6mbinaiaeydbBdbaeclfheaiclfhiadc98fgdci0mbkkdnadTmbinaiaeRbb86bbaicefhiaecefheadcufgdmbkkabk:3eedudndnabciGTmbabhixekaecFeGc:b:c:ew2hldndnadcz9pmbabhixekabhiinaialBdxaialBdwaialBdlaialBdbaiczfhiadc9Wfgdcs0mbkkadcl6mbinaialBdbaiclfhiadc98fgdci0mbkkdnadTmbinaiae86bbaicefhiadcufgdmbkkabk9teiucbcbyd;81jjbgeabcrfc94GfgbBd;81jjbdndnabZbcztgd9nmbcuhiabad9RcFFifcz4nbcuSmekaehikaikTeeucbabcbyd;81jjbge9Rcifc98GaefgbBd;81jjbdnabZbcztge9nmbabae9RcFFifcz4nb8Akk:;Deludndndnadch9pmbabaeSmdaeabadfgi9Rcbadcet9R0mekabaead;8qbbxekaeab7ciGhldndndnabae9pmbdnalTmbadhvabhixikdnabciGmbadhvabhixdkadTmiabaeRbb86bbadcufhvdnabcefgiciGmbaecefhexdkavTmiabaeRbe86beadc9:fhvdnabcdfgiciGmbaecdfhexdkavTmiabaeRbd86bdadc99fhvdnabcifgiciGmbaecifhexdkavTmiabaeRbi86biabclfhiaeclfheadc98fhvxekdnalmbdnaiciGTmbadTmlabadcufgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc9:fgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc99fgifglaeaifRbb86bbdnalciGmbaihdxekaiTmlabadc98fgdfaeadfRbb86bbkadcl6mbdnadc98fgocd4cefciGgiTmbaec98fhlabc98fhvinavadfaladfydbBdbadc98fhdaicufgimbkkaocx6mbaec9Wfhvabc9WfhoinaoadfgicxfavadfglcxfydbBdbaicwfalcwfydbBdbaiclfalclfydbBdbaialydbBdbadc9Wfgdci0mbkkadTmdadhidnadciGglTmbaecufhvabcufhoadhiinaoaifavaifRbb86bbaicufhialcufglmbkkadcl6mdaec98fhlabc98fhvinavaifgecifalaifgdcifRbb86bbaecdfadcdfRbb86bbaecefadcefRbb86bbaeadRbb86bbaic98fgimbxikkavcl6mbdnavc98fglcd4cefcrGgdTmbavadcdt9RhvinaiaeydbBdbaeclfheaiclfhiadcufgdmbkkalc36mbinaiaeydbBdbaiaeydlBdlaiaeydwBdwaiaeydxBdxaiaeydzBdzaiaeydCBdCaiaeydKBdKaiaeyd3Bd3aecafheaicafhiavc9Gfgvci0mbkkavTmbdndnavcrGgdmbavhlxekavc94GhlinaiaeRbb86bbaicefhiaecefheadcufgdmbkkavcw6mbinaiaeRbb86bbaiaeRbe86beaiaeRbd86bdaiaeRbi86biaiaeRbl86blaiaeRbv86bvaiaeRbo86boaiaeRbr86braicwfhiaecwfhealc94fglmbkkabkk:nedbcjwktFFuuFFuuFFuubbbbFFuFFFuFFFuFbbbbbbjZbbbbbbbbbbbbbbjZbbbbbbbbbbbbbbjZ86;nAZ86;nAZ86;nAZ86;nA:;86;nAZ86;nAZ86;nAZ86;nA:;86;nAZ86;nAZ86;nAZ86;nA:;bc;0wkxebbbdbbbjNbb";
+  var wasmpack = new Uint8Array([
+    32,
+    0,
+    65,
+    2,
+    1,
+    106,
+    34,
+    33,
+    3,
+    128,
+    11,
+    4,
+    13,
+    64,
+    6,
+    253,
+    10,
+    7,
+    15,
+    116,
+    127,
+    5,
+    8,
+    12,
+    40,
+    16,
+    19,
+    54,
+    20,
+    9,
+    27,
+    255,
+    113,
+    17,
+    42,
+    67,
+    24,
+    23,
+    146,
+    148,
+    18,
+    14,
+    22,
+    45,
+    70,
+    69,
+    56,
+    114,
+    101,
+    21,
+    25,
+    63,
+    75,
+    136,
+    108,
+    28,
+    118,
+    29,
+    73,
+    115
+  ]);
+  if (typeof WebAssembly !== "object") {
+    return {
+      supported: false
+    };
+  }
+  var instance;
+  var ready = WebAssembly.instantiate(unpack(wasm2), {}).then(function(result) {
+    instance = result.instance;
+    instance.exports.__wasm_call_ctors();
+  });
+  function unpack(data) {
+    var result = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; ++i) {
+      var ch = data.charCodeAt(i);
+      result[i] = ch > 96 ? ch - 97 : ch > 64 ? ch - 39 : ch + 4;
+    }
+    var write = 0;
+    for (var i = 0; i < data.length; ++i) {
+      result[write++] = result[i] < 60 ? wasmpack[result[i]] : (result[i] - 60) * 64 + result[++i];
+    }
+    return result.buffer.slice(0, write);
+  }
+  function assert(cond) {
+    if (!cond) {
+      throw new Error("Assertion failed");
+    }
+  }
+  function bytes(view) {
+    return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
+  }
+  var BOUNDS_SIZE = 48;
+  var MESHLET_SIZE = 16;
+  function extractMeshlet(buffers, index) {
+    var vertex_offset = buffers.meshlets[index * 4 + 0];
+    var triangle_offset = buffers.meshlets[index * 4 + 1];
+    var vertex_count = buffers.meshlets[index * 4 + 2];
+    var triangle_count = buffers.meshlets[index * 4 + 3];
+    return {
+      vertices: buffers.vertices.subarray(vertex_offset, vertex_offset + vertex_count),
+      triangles: buffers.triangles.subarray(triangle_offset, triangle_offset + triangle_count * 3)
+    };
+  }
+  function buildMeshlets(fun, indices, vertex_positions, vertex_count, vertex_positions_stride, max_vertices, min_triangles, max_triangles, parama, paramb) {
+    var sbrk = instance.exports.sbrk;
+    var max_meshlets = instance.exports.meshopt_buildMeshletsBound(indices.length, max_vertices, min_triangles);
+    var meshletsp = sbrk(max_meshlets * MESHLET_SIZE);
+    var meshlet_verticesp = sbrk(indices.length * 4);
+    var meshlet_trianglesp = sbrk(indices.length);
+    var indicesp = sbrk(indices.byteLength);
+    var verticesp = sbrk(vertex_positions.byteLength);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(indices), indicesp);
+    heap.set(bytes(vertex_positions), verticesp);
+    var count = fun(
+      meshletsp,
+      meshlet_verticesp,
+      meshlet_trianglesp,
+      indicesp,
+      indices.length,
+      verticesp,
+      vertex_count,
+      vertex_positions_stride,
+      max_vertices,
+      min_triangles,
+      max_triangles,
+      parama,
+      paramb
+    );
+    heap = new Uint8Array(instance.exports.memory.buffer);
+    var meshletBytes = heap.subarray(meshletsp, meshletsp + count * MESHLET_SIZE);
+    var meshlets = new Uint32Array(meshletBytes.buffer, meshletBytes.byteOffset, meshletBytes.byteLength / 4).slice();
+    for (var i = 0; i < count; ++i) {
+      var vertex_offset = meshlets[i * 4 + 0];
+      var triangle_offset = meshlets[i * 4 + 1];
+      var vertex_count = meshlets[i * 4 + 2];
+      var triangle_count = meshlets[i * 4 + 3];
+      instance.exports.meshopt_optimizeMeshlet(
+        meshlet_verticesp + vertex_offset * 4,
+        meshlet_trianglesp + triangle_offset,
+        triangle_count,
+        vertex_count
+      );
+    }
+    var last_vertex_offset = meshlets[(count - 1) * 4 + 0];
+    var last_triangle_offset = meshlets[(count - 1) * 4 + 1];
+    var last_vertex_count = meshlets[(count - 1) * 4 + 2];
+    var last_triangle_count = meshlets[(count - 1) * 4 + 3];
+    var used_vertices = last_vertex_offset + last_vertex_count;
+    var used_triangles = last_triangle_offset + last_triangle_count * 3;
+    var result = {
+      meshlets,
+      vertices: new Uint32Array(heap.buffer, meshlet_verticesp, used_vertices).slice(),
+      triangles: new Uint8Array(heap.buffer, meshlet_trianglesp, used_triangles * 3).slice(),
+      meshletCount: count
+    };
+    sbrk(meshletsp - sbrk(0));
+    return result;
+  }
+  function extractBounds(boundsp) {
+    var bounds_floats = new Float32Array(instance.exports.memory.buffer, boundsp, BOUNDS_SIZE / 4);
+    return {
+      centerX: bounds_floats[0],
+      centerY: bounds_floats[1],
+      centerZ: bounds_floats[2],
+      radius: bounds_floats[3],
+      coneApexX: bounds_floats[4],
+      coneApexY: bounds_floats[5],
+      coneApexZ: bounds_floats[6],
+      coneAxisX: bounds_floats[7],
+      coneAxisY: bounds_floats[8],
+      coneAxisZ: bounds_floats[9],
+      coneCutoff: bounds_floats[10]
+    };
+  }
+  function computeMeshletBounds(buffers, vertex_positions, vertex_count, vertex_positions_stride) {
+    var sbrk = instance.exports.sbrk;
+    var results = [];
+    var verticesp = sbrk(vertex_positions.byteLength);
+    var meshlet_verticesp = sbrk(buffers.vertices.byteLength);
+    var meshlet_trianglesp = sbrk(buffers.triangles.byteLength);
+    var resultp = sbrk(BOUNDS_SIZE);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(vertex_positions), verticesp);
+    heap.set(bytes(buffers.vertices), meshlet_verticesp);
+    heap.set(bytes(buffers.triangles), meshlet_trianglesp);
+    for (var i = 0; i < buffers.meshletCount; ++i) {
+      var vertex_offset = buffers.meshlets[i * 4 + 0];
+      var triangle_offset = buffers.meshlets[i * 4 + 0 + 1];
+      var triangle_count = buffers.meshlets[i * 4 + 0 + 3];
+      instance.exports.meshopt_computeMeshletBounds(
+        resultp,
+        meshlet_verticesp + vertex_offset * 4,
+        meshlet_trianglesp + triangle_offset,
+        triangle_count,
+        verticesp,
+        vertex_count,
+        vertex_positions_stride
+      );
+      results.push(extractBounds(resultp));
+    }
+    sbrk(verticesp - sbrk(0));
+    return results;
+  }
+  function computeClusterBounds(indices, vertex_positions, vertex_count, vertex_positions_stride) {
+    var sbrk = instance.exports.sbrk;
+    var resultp = sbrk(BOUNDS_SIZE);
+    var indicesp = sbrk(indices.byteLength);
+    var verticesp = sbrk(vertex_positions.byteLength);
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(indices), indicesp);
+    heap.set(bytes(vertex_positions), verticesp);
+    instance.exports.meshopt_computeClusterBounds(resultp, indicesp, indices.length, verticesp, vertex_count, vertex_positions_stride);
+    var result = extractBounds(resultp);
+    sbrk(resultp - sbrk(0));
+    return result;
+  }
+  function computeSphereBounds(positions, count, positions_stride, radii, radii_stride) {
+    var sbrk = instance.exports.sbrk;
+    var resultp = sbrk(BOUNDS_SIZE);
+    var positionsp = sbrk(positions.byteLength);
+    var radiip = radii ? sbrk(radii.byteLength) : 0;
+    var heap = new Uint8Array(instance.exports.memory.buffer);
+    heap.set(bytes(positions), positionsp);
+    if (radii) {
+      heap.set(bytes(radii), radiip);
+    }
+    instance.exports.meshopt_computeSphereBounds(resultp, positionsp, count, positions_stride, radiip, radii ? radii_stride : 0);
+    var result = extractBounds(resultp);
+    sbrk(resultp - sbrk(0));
+    return result;
+  }
+  return {
+    ready,
+    supported: true,
+    buildMeshlets: function(indices, vertex_positions, vertex_positions_stride, max_vertices, max_triangles, cone_weight) {
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(max_vertices > 0 && max_vertices <= 256);
+      assert(max_triangles >= 1 && max_triangles <= 512);
+      cone_weight = cone_weight || 0;
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      return buildMeshlets(
+        instance.exports.meshopt_buildMeshletsFlex,
+        indices32,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        max_vertices,
+        max_triangles,
+        max_triangles,
+        cone_weight,
+        0
+      );
+    },
+    buildMeshletsFlex: function(indices, vertex_positions, vertex_positions_stride, max_vertices, min_triangles, max_triangles, cone_weight, split_factor) {
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(max_vertices > 0 && max_vertices <= 256);
+      assert(min_triangles >= 1 && max_triangles <= 512);
+      assert(min_triangles <= max_triangles);
+      cone_weight = cone_weight || 0;
+      split_factor = split_factor || 0;
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      return buildMeshlets(
+        instance.exports.meshopt_buildMeshletsFlex,
+        indices32,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        max_vertices,
+        min_triangles,
+        max_triangles,
+        cone_weight,
+        split_factor
+      );
+    },
+    buildMeshletsSpatial: function(indices, vertex_positions, vertex_positions_stride, max_vertices, min_triangles, max_triangles, fill_weight) {
+      assert(indices.length % 3 == 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      assert(max_vertices > 0 && max_vertices <= 256);
+      assert(min_triangles >= 1 && max_triangles <= 512);
+      assert(min_triangles <= max_triangles);
+      fill_weight = fill_weight || 0;
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      return buildMeshlets(
+        instance.exports.meshopt_buildMeshletsSpatial,
+        indices32,
+        vertex_positions,
+        vertex_positions.length / vertex_positions_stride,
+        vertex_positions_stride * 4,
+        max_vertices,
+        min_triangles,
+        max_triangles,
+        fill_weight
+      );
+    },
+    extractMeshlet: function(buffers, index) {
+      assert(index >= 0 && index < buffers.meshletCount);
+      return extractMeshlet(buffers, index);
+    },
+    computeClusterBounds: function(indices, vertex_positions, vertex_positions_stride) {
+      assert(indices.length % 3 == 0);
+      assert(indices.length / 3 <= 512);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      var indices32 = indices.BYTES_PER_ELEMENT == 4 ? indices : new Uint32Array(indices);
+      return computeClusterBounds(indices32, vertex_positions, vertex_positions.length / vertex_positions_stride, vertex_positions_stride * 4);
+    },
+    computeMeshletBounds: function(buffers, vertex_positions, vertex_positions_stride) {
+      assert(buffers.meshletCount != 0);
+      assert(vertex_positions instanceof Float32Array);
+      assert(vertex_positions.length % vertex_positions_stride == 0);
+      assert(vertex_positions_stride >= 3);
+      return computeMeshletBounds(buffers, vertex_positions, vertex_positions.length / vertex_positions_stride, vertex_positions_stride * 4);
+    },
+    computeSphereBounds: function(positions, positions_stride, radii, radii_stride) {
+      assert(positions instanceof Float32Array);
+      assert(positions.length % positions_stride == 0);
+      assert(positions_stride >= 3);
+      assert(!radii || radii instanceof Float32Array);
+      assert(!radii || radii.length % radii_stride == 0);
+      assert(!radii || radii_stride >= 1);
+      assert(!radii || positions.length / positions_stride == radii.length / radii_stride);
+      radii_stride = radii_stride || 0;
+      return computeSphereBounds(positions, positions.length / positions_stride, positions_stride * 4, radii, radii_stride * 4);
+    }
+  };
+})();
+
 // packages/engine/Source/Scene/GltfBufferViewLoader.js
-var import_meshoptimizer = __toESM(require_meshoptimizer(), 1);
 function GltfBufferViewLoader(options) {
   options = options ?? Frozen_default.EMPTY_OBJECT;
   const resourceCache = options.resourceCache;
@@ -79461,7 +79804,7 @@ async function loadResources(loader) {
       const count = loader._meshoptCount;
       const byteStride = loader._meshoptByteStride;
       const result = new Uint8Array(count * byteStride);
-      import_meshoptimizer.MeshoptDecoder.decodeGltfBuffer(
+      MeshoptDecoder.decodeGltfBuffer(
         result,
         count,
         byteStride,
@@ -84194,6 +84537,7 @@ function Material2() {
   this.alphaCutoff = 0.5;
   this.doubleSided = false;
   this.unlit = false;
+  this.pointDiameter = void 0;
 }
 Material2.DEFAULT_EMISSIVE_FACTOR = Cartesian3_default.ZERO;
 ModelComponents.Quantization = Quantization;
@@ -93500,25 +93844,31 @@ function DynamicEnvironmentMapManager(options) {
   this._shouldRegenerateShaders = false;
   this._shouldReset = false;
   options = options ?? Frozen_default.EMPTY_OBJECT;
-  const mipmapLevels = Math.min(
-    options.mipmapLevels ?? 7,
-    Math.log2(ContextLimits_default.maximumCubeMapSize)
+  const mipmapLevels = Math.max(
+    Math.floor(
+      Math.min(
+        options.mipmapLevels ?? 7,
+        Math.log2(ContextLimits_default.maximumCubeMapSize)
+      )
+    ),
+    0
   );
   this._mipmapLevels = mipmapLevels;
+  const arrayLength = Math.max(mipmapLevels - 1, 0) * 6;
   this._radianceMapComputeCommands = new Array(6);
-  this._convolutionComputeCommands = new Array((mipmapLevels - 1) * 6);
+  this._convolutionComputeCommands = new Array(arrayLength);
   this._irradianceComputeCommand = void 0;
   this._radianceMapFS = void 0;
   this._irradianceMapFS = void 0;
   this._convolveSP = void 0;
   this._va = void 0;
   this._radianceMapTextures = new Array(6);
-  this._specularMapTextures = new Array((mipmapLevels - 1) * 6);
+  this._specularMapTextures = new Array(arrayLength);
   this._radianceCubeMap = void 0;
   this._irradianceMapTexture = void 0;
   this._sphericalHarmonicCoefficients = DynamicEnvironmentMapManager.DEFAULT_SPHERICAL_HARMONIC_COEFFICIENTS.slice();
   this._lastTime = new JulianDate_default();
-  const width = Math.pow(2, mipmapLevels - 1);
+  const width = Math.max(Math.pow(2, mipmapLevels - 1), 1);
   this._textureDimensions = new Cartesian2_default(width, width);
   this._radiiAndDynamicAtmosphereColor = new Cartesian3_default();
   this._sceneEnvironmentMap = void 0;
@@ -93837,6 +94187,22 @@ function updateSpecularMaps(manager, frameState) {
   let height = textureDimensions.y / 2;
   const context = frameState.context;
   let facesCopied = 0;
+  const checkComplete = () => {
+    const length2 = manager._specularMapTextures.length;
+    if (facesCopied >= length2) {
+      manager._irradianceCommandDirty = true;
+      if (mipmapLevels > 1) {
+        radianceCubeMap.sampler = new Sampler_default({
+          minificationFilter: TextureMinificationFilter_default.LINEAR_MIPMAP_LINEAR
+        });
+        manager._shouldRegenerateShaders = true;
+        manager._va.destroy();
+        manager._va = void 0;
+        manager._convolveSP.destroy();
+        manager._convolveSP = void 0;
+      }
+    }
+  };
   const getPostExecute = (command, index2, texture, face, level) => () => {
     if (manager.isDestroyed() || command.canceled) {
       DynamicEnvironmentMapManager._activeComputeCommandCount--;
@@ -93849,18 +94215,7 @@ function updateSpecularMaps(manager, frameState) {
     DynamicEnvironmentMapManager._activeComputeCommandCount--;
     texture.destroy();
     manager._specularMapTextures[index2] = void 0;
-    const length2 = manager._specularMapTextures.length;
-    if (facesCopied >= length2) {
-      manager._irradianceCommandDirty = true;
-      radianceCubeMap.sampler = new Sampler_default({
-        minificationFilter: TextureMinificationFilter_default.LINEAR_MIPMAP_LINEAR
-      });
-      manager._shouldRegenerateShaders = true;
-      manager._va.destroy();
-      manager._va = void 0;
-      manager._convolveSP.destroy();
-      manager._convolveSP = void 0;
-    }
+    checkComplete();
   };
   let index = 0;
   for (let level = 1; level < mipmapLevels; ++level) {
@@ -93922,6 +94277,7 @@ function updateSpecularMaps(manager, frameState) {
     width /= 2;
     height /= 2;
   }
+  checkComplete();
 }
 var irradianceTextureDimensions = new Cartesian2_default(3, 3);
 function updateIrradianceResources(manager, frameState) {
@@ -94003,9 +94359,8 @@ function updateSphericalHarmonicCoefficients(manager, frameState) {
 DynamicEnvironmentMapManager.prototype.update = function(frameState) {
   const mode2 = frameState.mode;
   const isSupported2 = (
-    // A FrameState type works here because the function only references the context parameter.
-    // @ts-ignore
-    DynamicEnvironmentMapManager.isDynamicUpdateSupported(frameState)
+    // @ts-expect-error A FrameState type works here because the function only references the context parameter.
+    DynamicEnvironmentMapManager.isDynamicUpdateSupported(frameState) && this._mipmapLevels >= 1
   );
   if (!isSupported2 || !this.enabled || !this.shouldUpdate || !defined_default(this._position) || mode2 === SceneMode_default.MORPHING) {
     this._shouldRegenerateShaders = false;
@@ -98499,6 +98854,13 @@ function loadMaterial(loader, gltfMaterial, frameState) {
   material.alphaMode = gltfMaterial.alphaMode;
   material.alphaCutoff = gltfMaterial.alphaCutoff;
   material.doubleSided = gltfMaterial.doubleSided;
+  const pointStyleExtension = extensions.BENTLEY_materials_point_style;
+  if (defined_default(pointStyleExtension) && defined_default(pointStyleExtension.diameter)) {
+    const diameter = pointStyleExtension.diameter;
+    if (diameter >= 1) {
+      material.pointDiameter = Math.floor(diameter);
+    }
+  }
   return material;
 }
 function loadFeatureIdAttribute(featureIds, positionalLabel) {
@@ -109066,7 +109428,7 @@ var WebMercatorTilingScheme_default = WebMercatorTilingScheme;
 
 // packages/engine/Source/Scene/ArcGisMapService.js
 var defaultTokenCredit2;
-var defaultAccessToken2 = "AAPTxy8BH1VEsoebNVZXo8HurEOF051kAEKlhkOhBEc9BmTlKbWoQXtdb-m2VclxMHo8eEPu_iyh95DPKVzeyNrKkb2zc_ICfJxY7tPEl4aVdWCyU_P18q9k6D26yO7pAVtbr3I-gxRJb412PB_FydyuNKYsVRiVLqJGaYOCYhJeY3Tv8USWG4TQVu6i2mMZ8CBE68HAd3DByIRkBcjQRnker5_UyWjO86QZxpbnykaqDtY.AT1_zMTIWhVd";
+var defaultAccessToken2 = "AAPTxy8BH1VEsoebNVZXo8HurEOF051kAEKlhkOhBEc9BmQBN5OwMQnvqcM3GTdzwDusCXj4eE5jKKONHLoPEAvNXnML4d2_ObFMHiYtbS6gOWoNlH6cNDium9FLGy4eRBK7mcDQKdokYzlY27y-WPo25dgjAfx6C0rbvGsk0yn7FHPv8yDcsW5frQhhXIJ48lW5UcbIlpxY_j-Im5MJfxgIQuUA_m0tvy4rxbkTMNS26yA.AT1_DJvNEaWq";
 var ArcGisMapService = {};
 ArcGisMapService.defaultAccessToken = defaultAccessToken2;
 ArcGisMapService.defaultWorldImageryServer = new Resource_default({
@@ -113558,6 +113920,7 @@ function Google2DImageryProvider(options) {
     session: encodeURIComponent(options.session),
     key: encodeURIComponent(options.key)
   });
+  this._resource = resource.clone();
   let credit;
   if (defined_default(options.credit)) {
     credit = options.credit;
@@ -113803,7 +114166,7 @@ Google2DImageryProvider.prototype.requestImage = function(x, y, level, request) 
   if (!defined_default(promise)) {
     return void 0;
   }
-  if (promise && !defined_default(this._attributionsByLevel)) {
+  if (!defined_default(this._attributionsByLevel)) {
     return Promise.all([promise, this.getViewportCredits()]).then(
       (results) => results[0]
     );
@@ -113818,12 +114181,7 @@ Google2DImageryProvider.prototype.getViewportCredits = async function() {
   const promises = [];
   for (let level = 0; level < maximumLevel + 1; level++) {
     promises.push(
-      fetchViewportAttribution(
-        this._viewportUrl,
-        this._key,
-        this._session,
-        level
-      )
+      fetchViewportAttribution(this._resource, this._viewportUrl, level)
     );
   }
   const results = await Promise.all(promises);
@@ -113840,12 +114198,10 @@ Google2DImageryProvider.prototype.getViewportCredits = async function() {
   this._attributionsByLevel = attributionsByLevel;
   return attributionsByLevel;
 };
-async function fetchViewportAttribution(url2, key, session, level) {
-  const viewport = await Resource_default.fetch({
+async function fetchViewportAttribution(resource, url2, level) {
+  const viewportResource = resource.getDerivedResource({
     url: url2,
     queryParameters: {
-      key,
-      session,
       zoom: level,
       north: 90,
       south: -90,
@@ -113854,7 +114210,7 @@ async function fetchViewportAttribution(url2, key, session, level) {
     },
     data: JSON.stringify(Frozen_default.EMPTY_OBJECT)
   });
-  const viewportJson = JSON.parse(viewport);
+  const viewportJson = await viewportResource.fetchJson();
   return viewportJson.copyright;
 }
 function buildQueryOptions(options) {
@@ -113901,26 +114257,29 @@ var Google2DImageryProvider_default = Google2DImageryProvider;
 var trailingSlashRegex3 = /\/$/;
 function Azure2DImageryProvider(options) {
   options = options ?? {};
-  const maximumLevel = options.maximumLevel ?? 22;
-  const minimumLevel = options.minimumLevel ?? 0;
   const tilesetId = options.tilesetId ?? "microsoft.imagery";
-  const subscriptionKey = options.subscriptionKey ?? options["subscription-key"];
-  Check_default.defined("options.subscriptionKey", subscriptionKey);
+  this._maximumLevel = options.maximumLevel ?? 22;
+  this._minimumLevel = options.minimumLevel ?? 0;
+  this._subscriptionKey = options.subscriptionKey ?? options["subscription-key"];
+  Check_default.defined("options.subscriptionKey", this._subscriptionKey);
+  this._tilesetId = options.tilesetId;
   const resource = options.url instanceof IonResource_default ? options.url : Resource_default.createIfNeeded(options.url ?? "https://atlas.microsoft.com/");
   let templateUrl = resource.getUrlComponent();
   if (!trailingSlashRegex3.test(templateUrl)) {
     templateUrl += "/";
   }
-  templateUrl += `map/tile`;
-  resource.url = templateUrl;
+  const tilesUrl = `${templateUrl}map/tile`;
+  this._viewportUrl = `${templateUrl}map/attribution`;
+  resource.url = tilesUrl;
   resource.setQueryParameters({
     "api-version": "2024-04-01",
     tilesetId,
+    "subscription-key": this._subscriptionKey,
     zoom: `{z}`,
     x: `{x}`,
-    y: `{y}`,
-    "subscription-key": subscriptionKey
+    y: `{y}`
   });
+  this._resource = resource;
   let credit;
   if (defined_default(options.credit)) {
     credit = options.credit;
@@ -113930,14 +114289,15 @@ function Azure2DImageryProvider(options) {
   }
   const provider = new UrlTemplateImageryProvider_default({
     ...options,
-    maximumLevel,
-    minimumLevel,
+    maximumLevel: this._maximumLevel,
+    minimumLevel: this._minimumLevel,
     url: resource,
     credit
   });
   provider._resource = resource;
   this._imageryProvider = provider;
   this._tileCredits = resource.credits;
+  this._attributionsByLevel = void 0;
 }
 Object.defineProperties(Azure2DImageryProvider.prototype, {
   /**
@@ -114087,14 +114447,71 @@ Object.defineProperties(Azure2DImageryProvider.prototype, {
   }
 });
 Azure2DImageryProvider.prototype.getTileCredits = function(x, y, level) {
-  return this._imageryProvider.getTileCredits(x, y, level);
+  const hasAttributions = defined_default(this._attributionsByLevel);
+  if (!hasAttributions || !defined_default(this._tileCredits)) {
+    return void 0;
+  }
+  const innerCredits = this._attributionsByLevel.get(level);
+  if (!defined_default(this._tileCredits)) {
+    return innerCredits;
+  }
+  return this._tileCredits.concat(innerCredits);
 };
 Azure2DImageryProvider.prototype.requestImage = function(x, y, level, request) {
-  return this._imageryProvider.requestImage(x, y, level, request);
+  const promise = this._imageryProvider.requestImage(x, y, level, request);
+  if (!defined_default(promise)) {
+    return void 0;
+  }
+  if (!defined_default(this._attributionsByLevel)) {
+    return Promise.all([promise, this.getViewportCredits()]).then(
+      (results) => results[0]
+    );
+  }
+  return promise;
 };
 Azure2DImageryProvider.prototype.pickFeatures = function(x, y, level, longitude, latitude) {
   return void 0;
 };
+Azure2DImageryProvider.prototype.getViewportCredits = async function() {
+  const maximumLevel = this._maximumLevel;
+  const promises = [];
+  for (let level = 0; level < maximumLevel + 1; level++) {
+    promises.push(
+      fetchViewportAttribution2(
+        this._resource,
+        this._viewportUrl,
+        this._subscriptionKey,
+        this._tilesetId,
+        level
+      )
+    );
+  }
+  const results = await Promise.all(promises);
+  const attributionsByLevel = /* @__PURE__ */ new Map();
+  for (let level = 0; level < maximumLevel + 1; level++) {
+    const credits = [];
+    const attributions = results[level].join(",");
+    if (attributions) {
+      const levelCredits = new Credit_default(attributions);
+      credits.push(levelCredits);
+    }
+    attributionsByLevel.set(level, credits);
+  }
+  this._attributionsByLevel = attributionsByLevel;
+  return attributionsByLevel;
+};
+async function fetchViewportAttribution2(resource, url2, key, tilesetId, level) {
+  const viewportResource = resource.getDerivedResource({
+    url: url2,
+    queryParameters: {
+      zoom: level,
+      bounds: "-180,-90,180,90"
+    },
+    data: JSON.stringify(Frozen_default.EMPTY_OBJECT)
+  });
+  const viewportJson = await viewportResource.fetchJson();
+  return viewportJson.copyrights;
+}
 var Azure2DImageryProvider_default = Azure2DImageryProvider;
 
 // packages/engine/Source/Scene/IonImageryProviderFactory.js
@@ -118377,6 +118794,21 @@ MaterialPipelineStage.process = function(renderResources, primitive, frameState)
   } else if (material.alphaMode === AlphaMode_default.MASK) {
     alphaOptions.alphaCutoff = material.alphaCutoff;
   }
+  if (defined_default(material.pointDiameter)) {
+    shaderBuilder.addDefine(
+      "HAS_POINT_DIAMETER",
+      void 0,
+      ShaderDestination_default.VERTEX
+    );
+    shaderBuilder.addUniform(
+      "float",
+      "u_pointDiameter",
+      ShaderDestination_default.VERTEX
+    );
+    uniformMap2.u_pointDiameter = function() {
+      return material.pointDiameter * frameState.pixelRatio;
+    };
+  }
   shaderBuilder.addFragmentLines(MaterialStageFS_default);
   if (material.doubleSided) {
     shaderBuilder.addDefine(
@@ -121742,10 +122174,10 @@ function deriveSkipLodStencilCommand(command) {
 var ModelDrawCommand_default = ModelDrawCommand;
 
 // packages/engine/Source/Shaders/Model/ModelVS.js
-var ModelVS_default = "precision highp float;\n\nczm_modelVertexOutput defaultVertexOutput(vec3 positionMC) {\n    czm_modelVertexOutput vsOutput;\n    vsOutput.positionMC = positionMC;\n    vsOutput.pointSize = 1.0;\n    return vsOutput;\n}\n\nvoid main()\n{\n    // Initialize the attributes struct with all\n    // attributes except quantized ones.\n    ProcessedAttributes attributes;\n    initializeAttributes(attributes);\n\n    #ifdef HAS_IMAGERY\n    initializeImageryAttributes();\n    #endif\n\n    // Dequantize the quantized ones and add them to the\n    // attributes struct.\n    #ifdef USE_DEQUANTIZATION\n    dequantizationStage(attributes);\n    #endif\n\n    #ifdef HAS_MORPH_TARGETS\n    morphTargetsStage(attributes);\n    #endif\n\n    #ifdef HAS_SKINNING\n    skinningStage(attributes);\n    #endif\n\n    #ifdef HAS_PRIMITIVE_OUTLINE\n    primitiveOutlineStage();\n    #endif\n\n    // Compute the bitangent according to the formula in the glTF spec.\n    // Normal and tangents can be affected by morphing and skinning, so\n    // the bitangent should not be computed until their values are finalized.\n    #ifdef HAS_BITANGENTS\n    attributes.bitangentMC = normalize(cross(attributes.normalMC, attributes.tangentMC) * attributes.tangentSignMC);\n    #endif\n\n    FeatureIds featureIds;\n    featureIdStage(featureIds, attributes);\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    SelectedFeature feature;\n    selectedFeatureIdStage(feature, featureIds);\n    // Handle any show properties that come from the style.\n    cpuStylingStage(attributes.positionMC, feature);\n    #endif\n\n    #if defined(USE_2D_POSITIONS) || defined(USE_2D_INSTANCING)\n    // The scene mode 2D pipeline stage and instancing stage add a different\n    // model view matrix to accurately project the model to 2D. However, the\n    // output positions and normals should be transformed by the 3D matrices\n    // to keep the data the same for the fragment shader.\n    mat4 modelView = czm_modelView3D;\n    mat3 normal = czm_normal3D;\n    #else\n    // These are used for individual model projection because they will\n    // automatically change based on the scene mode.\n    mat4 modelView = czm_modelView;\n    mat3 normal = czm_normal;\n    #endif\n\n    // Update the position for this instance in place\n    #ifdef HAS_INSTANCING\n\n        // The legacy instance stage is used when rendering i3dm models that\n        // encode instances transforms in world space, as opposed to glTF models\n        // that use EXT_mesh_gpu_instancing, where instance transforms are encoded\n        // in object space.\n        #ifdef USE_LEGACY_INSTANCING\n        mat4 instanceModelView;\n        mat3 instanceModelViewInverseTranspose;\n\n        legacyInstancingStage(attributes, instanceModelView, instanceModelViewInverseTranspose);\n\n        modelView = instanceModelView;\n        normal = instanceModelViewInverseTranspose;\n        #else\n        instancingStage(attributes);\n        #endif\n\n        #ifdef USE_PICKING\n        v_pickColor = a_pickColor;\n        #endif\n\n    #endif\n\n    Metadata metadata;\n    MetadataClass metadataClass;\n    MetadataStatistics metadataStatistics;\n    metadataStage(metadata, metadataClass, metadataStatistics, attributes);\n\n    #ifdef HAS_VERTICAL_EXAGGERATION\n    verticalExaggerationStage(attributes);\n    #endif\n\n    #ifdef HAS_CUSTOM_VERTEX_SHADER\n    czm_modelVertexOutput vsOutput = defaultVertexOutput(attributes.positionMC);\n    customShaderStage(vsOutput, attributes, featureIds, metadata, metadataClass, metadataStatistics);\n    #endif\n\n    // Compute the final position in each coordinate system needed.\n    // This returns the value that will be assigned to gl_Position.\n    vec4 positionClip = geometryStage(attributes, modelView, normal);\n\n    // This must go after the geometry stage as it needs v_positionWC\n    #ifdef HAS_ATMOSPHERE\n    atmosphereStage(attributes);\n    #endif\n\n    #ifdef ENABLE_CLIPPING_POLYGONS\n    modelClippingPolygonsStage(attributes);\n    #endif\n\n    #ifdef HAS_SILHOUETTE\n    silhouetteStage(attributes, positionClip);\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n    float show = pointCloudShowStylingStage(attributes, metadata);\n    #else\n    float show = 1.0;\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_BACK_FACE_CULLING\n    show *= pointCloudBackFaceCullingStage();\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_COLOR_STYLE\n    v_pointCloudColor = pointCloudColorStylingStage(attributes, metadata);\n    #endif\n\n    #ifdef PRIMITIVE_TYPE_POINTS\n        #ifdef HAS_CUSTOM_VERTEX_SHADER\n        gl_PointSize = vsOutput.pointSize;\n        #elif defined(HAS_POINT_CLOUD_POINT_SIZE_STYLE) || defined(HAS_POINT_CLOUD_ATTENUATION)\n        gl_PointSize = pointCloudPointSizeStylingStage(attributes, metadata);\n        #else\n        gl_PointSize = 1.0;\n        #endif\n        \n        gl_PointSize *= show;\n    #endif\n\n    // Important NOT to compute gl_Position = show * positionClip or we hit:\n    // https://github.com/CesiumGS/cesium/issues/11270\n    //\n    // We will discard points with v_pointCloudShow == 0 in the fragment shader.\n    gl_Position = positionClip;\n\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n    v_pointCloudShow = show;\n    #endif\n}\n";
+var ModelVS_default = "precision highp float;\n\nczm_modelVertexOutput defaultVertexOutput(vec3 positionMC) {\n    czm_modelVertexOutput vsOutput;\n    vsOutput.positionMC = positionMC;\n    vsOutput.pointSize = 1.0;\n    return vsOutput;\n}\n\nvoid main()\n{\n    // Initialize the attributes struct with all\n    // attributes except quantized ones.\n    ProcessedAttributes attributes;\n    initializeAttributes(attributes);\n\n    #ifdef HAS_IMAGERY\n    initializeImageryAttributes();\n    #endif\n\n    // Dequantize the quantized ones and add them to the\n    // attributes struct.\n    #ifdef USE_DEQUANTIZATION\n    dequantizationStage(attributes);\n    #endif\n\n    #ifdef HAS_MORPH_TARGETS\n    morphTargetsStage(attributes);\n    #endif\n\n    #ifdef HAS_SKINNING\n    skinningStage(attributes);\n    #endif\n\n    #ifdef HAS_PRIMITIVE_OUTLINE\n    primitiveOutlineStage();\n    #endif\n\n    // Compute the bitangent according to the formula in the glTF spec.\n    // Normal and tangents can be affected by morphing and skinning, so\n    // the bitangent should not be computed until their values are finalized.\n    #ifdef HAS_BITANGENTS\n    attributes.bitangentMC = normalize(cross(attributes.normalMC, attributes.tangentMC) * attributes.tangentSignMC);\n    #endif\n\n    FeatureIds featureIds;\n    featureIdStage(featureIds, attributes);\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    SelectedFeature feature;\n    selectedFeatureIdStage(feature, featureIds);\n    // Handle any show properties that come from the style.\n    cpuStylingStage(attributes.positionMC, feature);\n    #endif\n\n    #if defined(USE_2D_POSITIONS) || defined(USE_2D_INSTANCING)\n    // The scene mode 2D pipeline stage and instancing stage add a different\n    // model view matrix to accurately project the model to 2D. However, the\n    // output positions and normals should be transformed by the 3D matrices\n    // to keep the data the same for the fragment shader.\n    mat4 modelView = czm_modelView3D;\n    mat3 normal = czm_normal3D;\n    #else\n    // These are used for individual model projection because they will\n    // automatically change based on the scene mode.\n    mat4 modelView = czm_modelView;\n    mat3 normal = czm_normal;\n    #endif\n\n    // Update the position for this instance in place\n    #ifdef HAS_INSTANCING\n\n        // The legacy instance stage is used when rendering i3dm models that\n        // encode instances transforms in world space, as opposed to glTF models\n        // that use EXT_mesh_gpu_instancing, where instance transforms are encoded\n        // in object space.\n        #ifdef USE_LEGACY_INSTANCING\n        mat4 instanceModelView;\n        mat3 instanceModelViewInverseTranspose;\n\n        legacyInstancingStage(attributes, instanceModelView, instanceModelViewInverseTranspose);\n\n        modelView = instanceModelView;\n        normal = instanceModelViewInverseTranspose;\n        #else\n        instancingStage(attributes);\n        #endif\n\n        #ifdef USE_PICKING\n        v_pickColor = a_pickColor;\n        #endif\n\n    #endif\n\n    Metadata metadata;\n    MetadataClass metadataClass;\n    MetadataStatistics metadataStatistics;\n    metadataStage(metadata, metadataClass, metadataStatistics, attributes);\n\n    #ifdef HAS_VERTICAL_EXAGGERATION\n    verticalExaggerationStage(attributes);\n    #endif\n\n    #ifdef HAS_CUSTOM_VERTEX_SHADER\n    czm_modelVertexOutput vsOutput = defaultVertexOutput(attributes.positionMC);\n    customShaderStage(vsOutput, attributes, featureIds, metadata, metadataClass, metadataStatistics);\n    #endif\n\n    // Compute the final position in each coordinate system needed.\n    // This returns the value that will be assigned to gl_Position.\n    vec4 positionClip = geometryStage(attributes, modelView, normal);\n\n    // This must go after the geometry stage as it needs v_positionWC\n    #ifdef HAS_ATMOSPHERE\n    atmosphereStage(attributes);\n    #endif\n\n    #ifdef ENABLE_CLIPPING_POLYGONS\n    modelClippingPolygonsStage(attributes);\n    #endif\n\n    #ifdef HAS_SILHOUETTE\n    silhouetteStage(attributes, positionClip);\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n    float show = pointCloudShowStylingStage(attributes, metadata);\n    #else\n    float show = 1.0;\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_BACK_FACE_CULLING\n    show *= pointCloudBackFaceCullingStage();\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_COLOR_STYLE\n    v_pointCloudColor = pointCloudColorStylingStage(attributes, metadata);\n    #endif\n\n    #ifdef PRIMITIVE_TYPE_POINTS\n        #ifdef HAS_CUSTOM_VERTEX_SHADER\n        gl_PointSize = vsOutput.pointSize;\n        #elif defined(HAS_POINT_CLOUD_POINT_SIZE_STYLE) || defined(HAS_POINT_CLOUD_ATTENUATION)\n        gl_PointSize = pointCloudPointSizeStylingStage(attributes, metadata);\n        #elif defined(HAS_POINT_DIAMETER)\n        gl_PointSize = u_pointDiameter;\n        #else\n        gl_PointSize = 1.0;\n        #endif\n        \n        gl_PointSize *= show;\n    #endif\n\n    // Important NOT to compute gl_Position = show * positionClip or we hit:\n    // https://github.com/CesiumGS/cesium/issues/11270\n    //\n    // We will discard points with v_pointCloudShow == 0 in the fragment shader.\n    gl_Position = positionClip;\n\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n    v_pointCloudShow = show;\n    #endif\n}\n";
 
 // packages/engine/Source/Shaders/Model/ModelFS.js
-var ModelFS_default = "\nprecision highp float;\n\nczm_modelMaterial defaultModelMaterial()\n{\n    czm_modelMaterial material;\n    material.diffuse = vec3(0.0);\n    material.specular = vec3(1.0);\n    material.roughness = 1.0;\n    material.occlusion = 1.0;\n    material.normalEC = vec3(0.0, 0.0, 1.0);\n    material.emissive = vec3(0.0);\n    material.alpha = 1.0;\n    return material;\n}\n\nvec4 handleAlpha(vec3 color, float alpha)\n{\n    #ifdef ALPHA_MODE_MASK\n    if (alpha < u_alphaCutoff) {\n        discard;\n    }\n    #endif\n\n    return vec4(color, alpha);\n}\n\nSelectedFeature selectedFeature;\n\nvoid main()\n{\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n        if (v_pointCloudShow == 0.0)\n        {\n            discard;\n        }\n    #endif\n\n    #ifdef HAS_MODEL_SPLITTER\n    modelSplitterStage();\n    #endif\n\n    czm_modelMaterial material = defaultModelMaterial();\n\n    ProcessedAttributes attributes;\n    geometryStage(attributes);\n\n    FeatureIds featureIds;\n    featureIdStage(featureIds, attributes);\n\n    Metadata metadata;\n    MetadataClass metadataClass;\n    MetadataStatistics metadataStatistics;\n    metadataStage(metadata, metadataClass, metadataStatistics, attributes);\n\n    //========================================================================\n    // When not picking metadata START\n    #ifndef METADATA_PICKING_ENABLED\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    selectedFeatureIdStage(selectedFeature, featureIds);\n    #endif\n\n    #ifndef CUSTOM_SHADER_REPLACE_MATERIAL\n    materialStage(material, attributes, selectedFeature);\n    #endif\n\n    #ifdef HAS_CUSTOM_FRAGMENT_SHADER\n    customShaderStage(material, attributes, featureIds, metadata, metadataClass, metadataStatistics);\n    #endif\n\n    lightingStage(material, attributes);\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    cpuStylingStage(material, selectedFeature);\n    #endif\n\n    #ifdef HAS_MODEL_COLOR\n    modelColorStage(material);\n    #endif\n\n    #ifdef HAS_PRIMITIVE_OUTLINE\n    primitiveOutlineStage(material);\n    #endif\n\n    vec4 color = handleAlpha(material.diffuse, material.alpha);\n\n    // When not picking metadata END\n    //========================================================================\n    #else\n    //========================================================================\n    // When picking metadata START\n\n    vec4 metadataValues = vec4(0.0, 0.0, 0.0, 0.0);\n    metadataPickingStage(metadata, metadataClass, metadataValues);\n    vec4 color = metadataValues;\n\n    #endif\n    // When picking metadata END\n    //========================================================================\n\n    #ifdef HAS_CLIPPING_PLANES\n    modelClippingPlanesStage(color);\n    #endif\n\n    #ifdef ENABLE_CLIPPING_POLYGONS\n    modelClippingPolygonsStage();\n    #endif\n\n    //========================================================================\n    // When not picking metadata START\n    #ifndef METADATA_PICKING_ENABLED\n\n    #if defined(HAS_SILHOUETTE) && defined(HAS_NORMALS)\n    silhouetteStage(color);\n    #endif\n\n    #ifdef HAS_ATMOSPHERE\n    atmosphereStage(color, attributes);\n    #endif\n\n    #ifdef HAS_EDGE_VISIBILITY\n    edgeVisibilityStage(color, featureIds);\n    edgeDetectionStage(color, featureIds);\n    #endif\n\n    #endif\n    // When not picking metadata END\n    //========================================================================\n\n    out_FragColor = color;\n}\n\n";
+var ModelFS_default = "\nprecision highp float;\n\nczm_modelMaterial defaultModelMaterial()\n{\n    czm_modelMaterial material;\n    material.diffuse = vec3(0.0);\n    material.specular = vec3(1.0);\n    material.roughness = 1.0;\n    material.occlusion = 1.0;\n    material.normalEC = vec3(0.0, 0.0, 1.0);\n    material.emissive = vec3(0.0);\n    material.alpha = 1.0;\n    return material;\n}\n\nvec4 handleAlpha(vec3 color, float alpha)\n{\n    #ifdef ALPHA_MODE_MASK\n    if (alpha < u_alphaCutoff) {\n        discard;\n    }\n    #endif\n\n    return vec4(color, alpha);\n}\n\nSelectedFeature selectedFeature;\n\nvoid main()\n{\n    #ifdef PRIMITIVE_TYPE_POINTS\n    // Render points as circles\n    float distanceToCenter = length(gl_PointCoord - vec2(0.5));\n    if (distanceToCenter > 0.5) {\n        discard;\n    }\n    #endif\n\n    #ifdef HAS_POINT_CLOUD_SHOW_STYLE\n        if (v_pointCloudShow == 0.0)\n        {\n            discard;\n        }\n    #endif\n\n    #ifdef HAS_MODEL_SPLITTER\n    modelSplitterStage();\n    #endif\n\n    czm_modelMaterial material = defaultModelMaterial();\n\n    ProcessedAttributes attributes;\n    geometryStage(attributes);\n\n    FeatureIds featureIds;\n    featureIdStage(featureIds, attributes);\n\n    Metadata metadata;\n    MetadataClass metadataClass;\n    MetadataStatistics metadataStatistics;\n    metadataStage(metadata, metadataClass, metadataStatistics, attributes);\n\n    //========================================================================\n    // When not picking metadata START\n    #ifndef METADATA_PICKING_ENABLED\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    selectedFeatureIdStage(selectedFeature, featureIds);\n    #endif\n\n    #ifndef CUSTOM_SHADER_REPLACE_MATERIAL\n    materialStage(material, attributes, selectedFeature);\n    #endif\n\n    #ifdef HAS_CUSTOM_FRAGMENT_SHADER\n    customShaderStage(material, attributes, featureIds, metadata, metadataClass, metadataStatistics);\n    #endif\n\n    lightingStage(material, attributes);\n\n    #ifdef HAS_SELECTED_FEATURE_ID\n    cpuStylingStage(material, selectedFeature);\n    #endif\n\n    #ifdef HAS_MODEL_COLOR\n    modelColorStage(material);\n    #endif\n\n    #ifdef HAS_PRIMITIVE_OUTLINE\n    primitiveOutlineStage(material);\n    #endif\n\n    vec4 color = handleAlpha(material.diffuse, material.alpha);\n\n    // When not picking metadata END\n    //========================================================================\n    #else\n    //========================================================================\n    // When picking metadata START\n\n    vec4 metadataValues = vec4(0.0, 0.0, 0.0, 0.0);\n    metadataPickingStage(metadata, metadataClass, metadataValues);\n    vec4 color = metadataValues;\n\n    #endif\n    // When picking metadata END\n    //========================================================================\n\n    #ifdef HAS_CLIPPING_PLANES\n    modelClippingPlanesStage(color);\n    #endif\n\n    #ifdef ENABLE_CLIPPING_POLYGONS\n    modelClippingPolygonsStage();\n    #endif\n\n    //========================================================================\n    // When not picking metadata START\n    #ifndef METADATA_PICKING_ENABLED\n\n    #if defined(HAS_SILHOUETTE) && defined(HAS_NORMALS)\n    silhouetteStage(color);\n    #endif\n\n    #ifdef HAS_ATMOSPHERE\n    atmosphereStage(color, attributes);\n    #endif\n\n    #ifdef HAS_EDGE_VISIBILITY\n    edgeVisibilityStage(color, featureIds);\n    edgeDetectionStage(color, featureIds);\n    #endif\n\n    #endif\n    // When not picking metadata END\n    //========================================================================\n\n    out_FragColor = color;\n}\n\n";
 
 // packages/engine/Source/Scene/Model/ModelDrawCommands.js
 function ModelDrawCommands() {
@@ -126962,7 +127394,9 @@ void doThreePointDepthTest(float eyeDepth, bool applyTranslate) {
 }
 #endif
 
-void doDepthTest() {
+// Extra manual depth testing is done to allow more control over how a billboard is occluded 
+// by the globe when near and far from the camera.
+void doDepthTest(float globeDepth) {
     float temp = v_compressed.y;
     temp = temp * SHIFT_RIGHT1;
     float temp2 = (temp - floor(temp)) * SHIFT_LEFT1;
@@ -126987,14 +127421,10 @@ void doDepthTest() {
     }
 #endif
 
-    // Automatic depth testing of billboards is disabled (@see BillboardCollection#update).
-    // Instead, we do one of two types of manual depth tests (potentially in addition to the test above), depending on the camera's distance to the billboard fragment.
     // If we're far away, we just compare against a flat, camera-facing depth-plane at the ellipsoid's center.
     // If we're close, we compare against the globe depth texture (which includes depth from the 3D tile pass).
-    vec2 fragSt = gl_FragCoord.xy / czm_viewport.zw;
-    float globeDepth = getGlobeDepthAtCoords(fragSt);
-    if (globeDepth == 0.0) return; // Not on globe
-    
+
+    if (globeDepth == 0.0) return; // Not on globe    
     float distanceToEllipsoidCenter = -length(czm_viewerPositionWC); // depth is negative by convention
     float testDistance = (eyeDepth > -u_coarseDepthTestDistance) ? globeDepth : distanceToEllipsoidCenter;
     if (eyeDepth < testDistance) {
@@ -127006,7 +127436,10 @@ void main()
 {
     if (v_splitDirection < 0.0 && gl_FragCoord.x > czm_splitPosition) discard;
     if (v_splitDirection > 0.0 && gl_FragCoord.x < czm_splitPosition) discard;
-    doDepthTest();
+    
+    vec2 fragSt = gl_FragCoord.xy / czm_viewport.zw;
+    float globeDepth = getGlobeDepthAtCoords(fragSt);
+    doDepthTest(globeDepth);
     
     vec4 color = texture(u_atlas, v_textureCoordinates);
 
@@ -127074,7 +127507,19 @@ void main()
     out_FragColor = color;
 
 #ifdef LOG_DEPTH
-    czm_writeLogDepth();
+    // If we've made it here, we passed our manual depth test, above. But the automatic depth test will
+    // still run, and some fragments of the billboard may clip against the globe. To prevent that,
+    // ensure the depth value we write out is in front of the globe depth.
+    float depthArg = v_depthFromNearPlusOne;
+
+    if (globeDepth != 0.0) { // On the globe
+        float globeDepthFromNearPlusOne = (-globeDepth - czm_currentFrustum.x) + 1.0;
+        float nudge = max(globeDepthFromNearPlusOne * 5e-6, czm_epsilon7);
+        float globeOnTop = max(1.0, globeDepthFromNearPlusOne - nudge);
+        depthArg = min(depthArg, globeOnTop);
+    }
+
+    czm_writeLogDepth(depthArg);
 #endif
 }`;
 
@@ -127681,7 +128126,7 @@ BillboardTexture.prototype.unload = async function() {
   this._height = void 0;
   this.dirty = true;
 };
-BillboardTexture.prototype.loadImage = async function(id, image) {
+BillboardTexture.prototype.loadImage = async function(id, image, width, height) {
   if (this._id === id) {
     return;
   }
@@ -127702,7 +128147,10 @@ BillboardTexture.prototype.loadImage = async function(id, image) {
   let index;
   const atlas = this._billboardCollection.textureAtlas;
   try {
-    index = await atlas.addImage(id, image);
+    index = atlas.addImage(id, image, width, height);
+    if (index instanceof Promise) {
+      index = await index;
+    }
   } catch (error) {
     billboardTexture._loadState = BillboardLoadState_default.ERROR;
     billboardTexture._loadError = error;
@@ -127737,18 +128185,36 @@ BillboardTexture.prototype.loadImage = async function(id, image) {
   this._height = rectangle.height;
   this.dirty = true;
 };
-BillboardTexture.prototype.addImageSubRegion = async function(id, subRegion) {
+BillboardTexture.prototype.addImageSubRegion = function(id, subRegion) {
   this._id = id;
-  this._loadState = BillboardLoadState_default.LOADING;
   this._loadError = void 0;
   this._hasSubregion = true;
-  let index;
   const atlas = this._billboardCollection.textureAtlas;
+  const indexOrPromise = atlas.addImageSubRegion(id, subRegion);
+  if (typeof indexOrPromise === "number") {
+    this.setImageSubRegion(indexOrPromise, subRegion);
+    return;
+  }
+  this.loadImageSubRegion(id, subRegion, indexOrPromise);
+};
+BillboardTexture.prototype.loadImageSubRegion = async function(id, subRegion, indexPromise) {
+  let index;
   try {
-    index = await atlas.addImageSubRegion(id, subRegion);
+    this._loadState = BillboardLoadState_default.LOADING;
+    index = await indexPromise;
   } catch (error) {
     this._loadState = BillboardLoadState_default.ERROR;
     this._loadError = error;
+    return;
+  }
+  if (this._id !== id) {
+    return;
+  }
+  this._loadState = BillboardLoadState_default.LOADED;
+  this.setImageSubRegion(index, subRegion);
+};
+BillboardTexture.prototype.setImageSubRegion = function(index, subRegion) {
+  if (this._index === index) {
     return;
   }
   if (!defined_default(index) || index === -1) {
@@ -127761,7 +128227,6 @@ BillboardTexture.prototype.addImageSubRegion = async function(id, subRegion) {
   this._width = subRegion.width;
   this._height = subRegion.height;
   this._index = index;
-  this._loadState = BillboardLoadState_default.LOADED;
   this.dirty = true;
 };
 BillboardTexture.prototype.computeTextureCoordinates = function(result) {
@@ -127881,27 +128346,24 @@ function Billboard(options, billboardCollection) {
   this._index = -1;
   this._batchIndex = void 0;
   this._imageTexture = new BillboardTexture_default(billboardCollection);
+  this._imageId = options.imageId;
   this._imageWidth = void 0;
   this._imageHeight = void 0;
   this._labelDimensions = void 0;
   this._labelHorizontalOrigin = void 0;
   this._labelTranslate = void 0;
   const image = options.image;
-  let imageId = options.imageId;
   if (defined_default(image)) {
-    if (!defined_default(imageId)) {
-      if (typeof image === "string") {
-        imageId = image;
-      } else if (defined_default(image.src)) {
-        imageId = image.src;
-      } else {
-        imageId = createGuid_default();
-      }
-    }
-    this._imageTexture.loadImage(imageId, image);
+    this._computeImageTextureProperties(options.imageId, image);
+    this._imageTexture.loadImage(
+      this._imageId,
+      image,
+      this._imageWidth,
+      this._imageHeight
+    );
   }
   if (defined_default(options.imageSubRegion)) {
-    this._imageTexture.addImageSubRegion(imageId, options.imageSubRegion);
+    this._imageTexture.addImageSubRegion(this._imageId, options.imageSubRegion);
   }
   this._actualClampedPosition = void 0;
   this._removeCallbackFunc = void 0;
@@ -128545,17 +129007,13 @@ Object.defineProperties(Billboard.prototype, {
         this._imageTexture.unload();
         return;
       }
-      let id;
-      if (typeof value === "string") {
-        id = value;
-      } else if (value instanceof Resource_default) {
-        id = value._url;
-      } else if (defined_default(value.src)) {
-        id = value.src;
-      } else {
-        id = createGuid_default();
-      }
-      this._imageTexture.loadImage(id, value);
+      this._computeImageTextureProperties(void 0, value);
+      this._imageTexture.loadImage(
+        this._imageId,
+        value,
+        this._imageWidth,
+        this._imageHeight
+      );
     }
   },
   /**
@@ -128769,12 +129227,47 @@ Billboard.prototype.computeTextureCoordinates = function(result) {
 Billboard.prototype.setImage = function(id, image) {
   Check_default.typeOf.string("id", id);
   Check_default.defined("image", image);
-  this._imageTexture.loadImage(id, image);
+  this._computeImageTextureProperties(id, image);
+  this._imageTexture.loadImage(
+    this._imageId,
+    image,
+    this._imageWidth,
+    this._imageHeight
+  );
 };
 Billboard.prototype.setImageTexture = function(billboardTexture) {
   Check_default.defined("billboardTexture", billboardTexture);
   BillboardTexture_default.clone(billboardTexture, this._imageTexture);
 };
+var SVG_MAX_SIZE_PX = 512;
+Billboard.prototype._computeImageTextureProperties = function(id, image) {
+  this._imageWidth = void 0;
+  this._imageHeight = void 0;
+  if (!defined_default(image)) {
+    this._imageId = createGuid_default();
+    return;
+  }
+  let imageUri;
+  if (typeof image === "string") {
+    imageUri = image;
+  } else if (image instanceof Resource_default) {
+    imageUri = image._url;
+  } else if (defined_default(image.src)) {
+    imageUri = image.src;
+  }
+  this._imageId = id ?? imageUri ?? createGuid_default();
+  const hasSizeInPixels = defined_default(this._width) && defined_default(this._height) && !this._sizeInMeters;
+  if (hasSizeInPixels && isSvgUri(imageUri)) {
+    this._imageWidth = Math.min(this._width, SVG_MAX_SIZE_PX);
+    this._imageHeight = Math.min(this._height, SVG_MAX_SIZE_PX);
+  }
+};
+function isSvgUri(uri) {
+  if (!defined_default(uri)) {
+    return false;
+  }
+  return isDataUri_default(uri) ? uri.startsWith("data:image/svg+xml") : getExtensionFromUri_default(uri) === "svg";
+}
 Billboard.prototype.setImageSubRegion = function(id, subRegion) {
   Check_default.typeOf.string("id", id);
   Check_default.defined("subRegion", subRegion);
@@ -130155,6 +130648,12 @@ BillboardCollection.prototype.update = function(frameState) {
     return;
   }
   const context = frameState.context;
+  if (!context.instancedArrays || !(ContextLimits_default.maximumVertexTextureImageUnits > 0)) {
+    deprecationWarning_default(
+      "Billboard-unsupported-ANGLE_instanced_arrays",
+      "Beginning in CesiumJS 1.140, billboards and labels will require device support for WebGL 2, or WebGL 1 with ANGLE_instanced_arrays and MAX_VERTEX_TEXTURE_IMAGE_UNITS > 0. For more information or to share feedback, see: https://github.com/CesiumGS/cesium/issues/13053"
+    );
+  }
   this._instanced = context.instancedArrays;
   attributeLocations = this._instanced ? attributeLocationsInstanced : attributeLocationsBatched;
   getIndexBuffer2 = this._instanced ? getIndexBufferInstanced : getIndexBufferBatched;
@@ -130328,7 +130827,8 @@ BillboardCollection.prototype.update = function(frameState) {
     if (this._blendOption === BlendOption_default.OPAQUE || this._blendOption === BlendOption_default.OPAQUE_AND_TRANSLUCENT) {
       this._rsOpaque = RenderState_default.fromCache({
         depthTest: {
-          enabled: false
+          enabled: true,
+          func: WebGLConstants_default.LESS
         },
         depthMask: true
       });
@@ -130339,7 +130839,8 @@ BillboardCollection.prototype.update = function(frameState) {
     if (this._blendOption === BlendOption_default.TRANSLUCENT || this._blendOption === BlendOption_default.OPAQUE_AND_TRANSLUCENT) {
       this._rsTranslucent = RenderState_default.fromCache({
         depthTest: {
-          enabled: false
+          enabled: true,
+          func: useTranslucentDepthMask ? WebGLConstants_default.LEQUAL : WebGLConstants_default.LESS
         },
         depthMask: useTranslucentDepthMask,
         blending: BlendingState_default.ALPHA_BLEND
@@ -131259,72 +131760,27 @@ Cesium3DTilePointFeature.prototype.getExactClassName = function() {
 var Cesium3DTilePointFeature_default = Cesium3DTilePointFeature;
 
 // packages/engine/Source/Core/writeTextToCanvas.js
-function measureText(context2D, textString, font, stroke, fill) {
+function measureText(context2D, textString) {
   const metrics = context2D.measureText(textString);
   const isSpace = !/\S/.test(textString);
-  if (!isSpace) {
-    const fontSize = document.defaultView.getComputedStyle(context2D.canvas).getPropertyValue("font-size").replace("px", "");
-    const canvas = document.createElement("canvas");
-    const padding = 100;
-    const width = metrics.width + padding | 0;
-    const height = 3 * fontSize;
-    const baseline = height / 2;
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    ctx.font = font;
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width + 1, canvas.height + 1);
-    if (stroke) {
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = context2D.lineWidth;
-      ctx.strokeText(textString, padding / 2, baseline);
-    }
-    if (fill) {
-      ctx.fillStyle = "black";
-      ctx.fillText(textString, padding / 2, baseline);
-    }
-    const pixelData = ctx.getImageData(0, 0, width, height).data;
-    const length2 = pixelData.length;
-    const width4 = width * 4;
-    let i, j;
-    let ascent, descent;
-    for (i = 0; i < length2; ++i) {
-      if (pixelData[i] !== 255) {
-        ascent = i / width4 | 0;
-        break;
-      }
-    }
-    for (i = length2 - 1; i >= 0; --i) {
-      if (pixelData[i] !== 255) {
-        descent = i / width4 | 0;
-        break;
-      }
-    }
-    let minx = -1;
-    for (i = 0; i < width && minx === -1; ++i) {
-      for (j = 0; j < height; ++j) {
-        const pixelIndex = i * 4 + j * width4;
-        if (pixelData[pixelIndex] !== 255 || pixelData[pixelIndex + 1] !== 255 || pixelData[pixelIndex + 2] !== 255 || pixelData[pixelIndex + 3] !== 255) {
-          minx = i;
-          break;
-        }
-      }
-    }
+  if (isSpace) {
     return {
       width: metrics.width,
-      height: descent - ascent,
-      ascent: baseline - ascent,
-      descent: descent - baseline,
-      minx: minx - padding / 2
+      height: 0,
+      ascent: 0,
+      descent: 0,
+      minx: 0
     };
   }
+  const ascent = Math.round(metrics.actualBoundingBoxAscent);
+  const descent = Math.round(metrics.actualBoundingBoxDescent);
+  const height = Math.max(ascent + descent, 1);
   return {
     width: metrics.width,
-    height: 0,
-    ascent: 0,
-    descent: 0,
-    minx: 0
+    height,
+    ascent,
+    descent,
+    minx: -Math.round(metrics.actualBoundingBoxLeft)
   };
 }
 var imageSmoothingEnabledName;
@@ -131365,15 +131821,17 @@ function writeTextToCanvas(text2, options) {
   context2D[imageSmoothingEnabledName] = false;
   canvas.style.visibility = "hidden";
   document.body.appendChild(canvas);
-  const dimensions = measureText(context2D, text2, font, stroke, fill);
+  const dimensions = measureText(context2D, text2);
   canvas.dimensions = dimensions;
   document.body.removeChild(canvas);
   canvas.style.visibility = "";
-  const x = -dimensions.minx;
-  const width = Math.ceil(dimensions.width) + x + doublePadding;
-  const height = dimensions.height + doublePadding;
-  const baseline = height - dimensions.ascent + padding;
-  const y = height - baseline + doublePadding;
+  const isSpace = !/\S/.test(text2);
+  const strokePadding = stroke && !isSpace ? Math.ceil(strokeWidth / 2) : 0;
+  const doubleStrokePadding = strokePadding * 2;
+  const x = -dimensions.minx + strokePadding;
+  const width = Math.ceil(dimensions.width) + x + doublePadding + strokePadding;
+  const height = dimensions.height + doublePadding + doubleStrokePadding;
+  const y = dimensions.ascent + padding + strokePadding;
   canvas.width = width;
   canvas.height = height;
   context2D.font = font;
@@ -132685,6 +133143,7 @@ function unbindGlyphBillboard(labelCollection, glyph) {
   const billboard = glyph.billboard;
   if (defined_default(billboard)) {
     billboard.show = false;
+    billboard._clampedPosition = void 0;
     if (defined_default(billboard._removeCallbackFunc)) {
       billboard._removeCallbackFunc();
       billboard._removeCallbackFunc = void 0;
@@ -134724,9 +135183,7 @@ PolylineBucket.prototype.updateShader = function(context, batchTable, useHighlig
   if (this.material.shaderSource.search(/in\s+float\s+v_polylineAngle;/g) !== -1) {
     defines.push("POLYLINE_DASH");
   }
-  if (!FeatureDetection_default.isInternetExplorer()) {
-    defines.push("CLIP_POLYLINE");
-  }
+  defines.push("CLIP_POLYLINE");
   const fs = new ShaderSource_default({
     defines,
     sources: ["in vec4 v_pickColor;\n", this.material.shaderSource, PolylineFS_default]
@@ -136258,10 +136715,7 @@ function createShaders2(primitive, context) {
     false
   )(PolylineFS);
   const vs = new ShaderSource_default({
-    defines: [
-      "VECTOR_TILE",
-      !FeatureDetection_default.isInternetExplorer() ? "CLIP_POLYLINE" : ""
-    ],
+    defines: ["VECTOR_TILE", "CLIP_POLYLINE"],
     sources: [PolylineCommon_default, vsSource]
   });
   const fs = new ShaderSource_default({
@@ -136821,10 +137275,7 @@ function createShaders3(primitive, context) {
     true
   )(Vector3DTileClampedPolylinesFS_default);
   const vs = new ShaderSource_default({
-    defines: [
-      "VECTOR_TILE",
-      !FeatureDetection_default.isInternetExplorer() ? "CLIP_POLYLINE" : ""
-    ],
+    defines: ["VECTOR_TILE", "CLIP_POLYLINE"],
     sources: [PolylineCommon_default, vsSource]
   });
   const fs = new ShaderSource_default({
@@ -138156,7 +138607,7 @@ GaussianSplatPrimitive.buildGSplatDrawCommand = function(primitive, frameState) 
     cull: renderStateOptions.cull.enabled,
     pass: Pass_default.GAUSSIAN_SPLATS,
     count: renderResources.count,
-    owner: this,
+    owner: primitive,
     instanceCount: renderResources.instanceCount,
     primitiveType: PrimitiveType_default.TRIANGLE_STRIP,
     debugShowBoundingVolume: tileset.debugShowBoundingVolume,
@@ -155436,7 +155887,7 @@ function createDeclutterCallback(entityCluster) {
     let collection;
     let collectionIndex;
     if (points.length > 0) {
-      const index = new KDBush(points.length, 64, Uint32Array);
+      const index = new KDBush(points.length, 64, Float64Array);
       for (let p = 0; p < points.length; ++p) {
         index.add(points[p].coord.x, points[p].coord.y);
       }
@@ -182422,7 +182873,7 @@ var ChunkStream = class extends null {
 };
 
 // node_modules/@zip.js/zip.js/lib/core/codec-worker.js
-var WEB_WORKERS_SUPPORTED = typeof Worker != UNDEFINED_TYPE;
+var WEB_WORKERS_SUPPORTED;
 var initModule = () => {
 };
 function configureWorker({ initModule: initModuleFunction }) {
@@ -182466,6 +182917,9 @@ var CodecWorker = class {
         onTaskFinished(workerData);
       }
     });
+    if (WEB_WORKERS_SUPPORTED === UNDEFINED_VALUE) {
+      WEB_WORKERS_SUPPORTED = typeof Worker != UNDEFINED_TYPE;
+    }
     return (useWebWorkers && WEB_WORKERS_SUPPORTED ? createWebWorkerInterface : createWorkerInterface)(workerData, config2);
   }
 };
@@ -184872,15 +185326,19 @@ function getHeaderInfo(options) {
   let { version, compressionMethod } = options;
   const compressed = !directory && (level > 0 || level === UNDEFINED_VALUE && compressionMethod !== 0);
   let rawExtraFieldZip64;
+  let rawLocalExtraFieldZip64;
   const uncompressedFile = passThrough || !compressed;
   const zip64ExtraFieldComplete = zip64 && (options.bufferedWrite || (!zip64UncompressedSize && !zip64CompressedSize || uncompressedFile));
   if (zip64) {
     let rawExtraFieldZip64Length = 4;
+    let rawLocalExtraFieldZip64Length = 4;
     if (zip64UncompressedSize) {
       rawExtraFieldZip64Length += 8;
+      rawLocalExtraFieldZip64Length += 8;
     }
     if (zip64CompressedSize) {
       rawExtraFieldZip64Length += 8;
+      rawLocalExtraFieldZip64Length += 8;
     }
     if (zip64Offset) {
       rawExtraFieldZip64Length += 8;
@@ -184890,18 +185348,28 @@ function getHeaderInfo(options) {
     }
     rawExtraFieldZip64 = new Uint8Array(rawExtraFieldZip64Length);
     const rawExtraFieldZip64View = getDataView2(rawExtraFieldZip64);
+    rawLocalExtraFieldZip64 = new Uint8Array(rawLocalExtraFieldZip64Length);
+    const rawLocalExtraFieldZip64View = getDataView2(rawLocalExtraFieldZip64);
     setUint16(rawExtraFieldZip64View, 0, EXTRAFIELD_TYPE_ZIP64);
     setUint16(rawExtraFieldZip64View, 2, getLength(rawExtraFieldZip64) - 4);
+    setUint16(rawLocalExtraFieldZip64View, 0, EXTRAFIELD_TYPE_ZIP64);
+    setUint16(rawLocalExtraFieldZip64View, 2, getLength(rawLocalExtraFieldZip64) - 4);
     if (zip64ExtraFieldComplete) {
       const rawExtraFieldZip64View2 = getDataView2(rawExtraFieldZip64);
+      const rawLocalExtraFieldZip64View2 = getDataView2(rawLocalExtraFieldZip64);
       let rawExtraFieldZip64Offset = 4;
+      let rawLocalExtraFieldZip64Offset = 4;
       if (zip64UncompressedSize) {
         setBigUint64(rawExtraFieldZip64View2, rawExtraFieldZip64Offset, BigInt(uncompressedSize));
         rawExtraFieldZip64Offset += 8;
+        setBigUint64(rawLocalExtraFieldZip64View2, rawLocalExtraFieldZip64Offset, BigInt(uncompressedSize));
+        rawLocalExtraFieldZip64Offset += 8;
       }
       if (zip64CompressedSize && uncompressedFile) {
         setBigUint64(rawExtraFieldZip64View2, rawExtraFieldZip64Offset, BigInt(uncompressedSize));
         rawExtraFieldZip64Offset += 8;
+        setBigUint64(rawLocalExtraFieldZip64View2, rawLocalExtraFieldZip64Offset, BigInt(uncompressedSize));
+        rawLocalExtraFieldZip64Offset += 8;
       }
       if (zip64Offset) {
         setBigUint64(rawExtraFieldZip64View2, rawExtraFieldZip64Offset, BigInt(offset));
@@ -184911,9 +185379,13 @@ function getHeaderInfo(options) {
         setUint322(rawExtraFieldZip64View2, rawExtraFieldZip64Offset, diskNumberStart);
         rawExtraFieldZip64Offset += 4;
       }
+      if (rawLocalExtraFieldZip64Offset == 4) {
+        rawLocalExtraFieldZip64 = new Uint8Array();
+      }
     }
   } else {
     rawExtraFieldZip64 = new Uint8Array();
+    rawLocalExtraFieldZip64 = new Uint8Array();
   }
   let rawExtraFieldAES;
   if (encrypted && !zipCrypto) {
@@ -185016,7 +185488,7 @@ function getHeaderInfo(options) {
     rawExtraFieldAES[9] = compressionMethod;
     compressionMethod = COMPRESSION_METHOD_AES;
   }
-  const localExtraFieldZip64Length = zip64ExtraFieldComplete ? getLength(rawExtraFieldZip64) : 0;
+  const localExtraFieldZip64Length = zip64ExtraFieldComplete ? getLength(rawLocalExtraFieldZip64) : 0;
   const extraFieldLength = localExtraFieldZip64Length + getLength(rawExtraFieldAES, rawExtraFieldExtendedTimestamp, rawExtraFieldNTFS, rawExtraFieldUnix, rawExtraField);
   const {
     headerArray,
@@ -185041,7 +185513,7 @@ function getHeaderInfo(options) {
   arraySet(localHeaderArray, rawFilename, localHeaderOffset);
   localHeaderOffset += getLength(rawFilename);
   if (zip64ExtraFieldComplete) {
-    arraySet(localHeaderArray, rawExtraFieldZip64, localHeaderOffset);
+    arraySet(localHeaderArray, rawLocalExtraFieldZip64, localHeaderOffset);
   }
   localHeaderOffset += localExtraFieldZip64Length;
   arraySet(localHeaderArray, rawExtraFieldAES, localHeaderOffset);
@@ -185208,40 +185680,29 @@ function updateLocalHeader({
   signature,
   compressedSize,
   uncompressedSize,
-  offset,
-  diskNumberStart,
   zip64UncompressedSize,
-  zip64CompressedSize,
-  zip64Offset,
-  zip64DiskNumberStart
+  zip64CompressedSize
 }, localHeaderView, { dataDescriptor }) {
   if (!dataDescriptor) {
     if (!encrypted) {
       setUint322(localHeaderView, HEADER_OFFSET_SIGNATURE + 4, signature);
     }
-    if (!zip64) {
+    if (!zip64CompressedSize) {
       setUint322(localHeaderView, HEADER_OFFSET_COMPRESSED_SIZE + 4, compressedSize);
+    }
+    if (!zip64UncompressedSize) {
       setUint322(localHeaderView, HEADER_OFFSET_UNCOMPRESSED_SIZE + 4, uncompressedSize);
     }
   }
-  if (zip64) {
-    if (localExtraFieldZip64Length) {
-      let localHeaderOffset = HEADER_SIZE2 + getLength(rawFilename) + 4;
-      if (zip64UncompressedSize) {
-        setBigUint64(localHeaderView, localHeaderOffset, BigInt(uncompressedSize));
-        localHeaderOffset += 8;
-      }
-      if (zip64CompressedSize) {
-        setBigUint64(localHeaderView, localHeaderOffset, BigInt(compressedSize));
-        localHeaderOffset += 8;
-      }
-      if (zip64Offset) {
-        setBigUint64(localHeaderView, localHeaderOffset, BigInt(offset));
-        localHeaderOffset += 8;
-      }
-      if (zip64DiskNumberStart) {
-        setUint322(localHeaderView, localHeaderOffset, diskNumberStart);
-      }
+  if (zip64 && localExtraFieldZip64Length) {
+    let localHeaderOffset = HEADER_SIZE2 + getLength(rawFilename) + 4;
+    if (zip64UncompressedSize) {
+      setBigUint64(localHeaderView, localHeaderOffset, BigInt(uncompressedSize));
+      localHeaderOffset += 8;
+    }
+    if (zip64CompressedSize) {
+      setBigUint64(localHeaderView, localHeaderOffset, BigInt(compressedSize));
+      localHeaderOffset += 8;
     }
   }
 }
@@ -185594,9 +186055,9 @@ function g(g2) {
     for (let A2 = 0; A2 < g3.length; ) {
       const C = g3[A2++];
       if (128 & C) {
-        const Q = 3 + (127 & C), Y = g3[A2++] << 8 | g3[A2++], D = E - Y;
+        const Q = 3 + (127 & C), D = g3[A2++] << 8 | g3[A2++], o = E - D;
         I(E + Q);
-        for (let A3 = 0; Q > A3; A3++) B2[E++] = B2[D + A3];
+        for (let A3 = 0; Q > A3; A3++) B2[E++] = B2[o + A3];
       } else {
         const Q = C;
         I(E + Q);
@@ -185629,7 +186090,7 @@ function g(g2) {
         I2.set(B2.subarray(0, E)), B2 = I2;
       }
     }
-  })("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mYAABAFZgAAEAdmAAAQBOYAABAG5gAAEAXmAAAQB+YAABAEFgAAEAYWAAAQBRYAABAHFgAAEASWAAAQBpYAABAFlgAAEAeWAAAQBFYAABAGVgAAEAVWAAAQB1YAABAE1gAAEAbWAAAQBdYAABAH1gAAEAQ2AAAQBjYAABAFNgAAEAc2AAASAETMCAK2AAAQBbYAABAHtgAAEAR2AAAQBnYAABAFdgAAEAd2AAAQBPYAABAG9gAAEAX2AAAQB/YAABAETgADCBRMBCQCTgAAIAZOAAAgBU4AACAFTgAAIAdOAAAgB04AACAEzgAAIATOAAAgBs4AACAGzgAAIAXOAAAgBc4AACAHzgAAIAfOAAAgBC4AACIAQ2oAEAoAABIAACAFLgAAIAUuAAAgBy4AACAHLgAAIASuAAAgBK4AACAGrgAAIAauAAAgBa4AACAFrgAAIAeuAAAgB64AACAEbgAAIARuAAAgBm4AACAGbgAAIAVuAAAgBW4AACAHbgAAIAduAAAgBO4AACAE7gAAIAbuAAAgBu4AACAF7gAAIAXuAAAgB+4AACAH7gAAIgQO2AQeAAAgBh4AACAGHgAAIAUeAAAgBR4AACAHHgAAIAceAAAgBJ4AACAEngAAIAaeAAAgBp4AACAFngAAIAWeAAAgB54AACAHngAAIAReAAAgBF4AACAGXgAAIAZeAAAgBV4AACAFXgAAIAdeAAAgB14AACAE3gAAIATeAAAgBt4AACAG3gAAIAXeAAAgBd4AACAH3gAAIAfeAAAgBD4AACAEPgAAIAY+AAAgBj4AACAFPgAAIAU+AAAgBz4AACAHPgAAIAS+AAAgBL4AACAGvgAAIAa+AAAgBb4AACAFvgAAIAe+AAAgB74AACAEfgAAIAR+AAAgBn4AACAGfgAAIAV+AAAgBX4AACAHfgAAIAd+AAAgBP4AACAE/gAAIAb+AAAgBv4AACAF/gAAIAX+AAAgB/4AACAH/gAAIgQQKAUCAAAQBIIAABAFggAAEARCAAAQBUIAABAEwgAAEAXCCBVYDBwBIgAAEASiAAAQBaIAABAEYgAAEAViAAAQBOIAABAF4gAAEAQSAAAQBRIAABAEkgAAEAWSAAAQBFIAABAFUgAAEATSAAAQBdIAABAEDgABCAYOAAAQBQ4AABAHDgAAEASOAAAQBo4AABAFjgAAEAeOAAASAveaAAHSBAsYBBYAAXAEFggVKARSAAAQBDIAABAEcgAAEgL34gAREAQWCBgQBGoIF6gEFgAPUAQWAA7gBBYADnIBPdoAABAERgAAEAQmAAAQBGYAABIEAAgEVgAAEAQ2AAAQBHYAABAEDgAAEAROCBkABBYACLIEFpgEFgAG0AQWAPd8DGwtNgx+5hwAEAQKMAASBB1GJAAQBBIwABAEFigAEBEGwHAuAvMWLAEuNADuFAC8BBoQABIEFiIEABIEBCoEABIEBkoEABICEcYIABAELhAAEAQyEAASABduBR3kE4B0LI4UAX4UFywIQEYAFbQYHCQYKBQuAOrgEDQIOAYAHJQSUHgtphQCQhQCIhQCAhQB4gQBogQBcgQYfARCAAAQBFIAABAEYgAAEARyAAAQBIIAABAEogAAEATCAAAQBOIAABAFAgAAEAVCAAASBBr0BcIAABAGAgAAEAaCAAAQBwIAABAHggABvAx8Lco0Ab4EAa4EAZ4EAY4EAX4EAW4EAV4EAU4EAT4EAS4EAR4EAQ4EBPAGArwBBgFHNAgttgQDHAQSAAAIBCIAABIEBM4ECSwEQgAAOgwAMgYVpgKomhAAkgQdzgQBPAQiAAAiBABiFAAyBCLeDAAwBIIEAlIAyhIEAawGAgQgvAQSDAAyAP0gKAQAQDABBkSEL/4AlHwEDgpvTBQgJCQoKgEk3gAABAQ2AAAEBDoAAAQEPgAABARCEAAEBEYQAAQEShAABAROEAAEBFIwAAQEVjAABARaMAAEBF4wAAQEYnAABARmcAAEBGpwAAQEbmwABARyBffsEBAQFBYHBkAEHgAABAQiEAAGAXSqCAAEBCowAAYAnsooAAYEBMJkAAYEBTJkAAYEBaLkAAYEBpLkAAYIDdYABzoUBvI0BqJ0BkLwBgAIbHLwAAQEdvAABgA9PgH05A9AqAQ==")), B) });
+  })("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BAGZgAAEAVmAAAQB2YAABAE5gAAEAbmAAAQBeYAABAH5gAAEAQWAAAQBhYAABAFFgAAEAcWAAAQBJYAABAGlgAAEAWWAAAQB5YAABAEVgAAEAZWAAAQBVYAABAHVgAAEATWAAAQBtYAABAF1gAAEAfWAAAQBDYAABAGNgAAEAU2AAAQBzYAABIARMwIArYAABAFtgAAEAe2AAAQBHYAABAGdgAAEAV2AAAQB3YAABAE9gAAEAb2AAAQBfYAABAH9gAAEAROAAMIFEwEJAJOAAAgBk4AACAFTgAAIAVOAAAgB04AACAHTgAAIATOAAAgBM4AACAGzgAAIAbOAAAgBc4AACAFzgAAIAfOAAAgB84AACAELgAAIgBDagAQCgAAEgAAIAUuAAAgBS4AACAHLgAAIAcuAAAgBK4AACAErgAAIAauAAAgBq4AACAFrgAAIAWuAAAgB64AACAHrgAAIARuAAAgBG4AACAGbgAAIAZuAAAgBW4AACAFbgAAIAduAAAgB24AACAE7gAAIATuAAAgBu4AACAG7gAAIAXuAAAgBe4AACAH7gAAIAfuAAAiBA7YBB4AACAGHgAAIAYeAAAgBR4AACAFHgAAIAceAAAgBx4AACAEngAAIASeAAAgBp4AACAGngAAIAWeAAAgBZ4AACAHngAAIAeeAAAgBF4AACAEXgAAIAZeAAAgBl4AACAFXgAAIAVeAAAgB14AACAHXgAAIATeAAAgBN4AACAG3gAAIAbeAAAgBd4AACAF3gAAIAfeAAAgB94AACAEPgAAIAQ+AAAgBj4AACAGPgAAIAU+AAAgBT4AACAHPgAAIAc+AAAgBL4AACAEvgAAIAa+AAAgBr4AACAFvgAAIAW+AAAgB74AACAHvgAAIAR+AAAgBH4AACAGfgAAIAZ+AAAgBX4AACAFfgAAIAd+AAAgB34AACAE/gAAIAT+AAAgBv4AACAG/gAAIAX+AAAgBf4AACAH/gAAIAf+AAAiBBAoBQIAABAEggAAEAWCAAAQBEIAABAFQgAAEATCAAAQBcIIFVgMHAEiAAAQBKIAABAFogAAEARiAAAQBWIAABAE4gAAEAXiAAAQBBIAABAFEgAAEASSAAAQBZIAABAEUgAAEAVSAAAQBNIAABAF0gAAEAQOAAEIBg4AABAFDgAAEAcOAAAQBI4AABAGjgAAEAWOAAAQB44AABIC+K4AAdIECxgEFgABcAQWCBUoBFIAABAEMgAAEARyAAASAvlaABEQBBYIGBAEaggXqAQWAA9QBBYADuAEFgAOcgE92gAAEARGAAAQBCYAABAEZgAAEgQACARWAAAQBDYAABAEdgAAEgL59gAKkgQZAAQWAAiyBBaYBBYABtAEFgD3fAxsLTYMfuYcABIC+rooABIEHUYkABAEEjAAEAQWKAAQEQbAcC4C9CosAS40AO4UALwEGhAAEgQWIgQAEgQEKgQAEgQGSgQAEgIS2ggAEAQuEAAQBDIQABIAF24FHeQTgHQsjhQBfhQXLAhARgAVtBgcJBgoFC4A6uAQNAg4BgAclBJQeC2mFAJCFAIiFAICFAHiBAGiBAFyBBh8BEIAABAEUgAAEARiAAAQBHIAABAEggAAEASiAAAQBMIAABAE4gAAEAUCAAAQBUIAABIEGvQFwgAAEAYCAAAQBoIAABAHAgAAEAeCAAG8DHwtyjQBvgQBrgQBngQBjgQBfgQBbgQBXgQBTgQBPgQBLgQBHgQBDgQE8AYCvAEGAUc0CC22BAMcBBIAAAgEIgAAEgQEzgQJLARCAAA6DAAyBnqyAqmuEACSBB3OBAE8BCIAACIEAGIUADIEIt4MADAEggQCUgDKEgQBrAYCBCC8BBIMADIA/SAoBABAMAEGRIQv/gCUfgMDAgIKxBQgJCQoKgEk3gAABAQ2AAAEBDoAAAQEPgAABARCEAAEBEYQAAQEShAABAROEAAEBFIwAAQEVjAABARaMAAEBF4wAAQEYnAABARmcAAEBGpwAAQEbmwABARyBffsEBAQFBYHB1QEHgAABAQiEAAGAXSqCAAEBCowAAYAnsooAAYEBMJkAAYEBTJkAAYEBaLkAAYEBpLkAAYIDdYABzoUBvI0BqJ0BkLwBgAIbHLwAAQEdvAABgA9PgH05A9AqAQ==")), B) });
 }
 
 // node_modules/@zip.js/zip.js/lib/core/streams/zlib-wasm/zlib-streams.js
@@ -185713,13 +186174,17 @@ function _make(isCompress, type, options = {}) {
           }
           heap.set(buffer2.subarray(offset, offset + toRead), this.in);
           const result = process2(this.streamHandle, this.in, toRead, out, outBufferSize, 0);
-          if (!isCompress && result < 0) {
-            throw new Error("process error:" + result);
-          }
           const prod = result & 16777215;
           if (prod) {
             scratch.set(heap.subarray(out, out + prod), 0);
             controller.enqueue(scratch.slice(0, prod));
+          }
+          if (!isCompress) {
+            const code = result >> 24 & 255;
+            const signedCode = code & 128 ? code - 256 : code;
+            if (signedCode < 0) {
+              throw new Error("process error:" + signedCode);
+            }
           }
           const consumed = last_consumed(this.streamHandle);
           if (consumed === 0) {
@@ -185748,11 +186213,14 @@ function _make(isCompress, type, options = {}) {
         const scratch = this._scratch;
         while (true) {
           const result = process2(this.streamHandle, 0, 0, out, outBufferSize, 4);
-          if (!isCompress && result < 0) {
-            throw new Error("process error:" + result);
-          }
           const produced = result & 16777215;
           const code = result >> 24 & 255;
+          if (!isCompress) {
+            const signedCode = code & 128 ? code - 256 : code;
+            if (signedCode < 0) {
+              throw new Error("process error:" + signedCode);
+            }
+          }
           if (produced) {
             scratch.set(heap.subarray(out, out + produced), 0);
             controller.enqueue(scratch.slice(0, produced));
@@ -192154,8 +192622,326 @@ TerrainData.prototype.wasCreatedByUpsampling = DeveloperError_default.throwInsta
 TerrainData.maximumAsynchronousTasks = 5;
 var TerrainData_default = TerrainData;
 
+// packages/engine/Source/Core/TerrainPicker.js
+var MAXIMUM_TERRAIN_PICKER_LEVEL = 3;
+function TerrainPicker(vertices, indices, encoding) {
+  Check_default.defined("vertices", vertices);
+  Check_default.defined("indices", indices);
+  Check_default.defined("encoding", encoding);
+  this._vertices = vertices;
+  this._indices = indices;
+  this._encoding = encoding;
+  this._inverseTransform = new Matrix4_default();
+  this._needsRebuild = true;
+  this._rootNode = new TerrainPickerNode();
+}
+var incrementallyBuildTerrainPickerTaskProcessor = new TaskProcessor_default(
+  "incrementallyBuildTerrainPicker"
+);
+Object.defineProperties(TerrainPicker.prototype, {
+  /**
+   * Indicates whether the terrain picker needs to be rebuilt due to changes in the underlying terrain mesh's vertices or indices.
+   * @type {boolean}
+   */
+  needsRebuild: {
+    get: function() {
+      return this._needsRebuild;
+    },
+    set: function(value) {
+      this._needsRebuild = value;
+    }
+  }
+});
+function TerrainPickerNode() {
+  this.x = 0;
+  this.y = 0;
+  this.level = 0;
+  this.aabb = createAABBForNode(this.x, this.y, this.level);
+  this.intersectingTriangles = new Uint32Array(0);
+  this.children = [];
+  this.buildingChildren = false;
+}
+TerrainPickerNode.prototype.addChild = function(childIdx) {
+  if (childIdx < 0 || childIdx > 3) {
+    throw new DeveloperError_default(
+      "TerrainPickerNode child index must be between 0 and 3, inclusive."
+    );
+  }
+  const childNode = new TerrainPickerNode();
+  childNode.x = this.x * 2 + (childIdx & 1);
+  childNode.y = this.y * 2 + (childIdx >> 1 & 1);
+  childNode.level = this.level + 1;
+  childNode.aabb = createAABBForNode(childNode.x, childNode.y, childNode.level);
+  this.children[childIdx] = childNode;
+};
+var scratchTransformedRay = new Ray_default();
+var scratchTrianglePoints = [
+  new Cartesian3_default(),
+  new Cartesian3_default(),
+  new Cartesian3_default()
+];
+TerrainPicker.prototype.rayIntersect = function(ray, tileTransform, cullBackFaces, mode2, projection) {
+  if (this._needsRebuild) {
+    reset(this, tileTransform);
+  }
+  const invTransform = this._inverseTransform;
+  const transformedRay = scratchTransformedRay;
+  transformedRay.origin = Matrix4_default.multiplyByPoint(
+    invTransform,
+    ray.origin,
+    transformedRay.origin
+  );
+  transformedRay.direction = Matrix4_default.multiplyByPointAsVector(
+    invTransform,
+    ray.direction,
+    transformedRay.direction
+  );
+  const intersections = [];
+  getNodesIntersectingRay(this._rootNode, transformedRay, intersections);
+  return findClosestPointInClosestNode(
+    this,
+    intersections,
+    ray,
+    cullBackFaces,
+    mode2,
+    projection
+  );
+};
+function reset(terrainPicker, tileTransform) {
+  Matrix4_default.inverse(tileTransform, terrainPicker._inverseTransform);
+  terrainPicker._needsRebuild = false;
+  const triangleCount = terrainPicker._indices.length / 3;
+  const intersectingTriangles = new Uint32Array(triangleCount);
+  for (let i = 0; i < triangleCount; ++i) {
+    intersectingTriangles[i] = i;
+  }
+  terrainPicker._rootNode.intersectingTriangles = intersectingTriangles;
+  terrainPicker._rootNode.children.length = 0;
+}
+var scratchAABBMin = new Cartesian3_default();
+var scratchAABBMax = new Cartesian3_default();
+function createAABBForNode(x, y, level) {
+  const sizeAtLevel = 1 / Math.pow(2, level);
+  const aabbMin = Cartesian3_default.fromElements(
+    x * sizeAtLevel - 0.5,
+    y * sizeAtLevel - 0.5,
+    -0.5,
+    scratchAABBMin
+  );
+  const aabbMax = Cartesian3_default.fromElements(
+    (x + 1) * sizeAtLevel - 0.5,
+    (y + 1) * sizeAtLevel - 0.5,
+    0.5,
+    scratchAABBMax
+  );
+  return AxisAlignedBoundingBox_default.fromCorners(aabbMin, aabbMax);
+}
+function packTriangleBuffers(trianglePositionsBuffer, triangleIndicesBuffer, trianglePositions, triangleIndex, bufferIndex) {
+  Cartesian3_default.pack(
+    trianglePositions[0],
+    trianglePositionsBuffer,
+    9 * bufferIndex
+  );
+  Cartesian3_default.pack(
+    trianglePositions[1],
+    trianglePositionsBuffer,
+    9 * bufferIndex + 3
+  );
+  Cartesian3_default.pack(
+    trianglePositions[2],
+    trianglePositionsBuffer,
+    9 * bufferIndex + 6
+  );
+  triangleIndicesBuffer[bufferIndex] = triangleIndex;
+}
+var scratchInterval2 = new Interval_default();
+function getNodesIntersectingRay(currentNode, ray, intersectingNodes) {
+  const interval = IntersectionTests_default.rayAxisAlignedBoundingBox(
+    ray,
+    currentNode.aabb,
+    scratchInterval2
+  );
+  if (!defined_default(interval)) {
+    return;
+  }
+  const isLeaf = !currentNode.children.length || currentNode.buildingChildren;
+  if (isLeaf) {
+    intersectingNodes.push({
+      node: currentNode,
+      interval: new Interval_default(interval.start, interval.stop)
+    });
+    return;
+  }
+  for (let i = 0; i < currentNode.children.length; i++) {
+    getNodesIntersectingRay(currentNode.children[i], ray, intersectingNodes);
+  }
+}
+function findClosestPointInClosestNode(terrainPicker, intersections, ray, cullBackFaces, mode2, projection) {
+  const sortedIntersections = intersections.sort(function(a3, b) {
+    return a3.interval.start - b.interval.start;
+  });
+  let minT = Number.MAX_VALUE;
+  for (let i = 0; i < sortedIntersections.length; i++) {
+    const intersection = sortedIntersections[i];
+    const intersectionResult = getClosestTriangleInNode(
+      terrainPicker,
+      ray,
+      intersection.node,
+      cullBackFaces,
+      mode2,
+      projection
+    );
+    minT = Math.min(intersectionResult, minT);
+    if (minT !== Number.MAX_VALUE) {
+      break;
+    }
+  }
+  if (minT !== Number.MAX_VALUE) {
+    return Ray_default.getPoint(ray, minT);
+  }
+  return void 0;
+}
+function getClosestTriangleInNode(terrainPicker, ray, node, cullBackFaces, mode2, projection) {
+  let result = Number.MAX_VALUE;
+  const encoding = terrainPicker._encoding;
+  const indices = terrainPicker._indices;
+  const vertices = terrainPicker._vertices;
+  const triangleCount = node.intersectingTriangles.length;
+  const isMaxLevel = node.level >= MAXIMUM_TERRAIN_PICKER_LEVEL;
+  const shouldBuildChildren = !isMaxLevel && !node.buildingChildren;
+  let trianglePositions;
+  let triangleIndices;
+  if (shouldBuildChildren) {
+    trianglePositions = new Float64Array(triangleCount * 9);
+    triangleIndices = new Uint32Array(triangleCount);
+  }
+  for (let i = 0; i < triangleCount; i++) {
+    const triIndex = node.intersectingTriangles[i];
+    const v02 = getVertexPosition2(
+      encoding,
+      mode2,
+      projection,
+      ray,
+      vertices,
+      indices[3 * triIndex],
+      scratchTrianglePoints[0]
+    );
+    const v12 = getVertexPosition2(
+      encoding,
+      mode2,
+      projection,
+      ray,
+      vertices,
+      indices[3 * triIndex + 1],
+      scratchTrianglePoints[1]
+    );
+    const v22 = getVertexPosition2(
+      encoding,
+      mode2,
+      projection,
+      ray,
+      vertices,
+      indices[3 * triIndex + 2],
+      scratchTrianglePoints[2]
+    );
+    const triT = IntersectionTests_default.rayTriangleParametric(
+      ray,
+      v02,
+      v12,
+      v22,
+      cullBackFaces
+    );
+    if (defined_default(triT) && triT < result && triT >= 0) {
+      result = triT;
+    }
+    if (shouldBuildChildren) {
+      packTriangleBuffers(
+        trianglePositions,
+        triangleIndices,
+        scratchTrianglePoints,
+        triIndex,
+        i
+      );
+    }
+  }
+  if (shouldBuildChildren) {
+    for (let childIdx = 0; childIdx < 4; childIdx++) {
+      node.addChild(childIdx);
+    }
+    addTrianglesToChildrenNodes(
+      terrainPicker._inverseTransform,
+      node,
+      triangleIndices,
+      trianglePositions
+    );
+  }
+  return result;
+}
+var scratchCartographic18 = new Cartographic_default();
+function getVertexPosition2(encoding, mode2, projection, ray, vertices, index, result) {
+  let position = encoding.getExaggeratedPosition(vertices, index, result);
+  if (mode2 === SceneMode_default.SCENE3D) {
+    return position;
+  }
+  const ellipsoid = projection.ellipsoid;
+  const positionCartographic = ellipsoid.cartesianToCartographic(
+    position,
+    scratchCartographic18
+  );
+  position = projection.project(positionCartographic, result);
+  position = Cartesian3_default.fromElements(
+    position.z,
+    position.x,
+    position.y,
+    result
+  );
+  const worldWidth = Math_default.TWO_PI * projection.ellipsoid.maximumRadius;
+  const k = Math.round((ray.origin.y - position.y) / worldWidth);
+  position.y += k * worldWidth;
+  return position;
+}
+async function addTrianglesToChildrenNodes(inverseTransform, node, triangleIndices, trianglePositions) {
+  node.buildingChildren = true;
+  const inverseTransformPacked = new Float64Array(16);
+  Matrix4_default.pack(inverseTransform, inverseTransformPacked, 0);
+  const aabbArray = new Float64Array(6 * 4);
+  for (let i = 0; i < 4; i++) {
+    Cartesian3_default.pack(node.children[i].aabb.minimum, aabbArray, i * 6);
+    Cartesian3_default.pack(node.children[i].aabb.maximum, aabbArray, i * 6 + 3);
+  }
+  const parameters = {
+    aabbs: aabbArray,
+    inverseTransform: inverseTransformPacked,
+    triangleIndices,
+    trianglePositions
+  };
+  const transferableObjects = [
+    aabbArray.buffer,
+    inverseTransformPacked.buffer,
+    triangleIndices.buffer,
+    trianglePositions.buffer
+  ];
+  const incrementallyBuildTerrainPickerPromise = incrementallyBuildTerrainPickerTaskProcessor.scheduleTask(
+    parameters,
+    transferableObjects
+  );
+  if (!defined_default(incrementallyBuildTerrainPickerPromise)) {
+    node.buildingChildren = false;
+    return;
+  }
+  const result = await incrementallyBuildTerrainPickerPromise;
+  result.intersectingTrianglesArrays.forEach((buffer2, index) => {
+    if (defined_default(node.children[index])) {
+      node.children[index].intersectingTriangles = new Uint32Array(buffer2);
+    }
+  });
+  node.intersectingTriangles = new Uint32Array(0);
+  node.buildingChildren = false;
+}
+var TerrainPicker_default = TerrainPicker;
+
 // packages/engine/Source/Core/TerrainMesh.js
-function TerrainMesh(center, vertices, indices, indexCountWithoutSkirts, vertexCountWithoutSkirts, minimumHeight, maximumHeight, boundingSphere3D, occludeePointInScaledSpace, vertexStride, orientedBoundingBox, encoding, westIndicesSouthToNorth, southIndicesEastToWest, eastIndicesNorthToSouth, northIndicesWestToEast) {
+function TerrainMesh(center, vertices, indices, indexCountWithoutSkirts, vertexCountWithoutSkirts, minimumHeight, maximumHeight, rectangle, boundingSphere3D, occludeePointInScaledSpace, vertexStride, orientedBoundingBox, encoding, westIndicesSouthToNorth, southIndicesEastToWest, eastIndicesNorthToSouth, northIndicesWestToEast) {
   this.center = center;
   this.vertices = vertices;
   this.stride = vertexStride ?? 6;
@@ -192164,6 +192950,7 @@ function TerrainMesh(center, vertices, indices, indexCountWithoutSkirts, vertexC
   this.vertexCountWithoutSkirts = vertexCountWithoutSkirts;
   this.minimumHeight = minimumHeight;
   this.maximumHeight = maximumHeight;
+  this.rectangle = rectangle;
   this.boundingSphere3D = boundingSphere3D;
   this.occludeePointInScaledSpace = occludeePointInScaledSpace;
   this.orientedBoundingBox = orientedBoundingBox;
@@ -192172,7 +192959,118 @@ function TerrainMesh(center, vertices, indices, indexCountWithoutSkirts, vertexC
   this.southIndicesEastToWest = southIndicesEastToWest;
   this.eastIndicesNorthToSouth = eastIndicesNorthToSouth;
   this.northIndicesWestToEast = northIndicesWestToEast;
+  this._transform = new Matrix4_default();
+  this._lastPickSceneMode = void 0;
+  this._terrainPicker = new TerrainPicker_default(vertices, indices, encoding);
 }
+TerrainMesh.prototype.getTransform = function(mode2, projection) {
+  if (this._lastPickSceneMode === mode2) {
+    return this._transform;
+  }
+  this._terrainPicker.needsRebuild = true;
+  if (!defined_default(mode2) || mode2 === SceneMode_default.SCENE3D) {
+    return computeTransform(this, this._transform);
+  }
+  return computeTransform2D(this, projection, this._transform);
+};
+function computeTransform(mesh, result) {
+  const exaggeration = mesh.encoding.exaggeration;
+  const exaggerationRelativeHeight = mesh.encoding.exaggerationRelativeHeight;
+  const exaggeratedMinHeight = VerticalExaggeration_default.getHeight(
+    mesh.minimumHeight,
+    exaggeration,
+    exaggerationRelativeHeight
+  );
+  const exaggeratedMaxHeight = VerticalExaggeration_default.getHeight(
+    mesh.maximumHeight,
+    exaggeration,
+    exaggerationRelativeHeight
+  );
+  const obb = OrientedBoundingBox_default.fromRectangle(
+    mesh.rectangle,
+    exaggeratedMinHeight,
+    exaggeratedMaxHeight,
+    Ellipsoid_default.default,
+    mesh.orientedBoundingBox
+  );
+  return OrientedBoundingBox_default.computeTransformation(obb, result);
+}
+var scratchSWCartesian = new Cartesian3_default();
+var scratchNECartesian = new Cartesian3_default();
+var scratchSWCartographic = new Cartographic_default();
+var scratchNECartographic = new Cartographic_default();
+var scratchScale2D = new Cartesian3_default();
+var scratchCenter2D = new Cartesian3_default();
+function computeTransform2D(mesh, projection, result) {
+  const exaggeration = mesh.encoding.exaggeration;
+  const exaggerationRelativeHeight = mesh.encoding.exaggerationRelativeHeight;
+  const exaggeratedMinHeight = VerticalExaggeration_default.getHeight(
+    mesh.minimumHeight,
+    exaggeration,
+    exaggerationRelativeHeight
+  );
+  const exaggeratedMaxHeight = VerticalExaggeration_default.getHeight(
+    mesh.maximumHeight,
+    exaggeration,
+    exaggerationRelativeHeight
+  );
+  const southwest = projection.project(
+    Cartographic_default.fromRadians(
+      mesh.rectangle.west,
+      mesh.rectangle.south,
+      0,
+      scratchSWCartographic
+    ),
+    scratchSWCartesian
+  );
+  const northeast = projection.project(
+    Cartographic_default.fromRadians(
+      mesh.rectangle.east,
+      mesh.rectangle.north,
+      0,
+      scratchNECartographic
+    ),
+    scratchNECartesian
+  );
+  const heightRange = exaggeratedMaxHeight - exaggeratedMinHeight;
+  const scale = Cartesian3_default.fromElements(
+    northeast.x - southwest.x,
+    northeast.y - southwest.y,
+    heightRange > 0 ? heightRange : 1,
+    // Avoid zero scale
+    scratchScale2D
+  );
+  const center = Cartesian3_default.fromElements(
+    southwest.x + scale.x * 0.5,
+    southwest.y + scale.y * 0.5,
+    exaggeratedMinHeight + scale.z * 0.5,
+    scratchCenter2D
+  );
+  Matrix4_default.fromTranslation(center, result);
+  Matrix4_default.setScale(result, scale, result);
+  Matrix4_default.multiply(Transforms_default.SWIZZLE_3D_TO_2D_MATRIX, result, result);
+  return result;
+}
+TerrainMesh.prototype.pick = function(ray, cullBackFaces, mode2, projection) {
+  const intersection = this._terrainPicker.rayIntersect(
+    ray,
+    this.getTransform(mode2, projection),
+    cullBackFaces,
+    mode2,
+    projection
+  );
+  this._lastPickSceneMode = mode2;
+  return intersection;
+};
+TerrainMesh.prototype.updateExaggeration = function(exaggeration, exaggerationRelativeHeight) {
+  this._terrainPicker._vertices = this.vertices;
+  this._terrainPicker.needsRebuild = true;
+  this._lastPickSceneMode = void 0;
+};
+TerrainMesh.prototype.updateSceneMode = function(mode2) {
+  this._terrainPicker.needsRebuild = true;
+  this._lastPickSceneMode = void 0;
+};
 var TerrainMesh_default = TerrainMesh;
 
 // packages/engine/Source/Core/HeightmapTerrainData.js
@@ -192308,6 +193206,7 @@ HeightmapTerrainData.prototype.createMesh = function(options) {
       vertexCountWithoutSkirts,
       result.minimumHeight,
       result.maximumHeight,
+      rectangle,
       BoundingSphere_default.clone(result.boundingSphere3D),
       Cartesian3_default.clone(result.occludeePointInScaledSpace),
       result.numberOfAttributes,
@@ -192382,6 +193281,7 @@ HeightmapTerrainData.prototype._createMeshSync = function(options) {
     vertexCountWithoutSkirts,
     result.minimumHeight,
     result.maximumHeight,
+    rectangle,
     result.boundingSphere3D,
     result.occludeePointInScaledSpace,
     result.encoding.stride,
@@ -193931,7 +194831,6 @@ CatmullRomSpline.prototype.evaluate = function(time, result) {
 var CatmullRomSpline_default = CatmullRomSpline;
 
 // packages/engine/Source/Core/Cesium3DTilesTerrainGeometryProcessor.js
-var import_meshoptimizer2 = __toESM(require_meshoptimizer(), 1);
 var Cesium3DTilesTerrainGeometryProcessor = {};
 var scratchGltfInfo = {
   positions: void 0,
@@ -193951,7 +194850,7 @@ var scratchMinimumPositionENU = new Cartesian3_default();
 var scratchMaximumPositionENU = new Cartesian3_default();
 var scratchPosLocal = new Cartesian3_default();
 var scratchPosEcef = new Cartesian3_default();
-var scratchCartographic18 = new Cartographic_default();
+var scratchCartographic19 = new Cartographic_default();
 var scratchUV = new Cartesian2_default();
 var scratchNormal8 = new Cartesian3_default();
 var scratchNormalOct = new Cartesian2_default();
@@ -194006,7 +194905,7 @@ Cesium3DTilesTerrainGeometryProcessor.createMesh = async function(options) {
   const ellipsoid = Ellipsoid_default.clone(options.ellipsoid, new Ellipsoid_default());
   const rectangle = Rectangle_default.clone(options.rectangle, new Rectangle_default());
   const hasMeshOptCompression = gltf.extensionsRequired !== void 0 && gltf.extensionsRequired.indexOf("EXT_meshopt_compression") !== -1;
-  const decoderPromise = hasMeshOptCompression ? import_meshoptimizer2.MeshoptDecoder.ready : Promise.resolve(void 0);
+  const decoderPromise = hasMeshOptCompression ? MeshoptDecoder.ready : Promise.resolve(void 0);
   await decoderPromise;
   const tileMinLongitude = rectangle.west;
   const tileMinLatitude = rectangle.south;
@@ -194110,7 +195009,7 @@ Cesium3DTilesTerrainGeometryProcessor.createMesh = async function(options) {
     const cartographic2 = Cartographic_default.fromCartesian(
       posECEF,
       ellipsoid,
-      scratchCartographic18
+      scratchCartographic19
     );
     const { longitude, latitude, height } = cartographic2;
     let u3 = (longitude - tileMinLongitude) / tileLengthLongitude;
@@ -194177,6 +195076,7 @@ Cesium3DTilesTerrainGeometryProcessor.createMesh = async function(options) {
     vertexCountWithoutSkirts,
     minimumHeight,
     maximumHeight,
+    rectangle,
     BoundingSphere_default.clone(boundingSphere, new BoundingSphere_default()),
     Cartesian3_default.clone(horizonOcclusionPoint, new Cartesian3_default()),
     tempBufferStride,
@@ -194258,7 +195158,7 @@ function decodePositions(gltf) {
   const positionByteLength = bufferViewMeshOpt.byteStride;
   const PositionType = positionByteLength === 4 ? Uint8Array : Uint16Array;
   const positionsResult = new PositionType(positionCount * 4);
-  import_meshoptimizer2.MeshoptDecoder.decodeVertexBuffer(
+  MeshoptDecoder.decodeVertexBuffer(
     new Uint8Array(positionsResult.buffer),
     positionCount,
     positionByteLength,
@@ -194297,7 +195197,7 @@ function decodeNormals(gltf) {
   );
   const normalByteLength = bufferViewMeshOpt.byteStride;
   const normalsResult = new Int8Array(normalCount * normalByteLength);
-  import_meshoptimizer2.MeshoptDecoder.decodeVertexBuffer(
+  MeshoptDecoder.decodeVertexBuffer(
     new Uint8Array(normalsResult.buffer),
     normalCount,
     normalByteLength,
@@ -194349,7 +195249,7 @@ function decodeIndices(gltf) {
     bufferViewMeshOpt.byteLength
   );
   const indices = new SizedIndexType(indexCount);
-  import_meshoptimizer2.MeshoptDecoder.decodeIndexBuffer(
+  MeshoptDecoder.decodeIndexBuffer(
     new Uint8Array(indices.buffer),
     indexCount,
     bufferViewMeshOpt.byteStride,
@@ -194382,7 +195282,7 @@ function decodeEdgeIndices(gltf, name) {
   );
   const indices = new SizedIndexType(indexCount);
   const indexByteLength = bufferViewMeshOpt.byteStride;
-  import_meshoptimizer2.MeshoptDecoder.decodeIndexSequence(
+  MeshoptDecoder.decodeIndexSequence(
     new Uint8Array(indices.buffer),
     indexCount,
     indexByteLength,
@@ -194677,6 +195577,7 @@ Cesium3DTilesTerrainGeometryProcessor.upsampleMesh = function(options) {
     upsampledVertexCountWithoutSkirts,
     minimumHeight,
     maximumHeight,
+    upsampleRectangle,
     BoundingSphere_default.clone(boundingSphere),
     Cartesian3_default.clone(horizonOcclusionPoint),
     upsampledVertexBufferStride,
@@ -195595,6 +196496,7 @@ Cesium3DTilesTerrainData.prototype.createMesh = function(options) {
       vertexCountWithoutSkirts,
       minimumHeight,
       maximumHeight,
+      rectangle,
       boundingSphere,
       horizonOcclusionPoint,
       encoding.stride,
@@ -195873,6 +196775,7 @@ function upsampleMesh(synchronous, thisMesh, thisSkirtHeight, credits, tilingSch
       vertexCountWithoutSkirts,
       minimumHeight,
       maximumHeight,
+      upsampleRectangle,
       boundingSphere,
       horizonOcclusionPoint,
       stride,
@@ -196971,6 +197874,7 @@ QuantizedMeshTerrainData.prototype.createMesh = function(options) {
       vertexCountWithoutSkirts,
       minimumHeight,
       maximumHeight,
+      rectangle,
       boundingSphere,
       occludeePointInScaledSpace,
       stride,
@@ -200316,6 +201220,7 @@ GoogleEarthEnterpriseTerrainData.prototype.createMesh = function(options) {
       result.vertexCountWithoutSkirts,
       result.minimumHeight,
       result.maximumHeight,
+      rectangleScratch6,
       BoundingSphere_default.clone(result.boundingSphere3D),
       Cartesian3_default.clone(result.occludeePointInScaledSpace),
       result.numberOfAttributes,
@@ -202448,14 +203353,10 @@ function registerListener(screenSpaceEventHandler, domType, element, callback) {
   function listener(e) {
     callback(screenSpaceEventHandler, e);
   }
-  if (FeatureDetection_default.isInternetExplorer()) {
-    element.addEventListener(domType, listener, false);
-  } else {
-    element.addEventListener(domType, listener, {
-      capture: false,
-      passive: false
-    });
-  }
+  element.addEventListener(domType, listener, {
+    capture: false,
+    passive: false
+  });
   screenSpaceEventHandler._removalFunctions.push(function() {
     element.removeEventListener(domType, listener, false);
   });
@@ -206041,57 +206942,12 @@ Object.defineProperties(GlobeSurfaceTile.prototype, {
     }
   }
 });
-var scratchCartographic19 = new Cartographic_default();
-function getPosition3(encoding, mode2, projection, vertices, index, result) {
-  let position = encoding.getExaggeratedPosition(vertices, index, result);
-  if (defined_default(mode2) && mode2 !== SceneMode_default.SCENE3D) {
-    const ellipsoid = projection.ellipsoid;
-    const positionCartographic = ellipsoid.cartesianToCartographic(
-      position,
-      scratchCartographic19
-    );
-    position = projection.project(positionCartographic, result);
-    position = Cartesian3_default.fromElements(
-      position.z,
-      position.x,
-      position.y,
-      result
-    );
-  }
-  return position;
-}
-var scratchV02 = new Cartesian3_default();
-var scratchV12 = new Cartesian3_default();
-var scratchV22 = new Cartesian3_default();
 GlobeSurfaceTile.prototype.pick = function(ray, mode2, projection, cullBackFaces, result) {
-  const mesh = this.renderedMesh;
-  if (!defined_default(mesh)) {
+  if (!defined_default(this.renderedMesh)) {
     return void 0;
   }
-  const vertices = mesh.vertices;
-  const indices = mesh.indices;
-  const encoding = mesh.encoding;
-  const indicesLength = indices.length;
-  let minT = Number.MAX_VALUE;
-  for (let i = 0; i < indicesLength; i += 3) {
-    const i0 = indices[i];
-    const i1 = indices[i + 1];
-    const i2 = indices[i + 2];
-    const v02 = getPosition3(encoding, mode2, projection, vertices, i0, scratchV02);
-    const v12 = getPosition3(encoding, mode2, projection, vertices, i1, scratchV12);
-    const v22 = getPosition3(encoding, mode2, projection, vertices, i2, scratchV22);
-    const t = IntersectionTests_default.rayTriangleParametric(
-      ray,
-      v02,
-      v12,
-      v22,
-      cullBackFaces
-    );
-    if (defined_default(t) && t < minT && t >= 0) {
-      minT = t;
-    }
-  }
-  return minT !== Number.MAX_VALUE ? Ray_default.getPoint(ray, minT, result) : void 0;
+  const value = this.renderedMesh.pick(ray, cullBackFaces, mode2, projection);
+  return Cartesian3_default.clone(value, result);
 };
 GlobeSurfaceTile.prototype.freeResources = function() {
   if (defined_default(this.waterMaskTexture)) {
@@ -206265,7 +207121,8 @@ GlobeSurfaceTile.prototype.updateExaggeration = function(tile, frameState, quadt
   const encoding = mesh.encoding;
   const encodingExaggerationScaleChanged = encoding.exaggeration !== exaggeration;
   const encodingRelativeHeightChanged = encoding.exaggerationRelativeHeight !== exaggerationRelativeHeight;
-  if (encodingExaggerationScaleChanged || encodingRelativeHeightChanged) {
+  const exaggerationChanged = encodingExaggerationScaleChanged || encodingRelativeHeightChanged;
+  if (exaggerationChanged) {
     if (encodingExaggerationScaleChanged) {
       if (hasExaggerationScale && !encoding.hasGeodeticSurfaceNormals) {
         const ellipsoid = tile.tilingScheme.ellipsoid;
@@ -206283,7 +207140,16 @@ GlobeSurfaceTile.prototype.updateExaggeration = function(tile, frameState, quadt
         data.level = -1;
       }
     }
+    mesh.updateExaggeration(exaggeration, exaggerationRelativeHeight);
   }
+};
+GlobeSurfaceTile.prototype.updateSceneMode = function(mode2) {
+  const surfaceTile = this;
+  const mesh = surfaceTile.renderedMesh;
+  if (mesh === void 0) {
+    return;
+  }
+  mesh.updateSceneMode(mode2);
 };
 function prepareNewTile(tile, terrainProvider, imageryLayerCollection) {
   let available = terrainProvider.getTileDataAvailable(
@@ -207751,6 +208617,7 @@ function createFillMesh(tileProvider, frameState, tile, vertexArraysToDestroy) {
       vertexCount,
       minimumHeight,
       maximumHeight,
+      rectangle,
       BoundingSphere_default.fromOrientedBoundingBox(obb),
       computeOccludeePoint(
         tileProvider,
@@ -208529,6 +209396,7 @@ function GlobeSurfaceTileProvider(options) {
   this._hasFillTilesThisFrame = false;
   this._oldVerticalExaggeration = void 0;
   this._oldVerticalExaggerationRelativeHeight = void 0;
+  this._oldSceneMode = SceneMode_default.SCENE3D;
 }
 Object.defineProperties(GlobeSurfaceTileProvider.prototype, {
   /**
@@ -208767,6 +209635,14 @@ GlobeSurfaceTileProvider.prototype.endUpdate = function(frameState) {
     quadtree.forEachLoadedTile(function(tile) {
       const surfaceTile = tile.data;
       surfaceTile.updateExaggeration(tile, frameState, quadtree);
+    });
+  }
+  const sceneModeChanged = this._oldSceneMode !== frameState.mode;
+  this._oldSceneMode = frameState.mode;
+  if (sceneModeChanged) {
+    quadtree.forEachLoadedTile(function(tile) {
+      const surfaceTile = tile.data;
+      surfaceTile.updateSceneMode(frameState.mode);
     });
   }
   const tilesToRenderByTextureCount = this._tilesToRenderByTextureCount;
@@ -211212,6 +212088,7 @@ function QuadtreePrimitive(options) {
   };
   const tilingScheme2 = this._tileProvider.tilingScheme;
   const ellipsoid = tilingScheme2.ellipsoid;
+  this._tilesRenderedThisFrame = /* @__PURE__ */ new Set();
   this._tilesToRender = [];
   this._tileLoadQueueHigh = [];
   this._tileLoadQueueMedium = [];
@@ -211301,9 +212178,9 @@ QuadtreePrimitive.prototype.forEachLoadedTile = function(tileFunction) {
   }
 };
 QuadtreePrimitive.prototype.forEachRenderedTile = function(tileFunction) {
-  const tilesRendered = this._tilesToRender;
-  for (let i = 0, len = tilesRendered.length; i < len; ++i) {
-    tileFunction(tilesRendered[i]);
+  const tilesRendered = this._tilesRenderedThisFrame;
+  for (const tile of tilesRendered) {
+    tileFunction(tile);
   }
 };
 QuadtreePrimitive.prototype.updateHeight = function(cartographic2, callback) {
@@ -211363,6 +212240,7 @@ QuadtreePrimitive.prototype.beginFrame = function(frameState) {
     return;
   }
   this._tileReplacementQueue.markStartOfRenderFrame();
+  this._tilesRenderedThisFrame.clear();
 };
 QuadtreePrimitive.prototype.render = function(frameState) {
   const passes = frameState.passes;
@@ -211945,6 +212823,7 @@ function screenSpaceError2D(primitive, frameState, tile) {
 }
 function addTileToRenderList(primitive, tile) {
   primitive._tilesToRender.push(tile);
+  primitive._tilesRenderedThisFrame.add(tile);
 }
 function processTileLoadQueue(primitive, frameState) {
   const tileLoadQueueHigh = primitive._tileLoadQueueHigh;
@@ -212517,12 +213396,7 @@ Globe.prototype.pickWorldCoordinates = function(ray, scene, cullBackFaces, resul
   const projection = scene.mapProjection;
   const sphereIntersections = scratchArray4;
   sphereIntersections.length = 0;
-  const tilesToRender = this._surface._tilesToRender;
-  let length2 = tilesToRender.length;
-  let tile;
-  let i;
-  for (i = 0; i < length2; ++i) {
-    tile = tilesToRender[i];
+  for (const tile of this._surface._tilesRenderedThisFrame) {
     const surfaceTile = tile.data;
     if (!defined_default(surfaceTile)) {
       continue;
@@ -212561,8 +213435,8 @@ Globe.prototype.pickWorldCoordinates = function(ray, scene, cullBackFaces, resul
   }
   sphereIntersections.sort(createComparePickTileFunction(ray.origin));
   let intersection;
-  length2 = sphereIntersections.length;
-  for (i = 0; i < length2; ++i) {
+  const length2 = sphereIntersections.length;
+  for (let i = 0; i < length2; ++i) {
     intersection = sphereIntersections[i].pick(
       ray,
       scene.mode,
@@ -212658,7 +213532,9 @@ Globe.prototype.getHeight = function(cartographic2) {
   }
   const intersection = tile.data.pick(
     ray,
-    void 0,
+    // Globe height is the same at a given cartographic regardless of the scene mode,
+    // but the ray is constructed via a surface normal (which assumes 3D), so pick in 3D mode.
+    SceneMode_default.SCENE3D,
     projection,
     false,
     scratchGetHeightIntersection
@@ -215547,6 +216423,10 @@ function getPickRayOrthographic(camera, windowPosition, result) {
   Cartesian3_default.multiplyByScalar(camera.upWC, y, scratchDirection2);
   Cartesian3_default.add(scratchDirection2, origin, origin);
   Cartesian3_default.clone(camera.directionWC, result.direction);
+  if (camera._mode === SceneMode_default.SCENE2D && camera._scene.mapMode2D === MapMode2D_default.INFINITE_SCROLL) {
+    const maxHorizontal = camera._maxCoord.x;
+    origin.y = Math_default.mod(origin.y + maxHorizontal, 2 * maxHorizontal) - maxHorizontal;
+  }
   return result;
 }
 Camera.prototype.getPickRay = function(windowPosition, result) {
@@ -220428,32 +221308,7 @@ function PickFramebuffer(context) {
   this._width = 0;
   this._height = 0;
 }
-PickFramebuffer.prototype.begin = function(screenSpaceRectangle, viewport) {
-  const context = this._context;
-  const { width, height } = viewport;
-  BoundingRectangle_default.clone(
-    screenSpaceRectangle,
-    this._passState.scissorTest.rectangle
-  );
-  this._width = width;
-  this._height = height;
-  this._fb.update(context, width, height);
-  this._passState.framebuffer = this._fb.framebuffer;
-  this._passState.viewport.width = width;
-  this._passState.viewport.height = height;
-  return this._passState;
-};
-PickFramebuffer.prototype.end = function(screenSpaceRectangle, limit = 1) {
-  const width = screenSpaceRectangle.width ?? 1;
-  const height = screenSpaceRectangle.height ?? 1;
-  const context = this._context;
-  const pixels = context.readPixels({
-    x: screenSpaceRectangle.x,
-    y: screenSpaceRectangle.y,
-    width,
-    height,
-    framebuffer: this._fb.framebuffer
-  });
+function pickObjectsFromPixels(context, pixels, width, height, limit = 1) {
   const max3 = Math.max(width, height);
   const length2 = max3 * max3;
   const halfWidth = Math.floor(width * 0.5);
@@ -220489,6 +221344,79 @@ PickFramebuffer.prototype.end = function(screenSpaceRectangle, limit = 1) {
     y += dy;
   }
   return [...objects];
+}
+PickFramebuffer.prototype.begin = function(screenSpaceRectangle, viewport) {
+  const context = this._context;
+  const { width, height } = viewport;
+  BoundingRectangle_default.clone(
+    screenSpaceRectangle,
+    this._passState.scissorTest.rectangle
+  );
+  this._width = width;
+  this._height = height;
+  this._fb.update(context, width, height);
+  this._passState.framebuffer = this._fb.framebuffer;
+  this._passState.viewport.width = width;
+  this._passState.viewport.height = height;
+  return this._passState;
+};
+PickFramebuffer.prototype.endAsync = async function(screenSpaceRectangle, frameState, limit = 1) {
+  const width = screenSpaceRectangle.width ?? 1;
+  const height = screenSpaceRectangle.height ?? 1;
+  const context = this._context;
+  const framebuffer = this._fb.framebuffer;
+  let pixelDatatype = PixelDatatype_default.UNSIGNED_BYTE;
+  let pixelFormat = PixelFormat_default.RGBA;
+  if (defined_default(framebuffer) && framebuffer.numberOfColorAttachments > 0) {
+    pixelDatatype = framebuffer.getColorTexture(0).pixelDatatype;
+    pixelFormat = framebuffer.getColorTexture(0).pixelFormat;
+  }
+  const pbo = context.readPixelsToPBO({
+    x: screenSpaceRectangle.x,
+    y: screenSpaceRectangle.y,
+    width,
+    height,
+    framebuffer
+  });
+  const sync = Sync_default.create({
+    context
+  });
+  try {
+    await sync.waitForSignal((next) => frameState.afterRender.push(next));
+    const pixels = PixelFormat_default.createTypedArray(
+      pixelFormat,
+      pixelDatatype,
+      width,
+      height
+    );
+    pbo.getBufferData(pixels);
+    const pickedObjects = pickObjectsFromPixels(
+      context,
+      pixels,
+      width,
+      height,
+      limit
+    );
+    return pickedObjects;
+  } catch (e) {
+    throw new RuntimeError_default("Async Picking Request Timeout");
+  } finally {
+    sync.destroy();
+    pbo.destroy();
+  }
+};
+PickFramebuffer.prototype.end = function(screenSpaceRectangle, limit = 1) {
+  const width = screenSpaceRectangle.width ?? 1;
+  const height = screenSpaceRectangle.height ?? 1;
+  const context = this._context;
+  const pixels = context.readPixels({
+    x: screenSpaceRectangle.x,
+    y: screenSpaceRectangle.y,
+    width,
+    height,
+    framebuffer: this._fb.framebuffer
+  });
+  return pickObjectsFromPixels(context, pixels, width, height, limit);
 };
 PickFramebuffer.prototype.readCenterPixel = function(screenSpaceRectangle) {
   const width = screenSpaceRectangle.width ?? 1;
@@ -220810,7 +221738,7 @@ function ShadowMap(options) {
   this._outOfViewPrevious = false;
   this._needsUpdate = true;
   let polygonOffsetSupported = true;
-  if (FeatureDetection_default.isInternetExplorer() || FeatureDetection_default.isEdge() || (FeatureDetection_default.isChrome() || FeatureDetection_default.isFirefox()) && FeatureDetection_default.isWindows() && !context.depthTexture) {
+  if (FeatureDetection_default.isEdge() || (FeatureDetection_default.isChrome() || FeatureDetection_default.isFirefox()) && FeatureDetection_default.isWindows() && !context.depthTexture) {
     polygonOffsetSupported = false;
   }
   this._polygonOffsetSupported = polygonOffsetSupported;
@@ -222994,8 +223922,7 @@ function computePickingDrawingBufferRectangle(drawingBufferHeight, position, wid
   result.y = drawingBufferHeight - position.y - (result.height - 1) * 0.5;
   return result;
 }
-Picking.prototype.pick = function(scene, windowPosition, width, height, limit = 1) {
-  Check_default.defined("windowPosition", windowPosition);
+function pickBegin(scene, windowPosition, drawingBufferRectangle, width, height) {
   const { context, frameState, defaultView } = scene;
   const { viewport, pickFramebuffer } = defaultView;
   scene.view = defaultView;
@@ -223010,12 +223937,12 @@ Picking.prototype.pick = function(scene, windowPosition, width, height, limit = 
     windowPosition,
     scratchPosition14
   );
-  const drawingBufferRectangle = computePickingDrawingBufferRectangle(
+  computePickingDrawingBufferRectangle(
     context.drawingBufferHeight,
     drawingBufferPosition,
     width,
     height,
-    scratchRectangle11
+    drawingBufferRectangle
   );
   scene.jobScheduler.disableThisFrame();
   scene.updateFrameState();
@@ -223034,8 +223961,43 @@ Picking.prototype.pick = function(scene, windowPosition, width, height, limit = 
   passState = pickFramebuffer.begin(drawingBufferRectangle, viewport);
   scene.updateAndExecuteCommands(passState, scratchColorZero);
   scene.resolveFramebuffers(passState);
-  const pickedObjects = pickFramebuffer.end(drawingBufferRectangle, limit);
+}
+function pickEnd(scene) {
+  const { context } = scene;
   context.endFrame();
+}
+Picking.prototype.pickAsync = async function(scene, windowPosition, width, height, limit = 1) {
+  Check_default.defined("windowPosition", windowPosition);
+  const { context, frameState, defaultView } = scene;
+  const { pickFramebuffer } = defaultView;
+  const drawingBufferRectangle = scratchRectangle11;
+  pickBegin(scene, windowPosition, drawingBufferRectangle, width, height);
+  let pickedObjects;
+  if (context.webgl2) {
+    pickedObjects = pickFramebuffer.endAsync(
+      drawingBufferRectangle,
+      frameState,
+      limit
+    );
+  } else {
+    pickedObjects = pickFramebuffer.end(drawingBufferRectangle, limit);
+    pickedObjects = Promise.resolve(pickedObjects);
+    oneTimeWarning_default(
+      "picking-async-fallback",
+      "Fallback to synchronous picking because async operation requires WebGL2 context."
+    );
+  }
+  pickEnd(scene);
+  return pickedObjects;
+};
+Picking.prototype.pick = function(scene, windowPosition, width, height, limit = 1) {
+  Check_default.defined("windowPosition", windowPosition);
+  const { defaultView } = scene;
+  const { pickFramebuffer } = defaultView;
+  const drawingBufferRectangle = scratchRectangle11;
+  pickBegin(scene, windowPosition, drawingBufferRectangle, width, height);
+  const pickedObjects = pickFramebuffer.end(drawingBufferRectangle, limit);
+  pickEnd(scene);
   return pickedObjects;
 };
 Picking.prototype.pickVoxelCoordinate = function(scene, windowPosition, width, height) {
@@ -226225,7 +227187,7 @@ Object.defineProperties(PostProcessStageCollection.prototype, {
   },
   /**
    * Specifies the tonemapping algorithm used when rendering with high dynamic range.
-   * {@link https://sandcastle.cesium.com/?src=High%20Dynamic%20Range.html|Sandcastle Demo}
+   * {@link https://sandcastle.cesium.com/?id=high-dynamic-range|Sandcastle Demo}
    *
    * @example viewer.scene.postProcessStages.tonemapper = Cesium.Tonemapper.ACES;
    *
@@ -231296,7 +232258,7 @@ function processVoxelProperties(renderResources, primitive) {
     const functionId = "getPropertiesFromMegatextureAtUv";
     shaderBuilder.addFunction(
       functionId,
-      `${propertiesStructName} getPropertiesFromMegatextureAtUv(vec2 texcoord)`,
+      `${propertiesStructName} getPropertiesFromMegatextureAtUv(vec3 texcoord)`,
       ShaderDestination_default.FRAGMENT
     );
     shaderBuilder.addFunctionLines(functionId, [
@@ -231766,7 +232728,7 @@ RayShapeIntersection nextIntersection(inout Intersections ix) {
         surfaceIntersection = ix.intersections[i];
         int intersectionType = int(length(surfaceIntersection.xyz) - 0.5);
         bool currShapeIsPositive = intersectionType < 2;
-        bool enter = intMod(intersectionType, 2) == 0;
+        bool enter = intersectionType % 2 == 0;
 
         ix.surroundCount += enter ? +1 : -1;
         ix.surroundIsPositive = currShapeIsPositive ? enter : ix.surroundIsPositive;
@@ -231829,10 +232791,10 @@ var convertLocalToCylinderUv_default = "uniform vec2 u_cylinderLocalToShapeUvRad
 var convertLocalToEllipsoidUv_default = "/* Ellipsoid defines (set in Scene/VoxelEllipsoidShape.js)\n#define ELLIPSOID_HAS_RENDER_BOUNDS_LONGITUDE_MIN_DISCONTINUITY\n#define ELLIPSOID_HAS_RENDER_BOUNDS_LONGITUDE_MAX_DISCONTINUITY\n#define ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE\n#define ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE_MIN_MAX_REVERSED\n#define ELLIPSOID_HAS_SHAPE_BOUNDS_LATITUDE\n*/\n\nuniform vec3 u_cameraPositionCartographic; // (longitude, latitude, height) in radians and meters\nuniform vec2 u_ellipsoidCurvatureAtLatitude;\nuniform mat3 u_ellipsoidEcToEastNorthUp;\nuniform vec3 u_ellipsoidRadii;\nuniform vec2 u_evoluteScale; // (radii.x ^ 2 - radii.z ^ 2) * vec2(1.0, -1.0) / radii;\nuniform vec3 u_ellipsoidInverseRadiiSquared;\n#if defined(ELLIPSOID_HAS_RENDER_BOUNDS_LONGITUDE_MIN_DISCONTINUITY) || defined(ELLIPSOID_HAS_RENDER_BOUNDS_LONGITUDE_MAX_DISCONTINUITY) || defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE_MIN_MAX_REVERSED)\n    uniform vec3 u_ellipsoidShapeUvLongitudeMinMaxMid;\n#endif\n#if defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE)\n    uniform vec2 u_ellipsoidLocalToShapeUvLongitude; // x = scale, y = offset\n    uniform float u_ellipsoidShapeUvLongitudeRangeOrigin;\n#endif\n#if defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LATITUDE)\n    uniform vec2 u_ellipsoidLocalToShapeUvLatitude; // x = scale, y = offset\n#endif\nuniform float u_ellipsoidInverseHeightDifference;\n\nuniform ivec4 u_cameraTileCoordinates;\nuniform vec3 u_cameraTileUv;\n\n// robust iterative solution without trig functions\n// https://github.com/0xfaded/ellipse_demo/issues/1\n// https://stackoverflow.com/questions/22959698/distance-from-given-point-to-given-ellipse\n// Extended to return radius of curvature along with the point\nvec3 nearestPointAndRadiusOnEllipse(vec2 pos, vec2 radii) {\n    vec2 p = abs(pos);\n    vec2 inverseRadii = 1.0 / radii;\n\n    // We describe the ellipse parametrically: v = radii * vec2(cos(t), sin(t))\n    // but store the cos and sin of t in a vec2 for efficiency.\n    // Initial guess: t = pi/4\n    vec2 tTrigs = vec2(0.7071067811865476);\n    // Initial guess of point on ellipsoid\n    vec2 v = radii * tTrigs;\n    // Center of curvature of the ellipse at v\n    vec2 evolute = u_evoluteScale * tTrigs * tTrigs * tTrigs;\n\n    const int iterations = 3;\n    for (int i = 0; i < iterations; ++i) {\n        // Find the (approximate) intersection of p - evolute with the ellipsoid.\n        vec2 q = normalize(p - evolute) * length(v - evolute);\n        // Update the estimate of t.\n        tTrigs = (q + evolute) * inverseRadii;\n        tTrigs = normalize(clamp(tTrigs, 0.0, 1.0));\n        v = radii * tTrigs;\n        evolute = u_evoluteScale * tTrigs * tTrigs * tTrigs;\n    }\n\n    return vec3(v * sign(pos), length(v - evolute));\n}\n\nmat3 convertLocalToShapeSpaceDerivative(in vec3 position) {\n    vec3 east = normalize(vec3(-position.y, position.x, 0.0));\n\n    // Convert the 3D position to a 2D position relative to the ellipse (radii.x, radii.z)\n    // (assume radii.y == radii.x) and find the nearest point on the ellipse and its normal\n    float distanceFromZAxis = length(position.xy);\n    vec2 posEllipse = vec2(distanceFromZAxis, position.z);\n    vec3 surfacePointAndRadius = nearestPointAndRadiusOnEllipse(posEllipse, u_ellipsoidRadii.xz);\n    vec2 surfacePoint = surfacePointAndRadius.xy;\n\n    vec2 normal2d = normalize(surfacePoint * u_ellipsoidInverseRadiiSquared.xz);\n    vec3 north = vec3(-normal2d.y * normalize(position.xy), abs(normal2d.x));\n\n    float heightSign = length(posEllipse) < length(surfacePoint) ? -1.0 : 1.0;\n    float height = heightSign * length(posEllipse - surfacePoint);\n    vec3 up = normalize(cross(east, north));\n\n    return mat3(east / distanceFromZAxis, north / (surfacePointAndRadius.z + height), up);\n}\n\nvec3 scaleShapeUvToShapeSpace(in vec3 shapeUv) {\n    // Convert from [0, 1] to radians [-pi, pi]\n    float longitude = shapeUv.x * czm_twoPi;\n    #if defined (ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE)\n        longitude /= u_ellipsoidLocalToShapeUvLongitude.x;\n    #endif\n\n    // Convert from [0, 1] to radians [-pi/2, pi/2]\n    float latitude = shapeUv.y * czm_pi;\n    #if defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LATITUDE)\n        latitude /= u_ellipsoidLocalToShapeUvLatitude.x;\n    #endif\n\n    float height = shapeUv.z / u_ellipsoidInverseHeightDifference;\n\n    return vec3(longitude, latitude, height);\n}\n\nvec3 convertEcToDeltaShape(in vec3 positionEC) {\n    vec3 enu = u_ellipsoidEcToEastNorthUp * positionEC;\n\n    // 1. Compute the change in longitude from the camera to the ENU point\n    // First project the camera and ENU positions to the equatorial XY plane,\n    // positioning the camera on the +x axis, so that enu.x projects along the +y axis\n    float cosLatitude = cos(u_cameraPositionCartographic.y);\n    float sinLatitude = sin(u_cameraPositionCartographic.y);\n    float primeVerticalRadius = 1.0 / u_ellipsoidCurvatureAtLatitude.x;\n    vec2 cameraXY = vec2((primeVerticalRadius + u_cameraPositionCartographic.z) * cosLatitude, 0.0);\n    // Note precision loss in positionXY.x if length(enu) << length(cameraXY)\n    vec2 positionXY = cameraXY + vec2(-enu.y * sinLatitude + enu.z * cosLatitude, enu.x);\n    float dLongitude = atan(positionXY.y, positionXY.x);\n\n    // 2. Find the longitude component of positionXY, by rotating about Z until the y component is zero.\n    // Use the versine  to compute the change in x directly from the change in angle:\n    //   versine(angle) = 2 * sin^2(angle/2)\n    float sinHalfLongitude = sin(dLongitude / 2.0);\n    float dx = length(positionXY) * 2.0 * sinHalfLongitude * sinHalfLongitude;\n    // Rotate longitude component back to ENU North and Up, and remove from enu\n    enu += vec3(-enu.x, -dx * sinLatitude, dx * cosLatitude);\n\n    // 3. Compute the change in latitude from the camera to the ENU point.\n    // First project the camera and ENU positions to the meridional ZX plane,\n    // positioning the camera on the +Z axis, so that enu.y maps to the +X axis.\n    float meridionalRadius = 1.0 / u_ellipsoidCurvatureAtLatitude.y;\n    vec2 cameraZX = vec2(meridionalRadius + u_cameraPositionCartographic.z, 0.0);\n    vec2 positionZX = cameraZX + vec2(enu.z, enu.y);\n    float dLatitude = atan(positionZX.y, positionZX.x);\n\n    // 4. Compute the change in height above the ellipsoid\n    // Find the change in enu.z associated with rotating the point to the latitude of the camera\n    float sinHalfLatitude = sin(dLatitude / 2.0);\n    float dz = length(positionZX) * 2.0 * sinHalfLatitude * sinHalfLatitude;\n    // The remaining change in enu.z is the change in height above the ellipsoid\n    float dHeight = enu.z + dz;\n\n    return vec3(dLongitude, dLatitude, dHeight);\n}\n\nvec3 convertEcToDeltaTile(in vec3 positionEC) {\n    vec3 deltaShape = convertEcToDeltaShape(positionEC);\n    // Convert to tileset coordinates in [0, 1]\n    float dx = deltaShape.x / czm_twoPi;\n\n#if (defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE))\n    // Wrap to ensure dx is not crossing through the unoccupied angle range, where\n    // angle to tile coordinate conversions would be more complicated\n    float cameraUvLongitude = (u_cameraPositionCartographic.x + czm_pi) / czm_twoPi;\n    float cameraUvLongitudeShift = fract(cameraUvLongitude - u_ellipsoidShapeUvLongitudeRangeOrigin);\n    float rawOutputUvLongitude = cameraUvLongitudeShift + dx;\n    float rotation = floor(rawOutputUvLongitude);\n    dx -= rotation;\n    dx *= u_ellipsoidLocalToShapeUvLongitude.x;\n#endif\n\n    float dy = deltaShape.y / czm_pi;\n#if (defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LATITUDE))\n    dy *= u_ellipsoidLocalToShapeUvLatitude.x;\n#endif\n\n    float dz = u_ellipsoidInverseHeightDifference * deltaShape.z;\n    // Convert to tile coordinate changes\n    return vec3(dx, dy, dz) * float(1 << u_cameraTileCoordinates.w);\n}\n\nTileAndUvCoordinate getTileAndUvCoordinate(in vec3 positionEC) {\n    vec3 deltaTileCoordinate = convertEcToDeltaTile(positionEC);\n    vec3 tileUvSum = u_cameraTileUv + deltaTileCoordinate;\n    ivec3 tileCoordinate = u_cameraTileCoordinates.xyz + ivec3(floor(tileUvSum));\n    int maxTileCoordinate = (1 << u_cameraTileCoordinates.w) - 1;\n    tileCoordinate.y = min(max(0, tileCoordinate.y), maxTileCoordinate);\n    tileCoordinate.z = min(max(0, tileCoordinate.z), maxTileCoordinate);\n#if (!defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE))\n    ivec3 tileCoordinateChange = tileCoordinate - u_cameraTileCoordinates.xyz;\n    if (tileCoordinate.x < 0) {\n        tileCoordinate.x += (maxTileCoordinate + 1);\n    } else if (tileCoordinate.x > maxTileCoordinate) {\n        tileCoordinate.x -= (maxTileCoordinate + 1);\n    }\n#else\n    tileCoordinate.x = min(max(0, tileCoordinate.x), maxTileCoordinate);\n    ivec3 tileCoordinateChange = tileCoordinate - u_cameraTileCoordinates.xyz;\n#endif\n    vec3 tileUv = tileUvSum - vec3(tileCoordinateChange);\n#if (!defined(ELLIPSOID_HAS_SHAPE_BOUNDS_LONGITUDE))\n    // If there is only one tile spanning 2*PI angle, the coordinate wraps around\n    tileUv.x = (u_cameraTileCoordinates.w == 0) ? fract(tileUv.x) : clamp(tileUv.x, 0.0, 1.0);\n#else\n    tileUv.x = clamp(tileUv.x, 0.0, 1.0);\n#endif\n    tileUv.y = clamp(tileUv.y, 0.0, 1.0);\n    tileUv.z = clamp(tileUv.z, 0.0, 1.0);\n    return TileAndUvCoordinate(ivec4(tileCoordinate, u_cameraTileCoordinates.w), tileUv);\n}\n";
 
 // packages/engine/Source/Shaders/Voxels/Octree.js
-var Octree_default = "// These octree flags must be in sync with GpuOctreeFlag in VoxelTraversal.js\n#define OCTREE_FLAG_INTERNAL 0\n#define OCTREE_FLAG_LEAF 1\n#define OCTREE_FLAG_PACKED_LEAF_FROM_PARENT 2\n\n#define OCTREE_MAX_LEVELS 32 // Harcoded value because GLSL doesn't like variable length loops\n\nuniform sampler2D u_octreeInternalNodeTexture;\nuniform vec2 u_octreeInternalNodeTexelSizeUv;\nuniform int u_octreeInternalNodeTilesPerRow;\n#if (SAMPLE_COUNT > 1)\nuniform sampler2D u_octreeLeafNodeTexture;\nuniform vec2 u_octreeLeafNodeTexelSizeUv;\nuniform int u_octreeLeafNodeTilesPerRow;\n#endif\nuniform ivec3 u_dimensions; // does not include padding, and is in the z-up orientation\nuniform ivec3 u_inputDimensions; // includes padding, and is in the orientation of the input data\n#if defined(PADDING)\n    uniform ivec3 u_paddingBefore;\n#endif\n\nstruct OctreeNodeData {\n    int data;\n    int flag;\n};\n\nstruct TraversalData {\n    ivec4 octreeCoords;\n    int parentOctreeIndex;\n};\n\nstruct TileAndUvCoordinate {\n    ivec4 tileCoords;\n    vec3 tileUv;\n};\n\nstruct SampleData {\n    int megatextureIndex;\n    ivec4 tileCoords;\n    vec3 tileUv;\n    vec3 inputCoordinate;\n    #if (SAMPLE_COUNT > 1)\n        float weight;\n    #endif\n};\n\n// Integer mod: For WebGL1 only\nint intMod(in int a, in int b) {\n    return a - (b * (a / b));\n}\nint normU8_toInt(in float value) {\n    return int(value * 255.0);\n}\nint normU8x2_toInt(in vec2 value) {\n    return int(value.x * 255.0) + 256 * int(value.y * 255.0);\n}\nfloat normU8x2_toFloat(in vec2 value) {\n    return float(normU8x2_toInt(value)) / 65535.0;\n}\n\nOctreeNodeData getOctreeNodeData(in vec2 octreeUv) {\n    vec4 texData = texture(u_octreeInternalNodeTexture, octreeUv);\n\n    OctreeNodeData data;\n    data.data = normU8x2_toInt(texData.xy);\n    data.flag = normU8x2_toInt(texData.zw);\n    return data;\n}\n\nOctreeNodeData getOctreeChildData(in int parentOctreeIndex, in ivec3 childCoord) {\n    int childIndex = childCoord.z * 4 + childCoord.y * 2 + childCoord.x;\n    int octreeCoordX = intMod(parentOctreeIndex, u_octreeInternalNodeTilesPerRow) * 9 + 1 + childIndex;\n    int octreeCoordY = parentOctreeIndex / u_octreeInternalNodeTilesPerRow;\n    vec2 octreeUv = u_octreeInternalNodeTexelSizeUv * vec2(float(octreeCoordX) + 0.5, float(octreeCoordY) + 0.5);\n    return getOctreeNodeData(octreeUv);\n}\n\nint getOctreeParentIndex(in int octreeIndex) {\n    int octreeCoordX = intMod(octreeIndex, u_octreeInternalNodeTilesPerRow) * 9;\n    int octreeCoordY = octreeIndex / u_octreeInternalNodeTilesPerRow;\n    vec2 octreeUv = u_octreeInternalNodeTexelSizeUv * vec2(float(octreeCoordX) + 0.5, float(octreeCoordY) + 0.5);\n    vec4 parentData = texture(u_octreeInternalNodeTexture, octreeUv);\n    int parentOctreeIndex = normU8x2_toInt(parentData.xy);\n    return parentOctreeIndex;\n}\n\nvec3 getTileUv(in TileAndUvCoordinate tileAndUv, in ivec4 octreeCoords) {\n    int levelDifference = tileAndUv.tileCoords.w - octreeCoords.w;\n    float scalar = exp2(-1.0 * float(levelDifference));\n    vec3 originShift = vec3(tileAndUv.tileCoords.xyz - (octreeCoords.xyz << levelDifference)) * scalar;\n    return tileAndUv.tileUv * scalar + originShift;\n}\n\nvec3 getClampedTileUv(in TileAndUvCoordinate tileAndUv, in ivec4 octreeCoords) {\n    vec3 tileUv = getTileUv(tileAndUv, octreeCoords);\n    return clamp(tileUv, vec3(0.0), vec3(1.0));\n}\n\nvoid addSampleCoordinates(in TileAndUvCoordinate tileAndUv, inout SampleData sampleData) {\n    vec3 tileUv = getClampedTileUv(tileAndUv, sampleData.tileCoords);\n\n    vec3 inputCoordinate = tileUv * vec3(u_dimensions);\n#if defined(PADDING)\n    inputCoordinate += vec3(u_paddingBefore);\n#endif\n#if defined(Y_UP_METADATA_ORDER)\n#if defined(SHAPE_BOX)\n    float inputY = inputCoordinate.y;\n    inputCoordinate.y = float(u_inputDimensions.y) - inputCoordinate.z;\n    inputCoordinate.z = inputY;\n#elif defined(SHAPE_CYLINDER)\n    float angle = inputCoordinate.y;\n    float height = inputCoordinate.z;\n    #if (!defined(CYLINDER_HAS_SHAPE_BOUNDS_ANGLE))\n    // Account for the different 0-angle convention in glTF vs 3DTiles\n    if (sampleData.tileCoords.w == 0) {\n        float angleCount = float(u_inputDimensions.z);\n        angle = mod(angle + angleCount / 2.0, angleCount);\n    }\n    #endif\n    inputCoordinate.y = height;\n    inputCoordinate.z = angle;\n#endif\n#endif\n\n    sampleData.tileUv = tileUv;\n    sampleData.inputCoordinate = inputCoordinate;\n}\n\nvoid getOctreeLeafSampleData(in OctreeNodeData data, in ivec4 octreeCoords, out SampleData sampleData) {\n    sampleData.megatextureIndex = data.data;\n    sampleData.tileCoords = (data.flag == OCTREE_FLAG_PACKED_LEAF_FROM_PARENT)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n}\n\n#if (SAMPLE_COUNT > 1)\nvoid getOctreeLeafSampleDatas(in OctreeNodeData data, in ivec4 octreeCoords, out SampleData sampleDatas[SAMPLE_COUNT]) {\n    int leafIndex = data.data;\n    int leafNodeTexelCount = 2;\n    // Adding 0.5 moves to the center of the texel\n    float leafCoordXStart = float(intMod(leafIndex, u_octreeLeafNodeTilesPerRow) * leafNodeTexelCount) + 0.5;\n    float leafCoordY = float(leafIndex / u_octreeLeafNodeTilesPerRow) + 0.5;\n\n    // Get an interpolation weight and a flag to determine whether to read the parent texture\n    vec2 leafUv0 = u_octreeLeafNodeTexelSizeUv * vec2(leafCoordXStart + 0.0, leafCoordY);\n    vec4 leafData0 = texture(u_octreeLeafNodeTexture, leafUv0);\n    float lerp = normU8x2_toFloat(leafData0.xy);\n    sampleDatas[0].weight = 1.0 - lerp;\n    sampleDatas[1].weight = lerp;\n    // TODO: this looks wrong? Should be comparing to OCTREE_FLAG_PACKED_LEAF_FROM_PARENT\n    sampleDatas[0].tileCoords = (normU8_toInt(leafData0.z) == 1)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n    sampleDatas[1].tileCoords = (normU8_toInt(leafData0.w) == 1)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n\n    // Get megatexture indices for both samples\n    vec2 leafUv1 = u_octreeLeafNodeTexelSizeUv * vec2(leafCoordXStart + 1.0, leafCoordY);\n    vec4 leafData1 = texture(u_octreeLeafNodeTexture, leafUv1);\n    sampleDatas[0].megatextureIndex = normU8x2_toInt(leafData1.xy);\n    sampleDatas[1].megatextureIndex = normU8x2_toInt(leafData1.zw);\n}\n#endif\n\nOctreeNodeData traverseOctreeDownwards(in ivec4 tileCoordinate, inout TraversalData traversalData) {\n    OctreeNodeData childData;\n\n    for (int i = 0; i < OCTREE_MAX_LEVELS; ++i) {\n        // tileCoordinate.xyz is defined at the level of detail tileCoordinate.w.\n        // Find the corresponding coordinate at the level traversalData.octreeCoords.w\n        int level = traversalData.octreeCoords.w + 1;\n        int levelDifference = tileCoordinate.w - level;\n        ivec3 coordinateAtLevel = tileCoordinate.xyz >> levelDifference;\n        traversalData.octreeCoords = ivec4(coordinateAtLevel, level);\n\n        ivec3 childCoordinate = coordinateAtLevel & 1;\n        childData = getOctreeChildData(traversalData.parentOctreeIndex, childCoordinate);\n\n        if (childData.flag != OCTREE_FLAG_INTERNAL) {\n            // leaf tile - stop traversing\n            break;\n        }\n\n        traversalData.parentOctreeIndex = childData.data;\n    }\n\n    return childData;\n}\n\n/**\n* Transform a given position to an octree tile coordinate and a position within that tile,\n* and find the corresponding megatexture index and texture coordinates\n*/\nvoid traverseOctreeFromBeginning(in TileAndUvCoordinate tileAndUv, out TraversalData traversalData, out SampleData sampleDatas[SAMPLE_COUNT]) {\n    traversalData.octreeCoords = ivec4(0);\n    traversalData.parentOctreeIndex = 0;\n\n    OctreeNodeData nodeData = getOctreeNodeData(vec2(0.0));\n    if (nodeData.flag != OCTREE_FLAG_LEAF) {\n        nodeData = traverseOctreeDownwards(tileAndUv.tileCoords, traversalData);\n    }\n\n    #if (SAMPLE_COUNT == 1)\n        getOctreeLeafSampleData(nodeData, traversalData.octreeCoords, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n    #else\n        getOctreeLeafSampleDatas(nodeData, traversalData.octreeCoords, sampleDatas);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[1]);\n    #endif\n}\n\nbool insideTile(in ivec4 tileCoordinate, in ivec4 octreeCoords) {\n    int levelDifference = tileCoordinate.w - octreeCoords.w;\n    if (levelDifference < 0) {\n        return false;\n    }\n    ivec3 coordinateAtLevel = tileCoordinate.xyz >> levelDifference;\n    return coordinateAtLevel == octreeCoords.xyz;\n}\n\nvoid traverseOctreeFromExisting(in TileAndUvCoordinate tileAndUv, inout TraversalData traversalData, inout SampleData sampleDatas[SAMPLE_COUNT]) {\n    ivec4 tileCoords = tileAndUv.tileCoords;\n    if (insideTile(tileCoords, traversalData.octreeCoords)) {\n        for (int i = 0; i < SAMPLE_COUNT; i++) {\n            addSampleCoordinates(tileAndUv, sampleDatas[i]);\n        }\n        return;\n    }\n\n    // Go up tree until we find a parent tile containing tileCoords.\n    // Assumes all parents are available all they way up to the root.\n    for (int i = 0; i < OCTREE_MAX_LEVELS; ++i) {\n        traversalData.octreeCoords.xyz /= 2;\n        traversalData.octreeCoords.w -= 1;\n\n        if (insideTile(tileCoords, traversalData.octreeCoords)) {\n            break;\n        }\n\n        traversalData.parentOctreeIndex = getOctreeParentIndex(traversalData.parentOctreeIndex);\n    }\n\n    // Go down tree\n    OctreeNodeData nodeData = traverseOctreeDownwards(tileCoords, traversalData);\n\n    #if (SAMPLE_COUNT == 1)\n        getOctreeLeafSampleData(nodeData, traversalData.octreeCoords, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n    #else\n        getOctreeLeafSampleDatas(nodeData, traversalData.octreeCoords, sampleDatas);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[1]);\n    #endif\n}\n";
+var Octree_default = "// These octree flags must be in sync with GpuOctreeFlag in VoxelTraversal.js\n#define OCTREE_FLAG_INTERNAL 0\n#define OCTREE_FLAG_LEAF 1\n#define OCTREE_FLAG_PACKED_LEAF_FROM_PARENT 2\n\n#define OCTREE_MAX_LEVELS 32 // Harcoded value because GLSL doesn't like variable length loops\n\nuniform sampler2D u_octreeInternalNodeTexture;\nuniform vec2 u_octreeInternalNodeTexelSizeUv;\nuniform int u_octreeInternalNodeTilesPerRow;\n#if (SAMPLE_COUNT > 1)\nuniform sampler2D u_octreeLeafNodeTexture;\nuniform vec2 u_octreeLeafNodeTexelSizeUv;\nuniform int u_octreeLeafNodeTilesPerRow;\n#endif\nuniform ivec3 u_dimensions; // does not include padding, and is in the z-up orientation\nuniform ivec3 u_inputDimensions; // includes padding, and is in the orientation of the input data\n#if defined(PADDING)\n    uniform ivec3 u_paddingBefore;\n#endif\n\nstruct OctreeNodeData {\n    int data;\n    int flag;\n};\n\nstruct TraversalData {\n    ivec4 octreeCoords;\n    int parentOctreeIndex;\n};\n\nstruct TileAndUvCoordinate {\n    ivec4 tileCoords;\n    vec3 tileUv;\n};\n\nstruct SampleData {\n    int megatextureIndex;\n    ivec4 tileCoords;\n    vec3 tileUv;\n    vec3 inputCoordinate;\n    #if (SAMPLE_COUNT > 1)\n        float weight;\n    #endif\n};\n\nint normU8_toInt(in float value) {\n    return int(value * 255.0);\n}\nint normU8x2_toInt(in vec2 value) {\n    return int(value.x * 255.0) + 256 * int(value.y * 255.0);\n}\nfloat normU8x2_toFloat(in vec2 value) {\n    return float(normU8x2_toInt(value)) / 65535.0;\n}\n\nOctreeNodeData getOctreeNodeData(in vec2 octreeUv) {\n    vec4 texData = texture(u_octreeInternalNodeTexture, octreeUv);\n\n    OctreeNodeData data;\n    data.data = normU8x2_toInt(texData.xy);\n    data.flag = normU8x2_toInt(texData.zw);\n    return data;\n}\n\nOctreeNodeData getOctreeChildData(in int parentOctreeIndex, in ivec3 childCoord) {\n    int childIndex = childCoord.z * 4 + childCoord.y * 2 + childCoord.x;\n    int octreeCoordX = (parentOctreeIndex % u_octreeInternalNodeTilesPerRow) * 9 + 1 + childIndex;\n    int octreeCoordY = parentOctreeIndex / u_octreeInternalNodeTilesPerRow;\n    vec2 octreeUv = u_octreeInternalNodeTexelSizeUv * vec2(float(octreeCoordX) + 0.5, float(octreeCoordY) + 0.5);\n    return getOctreeNodeData(octreeUv);\n}\n\nint getOctreeParentIndex(in int octreeIndex) {\n    int octreeCoordX = (octreeIndex % u_octreeInternalNodeTilesPerRow) * 9;\n    int octreeCoordY = octreeIndex / u_octreeInternalNodeTilesPerRow;\n    vec2 octreeUv = u_octreeInternalNodeTexelSizeUv * vec2(float(octreeCoordX) + 0.5, float(octreeCoordY) + 0.5);\n    vec4 parentData = texture(u_octreeInternalNodeTexture, octreeUv);\n    int parentOctreeIndex = normU8x2_toInt(parentData.xy);\n    return parentOctreeIndex;\n}\n\nvec3 getTileUv(in TileAndUvCoordinate tileAndUv, in ivec4 octreeCoords) {\n    int levelDifference = tileAndUv.tileCoords.w - octreeCoords.w;\n    float scalar = exp2(-1.0 * float(levelDifference));\n    vec3 originShift = vec3(tileAndUv.tileCoords.xyz - (octreeCoords.xyz << levelDifference)) * scalar;\n    return tileAndUv.tileUv * scalar + originShift;\n}\n\nvec3 getClampedTileUv(in TileAndUvCoordinate tileAndUv, in ivec4 octreeCoords) {\n    vec3 tileUv = getTileUv(tileAndUv, octreeCoords);\n    return clamp(tileUv, vec3(0.0), vec3(1.0));\n}\n\nvoid addSampleCoordinates(in TileAndUvCoordinate tileAndUv, inout SampleData sampleData) {\n    vec3 tileUv = getClampedTileUv(tileAndUv, sampleData.tileCoords);\n\n    vec3 inputCoordinate = tileUv * vec3(u_dimensions);\n#if defined(PADDING)\n    inputCoordinate += vec3(u_paddingBefore);\n#endif\n#if defined(Y_UP_METADATA_ORDER)\n#if defined(SHAPE_BOX)\n    float inputY = inputCoordinate.y;\n    inputCoordinate.y = inputCoordinate.z;\n    // u_inputDimensions.z is the y-up dimension along the 3D Tiles y-axis.\n    inputCoordinate.z = float(u_inputDimensions.z) - inputY;\n#elif defined(SHAPE_CYLINDER)\n    float angle = inputCoordinate.y;\n    float height = inputCoordinate.z;\n    #if (!defined(CYLINDER_HAS_SHAPE_BOUNDS_ANGLE))\n    // Account for the different 0-angle convention in glTF vs 3DTiles\n    if (sampleData.tileCoords.w == 0) {\n        float angleCount = float(u_inputDimensions.z);\n        angle = mod(angle + angleCount / 2.0, angleCount);\n    }\n    #endif\n    inputCoordinate.y = height;\n    inputCoordinate.z = angle;\n#endif\n#endif\n\n    sampleData.tileUv = tileUv;\n    sampleData.inputCoordinate = inputCoordinate;\n}\n\nvoid getOctreeLeafSampleData(in OctreeNodeData data, in ivec4 octreeCoords, out SampleData sampleData) {\n    sampleData.megatextureIndex = data.data;\n    sampleData.tileCoords = (data.flag == OCTREE_FLAG_PACKED_LEAF_FROM_PARENT)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n}\n\n#if (SAMPLE_COUNT > 1)\nvoid getOctreeLeafSampleDatas(in OctreeNodeData data, in ivec4 octreeCoords, out SampleData sampleDatas[SAMPLE_COUNT]) {\n    int leafIndex = data.data;\n    int leafNodeTexelCount = 2;\n    // Adding 0.5 moves to the center of the texel\n    float leafCoordXStart = float((leafIndex % u_octreeLeafNodeTilesPerRow) * leafNodeTexelCount) + 0.5;\n    float leafCoordY = float(leafIndex / u_octreeLeafNodeTilesPerRow) + 0.5;\n\n    // Get an interpolation weight and a flag to determine whether to read the parent texture\n    vec2 leafUv0 = u_octreeLeafNodeTexelSizeUv * vec2(leafCoordXStart + 0.0, leafCoordY);\n    vec4 leafData0 = texture(u_octreeLeafNodeTexture, leafUv0);\n    float lerp = normU8x2_toFloat(leafData0.xy);\n    sampleDatas[0].weight = 1.0 - lerp;\n    sampleDatas[1].weight = lerp;\n    // TODO: this looks wrong? Should be comparing to OCTREE_FLAG_PACKED_LEAF_FROM_PARENT\n    sampleDatas[0].tileCoords = (normU8_toInt(leafData0.z) == 1)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n    sampleDatas[1].tileCoords = (normU8_toInt(leafData0.w) == 1)\n        ? ivec4(octreeCoords.xyz / 2, octreeCoords.w - 1)\n        : octreeCoords;\n\n    // Get megatexture indices for both samples\n    vec2 leafUv1 = u_octreeLeafNodeTexelSizeUv * vec2(leafCoordXStart + 1.0, leafCoordY);\n    vec4 leafData1 = texture(u_octreeLeafNodeTexture, leafUv1);\n    sampleDatas[0].megatextureIndex = normU8x2_toInt(leafData1.xy);\n    sampleDatas[1].megatextureIndex = normU8x2_toInt(leafData1.zw);\n}\n#endif\n\nOctreeNodeData traverseOctreeDownwards(in ivec4 tileCoordinate, inout TraversalData traversalData) {\n    OctreeNodeData childData;\n\n    for (int i = 0; i < OCTREE_MAX_LEVELS; ++i) {\n        // tileCoordinate.xyz is defined at the level of detail tileCoordinate.w.\n        // Find the corresponding coordinate at the level traversalData.octreeCoords.w\n        int level = traversalData.octreeCoords.w + 1;\n        int levelDifference = tileCoordinate.w - level;\n        ivec3 coordinateAtLevel = tileCoordinate.xyz >> levelDifference;\n        traversalData.octreeCoords = ivec4(coordinateAtLevel, level);\n\n        ivec3 childCoordinate = coordinateAtLevel & 1;\n        childData = getOctreeChildData(traversalData.parentOctreeIndex, childCoordinate);\n\n        if (childData.flag != OCTREE_FLAG_INTERNAL) {\n            // leaf tile - stop traversing\n            break;\n        }\n\n        traversalData.parentOctreeIndex = childData.data;\n    }\n\n    return childData;\n}\n\n/**\n* Transform a given position to an octree tile coordinate and a position within that tile,\n* and find the corresponding megatexture index and texture coordinates\n*/\nvoid traverseOctreeFromBeginning(in TileAndUvCoordinate tileAndUv, out TraversalData traversalData, out SampleData sampleDatas[SAMPLE_COUNT]) {\n    traversalData.octreeCoords = ivec4(0);\n    traversalData.parentOctreeIndex = 0;\n\n    OctreeNodeData nodeData = getOctreeNodeData(vec2(0.0));\n    if (nodeData.flag != OCTREE_FLAG_LEAF) {\n        nodeData = traverseOctreeDownwards(tileAndUv.tileCoords, traversalData);\n    }\n\n    #if (SAMPLE_COUNT == 1)\n        getOctreeLeafSampleData(nodeData, traversalData.octreeCoords, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n    #else\n        getOctreeLeafSampleDatas(nodeData, traversalData.octreeCoords, sampleDatas);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[1]);\n    #endif\n}\n\nbool insideTile(in ivec4 tileCoordinate, in ivec4 octreeCoords) {\n    int levelDifference = tileCoordinate.w - octreeCoords.w;\n    if (levelDifference < 0) {\n        return false;\n    }\n    ivec3 coordinateAtLevel = tileCoordinate.xyz >> levelDifference;\n    return coordinateAtLevel == octreeCoords.xyz;\n}\n\nvoid traverseOctreeFromExisting(in TileAndUvCoordinate tileAndUv, inout TraversalData traversalData, inout SampleData sampleDatas[SAMPLE_COUNT]) {\n    ivec4 tileCoords = tileAndUv.tileCoords;\n    if (insideTile(tileCoords, traversalData.octreeCoords)) {\n        for (int i = 0; i < SAMPLE_COUNT; i++) {\n            addSampleCoordinates(tileAndUv, sampleDatas[i]);\n        }\n        return;\n    }\n\n    // Go up tree until we find a parent tile containing tileCoords.\n    // Assumes all parents are available all they way up to the root.\n    for (int i = 0; i < OCTREE_MAX_LEVELS; ++i) {\n        traversalData.octreeCoords.xyz /= 2;\n        traversalData.octreeCoords.w -= 1;\n\n        if (insideTile(tileCoords, traversalData.octreeCoords)) {\n            break;\n        }\n\n        traversalData.parentOctreeIndex = getOctreeParentIndex(traversalData.parentOctreeIndex);\n    }\n\n    // Go down tree\n    OctreeNodeData nodeData = traverseOctreeDownwards(tileCoords, traversalData);\n\n    #if (SAMPLE_COUNT == 1)\n        getOctreeLeafSampleData(nodeData, traversalData.octreeCoords, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n    #else\n        getOctreeLeafSampleDatas(nodeData, traversalData.octreeCoords, sampleDatas);\n        addSampleCoordinates(tileAndUv, sampleDatas[0]);\n        addSampleCoordinates(tileAndUv, sampleDatas[1]);\n    #endif\n}\n";
 
 // packages/engine/Source/Shaders/Voxels/Megatexture.js
-var Megatexture_default = "// See Octree.glsl for the definitions of SampleData and intMod\n\n/* Megatexture defines (set in Scene/VoxelRenderResources.js)\n#define SAMPLE_COUNT ###\n#define NEAREST_SAMPLING\n#define PADDING\n*/\n\nuniform ivec2 u_megatextureSliceDimensions; // number of slices per tile, in two dimensions\nuniform ivec2 u_megatextureTileDimensions; // number of tiles per megatexture, in two dimensions\nuniform vec2 u_megatextureVoxelSizeUv;\nuniform vec2 u_megatextureSliceSizeUv;\nuniform vec2 u_megatextureTileSizeUv;\n\n// Integer min, max, clamp: For WebGL1 only\nint intMin(int a, int b) {\n    return a <= b ? a : b;\n}\nint intMax(int a, int b) {\n    return a >= b ? a : b;\n}\nint intClamp(int v, int minVal, int maxVal) {\n    return intMin(intMax(v, minVal), maxVal);\n}\n\nvec2 index1DTo2DTexcoord(int index, ivec2 dimensions, vec2 uvScale)\n{\n    int indexX = intMod(index, dimensions.x);\n    int indexY = index / dimensions.x;\n    return vec2(indexX, indexY) * uvScale;\n}\n\n/*\n    How is 3D data stored in a 2D megatexture?\n\n    In this example there is only one loaded tile and it has 2x2x2 voxels (8 voxels total).\n    The data is sliced by Z. The data at Z = 0 is placed in texels (0,0), (0,1), (1,0), (1,1) and\n    the data at Z = 1 is placed in texels (2,0), (2,1), (3,0), (3,1).\n    Note that there could be empty space in the megatexture because it's a power of two.\n\n      0   1   2   3\n    +---+---+---+---+\n    |   |   |   |   | 3\n    +---+---+---+---+\n    |   |   |   |   | 2\n    +-------+-------+\n    |010|110|011|111| 1\n    |--- ---|--- ---|\n    |000|100|001|101| 0\n    +-------+-------+\n\n    When doing linear interpolation the megatexture needs to be sampled twice: once for\n    the Z slice above the voxel coordinate and once for the slice below. The two slices\n    are interpolated with fract(coord.z - 0.5). For example, a Z coordinate of 1.0 is\n    halfway between two Z slices so the interpolation factor is 0.5. Below is a side view\n    of the 3D voxel grid with voxel coordinates on the left side.\n\n    2 +---+\n      |001|\n    1 +-z-+\n      |000|\n    0 +---+\n\n    When doing nearest neighbor the megatexture only needs to be sampled once at the closest Z slice.\n*/\n\nProperties getPropertiesFromMegatexture(in SampleData sampleData) {\n    int tileIndex = sampleData.megatextureIndex;\n\n    vec3 voxelCoord = sampleData.inputCoordinate;\n    #if defined(NEAREST_SAMPLING)\n        // Round to the center of the nearest voxel\n        voxelCoord = floor(voxelCoord) + vec3(0.5);\n    #endif\n\n    // Tile location\n    vec2 tileUvOffset = index1DTo2DTexcoord(tileIndex, u_megatextureTileDimensions, u_megatextureTileSizeUv);\n\n    // Slice location\n    float slice = voxelCoord.z - 0.5;\n    int sliceIndex = int(floor(slice));\n    int sliceIndex0 = intClamp(sliceIndex, 0, u_inputDimensions.z - 1);\n    vec2 sliceUvOffset0 = index1DTo2DTexcoord(sliceIndex0, u_megatextureSliceDimensions, u_megatextureSliceSizeUv);\n\n    // Voxel location\n    vec2 voxelUvOffset = clamp(voxelCoord.xy, vec2(0.5), vec2(u_inputDimensions.xy) - vec2(0.5)) * u_megatextureVoxelSizeUv;\n\n    // Final location in the megatexture\n    vec2 uv0 = tileUvOffset + sliceUvOffset0 + voxelUvOffset;\n\n    #if defined(NEAREST_SAMPLING)\n        return getPropertiesFromMegatextureAtUv(uv0);\n    #else\n        float sliceLerp = fract(slice);\n        int sliceIndex1 = intMin(sliceIndex + 1, u_inputDimensions.z - 1);\n        vec2 sliceUvOffset1 = index1DTo2DTexcoord(sliceIndex1, u_megatextureSliceDimensions, u_megatextureSliceSizeUv);\n        vec2 uv1 = tileUvOffset + sliceUvOffset1 + voxelUvOffset;\n        Properties properties0 = getPropertiesFromMegatextureAtUv(uv0);\n        Properties properties1 = getPropertiesFromMegatextureAtUv(uv1);\n        return mixProperties(properties0, properties1, sliceLerp);\n    #endif\n}\n\n// Convert an array of sample datas to a final weighted properties.\nProperties accumulatePropertiesFromMegatexture(in SampleData sampleDatas[SAMPLE_COUNT]) {\n    #if (SAMPLE_COUNT == 1)\n        return getPropertiesFromMegatexture(sampleDatas[0]);\n    #else\n        // When more than one sample is taken the accumulator needs to start at 0\n        Properties properties = clearProperties();\n        for (int i = 0; i < SAMPLE_COUNT; ++i) {\n            float weight = sampleDatas[i].weight;\n\n            // Avoid reading the megatexture when the weight is 0 as it can be costly.\n            if (weight > 0.0) {\n                Properties tempProperties = getPropertiesFromMegatexture(sampleDatas[i]);\n                tempProperties = scaleProperties(tempProperties, weight);\n                properties = sumProperties(properties, tempProperties);\n            }\n        }\n        return properties;\n    #endif\n}\n";
+var Megatexture_default = "// See Octree.glsl for the definitions of SampleData\n\n/* Megatexture defines (set in Scene/VoxelRenderResources.js)\n#define SAMPLE_COUNT ###\n#define PADDING\n*/\n\nuniform ivec3 u_megatextureTileCounts; // number of tiles in the megatexture, along each axis\n\nvec3 index1DTo3DTexCoord(int index)\n{\n    int tilesPerZ = u_megatextureTileCounts.x * u_megatextureTileCounts.y;\n    int iz = index / tilesPerZ;\n    int remainder = index - iz * tilesPerZ;\n    int iy = remainder / u_megatextureTileCounts.x;\n    int ix = remainder - iy * u_megatextureTileCounts.x;\n    return vec3(ix, iy, iz) / vec3(u_megatextureTileCounts);\n}\n\nProperties getPropertiesFromMegatexture(in SampleData sampleData) {\n    int tileIndex = sampleData.megatextureIndex;\n\n    vec3 voxelCoord = sampleData.inputCoordinate;\n\n    // UV coordinate of the lower corner of the tile in the megatexture\n    vec3 tileUvOffset = index1DTo3DTexCoord(tileIndex);\n\n    // Voxel location\n    vec3 tileDimensions = vec3(u_inputDimensions);\n    vec3 clampedVoxelCoord = clamp(voxelCoord, vec3(0.5), tileDimensions - vec3(0.5));\n    vec3 voxelUv = clampedVoxelCoord / tileDimensions / vec3(u_megatextureTileCounts);\n\n    return getPropertiesFromMegatextureAtUv(tileUvOffset + voxelUv);\n}\n\n// Convert an array of sample datas to a final weighted properties.\nProperties accumulatePropertiesFromMegatexture(in SampleData sampleDatas[SAMPLE_COUNT]) {\n    #if (SAMPLE_COUNT == 1)\n        return getPropertiesFromMegatexture(sampleDatas[0]);\n    #else\n        // When more than one sample is taken the accumulator needs to start at 0\n        Properties properties = clearProperties();\n        for (int i = 0; i < SAMPLE_COUNT; ++i) {\n            float weight = sampleDatas[i].weight;\n\n            // Avoid reading the megatexture when the weight is 0 as it can be costly.\n            if (weight > 0.0) {\n                Properties tempProperties = getPropertiesFromMegatexture(sampleDatas[i]);\n                tempProperties = scaleProperties(tempProperties, weight);\n                properties = sumProperties(properties, tempProperties);\n            }\n        }\n        return properties;\n    #endif\n}\n";
 
 // packages/engine/Source/Scene/VoxelMetadataOrder.js
 var VoxelMetadataOrder = {
@@ -231870,7 +232832,7 @@ function VoxelRenderResources(primitive) {
     }
   }
   shaderBuilder.addUniform(
-    "sampler2D",
+    "sampler3D",
     "u_megatextureTextures[METADATA_COUNT]",
     ShaderDestination_default.FRAGMENT
   );
@@ -232010,13 +232972,6 @@ function VoxelRenderResources(primitive) {
   if (primitive._useLogDepth) {
     shaderBuilder.addDefine(
       "LOG_DEPTH_READ_ONLY",
-      void 0,
-      ShaderDestination_default.FRAGMENT
-    );
-  }
-  if (primitive._nearestSampling) {
-    shaderBuilder.addDefine(
-      "NEAREST_SAMPLING",
       void 0,
       ShaderDestination_default.FRAGMENT
     );
@@ -234577,87 +235532,43 @@ KeyframeNode.LoadState = LoadState;
 var KeyframeNode_default = KeyframeNode;
 
 // packages/engine/Source/Scene/Megatexture.js
-function Megatexture(context, dimensions, channelCount, componentType, availableTextureMemoryBytes) {
-  const maximumTextureMemoryByteLength = 512 * 1024 * 1024;
-  availableTextureMemoryBytes = Math.min(
-    availableTextureMemoryBytes ?? 128 * 1024 * 1024,
-    maximumTextureMemoryByteLength
-  );
-  if (componentType === MetadataComponentType_default.UNSIGNED_SHORT) {
-    componentType = MetadataComponentType_default.FLOAT32;
-  }
-  if (componentType === MetadataComponentType_default.FLOAT32 && !context.floatingPointTexture) {
-    throw new RuntimeError_default("Floating point texture not supported");
-  }
+function Megatexture(context, dimensions, channelCount, componentType, availableTextureMemoryBytes = 134217728, tileCount) {
   const pixelDataType = getPixelDataType(componentType);
-  const pixelFormat = getPixelFormat(channelCount, context.webgl2);
-  const componentTypeByteLength = MetadataComponentType_default.getSizeInBytes(componentType);
-  const textureDimension = getTextureDimension(
+  const pixelFormat = getPixelFormat(channelCount);
+  const bytesPerSample = channelCount * MetadataComponentType_default.getSizeInBytes(componentType);
+  const textureDimension = Megatexture.get3DTextureDimension(
+    dimensions,
+    bytesPerSample,
     availableTextureMemoryBytes,
-    channelCount,
-    componentTypeByteLength
+    tileCount
   );
-  const sliceCountPerRegionX = Math.ceil(Math.sqrt(dimensions.x));
-  const sliceCountPerRegionY = Math.ceil(dimensions.z / sliceCountPerRegionX);
-  const voxelCountPerRegionX = sliceCountPerRegionX * dimensions.x;
-  const voxelCountPerRegionY = sliceCountPerRegionY * dimensions.y;
-  const regionCountPerMegatextureX = Math.floor(
-    textureDimension / voxelCountPerRegionX
+  const tileCounts = Cartesian3_default.divideComponents(
+    textureDimension,
+    dimensions,
+    new Cartesian3_default()
   );
-  const regionCountPerMegatextureY = Math.floor(
-    textureDimension / voxelCountPerRegionY
-  );
-  if (regionCountPerMegatextureX === 0 || regionCountPerMegatextureY === 0) {
-    throw new RuntimeError_default("Tileset is too large to fit into megatexture");
-  }
   this.channelCount = channelCount;
   this.componentType = componentType;
-  this.textureMemoryByteLength = componentTypeByteLength * channelCount * textureDimension ** 2;
+  this.textureMemoryByteLength = bytesPerSample * textureDimension.x * textureDimension.y * textureDimension.z;
+  this.tileCounts = Cartesian3_default.clone(tileCounts, new Cartesian3_default());
   this.voxelCountPerTile = Cartesian3_default.clone(dimensions, new Cartesian3_default());
-  this.maximumTileCount = regionCountPerMegatextureX * regionCountPerMegatextureY;
-  this.regionCountPerMegatexture = new Cartesian2_default(
-    regionCountPerMegatextureX,
-    regionCountPerMegatextureY
-  );
-  this.voxelCountPerRegion = new Cartesian2_default(
-    voxelCountPerRegionX,
-    voxelCountPerRegionY
-  );
-  this.sliceCountPerRegion = new Cartesian2_default(
-    sliceCountPerRegionX,
-    sliceCountPerRegionY
-  );
-  this.voxelSizeUv = new Cartesian2_default(
-    1 / textureDimension,
-    1 / textureDimension
-  );
-  this.sliceSizeUv = new Cartesian2_default(
-    dimensions.x / textureDimension,
-    dimensions.y / textureDimension
-  );
-  this.regionSizeUv = new Cartesian2_default(
-    voxelCountPerRegionX / textureDimension,
-    voxelCountPerRegionY / textureDimension
-  );
-  this.texture = new Texture_default({
+  this.maximumTileCount = tileCounts.x * tileCounts.y * tileCounts.z;
+  this.texture = new Texture3D_default({
     context,
     pixelFormat,
     pixelDatatype: pixelDataType,
     flipY: false,
-    width: textureDimension,
-    height: textureDimension,
+    width: textureDimension.x,
+    height: textureDimension.y,
+    depth: textureDimension.z,
     sampler: new Sampler_default({
+      wrapR: TextureWrap_default.CLAMP_TO_EDGE,
       wrapS: TextureWrap_default.CLAMP_TO_EDGE,
       wrapT: TextureWrap_default.CLAMP_TO_EDGE,
       minificationFilter: TextureMinificationFilter_default.LINEAR,
       magnificationFilter: TextureMagnificationFilter_default.LINEAR
     })
   });
-  const componentDatatype = MetadataComponentType_default.toComponentDatatype(componentType);
-  this.tileVoxelDataTemp = ComponentDatatype_default.createTypedArray(
-    componentDatatype,
-    voxelCountPerRegionX * voxelCountPerRegionY * channelCount
-  );
   this.nodes = new Array(this.maximumTileCount);
   for (let tileIndex = 0; tileIndex < this.maximumTileCount; tileIndex++) {
     this.nodes[tileIndex] = new MegatextureNode(tileIndex);
@@ -234670,7 +235581,37 @@ function Megatexture(context, dimensions, channelCount, componentType, available
   this.occupiedList = void 0;
   this.emptyList = this.nodes[0];
   this.occupiedCount = 0;
+  this._nearestSampling = false;
 }
+Object.defineProperties(Megatexture.prototype, {
+  /**
+   * Gets or sets the nearest sampling flag.
+   * @type {boolean}
+   */
+  nearestSampling: {
+    get: function() {
+      return this._nearestSampling;
+    },
+    set: function(nearestSampling) {
+      Check_default.typeOf.bool("nearestSampling", nearestSampling);
+      if (this._nearestSampling === nearestSampling) {
+        return;
+      }
+      if (nearestSampling) {
+        this.texture.sampler = Sampler_default.NEAREST;
+      } else {
+        this.texture.sampler = new Sampler_default({
+          wrapR: TextureWrap_default.CLAMP_TO_EDGE,
+          wrapS: TextureWrap_default.CLAMP_TO_EDGE,
+          wrapT: TextureWrap_default.CLAMP_TO_EDGE,
+          minificationFilter: TextureMinificationFilter_default.LINEAR,
+          magnificationFilter: TextureMagnificationFilter_default.LINEAR
+        });
+      }
+      this._nearestSampling = nearestSampling;
+    }
+  }
+});
 function getPixelDataType(componentType) {
   if (componentType === MetadataComponentType_default.FLOAT32 || componentType === MetadataComponentType_default.FLOAT64) {
     return PixelDatatype_default.FLOAT;
@@ -234678,25 +235619,17 @@ function getPixelDataType(componentType) {
     return PixelDatatype_default.UNSIGNED_BYTE;
   }
 }
-function getPixelFormat(channelCount, webgl2) {
-  if (channelCount === 1) {
-    return webgl2 ? PixelFormat_default.RED : PixelFormat_default.LUMINANCE;
-  } else if (channelCount === 2) {
-    return webgl2 ? PixelFormat_default.RG : PixelFormat_default.LUMINANCE_ALPHA;
-  } else if (channelCount === 3) {
-    return PixelFormat_default.RGB;
-  } else if (channelCount === 4) {
-    return PixelFormat_default.RGBA;
+function getPixelFormat(channelCount) {
+  switch (channelCount) {
+    case 1:
+      return PixelFormat_default.RED;
+    case 2:
+      return PixelFormat_default.RG;
+    case 3:
+      return PixelFormat_default.RGB;
+    case 4:
+      return PixelFormat_default.RGBA;
   }
-}
-function getTextureDimension(availableTextureMemoryBytes, channelCount, componentByteLength) {
-  const texelCount = Math.floor(
-    availableTextureMemoryBytes / (channelCount * componentByteLength)
-  );
-  return Math.min(
-    ContextLimits_default.maximumTextureSize,
-    Math_default.previousPowerOfTwo(Math.floor(Math.sqrt(texelCount)))
-  );
 }
 function MegatextureNode(index) {
   this.index = index;
@@ -234744,77 +235677,81 @@ Megatexture.prototype.remove = function(index) {
 Megatexture.prototype.isFull = function() {
   return this.emptyList === void 0;
 };
-Megatexture.getApproximateTextureMemoryByteLength = function(tileCount, dimensions, channelCount, componentType) {
-  if (componentType === MetadataComponentType_default.UNSIGNED_SHORT) {
-    componentType = MetadataComponentType_default.FLOAT32;
+Megatexture.get3DTextureDimension = function(tileDimensions, bytesPerSample, availableTextureMemoryBytes, tileCount) {
+  const { maximum3DTextureSize } = ContextLimits_default;
+  if (Cartesian3_default.maximumComponent(tileDimensions) > maximum3DTextureSize) {
+    throw new RuntimeError_default(
+      "The GL context does not support a 3D texture large enough to contain a tile with the given dimensions."
+    );
   }
-  const datatypeSizeInBytes = MetadataComponentType_default.getSizeInBytes(componentType);
-  const voxelCountTotal = tileCount * dimensions.x * dimensions.y * dimensions.z;
-  const sliceCountPerRegionX = Math.ceil(Math.sqrt(dimensions.x));
-  const sliceCountPerRegionY = Math.ceil(dimensions.z / sliceCountPerRegionX);
-  const voxelCountPerRegionX = sliceCountPerRegionX * dimensions.x;
-  const voxelCountPerRegionY = sliceCountPerRegionY * dimensions.y;
-  let textureDimension = Math_default.previousPowerOfTwo(
-    Math.floor(Math.sqrt(voxelCountTotal))
+  const tileSizeInBytes = bytesPerSample * tileDimensions.x * tileDimensions.y * tileDimensions.z;
+  const maxTileCount = Math.floor(
+    availableTextureMemoryBytes / tileSizeInBytes
   );
-  for (; ; ) {
-    const regionCountX = Math.floor(textureDimension / voxelCountPerRegionX);
-    const regionCountY = Math.floor(textureDimension / voxelCountPerRegionY);
-    const regionCount = regionCountX * regionCountY;
-    if (regionCount >= tileCount) {
+  if (maxTileCount < 1) {
+    throw new RuntimeError_default(
+      "Not enough texture memory available to create a megatexture with the given tile dimensions."
+    );
+  }
+  if (defined_default(tileCount)) {
+    tileCount = Math.min(tileCount, maxTileCount);
+  } else {
+    tileCount = maxTileCount;
+  }
+  const sortedDimensions = Object.entries(tileDimensions).sort(
+    (a3, b) => b[1] - a3[1]
+  );
+  const tilesPerDimension = sortedDimensions.map(
+    ([axis, dimension]) => Math.floor(maximum3DTextureSize / dimension)
+  );
+  for (let i = 0; i < 3; i++) {
+    const currentTileCount = getVolume(tilesPerDimension);
+    if (currentTileCount < tileCount) {
       break;
-    } else {
-      textureDimension *= 2;
     }
+    const sliceDimensions = tilesPerDimension.slice();
+    sliceDimensions.splice(i, 1);
+    const tilesPerSlice = sliceDimensions[0] * sliceDimensions[1];
+    const excessTiles = currentTileCount - tileCount;
+    const slicesToRemove = Math.floor(excessTiles / tilesPerSlice);
+    tilesPerDimension[i] -= slicesToRemove;
   }
-  const textureMemoryByteLength = textureDimension * textureDimension * channelCount * datatypeSizeInBytes;
-  return textureMemoryByteLength;
+  if (getVolume(tilesPerDimension) > maxTileCount) {
+    tilesPerDimension[2] = Math.floor(
+      maxTileCount / (tilesPerDimension[0] * tilesPerDimension[1])
+    );
+  }
+  const textureDimension = new Cartesian3_default();
+  for (let i = 0; i < 3; i++) {
+    const [axis, dimension] = sortedDimensions[i];
+    textureDimension[axis] = tilesPerDimension[i] * dimension;
+  }
+  return textureDimension;
 };
-Megatexture.prototype.writeDataToTexture = function(index, data) {
-  const tileData = data.constructor === Uint16Array ? new Float32Array(data) : data;
-  const {
-    tileVoxelDataTemp,
-    voxelCountPerTile,
-    sliceCountPerRegion,
-    voxelCountPerRegion,
-    channelCount,
-    regionCountPerMegatexture
-  } = this;
-  for (let z = 0; z < voxelCountPerTile.z; z++) {
-    const sliceVoxelOffsetX = z % sliceCountPerRegion.x * voxelCountPerTile.x;
-    const sliceVoxelOffsetY = Math.floor(z / sliceCountPerRegion.x) * voxelCountPerTile.y;
-    for (let y = 0; y < voxelCountPerTile.y; y++) {
-      const readOffset = getReadOffset(voxelCountPerTile, y, z);
-      const writeOffset = (sliceVoxelOffsetY + y) * voxelCountPerRegion.x + sliceVoxelOffsetX;
-      for (let x = 0; x < voxelCountPerTile.x; x++) {
-        const readIndex = readOffset + x;
-        const writeIndex = writeOffset + x;
-        for (let c = 0; c < channelCount; c++) {
-          tileVoxelDataTemp[writeIndex * channelCount + c] = tileData[readIndex * channelCount + c];
-        }
-      }
-    }
-  }
-  const voxelOffsetX = index % regionCountPerMegatexture.x * voxelCountPerRegion.x;
-  const voxelOffsetY = Math.floor(index / regionCountPerMegatexture.x) * voxelCountPerRegion.y;
+function getVolume(dimensionsArray) {
+  return dimensionsArray.reduce((p, d) => p * d);
+}
+Megatexture.prototype.writeDataToTexture = function(index, tileData) {
+  const { tileCounts, voxelCountPerTile } = this;
   const source = {
-    arrayBufferView: tileVoxelDataTemp,
-    width: voxelCountPerRegion.x,
-    height: voxelCountPerRegion.y
+    arrayBufferView: tileData,
+    width: voxelCountPerTile.x,
+    height: voxelCountPerTile.y,
+    depth: voxelCountPerTile.z
   };
+  const tilesPerZ = tileCounts.x * tileCounts.y;
+  const iz = Math.floor(index / tilesPerZ);
+  const remainder = index - iz * tilesPerZ;
+  const iy = Math.floor(remainder / tileCounts.x);
+  const ix = remainder - iy * tileCounts.x;
   const copyOptions = {
     source,
-    xOffset: voxelOffsetX,
-    yOffset: voxelOffsetY
+    xOffset: ix * voxelCountPerTile.x,
+    yOffset: iy * voxelCountPerTile.y,
+    zOffset: iz * voxelCountPerTile.z
   };
   this.texture.copyFrom(copyOptions);
 };
-function getReadOffset(dimensions, y, z) {
-  const voxelsPerInputSlice = dimensions.y * dimensions.x;
-  const sliceIndex = z;
-  const rowIndex = y;
-  return sliceIndex * voxelsPerInputSlice + rowIndex * dimensions.x;
-}
 Megatexture.prototype.isDestroyed = function() {
   return false;
 };
@@ -235035,30 +235972,20 @@ var SpatialNode_default = SpatialNode;
 
 // packages/engine/Source/Scene/VoxelTraversal.js
 function VoxelTraversal(primitive, context, keyframeCount, maximumTextureMemoryByteLength) {
-  const { provider, dimensions, paddingBefore, paddingAfter } = primitive;
-  const { types, componentTypes, metadataOrder } = provider;
-  const inputDimensions = Cartesian3_default.add(
-    dimensions,
-    paddingBefore,
-    new Cartesian3_default()
-  );
-  Cartesian3_default.add(inputDimensions, paddingAfter, inputDimensions);
-  if (metadataOrder === VoxelMetadataOrder_default.Y_UP) {
-    const inputDimensionsY = inputDimensions.y;
-    inputDimensions.y = inputDimensions.z;
-    inputDimensions.z = inputDimensionsY;
-  }
-  if (!defined_default(maximumTextureMemoryByteLength) && defined_default(provider.maximumTileCount)) {
-    maximumTextureMemoryByteLength = getApproximateTextureMemoryByteLength(
-      provider.maximumTileCount,
-      inputDimensions,
-      types,
-      componentTypes
+  const { provider, dimensions, inputDimensions } = primitive;
+  const { types, componentTypes } = provider;
+  if (defined_default(maximumTextureMemoryByteLength)) {
+    maximumTextureMemoryByteLength = Math.min(
+      Math.max(0, maximumTextureMemoryByteLength),
+      512 * 1024 * 1024
     );
+  } else {
+    maximumTextureMemoryByteLength = 128 * 1024 * 1024;
   }
   this._primitive = primitive;
   this.textureMemoryByteLength = 0;
   this.megatextures = new Array(types.length);
+  const providerTileCount = defined_default(provider.maximumTileCount) ? provider.maximumTileCount : defined_default(provider.availableLevels) ? (8 ** provider.availableLevels - 1) / 7 : void 0;
   for (let i = 0; i < types.length; i++) {
     const type = types[i];
     const componentCount = MetadataType_default.getComponentCount(type);
@@ -235068,7 +235995,8 @@ function VoxelTraversal(primitive, context, keyframeCount, maximumTextureMemoryB
       inputDimensions,
       componentCount,
       componentType,
-      maximumTextureMemoryByteLength
+      maximumTextureMemoryByteLength,
+      providerTileCount
     );
     this.textureMemoryByteLength += this.megatextures[i].textureMemoryByteLength;
   }
@@ -235711,22 +236639,6 @@ function copyToLeafNodeTexture(data, texelsPerTile, tilesPerRow, texture) {
   };
   texture.copyFrom(copyOptions);
 }
-function getApproximateTextureMemoryByteLength(tileCount, dimensions, types, componentTypes) {
-  let textureMemoryByteLength = 0;
-  const length2 = types.length;
-  for (let i = 0; i < length2; i++) {
-    const type = types[i];
-    const componentType = componentTypes[i];
-    const componentCount = MetadataType_default.getComponentCount(type);
-    textureMemoryByteLength += Megatexture_default2.getApproximateTextureMemoryByteLength(
-      tileCount,
-      dimensions,
-      componentCount,
-      componentType
-    );
-  }
-  return textureMemoryByteLength;
-}
 var VoxelTraversal_default = VoxelTraversal;
 
 // packages/engine/Source/Scene/VoxelPrimitive.js
@@ -235788,11 +236700,7 @@ function VoxelPrimitive(options) {
     octreeLeafNodeTilesPerRow: 0,
     octreeLeafNodeTexelSizeUv: new Cartesian2_default(),
     megatextureTextures: [],
-    megatextureSliceDimensions: new Cartesian2_default(),
-    megatextureTileDimensions: new Cartesian2_default(),
-    megatextureVoxelSizeUv: new Cartesian2_default(),
-    megatextureSliceSizeUv: new Cartesian2_default(),
-    megatextureTileSizeUv: new Cartesian2_default(),
+    megatextureTileCounts: new Cartesian3_default(),
     dimensions: new Cartesian3_default(),
     inputDimensions: new Cartesian3_default(),
     paddingBefore: new Cartesian3_default(),
@@ -236072,10 +236980,7 @@ Object.defineProperties(VoxelPrimitive.prototype, {
     },
     set: function(nearestSampling) {
       Check_default.typeOf.bool("nearestSampling", nearestSampling);
-      if (this._nearestSampling !== nearestSampling) {
-        this._nearestSampling = nearestSampling;
-        this._shaderDirty = true;
-      }
+      this._nearestSampling = nearestSampling;
     }
   },
   /**
@@ -236408,11 +237313,18 @@ VoxelPrimitive.prototype.update = function(frameState) {
     uniforms.cameraTileUv
   );
   uniforms.stepSize = this._stepSizeMultiplier;
+  updateNearestSampling(this);
   updateRenderBoundPlanes(this, frameState);
   const command = frameState.passes.pick ? this._drawCommandPick : frameState.passes.pickVoxel ? this._drawCommandPickVoxel : this._drawCommand;
   command.boundingVolume = this._shape.boundingSphere;
   frameState.commandList.push(command);
 };
+function updateNearestSampling(primitive) {
+  const { megatextures } = primitive._traversal;
+  for (let i = 0; i < megatextures.length; ++i) {
+    megatextures[i].nearestSampling = primitive._nearestSampling;
+  }
+}
 function updateRenderBoundPlanes(primitive, frameState) {
   const uniforms = primitive._uniforms;
   const { renderBoundPlanes } = primitive._shape;
@@ -236687,32 +237599,15 @@ function setTraversalUniforms(traversal4, uniforms) {
     uniforms.octreeInternalNodeTexelSizeUv
   );
   uniforms.octreeInternalNodeTilesPerRow = traversal4.internalNodeTilesPerRow;
-  const megatextures = traversal4.megatextures;
+  const { megatextures } = traversal4;
   const megatexture = megatextures[0];
-  const megatextureLength = megatextures.length;
-  uniforms.megatextureTextures = new Array(megatextureLength);
-  for (let i = 0; i < megatextureLength; i++) {
+  uniforms.megatextureTextures = new Array(megatextures.length);
+  for (let i = 0; i < megatextures.length; i++) {
     uniforms.megatextureTextures[i] = megatextures[i].texture;
   }
-  uniforms.megatextureSliceDimensions = Cartesian2_default.clone(
-    megatexture.sliceCountPerRegion,
-    uniforms.megatextureSliceDimensions
-  );
-  uniforms.megatextureTileDimensions = Cartesian2_default.clone(
-    megatexture.regionCountPerMegatexture,
-    uniforms.megatextureTileDimensions
-  );
-  uniforms.megatextureVoxelSizeUv = Cartesian2_default.clone(
-    megatexture.voxelSizeUv,
-    uniforms.megatextureVoxelSizeUv
-  );
-  uniforms.megatextureSliceSizeUv = Cartesian2_default.clone(
-    megatexture.sliceSizeUv,
-    uniforms.megatextureSliceSizeUv
-  );
-  uniforms.megatextureTileSizeUv = Cartesian2_default.clone(
-    megatexture.regionSizeUv,
-    uniforms.megatextureTileSizeUv
+  uniforms.megatextureTileCounts = Cartesian3_default.clone(
+    megatexture.tileCounts,
+    uniforms.megatextureTileCounts
   );
 }
 function checkShapeDefines(primitive) {
@@ -239553,13 +240448,14 @@ Scene4.prototype.resolveFramebuffers = function(passState) {
 };
 function callAfterRenderFunctions(scene) {
   const functions = scene._frameState.afterRender;
-  for (let i = 0; i < functions.length; ++i) {
-    const shouldRequestRender = functions[i]();
+  const functionsCpy = functions.slice();
+  functions.length = 0;
+  for (let i = 0; i < functionsCpy.length; ++i) {
+    const shouldRequestRender = functionsCpy[i]();
     if (shouldRequestRender) {
       scene.requestRender();
     }
   }
-  functions.length = 0;
 }
 function getGlobeHeight(scene) {
   if (scene.mode === SceneMode_default.MORPHING) {
@@ -239924,6 +240820,16 @@ Scene4.prototype.clampLineWidth = function(width) {
 };
 Scene4.prototype.pick = function(windowPosition, width, height) {
   return this._picking.pick(this, windowPosition, width, height, 1)[0];
+};
+Scene4.prototype.pickAsync = async function(windowPosition, width, height) {
+  const result = await this._picking.pickAsync(
+    this,
+    windowPosition,
+    width,
+    height,
+    1
+  );
+  return result[0];
 };
 Scene4.prototype.pickVoxel = function(windowPosition, width, height) {
   const pickedObject = this.pick(windowPosition, width, height);
@@ -248730,9 +249636,9 @@ function sameSide(p1, p2, a3, b) {
   );
   return Cartesian3_default.dot(cp1, cp2) >= 0;
 }
-var scratchV03 = new Cartesian3_default();
-var scratchV13 = new Cartesian3_default();
-var scratchV23 = new Cartesian3_default();
+var scratchV02 = new Cartesian3_default();
+var scratchV12 = new Cartesian3_default();
+var scratchV22 = new Cartesian3_default();
 var scratchV0V1 = new Cartesian3_default();
 var scratchV0V2 = new Cartesian3_default();
 var scratchCrossProd = new Cartesian3_default();
@@ -248779,19 +249685,19 @@ I3SGeometry.prototype.getClosestPointIndexOnTriangle = function(px, py, pz) {
         positions[i0 * 3],
         positions[i0 * 3 + 1],
         positions[i0 * 3 + 2],
-        scratchV03
+        scratchV02
       );
       const v12 = Cartesian3_default.fromElements(
         positions[i1 * 3],
         positions[i1 * 3 + 1],
         positions[i1 * 3 + 2],
-        scratchV13
+        scratchV12
       );
       const v22 = new Cartesian3_default(
         positions[i2 * 3],
         positions[i2 * 3 + 1],
         positions[i2 * 3 + 2],
-        scratchV23
+        scratchV22
       );
       if (!sameSide(position, v02, v12, v22) || !sameSide(position, v12, v02, v22) || !sameSide(position, v22, v02, v12)) {
         continue;
@@ -253606,7 +254512,7 @@ function createTaskProcessorWorker(workerFunction) {
 var createTaskProcessorWorker_default = createTaskProcessorWorker;
 
 // packages/engine/index.js
-globalThis.CESIUM_VERSION = "1.135.0";
+globalThis.CESIUM_VERSION = "1.138.0";
 
 // packages/widgets/Source/ThirdParty/knockout-3.5.1.js
 var oldValue;
@@ -257076,6 +257982,811 @@ function subscribeAndEvaluate(owner, observablePropertyName, callback, target, e
 }
 var subscribeAndEvaluate_default = subscribeAndEvaluate;
 
+// packages/widgets/Source/BaseLayerPicker/BaseLayerPickerViewModel.js
+function BaseLayerPickerViewModel(options) {
+  options = options ?? Frozen_default.EMPTY_OBJECT;
+  const globe = options.globe;
+  const imageryProviderViewModels = options.imageryProviderViewModels ?? Frozen_default.EMPTY_ARRAY;
+  const terrainProviderViewModels = options.terrainProviderViewModels ?? Frozen_default.EMPTY_ARRAY;
+  if (!defined_default(globe)) {
+    throw new DeveloperError_default("globe is required");
+  }
+  this._globe = globe;
+  this.imageryProviderViewModels = imageryProviderViewModels.slice(0);
+  this.terrainProviderViewModels = terrainProviderViewModels.slice(0);
+  this.dropDownVisible = false;
+  knockout_default.track(this, [
+    "imageryProviderViewModels",
+    "terrainProviderViewModels",
+    "dropDownVisible"
+  ]);
+  const imageryObservable = knockout_default.getObservable(
+    this,
+    "imageryProviderViewModels"
+  );
+  const imageryProviders = knockout_default.pureComputed(function() {
+    const providers = imageryObservable();
+    const categories = {};
+    let i;
+    for (i = 0; i < providers.length; i++) {
+      const provider = providers[i];
+      const category = provider.category;
+      if (defined_default(categories[category])) {
+        categories[category].push(provider);
+      } else {
+        categories[category] = [provider];
+      }
+    }
+    const allCategoryNames = Object.keys(categories);
+    const result = [];
+    for (i = 0; i < allCategoryNames.length; i++) {
+      const name = allCategoryNames[i];
+      result.push({
+        name,
+        providers: categories[name]
+      });
+    }
+    return result;
+  });
+  this._imageryProviders = imageryProviders;
+  const terrainObservable = knockout_default.getObservable(
+    this,
+    "terrainProviderViewModels"
+  );
+  const terrainProviders = knockout_default.pureComputed(function() {
+    const providers = terrainObservable();
+    const categories = {};
+    let i;
+    for (i = 0; i < providers.length; i++) {
+      const provider = providers[i];
+      const category = provider.category;
+      if (defined_default(categories[category])) {
+        categories[category].push(provider);
+      } else {
+        categories[category] = [provider];
+      }
+    }
+    const allCategoryNames = Object.keys(categories);
+    const result = [];
+    for (i = 0; i < allCategoryNames.length; i++) {
+      const name = allCategoryNames[i];
+      result.push({
+        name,
+        providers: categories[name]
+      });
+    }
+    return result;
+  });
+  this._terrainProviders = terrainProviders;
+  this.buttonTooltip = void 0;
+  knockout_default.defineProperty(this, "buttonTooltip", function() {
+    const selectedImagery = this.selectedImagery;
+    const selectedTerrain = this.selectedTerrain;
+    const imageryTip = defined_default(selectedImagery) ? selectedImagery.name : void 0;
+    const terrainTip = defined_default(selectedTerrain) ? selectedTerrain.name : void 0;
+    if (defined_default(imageryTip) && defined_default(terrainTip)) {
+      return `${imageryTip}
+${terrainTip}`;
+    } else if (defined_default(imageryTip)) {
+      return imageryTip;
+    }
+    return terrainTip;
+  });
+  this.buttonImageUrl = void 0;
+  knockout_default.defineProperty(this, "buttonImageUrl", function() {
+    const selectedImagery = this.selectedImagery;
+    if (defined_default(selectedImagery)) {
+      return selectedImagery.iconUrl;
+    }
+  });
+  this.selectedImagery = void 0;
+  const selectedImageryViewModel = knockout_default.observable();
+  this._currentImageryLayers = [];
+  knockout_default.defineProperty(this, "selectedImagery", {
+    get: function() {
+      return selectedImageryViewModel();
+    },
+    set: function(value) {
+      if (selectedImageryViewModel() === value) {
+        this.dropDownVisible = false;
+        return;
+      }
+      let i;
+      const currentImageryLayers = this._currentImageryLayers;
+      const currentImageryLayersLength = currentImageryLayers.length;
+      const imageryLayers = this._globe.imageryLayers;
+      let hadExistingBaseLayer = false;
+      for (i = 0; i < currentImageryLayersLength; i++) {
+        const layersLength = imageryLayers.length;
+        for (let x = 0; x < layersLength; x++) {
+          const layer = imageryLayers.get(x);
+          if (layer === currentImageryLayers[i]) {
+            imageryLayers.remove(layer);
+            hadExistingBaseLayer = true;
+            break;
+          }
+        }
+      }
+      if (defined_default(value)) {
+        const newProviders = value.creationCommand();
+        if (Array.isArray(newProviders)) {
+          const newProvidersLength = newProviders.length;
+          this._currentImageryLayers = [];
+          for (i = newProvidersLength - 1; i >= 0; i--) {
+            const layer = ImageryLayer_default.fromProviderAsync(newProviders[i]);
+            imageryLayers.add(layer, 0);
+            this._currentImageryLayers.push(layer);
+          }
+        } else {
+          this._currentImageryLayers = [];
+          const layer = ImageryLayer_default.fromProviderAsync(newProviders);
+          layer.name = value.name;
+          if (hadExistingBaseLayer) {
+            imageryLayers.add(layer, 0);
+          } else {
+            const baseLayer = imageryLayers.get(0);
+            if (defined_default(baseLayer)) {
+              imageryLayers.remove(baseLayer);
+            }
+            imageryLayers.add(layer, 0);
+          }
+          this._currentImageryLayers.push(layer);
+        }
+      }
+      selectedImageryViewModel(value);
+      this.dropDownVisible = false;
+    }
+  });
+  this.selectedTerrain = void 0;
+  const selectedTerrainViewModel = knockout_default.observable();
+  knockout_default.defineProperty(this, "selectedTerrain", {
+    get: function() {
+      return selectedTerrainViewModel();
+    },
+    set: function(value) {
+      if (selectedTerrainViewModel() === value) {
+        this.dropDownVisible = false;
+        return;
+      }
+      let newProvider;
+      if (defined_default(value)) {
+        newProvider = value.creationCommand();
+      }
+      if (defined_default(newProvider) && !defined_default(newProvider.then)) {
+        this._globe.depthTestAgainstTerrain = !(newProvider instanceof EllipsoidTerrainProvider_default);
+        this._globe.terrainProvider = newProvider;
+      } else if (defined_default(newProvider)) {
+        let cancelUpdate = false;
+        const removeCancelListener = this._globe.terrainProviderChanged.addEventListener(() => {
+          cancelUpdate = true;
+          removeCancelListener();
+        });
+        const terrain = new Terrain_default(newProvider);
+        const removeEventListener2 = terrain.readyEvent.addEventListener(
+          (terrainProvider) => {
+            if (cancelUpdate) {
+              return;
+            }
+            this._globe.depthTestAgainstTerrain = !(terrainProvider instanceof EllipsoidTerrainProvider_default);
+            this._globe.terrainProvider = terrainProvider;
+            removeEventListener2();
+          }
+        );
+      }
+      selectedTerrainViewModel(value);
+      this.dropDownVisible = false;
+    }
+  });
+  const that = this;
+  this._toggleDropDown = createCommand_default(function() {
+    that.dropDownVisible = !that.dropDownVisible;
+  });
+  this.selectedImagery = options.selectedImageryProviderViewModel ?? imageryProviderViewModels[0];
+  this.selectedTerrain = options.selectedTerrainProviderViewModel;
+}
+Object.defineProperties(BaseLayerPickerViewModel.prototype, {
+  /**
+   * Gets the command to toggle the visibility of the drop down.
+   * @memberof BaseLayerPickerViewModel.prototype
+   *
+   * @type {Command}
+   */
+  toggleDropDown: {
+    get: function() {
+      return this._toggleDropDown;
+    }
+  },
+  /**
+   * Gets the globe.
+   * @memberof BaseLayerPickerViewModel.prototype
+   *
+   * @type {Globe}
+   */
+  globe: {
+    get: function() {
+      return this._globe;
+    }
+  }
+});
+var BaseLayerPickerViewModel_default = BaseLayerPickerViewModel;
+
+// packages/widgets/Source/BaseLayerPicker/BaseLayerPicker.js
+function BaseLayerPicker(container, options) {
+  if (!defined_default(container)) {
+    throw new DeveloperError_default("container is required.");
+  }
+  container = getElement_default(container);
+  const viewModel = new BaseLayerPickerViewModel_default(options);
+  const element = document.createElement("button");
+  element.type = "button";
+  element.className = "cesium-button cesium-toolbar-button";
+  element.setAttribute(
+    "data-bind",
+    "attr: { title: buttonTooltip },click: toggleDropDown"
+  );
+  container.appendChild(element);
+  const imgElement = document.createElement("img");
+  imgElement.setAttribute("draggable", "false");
+  imgElement.className = "cesium-baseLayerPicker-selected";
+  imgElement.setAttribute(
+    "data-bind",
+    "attr: { src: buttonImageUrl }, visible: !!buttonImageUrl"
+  );
+  element.appendChild(imgElement);
+  const dropPanel = document.createElement("div");
+  dropPanel.className = "cesium-baseLayerPicker-dropDown";
+  dropPanel.setAttribute(
+    "data-bind",
+    'css: { "cesium-baseLayerPicker-dropDown-visible" : dropDownVisible }'
+  );
+  container.appendChild(dropPanel);
+  const imageryTitle = document.createElement("div");
+  imageryTitle.className = "cesium-baseLayerPicker-sectionTitle";
+  imageryTitle.setAttribute(
+    "data-bind",
+    "visible: imageryProviderViewModels.length > 0"
+  );
+  imageryTitle.innerHTML = "Imagery";
+  dropPanel.appendChild(imageryTitle);
+  const imagerySection = document.createElement("div");
+  imagerySection.className = "cesium-baseLayerPicker-section";
+  imagerySection.setAttribute("data-bind", "foreach: _imageryProviders");
+  dropPanel.appendChild(imagerySection);
+  const imageryCategories = document.createElement("div");
+  imageryCategories.className = "cesium-baseLayerPicker-category";
+  imagerySection.appendChild(imageryCategories);
+  const categoryTitle = document.createElement("div");
+  categoryTitle.className = "cesium-baseLayerPicker-categoryTitle";
+  categoryTitle.setAttribute("data-bind", "text: name");
+  imageryCategories.appendChild(categoryTitle);
+  const imageryChoices = document.createElement("div");
+  imageryChoices.className = "cesium-baseLayerPicker-choices";
+  imageryChoices.setAttribute("data-bind", "foreach: providers");
+  imageryCategories.appendChild(imageryChoices);
+  const imageryProvider = document.createElement("div");
+  imageryProvider.className = "cesium-baseLayerPicker-item";
+  imageryProvider.setAttribute(
+    "data-bind",
+    'css: { "cesium-baseLayerPicker-selectedItem" : $data === $parents[1].selectedImagery },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parents[1].selectedImagery = $data; }'
+  );
+  imageryChoices.appendChild(imageryProvider);
+  const providerIcon = document.createElement("img");
+  providerIcon.className = "cesium-baseLayerPicker-itemIcon";
+  providerIcon.setAttribute("data-bind", "attr: { src: iconUrl }");
+  providerIcon.setAttribute("draggable", "false");
+  imageryProvider.appendChild(providerIcon);
+  const providerLabel = document.createElement("div");
+  providerLabel.className = "cesium-baseLayerPicker-itemLabel";
+  providerLabel.setAttribute("data-bind", "text: name");
+  imageryProvider.appendChild(providerLabel);
+  const terrainTitle = document.createElement("div");
+  terrainTitle.className = "cesium-baseLayerPicker-sectionTitle";
+  terrainTitle.setAttribute(
+    "data-bind",
+    "visible: terrainProviderViewModels.length > 0"
+  );
+  terrainTitle.innerHTML = "Terrain";
+  dropPanel.appendChild(terrainTitle);
+  const terrainSection = document.createElement("div");
+  terrainSection.className = "cesium-baseLayerPicker-section";
+  terrainSection.setAttribute("data-bind", "foreach: _terrainProviders");
+  dropPanel.appendChild(terrainSection);
+  const terrainCategories = document.createElement("div");
+  terrainCategories.className = "cesium-baseLayerPicker-category";
+  terrainSection.appendChild(terrainCategories);
+  const terrainCategoryTitle = document.createElement("div");
+  terrainCategoryTitle.className = "cesium-baseLayerPicker-categoryTitle";
+  terrainCategoryTitle.setAttribute("data-bind", "text: name");
+  terrainCategories.appendChild(terrainCategoryTitle);
+  const terrainChoices = document.createElement("div");
+  terrainChoices.className = "cesium-baseLayerPicker-choices";
+  terrainChoices.setAttribute("data-bind", "foreach: providers");
+  terrainCategories.appendChild(terrainChoices);
+  const terrainProvider = document.createElement("div");
+  terrainProvider.className = "cesium-baseLayerPicker-item";
+  terrainProvider.setAttribute(
+    "data-bind",
+    'css: { "cesium-baseLayerPicker-selectedItem" : $data === $parents[1].selectedTerrain },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parents[1].selectedTerrain = $data; }'
+  );
+  terrainChoices.appendChild(terrainProvider);
+  const terrainProviderIcon = document.createElement("img");
+  terrainProviderIcon.className = "cesium-baseLayerPicker-itemIcon";
+  terrainProviderIcon.setAttribute("data-bind", "attr: { src: iconUrl }");
+  terrainProviderIcon.setAttribute("draggable", "false");
+  terrainProvider.appendChild(terrainProviderIcon);
+  const terrainProviderLabel = document.createElement("div");
+  terrainProviderLabel.className = "cesium-baseLayerPicker-itemLabel";
+  terrainProviderLabel.setAttribute("data-bind", "text: name");
+  terrainProvider.appendChild(terrainProviderLabel);
+  knockout_default.applyBindings(viewModel, element);
+  knockout_default.applyBindings(viewModel, dropPanel);
+  this._viewModel = viewModel;
+  this._container = container;
+  this._element = element;
+  this._dropPanel = dropPanel;
+  this._closeDropDown = function(e) {
+    if (!(element.contains(e.target) || dropPanel.contains(e.target))) {
+      viewModel.dropDownVisible = false;
+    }
+  };
+  if (FeatureDetection_default.supportsPointerEvents()) {
+    document.addEventListener("pointerdown", this._closeDropDown, true);
+  } else {
+    document.addEventListener("mousedown", this._closeDropDown, true);
+    document.addEventListener("touchstart", this._closeDropDown, true);
+  }
+}
+Object.defineProperties(BaseLayerPicker.prototype, {
+  /**
+   * Gets the parent container.
+   * @memberof BaseLayerPicker.prototype
+   *
+   * @type {Element}
+   */
+  container: {
+    get: function() {
+      return this._container;
+    }
+  },
+  /**
+   * Gets the view model.
+   * @memberof BaseLayerPicker.prototype
+   *
+   * @type {BaseLayerPickerViewModel}
+   */
+  viewModel: {
+    get: function() {
+      return this._viewModel;
+    }
+  }
+});
+BaseLayerPicker.prototype.isDestroyed = function() {
+  return false;
+};
+BaseLayerPicker.prototype.destroy = function() {
+  if (FeatureDetection_default.supportsPointerEvents()) {
+    document.removeEventListener("pointerdown", this._closeDropDown, true);
+  } else {
+    document.removeEventListener("mousedown", this._closeDropDown, true);
+    document.removeEventListener("touchstart", this._closeDropDown, true);
+  }
+  knockout_default.cleanNode(this._element);
+  knockout_default.cleanNode(this._dropPanel);
+  this._container.removeChild(this._element);
+  this._container.removeChild(this._dropPanel);
+  return destroyObject_default(this);
+};
+var BaseLayerPicker_default = BaseLayerPicker;
+
+// packages/widgets/Source/BaseLayerPicker/ProviderViewModel.js
+function ProviderViewModel(options) {
+  if (!defined_default(options.name)) {
+    throw new DeveloperError_default("options.name is required.");
+  }
+  if (!defined_default(options.tooltip)) {
+    throw new DeveloperError_default("options.tooltip is required.");
+  }
+  if (!defined_default(options.iconUrl)) {
+    throw new DeveloperError_default("options.iconUrl is required.");
+  }
+  if (typeof options.creationFunction !== "function") {
+    throw new DeveloperError_default("options.creationFunction is required.");
+  }
+  let creationCommand = options.creationFunction;
+  if (!defined_default(creationCommand.canExecute)) {
+    creationCommand = createCommand_default(creationCommand);
+  }
+  this._creationCommand = creationCommand;
+  this.name = options.name;
+  this.tooltip = options.tooltip;
+  this.iconUrl = options.iconUrl;
+  this._category = options.category ?? "";
+  knockout_default.track(this, ["name", "tooltip", "iconUrl"]);
+}
+Object.defineProperties(ProviderViewModel.prototype, {
+  /**
+   * Gets the Command that creates one or more providers which will be added to
+   * the globe when this item is selected.
+   * @memberof ProviderViewModel.prototype
+   * @memberof ProviderViewModel.prototype
+   * @type {Command}
+   * @readonly
+   */
+  creationCommand: {
+    get: function() {
+      return this._creationCommand;
+    }
+  },
+  /**
+   * Gets the category
+   * @type {string}
+   * @memberof ProviderViewModel.prototype
+   * @readonly
+   */
+  category: {
+    get: function() {
+      return this._category;
+    }
+  }
+});
+var ProviderViewModel_default = ProviderViewModel;
+
+// packages/widgets/Source/BaseLayerPicker/createDefaultImageryProviderViewModels.js
+function createDefaultImageryProviderViewModels() {
+  const providerViewModels = [];
+  const useRetinaTiles = devicePixelRatio >= 2;
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Bing Maps Aerial",
+      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/bingAerial.png"),
+      tooltip: "Bing Maps aerial imagery, provided by Cesium ion",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return createWorldImageryAsync_default({
+          style: IonWorldImageryStyle_default.AERIAL
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Bing Maps Aerial with Labels",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/bingAerialLabels.png"
+      ),
+      tooltip: "Bing Maps aerial imagery with labels, provided by Cesium ion",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return createWorldImageryAsync_default({
+          style: IonWorldImageryStyle_default.AERIAL_WITH_LABELS
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Bing Maps Roads",
+      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/bingRoads.png"),
+      tooltip: "Bing Maps standard road maps, provided by Cesium ion",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return createWorldImageryAsync_default({
+          style: IonWorldImageryStyle_default.ROAD
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "ArcGIS World Imagery",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldImagery.png"
+      ),
+      tooltip: "ArcGIS World Imagery provides one meter or better satellite and aerial imagery in many parts of the world and lower resolution satellite imagery worldwide. The map includes 15m TerraColor imagery at small and mid-scales (~1:591M down to ~1:288k) for the world. The map features Maxar imagery at 0.3m resolution for select metropolitan areas around the world, 0.5m resolution across the United States and parts of Western Europe, and 1m resolution imagery across the rest of the world. In addition to commercial sources, the World Imagery map features high-resolution aerial photography contributed by the GIS User Community. This imagery ranges from 0.3m to 0.03m resolution (down to ~1:280 nin select communities). For more information on this map, including the terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9",
+      category: "Other",
+      creationFunction: function() {
+        return ArcGisMapServerImageryProvider_default.fromBasemapType(
+          ArcGisBaseMapType_default.SATELLITE,
+          {
+            enablePickFeatures: false
+          }
+        );
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "ArcGIS World Hillshade",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldHillshade.png"
+      ),
+      tooltip: "ArcGIS World Hillshade map portrays elevation as an artistic hillshade. This map is designed to be used as a backdrop for topographical, soil, hydro, landcover or other outdoor recreational maps. The map was compiled from a variety of sources from several data providers. The basemap has global coverage down to a scale of ~1:72k. In select areas of the United States and Europe, coverage is available down to ~1:9k. For more information on this map, including the terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=1b243539f4514b6ba35e7d995890db1d",
+      category: "Other",
+      creationFunction: function() {
+        return ArcGisMapServerImageryProvider_default.fromBasemapType(
+          ArcGisBaseMapType_default.HILLSHADE,
+          {
+            enablePickFeatures: false
+          }
+        );
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Esri World Ocean",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldOcean.png"
+      ),
+      tooltip: "ArcGIS World Ocean map is designed to be used as a base map by marine GIS professionals and as a reference map by anyone interested in ocean data.  The base map features marine bathymetry. Land features include inland waters and roads overlaid on land cover and shaded relief imagery. The map was compiled from a variety of best available sources from several data providers, including General Bathymetric Chart of the Oceans GEBCO_08 Grid, National Oceanic and Atmospheric Administration (NOAA), and National Geographic, Garmin, HERE, Geonames.org, and Esri, and various other contributors. The base map currently provides coverage for the world down to a scale of ~1:577k, and coverage down to 1:72k in US coastal areas, and various other areas. Coverage down to ~ 1:9k is available limited areas based on regional hydrographic survey data. The base map was designed and developed by Esri. For more information on this map, including our terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=1e126e7520f9466c9ca28b8f28b5e500",
+      category: "Other",
+      creationFunction: function() {
+        return ArcGisMapServerImageryProvider_default.fromBasemapType(
+          ArcGisBaseMapType_default.OCEANS,
+          {
+            enablePickFeatures: false
+          }
+        );
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Open\xADStreet\xADMap",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/openStreetMap.png"
+      ),
+      tooltip: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world.\nhttp://www.openstreetmap.org",
+      category: "Other",
+      creationFunction: function() {
+        return new OpenStreetMapImageryProvider_default({
+          url: "https://tile.openstreetmap.org/"
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Stadia x Stamen Watercolor",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/stamenWatercolor.png"
+      ),
+      tooltip: "Based on the original basemaps created for the Knight Foundation and reminiscent of hand drawn maps, the watercolor maps from Stamen Design apply raster effect area washes and organic edges over a paper texture to add warm pop to any map.\nhttps://docs.stadiamaps.com/map-styles/stamen-watercolor/",
+      category: "Other",
+      creationFunction: function() {
+        return new OpenStreetMapImageryProvider_default({
+          url: "https://tiles.stadiamaps.com/tiles/stamen_watercolor/",
+          fileExtension: "jpg",
+          credit: `&copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>
+           &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
+           &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+           &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Stadia x Stamen Toner",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/stamenToner.png"
+      ),
+      tooltip: "Based on the original basemaps created for the Knight Foundation and the most popular of the excellent styles from Stamen Design, these high-contrast B+W (black and white) maps are the perfect backdrop for your colorful and eye-catching overlays.\nhttps://docs.stadiamaps.com/map-styles/stamen-toner/",
+      category: "Other",
+      creationFunction: function() {
+        return new OpenStreetMapImageryProvider_default({
+          url: "https://tiles.stadiamaps.com/tiles/stamen_toner/",
+          retinaTiles: useRetinaTiles,
+          credit: `&copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>
+            &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
+            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Stadia Alidade Smooth",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/stadiaAlidadeSmooth.png"
+      ),
+      tooltip: "Stadia's custom Alidade Smooth style is designed for maps that use a lot of markers or overlays. It features a muted color scheme and fewer points of interest to allow your added data to shine.\nhttps://docs.stadiamaps.com/map-styles/alidade-smooth/",
+      category: "Other",
+      creationFunction: function() {
+        return new OpenStreetMapImageryProvider_default({
+          url: "https://tiles.stadiamaps.com/tiles/alidade_smooth/",
+          retinaTiles: useRetinaTiles,
+          credit: `&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
+            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Stadia Alidade Smooth Dark",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/stadiaAlidadeSmoothDark.png"
+      ),
+      tooltip: "Stadia Alidade Smooth Dark, like its lighter cousin, is also designed to stay out of the way. It just flips the dark mode switch on the color scheme. With the lights out, your data can now literally shine.\nhttps://docs.stadiamaps.com/map-styles/alidade-smooth-dark/",
+      category: "Other",
+      creationFunction: function() {
+        return new OpenStreetMapImageryProvider_default({
+          url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/",
+          retinaTiles: useRetinaTiles,
+          credit: `&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
+            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
+        });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Sentinel-2",
+      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/sentinel-2.png"),
+      tooltip: "Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 and 2017).",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3954);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Blue Marble",
+      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/blueMarble.png"),
+      tooltip: "Blue Marble Next Generation July, 2004 imagery from NASA.",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3845);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Earth at night",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/earthAtNight.png"
+      ),
+      tooltip: "The Earth at night, also known as The Black Marble, is a 500 meter resolution global composite imagery layer released by NASA.",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3812);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Natural Earth\xA0II",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/naturalEarthII.png"
+      ),
+      tooltip: "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return TileMapServiceImageryProvider_default.fromUrl(
+          buildModuleUrl_default("Assets/Textures/NaturalEarthII")
+        );
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Google Maps Satellite",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/googleSatellite.png"
+      ),
+      tooltip: "Imagery from Google Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3830182);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Google Maps Satellite with Labels",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/googleSatelliteLabels.png"
+      ),
+      tooltip: "Imagery with place labels from Google Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3830183);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Google Maps Roadmap",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/googleRoadmap.png"
+      ),
+      tooltip: "Labeled roads and other features on a base landscape from Google Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3830184);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Google Maps Contour",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/googleContour.png"
+      ),
+      tooltip: "Hillshade mapping, contour lines, natural features (roadmap features hidden) from Google Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3830186);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Azure Maps Aerial",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/ImageryProviders/azureAerial.png"
+      ),
+      tooltip: "Imagery from Azure Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3891168);
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Azure Maps Roads",
+      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/azureRoads.png"),
+      tooltip: "Labeled roads and other features on a base landscape from Azure Maps",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return IonImageryProvider_default.fromAssetId(3891169);
+      }
+    })
+  );
+  return providerViewModels;
+}
+var createDefaultImageryProviderViewModels_default = createDefaultImageryProviderViewModels;
+
+// packages/widgets/Source/BaseLayerPicker/createDefaultTerrainProviderViewModels.js
+function createDefaultTerrainProviderViewModels() {
+  const providerViewModels = [];
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "WGS84 Ellipsoid",
+      iconUrl: buildModuleUrl_default("Widgets/Images/TerrainProviders/Ellipsoid.png"),
+      tooltip: "WGS84 standard ellipsoid, also known as EPSG:4326",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return new EllipsoidTerrainProvider_default({ ellipsoid: Ellipsoid_default.WGS84 });
+      }
+    })
+  );
+  providerViewModels.push(
+    new ProviderViewModel_default({
+      name: "Cesium World Terrain",
+      iconUrl: buildModuleUrl_default(
+        "Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"
+      ),
+      tooltip: "High-resolution global terrain tileset curated from several datasources and hosted by Cesium ion",
+      category: "Cesium ion",
+      creationFunction: function() {
+        return createWorldTerrainAsync_default({
+          requestWaterMask: true,
+          requestVertexNormals: true
+        });
+      }
+    })
+  );
+  return providerViewModels;
+}
+var createDefaultTerrainProviderViewModels_default = createDefaultTerrainProviderViewModels;
+
 // packages/widgets/Source/Animation/Animation.js
 var svgNS2 = "http://www.w3.org/2000/svg";
 var xlinkNS = "http://www.w3.org/1999/xlink";
@@ -258546,800 +260257,6 @@ Object.defineProperties(AnimationViewModel.prototype, {
 AnimationViewModel._maxShuttleRingAngle = maxShuttleRingAngle;
 AnimationViewModel._realtimeShuttleRingAngle = realtimeShuttleRingAngle;
 var AnimationViewModel_default = AnimationViewModel;
-
-// packages/widgets/Source/BaseLayerPicker/BaseLayerPickerViewModel.js
-function BaseLayerPickerViewModel(options) {
-  options = options ?? Frozen_default.EMPTY_OBJECT;
-  const globe = options.globe;
-  const imageryProviderViewModels = options.imageryProviderViewModels ?? Frozen_default.EMPTY_ARRAY;
-  const terrainProviderViewModels = options.terrainProviderViewModels ?? Frozen_default.EMPTY_ARRAY;
-  if (!defined_default(globe)) {
-    throw new DeveloperError_default("globe is required");
-  }
-  this._globe = globe;
-  this.imageryProviderViewModels = imageryProviderViewModels.slice(0);
-  this.terrainProviderViewModels = terrainProviderViewModels.slice(0);
-  this.dropDownVisible = false;
-  knockout_default.track(this, [
-    "imageryProviderViewModels",
-    "terrainProviderViewModels",
-    "dropDownVisible"
-  ]);
-  const imageryObservable = knockout_default.getObservable(
-    this,
-    "imageryProviderViewModels"
-  );
-  const imageryProviders = knockout_default.pureComputed(function() {
-    const providers = imageryObservable();
-    const categories = {};
-    let i;
-    for (i = 0; i < providers.length; i++) {
-      const provider = providers[i];
-      const category = provider.category;
-      if (defined_default(categories[category])) {
-        categories[category].push(provider);
-      } else {
-        categories[category] = [provider];
-      }
-    }
-    const allCategoryNames = Object.keys(categories);
-    const result = [];
-    for (i = 0; i < allCategoryNames.length; i++) {
-      const name = allCategoryNames[i];
-      result.push({
-        name,
-        providers: categories[name]
-      });
-    }
-    return result;
-  });
-  this._imageryProviders = imageryProviders;
-  const terrainObservable = knockout_default.getObservable(
-    this,
-    "terrainProviderViewModels"
-  );
-  const terrainProviders = knockout_default.pureComputed(function() {
-    const providers = terrainObservable();
-    const categories = {};
-    let i;
-    for (i = 0; i < providers.length; i++) {
-      const provider = providers[i];
-      const category = provider.category;
-      if (defined_default(categories[category])) {
-        categories[category].push(provider);
-      } else {
-        categories[category] = [provider];
-      }
-    }
-    const allCategoryNames = Object.keys(categories);
-    const result = [];
-    for (i = 0; i < allCategoryNames.length; i++) {
-      const name = allCategoryNames[i];
-      result.push({
-        name,
-        providers: categories[name]
-      });
-    }
-    return result;
-  });
-  this._terrainProviders = terrainProviders;
-  this.buttonTooltip = void 0;
-  knockout_default.defineProperty(this, "buttonTooltip", function() {
-    const selectedImagery = this.selectedImagery;
-    const selectedTerrain = this.selectedTerrain;
-    const imageryTip = defined_default(selectedImagery) ? selectedImagery.name : void 0;
-    const terrainTip = defined_default(selectedTerrain) ? selectedTerrain.name : void 0;
-    if (defined_default(imageryTip) && defined_default(terrainTip)) {
-      return `${imageryTip}
-${terrainTip}`;
-    } else if (defined_default(imageryTip)) {
-      return imageryTip;
-    }
-    return terrainTip;
-  });
-  this.buttonImageUrl = void 0;
-  knockout_default.defineProperty(this, "buttonImageUrl", function() {
-    const selectedImagery = this.selectedImagery;
-    if (defined_default(selectedImagery)) {
-      return selectedImagery.iconUrl;
-    }
-  });
-  this.selectedImagery = void 0;
-  const selectedImageryViewModel = knockout_default.observable();
-  this._currentImageryLayers = [];
-  knockout_default.defineProperty(this, "selectedImagery", {
-    get: function() {
-      return selectedImageryViewModel();
-    },
-    set: function(value) {
-      if (selectedImageryViewModel() === value) {
-        this.dropDownVisible = false;
-        return;
-      }
-      let i;
-      const currentImageryLayers = this._currentImageryLayers;
-      const currentImageryLayersLength = currentImageryLayers.length;
-      const imageryLayers = this._globe.imageryLayers;
-      let hadExistingBaseLayer = false;
-      for (i = 0; i < currentImageryLayersLength; i++) {
-        const layersLength = imageryLayers.length;
-        for (let x = 0; x < layersLength; x++) {
-          const layer = imageryLayers.get(x);
-          if (layer === currentImageryLayers[i]) {
-            imageryLayers.remove(layer);
-            hadExistingBaseLayer = true;
-            break;
-          }
-        }
-      }
-      if (defined_default(value)) {
-        const newProviders = value.creationCommand();
-        if (Array.isArray(newProviders)) {
-          const newProvidersLength = newProviders.length;
-          this._currentImageryLayers = [];
-          for (i = newProvidersLength - 1; i >= 0; i--) {
-            const layer = ImageryLayer_default.fromProviderAsync(newProviders[i]);
-            imageryLayers.add(layer, 0);
-            this._currentImageryLayers.push(layer);
-          }
-        } else {
-          this._currentImageryLayers = [];
-          const layer = ImageryLayer_default.fromProviderAsync(newProviders);
-          layer.name = value.name;
-          if (hadExistingBaseLayer) {
-            imageryLayers.add(layer, 0);
-          } else {
-            const baseLayer = imageryLayers.get(0);
-            if (defined_default(baseLayer)) {
-              imageryLayers.remove(baseLayer);
-            }
-            imageryLayers.add(layer, 0);
-          }
-          this._currentImageryLayers.push(layer);
-        }
-      }
-      selectedImageryViewModel(value);
-      this.dropDownVisible = false;
-    }
-  });
-  this.selectedTerrain = void 0;
-  const selectedTerrainViewModel = knockout_default.observable();
-  knockout_default.defineProperty(this, "selectedTerrain", {
-    get: function() {
-      return selectedTerrainViewModel();
-    },
-    set: function(value) {
-      if (selectedTerrainViewModel() === value) {
-        this.dropDownVisible = false;
-        return;
-      }
-      let newProvider;
-      if (defined_default(value)) {
-        newProvider = value.creationCommand();
-      }
-      if (defined_default(newProvider) && !defined_default(newProvider.then)) {
-        this._globe.depthTestAgainstTerrain = !(newProvider instanceof EllipsoidTerrainProvider_default);
-        this._globe.terrainProvider = newProvider;
-      } else if (defined_default(newProvider)) {
-        let cancelUpdate = false;
-        const removeCancelListener = this._globe.terrainProviderChanged.addEventListener(() => {
-          cancelUpdate = true;
-          removeCancelListener();
-        });
-        const terrain = new Terrain_default(newProvider);
-        const removeEventListener2 = terrain.readyEvent.addEventListener(
-          (terrainProvider) => {
-            if (cancelUpdate) {
-              return;
-            }
-            this._globe.depthTestAgainstTerrain = !(terrainProvider instanceof EllipsoidTerrainProvider_default);
-            this._globe.terrainProvider = terrainProvider;
-            removeEventListener2();
-          }
-        );
-      }
-      selectedTerrainViewModel(value);
-      this.dropDownVisible = false;
-    }
-  });
-  const that = this;
-  this._toggleDropDown = createCommand_default(function() {
-    that.dropDownVisible = !that.dropDownVisible;
-  });
-  this.selectedImagery = options.selectedImageryProviderViewModel ?? imageryProviderViewModels[0];
-  this.selectedTerrain = options.selectedTerrainProviderViewModel;
-}
-Object.defineProperties(BaseLayerPickerViewModel.prototype, {
-  /**
-   * Gets the command to toggle the visibility of the drop down.
-   * @memberof BaseLayerPickerViewModel.prototype
-   *
-   * @type {Command}
-   */
-  toggleDropDown: {
-    get: function() {
-      return this._toggleDropDown;
-    }
-  },
-  /**
-   * Gets the globe.
-   * @memberof BaseLayerPickerViewModel.prototype
-   *
-   * @type {Globe}
-   */
-  globe: {
-    get: function() {
-      return this._globe;
-    }
-  }
-});
-var BaseLayerPickerViewModel_default = BaseLayerPickerViewModel;
-
-// packages/widgets/Source/BaseLayerPicker/BaseLayerPicker.js
-function BaseLayerPicker(container, options) {
-  if (!defined_default(container)) {
-    throw new DeveloperError_default("container is required.");
-  }
-  container = getElement_default(container);
-  const viewModel = new BaseLayerPickerViewModel_default(options);
-  const element = document.createElement("button");
-  element.type = "button";
-  element.className = "cesium-button cesium-toolbar-button";
-  element.setAttribute(
-    "data-bind",
-    "attr: { title: buttonTooltip },click: toggleDropDown"
-  );
-  container.appendChild(element);
-  const imgElement = document.createElement("img");
-  imgElement.setAttribute("draggable", "false");
-  imgElement.className = "cesium-baseLayerPicker-selected";
-  imgElement.setAttribute(
-    "data-bind",
-    "attr: { src: buttonImageUrl }, visible: !!buttonImageUrl"
-  );
-  element.appendChild(imgElement);
-  const dropPanel = document.createElement("div");
-  dropPanel.className = "cesium-baseLayerPicker-dropDown";
-  dropPanel.setAttribute(
-    "data-bind",
-    'css: { "cesium-baseLayerPicker-dropDown-visible" : dropDownVisible }'
-  );
-  container.appendChild(dropPanel);
-  const imageryTitle = document.createElement("div");
-  imageryTitle.className = "cesium-baseLayerPicker-sectionTitle";
-  imageryTitle.setAttribute(
-    "data-bind",
-    "visible: imageryProviderViewModels.length > 0"
-  );
-  imageryTitle.innerHTML = "Imagery";
-  dropPanel.appendChild(imageryTitle);
-  const imagerySection = document.createElement("div");
-  imagerySection.className = "cesium-baseLayerPicker-section";
-  imagerySection.setAttribute("data-bind", "foreach: _imageryProviders");
-  dropPanel.appendChild(imagerySection);
-  const imageryCategories = document.createElement("div");
-  imageryCategories.className = "cesium-baseLayerPicker-category";
-  imagerySection.appendChild(imageryCategories);
-  const categoryTitle = document.createElement("div");
-  categoryTitle.className = "cesium-baseLayerPicker-categoryTitle";
-  categoryTitle.setAttribute("data-bind", "text: name");
-  imageryCategories.appendChild(categoryTitle);
-  const imageryChoices = document.createElement("div");
-  imageryChoices.className = "cesium-baseLayerPicker-choices";
-  imageryChoices.setAttribute("data-bind", "foreach: providers");
-  imageryCategories.appendChild(imageryChoices);
-  const imageryProvider = document.createElement("div");
-  imageryProvider.className = "cesium-baseLayerPicker-item";
-  imageryProvider.setAttribute(
-    "data-bind",
-    'css: { "cesium-baseLayerPicker-selectedItem" : $data === $parents[1].selectedImagery },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parents[1].selectedImagery = $data; }'
-  );
-  imageryChoices.appendChild(imageryProvider);
-  const providerIcon = document.createElement("img");
-  providerIcon.className = "cesium-baseLayerPicker-itemIcon";
-  providerIcon.setAttribute("data-bind", "attr: { src: iconUrl }");
-  providerIcon.setAttribute("draggable", "false");
-  imageryProvider.appendChild(providerIcon);
-  const providerLabel = document.createElement("div");
-  providerLabel.className = "cesium-baseLayerPicker-itemLabel";
-  providerLabel.setAttribute("data-bind", "text: name");
-  imageryProvider.appendChild(providerLabel);
-  const terrainTitle = document.createElement("div");
-  terrainTitle.className = "cesium-baseLayerPicker-sectionTitle";
-  terrainTitle.setAttribute(
-    "data-bind",
-    "visible: terrainProviderViewModels.length > 0"
-  );
-  terrainTitle.innerHTML = "Terrain";
-  dropPanel.appendChild(terrainTitle);
-  const terrainSection = document.createElement("div");
-  terrainSection.className = "cesium-baseLayerPicker-section";
-  terrainSection.setAttribute("data-bind", "foreach: _terrainProviders");
-  dropPanel.appendChild(terrainSection);
-  const terrainCategories = document.createElement("div");
-  terrainCategories.className = "cesium-baseLayerPicker-category";
-  terrainSection.appendChild(terrainCategories);
-  const terrainCategoryTitle = document.createElement("div");
-  terrainCategoryTitle.className = "cesium-baseLayerPicker-categoryTitle";
-  terrainCategoryTitle.setAttribute("data-bind", "text: name");
-  terrainCategories.appendChild(terrainCategoryTitle);
-  const terrainChoices = document.createElement("div");
-  terrainChoices.className = "cesium-baseLayerPicker-choices";
-  terrainChoices.setAttribute("data-bind", "foreach: providers");
-  terrainCategories.appendChild(terrainChoices);
-  const terrainProvider = document.createElement("div");
-  terrainProvider.className = "cesium-baseLayerPicker-item";
-  terrainProvider.setAttribute(
-    "data-bind",
-    'css: { "cesium-baseLayerPicker-selectedItem" : $data === $parents[1].selectedTerrain },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parents[1].selectedTerrain = $data; }'
-  );
-  terrainChoices.appendChild(terrainProvider);
-  const terrainProviderIcon = document.createElement("img");
-  terrainProviderIcon.className = "cesium-baseLayerPicker-itemIcon";
-  terrainProviderIcon.setAttribute("data-bind", "attr: { src: iconUrl }");
-  terrainProviderIcon.setAttribute("draggable", "false");
-  terrainProvider.appendChild(terrainProviderIcon);
-  const terrainProviderLabel = document.createElement("div");
-  terrainProviderLabel.className = "cesium-baseLayerPicker-itemLabel";
-  terrainProviderLabel.setAttribute("data-bind", "text: name");
-  terrainProvider.appendChild(terrainProviderLabel);
-  knockout_default.applyBindings(viewModel, element);
-  knockout_default.applyBindings(viewModel, dropPanel);
-  this._viewModel = viewModel;
-  this._container = container;
-  this._element = element;
-  this._dropPanel = dropPanel;
-  this._closeDropDown = function(e) {
-    if (!(element.contains(e.target) || dropPanel.contains(e.target))) {
-      viewModel.dropDownVisible = false;
-    }
-  };
-  if (FeatureDetection_default.supportsPointerEvents()) {
-    document.addEventListener("pointerdown", this._closeDropDown, true);
-  } else {
-    document.addEventListener("mousedown", this._closeDropDown, true);
-    document.addEventListener("touchstart", this._closeDropDown, true);
-  }
-}
-Object.defineProperties(BaseLayerPicker.prototype, {
-  /**
-   * Gets the parent container.
-   * @memberof BaseLayerPicker.prototype
-   *
-   * @type {Element}
-   */
-  container: {
-    get: function() {
-      return this._container;
-    }
-  },
-  /**
-   * Gets the view model.
-   * @memberof BaseLayerPicker.prototype
-   *
-   * @type {BaseLayerPickerViewModel}
-   */
-  viewModel: {
-    get: function() {
-      return this._viewModel;
-    }
-  }
-});
-BaseLayerPicker.prototype.isDestroyed = function() {
-  return false;
-};
-BaseLayerPicker.prototype.destroy = function() {
-  if (FeatureDetection_default.supportsPointerEvents()) {
-    document.removeEventListener("pointerdown", this._closeDropDown, true);
-  } else {
-    document.removeEventListener("mousedown", this._closeDropDown, true);
-    document.removeEventListener("touchstart", this._closeDropDown, true);
-  }
-  knockout_default.cleanNode(this._element);
-  knockout_default.cleanNode(this._dropPanel);
-  this._container.removeChild(this._element);
-  this._container.removeChild(this._dropPanel);
-  return destroyObject_default(this);
-};
-var BaseLayerPicker_default = BaseLayerPicker;
-
-// packages/widgets/Source/BaseLayerPicker/ProviderViewModel.js
-function ProviderViewModel(options) {
-  if (!defined_default(options.name)) {
-    throw new DeveloperError_default("options.name is required.");
-  }
-  if (!defined_default(options.tooltip)) {
-    throw new DeveloperError_default("options.tooltip is required.");
-  }
-  if (!defined_default(options.iconUrl)) {
-    throw new DeveloperError_default("options.iconUrl is required.");
-  }
-  if (typeof options.creationFunction !== "function") {
-    throw new DeveloperError_default("options.creationFunction is required.");
-  }
-  let creationCommand = options.creationFunction;
-  if (!defined_default(creationCommand.canExecute)) {
-    creationCommand = createCommand_default(creationCommand);
-  }
-  this._creationCommand = creationCommand;
-  this.name = options.name;
-  this.tooltip = options.tooltip;
-  this.iconUrl = options.iconUrl;
-  this._category = options.category ?? "";
-  knockout_default.track(this, ["name", "tooltip", "iconUrl"]);
-}
-Object.defineProperties(ProviderViewModel.prototype, {
-  /**
-   * Gets the Command that creates one or more providers which will be added to
-   * the globe when this item is selected.
-   * @memberof ProviderViewModel.prototype
-   * @memberof ProviderViewModel.prototype
-   * @type {Command}
-   * @readonly
-   */
-  creationCommand: {
-    get: function() {
-      return this._creationCommand;
-    }
-  },
-  /**
-   * Gets the category
-   * @type {string}
-   * @memberof ProviderViewModel.prototype
-   * @readonly
-   */
-  category: {
-    get: function() {
-      return this._category;
-    }
-  }
-});
-var ProviderViewModel_default = ProviderViewModel;
-
-// packages/widgets/Source/BaseLayerPicker/createDefaultImageryProviderViewModels.js
-function createDefaultImageryProviderViewModels() {
-  const providerViewModels = [];
-  const useRetinaTiles = devicePixelRatio >= 2;
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Bing Maps Aerial",
-      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/bingAerial.png"),
-      tooltip: "Bing Maps aerial imagery, provided by Cesium ion",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return createWorldImageryAsync_default({
-          style: IonWorldImageryStyle_default.AERIAL
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Bing Maps Aerial with Labels",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/bingAerialLabels.png"
-      ),
-      tooltip: "Bing Maps aerial imagery with labels, provided by Cesium ion",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return createWorldImageryAsync_default({
-          style: IonWorldImageryStyle_default.AERIAL_WITH_LABELS
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Bing Maps Roads",
-      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/bingRoads.png"),
-      tooltip: "Bing Maps standard road maps, provided by Cesium ion",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return createWorldImageryAsync_default({
-          style: IonWorldImageryStyle_default.ROAD
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "ArcGIS World Imagery",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldImagery.png"
-      ),
-      tooltip: "ArcGIS World Imagery provides one meter or better satellite and aerial imagery in many parts of the world and lower resolution satellite imagery worldwide. The map includes 15m TerraColor imagery at small and mid-scales (~1:591M down to ~1:288k) for the world. The map features Maxar imagery at 0.3m resolution for select metropolitan areas around the world, 0.5m resolution across the United States and parts of Western Europe, and 1m resolution imagery across the rest of the world. In addition to commercial sources, the World Imagery map features high-resolution aerial photography contributed by the GIS User Community. This imagery ranges from 0.3m to 0.03m resolution (down to ~1:280 nin select communities). For more information on this map, including the terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9",
-      category: "Other",
-      creationFunction: function() {
-        return ArcGisMapServerImageryProvider_default.fromBasemapType(
-          ArcGisBaseMapType_default.SATELLITE,
-          {
-            enablePickFeatures: false
-          }
-        );
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "ArcGIS World Hillshade",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldHillshade.png"
-      ),
-      tooltip: "ArcGIS World Hillshade map portrays elevation as an artistic hillshade. This map is designed to be used as a backdrop for topographical, soil, hydro, landcover or other outdoor recreational maps. The map was compiled from a variety of sources from several data providers. The basemap has global coverage down to a scale of ~1:72k. In select areas of the United States and Europe, coverage is available down to ~1:9k. For more information on this map, including the terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=1b243539f4514b6ba35e7d995890db1d",
-      category: "Other",
-      creationFunction: function() {
-        return ArcGisMapServerImageryProvider_default.fromBasemapType(
-          ArcGisBaseMapType_default.HILLSHADE,
-          {
-            enablePickFeatures: false
-          }
-        );
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Esri World Ocean",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/ArcGisMapServiceWorldOcean.png"
-      ),
-      tooltip: "ArcGIS World Ocean map is designed to be used as a base map by marine GIS professionals and as a reference map by anyone interested in ocean data.  The base map features marine bathymetry. Land features include inland waters and roads overlaid on land cover and shaded relief imagery. The map was compiled from a variety of best available sources from several data providers, including General Bathymetric Chart of the Oceans GEBCO_08 Grid, National Oceanic and Atmospheric Administration (NOAA), and National Geographic, Garmin, HERE, Geonames.org, and Esri, and various other contributors. The base map currently provides coverage for the world down to a scale of ~1:577k, and coverage down to 1:72k in US coastal areas, and various other areas. Coverage down to ~ 1:9k is available limited areas based on regional hydrographic survey data. The base map was designed and developed by Esri. For more information on this map, including our terms of use, visit us online at \nhttps://www.arcgis.com/home/item.html?id=1e126e7520f9466c9ca28b8f28b5e500",
-      category: "Other",
-      creationFunction: function() {
-        return ArcGisMapServerImageryProvider_default.fromBasemapType(
-          ArcGisBaseMapType_default.OCEANS,
-          {
-            enablePickFeatures: false
-          }
-        );
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Open\xADStreet\xADMap",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/openStreetMap.png"
-      ),
-      tooltip: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world.\nhttp://www.openstreetmap.org",
-      category: "Other",
-      creationFunction: function() {
-        return new OpenStreetMapImageryProvider_default({
-          url: "https://tile.openstreetmap.org/"
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Stadia x Stamen Watercolor",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/stamenWatercolor.png"
-      ),
-      tooltip: "Based on the original basemaps created for the Knight Foundation and reminiscent of hand drawn maps, the watercolor maps from Stamen Design apply raster effect area washes and organic edges over a paper texture to add warm pop to any map.\nhttps://docs.stadiamaps.com/map-styles/stamen-watercolor/",
-      category: "Other",
-      creationFunction: function() {
-        return new OpenStreetMapImageryProvider_default({
-          url: "https://tiles.stadiamaps.com/tiles/stamen_watercolor/",
-          fileExtension: "jpg",
-          credit: `&copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>
-           &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
-           &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
-           &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Stadia x Stamen Toner",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/stamenToner.png"
-      ),
-      tooltip: "Based on the original basemaps created for the Knight Foundation and the most popular of the excellent styles from Stamen Design, these high-contrast B+W (black and white) maps are the perfect backdrop for your colorful and eye-catching overlays.\nhttps://docs.stadiamaps.com/map-styles/stamen-toner/",
-      category: "Other",
-      creationFunction: function() {
-        return new OpenStreetMapImageryProvider_default({
-          url: "https://tiles.stadiamaps.com/tiles/stamen_toner/",
-          retinaTiles: useRetinaTiles,
-          credit: `&copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>
-            &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
-            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
-            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Stadia Alidade Smooth",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/stadiaAlidadeSmooth.png"
-      ),
-      tooltip: "Stadia's custom Alidade Smooth style is designed for maps that use a lot of markers or overlays. It features a muted color scheme and fewer points of interest to allow your added data to shine.\nhttps://docs.stadiamaps.com/map-styles/alidade-smooth/",
-      category: "Other",
-      creationFunction: function() {
-        return new OpenStreetMapImageryProvider_default({
-          url: "https://tiles.stadiamaps.com/tiles/alidade_smooth/",
-          retinaTiles: useRetinaTiles,
-          credit: `&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
-            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
-            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Stadia Alidade Smooth Dark",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/stadiaAlidadeSmoothDark.png"
-      ),
-      tooltip: "Stadia Alidade Smooth Dark, like its lighter cousin, is also designed to stay out of the way. It just flips the dark mode switch on the color scheme. With the lights out, your data can now literally shine.\nhttps://docs.stadiamaps.com/map-styles/alidade-smooth-dark/",
-      category: "Other",
-      creationFunction: function() {
-        return new OpenStreetMapImageryProvider_default({
-          url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/",
-          retinaTiles: useRetinaTiles,
-          credit: `&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a>
-            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
-            &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>`
-        });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Sentinel-2",
-      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/sentinel-2.png"),
-      tooltip: "Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 and 2017).",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3954);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Blue Marble",
-      iconUrl: buildModuleUrl_default("Widgets/Images/ImageryProviders/blueMarble.png"),
-      tooltip: "Blue Marble Next Generation July, 2004 imagery from NASA.",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3845);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Earth at night",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/earthAtNight.png"
-      ),
-      tooltip: "The Earth at night, also known as The Black Marble, is a 500 meter resolution global composite imagery layer released by NASA.",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3812);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Natural Earth\xA0II",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/naturalEarthII.png"
-      ),
-      tooltip: "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return TileMapServiceImageryProvider_default.fromUrl(
-          buildModuleUrl_default("Assets/Textures/NaturalEarthII")
-        );
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Google Maps Satellite",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/googleSatellite.png"
-      ),
-      tooltip: "Imagery from Google Maps",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3830182);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Google Maps Satellite with Labels",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/googleSatelliteLabels.png"
-      ),
-      tooltip: "Imagery with place labels from Google Maps",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3830183);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Google Maps Roadmap",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/googleRoadmap.png"
-      ),
-      tooltip: "Labeled roads and other features on a base landscape from Google Maps",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3830184);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Google Maps Labels Only",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/googleLabels.png"
-      ),
-      tooltip: "Place labels from Google Maps to combine with other imagery such as Sentinel-2",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3830185);
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Google Maps Contour",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/ImageryProviders/googleContour.png"
-      ),
-      tooltip: "Hillshade mapping, contour lines, natural features (roadmap features hidden) from Google Maps",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return IonImageryProvider_default.fromAssetId(3830186);
-      }
-    })
-  );
-  return providerViewModels;
-}
-var createDefaultImageryProviderViewModels_default = createDefaultImageryProviderViewModels;
-
-// packages/widgets/Source/BaseLayerPicker/createDefaultTerrainProviderViewModels.js
-function createDefaultTerrainProviderViewModels() {
-  const providerViewModels = [];
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "WGS84 Ellipsoid",
-      iconUrl: buildModuleUrl_default("Widgets/Images/TerrainProviders/Ellipsoid.png"),
-      tooltip: "WGS84 standard ellipsoid, also known as EPSG:4326",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return new EllipsoidTerrainProvider_default({ ellipsoid: Ellipsoid_default.WGS84 });
-      }
-    })
-  );
-  providerViewModels.push(
-    new ProviderViewModel_default({
-      name: "Cesium World Terrain",
-      iconUrl: buildModuleUrl_default(
-        "Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"
-      ),
-      tooltip: "High-resolution global terrain tileset curated from several datasources and hosted by Cesium ion",
-      category: "Cesium ion",
-      creationFunction: function() {
-        return createWorldTerrainAsync_default({
-          requestWaterMask: true,
-          requestVertexNormals: true
-        });
-      }
-    })
-  );
-  return providerViewModels;
-}
-var createDefaultTerrainProviderViewModels_default = createDefaultTerrainProviderViewModels;
 
 // packages/widgets/Source/Cesium3DTilesInspector/Cesium3DTilesInspectorViewModel.js
 function getPickTileset(viewModel) {
@@ -261677,35 +262594,77 @@ CesiumInspector.prototype.destroy = function() {
 };
 var CesiumInspector_default = CesiumInspector;
 
-// packages/widgets/Source/HomeButton/HomeButtonViewModel.js
-function HomeButtonViewModel(scene, duration) {
-  if (!defined_default(scene)) {
-    throw new DeveloperError_default("scene is required.");
+// packages/widgets/Source/FullscreenButton/FullscreenButtonViewModel.js
+function FullscreenButtonViewModel(fullscreenElement, container) {
+  if (!defined_default(container)) {
+    container = document.body;
   }
-  this._scene = scene;
-  this._duration = duration;
+  container = getElement_default(container);
   const that = this;
-  this._command = createCommand_default(function() {
-    that._scene.camera.flyHome(that._duration);
-  });
-  this.tooltip = "View Home";
-  knockout_default.track(this, ["tooltip"]);
-}
-Object.defineProperties(HomeButtonViewModel.prototype, {
-  /**
-   * Gets the scene to control.
-   * @memberof HomeButtonViewModel.prototype
-   *
-   * @type {Scene}
-   */
-  scene: {
+  const tmpIsFullscreen = knockout_default.observable(Fullscreen_default.fullscreen);
+  const tmpIsEnabled = knockout_default.observable(Fullscreen_default.enabled);
+  const ownerDocument = container.ownerDocument;
+  this.isFullscreen = void 0;
+  knockout_default.defineProperty(this, "isFullscreen", {
     get: function() {
-      return this._scene;
+      return tmpIsFullscreen();
+    }
+  });
+  this.isFullscreenEnabled = void 0;
+  knockout_default.defineProperty(this, "isFullscreenEnabled", {
+    get: function() {
+      return tmpIsEnabled();
+    },
+    set: function(value) {
+      tmpIsEnabled(value && Fullscreen_default.enabled);
+    }
+  });
+  this.tooltip = void 0;
+  knockout_default.defineProperty(this, "tooltip", function() {
+    if (!this.isFullscreenEnabled) {
+      return "Full screen unavailable";
+    }
+    return tmpIsFullscreen() ? "Exit full screen" : "Full screen";
+  });
+  this._command = createCommand_default(
+    function() {
+      if (Fullscreen_default.fullscreen) {
+        Fullscreen_default.exitFullscreen();
+      } else {
+        Fullscreen_default.requestFullscreen(that._fullscreenElement);
+      }
+    },
+    knockout_default.getObservable(this, "isFullscreenEnabled")
+  );
+  this._fullscreenElement = getElement_default(fullscreenElement) ?? ownerDocument.body;
+  this._callback = function() {
+    tmpIsFullscreen(Fullscreen_default.fullscreen);
+  };
+  ownerDocument.addEventListener(Fullscreen_default.changeEventName, this._callback);
+}
+Object.defineProperties(FullscreenButtonViewModel.prototype, {
+  /**
+   * Gets or sets the HTML element to place into fullscreen mode when the
+   * corresponding button is pressed.
+   * @memberof FullscreenButtonViewModel.prototype
+   *
+   * @type {Element}
+   */
+  fullscreenElement: {
+    //TODO:@exception {DeveloperError} value must be a valid HTML Element.
+    get: function() {
+      return this._fullscreenElement;
+    },
+    set: function(value) {
+      if (!(value instanceof Element)) {
+        throw new DeveloperError_default("value must be a valid Element.");
+      }
+      this._fullscreenElement = value;
     }
   },
   /**
-   * Gets the Command that is executed when the button is clicked.
-   * @memberof HomeButtonViewModel.prototype
+   * Gets the Command to toggle fullscreen mode.
+   * @memberof FullscreenButtonViewModel.prototype
    *
    * @type {Command}
    */
@@ -261713,43 +262672,34 @@ Object.defineProperties(HomeButtonViewModel.prototype, {
     get: function() {
       return this._command;
     }
-  },
-  /**
-   * Gets or sets the the duration of the camera flight in seconds.
-   * A value of zero causes the camera to instantly switch to home view.
-   * The duration will be computed based on the distance when undefined.
-   * @memberof HomeButtonViewModel.prototype
-   *
-   * @type {number|undefined}
-   */
-  duration: {
-    get: function() {
-      return this._duration;
-    },
-    set: function(value) {
-      if (defined_default(value) && value < 0) {
-        throw new DeveloperError_default("value must be positive.");
-      }
-      this._duration = value;
-    }
   }
 });
-var HomeButtonViewModel_default = HomeButtonViewModel;
+FullscreenButtonViewModel.prototype.isDestroyed = function() {
+  return false;
+};
+FullscreenButtonViewModel.prototype.destroy = function() {
+  document.removeEventListener(Fullscreen_default.changeEventName, this._callback);
+  destroyObject_default(this);
+};
+var FullscreenButtonViewModel_default = FullscreenButtonViewModel;
 
-// packages/widgets/Source/HomeButton/HomeButton.js
-function HomeButton(container, scene, duration) {
+// packages/widgets/Source/FullscreenButton/FullscreenButton.js
+var enterFullScreenPath = "M 83.96875 17.5625 L 83.96875 17.59375 L 76.65625 24.875 L 97.09375 24.96875 L 76.09375 45.96875 L 81.9375 51.8125 L 102.78125 30.9375 L 102.875 51.15625 L 110.15625 43.875 L 110.1875 17.59375 L 83.96875 17.5625 z M 44.125 17.59375 L 17.90625 17.625 L 17.9375 43.90625 L 25.21875 51.1875 L 25.3125 30.96875 L 46.15625 51.8125 L 52 45.96875 L 31 25 L 51.4375 24.90625 L 44.125 17.59375 z M 46.0625 76.03125 L 25.1875 96.875 L 25.09375 76.65625 L 17.8125 83.9375 L 17.8125 110.21875 L 44 110.25 L 51.3125 102.9375 L 30.90625 102.84375 L 51.875 81.875 L 46.0625 76.03125 z M 82 76.15625 L 76.15625 82 L 97.15625 103 L 76.71875 103.0625 L 84.03125 110.375 L 110.25 110.34375 L 110.21875 84.0625 L 102.9375 76.8125 L 102.84375 97 L 82 76.15625 z";
+var exitFullScreenPath = "M 104.34375 17.5625 L 83.5 38.4375 L 83.40625 18.21875 L 76.125 25.5 L 76.09375 51.78125 L 102.3125 51.8125 L 102.3125 51.78125 L 109.625 44.5 L 89.1875 44.40625 L 110.1875 23.40625 L 104.34375 17.5625 z M 23.75 17.59375 L 17.90625 23.4375 L 38.90625 44.4375 L 18.5 44.53125 L 25.78125 51.8125 L 52 51.78125 L 51.96875 25.53125 L 44.6875 18.25 L 44.625 38.46875 L 23.75 17.59375 z M 25.6875 76.03125 L 18.375 83.3125 L 38.78125 83.40625 L 17.8125 104.40625 L 23.625 110.25 L 44.5 89.375 L 44.59375 109.59375 L 51.875 102.3125 L 51.875 76.0625 L 25.6875 76.03125 z M 102.375 76.15625 L 76.15625 76.1875 L 76.1875 102.4375 L 83.46875 109.71875 L 83.5625 89.53125 L 104.40625 110.375 L 110.25 104.53125 L 89.25 83.53125 L 109.6875 83.46875 L 102.375 76.15625 z";
+function FullscreenButton(container, fullscreenElement) {
   if (!defined_default(container)) {
     throw new DeveloperError_default("container is required.");
   }
   container = getElement_default(container);
-  const viewModel = new HomeButtonViewModel_default(scene, duration);
-  viewModel._svgPath = "M14,4l-10,8.75h20l-4.25-3.7188v-4.6562h-2.812v2.1875l-2.938-2.5625zm-7.0938,9.906v10.094h14.094v-10.094h-14.094zm2.1876,2.313h3.3122v4.25h-3.3122v-4.25zm5.8442,1.281h3.406v6.438h-3.406v-6.438z";
+  const viewModel = new FullscreenButtonViewModel_default(fullscreenElement, container);
+  viewModel._exitFullScreenPath = exitFullScreenPath;
+  viewModel._enterFullScreenPath = enterFullScreenPath;
   const element = document.createElement("button");
   element.type = "button";
-  element.className = "cesium-button cesium-toolbar-button cesium-home-button";
+  element.className = "cesium-button cesium-fullscreenButton";
   element.setAttribute(
     "data-bind",
-    "attr: { title: tooltip },click: command,cesiumSvgPath: { path: _svgPath, width: 28, height: 28 }"
+    "attr: { title: tooltip },click: command,enable: isFullscreenEnabled,cesiumSvgPath: { path: isFullscreen ? _exitFullScreenPath : _enterFullScreenPath, width: 128, height: 128 }"
   );
   container.appendChild(element);
   knockout_default.applyBindings(viewModel, element);
@@ -261757,10 +262707,10 @@ function HomeButton(container, scene, duration) {
   this._viewModel = viewModel;
   this._element = element;
 }
-Object.defineProperties(HomeButton.prototype, {
+Object.defineProperties(FullscreenButton.prototype, {
   /**
    * Gets the parent container.
-   * @memberof HomeButton.prototype
+   * @memberof FullscreenButton.prototype
    *
    * @type {Element}
    */
@@ -261771,9 +262721,9 @@ Object.defineProperties(HomeButton.prototype, {
   },
   /**
    * Gets the view model.
-   * @memberof HomeButton.prototype
+   * @memberof FullscreenButton.prototype
    *
-   * @type {HomeButtonViewModel}
+   * @type {FullscreenButtonViewModel}
    */
   viewModel: {
     get: function() {
@@ -261781,15 +262731,16 @@ Object.defineProperties(HomeButton.prototype, {
     }
   }
 });
-HomeButton.prototype.isDestroyed = function() {
+FullscreenButton.prototype.isDestroyed = function() {
   return false;
 };
-HomeButton.prototype.destroy = function() {
+FullscreenButton.prototype.destroy = function() {
+  this._viewModel.destroy();
   knockout_default.cleanNode(this._element);
   this._container.removeChild(this._element);
   return destroyObject_default(this);
 };
-var HomeButton_default = HomeButton;
+var FullscreenButton_default = FullscreenButton;
 
 // packages/widgets/Source/Geocoder/GeocoderViewModel.js
 var DEFAULT_HEIGHT = 1e3;
@@ -262359,77 +263310,35 @@ Geocoder.prototype.destroy = function() {
 };
 var Geocoder_default = Geocoder;
 
-// packages/widgets/Source/FullscreenButton/FullscreenButtonViewModel.js
-function FullscreenButtonViewModel(fullscreenElement, container) {
-  if (!defined_default(container)) {
-    container = document.body;
+// packages/widgets/Source/HomeButton/HomeButtonViewModel.js
+function HomeButtonViewModel(scene, duration) {
+  if (!defined_default(scene)) {
+    throw new DeveloperError_default("scene is required.");
   }
-  container = getElement_default(container);
+  this._scene = scene;
+  this._duration = duration;
   const that = this;
-  const tmpIsFullscreen = knockout_default.observable(Fullscreen_default.fullscreen);
-  const tmpIsEnabled = knockout_default.observable(Fullscreen_default.enabled);
-  const ownerDocument = container.ownerDocument;
-  this.isFullscreen = void 0;
-  knockout_default.defineProperty(this, "isFullscreen", {
-    get: function() {
-      return tmpIsFullscreen();
-    }
+  this._command = createCommand_default(function() {
+    that._scene.camera.flyHome(that._duration);
   });
-  this.isFullscreenEnabled = void 0;
-  knockout_default.defineProperty(this, "isFullscreenEnabled", {
-    get: function() {
-      return tmpIsEnabled();
-    },
-    set: function(value) {
-      tmpIsEnabled(value && Fullscreen_default.enabled);
-    }
-  });
-  this.tooltip = void 0;
-  knockout_default.defineProperty(this, "tooltip", function() {
-    if (!this.isFullscreenEnabled) {
-      return "Full screen unavailable";
-    }
-    return tmpIsFullscreen() ? "Exit full screen" : "Full screen";
-  });
-  this._command = createCommand_default(
-    function() {
-      if (Fullscreen_default.fullscreen) {
-        Fullscreen_default.exitFullscreen();
-      } else {
-        Fullscreen_default.requestFullscreen(that._fullscreenElement);
-      }
-    },
-    knockout_default.getObservable(this, "isFullscreenEnabled")
-  );
-  this._fullscreenElement = getElement_default(fullscreenElement) ?? ownerDocument.body;
-  this._callback = function() {
-    tmpIsFullscreen(Fullscreen_default.fullscreen);
-  };
-  ownerDocument.addEventListener(Fullscreen_default.changeEventName, this._callback);
+  this.tooltip = "View Home";
+  knockout_default.track(this, ["tooltip"]);
 }
-Object.defineProperties(FullscreenButtonViewModel.prototype, {
+Object.defineProperties(HomeButtonViewModel.prototype, {
   /**
-   * Gets or sets the HTML element to place into fullscreen mode when the
-   * corresponding button is pressed.
-   * @memberof FullscreenButtonViewModel.prototype
+   * Gets the scene to control.
+   * @memberof HomeButtonViewModel.prototype
    *
-   * @type {Element}
+   * @type {Scene}
    */
-  fullscreenElement: {
-    //TODO:@exception {DeveloperError} value must be a valid HTML Element.
+  scene: {
     get: function() {
-      return this._fullscreenElement;
-    },
-    set: function(value) {
-      if (!(value instanceof Element)) {
-        throw new DeveloperError_default("value must be a valid Element.");
-      }
-      this._fullscreenElement = value;
+      return this._scene;
     }
   },
   /**
-   * Gets the Command to toggle fullscreen mode.
-   * @memberof FullscreenButtonViewModel.prototype
+   * Gets the Command that is executed when the button is clicked.
+   * @memberof HomeButtonViewModel.prototype
    *
    * @type {Command}
    */
@@ -262437,34 +263346,43 @@ Object.defineProperties(FullscreenButtonViewModel.prototype, {
     get: function() {
       return this._command;
     }
+  },
+  /**
+   * Gets or sets the the duration of the camera flight in seconds.
+   * A value of zero causes the camera to instantly switch to home view.
+   * The duration will be computed based on the distance when undefined.
+   * @memberof HomeButtonViewModel.prototype
+   *
+   * @type {number|undefined}
+   */
+  duration: {
+    get: function() {
+      return this._duration;
+    },
+    set: function(value) {
+      if (defined_default(value) && value < 0) {
+        throw new DeveloperError_default("value must be positive.");
+      }
+      this._duration = value;
+    }
   }
 });
-FullscreenButtonViewModel.prototype.isDestroyed = function() {
-  return false;
-};
-FullscreenButtonViewModel.prototype.destroy = function() {
-  document.removeEventListener(Fullscreen_default.changeEventName, this._callback);
-  destroyObject_default(this);
-};
-var FullscreenButtonViewModel_default = FullscreenButtonViewModel;
+var HomeButtonViewModel_default = HomeButtonViewModel;
 
-// packages/widgets/Source/FullscreenButton/FullscreenButton.js
-var enterFullScreenPath = "M 83.96875 17.5625 L 83.96875 17.59375 L 76.65625 24.875 L 97.09375 24.96875 L 76.09375 45.96875 L 81.9375 51.8125 L 102.78125 30.9375 L 102.875 51.15625 L 110.15625 43.875 L 110.1875 17.59375 L 83.96875 17.5625 z M 44.125 17.59375 L 17.90625 17.625 L 17.9375 43.90625 L 25.21875 51.1875 L 25.3125 30.96875 L 46.15625 51.8125 L 52 45.96875 L 31 25 L 51.4375 24.90625 L 44.125 17.59375 z M 46.0625 76.03125 L 25.1875 96.875 L 25.09375 76.65625 L 17.8125 83.9375 L 17.8125 110.21875 L 44 110.25 L 51.3125 102.9375 L 30.90625 102.84375 L 51.875 81.875 L 46.0625 76.03125 z M 82 76.15625 L 76.15625 82 L 97.15625 103 L 76.71875 103.0625 L 84.03125 110.375 L 110.25 110.34375 L 110.21875 84.0625 L 102.9375 76.8125 L 102.84375 97 L 82 76.15625 z";
-var exitFullScreenPath = "M 104.34375 17.5625 L 83.5 38.4375 L 83.40625 18.21875 L 76.125 25.5 L 76.09375 51.78125 L 102.3125 51.8125 L 102.3125 51.78125 L 109.625 44.5 L 89.1875 44.40625 L 110.1875 23.40625 L 104.34375 17.5625 z M 23.75 17.59375 L 17.90625 23.4375 L 38.90625 44.4375 L 18.5 44.53125 L 25.78125 51.8125 L 52 51.78125 L 51.96875 25.53125 L 44.6875 18.25 L 44.625 38.46875 L 23.75 17.59375 z M 25.6875 76.03125 L 18.375 83.3125 L 38.78125 83.40625 L 17.8125 104.40625 L 23.625 110.25 L 44.5 89.375 L 44.59375 109.59375 L 51.875 102.3125 L 51.875 76.0625 L 25.6875 76.03125 z M 102.375 76.15625 L 76.15625 76.1875 L 76.1875 102.4375 L 83.46875 109.71875 L 83.5625 89.53125 L 104.40625 110.375 L 110.25 104.53125 L 89.25 83.53125 L 109.6875 83.46875 L 102.375 76.15625 z";
-function FullscreenButton(container, fullscreenElement) {
+// packages/widgets/Source/HomeButton/HomeButton.js
+function HomeButton(container, scene, duration) {
   if (!defined_default(container)) {
     throw new DeveloperError_default("container is required.");
   }
   container = getElement_default(container);
-  const viewModel = new FullscreenButtonViewModel_default(fullscreenElement, container);
-  viewModel._exitFullScreenPath = exitFullScreenPath;
-  viewModel._enterFullScreenPath = enterFullScreenPath;
+  const viewModel = new HomeButtonViewModel_default(scene, duration);
+  viewModel._svgPath = "M14,4l-10,8.75h20l-4.25-3.7188v-4.6562h-2.812v2.1875l-2.938-2.5625zm-7.0938,9.906v10.094h14.094v-10.094h-14.094zm2.1876,2.313h3.3122v4.25h-3.3122v-4.25zm5.8442,1.281h3.406v6.438h-3.406v-6.438z";
   const element = document.createElement("button");
   element.type = "button";
-  element.className = "cesium-button cesium-fullscreenButton";
+  element.className = "cesium-button cesium-toolbar-button cesium-home-button";
   element.setAttribute(
     "data-bind",
-    "attr: { title: tooltip },click: command,enable: isFullscreenEnabled,cesiumSvgPath: { path: isFullscreen ? _exitFullScreenPath : _enterFullScreenPath, width: 128, height: 128 }"
+    "attr: { title: tooltip },click: command,cesiumSvgPath: { path: _svgPath, width: 28, height: 28 }"
   );
   container.appendChild(element);
   knockout_default.applyBindings(viewModel, element);
@@ -262472,10 +263390,10 @@ function FullscreenButton(container, fullscreenElement) {
   this._viewModel = viewModel;
   this._element = element;
 }
-Object.defineProperties(FullscreenButton.prototype, {
+Object.defineProperties(HomeButton.prototype, {
   /**
    * Gets the parent container.
-   * @memberof FullscreenButton.prototype
+   * @memberof HomeButton.prototype
    *
    * @type {Element}
    */
@@ -262486,9 +263404,9 @@ Object.defineProperties(FullscreenButton.prototype, {
   },
   /**
    * Gets the view model.
-   * @memberof FullscreenButton.prototype
+   * @memberof HomeButton.prototype
    *
-   * @type {FullscreenButtonViewModel}
+   * @type {HomeButtonViewModel}
    */
   viewModel: {
     get: function() {
@@ -262496,210 +263414,15 @@ Object.defineProperties(FullscreenButton.prototype, {
     }
   }
 });
-FullscreenButton.prototype.isDestroyed = function() {
+HomeButton.prototype.isDestroyed = function() {
   return false;
 };
-FullscreenButton.prototype.destroy = function() {
-  this._viewModel.destroy();
+HomeButton.prototype.destroy = function() {
   knockout_default.cleanNode(this._element);
   this._container.removeChild(this._element);
   return destroyObject_default(this);
 };
-var FullscreenButton_default = FullscreenButton;
-
-// packages/widgets/Source/InfoBox/InfoBoxViewModel.js
-var cameraEnabledPath = "M 13.84375 7.03125 C 11.412798 7.03125 9.46875 8.975298 9.46875 11.40625 L 9.46875 11.59375 L 2.53125 7.21875 L 2.53125 24.0625 L 9.46875 19.6875 C 9.4853444 22.104033 11.423165 24.0625 13.84375 24.0625 L 25.875 24.0625 C 28.305952 24.0625 30.28125 22.087202 30.28125 19.65625 L 30.28125 11.40625 C 30.28125 8.975298 28.305952 7.03125 25.875 7.03125 L 13.84375 7.03125 z";
-var cameraDisabledPath = "M 27.34375 1.65625 L 5.28125 27.9375 L 8.09375 30.3125 L 30.15625 4.03125 L 27.34375 1.65625 z M 13.84375 7.03125 C 11.412798 7.03125 9.46875 8.975298 9.46875 11.40625 L 9.46875 11.59375 L 2.53125 7.21875 L 2.53125 24.0625 L 9.46875 19.6875 C 9.4724893 20.232036 9.5676108 20.7379 9.75 21.21875 L 21.65625 7.03125 L 13.84375 7.03125 z M 28.21875 7.71875 L 14.53125 24.0625 L 25.875 24.0625 C 28.305952 24.0625 30.28125 22.087202 30.28125 19.65625 L 30.28125 11.40625 C 30.28125 9.8371439 29.456025 8.4902779 28.21875 7.71875 z";
-function InfoBoxViewModel() {
-  this._cameraClicked = new Event_default();
-  this._closeClicked = new Event_default();
-  this.maxHeight = 500;
-  this.enableCamera = false;
-  this.isCameraTracking = false;
-  this.showInfo = false;
-  this.titleText = "";
-  this.description = "";
-  knockout_default.track(this, [
-    "showInfo",
-    "titleText",
-    "description",
-    "maxHeight",
-    "enableCamera",
-    "isCameraTracking"
-  ]);
-  this._loadingIndicatorHtml = '<div class="cesium-infoBox-loadingContainer"><span class="cesium-infoBox-loading"></span></div>';
-  this.cameraIconPath = void 0;
-  knockout_default.defineProperty(this, "cameraIconPath", {
-    get: function() {
-      return !this.enableCamera || this.isCameraTracking ? cameraDisabledPath : cameraEnabledPath;
-    }
-  });
-  knockout_default.defineProperty(this, "_bodyless", {
-    get: function() {
-      return !defined_default(this.description) || this.description.length === 0;
-    }
-  });
-}
-InfoBoxViewModel.prototype.maxHeightOffset = function(offset) {
-  return `${this.maxHeight - offset}px`;
-};
-Object.defineProperties(InfoBoxViewModel.prototype, {
-  /**
-   * Gets an {@link Event} that is fired when the user clicks the camera icon.
-   * @memberof InfoBoxViewModel.prototype
-   * @type {Event}
-   */
-  cameraClicked: {
-    get: function() {
-      return this._cameraClicked;
-    }
-  },
-  /**
-   * Gets an {@link Event} that is fired when the user closes the info box.
-   * @memberof InfoBoxViewModel.prototype
-   * @type {Event}
-   */
-  closeClicked: {
-    get: function() {
-      return this._closeClicked;
-    }
-  }
-});
-var InfoBoxViewModel_default = InfoBoxViewModel;
-
-// packages/widgets/Source/InfoBox/InfoBox.js
-function InfoBox(container) {
-  Check_default.defined("container", container);
-  container = getElement_default(container);
-  const infoElement = document.createElement("div");
-  infoElement.className = "cesium-infoBox";
-  infoElement.setAttribute(
-    "data-bind",
-    'css: { "cesium-infoBox-visible" : showInfo, "cesium-infoBox-bodyless" : _bodyless }'
-  );
-  container.appendChild(infoElement);
-  const titleElement = document.createElement("div");
-  titleElement.className = "cesium-infoBox-title";
-  titleElement.setAttribute("data-bind", "text: titleText");
-  infoElement.appendChild(titleElement);
-  const cameraElement = document.createElement("button");
-  cameraElement.type = "button";
-  cameraElement.className = "cesium-button cesium-infoBox-camera";
-  cameraElement.setAttribute(
-    "data-bind",
-    'attr: { title: "Focus camera on object" },click: function () { cameraClicked.raiseEvent(this); },enable: enableCamera,cesiumSvgPath: { path: cameraIconPath, width: 32, height: 32 }'
-  );
-  infoElement.appendChild(cameraElement);
-  const closeElement = document.createElement("button");
-  closeElement.type = "button";
-  closeElement.className = "cesium-infoBox-close";
-  closeElement.setAttribute(
-    "data-bind",
-    "click: function () { closeClicked.raiseEvent(this); }"
-  );
-  closeElement.innerHTML = "&times;";
-  infoElement.appendChild(closeElement);
-  const frame = document.createElement("iframe");
-  frame.className = "cesium-infoBox-iframe";
-  frame.setAttribute("sandbox", "allow-same-origin allow-popups allow-forms");
-  frame.setAttribute(
-    "data-bind",
-    "style : { maxHeight : maxHeightOffset(40) }"
-  );
-  frame.setAttribute("allowfullscreen", true);
-  infoElement.appendChild(frame);
-  const viewModel = new InfoBoxViewModel_default();
-  knockout_default.applyBindings(viewModel, infoElement);
-  this._container = container;
-  this._element = infoElement;
-  this._frame = frame;
-  this._viewModel = viewModel;
-  this._descriptionSubscription = void 0;
-  const that = this;
-  frame.addEventListener("load", function() {
-    const frameDocument = frame.contentDocument;
-    const cssLink = frameDocument.createElement("link");
-    cssLink.href = buildModuleUrl_default("Widgets/InfoBox/InfoBoxDescription.css");
-    cssLink.rel = "stylesheet";
-    cssLink.type = "text/css";
-    const frameContent = frameDocument.createElement("div");
-    frameContent.className = "cesium-infoBox-description";
-    frameDocument.head.appendChild(cssLink);
-    frameDocument.body.appendChild(frameContent);
-    that._descriptionSubscription = subscribeAndEvaluate_default(
-      viewModel,
-      "description",
-      function(value) {
-        frame.style.height = "5px";
-        frameContent.innerHTML = value;
-        let background = null;
-        const firstElementChild = frameContent.firstElementChild;
-        if (firstElementChild !== null && frameContent.childNodes.length === 1) {
-          const style = window.getComputedStyle(firstElementChild);
-          if (style !== null) {
-            const backgroundColor = style["background-color"];
-            const color = Color_default.fromCssColorString(backgroundColor);
-            if (defined_default(color) && color.alpha !== 0) {
-              background = style["background-color"];
-            }
-          }
-        }
-        infoElement.style["background-color"] = background;
-        const height = frameContent.getBoundingClientRect().height;
-        frame.style.height = `${height}px`;
-      }
-    );
-  });
-  frame.setAttribute("src", "about:blank");
-}
-Object.defineProperties(InfoBox.prototype, {
-  /**
-   * Gets the parent container.
-   * @memberof InfoBox.prototype
-   *
-   * @type {Element}
-   */
-  container: {
-    get: function() {
-      return this._container;
-    }
-  },
-  /**
-   * Gets the view model.
-   * @memberof InfoBox.prototype
-   *
-   * @type {InfoBoxViewModel}
-   */
-  viewModel: {
-    get: function() {
-      return this._viewModel;
-    }
-  },
-  /**
-   * Gets the iframe used to display the description.
-   * @memberof InfoBox.prototype
-   *
-   * @type {HTMLIFrameElement}
-   */
-  frame: {
-    get: function() {
-      return this._frame;
-    }
-  }
-});
-InfoBox.prototype.isDestroyed = function() {
-  return false;
-};
-InfoBox.prototype.destroy = function() {
-  const container = this._container;
-  knockout_default.cleanNode(this._element);
-  container.removeChild(this._element);
-  if (defined_default(this._descriptionSubscription)) {
-    this._descriptionSubscription.dispose();
-  }
-  return destroyObject_default(this);
-};
-var InfoBox_default = InfoBox;
+var HomeButton_default = HomeButton;
 
 // packages/widgets/Source/I3SBuildingSceneLayerExplorer/I3SBuildingSceneLayerExplorerViewModel.js
 function expandItemsHandler(data, event) {
@@ -262897,6 +263620,200 @@ function I3SBuildingSceneLayerExplorer(containerId, i3sProvider) {
   }
 }
 var I3SBuildingSceneLayerExplorer_default = I3SBuildingSceneLayerExplorer;
+
+// packages/widgets/Source/InfoBox/InfoBoxViewModel.js
+var cameraEnabledPath = "M 13.84375 7.03125 C 11.412798 7.03125 9.46875 8.975298 9.46875 11.40625 L 9.46875 11.59375 L 2.53125 7.21875 L 2.53125 24.0625 L 9.46875 19.6875 C 9.4853444 22.104033 11.423165 24.0625 13.84375 24.0625 L 25.875 24.0625 C 28.305952 24.0625 30.28125 22.087202 30.28125 19.65625 L 30.28125 11.40625 C 30.28125 8.975298 28.305952 7.03125 25.875 7.03125 L 13.84375 7.03125 z";
+var cameraDisabledPath = "M 27.34375 1.65625 L 5.28125 27.9375 L 8.09375 30.3125 L 30.15625 4.03125 L 27.34375 1.65625 z M 13.84375 7.03125 C 11.412798 7.03125 9.46875 8.975298 9.46875 11.40625 L 9.46875 11.59375 L 2.53125 7.21875 L 2.53125 24.0625 L 9.46875 19.6875 C 9.4724893 20.232036 9.5676108 20.7379 9.75 21.21875 L 21.65625 7.03125 L 13.84375 7.03125 z M 28.21875 7.71875 L 14.53125 24.0625 L 25.875 24.0625 C 28.305952 24.0625 30.28125 22.087202 30.28125 19.65625 L 30.28125 11.40625 C 30.28125 9.8371439 29.456025 8.4902779 28.21875 7.71875 z";
+function InfoBoxViewModel() {
+  this._cameraClicked = new Event_default();
+  this._closeClicked = new Event_default();
+  this.maxHeight = 500;
+  this.enableCamera = false;
+  this.isCameraTracking = false;
+  this.showInfo = false;
+  this.titleText = "";
+  this.description = "";
+  knockout_default.track(this, [
+    "showInfo",
+    "titleText",
+    "description",
+    "maxHeight",
+    "enableCamera",
+    "isCameraTracking"
+  ]);
+  this._loadingIndicatorHtml = '<div class="cesium-infoBox-loadingContainer"><span class="cesium-infoBox-loading"></span></div>';
+  this.cameraIconPath = void 0;
+  knockout_default.defineProperty(this, "cameraIconPath", {
+    get: function() {
+      return !this.enableCamera || this.isCameraTracking ? cameraDisabledPath : cameraEnabledPath;
+    }
+  });
+  knockout_default.defineProperty(this, "_bodyless", {
+    get: function() {
+      return !defined_default(this.description) || this.description.length === 0;
+    }
+  });
+}
+InfoBoxViewModel.prototype.maxHeightOffset = function(offset) {
+  return `${this.maxHeight - offset}px`;
+};
+Object.defineProperties(InfoBoxViewModel.prototype, {
+  /**
+   * Gets an {@link Event} that is fired when the user clicks the camera icon.
+   * @memberof InfoBoxViewModel.prototype
+   * @type {Event}
+   */
+  cameraClicked: {
+    get: function() {
+      return this._cameraClicked;
+    }
+  },
+  /**
+   * Gets an {@link Event} that is fired when the user closes the info box.
+   * @memberof InfoBoxViewModel.prototype
+   * @type {Event}
+   */
+  closeClicked: {
+    get: function() {
+      return this._closeClicked;
+    }
+  }
+});
+var InfoBoxViewModel_default = InfoBoxViewModel;
+
+// packages/widgets/Source/InfoBox/InfoBox.js
+function InfoBox(container) {
+  Check_default.defined("container", container);
+  container = getElement_default(container);
+  const infoElement = document.createElement("div");
+  infoElement.className = "cesium-infoBox";
+  infoElement.setAttribute(
+    "data-bind",
+    'css: { "cesium-infoBox-visible" : showInfo, "cesium-infoBox-bodyless" : _bodyless }'
+  );
+  container.appendChild(infoElement);
+  const titleElement = document.createElement("div");
+  titleElement.className = "cesium-infoBox-title";
+  titleElement.setAttribute("data-bind", "text: titleText");
+  infoElement.appendChild(titleElement);
+  const cameraElement = document.createElement("button");
+  cameraElement.type = "button";
+  cameraElement.className = "cesium-button cesium-infoBox-camera";
+  cameraElement.setAttribute(
+    "data-bind",
+    'attr: { title: "Focus camera on object" },click: function () { cameraClicked.raiseEvent(this); },enable: enableCamera,cesiumSvgPath: { path: cameraIconPath, width: 32, height: 32 }'
+  );
+  infoElement.appendChild(cameraElement);
+  const closeElement = document.createElement("button");
+  closeElement.type = "button";
+  closeElement.className = "cesium-infoBox-close";
+  closeElement.setAttribute(
+    "data-bind",
+    "click: function () { closeClicked.raiseEvent(this); }"
+  );
+  closeElement.innerHTML = "&times;";
+  infoElement.appendChild(closeElement);
+  const frame = document.createElement("iframe");
+  frame.className = "cesium-infoBox-iframe";
+  frame.setAttribute("sandbox", "allow-same-origin allow-popups allow-forms");
+  frame.setAttribute(
+    "data-bind",
+    "style : { maxHeight : maxHeightOffset(40) }"
+  );
+  frame.setAttribute("allowfullscreen", true);
+  infoElement.appendChild(frame);
+  const viewModel = new InfoBoxViewModel_default();
+  knockout_default.applyBindings(viewModel, infoElement);
+  this._container = container;
+  this._element = infoElement;
+  this._frame = frame;
+  this._viewModel = viewModel;
+  this._descriptionSubscription = void 0;
+  const that = this;
+  frame.addEventListener("load", function() {
+    const frameDocument = frame.contentDocument;
+    const cssLink = frameDocument.createElement("link");
+    cssLink.href = buildModuleUrl_default("Widgets/InfoBox/InfoBoxDescription.css");
+    cssLink.rel = "stylesheet";
+    cssLink.type = "text/css";
+    const frameContent = frameDocument.createElement("div");
+    frameContent.className = "cesium-infoBox-description";
+    frameDocument.head.appendChild(cssLink);
+    frameDocument.body.appendChild(frameContent);
+    that._descriptionSubscription = subscribeAndEvaluate_default(
+      viewModel,
+      "description",
+      function(value) {
+        frame.style.height = "5px";
+        frameContent.innerHTML = value;
+        let background = null;
+        const firstElementChild = frameContent.firstElementChild;
+        if (firstElementChild !== null && frameContent.childNodes.length === 1) {
+          const style = window.getComputedStyle(firstElementChild);
+          if (style !== null) {
+            const backgroundColor = style["background-color"];
+            const color = Color_default.fromCssColorString(backgroundColor);
+            if (defined_default(color) && color.alpha !== 0) {
+              background = style["background-color"];
+            }
+          }
+        }
+        infoElement.style["background-color"] = background;
+        const height = frameContent.getBoundingClientRect().height;
+        frame.style.height = `${height}px`;
+      }
+    );
+  });
+  frame.setAttribute("src", "about:blank");
+}
+Object.defineProperties(InfoBox.prototype, {
+  /**
+   * Gets the parent container.
+   * @memberof InfoBox.prototype
+   *
+   * @type {Element}
+   */
+  container: {
+    get: function() {
+      return this._container;
+    }
+  },
+  /**
+   * Gets the view model.
+   * @memberof InfoBox.prototype
+   *
+   * @type {InfoBoxViewModel}
+   */
+  viewModel: {
+    get: function() {
+      return this._viewModel;
+    }
+  },
+  /**
+   * Gets the iframe used to display the description.
+   * @memberof InfoBox.prototype
+   *
+   * @type {HTMLIFrameElement}
+   */
+  frame: {
+    get: function() {
+      return this._frame;
+    }
+  }
+});
+InfoBox.prototype.isDestroyed = function() {
+  return false;
+};
+InfoBox.prototype.destroy = function() {
+  const container = this._container;
+  knockout_default.cleanNode(this._element);
+  container.removeChild(this._element);
+  if (defined_default(this._descriptionSubscription)) {
+    this._descriptionSubscription.dispose();
+  }
+  return destroyObject_default(this);
+};
+var InfoBox_default = InfoBox;
 
 // packages/widgets/Source/NavigationHelpButton/NavigationHelpButtonViewModel.js
 function NavigationHelpButtonViewModel() {
@@ -263096,73 +264013,43 @@ NavigationHelpButton.prototype.destroy = function() {
 };
 var NavigationHelpButton_default = NavigationHelpButton;
 
-// packages/widgets/Source/ProjectionPicker/ProjectionPickerViewModel.js
-function ProjectionPickerViewModel(scene) {
-  if (!defined_default(scene)) {
-    throw new DeveloperError_default("scene is required.");
+// packages/widgets/Source/PerformanceWatchdog/PerformanceWatchdogViewModel.js
+function PerformanceWatchdogViewModel(options) {
+  if (!defined_default(options) || !defined_default(options.scene)) {
+    throw new DeveloperError_default("options.scene is required.");
   }
-  this._scene = scene;
-  this._orthographic = scene.camera.frustum instanceof OrthographicFrustum_default;
-  this._flightInProgress = false;
-  this.dropDownVisible = false;
-  this.tooltipPerspective = "Perspective Projection";
-  this.tooltipOrthographic = "Orthographic Projection";
-  this.selectedTooltip = void 0;
-  this.sceneMode = scene.mode;
+  this._scene = options.scene;
+  this.lowFrameRateMessage = options.lowFrameRateMessage ?? "This application appears to be performing poorly on your system.  Please try using a different web browser or updating your video drivers.";
+  this.lowFrameRateMessageDismissed = false;
+  this.showingLowFrameRateMessage = false;
   knockout_default.track(this, [
-    "_orthographic",
-    "_flightInProgress",
-    "sceneMode",
-    "dropDownVisible",
-    "tooltipPerspective",
-    "tooltipOrthographic"
+    "lowFrameRateMessage",
+    "lowFrameRateMessageDismissed",
+    "showingLowFrameRateMessage"
   ]);
   const that = this;
-  knockout_default.defineProperty(this, "selectedTooltip", function() {
-    if (that._orthographic) {
-      return that.tooltipOrthographic;
-    }
-    return that.tooltipPerspective;
+  this._dismissMessage = createCommand_default(function() {
+    that.showingLowFrameRateMessage = false;
+    that.lowFrameRateMessageDismissed = true;
   });
-  this._toggleDropDown = createCommand_default(function() {
-    if (that.sceneMode === SceneMode_default.SCENE2D || that._flightInProgress) {
-      return;
-    }
-    that.dropDownVisible = !that.dropDownVisible;
-  });
-  this._eventHelper = new EventHelper_default();
-  this._eventHelper.add(
-    scene.morphComplete,
-    function(transitioner, oldMode, newMode, isMorphing) {
-      that.sceneMode = newMode;
-      that._orthographic = newMode === SceneMode_default.SCENE2D || that._scene.camera.frustum instanceof OrthographicFrustum_default;
+  const monitor = FrameRateMonitor_default.fromScene(options.scene);
+  this._unsubscribeLowFrameRate = monitor.lowFrameRate.addEventListener(
+    function() {
+      if (!that.lowFrameRateMessageDismissed) {
+        that.showingLowFrameRateMessage = true;
+      }
     }
   );
-  this._eventHelper.add(scene.preRender, function() {
-    that._flightInProgress = defined_default(scene.camera._currentFlight);
-  });
-  this._switchToPerspective = createCommand_default(function() {
-    if (that.sceneMode === SceneMode_default.SCENE2D) {
-      return;
+  this._unsubscribeNominalFrameRate = monitor.nominalFrameRate.addEventListener(
+    function() {
+      that.showingLowFrameRateMessage = false;
     }
-    that._scene.camera.switchToPerspectiveFrustum();
-    that._orthographic = false;
-    that.dropDownVisible = false;
-  });
-  this._switchToOrthographic = createCommand_default(function() {
-    if (that.sceneMode === SceneMode_default.SCENE2D) {
-      return;
-    }
-    that._scene.camera.switchToOrthographicFrustum();
-    that._orthographic = true;
-    that.dropDownVisible = false;
-  });
-  this._sceneMode = SceneMode_default;
+  );
 }
-Object.defineProperties(ProjectionPickerViewModel.prototype, {
+Object.defineProperties(PerformanceWatchdogViewModel.prototype, {
   /**
-   * Gets the scene
-   * @memberof ProjectionPickerViewModel.prototype
+   * Gets the {@link Scene} instance for which to monitor performance.
+   * @memberof PerformanceWatchdogViewModel.prototype
    * @type {Scene}
    */
   scene: {
@@ -263171,121 +264058,57 @@ Object.defineProperties(ProjectionPickerViewModel.prototype, {
     }
   },
   /**
-   * Gets the command to toggle the drop down box.
-   * @memberof ProjectionPickerViewModel.prototype
-   *
+   * Gets a command that dismisses the low frame rate message.  Once it is dismissed, the message
+   * will not be redisplayed.
+   * @memberof PerformanceWatchdogViewModel.prototype
    * @type {Command}
    */
-  toggleDropDown: {
+  dismissMessage: {
     get: function() {
-      return this._toggleDropDown;
-    }
-  },
-  /**
-   * Gets the command to switch to a perspective projection.
-   * @memberof ProjectionPickerViewModel.prototype
-   *
-   * @type {Command}
-   */
-  switchToPerspective: {
-    get: function() {
-      return this._switchToPerspective;
-    }
-  },
-  /**
-   * Gets the command to switch to orthographic projection.
-   * @memberof ProjectionPickerViewModel.prototype
-   *
-   * @type {Command}
-   */
-  switchToOrthographic: {
-    get: function() {
-      return this._switchToOrthographic;
-    }
-  },
-  /**
-   * Gets whether the scene is currently using an orthographic projection.
-   * @memberof ProjectionPickerViewModel.prototype
-   *
-   * @type {Command}
-   */
-  isOrthographicProjection: {
-    get: function() {
-      return this._orthographic;
+      return this._dismissMessage;
     }
   }
 });
-ProjectionPickerViewModel.prototype.isDestroyed = function() {
-  return false;
+PerformanceWatchdogViewModel.prototype.destroy = function() {
+  this._unsubscribeLowFrameRate();
+  this._unsubscribeNominalFrameRate();
+  return destroyObject_default(this);
 };
-ProjectionPickerViewModel.prototype.destroy = function() {
-  this._eventHelper.removeAll();
-  destroyObject_default(this);
-};
-var ProjectionPickerViewModel_default = ProjectionPickerViewModel;
+var PerformanceWatchdogViewModel_default = PerformanceWatchdogViewModel;
 
-// packages/widgets/Source/ProjectionPicker/ProjectionPicker.js
-var perspectivePath = "M 28.15625,10.4375 9.125,13.21875 13.75,43.25 41.75,55.09375 50.8125,37 54.5,11.9375 z m 0.125,3 19.976451,0.394265 L 43.03125,16.875 22.6875,14.28125 z M 50.971746,15.705477 47.90625,36.03125 42.53125,46 44.84375,19.3125 z M 12.625,16.03125 l 29.15625,3.6875 -2.65625,31 L 16.4375,41.125 z";
-var orthographicPath = "m 31.560594,6.5254438 -20.75,12.4687502 0.1875,24.5625 22.28125,11.8125 19.5,-12 0.65625,-0.375 0,-0.75 0.0312,-23.21875 z m 0.0625,3.125 16.65625,9.5000002 -16.125,10.28125 -17.34375,-9.71875 z m 18.96875,11.1875002 0.15625,20.65625 -17.46875,10.59375 0.15625,-20.28125 z m -37.0625,1.25 17.21875,9.625 -0.15625,19.21875 -16.9375,-9 z";
-function ProjectionPicker(container, scene) {
-  if (!defined_default(container)) {
-    throw new DeveloperError_default("container is required.");
+// packages/widgets/Source/PerformanceWatchdog/PerformanceWatchdog.js
+function PerformanceWatchdog(options) {
+  if (!defined_default(options) || !defined_default(options.container)) {
+    throw new DeveloperError_default("options.container is required.");
   }
-  if (!defined_default(scene)) {
-    throw new DeveloperError_default("scene is required.");
+  if (!defined_default(options.scene)) {
+    throw new DeveloperError_default("options.scene is required.");
   }
-  container = getElement_default(container);
-  const viewModel = new ProjectionPickerViewModel_default(scene);
-  viewModel._perspectivePath = perspectivePath;
-  viewModel._orthographicPath = orthographicPath;
-  const wrapper = document.createElement("span");
-  wrapper.className = "cesium-projectionPicker-wrapper cesium-toolbar-button";
-  container.appendChild(wrapper);
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "cesium-button cesium-toolbar-button";
-  button.setAttribute(
-    "data-bind",
-    'css: { "cesium-projectionPicker-buttonPerspective": !_orthographic,       "cesium-projectionPicker-buttonOrthographic": _orthographic,       "cesium-button-disabled" : sceneMode === _sceneMode.SCENE2D || _flightInProgress,        "cesium-projectionPicker-selected": dropDownVisible },attr: { title: selectedTooltip },click: toggleDropDown'
-  );
-  button.innerHTML = '<!-- ko cesiumSvgPath: { path: _perspectivePath, width: 64, height: 64, css: "cesium-projectionPicker-iconPerspective" } --><!-- /ko --><!-- ko cesiumSvgPath: { path: _orthographicPath, width: 64, height: 64, css: "cesium-projectionPicker-iconOrthographic" } --><!-- /ko -->';
-  wrapper.appendChild(button);
-  const perspectiveButton = document.createElement("button");
-  perspectiveButton.type = "button";
-  perspectiveButton.className = "cesium-button cesium-toolbar-button cesium-projectionPicker-dropDown-icon";
-  perspectiveButton.setAttribute(
-    "data-bind",
-    'css: { "cesium-projectionPicker-visible" : (dropDownVisible && _orthographic),       "cesium-projectionPicker-none" : !_orthographic,       "cesium-projectionPicker-hidden" : !dropDownVisible },attr: { title: tooltipPerspective },click: switchToPerspective,cesiumSvgPath: { path: _perspectivePath, width: 64, height: 64 }'
-  );
-  wrapper.appendChild(perspectiveButton);
-  const orthographicButton = document.createElement("button");
-  orthographicButton.type = "button";
-  orthographicButton.className = "cesium-button cesium-toolbar-button cesium-projectionPicker-dropDown-icon";
-  orthographicButton.setAttribute(
-    "data-bind",
-    'css: { "cesium-projectionPicker-visible" : (dropDownVisible && !_orthographic),       "cesium-projectionPicker-none" : _orthographic,       "cesium-projectionPicker-hidden" : !dropDownVisible},attr: { title: tooltipOrthographic },click: switchToOrthographic,cesiumSvgPath: { path: _orthographicPath, width: 64, height: 64 }'
-  );
-  wrapper.appendChild(orthographicButton);
-  knockout_default.applyBindings(viewModel, wrapper);
-  this._viewModel = viewModel;
+  const container = getElement_default(options.container);
+  const viewModel = new PerformanceWatchdogViewModel_default(options);
+  const element = document.createElement("div");
+  element.className = "cesium-performance-watchdog-message-area";
+  element.setAttribute("data-bind", "visible: showingLowFrameRateMessage");
+  const dismissButton = document.createElement("button");
+  dismissButton.setAttribute("type", "button");
+  dismissButton.className = "cesium-performance-watchdog-message-dismiss";
+  dismissButton.innerHTML = "&times;";
+  dismissButton.setAttribute("data-bind", "click: dismissMessage");
+  element.appendChild(dismissButton);
+  const message = document.createElement("div");
+  message.className = "cesium-performance-watchdog-message";
+  message.setAttribute("data-bind", "html: lowFrameRateMessage");
+  element.appendChild(message);
+  container.appendChild(element);
+  knockout_default.applyBindings(viewModel, element);
   this._container = container;
-  this._wrapper = wrapper;
-  this._closeDropDown = function(e) {
-    if (!wrapper.contains(e.target)) {
-      viewModel.dropDownVisible = false;
-    }
-  };
-  if (FeatureDetection_default.supportsPointerEvents()) {
-    document.addEventListener("pointerdown", this._closeDropDown, true);
-  } else {
-    document.addEventListener("mousedown", this._closeDropDown, true);
-    document.addEventListener("touchstart", this._closeDropDown, true);
-  }
+  this._viewModel = viewModel;
+  this._element = element;
 }
-Object.defineProperties(ProjectionPicker.prototype, {
+Object.defineProperties(PerformanceWatchdog.prototype, {
   /**
    * Gets the parent container.
-   * @memberof ProjectionPicker.prototype
+   * @memberof PerformanceWatchdog.prototype
    *
    * @type {Element}
    */
@@ -263296,9 +264119,9 @@ Object.defineProperties(ProjectionPicker.prototype, {
   },
   /**
    * Gets the view model.
-   * @memberof ProjectionPicker.prototype
+   * @memberof PerformanceWatchdog.prototype
    *
-   * @type {ProjectionPickerViewModel}
+   * @type {PerformanceWatchdogViewModel}
    */
   viewModel: {
     get: function() {
@@ -263306,22 +264129,16 @@ Object.defineProperties(ProjectionPicker.prototype, {
     }
   }
 });
-ProjectionPicker.prototype.isDestroyed = function() {
+PerformanceWatchdog.prototype.isDestroyed = function() {
   return false;
 };
-ProjectionPicker.prototype.destroy = function() {
+PerformanceWatchdog.prototype.destroy = function() {
   this._viewModel.destroy();
-  if (FeatureDetection_default.supportsPointerEvents()) {
-    document.removeEventListener("pointerdown", this._closeDropDown, true);
-  } else {
-    document.removeEventListener("mousedown", this._closeDropDown, true);
-    document.removeEventListener("touchstart", this._closeDropDown, true);
-  }
-  knockout_default.cleanNode(this._wrapper);
-  this._container.removeChild(this._wrapper);
+  knockout_default.cleanNode(this._element);
+  this._container.removeChild(this._element);
   return destroyObject_default(this);
 };
-var ProjectionPicker_default = ProjectionPicker;
+var PerformanceWatchdog_default = PerformanceWatchdog;
 
 // packages/widgets/Source/SelectionIndicator/SelectionIndicatorViewModel.js
 var screenSpacePos = new Cartesian2_default();
@@ -263523,133 +264340,6 @@ SelectionIndicator.prototype.destroy = function() {
   return destroyObject_default(this);
 };
 var SelectionIndicator_default = SelectionIndicator;
-
-// packages/widgets/Source/PerformanceWatchdog/PerformanceWatchdogViewModel.js
-function PerformanceWatchdogViewModel(options) {
-  if (!defined_default(options) || !defined_default(options.scene)) {
-    throw new DeveloperError_default("options.scene is required.");
-  }
-  this._scene = options.scene;
-  this.lowFrameRateMessage = options.lowFrameRateMessage ?? "This application appears to be performing poorly on your system.  Please try using a different web browser or updating your video drivers.";
-  this.lowFrameRateMessageDismissed = false;
-  this.showingLowFrameRateMessage = false;
-  knockout_default.track(this, [
-    "lowFrameRateMessage",
-    "lowFrameRateMessageDismissed",
-    "showingLowFrameRateMessage"
-  ]);
-  const that = this;
-  this._dismissMessage = createCommand_default(function() {
-    that.showingLowFrameRateMessage = false;
-    that.lowFrameRateMessageDismissed = true;
-  });
-  const monitor = FrameRateMonitor_default.fromScene(options.scene);
-  this._unsubscribeLowFrameRate = monitor.lowFrameRate.addEventListener(
-    function() {
-      if (!that.lowFrameRateMessageDismissed) {
-        that.showingLowFrameRateMessage = true;
-      }
-    }
-  );
-  this._unsubscribeNominalFrameRate = monitor.nominalFrameRate.addEventListener(
-    function() {
-      that.showingLowFrameRateMessage = false;
-    }
-  );
-}
-Object.defineProperties(PerformanceWatchdogViewModel.prototype, {
-  /**
-   * Gets the {@link Scene} instance for which to monitor performance.
-   * @memberof PerformanceWatchdogViewModel.prototype
-   * @type {Scene}
-   */
-  scene: {
-    get: function() {
-      return this._scene;
-    }
-  },
-  /**
-   * Gets a command that dismisses the low frame rate message.  Once it is dismissed, the message
-   * will not be redisplayed.
-   * @memberof PerformanceWatchdogViewModel.prototype
-   * @type {Command}
-   */
-  dismissMessage: {
-    get: function() {
-      return this._dismissMessage;
-    }
-  }
-});
-PerformanceWatchdogViewModel.prototype.destroy = function() {
-  this._unsubscribeLowFrameRate();
-  this._unsubscribeNominalFrameRate();
-  return destroyObject_default(this);
-};
-var PerformanceWatchdogViewModel_default = PerformanceWatchdogViewModel;
-
-// packages/widgets/Source/PerformanceWatchdog/PerformanceWatchdog.js
-function PerformanceWatchdog(options) {
-  if (!defined_default(options) || !defined_default(options.container)) {
-    throw new DeveloperError_default("options.container is required.");
-  }
-  if (!defined_default(options.scene)) {
-    throw new DeveloperError_default("options.scene is required.");
-  }
-  const container = getElement_default(options.container);
-  const viewModel = new PerformanceWatchdogViewModel_default(options);
-  const element = document.createElement("div");
-  element.className = "cesium-performance-watchdog-message-area";
-  element.setAttribute("data-bind", "visible: showingLowFrameRateMessage");
-  const dismissButton = document.createElement("button");
-  dismissButton.setAttribute("type", "button");
-  dismissButton.className = "cesium-performance-watchdog-message-dismiss";
-  dismissButton.innerHTML = "&times;";
-  dismissButton.setAttribute("data-bind", "click: dismissMessage");
-  element.appendChild(dismissButton);
-  const message = document.createElement("div");
-  message.className = "cesium-performance-watchdog-message";
-  message.setAttribute("data-bind", "html: lowFrameRateMessage");
-  element.appendChild(message);
-  container.appendChild(element);
-  knockout_default.applyBindings(viewModel, element);
-  this._container = container;
-  this._viewModel = viewModel;
-  this._element = element;
-}
-Object.defineProperties(PerformanceWatchdog.prototype, {
-  /**
-   * Gets the parent container.
-   * @memberof PerformanceWatchdog.prototype
-   *
-   * @type {Element}
-   */
-  container: {
-    get: function() {
-      return this._container;
-    }
-  },
-  /**
-   * Gets the view model.
-   * @memberof PerformanceWatchdog.prototype
-   *
-   * @type {PerformanceWatchdogViewModel}
-   */
-  viewModel: {
-    get: function() {
-      return this._viewModel;
-    }
-  }
-});
-PerformanceWatchdog.prototype.isDestroyed = function() {
-  return false;
-};
-PerformanceWatchdog.prototype.destroy = function() {
-  this._viewModel.destroy();
-  knockout_default.cleanNode(this._element);
-  this._container.removeChild(this._element);
-  return destroyObject_default(this);
-};
-var PerformanceWatchdog_default = PerformanceWatchdog;
 
 // packages/widgets/Source/SceneModePicker/SceneModePickerViewModel.js
 function SceneModePickerViewModel(scene, duration) {
@@ -263892,6 +264582,233 @@ SceneModePicker.prototype.destroy = function() {
   return destroyObject_default(this);
 };
 var SceneModePicker_default = SceneModePicker;
+
+// packages/widgets/Source/ProjectionPicker/ProjectionPickerViewModel.js
+function ProjectionPickerViewModel(scene) {
+  if (!defined_default(scene)) {
+    throw new DeveloperError_default("scene is required.");
+  }
+  this._scene = scene;
+  this._orthographic = scene.camera.frustum instanceof OrthographicFrustum_default;
+  this._flightInProgress = false;
+  this.dropDownVisible = false;
+  this.tooltipPerspective = "Perspective Projection";
+  this.tooltipOrthographic = "Orthographic Projection";
+  this.selectedTooltip = void 0;
+  this.sceneMode = scene.mode;
+  knockout_default.track(this, [
+    "_orthographic",
+    "_flightInProgress",
+    "sceneMode",
+    "dropDownVisible",
+    "tooltipPerspective",
+    "tooltipOrthographic"
+  ]);
+  const that = this;
+  knockout_default.defineProperty(this, "selectedTooltip", function() {
+    if (that._orthographic) {
+      return that.tooltipOrthographic;
+    }
+    return that.tooltipPerspective;
+  });
+  this._toggleDropDown = createCommand_default(function() {
+    if (that.sceneMode === SceneMode_default.SCENE2D || that._flightInProgress) {
+      return;
+    }
+    that.dropDownVisible = !that.dropDownVisible;
+  });
+  this._eventHelper = new EventHelper_default();
+  this._eventHelper.add(
+    scene.morphComplete,
+    function(transitioner, oldMode, newMode, isMorphing) {
+      that.sceneMode = newMode;
+      that._orthographic = newMode === SceneMode_default.SCENE2D || that._scene.camera.frustum instanceof OrthographicFrustum_default;
+    }
+  );
+  this._eventHelper.add(scene.preRender, function() {
+    that._flightInProgress = defined_default(scene.camera._currentFlight);
+  });
+  this._switchToPerspective = createCommand_default(function() {
+    if (that.sceneMode === SceneMode_default.SCENE2D) {
+      return;
+    }
+    that._scene.camera.switchToPerspectiveFrustum();
+    that._orthographic = false;
+    that.dropDownVisible = false;
+  });
+  this._switchToOrthographic = createCommand_default(function() {
+    if (that.sceneMode === SceneMode_default.SCENE2D) {
+      return;
+    }
+    that._scene.camera.switchToOrthographicFrustum();
+    that._orthographic = true;
+    that.dropDownVisible = false;
+  });
+  this._sceneMode = SceneMode_default;
+}
+Object.defineProperties(ProjectionPickerViewModel.prototype, {
+  /**
+   * Gets the scene
+   * @memberof ProjectionPickerViewModel.prototype
+   * @type {Scene}
+   */
+  scene: {
+    get: function() {
+      return this._scene;
+    }
+  },
+  /**
+   * Gets the command to toggle the drop down box.
+   * @memberof ProjectionPickerViewModel.prototype
+   *
+   * @type {Command}
+   */
+  toggleDropDown: {
+    get: function() {
+      return this._toggleDropDown;
+    }
+  },
+  /**
+   * Gets the command to switch to a perspective projection.
+   * @memberof ProjectionPickerViewModel.prototype
+   *
+   * @type {Command}
+   */
+  switchToPerspective: {
+    get: function() {
+      return this._switchToPerspective;
+    }
+  },
+  /**
+   * Gets the command to switch to orthographic projection.
+   * @memberof ProjectionPickerViewModel.prototype
+   *
+   * @type {Command}
+   */
+  switchToOrthographic: {
+    get: function() {
+      return this._switchToOrthographic;
+    }
+  },
+  /**
+   * Gets whether the scene is currently using an orthographic projection.
+   * @memberof ProjectionPickerViewModel.prototype
+   *
+   * @type {Command}
+   */
+  isOrthographicProjection: {
+    get: function() {
+      return this._orthographic;
+    }
+  }
+});
+ProjectionPickerViewModel.prototype.isDestroyed = function() {
+  return false;
+};
+ProjectionPickerViewModel.prototype.destroy = function() {
+  this._eventHelper.removeAll();
+  destroyObject_default(this);
+};
+var ProjectionPickerViewModel_default = ProjectionPickerViewModel;
+
+// packages/widgets/Source/ProjectionPicker/ProjectionPicker.js
+var perspectivePath = "M 28.15625,10.4375 9.125,13.21875 13.75,43.25 41.75,55.09375 50.8125,37 54.5,11.9375 z m 0.125,3 19.976451,0.394265 L 43.03125,16.875 22.6875,14.28125 z M 50.971746,15.705477 47.90625,36.03125 42.53125,46 44.84375,19.3125 z M 12.625,16.03125 l 29.15625,3.6875 -2.65625,31 L 16.4375,41.125 z";
+var orthographicPath = "m 31.560594,6.5254438 -20.75,12.4687502 0.1875,24.5625 22.28125,11.8125 19.5,-12 0.65625,-0.375 0,-0.75 0.0312,-23.21875 z m 0.0625,3.125 16.65625,9.5000002 -16.125,10.28125 -17.34375,-9.71875 z m 18.96875,11.1875002 0.15625,20.65625 -17.46875,10.59375 0.15625,-20.28125 z m -37.0625,1.25 17.21875,9.625 -0.15625,19.21875 -16.9375,-9 z";
+function ProjectionPicker(container, scene) {
+  if (!defined_default(container)) {
+    throw new DeveloperError_default("container is required.");
+  }
+  if (!defined_default(scene)) {
+    throw new DeveloperError_default("scene is required.");
+  }
+  container = getElement_default(container);
+  const viewModel = new ProjectionPickerViewModel_default(scene);
+  viewModel._perspectivePath = perspectivePath;
+  viewModel._orthographicPath = orthographicPath;
+  const wrapper = document.createElement("span");
+  wrapper.className = "cesium-projectionPicker-wrapper cesium-toolbar-button";
+  container.appendChild(wrapper);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "cesium-button cesium-toolbar-button";
+  button.setAttribute(
+    "data-bind",
+    'css: { "cesium-projectionPicker-buttonPerspective": !_orthographic,       "cesium-projectionPicker-buttonOrthographic": _orthographic,       "cesium-button-disabled" : sceneMode === _sceneMode.SCENE2D || _flightInProgress,        "cesium-projectionPicker-selected": dropDownVisible },attr: { title: selectedTooltip },click: toggleDropDown'
+  );
+  button.innerHTML = '<!-- ko cesiumSvgPath: { path: _perspectivePath, width: 64, height: 64, css: "cesium-projectionPicker-iconPerspective" } --><!-- /ko --><!-- ko cesiumSvgPath: { path: _orthographicPath, width: 64, height: 64, css: "cesium-projectionPicker-iconOrthographic" } --><!-- /ko -->';
+  wrapper.appendChild(button);
+  const perspectiveButton = document.createElement("button");
+  perspectiveButton.type = "button";
+  perspectiveButton.className = "cesium-button cesium-toolbar-button cesium-projectionPicker-dropDown-icon";
+  perspectiveButton.setAttribute(
+    "data-bind",
+    'css: { "cesium-projectionPicker-visible" : (dropDownVisible && _orthographic),       "cesium-projectionPicker-none" : !_orthographic,       "cesium-projectionPicker-hidden" : !dropDownVisible },attr: { title: tooltipPerspective },click: switchToPerspective,cesiumSvgPath: { path: _perspectivePath, width: 64, height: 64 }'
+  );
+  wrapper.appendChild(perspectiveButton);
+  const orthographicButton = document.createElement("button");
+  orthographicButton.type = "button";
+  orthographicButton.className = "cesium-button cesium-toolbar-button cesium-projectionPicker-dropDown-icon";
+  orthographicButton.setAttribute(
+    "data-bind",
+    'css: { "cesium-projectionPicker-visible" : (dropDownVisible && !_orthographic),       "cesium-projectionPicker-none" : _orthographic,       "cesium-projectionPicker-hidden" : !dropDownVisible},attr: { title: tooltipOrthographic },click: switchToOrthographic,cesiumSvgPath: { path: _orthographicPath, width: 64, height: 64 }'
+  );
+  wrapper.appendChild(orthographicButton);
+  knockout_default.applyBindings(viewModel, wrapper);
+  this._viewModel = viewModel;
+  this._container = container;
+  this._wrapper = wrapper;
+  this._closeDropDown = function(e) {
+    if (!wrapper.contains(e.target)) {
+      viewModel.dropDownVisible = false;
+    }
+  };
+  if (FeatureDetection_default.supportsPointerEvents()) {
+    document.addEventListener("pointerdown", this._closeDropDown, true);
+  } else {
+    document.addEventListener("mousedown", this._closeDropDown, true);
+    document.addEventListener("touchstart", this._closeDropDown, true);
+  }
+}
+Object.defineProperties(ProjectionPicker.prototype, {
+  /**
+   * Gets the parent container.
+   * @memberof ProjectionPicker.prototype
+   *
+   * @type {Element}
+   */
+  container: {
+    get: function() {
+      return this._container;
+    }
+  },
+  /**
+   * Gets the view model.
+   * @memberof ProjectionPicker.prototype
+   *
+   * @type {ProjectionPickerViewModel}
+   */
+  viewModel: {
+    get: function() {
+      return this._viewModel;
+    }
+  }
+});
+ProjectionPicker.prototype.isDestroyed = function() {
+  return false;
+};
+ProjectionPicker.prototype.destroy = function() {
+  this._viewModel.destroy();
+  if (FeatureDetection_default.supportsPointerEvents()) {
+    document.removeEventListener("pointerdown", this._closeDropDown, true);
+  } else {
+    document.removeEventListener("mousedown", this._closeDropDown, true);
+    document.removeEventListener("touchstart", this._closeDropDown, true);
+  }
+  knockout_default.cleanNode(this._wrapper);
+  this._container.removeChild(this._wrapper);
+  return destroyObject_default(this);
+};
+var ProjectionPicker_default = ProjectionPicker;
 
 // packages/widgets/Source/Timeline/TimelineHighlightRange.js
 function TimelineHighlightRange(color, heightInPx, base) {
@@ -265923,7 +266840,7 @@ Object.defineProperties(Viewer.prototype, {
    */
   ellipsoid: {
     get: function() {
-      return this._scene.ellipsoid;
+      return this.scene.ellipsoid;
     }
   },
   /**
@@ -267835,10 +268752,10 @@ function viewerVoxelInspectorMixin(viewer) {
 var viewerVoxelInspectorMixin_default = viewerVoxelInspectorMixin;
 
 // packages/widgets/index.js
-globalThis.CESIUM_VERSION = "1.135.0";
+globalThis.CESIUM_VERSION = "1.138.0";
 
 // Source/Cesium.js
-var VERSION2 = "1.135.0";
+var VERSION2 = "1.138.0";
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AlphaMode,
@@ -268571,6 +269488,7 @@ var VERSION2 = "1.135.0";
   SunPostProcess,
   SupportedImageFormats,
   SvgPathBindingHandler,
+  Sync,
   TaskProcessor,
   Terrain,
   TerrainData,
@@ -268578,6 +269496,7 @@ var VERSION2 = "1.135.0";
   TerrainFillMesh,
   TerrainMesh,
   TerrainOffsetProperty,
+  TerrainPicker,
   TerrainProvider,
   TerrainQuantization,
   TerrainState,

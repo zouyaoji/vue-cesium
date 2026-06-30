@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.135.0
+ * Version 1.138.0
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -26,13 +26,13 @@
 import {
   initSync,
   radix_sort_gaussians_indexes
-} from "./chunk-EJO3NKMS.js";
+} from "./chunk-TY5JXMVO.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-VVZ667H6.js";
+} from "./chunk-LK7GEFGB.js";
 import {
   defined_default
-} from "./chunk-75HAJIDT.js";
+} from "./chunk-7U5YNLF3.js";
 
 // packages/engine/Source/Workers/gaussianSplatSorter.js
 async function initWorker(parameters, transferableObjects) {
