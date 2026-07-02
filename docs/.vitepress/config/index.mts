@@ -70,8 +70,8 @@ function setupConfig(configEnv) {
       sidebars,
       nav,
       agolia: {
-        apiKey: 'af16f0ac1bafe23181598f7a15fd7378',
-        appId: 'MORBVNJTOI'
+        apiKey: '4f58affd3789543c7f5ece8c680cf159',
+        appId: '0R3ZAIXMAH'
       },
       features,
       langs: languages

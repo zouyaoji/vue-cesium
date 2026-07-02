@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2023-12-13 10:33:36
- * @LastEditors: ly
+ * @LastEditTime: 2026-07-02 22:40:43
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \vue-cesium\README.md
 -->
@@ -12,19 +12,19 @@
 
 <p align="center">
   <a href="https://github.com/zouyaoji/vue-cesium/actions/workflows/publish-npm.yml" target="_blank">
-    <img src="https://img.shields.io/github/actions/workflow/status/zouyaoji/vue-cesium/publish-npm.yml?style=plastic">
+    <img src="https://img.shields.io/github/actions/workflow/status/zouyaoji/vue-cesium/publish-npm.yml?style=social">
   </a>
   <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
-    <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic">
+    <img src="https://img.shields.io/npm/v/vue-cesium?style=social">
   </a>
   <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
-    <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">
+    <img src="https://img.shields.io/npm/dm/vue-cesium?style=social">
   </a>
   <a href="https://github.com/zouyaoji/vue-cesium/blob/dev/LICENSE" target="_blank">
-    <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
+    <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=social">
   </a>
   <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
-    <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=plastic" />
+    <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social" />
   </a>
   <br>
 </p>

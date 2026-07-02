@@ -41,7 +41,7 @@ export const head: HeadConfig[] = [
     'meta',
     {
       name: 'algolia-site-verification',
-      content: '22AA94BEB45D176A'
+      content: '872D530159005E01'
     }
   ],
   // 百度资源

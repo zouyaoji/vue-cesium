@@ -47,27 +47,27 @@ const currentLink = computed(() => {
         <div class="badges">
           <h1>
             <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
-              <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic">
+              <img src="https://img.shields.io/npm/v/vue-cesium?style=social">
             </a>
           </h1>
           <h1>
             <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
-              <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">
+              <img src="https://img.shields.io/npm/dm/vue-cesium?style=social">
             </a>
           </h1>
           <h1>
             <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
-              <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=plastic">
+              <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social">
             </a>
           </h1>
           <h1>
             <a href="https://github.com/zouyaoji/vue-cesium/issues" target="_blank">
-              <img src="https://img.shields.io/github/issues/zouyaoji/vue-cesium?style=plastic">
+              <img src="https://img.shields.io/github/issues/zouyaoji/vue-cesium?style=social">
             </a>
           </h1>
           <h1>
             <a href="https://github.com/zouyaoji/vue-cesium/issues" target="_blank">
-              <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
+              <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=social">
             </a>
           </h1>
         </div>
