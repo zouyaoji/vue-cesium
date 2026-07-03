@@ -61,7 +61,7 @@ function initialize(userOptions: any) {
   docsearch(
     Object.assign({}, userOptions, {
       container: '#docsearch',
-      indexName: 'vue-maplibre-docs',
+      indexName: 'vue-cesium-docs',
       placeholder: algoliaLocale.placeholder,
       translations: algoliaLocale.translations,
       searchParameters: Object.assign({}, userOptions.searchParameters, {

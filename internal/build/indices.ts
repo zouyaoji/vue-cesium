@@ -23,7 +23,7 @@ interface Index {
   path: string
 }
 
-const client = algoliasearch('0R3ZAIXMAH', algoliaKey)
+const client = algoliasearch('SQLJGWQV2M', algoliaKey)
 const langs = {
   'zh-CN': 'vue-cesium-zh',
   'en-US': 'vue-cesium-en'
