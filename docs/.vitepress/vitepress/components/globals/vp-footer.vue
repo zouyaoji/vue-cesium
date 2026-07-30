@@ -37,7 +37,7 @@ const homeLang = computed(() => homeLocale[lang.value])
         {{ homeLang['13'] }}
       </a> -->
       <a
-        href="https://https://zouyaoji.top/vue-cesium/sitemap.xml"
+        href="https://zouyaoji.top/vue-cesium/sitemap.xml"
         class="footer-main-link"
         target="_blank"
       >

@@ -78,7 +78,13 @@ function setupConfig(configEnv) {
     },
     cleanUrls: true,
     sitemap: {
-      hostname: 'https://zouyaoji.top/vue-cesium'
+      hostname: 'https://zouyaoji.top',
+      transformItems: (items) => {
+        return items.map(item => ({
+          ...item,
+          url: `/vue-cesium${item.url}`
+        }))
+      }
     },
     locales,
     vite: getViteConfig(configEnv),
