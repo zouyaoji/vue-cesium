@@ -23,7 +23,6 @@
     "docs:serve": "pnpm run -C docs serve",
     "stub": "pnpm run -r --parallel stub",
     "prepare": "husky",
-    "preinstall": "npx only-allow pnpm -y",
     "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\""
   },
   "author": "zouyaoji <370681295@qq.com>",
@@ -127,5 +126,15 @@
     "vue": "^3.5.33",
     "vue-jest": "5.0.0-alpha.10",
     "vue-tsc": "^3.1.4"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "onFail": "error"
+    }
   }
 }
